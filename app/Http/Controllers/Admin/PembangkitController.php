@@ -42,7 +42,7 @@ class PembangkitController extends Controller
             ->join('machines', 'machines.id', 'machine_status_logs.machine_id')
             ->whereDate('tanggal', Carbon::today())
             ->get();
-        
+
         $todayHops = UnitOperationHour::whereDate('tanggal', Carbon::today())->get();
 
         return view('admin.pembangkit.ready', compact('units', 'machines', 'operations', 'todayLogs', 'todayHops'));
@@ -50,7 +50,7 @@ class PembangkitController extends Controller
 
     public function saveStatus(Request $request)
     {
-        // Validate incoming request
+        // Validasi incoming request
         $request->validate([
             'logs' => 'required|array',
             'hops' => 'required|array',
@@ -114,16 +114,11 @@ class PembangkitController extends Controller
                     $machineStatusLog = new MachineStatusLog();
                     $machineStatusLog->setConnection($currentSession);
 
-                    $existingLog = $machineStatusLog->newQuery()
-                        ->where(function($query) use ($log) {
-                            $query->where([
-                                'machine_id' => $log['machine_id'],
-                                'tanggal' => $log['tanggal']
-                            ]);
-                            if (!empty($log['uuid'])) {
-                                $query->orWhere('uuid', $log['uuid']);
-                            }
-                        })->first();
+                    // Cek apakah data sudah ada berdasarkan machine_id, tanggal, dan input_time
+                    $existingLog = MachineStatusLog::where('machine_id', $log['machine_id'])
+                        ->where('tanggal', $log['tanggal'])
+                        ->where('input_time', $inputTime)
+                        ->first();
 
                     $updateData = [
                         'dmn' => $operation ? $operation->dmn : 0,
@@ -137,16 +132,18 @@ class PembangkitController extends Controller
                     ];
 
                     if ($existingLog) {
-                        $uuid = $existingLog->uuid;
+                        // Update existing log
                         $existingLog->setConnection($currentSession);
                         $existingLog->update($updateData);
                         $updatedLog = $existingLog;
                     } else {
+                        // Create new log
                         $uuid = (string) Str::uuid();
-                        $newLog = $machineStatusLog->newInstance(array_merge($updateData, [
+                        $newLog = new MachineStatusLog(array_merge($updateData, [
                             'machine_id' => $log['machine_id'],
                             'tanggal' => $log['tanggal'],
-                            'uuid' => $uuid
+                            'uuid' => $uuid,
+                            'input_time' => $inputTime // Simpan input_time
                         ]));
                         
                         $newLog->setConnection($currentSession);

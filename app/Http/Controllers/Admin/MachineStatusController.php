@@ -9,6 +9,7 @@ use App\Models\UnitOperationHour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Log;
+
 use Carbon\Carbon;
 use App\Models\Machine;
 
@@ -20,6 +21,7 @@ class MachineStatusController extends Controller
             $date = $request->get('date', now()->toDateString());
             $search = $request->get('search');
             $unitSource = $request->get('unit_source');
+            $selectedInputTime = $request->get('input_time', '06:00:00');
             
             // Query untuk mengambil data pembangkit
             $query = PowerPlant::with(['machines']);
@@ -35,8 +37,11 @@ class MachineStatusController extends Controller
             
             $powerPlants = $query->get();
             
-            // Ambil semua log untuk tanggal yang dipilih
+            // Ambil semua log untuk tanggal dan waktu input yang dipilih
             $logs = MachineStatusLog::whereDate('tanggal', $date)
+                ->when($selectedInputTime, function($query) use ($selectedInputTime) {
+                    return $query->where('input_time', $selectedInputTime);
+                })
                 ->when($search, function($query) use ($search) {
                     $query->where(function($q) use ($search) {
                         $q->whereHas('machine', function($q) use ($search) {
@@ -63,11 +68,23 @@ class MachineStatusController extends Controller
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
-                    'html' => view('admin.machine-status._table', compact('powerPlants', 'logs', 'hops', 'date'))->render()
+                    'html' => view('admin.machine-status._table', compact(
+                        'powerPlants',
+                        'logs',
+                        'hops',
+                        'date',
+                        'selectedInputTime'
+                    ))->render()
                 ]);
             }
 
-            return view('admin.machine-status.view', compact('powerPlants', 'logs', 'hops', 'date'));
+            return view('admin.machine-status.view', compact(
+                'powerPlants',
+                'logs',
+                'hops',
+                'date',
+                'selectedInputTime'
+            ));
             
         } catch (\Exception $e) {
             \Log::error('Error in machine status view: ' . $e->getMessage());

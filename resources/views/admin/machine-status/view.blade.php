@@ -105,6 +105,21 @@
                                 value="{{ request('search') }}">
                         </div>
 
+                        <!-- Waktu Input Filter -->
+                        <div class="flex items-center">
+                            <label for="input-time" class="text-sm text-gray-700 font-medium mr-2">Filter Waktu Input:</label>
+                            <select id="input-time" 
+                                class="border rounded px-3 py-2 text-sm w-full md:w-40"
+                                onchange="updateTable()">
+                                <option value="">Semua Waktu</option>
+                                <option value="06:00" {{ request('input_time') == '06:00' ? 'selected' : '' }}>06:00 (Pagi)</option>
+                                <option value="11:00" {{ request('input_time') == '11:00' ? 'selected' : '' }}>11:00 (Siang)</option>
+                                <option value="14:00" {{ request('input_time') == '14:00' ? 'selected' : '' }}>14:00 (Siang)</option>
+                                <option value="18:00" {{ request('input_time') == '18:00' ? 'selected' : '' }}>18:00 (Malam)</option>
+                                <option value="19:00" {{ request('input_time') == '19:00' ? 'selected' : '' }}>19:00 (Malam)</option>
+                            </select>
+                        </div>
+
                         <!-- Update Mesin Button -->
                         <div>
                             <a href="{{ route('admin.pembangkit.ready') }}" 
@@ -153,6 +168,7 @@ document.getElementById('searchInput').addEventListener('input', function(e) {
 function updateTable() {
     const date = document.getElementById('date-picker').value;
     const unitSource = @json(session('unit')) === 'mysql' ? document.getElementById('unit-source')?.value : null;
+    const inputTime = document.getElementById('input-time').value;
     const searchText = document.getElementById('searchInput').value;
     
     showLoading();
@@ -160,7 +176,8 @@ function updateTable() {
     const params = new URLSearchParams({
         date: date,
         search: searchText,
-        ...(unitSource && { unit_source: unitSource })
+        ...(unitSource && { unit_source: unitSource }),
+        ...(inputTime && { input_time: inputTime })
     });
     
     fetch(`{{ route('admin.machine-status.view') }}?${params.toString()}`, {

@@ -94,28 +94,35 @@
                     </div>
                     <div class="mb-4 flex flex-col lg:flex-row justify-between items-center gap-3">
                         <div class="flex flex-col lg:flex-row gap-y-3 sm:gap-y-3 space-x-4">
-                            <input type="date" id="filterDate" value="{{ date('Y-m-d') }}"
-                                class="px-4 py-2 border rounded-lg">
+                            <div class="flex flex-col lg:flex-row gap-4 mb-6">
+                                <div class="flex-1">
+                                    <input type="date" 
+                                           id="filterDate" 
+                                           value="{{ date('Y-m-d') }}" 
+                                           class="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                </div>
 
-                            <div class="relative">
-                                <select id="inputTime" class="px-4 py-2 border rounded-lg">
-                                    <option value="">Pilih Waktu Input</option>
-                                    <option value="06:00">Jam 6 Pagi</option>
-                                    <option value="11:00">Jam 11 Siang</option>
-                                    <option value="14:00">Jam 2 Siang</option>
-                                    <option value="18:00">Jam 6 Malam</option>
-                                    <option value="19:00">Jam 7 Malam</option>
-                                </select>
-                            </div>
+                                <div class="flex-1">
+                                    <select id="inputTime" 
+                                            class="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                            required>
+                                        <option value="">Pilih Waktu Input</option>
+                                        <option value="06:00">06:00 (Pagi)</option>
+                                        <option value="11:00">11:00 (Siang)</option>
+                                        <option value="14:00">14:00 (Siang)</option>
+                                        <option value="18:00">18:00 (Malam)</option>
+                                        <option value="19:00">19:00 (Malam)</option>
+                                    </select>
+                                </div>
 
-                            <div class="relative">
-                                <input type="text" 
-                                       id="searchInput" 
-                                       placeholder="Cari mesin, unit, atau status..."
-                                       onkeyup="if(event.key === 'Enter') searchTables()"
-                                       class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-search text-gray-400"></i>
+                                <div class="flex-1 relative">
+                                    <input type="text" 
+                                           id="searchInput" 
+                                           placeholder="Cari mesin atau unit..."
+                                           class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-search text-gray-400"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -411,7 +418,17 @@
     });
 
     function saveData() {
-        // Tampilkan loading indicator saat mulai menyimpan
+        const inputTime = document.getElementById('inputTime').value;
+        if (!inputTime) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Perhatian',
+                text: 'Silakan pilih waktu input terlebih dahulu!'
+            });
+            return;
+        }
+
+        // Tampilkan loading indicator
         Swal.fire({
             title: 'Menyimpan Data',
             text: 'Mohon tunggu...',
@@ -424,7 +441,7 @@
         const data = {
             logs: [],
             hops: [],
-            inputTime: document.getElementById('inputTime').value // Capture the input time
+            inputTime: inputTime // Tambahkan waktu input ke data yang akan dikirim
         };
 
         const tables = document.querySelectorAll('.unit-table table');
@@ -481,7 +498,7 @@
                         kronologi: inputKronologi ? inputKronologi.value.trim() : null,
                         tanggal_mulai: inputTanggalMulai ? inputTanggalMulai.value : null,
                         target_selesai: inputTargetSelesai ? inputTargetSelesai.value : null,
-                        input_time: data.inputTime // Ensure input_time is included here
+                        input_time: inputTime // Ensure input_time is included here
                     });
                 }
             });
@@ -505,14 +522,13 @@
                     icon: 'success',
                     title: 'Berhasil',
                     text: 'Data berhasil disimpan!',
-                    showConfirmButton: false,
-                    timer: 1500
+                    timer: 1500,
+                    showConfirmButton: false
                 }).then(() => {
-                    // Setelah pesan sukses, muat ulang data
                     loadData();
                 });
             } else {
-                throw new Error(result.message);
+                throw new Error(result.message || 'Terjadi kesalahan saat menyimpan data');
             }
         })
         .catch(error => {
@@ -643,73 +659,39 @@
     // Perbaikan fungsi loadData
     function loadData() {
         const tanggal = document.getElementById('filterDate').value;
-        const refreshButton = document.getElementById('refreshButton');
+        const inputTime = document.getElementById('inputTime').value;
         
-        // Tampilkan loading indicator
         Swal.fire({
             title: 'Memuat Data',
-            text: 'Mohon tunggu sebentar...',
+            text: 'Mohon tunggu...',
             allowOutsideClick: false,
             didOpen: () => {
                 Swal.showLoading();
             }
         });
 
-        // Nonaktifkan tombol selama proses
-        refreshButton.disabled = true;
-
-        // Tambahkan animasi pada ikon
-        const icon = refreshButton.querySelector('i.fas.fa-redo');
-        if (icon) {
-            icon.classList.add('fa-spin');
-        }
-
-        // Lakukan request AJAX
-        fetch(`{{ route('admin.pembangkit.get-status') }}?tanggal=${tanggal}`, {
+        fetch(`{{ route('admin.pembangkit.get-status') }}?tanggal=${tanggal}&input_time=${inputTime}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(result => {
             if (result.success) {
-                // Update form dengan data baru
                 updateFormWithData(result.data);
-                
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: 'Data berhasil dimuat!',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
+                Swal.close();
             } else {
                 throw new Error(result.message || 'Gagal memuat data');
             }
         })
         .catch(error => {
-            console.error('Error:', error);
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: `Gagal memuat data: ${error.message}`
+                text: error.message
             });
-        })
-        .finally(() => {
-            // Aktifkan kembali tombol
-            refreshButton.disabled = false;
-            
-            // Hentikan animasi
-            if (icon) {
-                icon.classList.remove('fa-spin');
-            }
         });
     }
 

@@ -50,32 +50,30 @@ class PembangkitController extends Controller
 
     public function saveStatus(Request $request)
     {
-        try {
-            // Pastikan kita menggunakan koneksi database yang benar
-            $currentSession = session('unit', 'mysql');
-            DB::beginTransaction();
+        // Validate incoming request
+        $request->validate([
+            'logs' => 'required|array',
+            'hops' => 'required|array',
+            'inputTime' => 'required|string',
+        ]);
 
+        // Extract input time
+        $inputTime = $request->input('inputTime');
+        $currentSession = session('unit', 'mysql');
+
+        DB::beginTransaction();
+        try {
             Log::info("Starting saveStatus operation", [
                 'session' => $currentSession,
                 'connection' => DB::connection()->getName()
             ]);
             
-            // Ambil waktu input dari request
-            $inputTime = $request->input('inputTime'); // Assuming inputTime is sent in the request
-            
             // Simpan data HOP
             foreach ($request->hops as $hopData) {
-                // Dapatkan power plant untuk mendapatkan unit_source
                 $powerPlant = PowerPlant::find($hopData['power_plant_id']);
                 if (!$powerPlant) {
                     throw new \Exception("Power Plant not found for id: {$hopData['power_plant_id']}");
                 }
-
-                Log::info("Saving HOP data", [
-                    'power_plant' => $powerPlant->name,
-                    'session' => session('unit'),
-                    'hop_data' => $hopData
-                ]);
 
                 // Cek apakah data sudah ada
                 $existingHop = UnitOperationHour::where([
@@ -84,30 +82,18 @@ class PembangkitController extends Controller
                 ])->first();
 
                 if ($existingHop) {
-                    // Update existing record
                     $existingHop->update([
                         'hop_value' => $hopData['hop_value'],
-                        'unit_source' => session('unit', 'mysql')
-                    ]);
-
-                    Log::info("Updated existing HOP", [
-                        'id' => $existingHop->id,
-                        'power_plant_id' => $existingHop->power_plant_id,
-                        'hop_value' => $existingHop->hop_value
+                        'unit_source' => session('unit', 'mysql'),
+                        'input_time' => $inputTime
                     ]);
                 } else {
-                    // Create new record
-                    $newHop = UnitOperationHour::create([
+                    UnitOperationHour::create([
                         'power_plant_id' => $hopData['power_plant_id'],
                         'tanggal' => $hopData['tanggal'],
                         'hop_value' => $hopData['hop_value'],
-                        'unit_source' => session('unit', 'mysql')
-                    ]);
-
-                    Log::info("Created new HOP", [
-                        'id' => $newHop->id,
-                        'power_plant_id' => $newHop->power_plant_id,
-                        'hop_value' => $newHop->hop_value
+                        'unit_source' => session('unit', 'mysql'),
+                        'input_time' => $inputTime
                     ]);
                 }
             }
@@ -115,23 +101,19 @@ class PembangkitController extends Controller
             // Simpan data status mesin
             foreach ($request->logs as $log) {
                 $equipment = isset($log['equipment']) ? trim($log['equipment']) : null;
-                
                 $operation = MachineOperation::where('machine_id', $log['machine_id'])
                     ->latest('recorded_at')
                     ->first();
 
-                // Cek status untuk menentukan nilai DMP
                 $dmp = $operation ? $operation->dmp : 0;
                 if (in_array($log['status'], ['Gangguan', 'Pemeliharaan', 'Mothballed', 'Overhaul'])) {
                     $dmp = 0;
                 }
 
                 if (!empty($log['status']) || !empty($log['deskripsi']) || !empty($log['load_value'])) {
-                    // Pastikan kita menggunakan model dengan koneksi yang benar
                     $machineStatusLog = new MachineStatusLog();
                     $machineStatusLog->setConnection($currentSession);
 
-                    // Cari record yang ada berdasarkan machine_id dan tanggal
                     $existingLog = $machineStatusLog->newQuery()
                         ->where(function($query) use ($log) {
                             $query->where([
@@ -151,30 +133,16 @@ class PembangkitController extends Controller
                         'equipment' => $equipment,
                         'deskripsi' => $log['deskripsi'] ?? null,
                         'unit_source' => $currentSession,
-                        'input_time' => $inputTime // Ensure input_time is included here
+                        'input_time' => $inputTime
                     ];
 
                     if ($existingLog) {
-                        // Pastikan UUID tetap sama saat update
                         $uuid = $existingLog->uuid;
-                        
-                        // Update existing record di database saat ini
                         $existingLog->setConnection($currentSession);
                         $existingLog->update($updateData);
-                        
-                        Log::info("Updated existing machine status log in unit database", [
-                            'uuid' => $uuid,
-                            'machine_id' => $log['machine_id'],
-                            'session' => $currentSession,
-                            'connection' => $existingLog->getConnectionName()
-                        ]);
-
                         $updatedLog = $existingLog;
                     } else {
-                        // Generate UUID baru untuk record baru
                         $uuid = (string) Str::uuid();
-                        
-                        // Create new record with UUID
                         $newLog = $machineStatusLog->newInstance(array_merge($updateData, [
                             'machine_id' => $log['machine_id'],
                             'tanggal' => $log['tanggal'],
@@ -183,14 +151,6 @@ class PembangkitController extends Controller
                         
                         $newLog->setConnection($currentSession);
                         $newLog->save();
-                        
-                        Log::info("Created new machine status log in unit database", [
-                            'uuid' => $uuid,
-                            'machine_id' => $log['machine_id'],
-                            'session' => $currentSession,
-                            'connection' => $newLog->getConnectionName()
-                        ]);
-
                         $updatedLog = $newLog;
                     }
 
@@ -203,26 +163,20 @@ class PembangkitController extends Controller
                         throw new \Exception("Failed to save/verify data in unit database");
                     }
 
-                    // Trigger event untuk sinkronisasi ke UP Kendari
+                    // Trigger event untuk sinkronisasi
                     event(new MachineStatusUpdated(
                         $updatedLog,
                         $existingLog ? 'update' : 'create'
                     ));
                 }
             }
-            
+
             DB::commit();
-
-            Log::info("All data saved successfully", [
-                'session' => $currentSession,
-                'connection' => DB::connection()->getName(),
-                'log_count' => count($request->logs)
-            ]);
-
             return response()->json([
                 'success' => true,
                 'message' => 'Data berhasil disimpan'
             ]);
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error saving data', [
@@ -231,6 +185,7 @@ class PembangkitController extends Controller
                 'session' => $currentSession ?? null,
                 'connection' => DB::connection()->getName()
             ]);
+            
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menyimpan data: ' . $e->getMessage()
@@ -240,6 +195,16 @@ class PembangkitController extends Controller
 
     public function getStatus(Request $request)
     {
+        $date = $request->query('tanggal');
+        $inputTime = $request->query('input_time');
+
+        // Fetch logs based on date and input time
+        $logs = MachineStatusLog::whereDate('tanggal', $date)
+            ->when($inputTime, function ($query) use ($inputTime) {
+                return $query->where('input_time', $inputTime);
+            })
+            ->get();
+
         try {
             $tanggal = $request->tanggal ?? now()->toDateString();
             $currentSession = session('unit', 'mysql');

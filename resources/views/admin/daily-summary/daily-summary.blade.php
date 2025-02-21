@@ -66,7 +66,7 @@
             <button type="button" onclick="location.reload();" class="bg-gray-500 text-white px-4 py-2 rounded">
                 <i class="fas fa-sync-alt mr-2"></i>Refresh Data
             </button>
-            <button type="button" onclick="window.location.href='{{ route('admin.daily-summary') }}'" class="bg-green-500 text-white px-4 py-2 rounded">
+            <button type="button" onclick="window.location.href='{{ route('admin.daily-summary.results') }}'" class="bg-green-500 text-white px-4 py-2 rounded">
                 <i class="fas fa-eye mr-2"></i>Lihat Data
             </button>
         </div>

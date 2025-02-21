@@ -60,4 +60,16 @@ class DailySummaryController extends Controller
         // Redirect atau kembali ke halaman sebelumnya
         return redirect()->back()->with('success', 'Data berhasil disimpan!');
     }
+
+    public function results()
+    {
+       
+        $dailySummaries = DailySummary::with('powerPlant')->get(); // Mengambil data dengan relasi powerPlant
+
+      
+        $units = PowerPlant::with('machines')->get();
+
+        // Tampilkan view dengan data yang diambil
+        return view('admin.daily-summary.daily-summary-results', compact('dailySummaries', 'units'));
+    }
 } 

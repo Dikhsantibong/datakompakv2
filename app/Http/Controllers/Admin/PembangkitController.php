@@ -123,7 +123,7 @@ class PembangkitController extends Controller
                     $dmp = 0;
                 }
 
-                if (!empty($log['status']) || !empty($log['deskripsi']) || !empty($log['load_value']) || !empty($log['progres'])) {
+                if (!empty($log['status']) || !empty($log['deskripsi']) || !empty($log['load_value'])) {
                     // Pastikan kita menggunakan model dengan koneksi yang benar
                     $machineStatusLog = new MachineStatusLog();
                     $machineStatusLog->setConnection($currentSession);
@@ -145,14 +145,8 @@ class PembangkitController extends Controller
                         'dmp' => $dmp,
                         'load_value' => $log['load_value'],
                         'status' => $log['status'],
-                        'component' => $log['component'],
                         'equipment' => $equipment,
                         'deskripsi' => $log['deskripsi'] ?? null,
-                        'kronologi' => $log['kronologi'] ?? null,
-                        'action_plan' => $log['action_plan'] ?? null,
-                        'progres' => $log['progres'] ?? null,
-                        'tanggal_mulai' => $log['tanggal_mulai'] ?? null,
-                        'target_selesai' => $log['target_selesai'] ?? null,
                         'unit_source' => $currentSession
                     ];
 
@@ -288,14 +282,8 @@ class PembangkitController extends Controller
                             'dmn' => $log->dmn,
                             'dmp' => $log->dmp,
                             'load_value' => $log->load_value,
-                            'component' => $log->component ?? '',
                             'equipment' => $log->equipment ?? '',
                             'deskripsi' => $log->deskripsi,
-                            'kronologi' => $log->kronologi,
-                            'action_plan' => $log->action_plan,
-                            'progres' => $log->progres,
-                            'tanggal_mulai' => $log->tanggal_mulai ? $log->tanggal_mulai->format('Y-m-d') : null,
-                            'target_selesai' => $log->target_selesai ? $log->target_selesai->format('Y-m-d') : null,
                             'updated_at' => $log->updated_at
                         ];
                     }),
@@ -461,15 +449,9 @@ class PembangkitController extends Controller
                     // Update log dengan nilai default kecuali DMN dan DMP
                     $log->update([
                         'status' => 'Operasi',
-                        'component' => null,
                         'equipment' => '',
                         'deskripsi' => '',
-                        'kronologi' => '',
-                        'action_plan' => '',
-                        'progres' => '',
                         'load_value' => '',
-                        'tanggal_mulai' => null,
-                        'target_selesai' => null,
                         'dmn' => $dmn,
                         'dmp' => $dmp
                     ]);

@@ -50,14 +50,7 @@ class MachineStatusLog extends Model
         'dmn',
         'dmp',
         'load_value',
-        'component',
-        'equipment',
         'deskripsi',
-        'kronologi',
-        'action_plan',
-        'progres',
-        'tanggal_mulai',
-        'target_selesai',
         'unit_source'
     ];
 
@@ -575,14 +568,7 @@ class MachineStatusLog extends Model
             'dmn' => $machineStatus->dmn,
             'dmp' => $machineStatus->dmp,
             'load_value' => $machineStatus->load_value,
-            'component' => $machineStatus->component,
-            'equipment' => $machineStatus->equipment,
             'deskripsi' => $machineStatus->deskripsi,
-            'kronologi' => $machineStatus->kronologi,
-            'action_plan' => $machineStatus->action_plan,
-            'progres' => $machineStatus->progres,
-            'tanggal_mulai' => $machineStatus->tanggal_mulai,
-            'target_selesai' => $machineStatus->target_selesai,
             'unit_source' => $powerPlant->unit_source,
             'created_at' => $machineStatus->created_at ?? now(),
             'updated_at' => now()

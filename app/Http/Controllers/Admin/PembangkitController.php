@@ -60,6 +60,9 @@ class PembangkitController extends Controller
                 'connection' => DB::connection()->getName()
             ]);
             
+            // Ambil waktu input dari request
+            $inputTime = $request->input('inputTime'); // Assuming inputTime is sent in the request
+            
             // Simpan data HOP
             foreach ($request->hops as $hopData) {
                 // Dapatkan power plant untuk mendapatkan unit_source
@@ -147,7 +150,8 @@ class PembangkitController extends Controller
                         'status' => $log['status'],
                         'equipment' => $equipment,
                         'deskripsi' => $log['deskripsi'] ?? null,
-                        'unit_source' => $currentSession
+                        'unit_source' => $currentSession,
+                        'input_time' => $inputTime // Ensure input_time is included here
                     ];
 
                     if ($existingLog) {

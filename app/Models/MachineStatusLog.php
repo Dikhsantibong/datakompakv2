@@ -51,19 +51,22 @@ class MachineStatusLog extends Model
         'dmp',
         'load_value',
         'deskripsi',
+        'input_time',
         'unit_source'
     ];
 
     protected $casts = [
         'tanggal' => 'date',
         'tanggal_mulai' => 'date',
-        'target_selesai' => 'date'
+        'target_selesai' => 'date',
+        'input_time' => 'date'
     ];
 
     protected $dates = [
         'tanggal',
         'tanggal_mulai',
         'target_selesai',
+        'input_time',
         'created_at',
         'updated_at'
     ];
@@ -570,6 +573,7 @@ class MachineStatusLog extends Model
             'load_value' => $machineStatus->load_value,
             'deskripsi' => $machineStatus->deskripsi,
             'unit_source' => $powerPlant->unit_source,
+            'input_time' => $machineStatus->input_time,
             'created_at' => $machineStatus->created_at ?? now(),
             'updated_at' => now()
         ];

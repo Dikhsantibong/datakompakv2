@@ -98,15 +98,24 @@
                                 class="px-4 py-2 border rounded-lg">
 
                             <div class="relative">
-                                <div class="relative">
-                                    <input type="text" 
-                                           id="searchInput" 
-                                           placeholder="Cari mesin, unit, atau status..."
-                                           onkeyup="if(event.key === 'Enter') searchTables()"
-                                           class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-search text-gray-400"></i>
-                                    </div>
+                                <select id="inputTime" class="px-4 py-2 border rounded-lg">
+                                    <option value="">Pilih Waktu Input</option>
+                                    <option value="06:00">Jam 6 Pagi</option>
+                                    <option value="11:00">Jam 11 Siang</option>
+                                    <option value="14:00">Jam 2 Siang</option>
+                                    <option value="18:00">Jam 6 Malam</option>
+                                    <option value="19:00">Jam 7 Malam</option>
+                                </select>
+                            </div>
+
+                            <div class="relative">
+                                <input type="text" 
+                                       id="searchInput" 
+                                       placeholder="Cari mesin, unit, atau status..."
+                                       onkeyup="if(event.key === 'Enter') searchTables()"
+                                       class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-search text-gray-400"></i>
                                 </div>
                             </div>
                         </div>
@@ -414,8 +423,10 @@
 
         const data = {
             logs: [],
-            hops: []
+            hops: [],
+            inputTime: document.getElementById('inputTime').value // Capture the input time
         };
+
         const tables = document.querySelectorAll('.unit-table table');
         const tanggal = document.getElementById('filterDate').value;
 
@@ -433,18 +444,14 @@
                 });
             }
 
-            // Tambahkan data status mesin (kode yang sudah ada)
+            // Tambahkan data status mesin
             const rows = table.querySelectorAll('tbody tr');
             rows.forEach(row => {
                 const machineId = row.querySelector('td[data-id]').getAttribute('data-id');
                 const statusSelect = row.querySelector('select');
                 const componentSelect = row.querySelector('.system-select');
-                
-                // Perbaikan pengambilan nilai equipment
                 const equipmentTextarea = row.querySelector('textarea[name^="equipment"]');
                 const equipmentValue = equipmentTextarea ? equipmentTextarea.value.trim() : '';
-                
-                // Ambil nilai-nilai lain
                 const dmpInput = row.querySelector('td:nth-child(3) input');
                 const inputDeskripsi = row.querySelector(`textarea[name="deskripsi[${machineId}]"]`);
                 const inputActionPlan = row.querySelector(`textarea[name="action_plan[${machineId}]"]`);
@@ -454,12 +461,8 @@
                 const inputTanggalMulai = row.querySelector(`input[name="tanggal_mulai[${machineId}]"]`);
                 const inputTargetSelesai = row.querySelector(`input[name="target_selesai[${machineId}]"]`);
 
-                // Perbaiki selector untuk input beban
-                const loadInput = row.querySelector('td:nth-child(5) input[type="number"]'); // Sesuaikan dengan posisi kolom beban
+                const loadInput = row.querySelector('td:nth-child(5) input[type="number"]');
                 const loadValue = loadInput ? parseFloat(loadInput.value) || 0 : 0;
-
-                // Debug log untuk memastikan nilai beban terambil
-                console.log('Load value for machine', machineId, ':', loadValue);
 
                 if (statusSelect && statusSelect.value) {
                     data.logs.push({
@@ -471,13 +474,14 @@
                         equipment: equipmentValue,
                         dmn: row.querySelector('td:nth-child(2)').textContent.trim(),
                         dmp: dmpInput ? dmpInput.value.trim() : null,
-                        load_value: loadValue, // Pastikan nilai load_value selalu terisi
+                        load_value: loadValue,
                         deskripsi: inputDeskripsi ? inputDeskripsi.value.trim() : null,
                         action_plan: inputActionPlan ? inputActionPlan.value.trim() : null,
                         progres: inputProgres ? inputProgres.value.trim() : null,
                         kronologi: inputKronologi ? inputKronologi.value.trim() : null,
                         tanggal_mulai: inputTanggalMulai ? inputTanggalMulai.value : null,
-                        target_selesai: inputTargetSelesai ? inputTargetSelesai.value : null
+                        target_selesai: inputTargetSelesai ? inputTargetSelesai.value : null,
+                        input_time: data.inputTime // Ensure input_time is included here
                     });
                 }
             });

@@ -181,6 +181,7 @@
                                 <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Beban (MW)</th>
                                 <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Status</th>
                                 <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Deskripsi</th>
+                                <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Waktu Input</th>
                             </tr>
                         </thead>
                         <tbody class="text-sm">
@@ -211,6 +212,7 @@
                                         </span>
                                     </td>
                                     <td class="px-3 py-2 border-r border-gray-200 text-center">{{ $log?->deskripsi ?? '-' }}</td>
+                                    <td class="px-3 py-2 border-r border-gray-200 text-center">{{ $log?->input_time ?? '-' }}</td>
                                 </tr>
                             @empty
                                 <tr>

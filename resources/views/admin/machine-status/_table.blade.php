@@ -212,8 +212,16 @@
                                         </span>
                                     </td>
                                     <td class="px-3 py-2 border-r border-gray-200 text-center">{{ $log?->deskripsi ?? '-' }}</td>
-                                    <td class="px-3 py-2 border-r border-gray-200 text-center">{{ $log?->input_time ?? '-' }}</td>
-                                </tr>
+                                    <td class="px-3 py-2 border-r border-gray-200 text-center">
+                                        @if($log && $log->input_time)
+                                            {{ \Carbon\Carbon::parse($log->input_time)->format('H:i:s') }}
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                    
+                                    
+                                    
                             @empty
                                 <tr>
                                     <td colspan="6" class="px-3 py-4 text-center text-gray-500">

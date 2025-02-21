@@ -59,7 +59,7 @@ class MachineStatusLog extends Model
         'tanggal' => 'date',
         'tanggal_mulai' => 'date',
         'target_selesai' => 'date',
-        'input_time' => 'date'
+        'input_time' => 'datetime:H:i:s',
     ];
 
     protected $dates = [

@@ -19,6 +19,11 @@
                 <i class="fas fa-home w-6 h-6"></i>
                 <span class="ml-3 text-base">Dashboard</span>
             </a>
+            <a href="{{ route('admin.monitor-kinerja') }}"
+            class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.monitor-kinerja') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+            <i class="fas fa-chart-line w-6 h-6"></i>
+            <span class="ml-3 text-base">Monitor Kinerja Pembangkit</span>
+            </a>
             <a href="{{ route('admin.daily-summary') }}"
                 class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.daily-summary') || request()->routeIs('admin.daily-summary.results') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                 <i class="fas fa-calendar-day w-6 h-6"></i>
@@ -41,8 +46,7 @@
                 <span class="ml-3 text-base">Monitor Mesin</span>
             </a>
 
-
-            
+           
 
             <a href="{{ route('admin.users') }}"
                 class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.users') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">

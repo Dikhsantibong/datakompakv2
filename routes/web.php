@@ -74,6 +74,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     
     Route::get('/dashboard/refresh', [DashboardController::class, 'refresh'])->name('dashboard.refresh');
 
+    // Add monitor-kinerja route
+    Route::view('/monitor-kinerja', 'admin.monitor-kinerja.index')->name('monitor-kinerja');
+
     Route::prefix('machine-monitor')->group(function () {
         Route::get('/', [MachineMonitorController::class, 'index'])->name('machine-monitor');
         Route::get('/create', [MachineMonitorController::class, 'create'])->name('machine-monitor.create');

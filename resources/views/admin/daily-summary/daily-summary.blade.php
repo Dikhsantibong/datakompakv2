@@ -66,9 +66,9 @@
                                     <th class="border-r"></th>
                                     <th class="px-4 py-2 border-r">
                                         <div class="grid grid-cols-3 gap-0">
-                                            <span class="subcol-border px-2">Terpasang</span>
-                                            <span class="subcol-border px-2">DMN</span>
-                                            <span class="px-2">Mampu</span>
+                                            <span class="subcol-border px-2 mr-4">Terpasang</span>
+                                            <span class="subcol-border px-2 mr-4" style="margin-left: 10px;">DMN</span>
+                                            <span class="px-2" style="margin-left: 10px;">Mampu</span>
                                         </div>
                                     </th>
                                     <th class="px-4 py-2 border-r">
@@ -157,13 +157,13 @@
                                     </th>
                                     <th class="px-4 py-2 border-r">
                                         <div class="grid grid-cols-7 gap-0">
-                                            <span class="subcol-border px-2">Meditran SX 15W/40 CH-4 (LITER)</span>
-                                            <span class="subcol-border px-2">Salyx 420 (LITER)</span>
-                                            <span class="subcol-border px-2">Salyx 430 (LITER)</span>
-                                            <span class="subcol-border px-2">TravoLube A (LITER)</span>
-                                            <span class="subcol-border px-2">Turbolube 46 (LITER)</span>
-                                            <span class="subcol-border px-2">Turbolube 68 (LITER)</span>
-                                            <span class="px-2">TOTAL (LITER)</span>
+                                            <span class="subcol-border border px-2">Meditran SX 15W/40 CH-4<br>(LITER)</span>
+                                            <span class="subcol-border border px-2">Salyx 420<br>(LITER)</span>
+                                            <span class="subcol-border border px-2">Salyx 430<br>(LITER)</span>
+                                            <span class="subcol-border border px-2">TravoLube A<br>(LITER)</span>
+                                            <span class="subcol-border border px-2">Turbolube 46<br>(LITER)</span>
+                                            <span class="subcol-border border px-2">Turbolube 68<br>(LITER)</span>
+                                            <span class="border px-2">TOTAL<br>(LITER)</span>
                                         </div>
                                     </th>
                                     <th class="px-4 py-2 border-r">

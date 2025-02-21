@@ -720,3 +720,4 @@ Route::post('/attendance/scan-qr', [AttendanceController::class, 'scanQR'])->nam
 
 // Rute untuk Ikhtisar Harian
 Route::get('/admin/daily-summary', [DailySummaryController::class, 'index'])->name('admin.daily-summary');
+Route::post('/admin/daily-summary', [DailySummaryController::class, 'store'])->name('daily-summary.store');

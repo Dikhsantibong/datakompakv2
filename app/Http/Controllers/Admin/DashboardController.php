@@ -15,6 +15,7 @@ use App\Models\WoBacklog;
 use App\Models\OtherDiscussion;
 use App\Models\Commitment;
 use App\Models\Attendance;
+use App\Models\DailySummary;
 
 
 class DashboardController extends Controller
@@ -214,11 +215,33 @@ class DashboardController extends Controller
             'data' => $attendanceData->toArray()
         ]);
 
+        // Ambil data dari DailySummary
+        $dailySummaries = DailySummary::selectRaw('
+                SUM(net_production) as total_net_production,
+                SUM(gross_production) as total_gross_production,
+                SUM(peak_load_day) as total_peak_load,
+                SUM(operating_hours) as total_operating_hours
+            ')
+            ->whereBetween('created_at', [$startDate, $endDate]) // Sesuaikan dengan kolom tanggal yang ada
+            ->first();
+
+        // Ambil nilai dari hasil query
+        $totalNetProduction = $dailySummaries->total_net_production ?? 0;
+        $totalGrossProduction = $dailySummaries->total_gross_production ?? 0;
+        $peakLoad = $dailySummaries->total_peak_load ?? 0;
+        $totalOperatingHours = $dailySummaries->total_operating_hours ?? 0;
+
+        // Kirim data ke view
         return view('admin.dashboard', compact(
             'chartData',
             'totalUsers',
             'totalClosedSRWO',
-            'recentActivities'
+            'recentActivities',
+            'totalNetProduction',
+            'totalGrossProduction',
+            'peakLoad',
+            'totalOperatingHours',
+            'dailySummaries'
         ));
     }
 

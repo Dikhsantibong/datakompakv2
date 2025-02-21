@@ -54,7 +54,7 @@
                                     d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>
                         </button>
-
+    
                         <!--  Menu Toggle Sidebar-->
                         <button id="desktop-menu-toggle"
                             class="hidden md:block relative items-center justify-center rounded-md text-gray-400 hover:bg-[#009BB9] p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -66,10 +66,10 @@
                                     d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>
                         </button>
-
-                        <h1 class="text-xl font-semibold text-gray-800">Dashboard Admin</h1>
+    
+                        <h1 class="text-xl font-semibold text-gray-800">Dashboard</h1>
                     </div>
-
+    
                     <div class="relative">
                         <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
                             <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}"
@@ -97,158 +97,43 @@
             <!-- Dashboard Content -->
             <main class="px-6">
                 <!-- Charts -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <!-- Card Ketepatan Waktu -->
-                    <div class="bg-white rounded-lg shadow p-6" style="height: 400px;">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800">Persentasi Kehadiran</h3>
-                            <div class="flex space-x-2">
-                                <button onclick="toggleChartType('activityChart', 'line')"
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Garis">
-                                    <i class="fas fa-chart-line"></i>
-                                </button>
-                                <button onclick="toggleChartType('activityChart', 'bar')"
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Batang">
-                                    <i class="fas fa-chart-bar"></i>
-                                </button>
+                 <!-- Card Total Produksi -->
+                      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                        <!-- Card Total Produksi Netto -->
+                        <div class="bg-blue-100 rounded-lg shadow p-4 flex items-center" style="height: 150px;">
+                            <i class="fas fa-chart-line text-blue-600 mr-3"></i>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Total Produksi Netto</h3>
+                                <p class="text-xl font-bold text-gray-900">{{ $totalNetProduction }}</p>
                             </div>
                         </div>
-                        <div style="height: 300px;">
-                            <canvas id="activityChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Card Kehadiran Rapat -->
-                    <div class="bg-white rounded-lg shadow p-6" style="height: 400px;">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800">Score Daily Meeting</h3>
-                            <div class="flex space-x-2">
-                                <button onclick="toggleChartType('meetingChart', 'line')"
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Garis">
-                                    <i class="fas fa-chart-line"></i>
-                                </button>
-                                <button onclick="toggleChartType('meetingChart', 'bar')"
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Batang">
-                                    <i class="fas fa-chart-bar"></i>
-                                </button>
+<!-- Card Total Produksi Bruto -->
+                        <div class="bg-green-100 rounded-lg shadow p-4 flex items-center" style="height: 150px;">
+                            <i class="fas fa-chart-bar text-green-600 mr-3"></i>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Total Produksi Bruto</h3>
+                                <p class="text-xl font-bold text-gray-900">{{ $totalGrossProduction }}</p>
                             </div>
                         </div>
-                        <div style="height: 300px;">
-                            <canvas id="meetingChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Diagram SR dan WO -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <!-- Card SR Status -->
-                    <div class="bg-white rounded-lg shadow p-6" style="height: 400px;">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800">Presentasi Status SR</h3>
-                            <div class="flex space-x-2">
-                                <button onclick="toggleChartType('srChart', 'pie')" 
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Pie">
-                                    <i class="fas fa-chart-pie"></i>
-                                </button>
-                                <button onclick="toggleChartType('srChart', 'doughnut')"
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Donat">
-                                    <i class="fas fa-circle-notch"></i>
-                                </button>
+    
+                        <div class="bg-yellow-100 rounded-lg shadow p-4 flex items-center" style="height: 150px;">
+                            <i class="fas fa-bolt text-yellow-600 mr-3"></i>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Beban Puncak</h3>
+                                <p class="text-xl font-bold text-gray-900">{{ $peakLoad }}</p>
                             </div>
                         </div>
-                        <div class="relative" style="height: 300px;">
-                            <canvas id="srChart"></canvas>
-                            <div id="srStats" class="absolute bottom-0 left-0 text-sm text-gray-600 p-2"></div>
-                        </div>
-                    </div>
-
-                    <!-- Card WO Status -->
-                    <div class="bg-white rounded-lg shadow p-6" style="height: 400px;">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800">Presentasi Status WO</h3>
-                            <div class="flex space-x-2">
-                                <button onclick="toggleChartType('woChart', 'pie')"
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Pie">
-                                    <i class="fas fa-chart-pie"></i>
-                                </button>
-                                <button onclick="toggleChartType('woChart', 'doughnut')"
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Donat">
-                                    <i class="fas fa-circle-notch"></i>
-                                </button>
+    
+                        <div class="bg-purple-100 rounded-lg shadow p-4 flex items-center" style="height: 150px;">
+                            <i class="fas fa-clock text-purple-600 mr-3"></i>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Total Jam Operasi</h3>
+                                <p class="text-xl font-bold text-gray-900">{{ $totalOperatingHours }}</p>
                             </div>
                         </div>
-                        <div class="relative" style="height: 300px;">
-                            <canvas id="woChart"></canvas>
-                            <div id="woStats" class="absolute bottom-0 left-0 text-sm text-gray-600 p-2"></div>
-                        </div>
                     </div>
-
-                    <!-- Card WO Backlog Status -->
-                    <div class="bg-white rounded-lg shadow p-6" style="height: 400px;">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800">WO Backlog Status</h3>
-                            <div class="flex space-x-2">
-                                <button onclick="toggleChartType('woBacklogChart', 'pie')"
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Pie">
-                                    <i class="fas fa-chart-pie"></i>
-                                </button>
-                                <button onclick="toggleChartType('woBacklogChart', 'doughnut')"
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Donat">
-                                    <i class="fas fa-circle-notch"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="relative" style="height: 300px;">
-                            <canvas id="woBacklogChart"></canvas>
-                            <div id="woBacklogStats" class="absolute bottom-0 left-0 text-sm text-gray-600 p-2"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Diagram Pembahasan dan Komitmen -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <!-- Card Pembahasan Lain-lain Status -->
-                    <div class="bg-white rounded-lg shadow p-6" style="height: 400px;">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800">Status Pembahasan Lain-lain</h3>
-                            <div class="flex space-x-2">
-                                <button onclick="toggleChartType('otherDiscussionChart', 'pie')" 
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Pie">
-                                    <i class="fas fa-chart-pie"></i>
-                                </button>
-                                <button onclick="toggleChartType('otherDiscussionChart', 'doughnut')"
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Donat">
-                                    <i class="fas fa-circle-notch"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="relative" style="height: 300px;">
-                            <canvas id="otherDiscussionChart"></canvas>
-                            <div id="otherDiscussionStats" class="absolute bottom-0 left-0 text-sm text-gray-600 p-2"></div>
-                        </div>
-                    </div>
-
-                    <!-- Card Komitmen Status -->
-                    <div class="bg-white rounded-lg shadow p-6" style="height: 400px;">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800">Status Komitmen</h3>
-                            <div class="flex space-x-2">
-                                <button onclick="toggleChartType('commitmentChart', 'pie')"
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Pie">
-                                    <i class="fas fa-chart-pie"></i>
-                                </button>
-                                <button onclick="toggleChartType('commitmentChart', 'doughnut')"
-                                    class="p-2 hover:bg-gray-100 rounded-lg" title="Tampilkan Grafik Donat">
-                                    <i class="fas fa-circle-notch"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="relative" style="height: 300px;">
-                            <canvas id="commitmentChart"></canvas>
-                            <div id="commitmentStats" class="absolute bottom-0 left-0 text-sm text-gray-600 p-2"></div>
-                        </div>
-                    </div>
-                </div>
+               
+            
 
                 <!-- Recent Activities Table -->
                 <div class="bg-white rounded-lg shadow">

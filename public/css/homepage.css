@@ -1,0 +1,112 @@
+/* General Styles */
+html, body {
+
+    background-color: white;
+    color: #fff;
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    /* min-height: 100vh; */
+}
+
+#line-chart {
+    display: block !important;
+}
+
+.card {
+    background-color: rgba(36,35,73,1);
+    color: white;
+    font-family: inherit;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.btn-outline-light {
+    border: 1px solid #fff;
+    transition: all 0.2s;
+}
+
+.btn-outline-light:hover {
+    background-color: #fff;
+    color: #00274D;
+}
+
+.footer {
+    background-color: #191a4b; /* Warna latar belakang footer */
+    color: white;
+    padding: 2rem 1rem;
+    width: 100%; /* Pastikan footer mengambil lebar penuh */
+    position: relative; /* Untuk memastikan footer tidak melayang */
+    left: 0; /* Mulai dari sisi kiri layar */
+    box-sizing: border-box; /* Sertakan padding dalam lebar total */
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1200px; /* Batas lebar konten */
+    margin: 0 auto; /* Pusatkan konten */
+    justify-content: space-between;
+    gap: 1rem; /* Jarak antar kolom */
+}
+
+.column {
+    flex: 1 1 200px; /* Atur kolom fleksibel */
+    padding: 0 1rem;
+    min-width: 250px; /* Lebar minimum kolom */
+}
+
+.social-icons a {
+    margin-right: 0.5rem;
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+form input {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+form button {
+    padding: 0.5rem;
+    background-color: #8bc53f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.copyright {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.copyright a {
+    color: #8bc53f;
+    text-decoration: none;
+}
+
+

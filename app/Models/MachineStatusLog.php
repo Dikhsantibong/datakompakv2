@@ -188,8 +188,8 @@ class MachineStatusLog extends Model
 
     public function isActiveIssue()
     {
-        if ($this->status !== 'Gangguan') {
-            return false;
+        if (in_array($this->status, ['FO', 'Pemeliharaan', 'Mothballed', 'Overhaul'])) {
+            return true; // FO, Pemeliharaan, Mothballed, Overhaul are treated as disturbances
         }
         return !$this->target_selesai || Carbon::now()->lte($this->target_selesai);
     }

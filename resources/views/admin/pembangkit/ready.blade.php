@@ -239,12 +239,12 @@
                                                             style="width: 100px;"
                                                             class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-400">
                                                             <option value="" style="background-color: #FFFFFF">Pilih Status</option>
-                                                            <option value="Operasi" style="background-color: #4CAF50">Operasi</option>
-                                                            <option value="Standby" style="background-color: #2196F3">Standby</option>
-                                                            <option value="Gangguan" style="background-color: #f44336">Gangguan</option>
-                                                            <option value="Pemeliharaan" style="background-color: #FF9800">Pemeliharaan</option>
-                                                            <option value="Mothballed" style="background-color: #9E9E9E">Mothballed</option>
-                                                            <option value="Overhaul" style="background-color: #673AB7">Overhaul</option>
+                                                            <option value="RSH" style="background-color: #FF9800">RSH</option>
+                                                            <option value="FO" style="background-color: #f44336">FO</option>
+                                                            <option value="MO" style="background-color: #4CAF50">MO</option>
+                                                            <option value="P0" style="background-color: #FFFFFF">P0</option>
+                                                            <option value="MB" style="background-color: #9E9E9E">MB</option>
+                                                            <option value="OPS" style="background-color: #2196F3">OPS</option>
                                                         </select>
                                                     </td>
                                                     <td class="px-3 py-2 border-r border-gray-200">
@@ -865,22 +865,15 @@
     }
 
     function getStatusColor(status) {
-        switch (status) {
-            case 'Operasi':
-                return '#4CAF50'; // Hijau
-            case 'Standby':
-                return '#2196F3'; // Kuning
-            case 'Gangguan':
-                return '#f44336'; // Merah
-            case 'Pemeliharaan':
-                return '#FF9800'; // Biru
-            case 'Mothballed':
-                return '#9E9E9E'; // Ungu
-            case 'Overhaul':
-                return '#673AB7'; // Orange
-            default:
-                return '#FFFFFF'; // Default tanpa warna
-        }
+        const statusMapping = {
+            'RSH': '#FF9800', // Orange
+            'FO': '#f44336', // Merah
+            'MO': '#4CAF50', // Hijau
+            'P0': '#FFFFFF', // Default tanpa warna
+            'MB': '#9E9E9E', // Ungu
+            'OPS': '#2196F3' // Biru
+        };
+        return statusMapping[status] || '#FFFFFF'; // Default tanpa warna
     }
 
     // Pastikan fungsi dijalankan saat halaman dimuat

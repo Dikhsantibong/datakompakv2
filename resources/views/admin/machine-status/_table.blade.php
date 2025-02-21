@@ -127,12 +127,12 @@
                                         });
                                     
                                     // Menghitung status berdasarkan log terakhir
-                                    $operasiCount = $latestLogs->where('status', 'Operasi')->count();
-                                    $gangguanCount = $latestLogs->where('status', 'Gangguan')->count();
-                                    $pemeliharaanCount = $latestLogs->where('status', 'Pemeliharaan')->count();
-                                    $standbyCount = $latestLogs->where('status', 'Standby')->count();
-                                    $overhaulCount = $latestLogs->where('status', 'Overhaul')->count();
-                                    $mothballedCount = $latestLogs->where('status', 'Mothballed')->count();
+                                    $rshCount = $latestLogs->where('status', 'RSH')->count();
+                                    $foCount = $latestLogs->where('status', 'FO')->count(); // FO categorized as Gangguan
+                                    $moCount = $latestLogs->where('status', 'MO')->count();
+                                    $p0Count = $latestLogs->where('status', 'P0')->count();
+                                    $mbCount = $latestLogs->where('status', 'MB')->count();
+                                    $opsCount = $latestLogs->where('status', 'OPS')->count();
                                 @endphp
                                 
                                 <div class="bg-gray-100 p-4 rounded-lg shadow-md hover:bg-gray-200 transition duration-300 md:col-span-1 col-span-7">
@@ -140,28 +140,28 @@
                                     <p class="text-2xl font-bold text-gray-900">{{ $machineCount }}</p>
                                 </div>
                                 <div class="bg-emerald-100 p-4 rounded-lg shadow-md hover:bg-emerald-200 transition duration-300 md:col-span-1 col-span-7">
-                                    <p class="text-sm text-emerald-700 font-medium">Operasi</p>
-                                    <p class="text-2xl font-bold text-emerald-900">{{ $operasiCount }}</p>
+                                    <p class="text-sm text-emerald-700 font-medium">RSH</p>
+                                    <p class="text-2xl font-bold text-emerald-900">{{ $rshCount }}</p>
                                 </div>
                                 <div class="bg-rose-100 p-4 rounded-lg shadow-md hover:bg-rose-200 transition duration-300 md:col-span-1 col-span-7">
-                                    <p class="text-sm text-rose-700 font-medium">Gangguan</p>
-                                    <p class="text-2xl font-bold text-rose-900">{{ $gangguanCount }}</p>
+                                    <p class="text-sm text-rose-700 font-medium">FO</p>
+                                    <p class="text-2xl font-bold text-rose-900">{{ $foCount }}</p>
                                 </div>
                                 <div class="bg-amber-100 p-4 rounded-lg shadow-md hover:bg-amber-200 transition duration-300 md:col-span-1 col-span-7">
-                                    <p class="text-sm text-amber-700 font-medium">Pemeliharaan</p>
-                                    <p class="text-2xl font-bold text-amber-900">{{ $pemeliharaanCount }}</p>
+                                    <p class="text-sm text-amber-700 font-medium">P0</p>
+                                    <p class="text-2xl font-bold text-amber-900">{{ $p0Count }}</p>
                                 </div>
                                 <div class="bg-sky-100 p-4 rounded-lg shadow-md hover:bg-sky-200 transition duration-300 md:col-span-1 col-span-7">
-                                    <p class="text-sm text-sky-700 font-medium">Standby</p>
-                                    <p class="text-2xl font-bold text-sky-900">{{ $standbyCount }}</p>
+                                    <p class="text-sm text-sky-700 font-medium">MO</p>
+                                    <p class="text-2xl font-bold text-sky-900">{{ $moCount }}</p>
                                 </div>
                                 <div class="bg-violet-100 p-4 rounded-lg shadow-md hover:bg-violet-200 transition duration-300 md:col-span-1 col-span-7">
-                                    <p class="text-sm text-violet-700 font-medium">Overhaul</p>
-                                    <p class="text-2xl font-bold text-violet-900">{{ $overhaulCount }}</p>
+                                    <p class="text-sm text-violet-700 font-medium">OPS</p>
+                                    <p class="text-2xl font-bold text-violet-900">{{ $opsCount }}</p>
                                 </div>
                                 <div class="bg-gray-100 p-4 rounded-lg shadow-md hover:bg-gray-200 transition duration-300 md:col-span-1 col-span-7">
-                                    <p class="text-sm text-gray-700 font-medium">Mothballed</p>
-                                    <p class="text-2xl font-bold text-gray-900">{{ $mothballedCount }}</p>
+                                    <p class="text-sm text-gray-700 font-medium">MB</p>
+                                    <p class="text-2xl font-bold text-gray-900">{{ $mbCount }}</p>
                                 </div>
                             </div>
                         </div>
@@ -179,16 +179,8 @@
                                 <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Daya Mampu Slim (MW)</th>
                                 <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Daya Mampu Pasok (MW)</th>
                                 <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Beban (MW)</th>
-                                
                                 <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Status</th>
-                                <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Component</th>
-                                <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Equipment</th>
                                 <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Deskripsi</th>
-                                <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Kronologi</th>
-                                <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Action Plan</th>
-                                <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Progress</th>
-                                <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">Tanggal Mulai</th>
-                                <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center">Target Selesai</th>
                             </tr>
                         </thead>
                         <tbody class="text-sm">
@@ -197,11 +189,12 @@
                                     $log = $filteredLogs->firstWhere('machine_id', $machine->id);
                                     $status = $log?->status ?? '-';
                                     $statusClass = match($status) {
-                                        'Operasi' => 'bg-green-100 text-green-800',
-                                        'Standby' => 'bg-blue-100 text-blue-800',
-                                        'Gangguan' => 'bg-red-100 text-red-800',
-                                        'Pemeliharaan' => 'bg-orange-100 text-orange-800',
-                                        'Overhaul' => 'bg-violet-100 text-violet-800',
+                                        'RSH' => 'bg-green-100 text-green-800',
+                                        'FO' => 'bg-red-100 text-red-800',
+                                        'MO' => 'bg-blue-100 text-blue-800',
+                                        'P0' => 'bg-orange-100 text-orange-800',
+                                        'MB' => 'bg-violet-100 text-violet-800',
+                                        'OPS' => 'bg-gray-100 text-gray-800',
                                         default => 'bg-gray-100 text-gray-800'
                                     };
                                 @endphp
@@ -217,52 +210,11 @@
                                             {{ $status }}
                                         </span>
                                     </td>
-                                    <td class="px-3 py-2 border-r border-gray-200">{{ $log?->component ?? '-' }}</td>
-                                    <td class="px-3 py-2 border-r border-gray-200 !text-left" data-content-type="equipment" style="text-align: left !important;">
-                                        <div class="min-w-[300px] max-w-full overflow-hidden !text-left" style="text-align: left !important; justify-content: flex-start !important;">
-                                            <div class="max-h-[150px] overflow-y-auto whitespace-pre-wrap break-words !text-left" style="text-align: left !important; justify-content: flex-start !important;">
-                                                <span style="text-align: left !important; display: block;">{{ $log?->equipment ?? '-' }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-3 py-2 border-r border-gray-200 !text-left" data-content-type="description" style="text-align: left !important;">
-                                        <div class="min-w-[300px] max-w-full overflow-hidden !text-left" style="text-align: left !important; justify-content: flex-start !important;">
-                                            <div class="max-h-[150px] overflow-y-auto whitespace-pre-wrap break-words !text-left" style="text-align: left !important; justify-content: flex-start !important;">
-                                                <span style="text-align: left !important; display: block;">{{ $log?->deskripsi ?? '-' }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-3 py-2 border-r border-gray-200 !text-left" data-content-type="kronologi" style="text-align: left !important;">
-                                        <div class="min-w-[300px] max-w-full overflow-hidden !text-left" style="text-align: left !important; justify-content: flex-start !important;">
-                                            <div class="max-h-[150px] overflow-y-auto whitespace-pre-wrap break-words !text-left" style="text-align: left !important; justify-content: flex-start !important;">
-                                                <span style="text-align: left !important; display: block;">{{ $log?->kronologi ?? '-' }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-3 py-2 border-r border-gray-200 !text-left" data-content-type="action-plan" style="text-align: left !important;">
-                                        <div class="min-w-[300px] max-w-full overflow-hidden !text-left" style="text-align: left !important; justify-content: flex-start !important;">
-                                            <div class="max-h-[150px] overflow-y-auto whitespace-pre-wrap break-words !text-left" style="text-align: left !important; justify-content: flex-start !important;">
-                                                <span style="text-align: left !important; display: block;">{{ $log?->action_plan ?? '-' }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-3 py-2 border-r border-gray-200 !text-left" data-content-type="progress" style="text-align: left !important;">
-                                        <div class="min-w-[300px] max-w-full overflow-hidden !text-left" style="text-align: left !important; justify-content: flex-start !important;">
-                                            <div class="max-h-[150px] overflow-y-auto whitespace-pre-wrap break-words !text-left" style="text-align: left !important; justify-content: flex-start !important;">
-                                                <span style="text-align: left !important; display: block;">{{ $log?->progres ?? '-' }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-3 py-2 border-r border-gray-200 text-center">
-                                        {{ $log?->tanggal_mulai ? \Carbon\Carbon::parse($log->tanggal_mulai)->format('d/m/Y') : '-' }}
-                                    </td>
-                                    <td class="px-3 py-2 text-center">
-                                        {{ $log?->target_selesai ? \Carbon\Carbon::parse($log->target_selesai)->format('d/m/Y') : '-' }}
-                                    </td>
+                                    <td class="px-3 py-2 border-r border-gray-200 text-center">{{ $log?->deskripsi ?? '-' }}</td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="14" class="px-3 py-4 text-center text-gray-500">
+                                    <td colspan="6" class="px-3 py-4 text-center text-gray-500">
                                         Tidak ada data mesin untuk unit ini
                                     </td>
                                 </tr>

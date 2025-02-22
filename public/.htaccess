@@ -5,9 +5,9 @@
 
     RewriteEngine On
 
-    # Remove public URL
-    RewriteCond %{REQUEST_URI} !^/public/
-    RewriteRule ^(.*)$ public/$1 [L]
+    # Remove public URL - Updated rule
+    RewriteCond %{REQUEST_URI} !^/public/ 
+    RewriteRule ^(.*)$ /public/$1 [L,QSA]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .

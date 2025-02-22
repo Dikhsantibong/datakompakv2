@@ -157,16 +157,19 @@
                                                     </div>
                                                 </td>
                                                 <td class="py-2 whitespace-nowrap flex justify-center gap-2">
-                                                    <a href="{{ route('admin.users.edit', $user->id) }}"
-                                                        class="text-white btn bg-indigo-500 hover:bg-indigo-900 rounded-lg border">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-
+                                                    @if ($user->role !== 'super_admin')
+                                                        <a href="{{ route('admin.users.edit', $user->id) }}"
+                                                            class="text-white btn bg-indigo-500 hover:bg-indigo-900 rounded-lg border">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                    
+              
                                                     <button type="button" 
                                                             onclick="confirmDelete({{ $user->id }}, '{{ $user->name }}')"
                                                             class="text-white btn bg-red-500 hover:bg-red-600 rounded-lg">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
+                                                    @endif
 
                                                     <form id="delete-form-{{ $user->id }}" 
                                                           action="{{ route('admin.users.destroy', $user->id) }}" 

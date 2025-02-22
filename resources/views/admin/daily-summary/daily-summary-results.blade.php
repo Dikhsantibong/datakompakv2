@@ -49,7 +49,7 @@
                                     document.getElementById('logout-form').submit();">Logout</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                             @csrf
-                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
+                            <input type="hidden" name="redirect" value="{{ route('login') }}">
                         </form>
                     </div>
                 </div>

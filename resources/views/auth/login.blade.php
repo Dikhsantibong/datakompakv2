@@ -88,7 +88,7 @@
 
                         <!-- Buttons -->
                         <div class="mt-4">
-                            <button type="submit" class="btn btn-primary w-100">
+                            <button type="submit" class=w"btn btn-primary w-100">
                                 {{ __('Login') }}
                             </button>
                             <div class="text-center mt-3">

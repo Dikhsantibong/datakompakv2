@@ -9,7 +9,8 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!auth()->check() || !auth()->user()->isAdmin()) {
+        // Cek apakah pengguna terautentikasi dan apakah mereka adalah admin atau super admin
+        if (!auth()->check() || (!auth()->user()->isAdmin() && !auth()->user()->isSuperAdmin())) {
             return redirect('/')->with('error', 'Unauthorized access.');
         }
 

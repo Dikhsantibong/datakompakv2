@@ -70,63 +70,72 @@
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-semibold text-gray-800">Status Mesin</h2>
                     
+                    <!-- Add Copy Button -->
+                    <button id="copyFormattedData" 
+                        class="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2">
+                        <i class="fas fa-copy mr-2"></i>
+                        Salin Laporan
+                    </button>
+                    
                     <!-- Filter Area -->
-                    <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
-                        <!-- Unit Source Filter - hanya tampil untuk session mysql -->
-                        @if(session('unit') === 'mysql')
-                        <div class="flex items-center">
-                            <label for="unit-source" class="text-sm text-gray-700 font-medium mr-2">Filter Unit:</label>
-                            <select id="unit-source" 
-                                class="border rounded px-3 py-2 text-sm w-full md:w-40"
-                                onchange="updateTable()">
-                                <option value="">Semua Unit</option>
-                                <option value="mysql" {{ request('unit_source') == 'mysql' ? 'selected' : '' }}>UP Kendari</option>
-                                <option value="mysql_wua_wua" {{ request('unit_source') == 'mysql_wua_wua' ? 'selected' : '' }}>Wua Wua</option>
-                                <option value="mysql_poasia" {{ request('unit_source') == 'mysql_poasia' ? 'selected' : '' }}>Poasia</option>
-                                <option value="mysql_kolaka" {{ request('unit_source') == 'mysql_kolaka' ? 'selected' : '' }}>Kolaka</option>
-                                <option value="mysql_bau_bau" {{ request('unit_source') == 'mysql_bau_bau' ? 'selected' : '' }}>Bau Bau</option>
-                            </select>
-                        </div>
-                        @endif
+                    <div class="flex flex-col gap-4">
+                        <!-- Row 1: Essential Filters -->
+                        <div class="flex flex-wrap items-center gap-3">
+                            @if(session('unit') === 'mysql')
+                            <div class="flex items-center">
+                                <label for="unit-source" class="text-sm text-gray-700 font-medium mr-2">Unit:</label>
+                                <select id="unit-source" 
+                                    class="border rounded px-3 py-2 text-sm w-40"
+                                    onchange="updateTable()">
+                                    <option value="">Semua Unit</option>
+                                    <option value="mysql" {{ request('unit_source') == 'mysql' ? 'selected' : '' }}>UP Kendari</option>
+                                    <option value="mysql_wua_wua" {{ request('unit_source') == 'mysql_wua_wua' ? 'selected' : '' }}>Wua Wua</option>
+                                    <option value="mysql_poasia" {{ request('unit_source') == 'mysql_poasia' ? 'selected' : '' }}>Poasia</option>
+                                    <option value="mysql_kolaka" {{ request('unit_source') == 'mysql_kolaka' ? 'selected' : '' }}>Kolaka</option>
+                                    <option value="mysql_bau_bau" {{ request('unit_source') == 'mysql_bau_bau' ? 'selected' : '' }}>Bau Bau</option>
+                                </select>
+                            </div>
+                            @endif
 
-                        <!-- Date Filter -->
-                        <div>
-                            <input type="date" id="date-picker" 
-                                class="border rounded px-3 py-2 text-sm w-full md:w-auto"
-                                value="{{ $date }}"
-                                onchange="updateTable()">
-                        </div>
-                        
-                        <!-- Search dengan debounce -->
-                        <div>
-                            <input type="text" id="searchInput" 
-                                placeholder="Cari unit/mesin/status..." 
-                                class="border rounded px-3 py-2 text-sm w-full md:w-64"
-                                value="{{ request('search') }}">
-                        </div>
+                            <div class="flex items-center">
+                                <label for="date-picker" class="text-sm text-gray-700 font-medium mr-2">Tanggal:</label>
+                                <input type="date" id="date-picker" 
+                                    class="border rounded px-3 py-2 text-sm w-auto"
+                                    value="{{ $date }}"
+                                    onchange="updateTable()">
+                            </div>
 
-                        <!-- Waktu Input Filter -->
-                        <div class="flex items-center">
-                            <label for="input-time" class="text-sm text-gray-700 font-medium mr-2">Filter Waktu Input:</label>
-                            <select id="input-time" 
-                                class="border rounded px-3 py-2 text-sm w-full md:w-40"
-                                onchange="updateTable()">
-                                <option value="">Semua Waktu</option>
-                                <option value="06:00" {{ request('input_time') == '06:00' ? 'selected' : '' }}>06:00 (Pagi)</option>
-                                <option value="11:00" {{ request('input_time') == '11:00' ? 'selected' : '' }}>11:00 (Siang)</option>
-                                <option value="14:00" {{ request('input_time') == '14:00' ? 'selected' : '' }}>14:00 (Siang)</option>
-                                <option value="18:00" {{ request('input_time') == '18:00' ? 'selected' : '' }}>18:00 (Malam)</option>
-                                <option value="19:00" {{ request('input_time') == '19:00' ? 'selected' : '' }}>19:00 (Malam)</option>
-                            </select>
+                            <div class="flex items-center">
+                                <label for="input-time" class="text-sm text-gray-700 font-medium mr-2">Waktu:</label>
+                                <select id="input-time" 
+                                    class="border rounded px-3 py-2 text-sm w-40"
+                                    onchange="updateTable()">
+                                    <option value="">Semua Waktu</option>
+                                    <option value="06:00" {{ request('input_time') == '06:00' ? 'selected' : '' }}>06:00 (Pagi)</option>
+                                    <option value="11:00" {{ request('input_time') == '11:00' ? 'selected' : '' }}>11:00 (Siang)</option>
+                                    <option value="14:00" {{ request('input_time') == '14:00' ? 'selected' : '' }}>14:00 (Siang)</option>
+                                    <option value="18:00" {{ request('input_time') == '18:00' ? 'selected' : '' }}>18:00 (Malam)</option>
+                                    <option value="19:00" {{ request('input_time') == '19:00' ? 'selected' : '' }}>19:00 (Malam)</option>
+                                </select>
+                            </div>
                         </div>
 
-                        <!-- Update Mesin Button -->
-                        <div>
-                            <a href="{{ route('admin.pembangkit.ready') }}" 
-                               class="inline-flex items-center justify-center w-full md:w-auto px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                <i class="fas fa-sync-alt mr-2"></i>
-                                Update Mesin
-                            </a>
+                        <!-- Row 2: Search and Action -->
+                        <div class="flex flex-wrap items-center gap-3">
+                            <div class="flex-grow">
+                                <input type="text" id="searchInput" 
+                                    placeholder="Cari unit/mesin/status..." 
+                                    class="border rounded px-3 py-2 text-sm w-full"
+                                    value="{{ request('search') }}">
+                            </div>
+
+                            <div>
+                                <a href="{{ route('admin.pembangkit.ready') }}" 
+                                   class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <i class="fas fa-sync-alt mr-2"></i>
+                                    Update Mesin
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -266,6 +275,101 @@ function fetchWithLoading(url, options = {}) {
             hideLoading();
         });
 }
+
+function formatDate(date) {
+    const months = [
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    const d = new Date(date);
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function getFormattedReport() {
+    const date = document.getElementById('date-picker').value;
+    const time = document.getElementById('input-time').value || '11:00';
+    
+    let report = `Assalamu Alaikum Wr.Wb\n`;
+    report += `Laporan Kesiapan Pembangkit PLN Nusantara Power\n`;
+    report += `Unit Pembangkitan Kendari, ${formatDate(date)}\n`;
+    report += `Pukul : ${time} Wita\n\n`;
+
+    // Get all power plant sections
+    const powerPlantSections = document.querySelectorAll('.bg-white.rounded-lg.shadow.p-6.mb-4');
+    
+    powerPlantSections.forEach(section => {
+        const title = section.querySelector('h1').textContent.replace('STATUS MESIN - ', '');
+        const stats = section.querySelectorAll('.grid.grid-cols-5 .bg-blue-50, .bg-green-50, .bg-purple-50, .bg-orange-50');
+        
+        report += `\n${title}\n`;
+        
+        // Add DMN, DMP, Beban, HOP stats
+        let totalDMP = 0;
+        let totalLoad = 0;
+
+        stats.forEach(stat => {
+            const label = stat.querySelector('p:first-child').textContent.trim();
+            const value = stat.querySelector('p:last-child').textContent.trim();
+            report += `${label} ${value}\n`;
+
+            if (label === 'DMP:') {
+                totalDMP = parseFloat(value);
+            } else if (label === 'Total Beban:') {
+                totalLoad = parseFloat(value);
+            }
+        });
+
+        // Calculate reserve power
+        const reservePower = totalDMP - totalLoad;
+        report += `Cadangan Daya: ${reservePower.toFixed(2)} MW\n\n`;
+
+        // Add machine details
+        const machines = section.querySelectorAll('tbody tr');
+        machines.forEach(machine => {
+            const cells = machine.querySelectorAll('td');
+            if (cells.length >= 6) {
+                const name = cells[1].textContent.trim();
+                const dmn = cells[2].textContent.trim();
+                const dmp = cells[3].textContent.trim();
+                const load = cells[4].textContent.trim();
+                const status = cells[5].textContent.trim();
+                
+                report += `- ${name} : ${dmn}/${dmp}/ ${status}`;
+                if (load && load !== '-') {
+                    report += ` ${load} MW`;
+                }
+                report += '\n';
+            }
+        });
+        
+        report += '\n';
+    });
+
+    report += '\nBarakallahu Fikhum dan Terima Kasih';
+    return report;
+}
+
+document.getElementById('copyFormattedData').addEventListener('click', function() {
+    const formattedReport = getFormattedReport();
+    
+    navigator.clipboard.writeText(formattedReport).then(() => {
+        // Show success message using SweetAlert2
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Laporan telah disalin ke clipboard',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Gagal menyalin laporan ke clipboard'
+        });
+    });
+});
 </script>
 
 <style>

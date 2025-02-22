@@ -4,7 +4,9 @@
     <div class="bg-[#0A749B] rounded-2xl h-full px-4 py-6 flex flex-col">
         <!-- Logo section -->
         <div class="flex items-center justify-between mb-8">
-            <img src="{{ asset('logo/navlogo.png') }}" alt="Logo Aplikasi Rapat Harian" class="w-40">
+            <div class="flex justify-center">
+                <img src="{{ asset('logo/navlogo.png') }}" alt="Logo Aplikasi Rapat Harian" class="w-40">
+            </div>
             <button id="menu-toggle-close"
                 class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#0A749B] hover:text-white focus:outline-none">
                 <span class="sr-only">Open main menu</span>
@@ -56,11 +58,13 @@
 
             
 
-            <a href="{{ route('admin.settings') }}"
-                class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.settings') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                <i class="fas fa-cog w-6 h-6"></i>
-                <span class="ml-3 text-base">Pengaturan</span>
-            </a>
+            @if(auth()->user()->isSuperAdmin())
+                <a href="{{ route('admin.settings') }}"
+                    class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.settings') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                    <i class="fas fa-cog w-6 h-6"></i>
+                    <span class="ml-3 text-base">Pengaturan</span>
+                </a>
+            @endif
 
             
         </nav>

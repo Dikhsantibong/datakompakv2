@@ -63,18 +63,59 @@
                                 <option value="mysql" {{ $selectedUnit == 'mysql' ? 'selected' : '' }} class="text-success">
                                     <i class="fas fa-building"></i> UP Kendari
                                 </option>
-                                <option value="mysql_bau_bau" {{ $selectedUnit == 'mysql_bau_bau' ? 'selected' : '' }} class="text-info">
-                                    <i class="fas fa-building"></i> ULPLTD Bau-Bau
+                                <option value="mysql_bau_bau" {{ $selectedUnit == 'mysql_bau_bau' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Bau-Bau
                                 </option>
-                                <option value="mysql_kolaka" {{ $selectedUnit == 'mysql_kolaka' ? 'selected' : '' }} class="text-warning">
-                                    <i class="fas fa-building"></i> ULPLTD Kolaka
+                                <option value="mysql_kolaka" {{ $selectedUnit == 'mysql_kolaka' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Kolaka
                                 </option>
-                                <option value="mysql_poasia" {{ $selectedUnit == 'mysql_poasia' ? 'selected' : '' }} class="text-danger">
-                                    <i class="fas fa-building"></i> ULPLTD Poasia
+                                <option value="mysql_poasia" {{ $selectedUnit == 'mysql_poasia' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Poasia
                                 </option>
                                 <option value="mysql_wua_wua" {{ $selectedUnit == 'mysql_wua_wua' ? 'selected' : '' }} class="text-primary">
-                                    <i class="fas fa-building"></i> ULPLTD Wua-Wua
+                                    <i class="fas fa-building"></i> UNIT Wua-Wua
                                 </option>
+                                <option value="mysql_moramo" {{ $selectedUnit == 'mysql_moramo' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Moramo
+                                </option>
+                                <option value="mysql_baruta" {{ $selectedUnit == 'mysql_baruta' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Baruta
+                                </option>
+                                <option value="mysql_winning" {{ $selectedUnit == 'mysql_winning' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Winning
+                                </option>
+                                <option value="mysql_sabilambo" {{ $selectedUnit == 'mysql_sabilambo' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Sabilambo
+                                </option>
+                                <option value="mysql_rongi" {{ $selectedUnit == 'mysql_rongi' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Rongi
+                                </option>
+                                <option value="mysql_mikuasi" {{ $selectedUnit == 'mysql_mikuasi' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Mikuasi
+                                </option>
+                                <option value="mysql_ladumpi" {{ $selectedUnit == 'mysql_ladumpi' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Ladumpi
+                                </option>
+                                <option value="mysql_langara" {{ $selectedUnit == 'mysql_langara' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Langara
+                                </option>
+                                <option value="mysql_lanipa_nipa" {{ $selectedUnit == 'mysql_lanipa_nipa' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Lanipa Nipa
+                                </option>
+                                <option value="mysql_pasarwajo" {{ $selectedUnit == 'mysql_pasarwajo' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Pasarwajo
+                                </option>
+                                <option value="mysql_raha" {{ $selectedUnit == 'mysql_raha' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Raha
+                                </option>
+                                <option value="mysql_wangi_wangi" {{ $selectedUnit == 'mysql_wangi_wangi' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Wangi Wangi
+                                </option>
+                                <option value="mysql_ereke" {{ $selectedUnit == 'mysql_ereke' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT Ereke
+                                </option>
+                               
+
                             </select>
                         </div>
 
@@ -88,7 +129,7 @@
 
                         <!-- Buttons -->
                         <div class="mt-4">
-                            <button type="submit" class=w"btn btn-primary w-100">
+                            <button type="submit" class="btn btn-primary w-100">
                                 {{ __('Login') }}
                             </button>
                             <div class="text-center mt-3">

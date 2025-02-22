@@ -56,6 +56,18 @@
             </div>
         </header>
 
+        @if(session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('error') }}</span>
+            </div>
+        @endif
+
         <div class="flex items-center pt-2">
             <x-admin-breadcrumb :breadcrumbs="[['name' => 'IKHTISAR HARIAN', 'url' => null]]" />
         </div>
@@ -224,8 +236,8 @@
                                     <tr>
                                         <td class="px-4 py-3 border-r">
                                             <div class="text-sm font-medium text-gray-900 text-center">{{ $machine->name }}</div>
-                                            <input type="hidden" name="data[{{ $machine->id }}][unit_id]" value="{{ $powerPlant->id }}">
-                                            <input type="hidden" name="data[{{ $machine->id }}][machine_id]" value="{{ $machine->id }}">
+                                            <input type="hidden" name="data[{{ $machine->id }}][power_plant_id]" value="{{ $powerPlant->id }}">
+                                            <input type="hidden" name="data[{{ $machine->id }}][machine_name]" value="{{ $machine->name }}">
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-3 gap-0">

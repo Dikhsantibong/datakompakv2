@@ -18,6 +18,24 @@
                     </button>
                     <h1 class="text-xl font-semibold text-gray-900">Kinerja Pembangkit</h1>
                 </div>
+                <div class="relative">
+                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}"
+                            class="w-7 h-7 rounded-full mr-2">
+                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                    </button>
+                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                        <a href="{{ route('logout') }}" 
+                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                           onclick="event.preventDefault(); 
+                                    document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                            <input type="hidden" name="redirect" value="{{ route('login') }}">
+                        </form>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -34,7 +52,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600">EAF</p>
-                                <p class="text-lg font-semibold text-gray-800">85.5%</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ number_format($performance['eaf'], 1) }}%</p>
                             </div>
                         </div>
                     </div>
@@ -47,7 +65,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600">SOF</p>
-                                <p class="text-lg font-semibold text-gray-800">10.2%</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ number_format($performance['sof'], 1) }}%</p>
                             </div>
                         </div>
                     </div>
@@ -60,7 +78,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600">EFOR</p>
-                                <p class="text-lg font-semibold text-gray-800">4.3%</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ number_format($performance['efor'], 1) }}%</p>
                             </div>
                         </div>
                     </div>
@@ -73,7 +91,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600">SdOF</p>
-                                <p class="text-lg font-semibold text-gray-800">2.1%</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ number_format($performance['sdof'], 1) }}%</p>
                             </div>
                         </div>
                     </div>
@@ -86,7 +104,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600">NCF</p>
-                                <p class="text-lg font-semibold text-gray-800">78.9%</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ number_format($performance['ncf'], 1) }}%</p>
                             </div>
                         </div>
                     </div>
@@ -103,19 +121,19 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div class="p-3 bg-gray-50 rounded-lg">
                                 <p class="text-sm text-gray-600">Jam Operasi</p>
-                                <p class="text-lg font-semibold text-gray-800">720 jam</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $operatingStats['operating_hours'] }} jam</p>
                             </div>
                             <div class="p-3 bg-gray-50 rounded-lg">
                                 <p class="text-sm text-gray-600">Jam Standby</p>
-                                <p class="text-lg font-semibold text-gray-800">24 jam</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $operatingStats['standby_hours'] }} jam</p>
                             </div>
                             <div class="p-3 bg-gray-50 rounded-lg">
                                 <p class="text-sm text-gray-600">Planned Outage</p>
-                                <p class="text-lg font-semibold text-gray-800">16 jam</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $operatingStats['planned_outage'] }} jam</p>
                             </div>
                             <div class="p-3 bg-gray-50 rounded-lg">
                                 <p class="text-sm text-gray-600">Maintenance Outage</p>
-                                <p class="text-lg font-semibold text-gray-800">8 jam</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $operatingStats['maintenance_outage'] }} jam</p>
                             </div>
                         </div>
                     </div>
@@ -129,19 +147,19 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div class="p-3 bg-gray-50 rounded-lg">
                                 <p class="text-sm text-gray-600">Produksi Bruto</p>
-                                <p class="text-lg font-semibold text-gray-800">2,600 MW</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $productionStats['gross_production'] }} MW</p>
                             </div>
                             <div class="p-3 bg-gray-50 rounded-lg">
                                 <p class="text-sm text-gray-600">Produksi Netto</p>
-                                <p class="text-lg font-semibold text-gray-800">2,400 MW</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $productionStats['net_production'] }} MW</p>
                             </div>
                             <div class="p-3 bg-gray-50 rounded-lg">
                                 <p class="text-sm text-gray-600">Beban Puncak</p>
-                                <p class="text-lg font-semibold text-gray-800">2,800 MW</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $productionStats['peak_load_day'] }} MW</p>
                             </div>
                             <div class="p-3 bg-gray-50 rounded-lg">
                                 <p class="text-sm text-gray-600">Beban Luar Puncak</p>
-                                <p class="text-lg font-semibold text-gray-800">2,000 MW</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $productionStats['peak_load_night'] }} MW</p>
                             </div>
                         </div>
                     </div>
@@ -158,19 +176,19 @@
                         <div class="space-y-3">
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-600">HSD</span>
-                                <span class="font-semibold text-gray-800">1,200</span>
+                                <span class="font-semibold text-gray-800">{{ $fuelUsage['hsd'] }}</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-600">B35</span>
-                                <span class="font-semibold text-gray-800">800</span>
+                                <span class="font-semibold text-gray-800">{{ $fuelUsage['b35'] }}</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-600">MFO</span>
-                                <span class="font-semibold text-gray-800">400</span>
+                                <span class="font-semibold text-gray-800">{{ $fuelUsage['mfo'] }}</span>
                             </div>
                             <div class="flex justify-between items-center pt-2 border-t">
                                 <span class="text-sm font-medium text-gray-600">Total</span>
-                                <span class="font-semibold text-gray-800">2,400</span>
+                                <span class="font-semibold text-gray-800">{{ $fuelUsage['total'] }}</span>
                             </div>
                         </div>
                     </div>
@@ -184,19 +202,19 @@
                         <div class="space-y-2">
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-600">Meditran</span>
-                                <span class="font-semibold text-gray-800">150</span>
+                                <span class="font-semibold text-gray-800">{{ $oilUsage['meditran'] }}</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-600">Salyx 420</span>
-                                <span class="font-semibold text-gray-800">100</span>
+                                <span class="font-semibold text-gray-800">{{ $oilUsage['salyx_420'] }}</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-600">Salyx 430</span>
-                                <span class="font-semibold text-gray-800">75</span>
+                                <span class="font-semibold text-gray-800">{{ $oilUsage['salyx_430'] }}</span>
                             </div>
                             <div class="flex justify-between items-center pt-2 border-t">
                                 <span class="text-sm font-medium text-gray-600">Total</span>
-                                <span class="font-semibold text-gray-800">325</span>
+                                <span class="font-semibold text-gray-800">{{ $oilUsage['total'] }}</span>
                             </div>
                         </div>
                     </div>
@@ -210,15 +228,15 @@
                         <div class="space-y-3">
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-600">SFC/SCC</span>
-                                <span class="font-semibold text-gray-800">0.345</span>
+                                <span class="font-semibold text-gray-800">{{ $technicalParams['sfc_scc'] }}</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-600">NPHR</span>
-                                <span class="font-semibold text-gray-800">2.567</span>
+                                <span class="font-semibold text-gray-800">{{ $technicalParams['nphr'] }}</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-600">SLC</span>
-                                <span class="font-semibold text-gray-800">1.234</span>
+                                <span class="font-semibold text-gray-800">{{ $technicalParams['slc'] }}</span>
                             </div>
                         </div>
                     </div>
@@ -280,45 +298,41 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const dummyData = [
-        { eaf: 85.5, sof: 10.2, efor: 4.3, sdof: 2.1, ncf: 78.9 },
-        { eaf: 87.2, sof: 9.8, efor: 3.9, sdof: 1.8, ncf: 80.1 },
-        { eaf: 86.8, sof: 9.5, efor: 4.1, sdof: 2.0, ncf: 79.5 }
-    ];
+    const chartData = @json($chartData);
     
     const ctx = document.getElementById('kinerjaChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Data 1', 'Data 2', 'Data 3'],
+            labels: chartData.map(item => new Date(item.created_at).toLocaleDateString()),
             datasets: [
                 {
                     label: 'EAF',
-                    data: dummyData.map(item => item.eaf),
+                    data: chartData.map(item => item.eaf),
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1
                 },
                 {
                     label: 'SOF',
-                    data: dummyData.map(item => item.sof),
+                    data: chartData.map(item => item.sof),
                     borderColor: 'rgb(255, 99, 132)',
                     tension: 0.1
                 },
                 {
                     label: 'EFOR',
-                    data: dummyData.map(item => item.efor),
+                    data: chartData.map(item => item.efor),
                     borderColor: 'rgb(255, 205, 86)',
                     tension: 0.1
                 },
                 {
                     label: 'SdOF',
-                    data: dummyData.map(item => item.sdof),
+                    data: chartData.map(item => item.sdof),
                     borderColor: 'rgb(54, 162, 235)',
                     tension: 0.1
                 },
                 {
                     label: 'NCF',
-                    data: dummyData.map(item => item.ncf),
+                    data: chartData.map(item => item.ncf),
                     borderColor: 'rgb(153, 102, 255)',
                     tension: 0.1
                 }

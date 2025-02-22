@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\MachineStatusController;
 use App\Http\Controllers\Admin\OtherDiscussionEditController;
 use App\Http\Controllers\Admin\PasswordVerificationController;
 use App\Http\Controllers\DailySummaryController;
+use App\Http\Controllers\Admin\MonitorKinerjaController;
 
 Route::get('/', [HomeController::class, 'index'])->name('homepage');
 
@@ -75,7 +76,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/dashboard/refresh', [DashboardController::class, 'refresh'])->name('dashboard.refresh');
 
     // Add monitor-kinerja route
-    Route::view('/monitor-kinerja', 'admin.monitor-kinerja.index')->name('monitor-kinerja');
+    Route::get('/monitor-kinerja', [MonitorKinerjaController::class, 'index'])->name('monitor-kinerja');
 
     Route::prefix('machine-monitor')->group(function () {
         Route::get('/', [MachineMonitorController::class, 'index'])->name('machine-monitor');

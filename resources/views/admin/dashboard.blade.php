@@ -47,7 +47,7 @@
                             </svg>
                         </button>
     
-                        <h1 class="text-xl font-semibold text-gray-800">Dashboard</h1>
+                        <h1 class="text-xl font-semibold text-gray-800">Dashboard 1</h1>
                     </div>
     
                     <div class="relative">

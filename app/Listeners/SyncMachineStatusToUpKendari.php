@@ -40,6 +40,7 @@ class SyncMachineStatusToUpKendari
                     'dmn' => $event->machineStatus->dmn,
                     'dmp' => $event->machineStatus->dmp,
                     'load_value' => $event->machineStatus->load_value,
+                    'input_time' => $event->machineStatus->input_time,
                     'unit_source' => $powerPlant->unit_source,
                     'updated_at' => now()
                 ];
@@ -122,6 +123,7 @@ class SyncMachineStatusToUpKendari
                     'dmn' => $event->machineStatus->dmn,
                     'dmp' => $event->machineStatus->dmp,
                     'load_value' => $event->machineStatus->load_value,
+                    'input_time' => $event->machineStatus->input_time,
                     'unit_source' => $event->sourceUnit,
                     'updated_at' => now()
                 ];

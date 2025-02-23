@@ -113,7 +113,7 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
-        'mysql_bau_bau' => [
+    'mysql_bau_bau' => [
     'driver' => 'mysql',
     'host' => env('DB_HOST', '127.0.0.1'),
     'port' => env('DB_PORT', '3306'),
@@ -371,7 +371,7 @@ return [
 ],
 
 // PLTMG Units
-'mysql_bau_bau' => [
+'mysql_pltmg_bau_bau' => [
     'driver' => 'mysql',
     'host' => env('DB_HOST', '127.0.0.1'),
     'port' => env('DB_PORT', '3306'),

@@ -81,6 +81,9 @@
                                 <option value="mysql_baruta" {{ $selectedUnit == 'mysql_baruta' ? 'selected' : '' }} class="text-primary">
                                     <i class="fas fa-building"></i> UNIT Baruta
                                 </option>
+                                <option value="mysql_pltmg_bau_bau" {{ $selectedUnit == 'mysql_pltmg_bau_bau' ? 'selected' : '' }} class="text-primary">
+                                    <i class="fas fa-building"></i> UNIT PLTMG Bau-Bau
+                                </option>
                                 <option value="mysql_winning" {{ $selectedUnit == 'mysql_winning' ? 'selected' : '' }} class="text-primary">
                                     <i class="fas fa-building"></i> UNIT Winning
                                 </option>

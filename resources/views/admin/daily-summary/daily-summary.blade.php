@@ -197,31 +197,31 @@
                                                 <span class="px-2">Jam</span>
                                             </div>
                                         </th>
-                                        <th class="px-4 py-2">
-                                            <div class="grid grid-cols-5 gap-0">
-                                                <span class="subcol-border px-2">HSD (Liter)</span>
-                                                <span class="subcol-border px-2">B35 (Liter)</span>
-                                                <span class="subcol-border px-2">MFO (Liter)</span>
-                                                <span class="subcol-border px-2">Total BBM (Liter)</span>
-                                                <span class="px-2">Air (M³)</span>
+                                        <th class="px-4 py-2 border border-gray-300">
+                                            <div class="grid grid-cols-5 gap-1">
+                                                <span class="px-2 text-center border-r border-gray-300">HSD (Liter)</span>
+                                                <span class="px-2 text-center border-r border-gray-300">B35 (Liter)</span>
+                                                <span class="px-2 text-center border-r border-gray-300">MFO (Liter)</span>
+                                                <span class="px-2 text-center border-r border-gray-300">Total BBM (Liter)</span>
+                                                <span class="px-2 text-center">Air (M³)</span>
                                             </div>
                                         </th>
-                                        <th class="px-4 py-2 border-r">
+                                        <th class="px-4 py-2 border border-gray-300 w-pelumas">
                                             <div class="grid grid-cols-7 gap-0">
-                                                <span class="subcol-border border px-2">Meditran SX 15W/40 CH-4<br>(LITER)</span>
-                                                <span class="subcol-border border px-2">Salyx 420<br>(LITER)</span>
-                                                <span class="subcol-border border px-2">Salyx 430<br>(LITER)</span>
-                                                <span class="subcol-border border px-2">TravoLube A<br>(LITER)</span>
-                                                <span class="subcol-border border px-2">Turbolube 46<br>(LITER)</span>
-                                                <span class="subcol-border border px-2">Turbolube 68<br>(LITER)</span>
-                                                <span class="border px-2">TOTAL<br>(LITER)</span>
+                                                <span class="px-1 text-center border-r border-gray-300 text-pelumas">Meditran SX 15W/40 CH-4 (LITER)</span>
+                                                <span class="px-1 text-center border-r border-gray-300 text-pelumas">Salyx 420 (LITER)</span>
+                                                <span class="px-1 text-center border-r border-gray-300 text-pelumas">Salyx 430 (LITER)</span>
+                                                <span class="px-1 text-center border-r border-gray-300 text-pelumas">TravoLube A (LITER)</span>
+                                                <span class="px-1 text-center border-r border-gray-300 text-pelumas">Turbolube 46 (LITER)</span>
+                                                <span class="px-1 text-center border-r border-gray-300 text-pelumas">Turbolube 68 (LITER)</span>
+                                                <span class="px-1 text-center text-pelumas">TOTAL (LITER)</span>
                                             </div>
                                         </th>
-                                        <th class="px-4 py-2 border-r">
+                                        <th class="px-4 py-2 border border-gray-300 w-efisiensi">
                                             <div class="grid grid-cols-3 gap-0">
-                                                <span class="subcol-border px-2">SFC/SCC (LITER/KWH)</span>
-                                                <span class="subcol-border px-2">TARA KALOR/NPHR (KCAL/KWH)</span>
-                                                <span class="px-2">SLC (CC/KWH)</span>
+                                                <span class="px-1 text-center border-r border-gray-300 text-pelumas">SFC/SCC (LITER/KWH)</span>
+                                                <span class="px-1 text-center border-r border-gray-300 text-pelumas">TARA KALOR/NPHR (KCAL/KWH)</span>
+                                                <span class="px-1 text-center text-pelumas">SLC (CC/KWH)</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2">
@@ -402,75 +402,75 @@
                                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                             </div>
                                         </td>
-                                        <td class="px-4 py-3">
-                                            <div class="grid grid-cols-5 gap-0">
-                                                <div class="input-group">
+                                        <td class="px-4 py-3 border border-gray-300">
+                                            <div class="grid grid-cols-5 gap-1">
+                                                <div class="input-group border-r border-gray-300">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][hsd_fuel]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
-                                                <div class="input-group">
+                                                <div class="input-group border-r border-gray-300">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][b35_fuel]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
-                                                <div class="input-group">
+                                                <div class="input-group border-r border-gray-300">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][mfo_fuel]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
-                                                <div class="input-group">
+                                                <div class="input-group border-r border-gray-300">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][total_fuel]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][water_usage]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-4 py-3 border-r">
+                                        <td class="px-4 py-3 border border-gray-300">
                                             <div class="grid grid-cols-7 gap-0">
-                                                <div class="input-group">
+                                                <div class="input-group border-r border-gray-300 px-0.5">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][meditran_oil]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
-                                                <div class="input-group">
+                                                <div class="input-group border-r border-gray-300 px-0.5">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][salyx_420]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
-                                                <div class="input-group">
+                                                <div class="input-group border-r border-gray-300 px-0.5">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][salyx_430]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
-                                                <div class="input-group">
+                                                <div class="input-group border-r border-gray-300 px-0.5">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][travolube_a]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
-                                                <div class="input-group">
+                                                <div class="input-group border-r border-gray-300 px-0.5">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][turbolube_46]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
-                                                <div class="input-group">
+                                                <div class="input-group border-r border-gray-300 px-0.5">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][turbolube_68]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
-                                                <div class="input-group">
+                                                <div class="input-group px-0.5">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][total_oil]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-4 py-3 border-r">
+                                        <td class="px-4 py-3 border border-gray-300">
                                             <div class="grid grid-cols-3 gap-0">
-                                                <div class="input-group">
+                                                <div class="input-group border-r border-gray-300 px-0.5">
                                                     <input type="number" step="0.001" name="data[{{ $machine->id }}][sfc_scc]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
-                                                <div class="input-group">
+                                                <div class="input-group border-r border-gray-300 px-0.5">
                                                     <input type="number" step="0.001" name="data[{{ $machine->id }}][nphr]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
-                                                <div class="input-group">
+                                                <div class="input-group px-0.5">
                                                     <input type="number" step="0.001" name="data[{{ $machine->id }}][slc]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                             </div>
                                         </td>
@@ -496,4 +496,60 @@
 <script>
 
 </script>
+<style>
+.w-mesin {
+    min-width: 100px !important;
+}
+.w-daya {
+    min-width: 300px !important;
+}
+.w-beban {
+    min-width: 200px !important;
+}
+.w-ratio {
+    min-width: 100px !important;
+}
+.w-produksi {
+    min-width: 200px !important;
+}
+.w-pemakaian-sendiri {
+    min-width: 300px !important;
+}
+.w-jam-operasi {
+    min-width: 400px !important;
+}
+.w-trip {
+    min-width: 200px !important;
+}
+.w-derating {
+    min-width: 400px !important;
+}
+.w-kinerja {
+    min-width: 400px !important;
+}
+.w-capability {
+    min-width: 100px !important;
+}
+.w-nof {
+    min-width: 100px !important;
+}
+.w-jsi {
+    min-width: 100px !important;
+}
+.w-bahan-bakar {
+    min-width: 500px !important;
+}
+.w-pelumas {
+    min-width: 700px !important;
+}
+.w-efisiensi {
+    min-width: 350px !important;
+}
+.w-keterangan {
+    min-width: 150px !important;
+}
+.text-pelumas {
+    font-size: 11px !important;
+}
+</style>
 @endsection 

@@ -38,9 +38,11 @@
                 <span class="ml-3 text-base">laporan Kesiapan Kit</span>
             </a>
 
-           
-
-            
+            <a href="{{ route('admin.rencana-daya-mampu') }}"
+                class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.rencana-daya-mampu') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                <i class="fas fa-bolt w-6 h-6"></i>
+                <span class="ml-3 text-base">Rencana Daya Mampu Bulanan</span>
+            </a>
 
             <a href="{{ route('admin.machine-monitor') }}"
                 class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.machine-monitor') || request()->routeIs('admin.machine-monitor.show') || request()->routeIs('admin.power-plants.index') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">

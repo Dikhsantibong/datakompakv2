@@ -33,6 +33,7 @@ use App\Http\Controllers\Admin\OtherDiscussionEditController;
 use App\Http\Controllers\Admin\PasswordVerificationController;
 use App\Http\Controllers\DailySummaryController;
 use App\Http\Controllers\Admin\MonitorKinerjaController;
+use App\Http\Controllers\Admin\RencanaDayaMampuController;
 
 Route::get('/', [HomeController::class, 'index'])->name('homepage');
 
@@ -77,6 +78,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Add monitor-kinerja route
     Route::get('/monitor-kinerja', [MonitorKinerjaController::class, 'index'])->name('monitor-kinerja');
+
+    // Add rencana-daya-mampu route (temporary view only)
+    Route::get('/rencana-daya-mampu', function() {
+        return view('admin.rencana-daya-mampu.index');
+    })->name('rencana-daya-mampu');
 
     Route::prefix('machine-monitor')->group(function () {
         Route::get('/', [MachineMonitorController::class, 'index'])->name('machine-monitor');

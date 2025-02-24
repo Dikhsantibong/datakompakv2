@@ -366,7 +366,7 @@
     }
 
     .logo {
-        width: 150px;
+        width: 300px;
         height: auto;
         position: relative;
         z-index: 2;

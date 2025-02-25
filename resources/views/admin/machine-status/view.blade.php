@@ -67,25 +67,27 @@
         <!-- Main Content -->
         <div class="container mx-auto px-4 py-6">
             <div class="bg-white rounded-lg shadow p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-semibold text-gray-800">Status Mesin</h2>
-                    
-                    <!-- Add Copy Button -->
-                    <button id="copyFormattedData" 
-                        class="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2">
-                        <i class="fas fa-copy mr-2"></i>
-                        Salin Laporan
-                    </button>
+                <div class="flex flex-col mb-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-4 sm:mb-0">Status Mesin</h2>
+                        
+                        <!-- Add Copy Button -->
+                        <button id="copyFormattedData" 
+                            class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mb-4 sm:mb-0">
+                            <i class="fas fa-copy mr-2"></i>
+                            Salin Laporan
+                        </button>
+                    </div>
                     
                     <!-- Filter Area -->
                     <div class="flex flex-col gap-4">
                         <!-- Row 1: Essential Filters -->
-                        <div class="flex flex-wrap items-center gap-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                             @if(session('unit') === 'mysql')
                             <div class="flex items-center">
-                                <label for="unit-source" class="text-sm text-gray-700 font-medium mr-2">Unit:</label>
+                                <label for="unit-source" class="text-sm text-gray-700 font-medium w-20">Unit:</label>
                                 <select id="unit-source" 
-                                    class="border rounded px-3 py-2 text-sm w-40"
+                                    class="border rounded px-3 py-2 text-sm flex-1"
                                     onchange="updateTable()">
                                     <option value="">Semua Unit</option>
                                     <option value="mysql" {{ request('unit_source') == 'mysql' ? 'selected' : '' }}>UP Kendari</option>
@@ -98,17 +100,17 @@
                             @endif
 
                             <div class="flex items-center">
-                                <label for="date-picker" class="text-sm text-gray-700 font-medium mr-2">Tanggal:</label>
+                                <label for="date-picker" class="text-sm text-gray-700 font-medium w-20">Tanggal:</label>
                                 <input type="date" id="date-picker" 
-                                    class="border rounded px-3 py-2 text-sm w-auto"
+                                    class="border rounded px-3 py-2 text-sm flex-1"
                                     value="{{ $date }}"
                                     onchange="updateTable()">
                             </div>
 
                             <div class="flex items-center">
-                                <label for="input-time" class="text-sm text-gray-700 font-medium mr-2">Waktu:</label>
+                                <label for="input-time" class="text-sm text-gray-700 font-medium w-20">Waktu:</label>
                                 <select id="input-time" 
-                                    class="border rounded px-3 py-2 text-sm w-40"
+                                    class="border rounded px-3 py-2 text-sm flex-1"
                                     onchange="updateTable()">
                                     <option value="">Semua Waktu</option>
                                     <option value="06:00" {{ request('input_time') == '06:00' ? 'selected' : '' }}>06:00 (Pagi)</option>
@@ -121,7 +123,7 @@
                         </div>
 
                         <!-- Row 2: Search and Action -->
-                        <div class="flex flex-wrap items-center gap-3">
+                        <div class="flex flex-col sm:flex-row gap-3">
                             <div class="flex-grow">
                                 <input type="text" id="searchInput" 
                                     placeholder="Cari unit/mesin/status..." 
@@ -129,9 +131,9 @@
                                     value="{{ request('search') }}">
                             </div>
 
-                            <div>
+                            <div class="w-full sm:w-auto">
                                 <a href="{{ route('admin.pembangkit.ready') }}" 
-                                   class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                   class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     <i class="fas fa-sync-alt mr-2"></i>
                                     Update Mesin
                                 </a>

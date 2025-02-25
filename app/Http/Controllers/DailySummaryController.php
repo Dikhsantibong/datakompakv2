@@ -87,13 +87,12 @@ class DailySummaryController extends Controller
 
     public function results()
     {
-       
-        $dailySummaries = DailySummary::with('powerPlant')->get(); // Mengambil data dengan relasi powerPlant
+        // Group daily summaries by power plant
+        $units = PowerPlant::with(['dailySummaries' => function($query) {
+            // You might want to add date filtering here later
+            $query->latest();
+        }])->get();
 
-      
-        $units = PowerPlant::with('machines')->get();
-
-        // Tampilkan view dengan data yang diambil
-        return view('admin.daily-summary.daily-summary-results', compact('dailySummaries', 'units'));
+        return view('admin.daily-summary.daily-summary-results', compact('units'));
     }
 } 

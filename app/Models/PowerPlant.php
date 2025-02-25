@@ -195,5 +195,10 @@ class PowerPlant extends Model
             })
         ];
     }
+
+    public function dailySummaries()
+    {
+        return $this->hasMany(DailySummary::class);
+    }
 }
 

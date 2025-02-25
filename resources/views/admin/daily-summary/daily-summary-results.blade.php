@@ -58,9 +58,9 @@
 
         <div class="p-6">
             @foreach($units as $unit)
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">{{ $unit->name }}</h2>
-                
-                <div class="bg-white rounded shadow-md p-4 mb-6">
+            
+            <div class="bg-white rounded shadow-md p-4 mb-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">{{ $unit->name }}</h2>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 border table-fixed" style="min-width: 3800px;">
                             <thead class="bg-gray-50">
@@ -79,10 +79,10 @@
                                     <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-capability">Capability Factor (%)</th>
                                     <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-nof">Nett Operating Factor (%)</th>
                                     <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-jsi">JSI</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-bahan-bakar">Pemakaian Bahan Bakar/Baku</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-pelumas">Pemakaian Pelumas</th>
+                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-bahan-bakar">Pemakaian Bahan Bakar/Baku</th>
+                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-pelumas">Pemakaian Pelumas</th>
                                     <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-efisiensi">Effisiensi</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-keterangan">Ket.</th>
+                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-keterangan">Ket.</th>
                                 </tr>
                                 <tr class="bg-gray-100 text-xs">
                                     <th class="border-r"></th>
@@ -203,133 +203,133 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($unit->machines as $machine)
+                                @foreach($unit->dailySummaries as $summary)
                                     <tr>
-                                        <td class="px-4 py-3 border-r">{{ $machine->name }}</td>
+                                        <td class="px-4 py-3 border-r">{{ $summary->machine_name }}</td>
                                         
                                         <!-- Daya (MW) -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-3 gap-0">
-                                                <div class="text-center border-r">{{ $machine->installed_power ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->dmn_power ?? '-' }}</div>
-                                                <div class="text-center">{{ $machine->capable_power ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->installed_power, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->dmn_power, 2) ?? '-' }}</div>
+                                                <div class="text-center">{{ number_format($summary->capable_power, 2) ?? '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Beban Puncak -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-2 gap-0">
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('peak_load_day') ?? '-' }}</div>
-                                                <div class="text-center">{{ $machine->metrics->sum('peak_load_night') ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->peak_load_day, 2) ?? '-' }}</div>
+                                                <div class="text-center">{{ number_format($summary->peak_load_night, 2) ?? '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Ratio Daya Kit -->
-                                        <td class="px-4 py-3 border-r text-center">{{ $machine->kit_ratio ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r text-center">{{ number_format($summary->kit_ratio, 2) ?? '-' }}</td>
 
                                         <!-- Produksi -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-2 gap-0">
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('gross_production') ?? '-' }}</div>
-                                                <div class="text-center">{{ $machine->metrics->sum('net_production') ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->gross_production, 2) ?? '-' }}</div>
+                                                <div class="text-center">{{ number_format($summary->net_production, 2) ?? '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Pemakaian Sendiri -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-3 gap-0">
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('aux_power') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('transformer_losses') ?? '-' }}</div>
-                                                <div class="text-center">{{ $machine->metrics->sum('usage_percentage') ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->aux_power, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->transformer_losses, 2) ?? '-' }}</div>
+                                                <div class="text-center">{{ number_format($summary->usage_percentage, 2) ?? '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Jam Periode -->
-                                        <td class="px-4 py-3 border-r text-center">{{ $machine->metrics->sum('period_hours') ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r text-center">{{ number_format($summary->period_hours, 2) ?? '-' }}</td>
 
                                         <!-- Jam Operasi -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-5 gap-0">
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('operating_hours') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('standby_hours') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('planned_outage') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('maintenance_outage') ?? '-' }}</div>
-                                                <div class="text-center">{{ $machine->metrics->sum('forced_outage') ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->operating_hours, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->standby_hours, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->planned_outage, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->maintenance_outage, 2) ?? '-' }}</div>
+                                                <div class="text-center">{{ number_format($summary->forced_outage, 2) ?? '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Trip Non OMC -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-2 gap-0">
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('trip_machine') ?? '-' }}</div>
-                                                <div class="text-center">{{ $machine->metrics->sum('trip_electrical') ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->trip_machine, 0) ?? '-' }}</div>
+                                                <div class="text-center">{{ number_format($summary->trip_electrical, 0) ?? '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Derating -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-4 gap-0">
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('efdh') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('epdh') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('eudh') ?? '-' }}</div>
-                                                <div class="text-center">{{ $machine->metrics->sum('esdh') ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->efdh, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->epdh, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->eudh, 2) ?? '-' }}</div>
+                                                <div class="text-center">{{ number_format($summary->esdh, 2) ?? '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Kinerja Pembangkit -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-4 gap-0">
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('eaf') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('sof') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('efor') ?? '-' }}</div>
-                                                <div class="text-center">{{ $machine->metrics->sum('sdof') ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->eaf, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->sof, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->efor, 2) ?? '-' }}</div>
+                                                <div class="text-center">{{ number_format($summary->sdof, 0) ?? '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Capability Factor -->
-                                        <td class="px-4 py-3 border-r text-center">{{ $machine->metrics->sum('ncf') ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r text-center">{{ number_format($summary->ncf, 2) ?? '-' }}</td>
 
                                         <!-- Nett Operating Factor -->
-                                        <td class="px-4 py-3 border-r text-center">{{ $machine->metrics->sum('nof') ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r text-center">{{ number_format($summary->nof, 2) ?? '-' }}</td>
 
                                         <!-- JSI -->
-                                        <td class="px-4 py-3 border-r text-center">{{ $machine->metrics->sum('jsi') ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r text-center">{{ number_format($summary->jsi, 2) ?? '-' }}</td>
 
                                         <!-- Pemakaian Bahan Bakar -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-5 gap-0">
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('hsd_fuel') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('b35_fuel') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('mfo_fuel') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('total_fuel') ?? '-' }}</div>
-                                                <div class="text-center">{{ $machine->metrics->sum('water_usage') ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->hsd_fuel, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->b35_fuel, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->mfo_fuel, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->total_fuel, 2) ?? '-' }}</div>
+                                                <div class="text-center">{{ number_format($summary->water_usage, 2) ?? '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Pemakaian Pelumas -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-7 gap-0">
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('meditran_oil') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('salyx_420') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('salyx_430') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('travolube_a') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('turbolube_46') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('turbolube_68') ?? '-' }}</div>
-                                                <div class="text-center">{{ $machine->metrics->sum('total_oil') ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->meditran_oil, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->salyx_420, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->salyx_430, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->travolube_a, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->turbolube_46, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->turbolube_68, 2) ?? '-' }}</div>
+                                                <div class="text-center">{{ number_format($summary->total_oil, 2) ?? '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Effisiensi -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-3 gap-0">
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('sfc_scc') ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ $machine->metrics->sum('nphr') ?? '-' }}</div>
-                                                <div class="text-center">{{ $machine->metrics->sum('slc') ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->sfc_scc, 3) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ number_format($summary->nphr, 3) ?? '-' }}</div>
+                                                <div class="text-center">{{ number_format($summary->slc, 3) ?? '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Keterangan -->
-                                        <td class="px-4 py-3 text-center">{{ $machine->notes ?? '-' }}</td>
+                                        <td class="px-4 py-3 text-center">{{ $summary->notes ?? '-' }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

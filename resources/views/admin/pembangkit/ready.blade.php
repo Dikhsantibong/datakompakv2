@@ -88,21 +88,21 @@
                     <div class="flex justify-between items-center mb-4">
                         <h1 class="text-xl font-semibold text-gray-800">Penyusunan Data Pembangkit</h1>
                         <a href="{{ route('admin.machine-status.view') }}" 
-                           class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                            <i class="fas fa-eye mr-2"></i>Lihat Status Mesin
+                           class="bg-blue-500 text-white px-2 py-1 md:px-4 md:py-2 text-sm md:text-base rounded-lg hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-eye mr-1 md:mr-2"></i>Lihat Status Mesin
                         </a>
                     </div>
-                    <div class="mb-4 flex flex-col lg:flex-row justify-between items-center gap-3">
-                        <div class="flex flex-col lg:flex-row gap-y-3 sm:gap-y-3 space-x-4">
-                            <div class="flex flex-col lg:flex-row gap-4 mb-6">
-                                <div class="flex-1">
+                    <div class="mb-4 flex flex-col gap-4">
+                        <div class="flex flex-col gap-4">
+                            <div class="flex flex-col gap-4">
+                                <div class="w-full">
                                     <input type="date" 
                                            id="filterDate" 
                                            value="{{ date('Y-m-d') }}" 
                                            class="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
                                 </div>
 
-                                <div class="flex-1">
+                                <div class="w-full">
                                     <select id="inputTime" 
                                             class="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                             required>
@@ -115,7 +115,7 @@
                                     </select>
                                 </div>
 
-                                <div class="flex-1 relative">
+                                <div class="w-full relative">
                                     <input type="text" 
                                            id="searchInput" 
                                            placeholder="Cari mesin atau unit..."
@@ -127,21 +127,17 @@
                             </div>
                         </div>
 
-                        <div class="flex space-x-4">
-                            <div class="max-w-full">
-                                <button id="refreshButton" 
-                                        onclick="loadData()"
-                                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                    <i class="fas fa-redo mr-2"></i>Refresh Data
-                                </button>
-                            </div>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center sm:justify-end">
+                            <button id="refreshButton" 
+                                    onclick="loadData()"
+                                    class="w-full sm:w-auto bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 text-center">
+                                <i class="fas fa-redo mr-2"></i>Refresh Data
+                            </button>
 
-                            <div class="max-w-full">
-                                <button onclick="saveData()"
-                                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                                    <i class="fas fa-save mr-2"></i>Simpan
-                                </button>
-                            </div>
+                            <button onclick="saveData()"
+                                class="w-full sm:w-auto bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 text-center">
+                                <i class="fas fa-save mr-2"></i>Simpan
+                            </button>
                         </div>
                     </div>
 

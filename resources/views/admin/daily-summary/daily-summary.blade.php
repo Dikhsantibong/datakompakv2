@@ -71,25 +71,25 @@
         <div class="flex items-center pt-2">
             <x-admin-breadcrumb :breadcrumbs="[['name' => 'IKHTISAR HARIAN', 'url' => null]]" />
         </div>
-        <div class="flex justify-end mt-4 space-x-4">
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
-                <i class="fas fa-save mr-2"></i>Simpan Data
+        <div class="flex flex-col sm:flex-row justify-end mt-4 space-y-2 sm:space-y-0 sm:space-x-4 px-6">
+            <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded">
+                <i class="fas fa-save mr-1"></i>Simpan Data
             </button>
-            <button type="button" onclick="location.reload();" class="bg-gray-500 text-white px-4 py-2 rounded">
-                <i class="fas fa-sync-alt mr-2"></i>Refresh Data
+            <button type="button" onclick="location.reload();" class="bg-gray-500 text-white px-2 py-1 rounded">
+                <i class="fas fa-sync-alt mr-1"></i>Refresh Data
             </button>
-            <button type="button" onclick="window.location.href='{{ route('admin.daily-summary.results') }}'" class="bg-green-500 text-white px-4 py-2 rounded">
-                <i class="fas fa-eye mr-2"></i>Lihat Data
+            <button type="button" onclick="window.location.href='{{ route('admin.daily-summary.results') }}'" class="bg-green-500 text-white px-2 py-1 rounded">
+                <i class="fas fa-eye mr-1"></i>Lihat Data
             </button>
         </div>
 
         
-        <div class="relative">
+        <div class="p-6">
             <form action="{{ route('daily-summary.store') }}" method="POST">
                 @csrf
                 @foreach($units as $powerPlant) 
-                    <h3 class="text-lg font-semibold text-gray-800 text-left mb-4">{{ $powerPlant->name }}</h3>
-                    <div class="bg-white rounded shadow-md p-4">
+                <div class="bg-white rounded shadow-md p-4 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 text-left mb-4">{{ $powerPlant->name }}</h3>
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200 border table-fixed" style="min-width: 3800px;">
                                 <thead class="bg-gray-50">
@@ -108,10 +108,10 @@
                                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-capability">Capability Factor (%)</th>
                                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-nof">Nett Operating Factor (%)</th>
                                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-jsi">JSI</th>
-                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-bahan-bakar">Pemakaian Bahan Bakar/Baku</th>
-                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-pelumas">Pemakaian Pelumas</th>
+                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-bahan-bakar">Pemakaian Bahan Bakar/Baku</th>
+                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-pelumas">Pemakaian Pelumas</th>
                                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-efisiensi">Effisiensi</th>
-                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-keterangan">Ket.</th>
+                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r  w-keterangan">Ket.</th>
                                     </tr>
                                     <tr class="bg-gray-100 text-xs">
                                         <th class="border-r"></th>

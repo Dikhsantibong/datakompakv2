@@ -54,6 +54,11 @@ class Machine extends Model
         return $this->hasMany(MachineStatusLog::class);
     }
 
+    public function rencanaDayaMampu()
+    {
+        return $this->hasMany(RencanaDayaMampu::class);
+    }
+
     public function getConnectionName()
     {
         return session('unit');

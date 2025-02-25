@@ -67,43 +67,65 @@
 
         <!-- Table Container -->
         <div class="p-6">
-            <div class="overflow-x-auto bg-white rounded-lg shadow p-6 mb-4">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 text-center border-r-2">No</th>
-                            <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-16 bg-gray-50 text-center border-r-2">Sistem Kelistrikan</th>
-                            <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Mesin Pembangkit</th>
-                            <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Site Pembangkit</th>
-                            <th colspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Rencana Realisasi</th>
-                            <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Daya PJBTL SILM</th>
-                            <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">DMP Existing</th>
-                            @for ($i = 1; $i <= date('t'); $i++)
-                                <th rowspan="2" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $i }}</th>
-                            @endfor
-                        </tr>
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r">Rencana</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r">Realisasi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <!-- Sample row, replace with your data loop -->
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white">1</td>
-                            <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white">Sample System</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Generator 1</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Site A</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Value 1</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Value 2</td>
-                            <td class="px-6 py-4 whitespace-nowrap">100 MW</td>
-                            <td class="px-6 py-4 whitespace-nowrap">95 MW</td>
-                            @for ($i = 1; $i <= date('t'); $i++)
-                                <td class="px-6 py-4 whitespace-nowrap text-center border-r-2">-</td>
-                            @endfor
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="overflow-x-auto bg-white rounded-lg shadow p-6 mb-4" style="max-width: 100%;">
+                <h1 class="text-2xl font-bold mb-4">Rencana Operasi Bulanan (ROB)</h1>
+                <!-- Unit Filter (Only show for UP Kendari users) -->
+                @if(session('unit') === 'mysql')
+                <div class="p-4 border-b">
+                    <select id="unit-source" 
+                            class="border rounded px-3 py-2 text-sm"
+                            onchange="updateTable()">
+                        <option value="mysql" {{ $unitSource == 'mysql' ? 'selected' : '' }}>UP Kendari</option>
+                        <option value="mysql_wua_wua" {{ $unitSource == 'mysql_wua_wua' ? 'selected' : '' }}>Wua Wua</option>
+                        <option value="mysql_poasia" {{ $unitSource == 'mysql_poasia' ? 'selected' : '' }}>Poasia</option>
+                        <option value="mysql_kolaka" {{ $unitSource == 'mysql_kolaka' ? 'selected' : '' }}>Kolaka</option>
+                        <option value="mysql_bau_bau" {{ $unitSource == 'mysql_bau_bau' ? 'selected' : '' }}>Bau Bau</option>
+                    </select>
+                </div>
+                @endif
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 border-2">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 text-center border-r-2">No</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-16 bg-gray-50 text-center border-r-2">Sistem Kelistrikan</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Mesin Pembangkit</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Site Pembangkit</th>
+                                <th colspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Rencana Realisasi</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Daya PJBTL SILM</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">DMP Existing</th>
+                                <th colspan="{{ date('t') }}" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                            </tr>
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r">Rencana</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r">Realisasi</th>
+                                @for ($i = 1; $i <= date('t'); $i++)
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $i }}</th>
+                                @endfor
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @php $no = 1; @endphp
+                            @foreach($powerPlants as $plant)
+                                @foreach($plant->machines as $machine)
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white text-center">{{ $no++ }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white">{{ $plant->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $machine->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $plant->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">-</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">-</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">-</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">-</td>
+                                        @for ($i = 1; $i <= date('t'); $i++)
+                                            <td class="px-6 py-4 whitespace-nowrap text-center border-r-2">-</td>
+                                        @endfor
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                        </tbody>
+                </div>
             </div>
         </div>
 
@@ -114,5 +136,10 @@
     document.getElementById('sidebarToggle').addEventListener('click', function() {
         document.querySelector('[sidebar]').classList.toggle('hidden');
     });
+
+    function updateTable() {
+        const unitSource = document.getElementById('unit-source').value;
+        window.location.href = `{{ route('admin.rencana-daya-mampu') }}?unit_source=${unitSource}`;
+    }
 </script>
 @endsection 

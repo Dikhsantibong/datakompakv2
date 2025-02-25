@@ -536,7 +536,7 @@ Route::resource('other-discussions', OtherDiscussionController::class)
 Route::post('other-discussions/update-status', [OtherDiscussionController::class, 'updateStatus'])
     ->name('admin.other-discussions.update-status');
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin.'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     // Pastikan namespace lengkap
     Route::get('other-discussions/{id}/edit', [OtherDiscussionEditController::class, 'edit'])
         ->name('other-discussions.edit');
@@ -732,3 +732,18 @@ Route::post('/attendance/scan-qr', [AttendanceController::class, 'scanQR'])->nam
 Route::get('/admin/daily-summary', [DailySummaryController::class, 'index'])->name('admin.daily-summary');
 Route::post('/admin/daily-summary', [DailySummaryController::class, 'store'])->name('daily-summary.store');
 Route::get('/admin/daily-summary/results', [DailySummaryController::class, 'results'])->name('admin.daily-summary.results');
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
+        // ... other admin routes ...
+        
+        // Rencana Daya Mampu routes
+        Route::get('rencana-daya-mampu', [RencanaDayaMampuController::class, 'index'])
+            ->name('rencana-daya-mampu');
+        
+        Route::get('rencana-daya-mampu/get-status', [RencanaDayaMampuController::class, 'getStatus'])
+            ->name('rencana-daya-mampu.get-status');
+        Route::post('rencana-daya-mampu/save-status', [RencanaDayaMampuController::class, 'saveStatus'])
+            ->name('rencana-daya-mampu.save-status');
+    });
+});

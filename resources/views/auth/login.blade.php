@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Add canvas element at the top of the container -->
+<canvas id="matrix" class="matrix-bg"></canvas>
+
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <!-- Power grid background -->
     <div class="power-grid">
@@ -47,15 +50,15 @@
             <!-- Kolom kanan -->
             <div class="right-section">
                 <div class="card-body">
-                    <h5 class="card-title text-center mb-4">{{ __('Login Now') }}</h5>
+                    <h5 class="card-title text-center mb-4">Login Now</h5>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
                         <!-- Username -->
-                        <div class="form-group custom-input-group">
-                            <div class="input-wrapper">
+                        <div class="form-group mb-3">
+                            <div class="modern-input-group">
                                 <i class="fas fa-user"></i>
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" placeholder="Enter Username" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                <input id="email" type="email" class="modern-form-control @error('email') is-invalid @enderror" name="email" placeholder="Enter Username" value="{{ old('email') }}" required autocomplete="email" autofocus>
                             </div>
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
@@ -65,10 +68,10 @@
                         </div>
 
                         <!-- Password -->
-                        <div class="form-group custom-input-group mt-3">
-                            <div class="input-wrapper">
+                        <div class="form-group mb-3">
+                            <div class="modern-input-group">
                                 <i class="fas fa-lock"></i>
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter Password" required autocomplete="current-password">
+                                <input id="password" type="password" class="modern-form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter Password" required autocomplete="current-password">
                             </div>
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -78,85 +81,84 @@
                         </div>
 
                         <!-- Unit Selection -->
-                        <div class="form-group custom-input-group mt-3">
-                            <label for="unit" class="text-primary">Pilih Unit:</label>
-                            <div class="input-wrapper">
+                        <div class="form-group mb-3">
+                            <label class="modern-label">Pilih Unit:</label>
+                            <div class="modern-input-group">
                                 <i class="fas fa-building"></i>
-                                <select name="unit" id="unit" required class="form-select">
-                                    <option value="mysql" {{ $selectedUnit == 'mysql' ? 'selected' : '' }} class="text-success">
-                                        <i class="fas fa-building"></i> UP Kendari
+                                <select name="unit" id="unit" class="modern-form-control" required>
+                                    <option value="mysql" {{ $selectedUnit == 'mysql' ? 'selected' : '' }}>
+                                        UP Kendari
                                     </option>
-                                    <option value="mysql_bau_bau" {{ $selectedUnit == 'mysql_bau_bau' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Bau-Bau
+                                    <option value="mysql_bau_bau" {{ $selectedUnit == 'mysql_bau_bau' ? 'selected' : '' }}>
+                                        UNIT Bau-Bau
                                     </option>
-                                    <option value="mysql_kolaka" {{ $selectedUnit == 'mysql_kolaka' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Kolaka
+                                    <option value="mysql_kolaka" {{ $selectedUnit == 'mysql_kolaka' ? 'selected' : '' }}>
+                                        UNIT Kolaka
                                     </option>
-                                    <option value="mysql_poasia" {{ $selectedUnit == 'mysql_poasia' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Poasia
+                                    <option value="mysql_poasia" {{ $selectedUnit == 'mysql_poasia' ? 'selected' : '' }}>
+                                        UNIT Poasia
                                     </option>
-                                    <option value="mysql_wua_wua" {{ $selectedUnit == 'mysql_wua_wua' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Wua-Wua
+                                    <option value="mysql_wua_wua" {{ $selectedUnit == 'mysql_wua_wua' ? 'selected' : '' }}>
+                                        UNIT Wua-Wua
                                     </option>
-                                    <option value="mysql_moramo" {{ $selectedUnit == 'mysql_moramo' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Moramo
+                                    <option value="mysql_moramo" {{ $selectedUnit == 'mysql_moramo' ? 'selected' : '' }}>
+                                        UNIT Moramo
                                     </option>
-                                    <option value="mysql_baruta" {{ $selectedUnit == 'mysql_baruta' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Baruta
+                                    <option value="mysql_baruta" {{ $selectedUnit == 'mysql_baruta' ? 'selected' : '' }}>
+                                        UNIT Baruta
                                     </option>
-                                    <option value="mysql_pltmg_bau_bau" {{ $selectedUnit == 'mysql_pltmg_bau_bau' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT PLTMG Bau-Bau
+                                    <option value="mysql_pltmg_bau_bau" {{ $selectedUnit == 'mysql_pltmg_bau_bau' ? 'selected' : '' }}>
+                                        UNIT PLTMG Bau-Bau
                                     </option>
-                                    <option value="mysql_winning" {{ $selectedUnit == 'mysql_winning' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Winning
+                                    <option value="mysql_winning" {{ $selectedUnit == 'mysql_winning' ? 'selected' : '' }}>
+                                        UNIT Winning
                                     </option>
-                                    <option value="mysql_sabilambo" {{ $selectedUnit == 'mysql_sabilambo' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Sabilambo
+                                    <option value="mysql_sabilambo" {{ $selectedUnit == 'mysql_sabilambo' ? 'selected' : '' }}>
+                                        UNIT Sabilambo
                                     </option>
-                                    <option value="mysql_rongi" {{ $selectedUnit == 'mysql_rongi' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Rongi
+                                    <option value="mysql_rongi" {{ $selectedUnit == 'mysql_rongi' ? 'selected' : '' }}>
+                                        UNIT Rongi
                                     </option>
-                                    <option value="mysql_mikuasi" {{ $selectedUnit == 'mysql_mikuasi' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Mikuasi
+                                    <option value="mysql_mikuasi" {{ $selectedUnit == 'mysql_mikuasi' ? 'selected' : '' }}>
+                                        UNIT Mikuasi
                                     </option>
-                                    <option value="mysql_ladumpi" {{ $selectedUnit == 'mysql_ladumpi' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Ladumpi
+                                    <option value="mysql_ladumpi" {{ $selectedUnit == 'mysql_ladumpi' ? 'selected' : '' }}>
+                                        UNIT Ladumpi
                                     </option>
-                                    <option value="mysql_langara" {{ $selectedUnit == 'mysql_langara' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Langara
+                                    <option value="mysql_langara" {{ $selectedUnit == 'mysql_langara' ? 'selected' : '' }}>
+                                        UNIT Langara
                                     </option>
-                                    <option value="mysql_lanipa_nipa" {{ $selectedUnit == 'mysql_lanipa_nipa' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Lanipa Nipa
+                                    <option value="mysql_lanipa_nipa" {{ $selectedUnit == 'mysql_lanipa_nipa' ? 'selected' : '' }}>
+                                        UNIT Lanipa Nipa
                                     </option>
-                                    <option value="mysql_pasarwajo" {{ $selectedUnit == 'mysql_pasarwajo' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Pasarwajo
+                                    <option value="mysql_pasarwajo" {{ $selectedUnit == 'mysql_pasarwajo' ? 'selected' : '' }}>
+                                        UNIT Pasarwajo
                                     </option>
-                                    <option value="mysql_raha" {{ $selectedUnit == 'mysql_raha' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Raha
+                                    <option value="mysql_raha" {{ $selectedUnit == 'mysql_raha' ? 'selected' : '' }}>
+                                        UNIT Raha
                                     </option>
-                                    <option value="mysql_wangi_wangi" {{ $selectedUnit == 'mysql_wangi_wangi' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Wangi Wangi
+                                    <option value="mysql_wangi_wangi" {{ $selectedUnit == 'mysql_wangi_wangi' ? 'selected' : '' }}>
+                                        UNIT Wangi Wangi
                                     </option>
-                                    <option value="mysql_ereke" {{ $selectedUnit == 'mysql_ereke' ? 'selected' : '' }} class="text-primary">
-                                        <i class="fas fa-building"></i> UNIT Ereke
+                                    <option value="mysql_ereke" {{ $selectedUnit == 'mysql_ereke' ? 'selected' : '' }}>
+                                        UNIT Ereke
                                     </option>
                                 </select>
                             </div>
                         </div>
 
                         <!-- Remember Me -->
-                        <div class="form-check mt-3">
+                        <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                             <label class="form-check-label" for="remember">
-                                {{ __('Remember Me') }}
+                                Remember Me
                             </label>
                         </div>
 
                         <!-- Login Button -->
-                        <div class="mt-4">
-                            <button type="submit" class="btn btn-primary w-100 login-btn">
-                                <span>{{ __('Login') }}</span>
-                                <div class="energy-beam"></div>
+                        <div class="d-grid">
+                            <button type="submit" class="modern-button">
+                                LOGIN
                             </button>
                         </div>
                     </form>
@@ -184,7 +186,7 @@
         width: 100%;
         height: 100%;
         background: linear-gradient(45deg, #090c1f, #1a237e);
-        z-index: -1;
+        z-index: 1;
         overflow: hidden;
     }
 
@@ -332,21 +334,19 @@
     }
 
     .login-card {
+        position: relative;
+        z-index: 2;
         width: 100%;
         max-width: 900px;
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(20px);
-        border-radius: 25px;
+        background: #fff;
+        border-radius: 20px;
         overflow: hidden;
-        border: 1px solid rgba(30, 144, 255, 0.2);
-        box-shadow: 
-            0 0 40px rgba(30, 144, 255, 0.2),
-            0 0 80px rgba(30, 144, 255, 0.1);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
 
     .card-inner {
         display: flex;
-        background: rgba(0, 0, 0, 0.6);
+        background: #fff;
     }
 
     .left-section {
@@ -355,9 +355,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        position: relative;
-        background: rgba(0, 0, 0, 0.7);
-        overflow: hidden;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
     }
 
     .logo-wrapper {
@@ -441,17 +439,8 @@
 
     .right-section {
         flex: 1;
-        background: rgba(255, 255, 255, 0.97);
         padding: 40px;
-        position: relative;
-        border-radius: 25px;
-        margin: 15px;
-        backdrop-filter: blur(20px);
-        box-shadow: 
-            inset 0 0 100px rgba(30, 144, 255, 0.1),
-            0 0 50px rgba(30, 144, 255, 0.2),
-            0 10px 20px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
+        background: #fff;
     }
 
     .power-lines {
@@ -466,108 +455,81 @@
         z-index: 2;
     }
 
-    .input-wrapper {
-        position: relative;
-        border: 2px solid rgba(30, 144, 255, 0.3);
-        border-radius: 20px;
-        overflow: hidden;
-        transition: all 0.4s ease;
-        background: rgba(255, 255, 255, 0.95);
-        margin-bottom: 20px;
-        z-index: 2;
+    .card-title {
+        color: #333;
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 30px;
     }
 
-    .input-wrapper i {
-        position: absolute;
-        left: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #1a237e;
-        z-index: 3;
-        font-size: 20px;
-        transition: all 0.4s ease;
-        pointer-events: none;
+    .modern-input-group {
+        position: relative;
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 12px 15px;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
     }
 
-    .form-control, 
-    .form-select {
-        position: relative;
+    .modern-input-group:focus-within {
+        border-color: #2a5298;
+        box-shadow: 0 0 0 3px rgba(42,82,152,0.1);
+    }
+
+    .modern-input-group i {
+        color: #2a5298;
+        margin-right: 10px;
+        font-size: 18px;
+    }
+
+    .modern-form-control {
         border: none;
-        padding: 18px 50px;
         background: transparent;
         width: 100%;
-        color: #1a237e;
-        font-size: 16px;
-        font-weight: 500;
-        transition: all 0.4s ease;
-        z-index: 2;
+        padding: 5px;
+        color: #333;
     }
 
-    .form-control:focus,
-    .form-select:focus {
+    .modern-form-control:focus {
         outline: none;
     }
 
-    .input-wrapper:focus-within {
-        border-color: #1e90ff;
+    .modern-form-control::placeholder {
+        color: #999;
+    }
+
+    .modern-label {
+        color: #2a5298;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .modern-button {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 15px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .modern-button:hover {
         transform: translateY(-2px);
-        box-shadow: 
-            0 8px 25px rgba(30, 144, 255, 0.15),
-            0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .input-wrapper:focus-within i {
-        color: #1e90ff;
-        transform: translateY(-50%) scale(1.1);
-    }
-
-    .form-check {
-        position: relative;
-        z-index: 2;
-    }
-
-    .form-check-input {
-        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(42,82,152,0.3);
     }
 
     .form-check-label {
-        cursor: pointer;
+        color: #666;
     }
 
-    .login-btn {
-        position: relative;
-        background: linear-gradient(45deg, #1a237e, #1e90ff);
-        border: none;
-        padding: 18px;
-        border-radius: 20px;
-        overflow: hidden;
-        transition: all 0.4s ease;
-        font-size: 18px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        color: white;
-        text-transform: uppercase;
-        box-shadow: 
-            0 5px 15px rgba(30, 144, 255, 0.3),
-            0 3px 8px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-        z-index: 2;
-    }
-
-    .login-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 
-            0 8px 25px rgba(30, 144, 255, 0.4),
-            0 5px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .login-btn:active {
-        transform: translateY(1px);
-    }
-
-    .card-title {
-        position: relative;
-        z-index: 2;
+    .form-check-input:checked {
+        background-color: #2a5298;
+        border-color: #2a5298;
     }
 
     /* Fixing the overlay effects */
@@ -666,19 +628,68 @@
             flex-direction: column;
         }
         
-        .left-section, .right-section {
-            width: 100%;
+        .left-section,
+        .right-section {
+            padding: 30px;
         }
-        
-        .left-section {
-            padding: 20px;
-        }
+    }
+
+    /* Add new Matrix canvas styles */
+    .matrix-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
     }
 </style>
 @endsection
 
 @section('scripts')
 <script>
+    // Add Matrix Rain Animation
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
+    const charSize = 14;
+    const columns = canvas.width / charSize;
+    const drops = [];
+
+    for (let i = 0; i < columns; i++) {
+        drops[i] = 1;
+    }
+
+    function draw() {
+        ctx.fillStyle = 'rgba(10, 25, 47, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#64ffda';
+        ctx.font = `${charSize}px monospace`;
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(text, i * charSize, drops[i] * charSize);
+
+            if (drops[i] * charSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+
+    setInterval(draw, 35);
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    // Existing scripts
     document.addEventListener('DOMContentLoaded', function() {
         @if(session('error'))
             Swal.fire({

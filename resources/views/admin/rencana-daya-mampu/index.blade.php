@@ -68,7 +68,22 @@
         <!-- Table Container -->
         <div class="p-6">
             <div class="overflow-x-auto bg-white rounded-lg shadow p-6 mb-4" style="max-width: 100%;">
-                <h1 class="text-2xl font-bold mb-4">Rencana Operasi Bulanan (ROB)</h1>
+                <div class="flex justify-between items-center mb-4">
+                    <h1 class="text-2xl font-bold">Rencana Operasi Bulanan (ROB)</h1>
+                    <div class="flex gap-2">
+                        <button id="editModeButton" 
+                                onclick="toggleEditMode()"
+                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Mode Edit
+                        </button>
+                        <button id="saveButton" 
+                                onclick="saveChanges()"
+                                class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 hidden">
+                            Simpan Perubahan
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Unit Filter (Only show for UP Kendari users) -->
                 @if(session('unit') === 'mysql')
                 <div class="p-4 border-b">
@@ -114,32 +129,186 @@
                                         <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white">{{ $plant->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $machine->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $plant->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center">-</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center">-</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center">-</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center">-</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <span class="data-display">{{ $machine->rencana ?? '-' }}</span>
+                                            <input type="text" 
+                                                   name="rencana[{{ $machine->id }}]"
+                                                   class="data-input hidden w-20 text-center border rounded"
+                                                   value="{{ $machine->rencana }}">
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <span class="data-display">{{ $machine->realisasi ?? '-' }}</span>
+                                            <input type="text" 
+                                                   name="realisasi[{{ $machine->id }}]"
+                                                   class="data-input hidden w-20 text-center border rounded"
+                                                   value="{{ $machine->realisasi }}">
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <span class="data-display">{{ $machine->daya_pjbtl_silm ?? '-' }}</span>
+                                            <input type="number" 
+                                                   name="daya_pjbtl[{{ $machine->id }}]"
+                                                   class="data-input hidden w-20 text-center border rounded"
+                                                   value="{{ $machine->daya_pjbtl_silm }}"
+                                                   step="0.01">
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <span class="data-display">{{ $machine->dmp_existing ?? '-' }}</span>
+                                            <input type="number" 
+                                                   name="dmp_existing[{{ $machine->id }}]"
+                                                   class="data-input hidden w-20 text-center border rounded"
+                                                   value="{{ $machine->dmp_existing }}"
+                                                   step="0.01">
+                                        </td>
                                         @for ($i = 1; $i <= date('t'); $i++)
-                                            <td class="px-6 py-4 whitespace-nowrap text-center border-r-2">-</td>
+                                            @php
+                                                $date = now()->format('Y-m-') . sprintf('%02d', $i);
+                                                $dailyValue = $machine->rencanaDayaMampu->first()?->getDailyValue($date, 'rencana');
+                                            @endphp
+                                            <td class="px-6 py-4 whitespace-nowrap text-center border-r-2">
+                                                <span class="data-display">{{ $dailyValue ?? '-' }}</span>
+                                                <input type="text" 
+                                                       name="days[{{ $machine->id }}][{{ $i }}]"
+                                                       class="data-input hidden w-16 text-center border rounded"
+                                                       value="{{ $dailyValue }}"
+                                                       data-date="{{ $date }}">
+                                            </td>
                                         @endfor
                                     </tr>
                                 @endforeach
                             @endforeach
                         </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
 <!-- Add this script at the bottom of your file -->
 <script src="{{asset('js/toggle.js')}}"></script>
 
 <script>
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
-        document.querySelector('[sidebar]').classList.toggle('hidden');
+    // Pastikan DOM sudah dimuat sepenuhnya
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inisialisasi event listener untuk sidebar toggle
+        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
+            document.querySelector('[sidebar]').classList.toggle('hidden');
+        });
     });
 
     function updateTable() {
         const unitSource = document.getElementById('unit-source').value;
         window.location.href = `{{ route('admin.rencana-daya-mampu') }}?unit_source=${unitSource}`;
+    }
+
+    let isEditMode = false;
+
+    function toggleEditMode() {
+        isEditMode = !isEditMode;
+        
+        // Ambil referensi elemen
+        const editButton = document.getElementById('editModeButton');
+        const saveButton = document.getElementById('saveButton');
+        const displays = document.querySelectorAll('.data-display');
+        const inputs = document.querySelectorAll('.data-input');
+
+        console.log('Toggle Edit Mode:', {
+            isEditMode,
+            displays: displays.length,
+            inputs: inputs.length
+        });
+
+        if (isEditMode) {
+            // Mode Edit aktif
+            editButton.classList.add('bg-gray-500');
+            editButton.classList.remove('bg-blue-500');
+            editButton.textContent = 'Batal';
+            saveButton.classList.remove('hidden');
+            
+            // Sembunyikan display, tampilkan input
+            displays.forEach(el => el.style.display = 'none');
+            inputs.forEach(el => {
+                el.style.display = 'inline-block';
+                el.classList.remove('hidden');
+            });
+        } else {
+            // Mode Edit non-aktif
+            editButton.classList.remove('bg-gray-500');
+            editButton.classList.add('bg-blue-500');
+            editButton.textContent = 'Mode Edit';
+            saveButton.classList.add('hidden');
+            
+            // Tampilkan display, sembunyikan input
+            displays.forEach(el => el.style.display = 'inline-block');
+            inputs.forEach(el => {
+                el.style.display = 'none';
+                el.classList.add('hidden');
+            });
+        }
+    }
+
+    function saveChanges() {
+        const saveButton = document.getElementById('saveButton');
+        saveButton.textContent = 'Menyimpan...';
+        saveButton.disabled = true;
+
+        const formData = new FormData();
+        formData.append('_token', '{{ csrf_token() }}');
+
+        // Kumpulkan data summary
+        document.querySelectorAll('input[name^="rencana"], input[name^="realisasi"], input[name^="daya_pjbtl"], input[name^="dmp_existing"]').forEach(input => {
+            if (!input.classList.contains('hidden') && input.value !== '') {
+                formData.append(input.name, input.value);
+            }
+        });
+
+        // Kumpulkan data harian
+        const dailyData = {};
+        document.querySelectorAll('input[name^="days"]').forEach(input => {
+            if (!input.classList.contains('hidden') && input.value !== '') {
+                const machineId = input.name.match(/days\[(\d+)\]/)[1];
+                const date = input.dataset.date;
+                
+                if (!dailyData[machineId]) {
+                    dailyData[machineId] = {};
+                }
+                if (!dailyData[machineId][date]) {
+                    dailyData[machineId][date] = {};
+                }
+                
+                dailyData[machineId][date]['rencana'] = input.value;
+                dailyData[machineId][date]['realisasi'] = input.value;
+            }
+        });
+
+        // Tambahkan daily_data ke formData
+        formData.append('daily_data', JSON.stringify(dailyData));
+
+        fetch('{{ route("admin.rencana-daya-mampu.update") }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Data berhasil disimpan');
+                location.reload();
+            } else {
+                alert(data.message || 'Terjadi kesalahan saat menyimpan data');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat menyimpan data');
+        })
+        .finally(() => {
+            saveButton.textContent = 'Simpan Perubahan';
+            saveButton.disabled = false;
+        });
     }
 </script>
 @endsection 

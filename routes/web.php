@@ -747,3 +747,6 @@ Route::middleware(['auth'])->group(function () {
             ->name('rencana-daya-mampu.save-status');
     });
 });
+
+Route::post('/admin/rencana-daya-mampu/update', [RencanaDayaMampuController::class, 'update'])
+    ->name('admin.rencana-daya-mampu.update');

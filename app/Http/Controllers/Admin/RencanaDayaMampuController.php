@@ -7,6 +7,8 @@ use App\Models\PowerPlant;
 use App\Models\Machine;
 use App\Models\RencanaDayaMampu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class RencanaDayaMampuController extends Controller
 {
@@ -30,34 +32,89 @@ class RencanaDayaMampuController extends Controller
                 }]);
         }])->orderBy('name')->get();
 
+        // Transform data to include daily values
+        $powerPlants->each(function($plant) use ($currentMonth) {
+            $plant->machines->each(function($machine) use ($currentMonth) {
+                // Get the latest record for the month
+                $record = $machine->rencanaDayaMampu->first();
+
+                if ($record) {
+                    // Set summary values as text
+                    $machine->rencana = $record->rencana;
+                    $machine->realisasi = $record->realisasi;
+                    // Set numeric values
+                    $machine->daya_pjbtl_silm = $record->daya_pjbtl_silm;
+                    $machine->dmp_existing = $record->dmp_existing;
+
+                    // Set daily values from JSON
+                    $machine->daily_values = $record->getDailyData($currentMonth);
+                }
+            });
+        });
+
         return view('admin.rencana-daya-mampu.index', compact('powerPlants', 'unitSource'));
     }
 
-    public function store(Request $request)
+    public function update(Request $request)
     {
-        $request->validate([
-            'machine_id' => 'required|exists:machines,id',
-            'tanggal' => 'required|date',
-            'rencana' => 'nullable|numeric',
-            'realisasi' => 'nullable|numeric',
-            'daya_pjbtl_silm' => 'nullable|numeric',
-            'dmp_existing' => 'nullable|numeric'
-        ]);
+        try {
+            DB::beginTransaction();
 
-        RencanaDayaMampu::updateOrCreate(
-            [
-                'machine_id' => $request->machine_id,
-                'tanggal' => $request->tanggal,
-            ],
-            [
-                'rencana' => $request->rencana,
-                'realisasi' => $request->realisasi,
-                'daya_pjbtl_silm' => $request->daya_pjbtl_silm,
-                'dmp_existing' => $request->dmp_existing,
-                'unit_source' => session('unit')
-            ]
-        );
+            // Decode daily_data JSON
+            $dailyData = json_decode($request->daily_data, true) ?? [];
 
-        return response()->json(['message' => 'Data berhasil disimpan']);
+            foreach ($request->all() as $key => $values) {
+                if (in_array($key, ['_token', 'daily_data'])) continue;
+
+                foreach ($values as $machineId => $value) {
+                    $machine = Machine::findOrFail($machineId);
+                    
+                    // Get or create record
+                    $record = RencanaDayaMampu::firstOrNew([
+                        'machine_id' => $machineId,
+                        'tanggal' => now()->format('Y-m-d')
+                    ]);
+
+                    // Update text values
+                    if ($key === 'rencana') $record->rencana = $value;
+                    if ($key === 'realisasi') $record->realisasi = $value;
+                    
+                    // Update numeric values
+                    if ($key === 'daya_pjbtl') $record->daya_pjbtl_silm = floatval($value);
+                    if ($key === 'dmp_existing') $record->dmp_existing = floatval($value);
+
+                    // Update daily values
+                    if (isset($dailyData[$machineId])) {
+                        $record->daily_data = $dailyData[$machineId];
+                    }
+
+                    $record->unit_source = session('unit');
+                    $record->updateSummary();
+                    $record->save();
+                }
+            }
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil disimpan'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan data: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Helper method to get daily value
+    public function getDayValue($machine, $day)
+    {
+        $date = Carbon::createFromFormat('Y-m-d', now()->format('Y-m-') . sprintf('%02d', $day));
+        $record = $machine->rencanaDayaMampu->first();
+        
+        return $record ? $record->getDailyValue($date->format('Y-m-d'), 'rencana') : null;
     }
 } 

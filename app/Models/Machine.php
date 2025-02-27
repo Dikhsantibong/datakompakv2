@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class Machine extends Model
 {
@@ -250,5 +251,14 @@ class Machine extends Model
         } finally {
             self::$isSyncing = false;
         }
+    }
+
+    public function getDayValue($day)
+    {
+        $date = Carbon::createFromFormat('Y-m-d', now()->format('Y-m-') . sprintf('%02d', $day));
+        return $this->rencanaDayaMampu
+            ->where('tanggal', $date->format('Y-m-d'))
+            ->first()
+            ?->rencana;
     }
 }

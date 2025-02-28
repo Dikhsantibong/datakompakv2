@@ -750,3 +750,6 @@ Route::middleware(['auth'])->group(function () {
 
 Route::post('/admin/rencana-daya-mampu/update', [RencanaDayaMampuController::class, 'update'])
     ->name('admin.rencana-daya-mampu.update');
+
+Route::post('/daily-summary/store', [DailySummaryController::class, 'store'])->name('daily-summary.store');
+Route::get('/daily-summary/results', [DailySummaryController::class, 'results'])->name('admin.daily-summary.results');

@@ -68,25 +68,34 @@
             </div>
         @endif
 
+        @if ($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="flex items-center pt-2">
             <x-admin-breadcrumb :breadcrumbs="[['name' => 'IKHTISAR HARIAN', 'url' => null]]" />
         </div>
-        <div class="flex flex-col sm:flex-row justify-end mt-4 space-y-2 sm:space-y-0 sm:space-x-4 px-6">
-            <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded">
-                <i class="fas fa-save mr-1"></i>Simpan Data
-            </button>
-            <button type="button" onclick="location.reload();" class="bg-gray-500 text-white px-2 py-1 rounded">
-                <i class="fas fa-sync-alt mr-1"></i>Refresh Data
-            </button>
-            <button type="button" onclick="window.location.href='{{ route('admin.daily-summary.results') }}'" class="bg-green-500 text-white px-2 py-1 rounded">
-                <i class="fas fa-eye mr-1"></i>Lihat Data
-            </button>
-        </div>
-
-        
         <div class="p-6">
             <form action="{{ route('daily-summary.store') }}" method="POST">
                 @csrf
+                <div class="flex flex-col sm:flex-row justify-end mt-4 space-y-2 sm:space-y-0 sm:space-x-4 px-6">
+                    <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded">
+                        <i class="fas fa-save mr-1"></i>Simpan Data
+                    </button>
+                    <button type="button" onclick="location.reload();" class="bg-gray-500 text-white px-2 py-1 rounded">
+                        <i class="fas fa-sync-alt mr-1"></i>Refresh Data
+                    </button>
+                    <button type="button" onclick="window.location.href='{{ route('admin.daily-summary.results') }}'" class="bg-green-500 text-white px-2 py-1 rounded">
+                        <i class="fas fa-eye mr-1"></i>Lihat Data
+                    </button>
+                </div>
+
                 @foreach($units as $powerPlant) 
                 <div class="bg-white rounded shadow-md p-4 mb-6">
                         <h3 class="text-lg font-semibold text-gray-800 text-left mb-4">{{ $powerPlant->name }}</h3>
@@ -487,14 +496,177 @@
                         </div>
                     </div>
                 @endforeach
-                
             </form>
         </div>
     </div>
 </div>
 <script src="{{ asset('js/toggle.js') }}"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fungsi helper untuk mengambil nilai numerik dari input
+    function getNumericValue(machineId, fieldName) {
+        const value = parseFloat(document.querySelector(`[name="data[${machineId}][${fieldName}]"]`).value) || 0;
+        return value;
+    }
 
+    // Fungsi untuk memperbarui semua kalkulasi
+    function updateCalculations(machineId) {
+        calculateRatioDaya(machineId);
+        calculateSusutTrafo(machineId);
+        calculatePersentasePS(machineId);
+        calculateEAF(machineId);
+        calculateSOF(machineId);
+        calculateEFOR(machineId);
+        calculateSDOF(machineId);
+        calculateNCF(machineId);
+        calculateNOF(machineId);
+        calculateSFC(machineId);
+        calculateSLC(machineId);
+        calculateTotalFuel(machineId);
+        calculateTotalOil(machineId);
+    }
+
+    // Ratio Daya = max(peak_load_day, peak_load_night) / capable_power
+    function calculateRatioDaya(machineId) {
+        const peakDay = getNumericValue(machineId, 'peak_load_day');
+        const peakNight = getNumericValue(machineId, 'peak_load_night');
+        const capablePower = getNumericValue(machineId, 'capable_power');
+        
+        if (capablePower > 0) {
+            const ratio = (Math.max(peakDay, peakNight) / capablePower) * 100;
+            document.querySelector(`[name="data[${machineId}][kit_ratio]"]`).value = ratio.toFixed(2);
+        }
+    }
+
+    // Susut Trafo = gross_production - net_production - aux_power
+    function calculateSusutTrafo(machineId) {
+        const grossProd = getNumericValue(machineId, 'gross_production');
+        const netProd = getNumericValue(machineId, 'net_production');
+        const auxPower = getNumericValue(machineId, 'aux_power');
+        
+        const susutTrafo = grossProd - netProd - auxPower;
+        document.querySelector(`[name="data[${machineId}][transformer_losses]"]`).value = susutTrafo.toFixed(2);
+    }
+
+    // Persentase PS = ((aux_power + transformer_losses) / gross_production) * 100
+    function calculatePersentasePS(machineId) {
+        const auxPower = getNumericValue(machineId, 'aux_power');
+        const susutTrafo = getNumericValue(machineId, 'transformer_losses');
+        const grossProd = getNumericValue(machineId, 'gross_production');
+        
+        if (grossProd > 0) {
+            const percentage = ((auxPower + susutTrafo) / grossProd) * 100;
+            document.querySelector(`[name="data[${machineId}][usage_percentage]"]`).value = percentage.toFixed(2);
+        }
+    }
+
+    // EAF = ((SH + Standby - EFDH - EPDH - EUDH - ESDH) * capable_power) / (period_hours * capable_power) * 100
+    function calculateEAF(machineId) {
+        const operatingHours = getNumericValue(machineId, 'operating_hours');
+        const standbyHours = getNumericValue(machineId, 'standby_hours');
+        const efdh = getNumericValue(machineId, 'efdh');
+        const epdh = getNumericValue(machineId, 'epdh');
+        const eudh = getNumericValue(machineId, 'eudh');
+        const esdh = getNumericValue(machineId, 'esdh');
+        const capablePower = getNumericValue(machineId, 'capable_power');
+        const periodHours = getNumericValue(machineId, 'period_hours');
+        
+        if (periodHours > 0 && capablePower > 0) {
+            const eaf = ((operatingHours + standbyHours - efdh - epdh - eudh - esdh) * capablePower) / 
+                       (periodHours * capablePower) * 100;
+            document.querySelector(`[name="data[${machineId}][eaf]"]`).value = eaf.toFixed(2);
+        }
+    }
+
+    // SOF = ((PO + MO) * capable_power) / (period_hours * capable_power) * 100
+    function calculateSOF(machineId) {
+        const po = getNumericValue(machineId, 'planned_outage');
+        const mo = getNumericValue(machineId, 'maintenance_outage');
+        const capablePower = getNumericValue(machineId, 'capable_power');
+        const periodHours = getNumericValue(machineId, 'period_hours');
+        
+        if (periodHours > 0 && capablePower > 0) {
+            const sof = ((po + mo) * capablePower) / (periodHours * capablePower) * 100;
+            document.querySelector(`[name="data[${machineId}][sof]"]`).value = sof.toFixed(2);
+        }
+    }
+
+    // EFOR = ((FO + EFDH) * capable_power) / ((operating_hours + FO) * capable_power) * 100
+    function calculateEFOR(machineId) {
+        const fo = getNumericValue(machineId, 'forced_outage');
+        const efdh = getNumericValue(machineId, 'efdh');
+        const operatingHours = getNumericValue(machineId, 'operating_hours');
+        const capablePower = getNumericValue(machineId, 'capable_power');
+        
+        if ((operatingHours + fo) > 0 && capablePower > 0) {
+            const efor = ((fo + efdh) * capablePower) / ((operatingHours + fo) * capablePower) * 100;
+            document.querySelector(`[name="data[${machineId}][efor]"]`).value = efor.toFixed(2);
+        }
+    }
+
+    // SDOF = trip_machine + trip_electrical
+    function calculateSDOF(machineId) {
+        const tripMachine = getNumericValue(machineId, 'trip_machine');
+        const tripElectrical = getNumericValue(machineId, 'trip_electrical');
+        
+        const sdof = tripMachine + tripElectrical;
+        document.querySelector(`[name="data[${machineId}][sdof]"]`).value = sdof.toFixed(0);
+    }
+
+    // NCF = net_production / (capable_power * period_hours) * 100
+    function calculateNCF(machineId) {
+        const netProduction = getNumericValue(machineId, 'net_production');
+        const capablePower = getNumericValue(machineId, 'capable_power');
+        const periodHours = getNumericValue(machineId, 'period_hours');
+        
+        if (capablePower > 0 && periodHours > 0) {
+            const ncf = (netProduction / (capablePower * periodHours)) * 100;
+            document.querySelector(`[name="data[${machineId}][ncf]"]`).value = ncf.toFixed(2);
+        }
+    }
+
+    // NOF = (net_production / (capable_power * operating_hours)) * 100
+    function calculateNOF(machineId) {
+        const netProduction = getNumericValue(machineId, 'net_production');
+        const capablePower = getNumericValue(machineId, 'capable_power');
+        const operatingHours = getNumericValue(machineId, 'operating_hours');
+        
+        if (capablePower > 0 && operatingHours > 0) {
+            const nof = (netProduction / (capablePower * operatingHours)) * 100;
+            document.querySelector(`[name="data[${machineId}][nof]"]`).value = nof.toFixed(2);
+        }
+    }
+
+    // SFC = total_fuel / gross_production
+    function calculateSFC(machineId) {
+        const totalFuel = getNumericValue(machineId, 'total_fuel');
+        const grossProduction = getNumericValue(machineId, 'gross_production');
+        
+        if (grossProduction > 0) {
+            const sfc = totalFuel / grossProduction;
+            document.querySelector(`[name="data[${machineId}][sfc_scc]"]`).value = sfc.toFixed(3);
+        }
+    }
+
+    // SLC = (total_oil * 1000) / gross_production
+    function calculateSLC(machineId) {
+        const totalOil = getNumericValue(machineId, 'total_oil');
+        const grossProduction = getNumericValue(machineId, 'gross_production');
+        
+        if (grossProduction > 0) {
+            const slc = (totalOil * 1000) / grossProduction;
+            document.querySelector(`[name="data[${machineId}][slc]"]`).value = slc.toFixed(3);
+        }
+    }
+
+    // Attach event listeners to all numeric inputs
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('change', function() {
+            const machineId = this.name.match(/\[(\d+)\]/)[1];
+            updateCalculations(machineId);
+        });
+    });
+});
 </script>
 <style>
 .w-mesin {

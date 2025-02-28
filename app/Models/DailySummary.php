@@ -57,6 +57,7 @@ class DailySummary extends Model
         'nphr',              // TARA KALOR/NPHR (KCAL/KWH)
         'slc',               // SLC (CC/KWH)
         'notes',             // Keterangan
+        'jsi',               // JSI
     ];
 
     public function powerPlant()

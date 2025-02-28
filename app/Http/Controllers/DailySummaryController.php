@@ -22,6 +22,7 @@ class DailySummaryController extends Controller
     {
         try {
             $machineData = $request->input('data', []);
+            $today = now()->format('Y-m-d');
             
             // Filter hanya data yang memiliki nilai
             $filledData = array_filter($machineData, function($data) {
@@ -96,11 +97,21 @@ class DailySummaryController extends Controller
                     }
                 }
 
-                // Debug: Log data yang akan disimpan
-                \Log::info('Data yang akan disimpan:', $dataToSave);
+                // Cek apakah sudah ada data untuk mesin ini di hari yang sama
+                $existingRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])
+                    ->where('machine_name', $data['machine_name'])
+                    ->whereDate('created_at', $today)
+                    ->first();
 
-                // Simpan data
-                DailySummary::create($dataToSave);
+                if ($existingRecord) {
+                    // Update data yang sudah ada
+                    $existingRecord->update($dataToSave);
+                    \Log::info('Data berhasil diupdate:', $dataToSave);
+                } else {
+                    // Buat data baru jika belum ada
+                    DailySummary::create($dataToSave);
+                    \Log::info('Data baru berhasil disimpan:', $dataToSave);
+                }
             }
 
             return redirect()->back()->with('success', 'Data berhasil disimpan!');
@@ -112,14 +123,18 @@ class DailySummaryController extends Controller
         }
     }
 
-    public function results()
+    public function results(Request $request)
     {
-        // Group daily summaries by power plant
-        $units = PowerPlant::with(['dailySummaries' => function($query) {
-            // You might want to add date filtering here later
-            $query->latest();
+        $date = $request->input('date', now()->format('Y-m-d'));
+
+        $units = PowerPlant::with(['dailySummaries' => function($query) use ($date) {
+            $query->whereDate('created_at', $date);
         }])->get();
 
-        return view('admin.daily-summary.daily-summary-results', compact('units'));
+        if ($request->ajax()) {
+            return view('admin.daily-summary.daily-summary-results', compact('units', 'date'))->render();
+        }
+
+        return view('admin.daily-summary.daily-summary-results', compact('units', 'date'));
     }
 } 

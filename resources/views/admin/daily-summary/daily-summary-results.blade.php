@@ -56,7 +56,34 @@
             </div>
         </header>
 
-        <div class="p-6">
+        <div class="p-6" id="content-wrapper">
+            <!-- Add Date Filter -->
+            <div class="mb-6 flex items-center gap-4">
+                <input 
+                    type="date" 
+                    id="dateFilter"
+                    value="{{ $date }}"
+                    class="rounded-md border-gray-300 shadow-sm focus:border-[#009BB9] focus:ring focus:ring-[#009BB9] focus:ring-opacity-50"
+                >
+                <div id="loading" class="hidden">
+                    <svg class="animate-spin h-5 w-5 text-[#009BB9]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Add Loading Overlay -->
+            <div id="content-loading" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white p-4 rounded-lg shadow-lg flex items-center gap-3">
+                    <svg class="animate-spin h-5 w-5 text-[#009BB9]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Loading data...</span>
+                </div>
+            </div>
+
             @foreach($units as $unit)
             
             <div class="bg-white rounded shadow-md p-4 mb-6">
@@ -341,6 +368,52 @@
     </div>
 </div>
 <script src="{{ asset('js/toggle.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dateFilter = document.getElementById('dateFilter');
+    const contentLoading = document.getElementById('content-loading');
+    const contentWrapper = document.getElementById('content-wrapper');
+
+    dateFilter.addEventListener('change', async function() {
+        try {
+            // Show loading overlay
+            contentLoading.classList.remove('hidden');
+
+            // Fetch new data dengan route name yang benar
+            const response = await fetch(`{{ route('admin.daily-summary.results') }}?date=${this.value}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const html = await response.text();
+            
+            // Create a temporary container
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            
+            // Find the content wrapper in the response
+            const newContent = temp.querySelector('#content-wrapper');
+            
+            // Update only the content wrapper
+            if (newContent) {
+                contentWrapper.innerHTML = newContent.innerHTML;
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error loading data. Please try again.');
+        } finally {
+            // Hide loading overlay
+            contentLoading.classList.add('hidden');
+        }
+    });
+});
+</script>
 <style>
 .w-mesin {
     min-width: 100px !important;
@@ -395,6 +468,18 @@
 }
 .text-pelumas {
     font-size: 11px !important;
+}
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 </style>
 @endsection 

@@ -86,16 +86,36 @@
         <div class="p-6">
             <form action="{{ route('daily-summary.store') }}" method="POST" novalidate>
                 @csrf
-                <div class="flex flex-col sm:flex-row justify-end mt-4 space-y-2 sm:space-y-0 sm:space-x-4 px-6">
-                    <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded">
-                        <i class="fas fa-save mr-1"></i>Simpan Data
-                    </button>
-                    <button type="button" onclick="location.reload();" class="bg-gray-500 text-white px-2 py-1 rounded">
-                        <i class="fas fa-sync-alt mr-1"></i>Refresh Data
-                    </button>
-                    <button type="button" onclick="window.location.href='{{ route('admin.daily-summary.results') }}'" class="bg-green-500 text-white px-2 py-1 rounded">
-                        <i class="fas fa-eye mr-1"></i>Lihat Data
-                    </button>
+                <!-- Search & Buttons Container -->
+                <div class="flex flex-col sm:flex-row justify-between items-center mb-6 px-4 gap-4">
+                    <!-- Search Unit -->
+                    <div class="w-full sm:w-72">
+                        <label for="unit-filter" class="block text-sm font-medium text-gray-700 mb-1">Filter Unit Pembangkit</label>
+                        <div class="relative">
+                            <select id="unit-filter" class="w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-10 py-2.5 text-gray-700 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer hover:border-gray-400 transition-colors duration-200 select-none">
+                                <option value="">Semua Unit</option>
+                                @foreach($units as $unit)
+                                    <option value="{{ $unit->name }}">{{ $unit->name }}</option>
+                                @endforeach
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                {{-- <i class="fas fa-chevron-down text-gray-400 text-sm"></i> --}}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center min-w-[160px] shadow-sm">
+                            <i class="fas fa-save mr-2.5"></i>Simpan Data
+                        </button>
+                        <button type="button" onclick="location.reload();" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center min-w-[160px] shadow-sm">
+                            <i class="fas fa-sync-alt mr-2.5"></i>Refresh Data
+                        </button>
+                        <button type="button" onclick="window.location.href='{{ route('admin.daily-summary.results') }}'" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center min-w-[160px] shadow-sm">
+                            <i class="fas fa-eye mr-2.5"></i>Lihat Data
+                        </button>
+                    </div>
                 </div>
 
                 @foreach($units as $powerPlant) 
@@ -744,6 +764,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    const unitFilter = document.getElementById('unit-filter');
+    const powerPlantDivs = document.querySelectorAll('.bg-white.rounded.shadow-md');
+
+    unitFilter.addEventListener('change', function() {
+        const selectedUnit = this.value;
+
+        powerPlantDivs.forEach(div => {
+            const unitName = div.querySelector('h3').textContent;
+            if (!selectedUnit || unitName.includes(selectedUnit)) {
+                div.style.display = 'block';
+            } else {
+                div.style.display = 'none';
+            }
+        });
+    });
 });
 </script>
 <style>
@@ -800,6 +836,18 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 .text-pelumas {
     font-size: 11px !important;
+}
+
+/* Remove default arrow in modern browsers */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* Remove default arrow in IE */
+select::-ms-expand {
+    display: none;
 }
 </style>
 

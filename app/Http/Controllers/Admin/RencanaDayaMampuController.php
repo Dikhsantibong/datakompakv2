@@ -60,51 +60,52 @@ class RencanaDayaMampuController extends Controller
         try {
             DB::beginTransaction();
 
-            // Decode daily_data JSON
-            $dailyData = json_decode($request->daily_data, true) ?? [];
+            $currentDate = now()->format('Y-m-d');
+            $unitSource = session('unit');
 
-            foreach ($request->all() as $key => $values) {
-                if (in_array($key, ['_token', 'daily_data'])) continue;
+            // Process each machine's data
+            foreach ($request->rencana ?? [] as $machineId => $rencanaValue) {
+                $record = RencanaDayaMampu::firstOrNew([
+                    'machine_id' => $machineId,
+                    'tanggal' => $currentDate
+                ]);
 
-                foreach ($values as $machineId => $value) {
-                    $machine = Machine::findOrFail($machineId);
-                    
-                    // Get or create record
-                    $record = RencanaDayaMampu::firstOrNew([
-                        'machine_id' => $machineId,
-                        'tanggal' => now()->format('Y-m-d')
-                    ]);
-
-                    // Update text values
-                    if ($key === 'rencana') $record->rencana = $value;
-                    if ($key === 'realisasi') $record->realisasi = $value;
-                    
-                    // Update numeric values
-                    if ($key === 'daya_pjbtl') $record->daya_pjbtl_silm = floatval($value);
-                    if ($key === 'dmp_existing') $record->dmp_existing = floatval($value);
-
-                    // Update daily values
+                // Basic data
+                $record->rencana = trim($rencanaValue);
+                $record->realisasi = trim($request->realisasi[$machineId] ?? '');
+                $record->daya_pjbtl_silm = floatval($request->daya_pjbtl[$machineId] ?? 0);
+                $record->dmp_existing = floatval($request->dmp_existing[$machineId] ?? 0);
+                
+                // Daily data if exists
+                if ($request->daily_data) {
+                    $dailyData = json_decode($request->daily_data, true);
                     if (isset($dailyData[$machineId])) {
                         $record->daily_data = $dailyData[$machineId];
                     }
-
-                    $record->unit_source = session('unit');
-                    $record->updateSummary();
-                    $record->save();
                 }
+
+                $record->unit_source = $unitSource;
+                $record->save();
             }
 
             DB::commit();
+
             return response()->json([
                 'success' => true,
-                'message' => 'Data berhasil disimpan'
+                'message' => 'Data berhasil disimpan',
+                'icon' => 'success',
+                'title' => 'Berhasil!'
             ]);
 
         } catch (\Exception $e) {
             DB::rollBack();
+            \Log::error('RencanaDayaMampu update error: ' . $e->getMessage());
+            
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menyimpan data: ' . $e->getMessage()
+                'message' => 'Gagal menyimpan data: ' . $e->getMessage(),
+                'icon' => 'error',
+                'title' => 'Error!'
             ], 500);
         }
     }

@@ -77,7 +77,7 @@
                             Mode Edit
                         </button>
                         <button id="saveButton" 
-                                onclick="saveChanges()"
+                                onclick="saveData()"
                                 class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 hidden">
                             Simpan Perubahan
                         </button>
@@ -247,68 +247,70 @@
         }
     }
 
-    function saveChanges() {
+    function saveData() {
+        // Show loading state
         const saveButton = document.getElementById('saveButton');
-        saveButton.textContent = 'Menyimpan...';
         saveButton.disabled = true;
+        saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
 
+        // Collect form data
         const formData = new FormData();
-        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
 
-        // Kumpulkan data summary
-        document.querySelectorAll('input[name^="rencana"], input[name^="realisasi"], input[name^="daya_pjbtl"], input[name^="dmp_existing"]').forEach(input => {
-            if (!input.classList.contains('hidden') && input.value !== '') {
-                formData.append(input.name, input.value);
-            }
+        // Add rencana and realisasi data
+        document.querySelectorAll('input[name^="rencana["]').forEach(input => {
+            formData.append(input.name, input.value);
+        });
+        document.querySelectorAll('input[name^="realisasi["]').forEach(input => {
+            formData.append(input.name, input.value);
+        });
+        document.querySelectorAll('input[name^="daya_pjbtl["]').forEach(input => {
+            formData.append(input.name, input.value);
+        });
+        document.querySelectorAll('input[name^="dmp_existing["]').forEach(input => {
+            formData.append(input.name, input.value);
         });
 
-        // Kumpulkan data harian
-        const dailyData = {};
-        document.querySelectorAll('input[name^="days"]').forEach(input => {
-            if (!input.classList.contains('hidden') && input.value !== '') {
-                const machineId = input.name.match(/days\[(\d+)\]/)[1];
-                const date = input.dataset.date;
-                
-                if (!dailyData[machineId]) {
-                    dailyData[machineId] = {};
-                }
-                if (!dailyData[machineId][date]) {
-                    dailyData[machineId][date] = {};
-                }
-                
-                dailyData[machineId][date]['rencana'] = input.value;
-                dailyData[machineId][date]['realisasi'] = input.value;
-            }
-        });
-
-        // Tambahkan daily_data ke formData
-        formData.append('daily_data', JSON.stringify(dailyData));
-
+        // Make the AJAX request
         fetch('{{ route("admin.rencana-daya-mampu.update") }}', {
             method: 'POST',
+            body: formData,
             headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json',
-            },
-            body: formData
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                alert('Data berhasil disimpan');
-                location.reload();
-            } else {
-                alert(data.message || 'Terjadi kesalahan saat menyimpan data');
-            }
+            // Show success message
+            Swal.fire({
+                title: data.title,
+                text: data.message,
+                icon: data.icon,
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload(); // Reload page after clicking OK
+                }
+            });
         })
         .catch(error => {
+            // Show error message
+            Swal.fire({
+                title: 'Error!',
+                text: 'Terjadi kesalahan saat menyimpan data',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
             console.error('Error:', error);
-            alert('Terjadi kesalahan saat menyimpan data');
         })
         .finally(() => {
-            saveButton.textContent = 'Simpan Perubahan';
+            // Reset button state
             saveButton.disabled = false;
+            saveButton.innerHTML = 'Simpan';
         });
     }
+
+    // Attach the save function to the button
+    document.getElementById('saveButton').addEventListener('click', saveData);
 </script>
 @endsection 

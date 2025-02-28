@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PowerPlant; // Import model PowerPlant
 use App\Models\DailySummary; // Import model DailySummary
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DailySummaryController extends Controller
 {
@@ -20,12 +21,46 @@ class DailySummaryController extends Controller
     public function store(Request $request)
     {
         try {
-            // Data yang dikirim dalam bentuk array per mesin
-            $machineData = $request->input('data');
+            $machineData = $request->input('data', []);
             
-            foreach ($machineData as $machineId => $data) {
-                // Validasi untuk setiap data mesin
-                $validatedData = $this->validate($request, [
+            // Filter hanya data yang memiliki nilai
+            $filledData = array_filter($machineData, function($data) {
+                return !empty($data['installed_power']);
+            });
+
+            if (empty($filledData)) {
+                return redirect()->back()
+                    ->with('error', 'Tidak ada data yang diisi untuk disimpan!')
+                    ->withInput();
+            }
+
+            foreach ($filledData as $machineId => $data) {
+                // Pastikan semua nilai numerik dikonversi dengan benar
+                $numericFields = [
+                    'installed_power', 'dmn_power', 'capable_power', 
+                    'peak_load_day', 'peak_load_night', 'kit_ratio',
+                    'gross_production', 'net_production', 'aux_power',
+                    'transformer_losses', 'usage_percentage', 'period_hours',
+                    'operating_hours', 'standby_hours', 'planned_outage',
+                    'maintenance_outage', 'forced_outage', 'trip_machine',
+                    'trip_electrical', 'efdh', 'epdh', 'eudh', 'esdh',
+                    'eaf', 'sof', 'efor', 'sdof', 'ncf', 'nof', 'jsi',
+                    'hsd_fuel', 'b35_fuel', 'mfo_fuel', 'total_fuel',
+                    'water_usage', 'meditran_oil', 'salyx_420', 'salyx_430',
+                    'travolube_a', 'turbolube_46', 'turbolube_68', 'total_oil',
+                    'sfc_scc', 'nphr', 'slc'
+                ];
+
+                foreach ($numericFields as $field) {
+                    if (isset($data[$field])) {
+                        $data[$field] = is_numeric($data[$field]) ? (float)$data[$field] : null;
+                    } else {
+                        $data[$field] = null;
+                    }
+                }
+
+                // Validasi data
+                $validator = Validator::make(['data' => [$machineId => $data]], [
                     "data.{$machineId}.power_plant_id" => 'required|exists:power_plants,id',
                     "data.{$machineId}.machine_name" => 'required|string|max:255',
                     "data.{$machineId}.installed_power" => 'required|numeric',
@@ -57,6 +92,7 @@ class DailySummaryController extends Controller
                     "data.{$machineId}.sdof" => 'nullable|numeric',
                     "data.{$machineId}.ncf" => 'nullable|numeric',
                     "data.{$machineId}.nof" => 'nullable|numeric',
+                    "data.{$machineId}.jsi" => 'nullable|numeric',
                     "data.{$machineId}.hsd_fuel" => 'nullable|numeric',
                     "data.{$machineId}.b35_fuel" => 'nullable|numeric',
                     "data.{$machineId}.mfo_fuel" => 'nullable|numeric',
@@ -74,14 +110,23 @@ class DailySummaryController extends Controller
                     "data.{$machineId}.slc" => 'nullable|numeric',
                     "data.{$machineId}.notes" => 'nullable|string',
                 ]);
+                
+                if ($validator->fails()) {
+                    return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+                }
 
-                // Simpan data untuk setiap mesin
+                // Simpan data
                 DailySummary::create($data);
             }
 
             return redirect()->back()->with('success', 'Data berhasil disimpan!');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+            \Log::error('Error saving daily summary: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                ->withInput();
         }
     }
 

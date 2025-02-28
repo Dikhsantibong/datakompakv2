@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <div class="flex h-screen bg-gray-50 overflow-auto">
     @include('components.sidebar')
     
@@ -82,7 +84,7 @@
             <x-admin-breadcrumb :breadcrumbs="[['name' => 'IKHTISAR HARIAN', 'url' => null]]" />
         </div>
         <div class="p-6">
-            <form action="{{ route('daily-summary.store') }}" method="POST">
+            <form action="{{ route('daily-summary.store') }}" method="POST" novalidate>
                 @csrf
                 <div class="flex flex-col sm:flex-row justify-end mt-4 space-y-2 sm:space-y-0 sm:space-x-4 px-6">
                     <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded">
@@ -253,7 +255,8 @@
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" name="data[{{ $machine->id }}][installed_power]" 
                                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
-                                                           required>
+                                                           value="{{ old('data.'.$machine->id.'.installed_power') }}"
+                                                           oninput="this.setCustomValidity('')">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" name="data[{{ $machine->id }}][dmn_power]"
@@ -666,6 +669,77 @@ document.addEventListener('DOMContentLoaded', function() {
             updateCalculations(machineId);
         });
     });
+
+    // Modifikasi event listener form submission
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Cek apakah ada minimal satu data yang diisi
+        const formData = new FormData(this);
+        let hasFilledData = false;
+
+        // Cek setiap mesin, jika ada satu saja yang diisi, maka form bisa disubmit
+        const machineData = {};
+        for (let [key, value] of formData.entries()) {
+            if (key.includes('data[')) {
+                const matches = key.match(/data\[(\d+)\]\[([^\]]+)\]/);
+                if (matches) {
+                    const [, machineId, field] = matches;
+                    if (!machineData[machineId]) {
+                        machineData[machineId] = {};
+                    }
+                    machineData[machineId][field] = value;
+                }
+            }
+        }
+
+        // Cek setiap mesin apakah memiliki data yang diisi
+        for (let machineId in machineData) {
+            const machine = machineData[machineId];
+            // Cek apakah ada nilai yang diisi selain power_plant_id dan machine_name
+            if (machine.installed_power || machine.dmn_power || machine.capable_power || 
+                machine.peak_load_day || machine.peak_load_night || machine.gross_production || 
+                machine.net_production) {
+                hasFilledData = true;
+                break;
+            }
+        }
+
+        if (!hasFilledData) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Harap isi minimal satu data mesin!'
+            });
+            return;
+        }
+
+        // Jika ada data yang diisi, lanjutkan dengan konfirmasi
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: "Apakah Anda yakin ingin menyimpan data?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Tampilkan loading
+                Swal.fire({
+                    title: 'Menyimpan Data...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                
+                // Submit form
+                this.submit();
+            }
+        });
+    });
 });
 </script>
 <style>
@@ -724,4 +798,84 @@ document.addEventListener('DOMContentLoaded', function() {
     font-size: 11px !important;
 }
 </style>
+
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: "{{ session('success') }}",
+        timer: 3000,
+        showConfirmButton: false
+    });
+</script>
+@endif
+
+@if(session('error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: "{{ session('error') }}",
+    });
+</script>
+@endif
+
+<script>
+// Hilangkan validasi default browser
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('invalid', (e) => {
+        e.preventDefault();
+    });
+});
+
+// Modifikasi event handler form submission
+document.querySelector('form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Cek apakah ada minimal satu data yang diisi
+    const formData = new FormData(this);
+    let hasFilledData = false;
+
+    // Cek setiap mesin
+    for (let [key, value] of formData.entries()) {
+        if (key.includes('[installed_power]') && value) {
+            hasFilledData = true;
+            break;
+        }
+    }
+
+    if (!hasFilledData) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Harap isi minimal satu data mesin!'
+        });
+        return;
+    }
+
+    // Jika ada data yang diisi, lanjutkan dengan konfirmasi
+    Swal.fire({
+        title: 'Konfirmasi',
+        text: "Apakah Anda yakin ingin menyimpan data?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Simpan!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Menyimpan Data...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            this.submit();
+        }
+    });
+});
+</script>
 @endsection 

@@ -60,6 +60,16 @@ class DailySummary extends Model
         'jsi',               // JSI
     ];
 
+    // Tambahkan casting untuk memastikan tipe data yang benar
+    protected $casts = [
+        'installed_power' => 'decimal:3',
+        'dmn_power' => 'decimal:3',
+        'capable_power' => 'decimal:3',
+        'peak_load_day' => 'decimal:3',
+        'peak_load_night' => 'decimal:3',
+        'kit_ratio' => 'decimal:3',
+    ];
+
     public function powerPlant()
     {
         return $this->belongsTo(PowerPlant::class);

@@ -25,7 +25,9 @@ class DailySummaryController extends Controller
             
             // Filter hanya data yang memiliki nilai
             $filledData = array_filter($machineData, function($data) {
-                return !empty($data['installed_power']);
+                return !empty($data['installed_power']) || !empty($data['dmn_power']) || 
+                       !empty($data['capable_power']) || !empty($data['peak_load_day']) || 
+                       !empty($data['peak_load_night']) || !empty($data['kit_ratio']);
             });
 
             if (empty($filledData)) {
@@ -35,90 +37,70 @@ class DailySummaryController extends Controller
             }
 
             foreach ($filledData as $machineId => $data) {
-                // Pastikan semua nilai numerik dikonversi dengan benar
-                $numericFields = [
-                    'installed_power', 'dmn_power', 'capable_power', 
-                    'peak_load_day', 'peak_load_night', 'kit_ratio',
-                    'gross_production', 'net_production', 'aux_power',
-                    'transformer_losses', 'usage_percentage', 'period_hours',
-                    'operating_hours', 'standby_hours', 'planned_outage',
-                    'maintenance_outage', 'forced_outage', 'trip_machine',
-                    'trip_electrical', 'efdh', 'epdh', 'eudh', 'esdh',
-                    'eaf', 'sof', 'efor', 'sdof', 'ncf', 'nof', 'jsi',
-                    'hsd_fuel', 'b35_fuel', 'mfo_fuel', 'total_fuel',
-                    'water_usage', 'meditran_oil', 'salyx_420', 'salyx_430',
-                    'travolube_a', 'turbolube_46', 'turbolube_68', 'total_oil',
-                    'sfc_scc', 'nphr', 'slc'
+                // Pastikan data yang dikirim sesuai dengan kolom database
+                $dataToSave = [
+                    'power_plant_id' => $data['power_plant_id'],
+                    'machine_name' => $data['machine_name'],
+                    'installed_power' => $data['installed_power'] ?? null,
+                    'dmn_power' => $data['dmn_power'] ?? null,
+                    'capable_power' => $data['capable_power'] ?? null,
+                    'peak_load_day' => $data['peak_load_day'] ?? null,
+                    'peak_load_night' => $data['peak_load_night'] ?? null,
+                    'kit_ratio' => $data['kit_ratio'] ?? null,
+                    'gross_production' => $data['gross_production'] ?? null,
+                    'net_production' => $data['net_production'] ?? null,
+                    'aux_power' => $data['aux_power'] ?? null,
+                    'transformer_losses' => $data['transformer_losses'] ?? null,
+                    'usage_percentage' => $data['usage_percentage'] ?? null,
+                    'period_hours' => $data['period_hours'] ?? null,
+                    'operating_hours' => $data['operating_hours'] ?? null,
+                    'standby_hours' => $data['standby_hours'] ?? null,
+                    'planned_outage' => $data['planned_outage'] ?? null,
+                    'maintenance_outage' => $data['maintenance_outage'] ?? null,
+                    'forced_outage' => $data['forced_outage'] ?? null,
+                    'trip_machine' => $data['trip_machine'] ?? null,
+                    'trip_electrical' => $data['trip_electrical'] ?? null,
+                    'efdh' => $data['efdh'] ?? null,
+                    'epdh' => $data['epdh'] ?? null,
+                    'eudh' => $data['eudh'] ?? null,
+                    'esdh' => $data['esdh'] ?? null,
+                    'eaf' => $data['eaf'] ?? null,
+                    'sof' => $data['sof'] ?? null,
+                    'efor' => $data['efor'] ?? null,
+                    'sdof' => $data['sdof'] ?? null,
+                    'ncf' => $data['ncf'] ?? null,
+                    'nof' => $data['nof'] ?? null,
+                    'jsi' => $data['jsi'] ?? null,
+                    'hsd_fuel' => $data['hsd_fuel'] ?? null,
+                    'b35_fuel' => $data['b35_fuel'] ?? null,
+                    'mfo_fuel' => $data['mfo_fuel'] ?? null,
+                    'total_fuel' => $data['total_fuel'] ?? null,
+                    'water_usage' => $data['water_usage'] ?? null,
+                    'meditran_oil' => $data['meditran_oil'] ?? null,
+                    'salyx_420' => $data['salyx_420'] ?? null,
+                    'salyx_430' => $data['salyx_430'] ?? null,
+                    'travolube_a' => $data['travolube_a'] ?? null,
+                    'turbolube_46' => $data['turbolube_46'] ?? null,
+                    'turbolube_68' => $data['turbolube_68'] ?? null,
+                    'total_oil' => $data['total_oil'] ?? null,
+                    'sfc_scc' => $data['sfc_scc'] ?? null,
+                    'nphr' => $data['nphr'] ?? null,
+                    'slc' => $data['slc'] ?? null,
+                    'notes' => $data['notes'] ?? null,
                 ];
 
-                foreach ($numericFields as $field) {
-                    if (isset($data[$field])) {
-                        $data[$field] = is_numeric($data[$field]) ? (float)$data[$field] : null;
-                    } else {
-                        $data[$field] = null;
+                // Konversi nilai string kosong menjadi null
+                foreach ($dataToSave as $key => $value) {
+                    if ($value === '') {
+                        $dataToSave[$key] = null;
                     }
                 }
 
-                // Validasi data
-                $validator = Validator::make(['data' => [$machineId => $data]], [
-                    "data.{$machineId}.power_plant_id" => 'required|exists:power_plants,id',
-                    "data.{$machineId}.machine_name" => 'required|string|max:255',
-                    "data.{$machineId}.installed_power" => 'required|numeric',
-                    "data.{$machineId}.dmn_power" => 'nullable|numeric',
-                    "data.{$machineId}.capable_power" => 'nullable|numeric',
-                    "data.{$machineId}.peak_load_day" => 'nullable|numeric',
-                    "data.{$machineId}.peak_load_night" => 'nullable|numeric',
-                    "data.{$machineId}.kit_ratio" => 'nullable|numeric',
-                    "data.{$machineId}.gross_production" => 'nullable|numeric',
-                    "data.{$machineId}.net_production" => 'nullable|numeric',
-                    "data.{$machineId}.aux_power" => 'nullable|numeric',
-                    "data.{$machineId}.transformer_losses" => 'nullable|numeric',
-                    "data.{$machineId}.usage_percentage" => 'nullable|numeric',
-                    "data.{$machineId}.period_hours" => 'nullable|numeric',
-                    "data.{$machineId}.operating_hours" => 'nullable|numeric',
-                    "data.{$machineId}.standby_hours" => 'nullable|numeric',
-                    "data.{$machineId}.planned_outage" => 'nullable|numeric',
-                    "data.{$machineId}.maintenance_outage" => 'nullable|numeric',
-                    "data.{$machineId}.forced_outage" => 'nullable|numeric',
-                    "data.{$machineId}.trip_machine" => 'nullable|numeric',
-                    "data.{$machineId}.trip_electrical" => 'nullable|numeric',
-                    "data.{$machineId}.efdh" => 'nullable|numeric',
-                    "data.{$machineId}.epdh" => 'nullable|numeric',
-                    "data.{$machineId}.eudh" => 'nullable|numeric',
-                    "data.{$machineId}.esdh" => 'nullable|numeric',
-                    "data.{$machineId}.eaf" => 'nullable|numeric',
-                    "data.{$machineId}.sof" => 'nullable|numeric',
-                    "data.{$machineId}.efor" => 'nullable|numeric',
-                    "data.{$machineId}.sdof" => 'nullable|numeric',
-                    "data.{$machineId}.ncf" => 'nullable|numeric',
-                    "data.{$machineId}.nof" => 'nullable|numeric',
-                    "data.{$machineId}.jsi" => 'nullable|numeric',
-                    "data.{$machineId}.hsd_fuel" => 'nullable|numeric',
-                    "data.{$machineId}.b35_fuel" => 'nullable|numeric',
-                    "data.{$machineId}.mfo_fuel" => 'nullable|numeric',
-                    "data.{$machineId}.total_fuel" => 'nullable|numeric',
-                    "data.{$machineId}.water_usage" => 'nullable|numeric',
-                    "data.{$machineId}.meditran_oil" => 'nullable|numeric',
-                    "data.{$machineId}.salyx_420" => 'nullable|numeric',
-                    "data.{$machineId}.salyx_430" => 'nullable|numeric',
-                    "data.{$machineId}.travolube_a" => 'nullable|numeric',
-                    "data.{$machineId}.turbolube_46" => 'nullable|numeric',
-                    "data.{$machineId}.turbolube_68" => 'nullable|numeric',
-                    "data.{$machineId}.total_oil" => 'nullable|numeric',
-                    "data.{$machineId}.sfc_scc" => 'nullable|numeric',
-                    "data.{$machineId}.nphr" => 'nullable|numeric',
-                    "data.{$machineId}.slc" => 'nullable|numeric',
-                    "data.{$machineId}.notes" => 'nullable|string',
-                ]);
-                
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-                }
+                // Debug: Log data yang akan disimpan
+                \Log::info('Data yang akan disimpan:', $dataToSave);
 
                 // Simpan data
-                DailySummary::create($data);
+                DailySummary::create($dataToSave);
             }
 
             return redirect()->back()->with('success', 'Data berhasil disimpan!');

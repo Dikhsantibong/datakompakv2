@@ -686,6 +686,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Calculate total oil consumption
+    function calculateTotalOil(machineId) {
+        const meditran = getNumericValue(machineId, 'meditran_oil');
+        const salyx420 = getNumericValue(machineId, 'salyx_420');
+        const salyx430 = getNumericValue(machineId, 'salyx_430');
+        const travolube = getNumericValue(machineId, 'travolube_a');
+        const turbolube46 = getNumericValue(machineId, 'turbolube_46');
+        const turbolube68 = getNumericValue(machineId, 'turbolube_68');
+        
+        const totalOil = meditran + salyx420 + salyx430 + travolube + turbolube46 + turbolube68;
+        document.querySelector(`[name="data[${machineId}][total_oil]"]`).value = totalOil.toFixed(2);
+    }
+
+    // Calculate total fuel consumption
+    function calculateTotalFuel(machineId) {
+        const hsd = getNumericValue(machineId, 'hsd_fuel');
+        const b35 = getNumericValue(machineId, 'b35_fuel');
+        const mfo = getNumericValue(machineId, 'mfo_fuel');
+        
+        const totalFuel = hsd + b35 + mfo;
+        document.querySelector(`[name="data[${machineId}][total_fuel]"]`).value = totalFuel.toFixed(2);
+    }
+
     // Attach event listeners to all numeric inputs
     document.querySelectorAll('input[type="number"]').forEach(input => {
         input.addEventListener('change', function() {

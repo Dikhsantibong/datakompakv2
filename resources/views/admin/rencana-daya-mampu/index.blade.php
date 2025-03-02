@@ -73,13 +73,13 @@
                     <div class="flex gap-2">
                         <button id="editModeButton" 
                                 onclick="toggleEditMode()"
-                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                            Mode Edit
+                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center">
+                            <i class="fas fa-edit mr-2"></i> Mode Edit
                         </button>
                         <button id="saveButton" 
                                 onclick="saveData()"
                                 class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 hidden">
-                            Simpan Perubahan
+                            <i class="fas fa-save mr-2"></i> Simpan Perubahan
                         </button>
                     </div>
                 </div>
@@ -131,17 +131,17 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $plant->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <span class="data-display">{{ $machine->rencana ?? '-' }}</span>
-                                            <input type="text" 
-                                                   name="rencana[{{ $machine->id }}]"
-                                                   class="data-input hidden w-20 text-center border rounded"
-                                                   value="{{ $machine->rencana }}">
+                                            <textarea name="rencana[{{ $machine->id }}]"
+                                                      style="width: 200px;"
+                                                      class="data-input hidden w-full text-center border rounded"
+                                                      rows="3">{{ $machine->rencana }}</textarea>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <span class="data-display">{{ $machine->realisasi ?? '-' }}</span>
-                                            <input type="text" 
-                                                   name="realisasi[{{ $machine->id }}]"
-                                                   class="data-input hidden w-20 text-center border rounded"
-                                                   value="{{ $machine->realisasi }}">
+                                            <textarea name="realisasi[{{ $machine->id }}]"
+                                                      style="width: 200px;"
+                                                      class="data-input hidden w-full text-center border rounded"
+                                                      rows="3">{{ $machine->realisasi }}</textarea>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <span class="data-display">{{ $machine->daya_pjbtl_silm ?? '-' }}</span>
@@ -166,11 +166,11 @@
                                             @endphp
                                             <td class="px-6 py-4 whitespace-nowrap text-center border-r-2">
                                                 <span class="data-display">{{ $dailyValue ?? '-' }}</span>
-                                                <input type="text" 
-                                                       name="days[{{ $machine->id }}][{{ $i }}]"
-                                                       class="data-input hidden w-16 text-center border rounded"
-                                                       value="{{ $dailyValue }}"
-                                                       data-date="{{ $date }}">
+                                                <textarea name="days[{{ $machine->id }}][{{ $i }}]"
+                                                          style="width: 200px;"
+                                                          class="data-input hidden w-full text-center border rounded"
+                                                          rows="3"
+                                                          data-date="{{ $date }}">{{ $dailyValue }}</textarea>
                                             </td>
                                         @endfor
                                     </tr>

@@ -34,6 +34,8 @@ use App\Http\Controllers\Admin\PasswordVerificationController;
 use App\Http\Controllers\DailySummaryController;
 use App\Http\Controllers\Admin\MonitorKinerjaController;
 use App\Http\Controllers\Admin\RencanaDayaMampuController;
+use App\Http\Controllers\Admin\AdministrasiOperasiController;
+use App\Http\Controllers\Admin\LibraryController;
 
 Route::get('/', [HomeController::class, 'index'])->name('homepage');
 
@@ -763,4 +765,16 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/daily-summary', [DailySummaryController::class, 'store'])->name('admin.daily-summary.store');
         Route::get('/daily-summary/results', [DailySummaryController::class, 'results'])->name('admin.daily-summary.results');
     });
+    
+});
+
+Route::get('/admin/administrasi-operasi', [AdministrasiOperasiController::class, 'index'])
+    ->name('admin.administrasi_operasi.index')
+    ->middleware(['auth']);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/library', [LibraryController::class, 'index'])->name('admin.library.index');
+    Route::post('/admin/library/upload', [LibraryController::class, 'upload'])->name('admin.library.upload');
+    Route::get('/admin/library/{document}/download', [LibraryController::class, 'download'])->name('admin.library.download');
+    Route::delete('/admin/library/{document}', [LibraryController::class, 'destroy'])->name('admin.library.destroy');
 });

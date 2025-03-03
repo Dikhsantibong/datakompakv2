@@ -39,7 +39,7 @@
                             </svg>
                         </button>
 
-                        <h1 class="text-xl font-semibold text-gray-800">Perpustakaan Digital</h1>
+                        <h1 class="text-xl font-semibold text-gray-800">Arsip Digital</h1>
                     </div>
 
                     <!-- User Dropdown -->

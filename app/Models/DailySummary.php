@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class DailySummary extends Model
 {
@@ -60,18 +61,71 @@ class DailySummary extends Model
         'jsi',               // JSI
     ];
 
-    // Tambahkan casting untuk memastikan tipe data yang benar
+    // Sesuaikan casting dengan tipe data di database
     protected $casts = [
         'installed_power' => 'decimal:3',
         'dmn_power' => 'decimal:3',
         'capable_power' => 'decimal:3',
         'peak_load_day' => 'decimal:3',
         'peak_load_night' => 'decimal:3',
-        'kit_ratio' => 'decimal:3',
+        'kit_ratio' => 'decimal:2',
+        'gross_production' => 'decimal:3',
+        'net_production' => 'decimal:3',
+        'aux_power' => 'decimal:3',
+        'transformer_losses' => 'decimal:3',
+        'usage_percentage' => 'decimal:2',
+        'period_hours' => 'decimal:2',
+        'operating_hours' => 'decimal:2',
+        'standby_hours' => 'decimal:2',
+        'planned_outage' => 'decimal:2',
+        'maintenance_outage' => 'decimal:2',
+        'forced_outage' => 'decimal:2',
+        'trip_machine' => 'decimal:2',
+        'trip_electrical' => 'decimal:2',
+        'efdh' => 'decimal:2',
+        'epdh' => 'decimal:2',
+        'eudh' => 'decimal:2',
+        'esdh' => 'decimal:2',
+        'eaf' => 'decimal:2',
+        'sof' => 'decimal:2',
+        'efor' => 'decimal:2',
+        'sdof' => 'decimal:2',
+        'ncf' => 'decimal:2',
+        'nof' => 'decimal:2',
+        'jsi' => 'decimal:2',
+        'hsd_fuel' => 'decimal:3',
+        'b35_fuel' => 'decimal:3',
+        'mfo_fuel' => 'decimal:3',
+        'total_fuel' => 'decimal:3',
+        'water_usage' => 'decimal:3',
+        'meditran_oil' => 'decimal:3',
+        'salyx_420' => 'decimal:3',
+        'salyx_430' => 'decimal:3',
+        'travolube_a' => 'decimal:3',
+        'turbolube_46' => 'decimal:3',
+        'turbolube_68' => 'decimal:3',
+        'total_oil' => 'decimal:3',
+        'sfc_scc' => 'decimal:3',
+        'nphr' => 'decimal:3',
+        'slc' => 'decimal:3'
     ];
 
     public function powerPlant()
     {
         return $this->belongsTo(PowerPlant::class);
+    }
+
+    // Tambahkan method boot untuk logging
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::saving(function ($model) {
+            Log::info('Saving DailySummary data:', $model->toArray());
+        });
+
+        static::saved(function ($model) {
+            Log::info('DailySummary data saved successfully:', $model->toArray());
+        });
     }
 }

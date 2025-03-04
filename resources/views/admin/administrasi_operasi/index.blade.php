@@ -71,7 +71,6 @@
 
             <div class="flex items-center pt-2">
                 <x-admin-breadcrumb :breadcrumbs="[
-                    ['name' => 'Dashboard', 'url' => route('admin.dashboard')],
                     ['name' => 'Administrasi Operasi', 'url' => null]
                 ]" />
             </div>

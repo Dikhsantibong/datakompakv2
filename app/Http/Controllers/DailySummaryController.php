@@ -6,6 +6,7 @@ use App\Models\PowerPlant; // Import model PowerPlant
 use App\Models\DailySummary; // Import model DailySummary
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class DailySummaryController extends Controller
 {
@@ -24,101 +25,119 @@ class DailySummaryController extends Controller
             $machineData = $request->input('data', []);
             $today = now()->format('Y-m-d');
             
-            // Filter hanya data yang memiliki nilai
-            $filledData = array_filter($machineData, function($data) {
-                return !empty($data['installed_power']) || !empty($data['dmn_power']) || 
-                       !empty($data['capable_power']) || !empty($data['peak_load_day']) || 
-                       !empty($data['peak_load_night']) || !empty($data['kit_ratio']);
-            });
+            // Debug log untuk melihat data yang diterima
+            Log::info('Received raw data:', ['data' => $machineData]);
 
-            if (empty($filledData)) {
+            // Validasi format input
+            $validator = Validator::make($machineData, [
+                '*' => 'array',
+                '*.power_plant_id' => 'required|exists:power_plants,id',
+                '*.machine_name' => 'required|string|max:255',
+                '*.installed_power' => 'nullable|numeric',
+                '*.dmn_power' => 'nullable|numeric',
+                '*.capable_power' => 'nullable|numeric',
+                '*.peak_load_day' => 'nullable|numeric',
+                '*.peak_load_night' => 'nullable|numeric',
+                '*.kit_ratio' => 'nullable|numeric',
+                '*.gross_production' => 'nullable|numeric',
+                '*.net_production' => 'nullable|numeric',
+                '*.aux_power' => 'nullable|numeric',
+                '*.transformer_losses' => 'nullable|numeric',
+                '*.usage_percentage' => 'nullable|numeric',
+                '*.period_hours' => 'nullable|numeric',
+                '*.operating_hours' => 'nullable|numeric',
+                '*.standby_hours' => 'nullable|numeric',
+                '*.planned_outage' => 'nullable|numeric',
+                '*.maintenance_outage' => 'nullable|numeric',
+                '*.forced_outage' => 'nullable|numeric',
+                '*.trip_machine' => 'nullable|numeric',
+                '*.trip_electrical' => 'nullable|numeric',
+                '*.efdh' => 'nullable|numeric',
+                '*.epdh' => 'nullable|numeric',
+                '*.eudh' => 'nullable|numeric',
+                '*.esdh' => 'nullable|numeric',
+                '*.eaf' => 'nullable|numeric',
+                '*.sof' => 'nullable|numeric',
+                '*.efor' => 'nullable|numeric',
+                '*.sdof' => 'nullable|numeric',
+                '*.ncf' => 'nullable|numeric',
+                '*.nof' => 'nullable|numeric',
+                '*.jsi' => 'nullable|numeric',
+                '*.hsd_fuel' => 'nullable|numeric',
+                '*.b35_fuel' => 'nullable|numeric',
+                '*.mfo_fuel' => 'nullable|numeric',
+                '*.total_fuel' => 'nullable|numeric',
+                '*.water_usage' => 'nullable|numeric',
+                '*.meditran_oil' => 'nullable|numeric',
+                '*.salyx_420' => 'nullable|numeric',
+                '*.salyx_430' => 'nullable|numeric',
+                '*.travolube_a' => 'nullable|numeric',
+                '*.turbolube_46' => 'nullable|numeric',
+                '*.turbolube_68' => 'nullable|numeric',
+                '*.total_oil' => 'nullable|numeric',
+                '*.sfc_scc' => 'nullable|numeric',
+                '*.nphr' => 'nullable|numeric',
+                '*.slc' => 'nullable|numeric',
+                '*.notes' => 'nullable|string',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('Validation failed:', [
+                    'errors' => $validator->errors()->toArray(),
+                    'data' => $machineData
+                ]);
                 return redirect()->back()
-                    ->with('error', 'Tidak ada data yang diisi untuk disimpan!')
+                    ->with('error', 'Format input tidak valid! Pastikan semua data diisi dengan benar.')
+                    ->withErrors($validator)
                     ->withInput();
             }
 
-            foreach ($filledData as $machineId => $data) {
-                // Pastikan data yang dikirim sesuai dengan kolom database
-                $dataToSave = [
-                    'power_plant_id' => $data['power_plant_id'],
-                    'machine_name' => $data['machine_name'],
-                    'installed_power' => $data['installed_power'] ?? null,
-                    'dmn_power' => $data['dmn_power'] ?? null,
-                    'capable_power' => $data['capable_power'] ?? null,
-                    'peak_load_day' => $data['peak_load_day'] ?? null,
-                    'peak_load_night' => $data['peak_load_night'] ?? null,
-                    'kit_ratio' => $data['kit_ratio'] ?? null,
-                    'gross_production' => $data['gross_production'] ?? null,
-                    'net_production' => $data['net_production'] ?? null,
-                    'aux_power' => $data['aux_power'] ?? null,
-                    'transformer_losses' => $data['transformer_losses'] ?? null,
-                    'usage_percentage' => $data['usage_percentage'] ?? null,
-                    'period_hours' => $data['period_hours'] ?? null,
-                    'operating_hours' => $data['operating_hours'] ?? null,
-                    'standby_hours' => $data['standby_hours'] ?? null,
-                    'planned_outage' => $data['planned_outage'] ?? null,
-                    'maintenance_outage' => $data['maintenance_outage'] ?? null,
-                    'forced_outage' => $data['forced_outage'] ?? null,
-                    'trip_machine' => $data['trip_machine'] ?? null,
-                    'trip_electrical' => $data['trip_electrical'] ?? null,
-                    'efdh' => $data['efdh'] ?? null,
-                    'epdh' => $data['epdh'] ?? null,
-                    'eudh' => $data['eudh'] ?? null,
-                    'esdh' => $data['esdh'] ?? null,
-                    'eaf' => $data['eaf'] ?? null,
-                    'sof' => $data['sof'] ?? null,
-                    'efor' => $data['efor'] ?? null,
-                    'sdof' => $data['sdof'] ?? null,
-                    'ncf' => $data['ncf'] ?? null,
-                    'nof' => $data['nof'] ?? null,
-                    'jsi' => $data['jsi'] ?? null,
-                    'hsd_fuel' => $data['hsd_fuel'] ?? null,
-                    'b35_fuel' => $data['b35_fuel'] ?? null,
-                    'mfo_fuel' => $data['mfo_fuel'] ?? null,
-                    'total_fuel' => $data['total_fuel'] ?? null,
-                    'water_usage' => $data['water_usage'] ?? null,
-                    'meditran_oil' => $data['meditran_oil'] ?? null,
-                    'salyx_420' => $data['salyx_420'] ?? null,
-                    'salyx_430' => $data['salyx_430'] ?? null,
-                    'travolube_a' => $data['travolube_a'] ?? null,
-                    'turbolube_46' => $data['turbolube_46'] ?? null,
-                    'turbolube_68' => $data['turbolube_68'] ?? null,
-                    'total_oil' => $data['total_oil'] ?? null,
-                    'sfc_scc' => $data['sfc_scc'] ?? null,
-                    'nphr' => $data['nphr'] ?? null,
-                    'slc' => $data['slc'] ?? null,
-                    'notes' => $data['notes'] ?? null,
-                ];
+            foreach ($machineData as $index => $data) {
+                // Filter data yang akan disimpan (hanya yang memiliki nilai)
+                $dataToSave = array_filter($data, function($value) {
+                    return $value !== '' && $value !== null;
+                });
 
-                // Konversi nilai string kosong menjadi null
+                // Konversi string ke float untuk field numerik
                 foreach ($dataToSave as $key => $value) {
-                    if ($value === '') {
-                        $dataToSave[$key] = null;
+                    if ($key !== 'power_plant_id' && $key !== 'machine_name' && $key !== 'notes') {
+                        $dataToSave[$key] = floatval($value);
                     }
                 }
 
-                // Cek apakah sudah ada data untuk mesin ini di hari yang sama
-                $existingRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])
-                    ->where('machine_name', $data['machine_name'])
-                    ->whereDate('created_at', $today)
-                    ->first();
+                // Cek apakah ada data yang perlu disimpan
+                if (count($dataToSave) <= 2) { // Hanya ada power_plant_id dan machine_name
+                    continue; // Skip jika tidak ada data numerik yang diisi
+                }
 
-                if ($existingRecord) {
-                    // Update data yang sudah ada
-                    $existingRecord->update($dataToSave);
-                    \Log::info('Data berhasil diupdate:', $dataToSave);
-                } else {
-                    // Buat data baru jika belum ada
-                    DailySummary::create($dataToSave);
-                    \Log::info('Data baru berhasil disimpan:', $dataToSave);
+                try {
+                    // Cek record yang sudah ada
+                    $existingRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])
+                        ->where('machine_name', $data['machine_name'])
+                        ->whereDate('created_at', $today)
+                        ->first();
+
+                    if ($existingRecord) {
+                        $existingRecord->update($dataToSave);
+                        Log::info("Updated record for machine {$data['machine_name']}", $dataToSave);
+                    } else {
+                        DailySummary::create($dataToSave);
+                        Log::info("Created new record for machine {$data['machine_name']}", $dataToSave);
+                    }
+                } catch (\Exception $e) {
+                    Log::error("Error processing machine {$data['machine_name']}: " . $e->getMessage());
+                    throw $e;
                 }
             }
 
             return redirect()->back()->with('success', 'Data berhasil disimpan!');
         } catch (\Exception $e) {
-            \Log::error('Error saving daily summary: ' . $e->getMessage());
+            Log::error('Error in store method: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'data' => $request->all()
+            ]);
             return redirect()->back()
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                ->with('error', 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.')
                 ->withInput();
         }
     }

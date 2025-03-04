@@ -273,10 +273,12 @@
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-3 gap-0">
                                                 <div class="input-group">
-                                                    <input type="number" step="0.001" 
-                                                           name="data[{{ $machine->id }}][installed_power]" 
+                                                    <input type="number" 
+                                                           step="0.001" 
+                                                           name="data[{{ $machine->id }}][installed_power]"
                                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
-                                                           value="{{ old('data.'.$machine->id.'.installed_power') }}">
+                                                           value="{{ old('data.'.$machine->id.'.installed_power', '') }}"
+                                                           min="0">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" 

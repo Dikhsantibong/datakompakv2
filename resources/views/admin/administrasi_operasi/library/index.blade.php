@@ -65,9 +65,8 @@
 
             <div class="flex items-center pt-2">
                 <x-admin-breadcrumb :breadcrumbs="[
-                    ['name' => 'Dashboard', 'url' => route('admin.dashboard')],
-                    ['name' => 'Administrasi Operasi', 'url' => route('admin.administrasi_operasi.index')],
-                    ['name' => 'Perpustakaan Digital', 'url' => null]
+                    
+                    ['name' => 'Arsip Digital', 'url' => null]
                 ]" />
             </div>
 

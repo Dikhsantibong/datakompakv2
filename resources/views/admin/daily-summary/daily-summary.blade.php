@@ -839,13 +839,13 @@ document.addEventListener('DOMContentLoaded', function() {
     min-width: 400px !important;
 }
 .w-capability {
-    min-width: 100px !important;
+    min-width: 150px !important;
 }
 .w-nof {
-    min-width: 100px !important;
+    min-width: 150px !important;
 }
 .w-jsi {
-    min-width: 100px !important;
+    min-width: 150px !important;
 }
 .w-bahan-bakar {
     min-width: 500px !important;

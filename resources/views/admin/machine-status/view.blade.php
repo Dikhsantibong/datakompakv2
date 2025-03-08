@@ -335,10 +335,11 @@ function getFormattedReport() {
                 const dmp = cells[3].textContent.trim();
                 const load = cells[4].textContent.trim();
                 const status = cells[5].textContent.trim();
+                const description = cells[6].textContent.trim();
                 
-                report += `- ${name} : ${dmn}/${dmp}/ ${status}`;
+                report += `- ${name} : ${dmn}/${dmp}/${load} MW ${status} (${description})`;
                 if (load && load !== '-') {
-                    report += ` ${load} MW`;
+                    report += ` `;
                 }
                 report += '\n';
             }

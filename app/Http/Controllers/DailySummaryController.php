@@ -7,6 +7,8 @@ use App\Models\DailySummary; // Import model DailySummary
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class DailySummaryController extends Controller
 {
@@ -25,8 +27,10 @@ class DailySummaryController extends Controller
             $machineData = $request->input('data', []);
             $today = now()->format('Y-m-d');
             
-            // Debug log untuk melihat data yang diterima
-            Log::info('Received raw data:', ['data' => $machineData]);
+            Log::info('Processing daily summary data', [
+                'session' => session('unit', 'mysql'),
+                'data_count' => count($machineData)
+            ]);
 
             // Validasi format input
             $validator = Validator::make($machineData, [
@@ -87,30 +91,40 @@ class DailySummaryController extends Controller
                     'data' => $machineData
                 ]);
                 return redirect()->back()
-                    ->with('error', 'Format input tidak valid! Pastikan semua data diisi dengan benar.')
+                    ->with('error', 'Format input tidak valid!')
                     ->withErrors($validator)
                     ->withInput();
             }
 
-            foreach ($machineData as $index => $data) {
-                // Filter data yang akan disimpan (hanya yang memiliki nilai)
-                $dataToSave = array_filter($data, function($value) {
-                    return $value !== '' && $value !== null;
-                });
+            DB::beginTransaction();
+            try {
+                foreach ($machineData as $index => $data) {
+                    // Filter data yang akan disimpan
+                    $dataToSave = array_filter($data, function($value) {
+                        return $value !== '' && $value !== null;
+                    });
 
-                // Konversi string ke float untuk field numerik
-                foreach ($dataToSave as $key => $value) {
-                    if ($key !== 'power_plant_id' && $key !== 'machine_name' && $key !== 'notes') {
-                        $dataToSave[$key] = floatval($value);
+                    // Konversi string ke float untuk field numerik
+                    foreach ($dataToSave as $key => $value) {
+                        if ($key !== 'power_plant_id' && $key !== 'machine_name' && $key !== 'notes') {
+                            $dataToSave[$key] = floatval($value);
+                        }
                     }
-                }
 
-                // Cek apakah ada data yang perlu disimpan
-                if (count($dataToSave) <= 2) { // Hanya ada power_plant_id dan machine_name
-                    continue; // Skip jika tidak ada data numerik yang diisi
-                }
+                    // Skip jika hanya ada power_plant_id dan machine_name
+                    if (count($dataToSave) <= 2) {
+                        continue;
+                    }
 
-                try {
+                    // Tambahkan UUID dan unit_source
+                    $powerPlant = PowerPlant::find($data['power_plant_id']);
+                    if (!$powerPlant) {
+                        throw new \Exception("Power Plant not found for id: {$data['power_plant_id']}");
+                    }
+
+                    $dataToSave['uuid'] = (string) Str::uuid();
+                    $dataToSave['unit_source'] = session('unit', 'mysql');
+
                     // Cek record yang sudah ada
                     $existingRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])
                         ->where('machine_name', $data['machine_name'])
@@ -119,41 +133,68 @@ class DailySummaryController extends Controller
 
                     if ($existingRecord) {
                         $existingRecord->update($dataToSave);
-                        Log::info("Updated record for machine {$data['machine_name']}", $dataToSave);
+                        Log::info("Updated daily summary", [
+                            'uuid' => $existingRecord->uuid,
+                            'machine' => $data['machine_name']
+                        ]);
                     } else {
                         DailySummary::create($dataToSave);
-                        Log::info("Created new record for machine {$data['machine_name']}", $dataToSave);
+                        Log::info("Created new daily summary", [
+                            'uuid' => $dataToSave['uuid'],
+                            'machine' => $data['machine_name']
+                        ]);
                     }
-                } catch (\Exception $e) {
-                    Log::error("Error processing machine {$data['machine_name']}: " . $e->getMessage());
-                    throw $e;
                 }
+
+                DB::commit();
+                return redirect()->back()->with('success', 'Data berhasil disimpan!');
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Error saving daily summary:', [
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+                throw $e;
             }
 
-            return redirect()->back()->with('success', 'Data berhasil disimpan!');
         } catch (\Exception $e) {
-            Log::error('Error in store method: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-                'data' => $request->all()
+            Log::error('Error in store method:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
             return redirect()->back()
-                ->with('error', 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.')
+                ->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage())
                 ->withInput();
         }
     }
 
     public function results(Request $request)
     {
-        $date = $request->input('date', now()->format('Y-m-d'));
+        try {
+            $date = $request->input('date', now()->format('Y-m-d'));
 
-        $units = PowerPlant::with(['dailySummaries' => function($query) use ($date) {
-            $query->whereDate('created_at', $date);
-        }])->get();
+            $units = PowerPlant::with(['dailySummaries' => function($query) use ($date) {
+                $query->whereDate('created_at', $date);
+            }])->get();
 
-        if ($request->ajax()) {
-            return view('admin.daily-summary.daily-summary-results', compact('units', 'date'))->render();
+            if ($request->ajax()) {
+                return view('admin.daily-summary.daily-summary-results', compact('units', 'date'))->render();
+            }
+
+            return view('admin.daily-summary.daily-summary-results', compact('units', 'date'));
+
+        } catch (\Exception $e) {
+            Log::error('Error in results method:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            if ($request->ajax()) {
+                return response()->json(['error' => 'Terjadi kesalahan saat memuat data.'], 500);
+            }
+            
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data.');
         }
-
-        return view('admin.daily-summary.daily-summary-results', compact('units', 'date'));
     }
 } 

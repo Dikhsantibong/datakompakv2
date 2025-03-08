@@ -13,6 +13,8 @@ use App\Events\ScoreCardDailyUpdated;
 use App\Listeners\SyncScoreCardDailyToUpKendari;
 use App\Events\PesertaUpdated;
 use App\Listeners\SyncPesertaToUpKendari;
+use App\Events\DailySummaryUpdated;
+use App\Listeners\SyncDailySummaryToUpKendari;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -34,6 +36,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         PesertaUpdated::class => [
             SyncPesertaToUpKendari::class,
+        ],
+        DailySummaryUpdated::class => [
+            SyncDailySummaryToUpKendari::class,
         ],
     ];
 } 

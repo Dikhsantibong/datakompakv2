@@ -5,14 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use App\Events\DailySummaryUpdated;
 
 class DailySummary extends Model
 {
     use HasFactory;
 
+    public static $isSyncing = false;
+
+    protected $primaryKey = 'uuid';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
+        'uuid',
         'power_plant_id',
         'machine_name',
+        'unit_source',
         'installed_power',    // Terpasang
         'dmn_power',         // DMN
         'capable_power',     // Mampu
@@ -107,25 +117,93 @@ class DailySummary extends Model
         'total_oil' => 'decimal:3',
         'sfc_scc' => 'decimal:3',
         'nphr' => 'decimal:3',
-        'slc' => 'decimal:3'
+        'slc' => 'decimal:3',
+        'uuid' => 'string',
+        'unit_source' => 'string',
     ];
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 
     public function powerPlant()
     {
         return $this->belongsTo(PowerPlant::class);
     }
 
-    // Tambahkan method boot untuk logging
     protected static function boot()
     {
         parent::boot();
         
-        static::saving(function ($model) {
-            Log::info('Saving DailySummary data:', $model->toArray());
+        static::creating(function ($model) {
+            if (!$model->uuid) {
+                $model->uuid = (string) Str::uuid();
+            }
         });
 
-        static::saved(function ($model) {
-            Log::info('DailySummary data saved successfully:', $model->toArray());
+        static::saved(function ($dailySummary) {
+            if (self::$isSyncing) return;
+
+            $currentSession = session('unit', 'mysql');
+            $powerPlant = $dailySummary->powerPlant;
+
+            if ($powerPlant) {
+                if ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
+                    // Sync dari UP Kendari ke unit lokal
+                    event(new DailySummaryUpdated($dailySummary, 'update'));
+                } elseif ($currentSession !== 'mysql' && $currentSession === $powerPlant->unit_source) {
+                    // Sync dari unit lokal ke UP Kendari
+                    event(new DailySummaryUpdated($dailySummary, 'update'));
+                }
+            }
         });
+
+        static::created(function ($dailySummary) {
+            if (self::$isSyncing) return;
+
+            $currentSession = session('unit', 'mysql');
+            $powerPlant = $dailySummary->powerPlant;
+
+            if ($powerPlant) {
+                if ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
+                    event(new DailySummaryUpdated($dailySummary, 'create'));
+                } elseif ($currentSession !== 'mysql' && $currentSession === $powerPlant->unit_source) {
+                    event(new DailySummaryUpdated($dailySummary, 'create'));
+                }
+            }
+        });
+
+        static::deleted(function ($dailySummary) {
+            if (self::$isSyncing) return;
+
+            $currentSession = session('unit', 'mysql');
+            $powerPlant = $dailySummary->powerPlant;
+
+            if ($powerPlant) {
+                if ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
+                    event(new DailySummaryUpdated($dailySummary, 'delete'));
+                } elseif ($currentSession !== 'mysql' && $currentSession === $powerPlant->unit_source) {
+                    event(new DailySummaryUpdated($dailySummary, 'delete'));
+                }
+            }
+        });
+    }
+
+    protected static function logSyncProcess($stage, $data)
+    {
+        $sessionId = uniqid('daily_summary_sync_');
+        $currentSession = session('unit', 'mysql');
+        
+        $logData = array_merge([
+            'sync_id' => $sessionId,
+            'timestamp' => now()->toDateTimeString(),
+            'stage' => $stage,
+            'current_session' => $currentSession,
+        ], $data);
+
+        Log::channel('sync')->info("Daily Summary Sync Process: {$stage}", $logData);
+        
+        return $sessionId;
     }
 }

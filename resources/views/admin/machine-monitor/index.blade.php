@@ -64,7 +64,7 @@
             <main class="p-6">
                 <!-- Indikator Kinerja -->
                 <div class=" bg-white grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 rounded-lg shadow-md" style="padding:20px">
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="bg-blue-50 rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div class="p-4">
                             <div class="text-3xl text-blue-600 mb-2">
                                 <i class="fas fa-cog"></i>
@@ -77,7 +77,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="bg-green-50 rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div class="p-4">
                             <div class="text-3xl text-green-600 mb-2">
                                 <i class="fas fa-building"></i>
@@ -90,7 +90,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="bg-red-50 rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div class="p-4">
                             <div class="text-3xl text-red-600 mb-2">
                                 <i class="fas fa-exclamation-triangle"></i>

@@ -24,6 +24,42 @@ class LibraryController extends Controller
         ));
     }
 
+    public function beritaAcara()
+    {
+        $beritaAcaraFiles = Document::where('category', 'berita-acara')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('admin.administrasi_operasi.library.berita-acara', compact('beritaAcaraFiles'));
+    }
+
+    public function standarisasi()
+    {
+        $standarisasiFiles = Document::where('category', 'standarisasi')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('admin.administrasi_operasi.library.standarisasi', compact('standarisasiFiles'));
+    }
+
+    public function bacaanDigital()
+    {
+        $bacaanDigitalFiles = Document::where('category', 'bacaan-digital')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('admin.administrasi_operasi.library.bacaan-digital', compact('bacaanDigitalFiles'));
+    }
+
+    public function diklat()
+    {
+        $diklatFiles = Document::where('category', 'diklat')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('admin.administrasi_operasi.library.diklat', compact('diklatFiles'));
+    }
+
     public function upload(Request $request)
     {
         $request->validate([

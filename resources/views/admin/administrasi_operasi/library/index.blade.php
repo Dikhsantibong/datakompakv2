@@ -72,6 +72,67 @@
 
             <!-- Main Content -->
             <main class="px-6 py-6">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" style="margin-bottom: 20px;">
+                    <div class="p-4 bg-white border-b border-gray-200">
+                        <!-- Card Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <!-- Card 1: Laporan Berita Acara -->
+                            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                                <div class="p-4">
+                                    <div class="text-3xl text-blue-600 mb-2">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-1">Laporan Berita Acara</h3>
+                                    <p class="text-gray-600 mb-2 text-sm">Kelola laporan berita acara operasional</p>
+                                    <a href="{{ route('admin.library.berita-acara') }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                                        Lihat Detail →
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Logsheet -->
+                            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                                <div class="p-4">
+                                    <div class="text-3xl text-green-600 mb-2">
+                                        <i class="fas fa-clipboard-list"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-1">Standarisasi dan Peraturan</h3>
+                                    <p class="text-gray-600 mb-2 text-sm">Akses dokumen Standarisasi dan Peraturan</p>
+                                    <a href="{{ route('admin.library.standarisasi') }}" class="text-green-600 hover:text-green-800 font-medium text-sm">
+                                        Lihat Detail →
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Card 3: Dokumen SOP -->
+                            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                                <div class="p-4">
+                                    <div class="text-3xl text-purple-600 mb-2">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-1">Bacaan Digital</h3>
+                                    <p class="text-gray-600 mb-2 text-sm">Akses dokumen Bacaan Digital</p>
+                                    <a href="{{ route('admin.library.bacaan-digital') }}" class="text-purple-600 hover:text-purple-800 font-medium text-sm">
+                                        Lihat Detail →
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Card 4: Diklat -->
+                            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                                <div class="p-4">
+                                    <div class="text-3xl text-indigo-600 mb-2">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-1">Diklat</h3>
+                                    <p class="text-gray-600 mb-2 text-sm">Akses dokumen Diklat</p>
+                                    <a href="{{ route('admin.library.diklat') }}" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm">
+                                        Lihat Detail →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="max-w-7xl mx-auto">
                     <!-- Document Categories -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

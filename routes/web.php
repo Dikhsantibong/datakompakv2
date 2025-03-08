@@ -778,3 +778,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/library/{document}/download', [LibraryController::class, 'download'])->name('admin.library.download');
     Route::delete('/admin/library/{document}', [LibraryController::class, 'destroy'])->name('admin.library.destroy');
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/daily-summary/get-latest-data', [DailySummaryController::class, 'getLatestData'])->name('daily-summary.get-latest-data');
+});
+
+Route::get('/admin/library/berita-acara', [LibraryController::class, 'beritaAcara'])->name('admin.library.berita-acara');
+Route::get('/admin/library/standarisasi', [LibraryController::class, 'standarisasi'])->name('admin.library.standarisasi');
+Route::get('/admin/library/bacaan-digital', [LibraryController::class, 'bacaanDigital'])->name('admin.library.bacaan-digital');
+Route::get('/admin/library/diklat', [LibraryController::class, 'diklat'])->name('admin.library.diklat');
+
+Route::post('/admin/library/upload', [LibraryController::class, 'upload'])->name('admin.library.upload');
+
+Route::get('/admin/library/view/{document}', [LibraryController::class, 'view'])->name('admin.library.view');

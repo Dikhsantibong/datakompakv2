@@ -79,54 +79,7 @@
             <main class="px-6">
                 <div class="py-6">
                     <div class="max-w-7xl mx-auto">
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6 bg-white border-b border-gray-200">
-                                <!-- Card Grid -->
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    <!-- Card 1: Laporan Berita Acara -->
-                                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                                        <div class="p-6">
-                                            <div class="text-4xl text-blue-600 mb-4">
-                                                <i class="fas fa-file-alt"></i>
-                                            </div>
-                                            <h3 class="text-xl font-semibold mb-2">Laporan Berita Acara</h3>
-                                            <p class="text-gray-600 mb-4">Kelola laporan berita acara operasional</p>
-                                            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">
-                                                Lihat Detail →
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <!-- Card 2: Logsheet -->
-                                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                                        <div class="p-6">
-                                            <div class="text-4xl text-green-600 mb-4">
-                                                <i class="fas fa-clipboard-list"></i>
-                                            </div>
-                                            <h3 class="text-xl font-semibold mb-2">Logsheet</h3>
-                                            <p class="text-gray-600 mb-4">Pencatatan dan monitoring logsheet harian</p>
-                                            <a href="#" class="text-green-600 hover:text-green-800 font-medium">
-                                                Lihat Detail →
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <!-- Card 3: Dokumen SOP -->
-                                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                                        <div class="p-6">
-                                            <div class="text-4xl text-purple-600 mb-4">
-                                                <i class="fas fa-book"></i>
-                                            </div>
-                                            <h3 class="text-xl font-semibold mb-2">Dokumen SOP</h3>
-                                            <p class="text-gray-600 mb-4">Akses dokumen Standard Operating Procedure</p>
-                                            <a href="#" class="text-purple-600 hover:text-purple-800 font-medium">
-                                                Lihat Detail →
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       
                     </div>
                 </div>
             </main>

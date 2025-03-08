@@ -388,37 +388,19 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show loading overlay
             contentLoading.classList.remove('hidden');
 
-            // Fetch new data dengan route name yang benar
-            const response = await fetch(`{{ route('admin.daily-summary.results') }}?date=${this.value}`, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            });
+            // Get current URL and update the date parameter
+            const url = new URL(window.location.href);
+            url.searchParams.set('date', this.value);
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            // Update browser URL without reloading
+            window.history.pushState({}, '', url);
 
-            const html = await response.text();
-            
-            // Create a temporary container
-            const temp = document.createElement('div');
-            temp.innerHTML = html;
-            
-            // Find the content wrapper in the response
-            const newContent = temp.querySelector('#content-wrapper');
-            
-            // Update only the content wrapper
-            if (newContent) {
-                contentWrapper.innerHTML = newContent.innerHTML;
-            }
+            // Redirect to the new URL
+            window.location.href = url.toString();
 
         } catch (error) {
             console.error('Error:', error);
             alert('Error loading data. Please try again.');
-        } finally {
-            // Hide loading overlay
-            contentLoading.classList.add('hidden');
         }
     });
 });

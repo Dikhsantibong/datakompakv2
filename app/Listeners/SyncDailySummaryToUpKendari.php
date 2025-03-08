@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\DailySummaryUpdated;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\DailySummary;
 
 class SyncDailySummaryToUpKendari
 {
@@ -14,13 +15,68 @@ class SyncDailySummaryToUpKendari
             $currentSession = session('unit', 'mysql');
             $powerPlant = $event->dailySummary->powerPlant;
 
+            if (!$powerPlant) {
+                Log::error('Power Plant not found for daily summary', [
+                    'uuid' => $event->dailySummary->uuid,
+                    'power_plant_id' => $event->dailySummary->power_plant_id
+                ]);
+                return;
+            }
+
             Log::info('Processing daily summary sync event', [
                 'current_session' => $currentSession,
                 'power_plant_id' => $event->dailySummary->power_plant_id,
                 'uuid' => $event->dailySummary->uuid,
                 'action' => $event->action,
-                'power_plant_unit' => $powerPlant ? $powerPlant->unit_source : null
+                'unit_source' => $event->dailySummary->unit_source
             ]);
+
+            // Jika dari unit lokal, sync ke UP Kendari
+            if ($currentSession !== 'mysql') {
+                DailySummary::$isSyncing = true; // Prevent recursive sync
+                
+                $upKendariDB = DB::connection('mysql');
+                $data = $this->prepareDataForSync($event->dailySummary, $powerPlant);
+                
+                Log::info('Syncing to UP Kendari', [
+                    'uuid' => $event->dailySummary->uuid,
+                    'data' => $data
+                ]);
+
+                DB::beginTransaction();
+                
+                try {
+                    switch($event->action) {
+                        case 'create':
+                        case 'update':
+                            $upKendariDB->table('daily_summaries')
+                                ->updateOrInsert(
+                                    ['uuid' => $event->dailySummary->uuid],
+                                    $data
+                                );
+                            break;
+                            
+                        case 'delete':
+                            $upKendariDB->table('daily_summaries')
+                                ->where('uuid', $event->dailySummary->uuid)
+                                ->delete();
+                            break;
+                    }
+                    
+                    DB::commit();
+                    
+                    Log::info("Sync to UP Kendari successful", [
+                        'action' => $event->action,
+                        'uuid' => $event->dailySummary->uuid
+                    ]);
+                    
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    throw $e;
+                } finally {
+                    DailySummary::$isSyncing = false;
+                }
+            }
 
             // Jika dari UP Kendari, sync ke unit lokal
             if ($currentSession === 'mysql' && $powerPlant && $powerPlant->unit_source !== 'mysql') {
@@ -70,54 +126,11 @@ class SyncDailySummaryToUpKendari
                 return;
             }
 
-            // Jika dari unit lokal, sync ke UP Kendari
-            if ($currentSession !== 'mysql') {
-                $upKendariDB = DB::connection('mysql');
-                
-                $data = $this->prepareDataForSync($event->dailySummary, $powerPlant);
-
-                DB::beginTransaction();
-                
-                try {
-                    switch($event->action) {
-                        case 'create':
-                            $data['created_at'] = now();
-                            $upKendariDB->table('daily_summaries')->insert($data);
-                            break;
-                            
-                        case 'update':
-                            $upKendariDB->table('daily_summaries')
-                                ->where('uuid', $event->dailySummary->uuid)
-                                ->update($data);
-                            break;
-                            
-                        case 'delete':
-                            $upKendariDB->table('daily_summaries')
-                                ->where('uuid', $event->dailySummary->uuid)
-                                ->delete();
-                            break;
-                    }
-                    
-                    DB::commit();
-                    
-                    Log::info("Sync to UP Kendari successful", [
-                        'action' => $event->action,
-                        'uuid' => $event->dailySummary->uuid
-                    ]);
-                    
-                } catch (\Exception $e) {
-                    DB::rollBack();
-                    throw $e;
-                }
-            }
-
         } catch (\Exception $e) {
             Log::error("Daily Summary sync failed", [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
-                'uuid' => $event->dailySummary->uuid ?? null,
-                'power_plant_id' => $event->dailySummary->power_plant_id,
-                'session' => $currentSession
+                'uuid' => $event->dailySummary->uuid ?? null
             ]);
         }
     }

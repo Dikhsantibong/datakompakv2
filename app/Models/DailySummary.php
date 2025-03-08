@@ -140,6 +140,7 @@ class DailySummary extends Model
             if (!$model->uuid) {
                 $model->uuid = (string) Str::uuid();
             }
+            $model->unit_source = session('unit', 'mysql');
         });
 
         static::saved(function ($dailySummary) {
@@ -149,11 +150,19 @@ class DailySummary extends Model
             $powerPlant = $dailySummary->powerPlant;
 
             if ($powerPlant) {
-                if ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
-                    // Sync dari UP Kendari ke unit lokal
+                if ($currentSession !== 'mysql') {
+                    Log::info('Triggering sync from local to UP Kendari', [
+                        'current_session' => $currentSession,
+                        'uuid' => $dailySummary->uuid,
+                        'power_plant' => $powerPlant->id
+                    ]);
                     event(new DailySummaryUpdated($dailySummary, 'update'));
-                } elseif ($currentSession !== 'mysql' && $currentSession === $powerPlant->unit_source) {
-                    // Sync dari unit lokal ke UP Kendari
+                } elseif ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
+                    Log::info('Triggering sync from UP Kendari to local', [
+                        'target_unit' => $powerPlant->unit_source,
+                        'uuid' => $dailySummary->uuid,
+                        'power_plant' => $powerPlant->id
+                    ]);
                     event(new DailySummaryUpdated($dailySummary, 'update'));
                 }
             }

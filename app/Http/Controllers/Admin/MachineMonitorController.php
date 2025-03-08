@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Log;
 
 class MachineMonitorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Mengambil data mesin dan relasinya
         $machines = Machine::with(['issues', 'metrics'])->get();
@@ -112,6 +112,36 @@ class MachineMonitorController extends Controller
         // Ambil semua power plants untuk filter
         $powerPlants = PowerPlant::all();
 
+        // Get today's date
+        $today = Carbon::today();
+        
+        // Define shift times
+        $shiftTimes = [
+            '06:00' => '06:00:00',
+            '11:00' => '11:00:00',
+            '14:00' => '14:00:00',
+            '18:00' => '18:00:00',
+            '19:00' => '19:00:00',
+        ];
+
+        // Get selected time or default to all
+        $selectedTime = $request->input('time_filter', 'all');
+
+        // Filter logs based on selected time
+        $filteredLogs = $machineStatusLogs->filter(function($log) use ($selectedTime, $shiftTimes, $today) {
+            if ($selectedTime === 'all') {
+                return true;
+            }
+            
+            if (isset($shiftTimes[$selectedTime])) {
+                return $log->tanggal->isSameDay($today) && 
+                       $log->input_time && 
+                       $log->input_time->format('H:i:s') === $shiftTimes[$selectedTime];
+            }
+            
+            return false;
+        });
+
         return view('admin.machine-monitor.index', compact(
             'machines',
             'healthCategories',
@@ -119,6 +149,8 @@ class MachineMonitorController extends Controller
             'uptime',
             'recentIssues',
             'machineStatusLogs',
+            'filteredLogs',
+            'selectedTime',
             'efficiencyData',
             'powerPlants'
         ));
@@ -462,6 +494,38 @@ class MachineMonitorController extends Controller
                 ->with('success', 'Data mesin berhasil dihapus');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menghapus data mesin: ' . $e->getMessage());
+        }
+    }
+
+    public function filter(Request $request)
+    {
+        try {
+            \Log::info('Filter request received', ['time_filter' => $request->input('time_filter')]);
+
+            $query = MachineStatusLog::with('machine')
+                ->whereDate('tanggal', Carbon::today());
+
+            $selectedTime = $request->input('time_filter');
+            
+            if ($selectedTime !== 'all') {
+                $query->whereTime('input_time', '=', $selectedTime.':00');
+            }
+
+            $logs = $query->get();
+
+            \Log::info('Filtered logs count: ' . $logs->count());
+
+            if ($request->ajax()) {
+                return view('admin.machine-monitor.partials.status-table', [
+                    'logs' => $logs
+                ])->render();
+            }
+
+            return response()->json(['error' => 'Request harus menggunakan AJAX'], 400);
+
+        } catch (\Exception $e) {
+            \Log::error('Filter error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }

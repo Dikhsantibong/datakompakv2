@@ -216,48 +216,24 @@
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xl font-semibold text-gray-800">Log Status Detail</h2>
-                        <div class="flex gap-2">
-                            <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                                <i class="fas fa-download mr-2"></i>Export
-                            </button>
-                            <button class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                                <i class="fas fa-filter mr-2"></i>Filter
-                            </button>
+                        <div class="flex gap-4">
+                            <!-- Time Filter -->
+                            <div class="flex items-center gap-2">
+                                <label class="text-sm text-gray-600">Filter Waktu:</label>
+                                <select id="timeFilter" class="rounded-lg border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500 p-2" style="padding: 2px; width: 120px;">
+                                    <option value="all" {{ $selectedTime == 'all' ? 'selected' : '' }}>Semua</option>
+                                    <option value="06:00" {{ $selectedTime == '06:00' ? 'selected' : '' }}>06:00 Pagi</option>
+                                    <option value="11:00" {{ $selectedTime == '11:00' ? 'selected' : '' }}>11:00 Siang</option>
+                                    <option value="14:00" {{ $selectedTime == '14:00' ? 'selected' : '' }}>14:00 Siang</option>
+                                    <option value="18:00" {{ $selectedTime == '18:00' ? 'selected' : '' }}>18:00 Malam</option>
+                                    <option value="19:00" {{ $selectedTime == '19:00' ? 'selected' : '' }}>19:00 Malam</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DMN</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DMP</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Beban</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($machineStatusLogs->take(10) as $log)
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $log->machine->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $log->tanggal->format('d M Y H:i') }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                                {{ $log->status === 'START' ? 'bg-green-100 text-green-800' : '' }}
-                                                {{ $log->status === 'STOP' ? 'bg-red-100 text-red-800' : '' }}
-                                                {{ $log->status === 'PARALLEL' ? 'bg-blue-100 text-blue-800' : '' }}">
-                                                {{ $log->status }}
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ number_format($log->dmn, 2) }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ number_format($log->dmp, 2) }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ number_format($log->load_value, 2) }}%</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div id="statusTableContent" class="overflow-x-auto">
+                        @include('admin.machine-monitor.partials.status-table', ['logs' => $filteredLogs])
                     </div>
                 </div>
             </main>
@@ -269,6 +245,7 @@
             <!-- Chart.js CDN -->
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script src="{{ asset('js/toggle.js') }}"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script>
                 // Data sementara untuk demonstrasi
                 const monthlyIssuesData = [{
@@ -585,6 +562,50 @@
                             submenu.style.maxHeight = '0';
                             dropdownButton.classList.remove('rotate-180');
                         }
+                    });
+                });
+
+                $(document).ready(function() {
+                    // Debug check
+                    console.log('Script loaded');
+                    
+                    // Setup CSRF
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    // Handle filter change
+                    $('#timeFilter').on('change', function(e) {
+                        e.preventDefault();
+                        console.log('Filter changed:', $(this).val());
+                        
+                        const selectedTime = $(this).val();
+                        const url = "{{ route('admin.machine-monitor.filter') }}";
+                        
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            data: { time_filter: selectedTime },
+                            beforeSend: function() {
+                                console.log('Sending request to:', url);
+                                $('#statusTableContent').addClass('opacity-50');
+                            },
+                            success: function(response) {
+                                console.log('Response received');
+                                $('#statusTableContent').html(response);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error:', error);
+                                console.error('Status:', status);
+                                console.error('Response:', xhr.responseText);
+                                alert('Terjadi kesalahan saat memuat data');
+                            },
+                            complete: function() {
+                                $('#statusTableContent').removeClass('opacity-50');
+                            }
+                        });
                     });
                 });
             </script>

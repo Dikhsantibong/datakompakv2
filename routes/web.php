@@ -791,3 +791,15 @@ Route::get('/admin/library/diklat', [LibraryController::class, 'diklat'])->name(
 Route::post('/admin/library/upload', [LibraryController::class, 'upload'])->name('admin.library.upload');
 
 Route::get('/admin/library/view/{document}', [LibraryController::class, 'view'])->name('admin.library.view');
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
+        // ... other routes ...
+        
+        // Perbaiki route untuk machine monitor
+        Route::get('/machine-monitor', [MachineMonitorController::class, 'index'])->name('machine-monitor');
+        Route::get('/machine-monitor/filter', [MachineMonitorController::class, 'filter'])->name('machine-monitor.filter');
+    });
+});

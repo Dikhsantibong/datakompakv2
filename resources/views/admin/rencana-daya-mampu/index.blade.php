@@ -90,9 +90,11 @@
 
                 <!-- Unit Filter (Only show for UP Kendari users) -->
                 @if(session('unit') === 'mysql')
-                <div class="p-4 border-b">
+                <div class="p-4 border-b flex items-center">
+                    <label for="unit-source" class="block text-sm font-medium text-gray-700 mr-2">Pilih Sumber Unit : </label>
                     <select id="unit-source" 
                             class="border rounded px-3 py-2 text-sm"
+                            style="width: 120px;"
                             onchange="updateTable()">
                         <option value="mysql" {{ $unitSource == 'mysql' ? 'selected' : '' }}>UP Kendari</option>
                         <option value="mysql_wua_wua" {{ $unitSource == 'mysql_wua_wua' ? 'selected' : '' }}>Wua Wua</option>

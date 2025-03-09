@@ -62,6 +62,7 @@
                             <select name="unit_source" 
                                     id="unit-source" 
                                     class="w-full md:w-64 border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                                    style="width: 130px;"
                                     onchange="updateFilter()">
                                 <option value="mysql" {{ $unitSource == 'mysql' ? 'selected' : '' }}>UP Kendari</option>
                                 <option value="mysql_wua_wua" {{ $unitSource == 'mysql_wua_wua' ? 'selected' : '' }}>Wua Wua</option>

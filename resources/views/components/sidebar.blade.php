@@ -56,7 +56,7 @@
             </a>
 
             <a href="{{ route('admin.library.index')}}"
-                class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.library.index') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.library.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                 <i class="fas fa-book w-5 h-5"></i>
                 <span class="ml-3 text-sm">Library</span>
             </a>

@@ -56,6 +56,22 @@
                         </button>
                     </div>
 
+                    <!-- Search Bar -->
+                    <div class="mb-4">
+                        <div class="flex gap-x-3">
+                            <div class="flex-1">
+                                <input type="text" 
+                                       id="searchInput" 
+                                       placeholder="Cari dokumen..." 
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            </div>
+                            <button onclick="clearSearch()" 
+                                    class="px-4 py-2 bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200">
+                                <i class="fas fa-times"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Table -->
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
@@ -105,4 +121,35 @@
     </div>
 
     @include('components.upload-modal')
+
+    @push('scripts')
+    <script>
+        function searchDocuments() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.querySelector('table');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const nameCell = rows[i].getElementsByTagName('td')[0];
+                if (nameCell) {
+                    const nameText = nameCell.textContent || nameCell.innerText;
+                    if (nameText.toLowerCase().indexOf(filter) > -1) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('searchInput');
+            input.value = '';
+            searchDocuments();
+        }
+
+        document.getElementById('searchInput').addEventListener('keyup', searchDocuments);
+    </script>
+    @endpush
 @endsection 

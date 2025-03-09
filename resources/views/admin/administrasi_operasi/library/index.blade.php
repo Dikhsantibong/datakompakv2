@@ -143,13 +143,19 @@
                                     <i class="fas fa-file-alt text-blue-500 mr-2"></i>
                                     Berita Acara Lapkit
                                 </h2>
-                                <button onclick="showUploadModal('berita-acara')" 
-                                        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                                    <i class="fas fa-upload mr-2"></i>Upload
-                                </button>
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('admin.library.berita-acara') }}" 
+                                       class="text-blue-500 hover:text-blue-700">
+                                        Lihat Semua
+                                    </a>
+                                    <button onclick="showUploadModal('berita-acara')" 
+                                            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                                        <i class="fas fa-upload mr-2"></i>Upload
+                                    </button>
+                                </div>
                             </div>
                             <div class="space-y-4">
-                                @foreach($beritaAcaraFiles as $file)
+                                @foreach($beritaAcaraFiles->take(5) as $file)
                                 <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                     <div class="flex items-center">
                                         <i class="fas fa-file-pdf text-red-500 mr-3"></i>
@@ -180,13 +186,19 @@
                                     <i class="fas fa-book-open text-green-500 mr-2"></i>
                                     Standarisasi dan Peraturan
                                 </h2>
-                                <button onclick="showUploadModal('standarisasi')" 
-                                        class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
-                                    <i class="fas fa-upload mr-2"></i>Upload
-                                </button>
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('admin.library.standarisasi') }}" 
+                                       class="text-green-500 hover:text-green-700">
+                                        Lihat Semua
+                                    </a>
+                                    <button onclick="showUploadModal('standarisasi')" 
+                                            class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                                        <i class="fas fa-upload mr-2"></i>Upload
+                                    </button>
+                                </div>
                             </div>
                             <div class="space-y-4">
-                                @foreach($standarisasiFiles as $file)
+                                @foreach($standarisasiFiles->take(5) as $file)
                                 <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                     <div class="flex items-center">
                                         <i class="fas fa-file-pdf text-red-500 mr-3"></i>
@@ -217,13 +229,19 @@
                                     <i class="fas fa-tablet-alt text-purple-500 mr-2"></i>
                                     Bacaan Digital
                                 </h2>
-                                <button onclick="showUploadModal('bacaan-digital')" 
-                                        class="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600">
-                                    <i class="fas fa-upload mr-2"></i>Upload
-                                </button>
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('admin.library.bacaan-digital') }}" 
+                                       class="text-purple-500 hover:text-purple-700">
+                                        Lihat Semua
+                                    </a>
+                                    <button onclick="showUploadModal('bacaan-digital')" 
+                                            class="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600">
+                                        <i class="fas fa-upload mr-2"></i>Upload
+                                    </button>
+                                </div>
                             </div>
                             <div class="space-y-4">
-                                @foreach($bacaanDigitalFiles as $file)
+                                @foreach($bacaanDigitalFiles->take(5) as $file)
                                 <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                     <div class="flex items-center">
                                         <i class="fas fa-file-pdf text-red-500 mr-3"></i>
@@ -254,13 +272,19 @@
                                     <i class="fas fa-graduation-cap text-yellow-500 mr-2"></i>
                                     Diklat
                                 </h2>
-                                <button onclick="showUploadModal('diklat')" 
-                                        class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">
-                                    <i class="fas fa-upload mr-2"></i>Upload
-                                </button>
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('admin.library.diklat') }}" 
+                                       class="text-yellow-500 hover:text-yellow-700">
+                                        Lihat Semua
+                                    </a>
+                                    <button onclick="showUploadModal('diklat')" 
+                                            class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">
+                                        <i class="fas fa-upload mr-2"></i>Upload
+                                    </button>
+                                </div>
                             </div>
                             <div class="space-y-4">
-                                @foreach($diklatFiles as $file)
+                                @foreach($diklatFiles->take(5) as $file)
                                 <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                     <div class="flex items-center">
                                         <i class="fas fa-file-pdf text-red-500 mr-3"></i>

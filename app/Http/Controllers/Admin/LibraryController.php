@@ -89,9 +89,24 @@ class LibraryController extends Controller
 
     public function destroy(Document $document)
     {
-        Storage::delete($document->path);
-        $document->delete();
+        try {
+            // Hapus file fisik
+            if (Storage::exists($document->path)) {
+                Storage::delete($document->path);
+            }
 
-        return response()->json(['message' => 'File deleted successfully']);
+            // Hapus record dari database
+            $document->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'File deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting file: ' . $e->getMessage()
+            ], 500);
+        }
     }
 } 

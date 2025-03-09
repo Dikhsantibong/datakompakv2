@@ -55,22 +55,6 @@
                         </button>
                     </div>
 
-                    <!-- Search Bar -->
-                    <div class="mb-4">
-                        <div class="flex gap-x-3">
-                            <div class="flex-1">
-                                <input type="text" 
-                                       id="searchInput" 
-                                       placeholder="Cari dokumen..." 
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <button onclick="clearSearch()" 
-                                    class="px-4 py-2 bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200">
-                                <i class="fas fa-times"></i> Clear
-                            </button>
-                        </div>
-                    </div>
-
                     <!-- Table -->
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
@@ -120,36 +104,60 @@
     </div>
 
     @include('components.upload-modal')
-@endsection
 
-@push('scripts')
-<script>
-    function searchDocuments() {
-        const input = document.getElementById('searchInput');
-        const filter = input.value.toLowerCase();
-        const table = document.querySelector('table');
-        const rows = table.getElementsByTagName('tr');
-
-        for (let i = 1; i < rows.length; i++) { // Start from 1 to skip header
-            const nameCell = rows[i].getElementsByTagName('td')[0];
-            if (nameCell) {
-                const nameText = nameCell.textContent || nameCell.innerText;
-                if (nameText.toLowerCase().indexOf(filter) > -1) {
-                    rows[i].style.display = '';
-                } else {
-                    rows[i].style.display = 'none';
+    @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function deleteFile(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Dokumen yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/library/delete/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire(
+                                'Terhapus!',
+                                'Dokumen berhasil dihapus.',
+                                'success'
+                            ).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            throw new Error(data.message || 'Terjadi kesalahan saat menghapus dokumen');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire(
+                            'Error!',
+                            'Terjadi kesalahan saat menghapus dokumen.',
+                            'error'
+                        );
+                    });
                 }
-            }
+            });
         }
-    }
-
-    function clearSearch() {
-        const input = document.getElementById('searchInput');
-        input.value = '';
-        searchDocuments();
-    }
-
-    // Add event listener for real-time search
-    document.getElementById('searchInput').addEventListener('keyup', searchDocuments);
-</script>
-@endpush
+    </script>
+    @endpush
+@endsection

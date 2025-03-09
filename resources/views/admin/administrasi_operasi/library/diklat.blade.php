@@ -123,6 +123,7 @@
     @include('components.upload-modal')
 
     @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function searchDocuments() {
             const input = document.getElementById('searchInput');
@@ -150,6 +151,57 @@
         }
 
         document.getElementById('searchInput').addEventListener('keyup', searchDocuments);
+
+        function deleteFile(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Dokumen yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/library/delete/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire(
+                                'Terhapus!',
+                                'Dokumen berhasil dihapus.',
+                                'success'
+                            ).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            throw new Error(data.message || 'Terjadi kesalahan saat menghapus dokumen');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire(
+                            'Error!',
+                            'Terjadi kesalahan saat menghapus dokumen.',
+                            'error'
+                        );
+                    });
+                }
+            });
+        }
     </script>
     @endpush
 @endsection 

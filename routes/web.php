@@ -803,3 +803,17 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/machine-monitor/filter', [MachineMonitorController::class, 'filter'])->name('machine-monitor.filter');
     });
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
+        // Library routes
+        Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
+        Route::get('/library/berita-acara', [LibraryController::class, 'beritaAcara'])->name('library.berita-acara');
+        Route::get('/library/standarisasi', [LibraryController::class, 'standarisasi'])->name('library.standarisasi');
+        Route::get('/library/bacaan-digital', [LibraryController::class, 'bacaanDigital'])->name('library.bacaan-digital');
+        Route::get('/library/diklat', [LibraryController::class, 'diklat'])->name('library.diklat');
+        Route::post('/library/upload', [LibraryController::class, 'upload'])->name('library.upload');
+        Route::get('/library/{document}/download', [LibraryController::class, 'download'])->name('library.download');
+        Route::delete('/library/delete/{document}', [LibraryController::class, 'destroy'])->name('library.delete');
+    });
+});

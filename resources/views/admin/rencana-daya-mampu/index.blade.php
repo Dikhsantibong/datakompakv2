@@ -67,14 +67,14 @@
 
         <!-- Table Container -->
         <div class="p-6">
-            <div class="overflow-x-auto bg-white rounded-2xl shadow-2xl p-8 mb-4" style="max-width: 100%;">
-                <!-- Header Section -->
-                <div class="flex justify-between items-center mb-8">
-                    <div>
-                        <h1 class="text-2xl font-bold text-[#009BB9]">Rencana Operasi Bulanan (ROB)</h1>
-                        <p class="text-sm text-gray-600 mt-2">Data rencana operasi pembangkit listrik bulanan</p>
-                    </div>
+            <div class="overflow-x-auto bg-white rounded-lg shadow p-6 mb-4" style="max-width: 100%;">
+                <div class="flex justify-between items-center mb-4">
+                    <h1 class="text-2xl font-bold">Rencana Operasi Bulanan (ROB)</h1>
                     <div class="flex gap-2">
+                        <a href="{{ route('admin.rencana-daya-mampu.manage') }}" 
+                           class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 flex items-center">
+                            <i class="fas fa-cogs mr-2"></i> Kelola Data
+                        </a>
                         <button id="editModeButton" 
                                 onclick="toggleEditMode()"
                                 class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center">
@@ -88,11 +88,11 @@
                     </div>
                 </div>
 
-                <!-- Unit Filter -->
+                <!-- Unit Filter (Only show for UP Kendari users) -->
                 @if(session('unit') === 'mysql')
-                <div class="mb-6">
+                <div class="p-4 border-b">
                     <select id="unit-source" 
-                            class="border rounded-lg px-4 py-2 text-sm w-64 focus:ring-2 focus:ring-[#009BB9]/20 focus:border-[#009BB9] transition-all duration-200"
+                            class="border rounded px-3 py-2 text-sm"
                             onchange="updateTable()">
                         <option value="mysql" {{ $unitSource == 'mysql' ? 'selected' : '' }}>UP Kendari</option>
                         <option value="mysql_wua_wua" {{ $unitSource == 'mysql_wua_wua' ? 'selected' : '' }}>Wua Wua</option>
@@ -103,25 +103,24 @@
                 </div>
                 @endif
 
-                <!-- Table Section with Enhanced Styling -->
-                <div class="overflow-x-auto border rounded-xl shadow-inner bg-white">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 border-2">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <th rowspan="2" class="px-6 py-4 text-left text-xs font-semibold text-[#1A3869] uppercase tracking-wider sticky left-0 bg-white text-center border-r z-20">No</th>
-                                <th rowspan="2" class="px-6 py-4 text-left text-xs font-semibold text-[#1A3869] uppercase tracking-wider sticky left-16 bg-white text-center border-r z-20">Sistem Kelistrikan</th>
-                                <th rowspan="2" class="px-6 py-4 text-left text-xs font-semibold text-[#1A3869] uppercase tracking-wider text-center border-r bg-[#009BB9]/10">Mesin Pembangkit</th>
-                                <th rowspan="2" class="px-6 py-4 text-left text-xs font-semibold text-[#1A3869] uppercase tracking-wider text-center border-r bg-[#009BB9]/10">Site Pembangkit</th>
-                                <th colspan="2" class="px-6 py-4 text-left text-xs font-semibold text-[#1A3869] uppercase tracking-wider text-center border-r bg-[#009BB9]/20">Rencana Realisasi</th>
-                                <th rowspan="2" class="px-6 py-4 text-left text-xs font-semibold text-[#1A3869] uppercase tracking-wider text-center border-r bg-[#009BB9]/10">Daya PJBTL SILM</th>
-                                <th rowspan="2" class="px-6 py-4 text-left text-xs font-semibold text-[#1A3869] uppercase tracking-wider text-center border-r bg-[#009BB9]/10">DMP Existing</th>
-                                <th colspan="{{ date('t') }}" class="px-6 py-4 text-center text-xs font-semibold text-[#1A3869] uppercase tracking-wider bg-[#009BB9]/30">Tanggal</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 text-center border-r-2">No</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-16 bg-gray-50 text-center border-r-2">Sistem Kelistrikan</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Mesin Pembangkit</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Site Pembangkit</th>
+                                <th colspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Rencana Realisasi</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Daya PJBTL SILM</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">DMP Existing</th>
+                                <th colspan="{{ date('t') }}" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                             </tr>
                             <tr>
-                                <th class="px-6 py-4 text-left text-xs font-semibold text-[#1A3869] uppercase tracking-wider text-center border-r bg-[#009BB9]/20">Rencana</th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold text-[#1A3869] uppercase tracking-wider text-center border-r bg-[#009BB9]/20">Realisasi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r">Rencana</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r">Realisasi</th>
                                 @for ($i = 1; $i <= date('t'); $i++)
-                                    <th class="px-6 py-4 text-center text-xs font-semibold text-[#1A3869] uppercase tracking-wider bg-[#009BB9]/30">{{ $i }}</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $i }}</th>
                                 @endfor
                             </tr>
                         </thead>
@@ -129,38 +128,38 @@
                             @php $no = 1; @endphp
                             @foreach($powerPlants as $plant)
                                 @foreach($plant->machines as $machine)
-                                    <tr class="hover:bg-[#009BB9]/5 transition-all duration-200">
-                                        <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white text-center border-r z-10">{{ $no++ }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white border-r z-10 font-medium">{{ $plant->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap border-r">{{ $machine->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap border-r">{{ $plant->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center bg-[#009BB9]/5">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white text-center">{{ $no++ }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white">{{ $plant->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $machine->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $plant->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <span class="data-display">{{ $machine->rencana ?? '-' }}</span>
                                             <textarea name="rencana[{{ $machine->id }}]"
                                                       style="width: 200px;"
-                                                      class="data-input hidden w-full text-center border rounded-xl focus:ring-2 focus:ring-[#009BB9]/20 focus:border-[#009BB9] transition-all duration-200 resize-none"
+                                                      class="data-input hidden w-full text-center border rounded"
                                                       rows="3">{{ $machine->rencana }}</textarea>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center bg-[#009BB9]/5">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <span class="data-display">{{ $machine->realisasi ?? '-' }}</span>
                                             <textarea name="realisasi[{{ $machine->id }}]"
                                                       style="width: 200px;"
-                                                      class="data-input hidden w-full text-center border rounded-xl focus:ring-2 focus:ring-[#009BB9]/20 focus:border-[#009BB9] transition-all duration-200 resize-none"
+                                                      class="data-input hidden w-full text-center border rounded"
                                                       rows="3">{{ $machine->realisasi }}</textarea>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
-                                            <span class="data-display font-medium">{{ $machine->daya_pjbtl_silm ?? '-' }}</span>
+                                            <span class="data-display">{{ $machine->daya_pjbtl_silm ?? '-' }}</span>
                                             <input type="number" 
                                                    name="daya_pjbtl[{{ $machine->id }}]"
-                                                   class="data-input hidden w-24 text-center border rounded-xl focus:ring-2 focus:ring-[#009BB9]/20 focus:border-[#009BB9] transition-all duration-200"
+                                                   class="data-input hidden w-20 text-center border rounded"
                                                    value="{{ $machine->daya_pjbtl_silm }}"
                                                    step="0.01">
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
-                                            <span class="data-display font-medium">{{ $machine->dmp_existing ?? '-' }}</span>
+                                            <span class="data-display">{{ $machine->dmp_existing ?? '-' }}</span>
                                             <input type="number" 
                                                    name="dmp_existing[{{ $machine->id }}]"
-                                                   class="data-input hidden w-24 text-center border rounded-xl focus:ring-2 focus:ring-[#009BB9]/20 focus:border-[#009BB9] transition-all duration-200"
+                                                   class="data-input hidden w-20 text-center border rounded"
                                                    value="{{ $machine->dmp_existing }}"
                                                    step="0.01">
                                         </td>
@@ -169,11 +168,11 @@
                                                 $date = now()->format('Y-m-') . sprintf('%02d', $i);
                                                 $dailyValue = $machine->rencanaDayaMampu->first()?->getDailyValue($date, 'rencana');
                                             @endphp
-                                            <td class="px-6 py-4 whitespace-nowrap text-center border-r bg-[#009BB9]/30">
+                                            <td class="px-6 py-4 whitespace-nowrap text-center border-r-2">
                                                 <span class="data-display">{{ $dailyValue ?? '-' }}</span>
                                                 <textarea name="days[{{ $machine->id }}][{{ $i }}]"
                                                           style="width: 200px;"
-                                                          class="data-input hidden w-full text-center border rounded-xl focus:ring-2 focus:ring-[#009BB9]/20 focus:border-[#009BB9] transition-all duration-200 resize-none"
+                                                          class="data-input hidden w-full text-center border rounded"
                                                           rows="3"
                                                           data-date="{{ $date }}">{{ $dailyValue }}</textarea>
                                             </td>

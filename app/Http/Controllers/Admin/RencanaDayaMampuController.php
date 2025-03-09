@@ -118,4 +118,44 @@ class RencanaDayaMampuController extends Controller
         
         return $record ? $record->getDailyValue($date->format('Y-m-d'), 'rencana') : null;
     }
+
+    public function manage(Request $request)
+    {
+        $unitSource = session('unit') === 'mysql' ? 
+            $request->get('unit_source', 'mysql') : 
+            session('unit');
+
+        // Get selected month and year (default to current)
+        $selectedMonth = $request->get('month', now()->format('m'));
+        $selectedYear = $request->get('year', now()->format('Y'));
+        $selectedDate = $selectedYear . '-' . $selectedMonth;
+
+        // Get power plants with their machines and rencana daya mampu data
+        $powerPlants = PowerPlant::when($unitSource !== 'mysql', function($query) use ($unitSource) {
+            return $query->where('unit_source', $unitSource);
+        })->with(['machines' => function($query) use ($selectedDate) {
+            $query->orderBy('name')
+                ->with(['rencanaDayaMampu' => function($query) use ($selectedDate) {
+                    $query->whereRaw("DATE_FORMAT(tanggal, '%Y-%m') = ?", [$selectedDate]);
+                }]);
+        }])->orderBy('name')->get();
+
+        return view('admin.rencana-daya-mampu.manage', compact(
+            'powerPlants', 
+            'unitSource', 
+            'selectedMonth', 
+            'selectedYear'
+        ));
+    }
+
+    public function export(Request $request)
+    {
+        $format = $request->get('format', 'pdf');
+        $month = $request->get('month', now()->format('m'));
+        $year = $request->get('year', now()->format('Y'));
+        
+        // Logic untuk export akan ditambahkan nanti
+        // Untuk sementara return response kosong
+        return response()->json(['message' => 'Export feature coming soon']);
+    }
 } 

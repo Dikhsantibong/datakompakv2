@@ -817,3 +817,8 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/library/delete/{document}', [LibraryController::class, 'destroy'])->name('library.delete');
     });
 });
+
+Route::get('/admin/rencana-daya-mampu/manage', [RencanaDayaMampuController::class, 'manage'])
+    ->name('admin.rencana-daya-mampu.manage');
+Route::get('/admin/rencana-daya-mampu/export', [RencanaDayaMampuController::class, 'export'])
+    ->name('admin.rencana-daya-mampu.export');

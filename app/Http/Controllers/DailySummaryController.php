@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use PDF; // Add this for PDF export
+use Maatwebsite\Excel\Facades\Excel; // Add this for Excel export
+use App\Exports\DailySummaryExport; // We'll create this class next
 
 class DailySummaryController extends Controller
 {
@@ -195,6 +198,45 @@ class DailySummaryController extends Controller
             }
             
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data.');
+        }
+    }
+
+    public function exportPdf(Request $request)
+    {
+        try {
+            $date = $request->input('date', now()->format('Y-m-d'));
+            
+            $units = PowerPlant::with(['dailySummaries' => function($query) use ($date) {
+                $query->whereDate('created_at', $date);
+            }])->get();
+
+            $pdf = PDF::loadView('admin.daily-summary.pdf', compact('units', 'date'));
+            
+            return $pdf->download('daily-summary-' . $date . '.pdf');
+
+        } catch (\Exception $e) {
+            Log::error('Error in PDF export:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengekspor PDF.');
+        }
+    }
+
+    public function exportExcel(Request $request)
+    {
+        try {
+            $date = $request->input('date', now()->format('Y-m-d'));
+            return Excel::download(new DailySummaryExport($date), 'daily-summary-' . $date . '.xlsx');
+
+        } catch (\Exception $e) {
+            Log::error('Error in Excel export:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengekspor Excel.');
         }
     }
 } 

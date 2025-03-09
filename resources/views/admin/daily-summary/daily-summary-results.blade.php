@@ -55,7 +55,10 @@
                 </div>
             </div>
         </header>
-
+       <!-- main content -->
+       <main class="flex-1 p-4">
+        <div class="bg-white rounded-lg shadow-md p-2">
+            <h1 class="text-xl font-semibold text-gray-800"> Kelola Data Ikhtisar Harian</h1>
         <div class="p-6" id="content-wrapper">
             <!-- Add Date Filter -->
             <div class="mb-6 flex items-center justify-between gap-4">
@@ -74,12 +77,21 @@
                     </div>
                 </div>
                 
-                <button 
-                    onclick="window.location.href='{{ route('admin.daily-summary') }}'" 
-                    class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center shadow-sm"
-                >
-                    <i class="fas fa-arrow-left mr-2"></i>Kembali
-                </button>
+                <div class="flex flex-col md:flex-row items-center gap-4">
+                    <a href="{{ route('admin.daily-summary.export-pdf', ['date' => $date]) }}" 
+                       class="bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center shadow-sm w-full md:w-auto mb-2 md:mb-0">
+                        <i class="fas fa-file-pdf mr-2"></i>Export PDF
+                    </a>
+                    <a href="{{ route('admin.daily-summary.export-excel', ['date' => $date]) }}" 
+                       class="bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center shadow-sm w-full md:w-auto mb-2 md:mb-0">
+                        <i class="fas fa-file-excel mr-2"></i>Export Excel
+                    </a>
+                    <button 
+                        onclick="window.location.href='{{ route('admin.daily-summary') }}'" 
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center shadow-sm w-full md:w-auto">
+                        <i class="fas fa-arrow-left mr-2"></i>Kembali
+                    </button>
+                </div>
             </div>
 
             <!-- Add Loading Overlay -->
@@ -376,6 +388,8 @@
         </div>
     </div>
 </div>
+</div>
+</main>
 <script src="{{ asset('js/toggle.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

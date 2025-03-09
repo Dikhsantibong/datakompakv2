@@ -822,3 +822,8 @@ Route::get('/admin/rencana-daya-mampu/manage', [RencanaDayaMampuController::clas
     ->name('admin.rencana-daya-mampu.manage');
 Route::get('/admin/rencana-daya-mampu/export', [RencanaDayaMampuController::class, 'export'])
     ->name('admin.rencana-daya-mampu.export');
+
+Route::get('/admin/daily-summary/export-pdf', [DailySummaryController::class, 'exportPdf'])
+    ->name('admin.daily-summary.export-pdf');
+Route::get('/admin/daily-summary/export-excel', [DailySummaryController::class, 'exportExcel'])
+    ->name('admin.daily-summary.export-excel');

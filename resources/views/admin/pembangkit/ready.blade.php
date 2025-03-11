@@ -987,8 +987,7 @@ document.getElementById('systemTableBody').addEventListener('change', function(e
     }
 });
 </script>
-@push('scripts')
-@endpush
+
 <script>
     function updateStatus(loadInput) {
         const row = loadInput.closest('tr');
@@ -996,9 +995,11 @@ document.getElementById('systemTableBody').addEventListener('change', function(e
         const loadValue = parseFloat(loadInput.value);
 
         if (loadValue > 0) {
-            statusSelect.value = 'P0';
-            statusSelect.style.backgroundColor = '#009BB9';
+            statusSelect.value = 'RSH';
+            statusSelect.style.backgroundColor = '#FF9800';
             statusSelect.style.color = 'black';
         }
     }
 </script>
+@push('scripts')
+@endpush

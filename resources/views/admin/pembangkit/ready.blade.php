@@ -244,7 +244,8 @@
                                                                min="0"
                                                                style="width: 100px;"
                                                                value="{{ $operations->where('machine_id', $machine->id)->first()->load_value ?? '0' }}"
-                                                               placeholder="Masukkan beban...">
+                                                               placeholder="Masukkan beban..."
+                                                               oninput="updateStatus(this)">
                                                     </td>
                                                     <td class="px-3 py-2 border-r border-gray-200">
                                                         <select name="status[{{ $machine->id }}]" 
@@ -988,3 +989,16 @@ document.getElementById('systemTableBody').addEventListener('change', function(e
 </script>
 @push('scripts')
 @endpush
+<script>
+    function updateStatus(loadInput) {
+        const row = loadInput.closest('tr');
+        const statusSelect = row.querySelector('select[name^="status"]');
+        const loadValue = parseFloat(loadInput.value);
+
+        if (loadValue > 0) {
+            statusSelect.value = 'P0';
+            statusSelect.style.backgroundColor = '#009BB9';
+            statusSelect.style.color = 'black';
+        }
+    }
+</script>

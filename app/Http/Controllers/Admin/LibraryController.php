@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class LibraryController extends Controller
 {
@@ -16,7 +17,7 @@ class LibraryController extends Controller
         $bacaanDigitalFiles = Document::where('category', 'bacaan-digital')->get();
         $diklatFiles = Document::where('category', 'diklat')->get();
 
-        return view('admin.administrasi_operasi.library.index', compact(
+        return view('admin.library.index', compact(
             'beritaAcaraFiles',
             'standarisasiFiles',
             'bacaanDigitalFiles',
@@ -30,7 +31,7 @@ class LibraryController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         
-        return view('admin.administrasi_operasi.library.berita-acara', compact('beritaAcaraFiles'));
+        return view('admin.library.berita-acara', compact('beritaAcaraFiles'));
     }
 
     public function standarisasi()
@@ -39,7 +40,7 @@ class LibraryController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         
-        return view('admin.administrasi_operasi.library.standarisasi', compact('standarisasiFiles'));
+        return view('admin.library.standarisasi', compact('standarisasiFiles'));
     }
 
     public function bacaanDigital()
@@ -48,7 +49,7 @@ class LibraryController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         
-        return view('admin.administrasi_operasi.library.bacaan-digital', compact('bacaanDigitalFiles'));
+        return view('admin.library.bacaan-digital', compact('bacaanDigitalFiles'));
     }
 
     public function diklat()
@@ -57,7 +58,7 @@ class LibraryController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         
-        return view('admin.administrasi_operasi.library.diklat', compact('diklatFiles'));
+        return view('admin.library.diklat', compact('diklatFiles'));
     }
 
     public function upload(Request $request)
@@ -76,7 +77,7 @@ class LibraryController extends Controller
             'path' => $path,
             'category' => $request->category,
             'description' => $request->description,
-            'user_id' => auth()->id()
+            'user_id' => Auth::id()
         ]);
 
         return redirect()->back()->with('success', 'Dokumen berhasil diunggah');

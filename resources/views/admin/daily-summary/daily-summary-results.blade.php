@@ -69,6 +69,21 @@
                         value="{{ $date }}"
                         class="rounded-md border-gray-300 shadow-sm focus:border-[#009BB9] focus:ring focus:ring-[#009BB9] focus:ring-opacity-50"
                     >
+                    <!-- Add search input -->
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="searchInput"
+                            placeholder="Cari unit atau mesin..."
+                            value="{{ $search ?? '' }}"
+                            class="rounded-md border-gray-300 shadow-sm focus:border-[#009BB9] focus:ring focus:ring-[#009BB9] focus:ring-opacity-50 pl-10 pr-4 py-2 w-64"
+                        >
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                    </div>
                     <div id="loading" class="hidden">
                         <svg class="animate-spin h-5 w-5 text-[#009BB9]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -394,17 +409,24 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const dateFilter = document.getElementById('dateFilter');
+    const searchInput = document.getElementById('searchInput');
     const contentLoading = document.getElementById('content-loading');
     const contentWrapper = document.getElementById('content-wrapper');
+    let searchTimeout;
 
-    dateFilter.addEventListener('change', async function() {
+    function updateContent() {
         try {
             // Show loading overlay
             contentLoading.classList.remove('hidden');
 
-            // Get current URL and update the date parameter
+            // Get current URL and update the parameters
             const url = new URL(window.location.href);
-            url.searchParams.set('date', this.value);
+            url.searchParams.set('date', dateFilter.value);
+            if (searchInput.value) {
+                url.searchParams.set('search', searchInput.value);
+            } else {
+                url.searchParams.delete('search');
+            }
 
             // Update browser URL without reloading
             window.history.pushState({}, '', url);
@@ -416,6 +438,14 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             alert('Error loading data. Please try again.');
         }
+    }
+
+    dateFilter.addEventListener('change', updateContent);
+
+    // Add debounced search functionality
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(updateContent, 500); // 500ms delay
     });
 });
 </script>

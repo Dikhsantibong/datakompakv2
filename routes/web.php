@@ -510,7 +510,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
     Route::get('machine-status/view', [MachineStatusController::class, 'view'])->name('machine-status.view');
 });
 
-Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
     // Route yang sudah ada
     Route::delete('/overdue-discussions/{id}', [OverdueDiscussionController::class, 'destroy'])
         ->name('overdue-discussions.destroy');

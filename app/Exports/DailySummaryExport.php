@@ -2,135 +2,173 @@
 
 namespace App\Exports;
 
-use App\Models\PowerPlant;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-class DailySummaryExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
+class DailySummaryExport implements FromView, ShouldAutoSize, WithStyles, WithDrawings
 {
     protected $date;
+    protected $units;
 
-    public function __construct($date)
+    public function __construct($date, $units)
     {
         $this->date = $date;
+        $this->units = $units;
     }
 
-    public function collection()
+    public function view(): View
     {
-        return PowerPlant::with(['dailySummaries' => function($query) {
-            $query->whereDate('created_at', $this->date);
-        }])->get()->flatMap(function ($unit) {
-            return $unit->dailySummaries;
-        });
+        return view('admin.daily-summary.excel', [
+            'date' => $this->date,
+            'units' => $this->units
+        ]);
     }
 
-    public function headings(): array
+    public function drawings()
     {
-        return [
-            'Unit',
-            'Mesin',
-            'Daya Terpasang (MW)',
-            'Daya DMN (MW)',
-            'Daya Mampu (MW)',
-            'Beban Puncak Siang (kW)',
-            'Beban Puncak Malam (kW)',
-            'Ratio Daya Kit (%)',
-            'Produksi Bruto (kWh)',
-            'Produksi Netto (kWh)',
-            'Aux Power (kWh)',
-            'Susut Trafo (kWh)',
-            'Pemakaian Sendiri (%)',
-            'Jam Periode',
-            'Jam Operasi',
-            'Jam Standby',
-            'Planned Outage',
-            'Maintenance Outage',
-            'Forced Outage',
-            'Trip Mesin (kali)',
-            'Trip Listrik (kali)',
-            'EFDH',
-            'EPDH',
-            'EUDH',
-            'ESDH',
-            'EAF (%)',
-            'SOF (%)',
-            'EFOR (%)',
-            'SdOF (Kali)',
-            'NCF (%)',
-            'NOF (%)',
-            'JSI',
-            'HSD (Liter)',
-            'B35 (Liter)',
-            'MFO (Liter)',
-            'Total BBM (Liter)',
-            'Air (M³)',
-            'Meditran Oil (Liter)',
-            'Salyx 420 (Liter)',
-            'Salyx 430 (Liter)',
-            'Travolube A (Liter)',
-            'Turbolube 46 (Liter)',
-            'Turbolube 68 (Liter)',
-            'Total Oil (Liter)',
-            'SFC/SCC (Liter/kWh)',
-            'NPHR (kCal/kWh)',
-            'SLC (cc/kWh)',
-            'Keterangan'
+        $pln_logo = new Drawing();
+        $pln_logo->setName('PLN Logo');
+        $pln_logo->setDescription('PLN Logo');
+        $pln_logo->setPath(public_path('logo/navlog1.png'));
+        $pln_logo->setHeight(40);
+        $pln_logo->setCoordinates('A1');
+
+        $k3_logo = new Drawing();
+        $k3_logo->setName('K3 Logo');
+        $k3_logo->setDescription('K3 Logo');
+        $k3_logo->setPath(public_path('logo/k3_logo.png'));
+        $k3_logo->setHeight(40);
+        $k3_logo->setCoordinates('R1');
+
+        return [$pln_logo, $k3_logo];
+    }
+
+    public function styles($sheet)
+    {
+        $styles = [
+            // Logo and title row
+            1 => [
+                'font' => ['bold' => true, 'size' => 14],
+                'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]
+            ],
+            'A1:R1' => ['height' => 50],
         ];
-    }
 
-    public function map($row): array
-    {
-        return [
-            $row->powerPlant->name,
-            $row->machine_name,
-            $row->installed_power,
-            $row->dmn_power,
-            $row->capable_power,
-            $row->peak_load_day,
-            $row->peak_load_night,
-            $row->kit_ratio,
-            $row->gross_production,
-            $row->net_production,
-            $row->aux_power,
-            $row->transformer_losses,
-            $row->usage_percentage,
-            $row->period_hours,
-            $row->operating_hours,
-            $row->standby_hours,
-            $row->planned_outage,
-            $row->maintenance_outage,
-            $row->forced_outage,
-            $row->trip_machine,
-            $row->trip_electrical,
-            $row->efdh,
-            $row->epdh,
-            $row->eudh,
-            $row->esdh,
-            $row->eaf,
-            $row->sof,
-            $row->efor,
-            $row->sdof,
-            $row->ncf,
-            $row->nof,
-            $row->jsi,
-            $row->hsd_fuel,
-            $row->b35_fuel,
-            $row->mfo_fuel,
-            $row->total_fuel,
-            $row->water_usage,
-            $row->meditran_oil,
-            $row->salyx_420,
-            $row->salyx_430,
-            $row->travolube_a,
-            $row->turbolube_46,
-            $row->turbolube_68,
-            $row->total_oil,
-            $row->sfc_scc,
-            $row->nphr,
-            $row->slc,
-            $row->notes
+        // Get the number of units to calculate the header positions
+        $unitCount = count($this->units);
+        $currentRow = 3;
+
+        // Apply styles for each unit's headers
+        for ($i = 0; $i < $unitCount; $i++) {
+            // Add gap before each unit (except the first one)
+            if ($i > 0) {
+                $styles["A" . ($currentRow) . ":R" . ($currentRow)] = [
+                    'height' => 20 // Menambahkan tinggi baris untuk gap
+                ];
+                $currentRow++; // Move to next row after gap
+            }
+
+            // Unit name row
+            $styles["A{$currentRow}:R{$currentRow}"] = [
+                'font' => ['bold' => true, 'size' => 11],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => 'B8CCE4']
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                    ]
+                ]
+            ];
+
+            // Main headers row
+            $styles["A" . ($currentRow + 1) . ":R" . ($currentRow + 1)] = [
+                'font' => ['bold' => true, 'size' => 10],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => 'B8CCE4']
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                    ]
+                ]
+            ];
+
+            // Sub headers row
+            $styles["A" . ($currentRow + 2) . ":R" . ($currentRow + 2)] = [
+                'font' => ['bold' => true, 'size' => 10],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => 'B8CCE4']
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                    ]
+                ]
+            ];
+
+            // Data rows style - center align all data cells
+            $dataRowCount = count($this->units[$i]->machines);
+            for ($row = 1; $row <= $dataRowCount; $row++) {
+                $styles["A" . ($currentRow + 2 + $row) . ":R" . ($currentRow + 2 + $row)] = [
+                    'alignment' => [
+                        'horizontal' => Alignment::HORIZONTAL_CENTER,
+                        'vertical' => Alignment::VERTICAL_CENTER
+                    ]
+                ];
+            }
+            
+            // Total row style
+            $styles["A" . ($currentRow + 2 + $dataRowCount + 1) . ":R" . ($currentRow + 2 + $dataRowCount + 1)] = [
+                'font' => ['bold' => true],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => 'F8F9FA']
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER
+                ]
+            ];
+
+            // Move to next unit position
+            $currentRow += (3 + $dataRowCount + 1); // headers (3) + data rows + total row
+        }
+
+        // Add general borders for all data
+        $styles["A3:R" . ($currentRow + 50)] = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ]
         ];
+
+        // Set specific column alignments if needed
+        $sheet->getStyle('A:R')->getAlignment()->setWrapText(true);
+
+        return $styles;
     }
 } 

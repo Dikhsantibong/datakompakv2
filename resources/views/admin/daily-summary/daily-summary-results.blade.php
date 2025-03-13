@@ -92,19 +92,19 @@
                     </div>
                 </div>
                 
-                <div class="flex flex-col md:flex-row items-center gap-4">
+                <div class="flex flex-col md:flex-row items-center gap-2">
                     <a href="{{ route('admin.daily-summary.export-pdf', ['date' => $date]) }}" 
-                       class="bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center shadow-sm w-full md:w-auto mb-2 md:mb-0">
-                        <i class="fas fa-file-pdf mr-2"></i>Export PDF
+                       class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center shadow-sm w-full md:w-auto">
+                        <i class="fas fa-file-pdf mr-2 text-sm"></i>PDF
                     </a>
                     <a href="{{ route('admin.daily-summary.export-excel', ['date' => $date]) }}" 
-                       class="bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center shadow-sm w-full md:w-auto mb-2 md:mb-0">
-                        <i class="fas fa-file-excel mr-2"></i>Export Excel
+                       class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center shadow-sm w-full md:w-auto">
+                        <i class="fas fa-file-excel mr-2 text-sm"></i>Excel
                     </a>
                     <button 
                         onclick="window.location.href='{{ route('admin.daily-summary') }}'" 
-                        class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center shadow-sm w-full md:w-auto">
-                        <i class="fas fa-arrow-left mr-2"></i>Kembali
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center shadow-sm w-full md:w-auto">
+                        <i class="fas fa-arrow-left mr-2 text-sm"></i>Kembali
                     </button>
                 </div>
             </div>
@@ -266,133 +266,137 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($unit->dailySummaries as $summary)
+                                @foreach($unit->machines as $machine)
                                     <tr>
-                                        <td class="px-4 py-3 border-r">{{ $summary->machine_name }}</td>
+                                        <td class="px-4 py-3 border-r">{{ $machine->name }}</td>
+                                        
+                                        @php
+                                            $summary = $unit->dailySummaries->where('machine_name', $machine->name)->first();
+                                        @endphp
                                         
                                         <!-- Daya (MW) -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-3 gap-0">
-                                                <div class="text-center border-r">{{ number_format($summary->installed_power, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->dmn_power, 2) ?? '-' }}</div>
-                                                <div class="text-center">{{ number_format($summary->capable_power, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->installed_power, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->dmn_power, 2) : '-' }}</div>
+                                                <div class="text-center">{{ $summary ? number_format($summary->capable_power, 2) : '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Beban Puncak -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-2 gap-0">
-                                                <div class="text-center border-r">{{ number_format($summary->peak_load_day, 2) ?? '-' }}</div>
-                                                <div class="text-center">{{ number_format($summary->peak_load_night, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->peak_load_day, 2) : '-' }}</div>
+                                                <div class="text-center">{{ $summary ? number_format($summary->peak_load_night, 2) : '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Ratio Daya Kit -->
-                                        <td class="px-4 py-3 border-r text-center">{{ number_format($summary->kit_ratio, 2) ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r text-center">{{ $summary ? number_format($summary->kit_ratio, 2) : '-' }}</td>
 
                                         <!-- Produksi -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-2 gap-0">
-                                                <div class="text-center border-r">{{ number_format($summary->gross_production, 2) ?? '-' }}</div>
-                                                <div class="text-center">{{ number_format($summary->net_production, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->gross_production, 2) : '-' }}</div>
+                                                <div class="text-center">{{ $summary ? number_format($summary->net_production, 2) : '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Pemakaian Sendiri -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-3 gap-0">
-                                                <div class="text-center border-r">{{ number_format($summary->aux_power, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->transformer_losses, 2) ?? '-' }}</div>
-                                                <div class="text-center">{{ number_format($summary->usage_percentage, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->aux_power, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->transformer_losses, 2) : '-' }}</div>
+                                                <div class="text-center">{{ $summary ? number_format($summary->usage_percentage, 2) : '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Jam Periode -->
-                                        <td class="px-4 py-3 border-r text-center">{{ number_format($summary->period_hours, 2) ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r text-center">{{ $summary ? number_format($summary->period_hours, 2) : '-' }}</td>
 
                                         <!-- Jam Operasi -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-5 gap-0">
-                                                <div class="text-center border-r">{{ number_format($summary->operating_hours, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->standby_hours, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->planned_outage, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->maintenance_outage, 2) ?? '-' }}</div>
-                                                <div class="text-center">{{ number_format($summary->forced_outage, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->operating_hours, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->standby_hours, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->planned_outage, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->maintenance_outage, 2) : '-' }}</div>
+                                                <div class="text-center">{{ $summary ? number_format($summary->forced_outage, 2) : '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Trip Non OMC -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-2 gap-0">
-                                                <div class="text-center border-r">{{ number_format($summary->trip_machine, 0) ?? '-' }}</div>
-                                                <div class="text-center">{{ number_format($summary->trip_electrical, 0) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->trip_machine, 0) : '-' }}</div>
+                                                <div class="text-center">{{ $summary ? number_format($summary->trip_electrical, 0) : '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Derating -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-4 gap-0">
-                                                <div class="text-center border-r">{{ number_format($summary->efdh, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->epdh, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->eudh, 2) ?? '-' }}</div>
-                                                <div class="text-center">{{ number_format($summary->esdh, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->efdh, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->epdh, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->eudh, 2) : '-' }}</div>
+                                                <div class="text-center">{{ $summary ? number_format($summary->esdh, 2) : '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Kinerja Pembangkit -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-4 gap-0">
-                                                <div class="text-center border-r">{{ number_format($summary->eaf, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->sof, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->efor, 2) ?? '-' }}</div>
-                                                <div class="text-center">{{ number_format($summary->sdof, 0) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->eaf, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->sof, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->efor, 2) : '-' }}</div>
+                                                <div class="text-center">{{ $summary ? number_format($summary->sdof, 0) : '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Capability Factor -->
-                                        <td class="px-4 py-3 border-r text-center">{{ number_format($summary->ncf, 2) ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r text-center">{{ $summary ? number_format($summary->ncf, 2) : '-' }}</td>
 
                                         <!-- Nett Operating Factor -->
-                                        <td class="px-4 py-3 border-r text-center">{{ number_format($summary->nof, 2) ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r text-center">{{ $summary ? number_format($summary->nof, 2) : '-' }}</td>
 
                                         <!-- JSI -->
-                                        <td class="px-4 py-3 border-r text-center">{{ number_format($summary->jsi, 2) ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r text-center">{{ $summary ? number_format($summary->jsi, 2) : '-' }}</td>
 
                                         <!-- Pemakaian Bahan Bakar -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-5 gap-0">
-                                                <div class="text-center border-r">{{ number_format($summary->hsd_fuel, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->b35_fuel, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->mfo_fuel, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->total_fuel, 2) ?? '-' }}</div>
-                                                <div class="text-center">{{ number_format($summary->water_usage, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->hsd_fuel, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->b35_fuel, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->mfo_fuel, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->total_fuel, 2) : '-' }}</div>
+                                                <div class="text-center">{{ $summary ? number_format($summary->water_usage, 2) : '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Pemakaian Pelumas -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-7 gap-0">
-                                                <div class="text-center border-r">{{ number_format($summary->meditran_oil, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->salyx_420, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->salyx_430, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->travolube_a, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->turbolube_46, 2) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->turbolube_68, 2) ?? '-' }}</div>
-                                                <div class="text-center">{{ number_format($summary->total_oil, 2) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->meditran_oil, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->salyx_420, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->salyx_430, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->travolube_a, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->turbolube_46, 2) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->turbolube_68, 2) : '-' }}</div>
+                                                <div class="text-center">{{ $summary ? number_format($summary->total_oil, 2) : '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Effisiensi -->
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-3 gap-0">
-                                                <div class="text-center border-r">{{ number_format($summary->sfc_scc, 3) ?? '-' }}</div>
-                                                <div class="text-center border-r">{{ number_format($summary->nphr, 3) ?? '-' }}</div>
-                                                <div class="text-center">{{ number_format($summary->slc, 3) ?? '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->sfc_scc, 3) : '-' }}</div>
+                                                <div class="text-center border-r">{{ $summary ? number_format($summary->nphr, 3) : '-' }}</div>
+                                                <div class="text-center">{{ $summary ? number_format($summary->slc, 3) : '-' }}</div>
                                             </div>
                                         </td>
 
                                         <!-- Keterangan -->
-                                        <td class="px-4 py-3 text-center">{{ $summary->notes ?? '-' }}</td>
+                                        <td class="px-4 py-3 text-center">{{ $summary ? $summary->notes : '-' }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

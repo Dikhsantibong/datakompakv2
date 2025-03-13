@@ -83,7 +83,8 @@
         <div class="flex items-center pt-2">
             <x-admin-breadcrumb :breadcrumbs="[['name' => 'IKHTISAR HARIAN', 'url' => null]]" />
         </div>
-        <div class="p-6">
+
+        <div class="bg-white rounded shadow-md p-6">
             <form action="{{ route('daily-summary.store') }}" method="POST" novalidate>
                 @csrf
                 <!-- Search & Buttons Container -->
@@ -92,28 +93,27 @@
                     <div class="w-full sm:w-72">
                         <label for="unit-filter" class="block text-sm font-medium text-gray-700 mb-1">Filter Unit Pembangkit</label>
                         <div class="relative">
-                            <select id="unit-filter" class="w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-10 py-2.5 text-gray-700 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer hover:border-gray-400 transition-colors duration-200 select-none">
+                            <select id="unit-filter" class="w-full appearance-none rounded-md border border-gray-300 bg-white pl-4 pr-10 py-2 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer hover:border-gray-400 transition-colors duration-200 select-none">
                                 <option value="">Semua Unit</option>
                                 @foreach($units as $unit)
                                     <option value="{{ $unit->name }}">{{ $unit->name }}</option>
                                 @endforeach
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                {{-- <i class="fas fa-chevron-down text-gray-400 text-sm"></i> --}}
                             </div>
                         </div>
                     </div>
                     
                     <!-- Action Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center min-w-[160px] shadow-sm">
-                            <i class="fas fa-save mr-2.5"></i>Simpan Data
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center shadow-sm">
+                            <i class="fas fa-save mr-2 text-sm"></i>Simpan
                         </button>
-                        <button type="button" onclick="location.reload();" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center min-w-[160px] shadow-sm">
-                            <i class="fas fa-sync-alt mr-2.5"></i>Refresh Data
+                        <button type="button" onclick="location.reload();" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center shadow-sm">
+                            <i class="fas fa-sync-alt mr-2 text-sm"></i>Refresh
                         </button>
-                        <button type="button" onclick="window.location.href='{{ route('admin.daily-summary.results') }}'" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2.5 rounded-lg text-base font-medium flex items-center justify-center min-w-[160px] shadow-sm">
-                            <i class="fas fa-eye mr-2.5"></i>Lihat Data
+                        <button type="button" onclick="window.location.href='{{ route('admin.daily-summary.results') }}'" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center shadow-sm">
+                            <i class="fas fa-cogs mr-2 text-sm"></i>Kelola
                         </button>
                     </div>
                 </div>

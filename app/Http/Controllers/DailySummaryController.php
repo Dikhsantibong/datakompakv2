@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use PDF; // Add this for PDF export
 use Maatwebsite\Excel\Facades\Excel; // Add this for Excel export
 use App\Exports\DailySummaryExport; // We'll create this class next
+use Carbon\Carbon;
 
 class DailySummaryController extends Controller
 {
@@ -204,16 +205,21 @@ class DailySummaryController extends Controller
     public function exportPdf(Request $request)
     {
         try {
-            $date = $request->input('date', now()->format('Y-m-d'));
-            
-            $units = PowerPlant::with(['dailySummaries' => function($query) use ($date) {
+            $date = $request->date;
+            // Format tanggal untuk nama file
+            $formattedDate = Carbon::parse($date)->format('d F Y');
+            $fileName = "Ikhtisar Harian ({$formattedDate}).pdf";
+
+            $units = PowerPlant::with(['machines', 'dailySummaries' => function($query) use ($date) {
                 $query->whereDate('created_at', $date);
             }])->get();
 
-            $pdf = PDF::loadView('admin.daily-summary.pdf', compact('units', 'date'));
-            
-            return $pdf->download('daily-summary-' . $date . '.pdf');
+            $pdf = PDF::loadView('admin.daily-summary.pdf', [
+                'date' => $date,
+                'units' => $units
+            ]);
 
+            return $pdf->download($fileName);
         } catch (\Exception $e) {
             Log::error('Error in PDF export:', [
                 'message' => $e->getMessage(),
@@ -227,9 +233,16 @@ class DailySummaryController extends Controller
     public function exportExcel(Request $request)
     {
         try {
-            $date = $request->input('date', now()->format('Y-m-d'));
-            return Excel::download(new DailySummaryExport($date), 'daily-summary-' . $date . '.xlsx');
+            $date = $request->date;
+            // Format tanggal untuk nama file
+            $formattedDate = Carbon::parse($date)->format('d F Y');
+            $fileName = "Ikhtisar Harian ({$formattedDate}).xlsx";
 
+            $units = PowerPlant::with(['machines', 'dailySummaries' => function($query) use ($date) {
+                $query->whereDate('created_at', $date);
+            }])->get();
+
+            return Excel::download(new DailySummaryExport($date, $units), $fileName);
         } catch (\Exception $e) {
             Log::error('Error in Excel export:', [
                 'message' => $e->getMessage(),

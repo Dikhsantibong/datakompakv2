@@ -9,6 +9,9 @@ use App\Models\RencanaDayaMampu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use PDF;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RencanaDayaMampuExport;
 
 class RencanaDayaMampuController extends Controller
 {
@@ -150,12 +153,49 @@ class RencanaDayaMampuController extends Controller
 
     public function export(Request $request)
     {
-        $format = $request->get('format', 'pdf');
-        $month = $request->get('month', now()->format('m'));
-        $year = $request->get('year', now()->format('Y'));
-        
-        // Logic untuk export akan ditambahkan nanti
-        // Untuk sementara return response kosong
-        return response()->json(['message' => 'Export feature coming soon']);
+        try {
+            $format = $request->get('format', 'pdf');
+            $month = $request->get('month', now()->format('m'));
+            $year = $request->get('year', now()->format('Y'));
+            $unitSource = $request->get('unit_source', session('unit', 'mysql'));
+            
+            // Format tanggal untuk nama file
+            $date = Carbon::createFromFormat('Y-m', "$year-$month");
+            $formattedDate = $date->format('F Y');
+            
+            // Get data
+            $powerPlants = PowerPlant::when($unitSource !== 'mysql', function($query) use ($unitSource) {
+                return $query->where('unit_source', $unitSource);
+            })->with(['machines' => function($query) use ($year, $month) {
+                $query->orderBy('name')
+                    ->with(['rencanaDayaMampu' => function($query) use ($year, $month) {
+                        $query->whereYear('tanggal', $year)
+                              ->whereMonth('tanggal', $month);
+                    }]);
+            }])->orderBy('name')->get();
+
+            if ($format === 'pdf') {
+                $pdf = PDF::loadView('admin.rencana-daya-mampu.pdf', [
+                    'powerPlants' => $powerPlants,
+                    'month' => $month,
+                    'year' => $year,
+                    'date' => $formattedDate,
+                    'unitSource' => $unitSource
+                ]);
+                
+                // Set paper orientation to landscape and size to A4
+                $pdf->setPaper('A4', 'landscape');
+                
+                return $pdf->download("Rencana Daya Mampu ($formattedDate).pdf");
+            } else {
+                return Excel::download(
+                    new RencanaDayaMampuExport($powerPlants, $month, $year, $unitSource),
+                    "Rencana Daya Mampu ($formattedDate).xlsx"
+                );
+            }
+        } catch (\Exception $e) {
+            \Log::error('Export error: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat mengexport data');
+        }
     }
 }   

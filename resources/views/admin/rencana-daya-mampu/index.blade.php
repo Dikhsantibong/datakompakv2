@@ -68,11 +68,7 @@
         <!-- Table Container -->
         <div class="p-6">
 
-                <div class=" bg-white shadow-sm rounded-lg p-4 flex justify-between mb-10 gap-2">
-                    <div class="bg-white shadow-sm rounded-lg flex-1 h-48 "> 1</div>
-                    <div class="bg-white shadow-sm rounded-lg flex-1 h-48 "> 2</div>
-                    <div class="bg-white shadow-sm rounded-lg flex-1 h-48 "> 3</div>
-                </div>
+               
                 
             <div class="overflow-x-auto bg-white rounded-lg shadow p-6 mb-4" style="max-width: 100%;">
                 <div class="flex justify-between items-center mb-4">

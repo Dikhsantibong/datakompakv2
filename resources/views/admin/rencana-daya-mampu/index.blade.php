@@ -67,9 +67,16 @@
 
         <!-- Table Container -->
         <div class="p-6">
+
+                <div class=" bg-white shadow-sm rounded-lg p-4 flex justify-between mb-10 gap-2">
+                    <div class="bg-white shadow-sm rounded-lg flex-1 h-48 "> 1</div>
+                    <div class="bg-white shadow-sm rounded-lg flex-1 h-48 "> 2</div>
+                    <div class="bg-white shadow-sm rounded-lg flex-1 h-48 "> 3</div>
+                </div>
+                
             <div class="overflow-x-auto bg-white rounded-lg shadow p-6 mb-4" style="max-width: 100%;">
                 <div class="flex justify-between items-center mb-4">
-                    <h1 class="text-2xl font-bold">Rencana Operasi Bulanan (ROB)</h1>
+                    <h1 class="text-2xl text-gray-800 font-bold">Rencana Operasi Bulanan (ROB)</h1>
                     <div class="flex gap-2">
                         <a href="{{ route('admin.rencana-daya-mampu.manage') }}" 
                            class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 flex items-center">
@@ -109,13 +116,13 @@
                     <table class="min-w-full divide-y divide-gray-200 border-2">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 text-center border-r-2">No</th>
-                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-16 bg-gray-50 text-center border-r-2">Sistem Kelistrikan</th>
-                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Mesin Pembangkit</th>
-                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Site Pembangkit</th>
-                                <th colspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Rencana Realisasi</th>
-                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Daya PJBTL SILM</th>
-                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">DMP Existing</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50  border-r-2">No</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-16 bg-gray-50  border-r-2">Sistem Kelistrikan</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider  border-r-2">Mesin Pembangkit</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider  border-r-2">Site Pembangkit</th>
+                                <th colspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider  border-r-2">Rencana Realisasi</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider  border-r-2">Daya PJBTL SILM</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r-2">DMP Existing</th>
                                 <th colspan="{{ date('t') }}" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                             </tr>
                             <tr>
@@ -132,9 +139,9 @@
                                 @foreach($plant->machines as $machine)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white text-center">{{ $no++ }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white">{{ $plant->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $plant->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $machine->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $plant->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap " style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $plant->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <span class="data-display">{{ $machine->rencana ?? '-' }}</span>
                                             <textarea name="rencana[{{ $machine->id }}]"

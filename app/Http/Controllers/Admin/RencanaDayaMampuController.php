@@ -158,4 +158,4 @@ class RencanaDayaMampuController extends Controller
         // Untuk sementara return response kosong
         return response()->json(['message' => 'Export feature coming soon']);
     }
-} 
+}   

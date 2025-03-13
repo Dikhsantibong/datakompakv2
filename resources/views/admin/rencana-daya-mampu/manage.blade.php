@@ -151,9 +151,9 @@
                                 @foreach($plant->machines as $machine)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white text-center">{{ $no++ }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white">{{ $plant->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $plant->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $machine->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $plant->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $plant->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">{{ $machine->rencana ?? '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">{{ $machine->realisasi ?? '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">{{ $machine->daya_pjbtl_silm ?? '-' }}</td>

@@ -26,7 +26,7 @@
     <div class="max-w-md w-full mx-4">
         <div class="bg-white rounded-lg shadow-lg p-6">
             <div class="text-center mb-8">
-                <img src="/images/logo.png" alt="DATAKOMPAK Logo" class="w-24 h-24 mx-auto mb-4">
+                <img src="{{ asset('logo/navlogo.png') }}" alt="DATAKOMPAK Logo" class="w-24 h-24 mx-auto mb-4">
                 <h1 class="text-2xl font-bold text-gray-800">DATAKOMPAK</h1>
                 <p class="text-sm text-gray-600 mt-1">Data Komunitas Operasi Mantap Unit Pembangkit Kendari</p>
                 <p class="text-gray-600 mt-2">Install aplikasi untuk pengalaman yang lebih baik</p>

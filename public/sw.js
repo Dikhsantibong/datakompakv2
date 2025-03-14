@@ -1,68 +1,56 @@
-const CACHE_NAME = 'rdm-cache-v1';
-const urlsToCache = [
+const preLoad = function () {
+    return caches.open("offline").then(function (cache) {
+        // caching index and important routes
+        return cache.addAll(filesToCache);
+    });
+};
+
+self.addEventListener("install", function (event) {
+    event.waitUntil(preLoad());
+});
+
+const filesToCache = [
     '/',
-    '/install-app',
-    '/css/app.css',
-    '/js/app.js',
-    '/js/toggle.js',
-    '/images/logo.png',
-    '/images/icons/*',
-    // Cache fonts jika menggunakan custom fonts
-    'https://cdn.tailwindcss.com',
+    '/offline.html'
 ];
 
-// Install Service Worker
-self.addEventListener('install', event => {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => {
-                console.log('Opened cache');
-                return cache.addAll(urlsToCache);
-            })
-    );
+const checkResponse = function (request) {
+    return new Promise(function (fulfill, reject) {
+        fetch(request).then(function (response) {
+            if (response.status !== 404) {
+                fulfill(response);
+            } else {
+                reject();
+            }
+        }, reject);
+    });
+};
+
+const addToCache = function (request) {
+    return caches.open("offline").then(function (cache) {
+        return fetch(request).then(function (response) {
+            return cache.put(request, response);
+        });
+    });
+};
+
+const returnFromCache = function (request) {
+    return caches.open("offline").then(function (cache) {
+        return cache.match(request).then(function (matching) {
+            if (!matching || matching.status === 404) {
+                return cache.match("offline.html");
+            } else {
+                return matching;
+            }
+        });
+    });
+};
+
+self.addEventListener("fetch", function (event) {
+    event.respondWith(checkResponse(event.request).catch(function () {
+        return returnFromCache(event.request);
+    }));
+    if(!event.request.url.startsWith('http')){
+        event.waitUntil(addToCache(event.request));
+    }
 });
-
-// Activate Service Worker
-self.addEventListener('activate', event => {
-    const cacheWhitelist = [CACHE_NAME];
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheWhitelist.indexOf(cacheName) === -1) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
-    );
-});
-
-// Fetch Strategy - Cache First, Network Fallback
-self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request)
-            .then(response => {
-                if (response) {
-                    return response;
-                }
-                return fetch(event.request)
-                    .then(response => {
-                        // Check if we received a valid response
-                        if (!response || response.status !== 200 || response.type !== 'basic') {
-                            return response;
-                        }
-
-                        // Clone the response
-                        const responseToCache = response.clone();
-
-                        caches.open(CACHE_NAME)
-                            .then(cache => {
-                                cache.put(event.request, responseToCache);
-                            });
-
-                        return response;
-                    });
-            })
-    );
-}); 

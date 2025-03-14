@@ -80,34 +80,103 @@
         const installButton = document.getElementById('installButton');
         const installInstructions = document.getElementById('installInstructions');
 
-        // Deteksi apakah bisa install PWA
+        // Cek apakah PWA sudah terinstall
+        const isPWAInstalled = () => {
+            return window.matchMedia('(display-mode: standalone)').matches ||
+                   window.navigator.standalone === true;
+        };
+
+        // Fungsi untuk mengecek kriteria installable
+        const checkInstallable = () => {
+            if (isPWAInstalled()) {
+                console.log('PWA sudah terinstall');
+                installButton.style.display = 'none';
+                return false;
+            }
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('Service Worker berhasil didaftarkan:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.error('Gagal mendaftarkan Service Worker:', error);
+                    });
+            } else {
+                console.log('Service Worker tidak didukung');
+                return false;
+            }
+
+            return true;
+        };
+
+        // Inisialisasi
+        window.addEventListener('load', () => {
+            checkInstallable();
+        });
+
+        // Tangkap event beforeinstallprompt
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installButton.style.display = 'block';
-        });
-
-        // Handle tombol install
-        installButton.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response to install prompt: ${outcome}`);
-                deferredPrompt = null;
+            console.log('Install prompt siap');
+            
+            // Tampilkan tombol install hanya jika belum terinstall
+            if (!isPWAInstalled()) {
+                installButton.style.display = 'block';
             }
         });
 
-        // Deteksi platform
+        // Handle klik tombol install
+        installButton.addEventListener('click', async () => {
+            if (!deferredPrompt) {
+                console.log('Prompt instalasi tidak tersedia');
+                
+                // Tampilkan instruksi manual untuk iOS
+                if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                    installInstructions.style.display = 'block';
+                    installButton.style.display = 'none';
+                }
+                return;
+            }
+
+            try {
+                // Tampilkan prompt instalasi
+                const result = await deferredPrompt.prompt();
+                console.log('Prompt instalasi ditampilkan:', result);
+                
+                // Tunggu user response
+                const choiceResult = await deferredPrompt.userChoice;
+                console.log('User choice:', choiceResult.outcome);
+                
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User menerima instalasi');
+                } else {
+                    console.log('User menolak instalasi');
+                }
+                
+                // Reset prompt
+                deferredPrompt = null;
+                installButton.style.display = 'none';
+                
+            } catch (error) {
+                console.error('Error saat instalasi:', error);
+            }
+        });
+
+        // Deteksi successful installation
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('DATAKOMPAK berhasil diinstall!');
+            installButton.style.display = 'none';
+        });
+
+        // Khusus untuk iOS
         if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
             installButton.style.display = 'none';
-            installInstructions.style.display = 'block';
+            if (!isPWAInstalled()) {
+                installInstructions.style.display = 'block';
+            }
         }
-
-        // Deteksi jika sudah terinstall
-        window.addEventListener('appinstalled', () => {
-            installButton.style.display = 'none';
-            console.log('PWA was installed');
-        });
     </script>
 </body>
 </html> 

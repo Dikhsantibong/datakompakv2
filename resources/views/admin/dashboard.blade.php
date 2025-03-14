@@ -2,6 +2,7 @@
 
 @push('styles')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         .main-content {
             overflow-y: auto;
@@ -11,6 +12,73 @@
             background-size: cover;
             background-position: center;
             transition: background-image 1s ease-in-out;
+            font-family: 'Poppins', sans-serif;
+            min-height: 200px;
+        }
+
+        .typing-animation {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid white;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+            margin: 0;
+            width: 0;
+        }
+
+        @media (max-width: 768px) {
+            .typing-animation {
+                white-space: normal;
+                border-right: none;
+                width: 100%;
+                font-size: 1.5rem;
+                line-height: 1.2;
+                animation: fadeIn 1s ease-in forwards;
+            }
+            
+            .welcome-card {
+                background-position: center;
+                padding: 1.5rem;
+                min-height: 180px;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+            animation-delay: 1s;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: white }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.2),
+                rgba(0, 0, 0, 0.4)
+            );
+            border-radius: 0.5rem;
+            z-index: 1;
+        }
+
+        .welcome-card > div {
+            position: relative;
+            z-index: 2;
         }
     </style>
 @endpush
@@ -71,20 +139,29 @@
         <div class="p-6">
             <!-- Welcome Card -->
             
-            <div class="rounded-lg shadow-sm p-6 mb-6 text-white h-64 relative welcome-card">
+            <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
                 <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
-                <div class="flex justify-between items-center relative z-10">
-                    <div>
-                        <h2 class="text-3xl font-bold mb-3 tracking-tight">Selamat Datang di Datakompak</h2>
-                        <p class="text-xl font-semibold mb-2">Data Komunitas Operasi Mantap Unit Pembangkit Kendari</p>
-                        <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 mt-4 max-w-xl">
-                            <p class="text-base leading-relaxed">
+                <div class="relative z-10">
+                    <!-- Text Content -->
+                    <div class="space-y-2 md:space-y-4">
+                        <div style="overflow: hidden;">
+                            <h2 class="text-2xl md:text-3xl font-bold tracking-tight typing-animation">
+                                Selamat Datang di Datakompak
+                            </h2>
+                        </div>
+                        <p class="text-sm md:text-lg font-medium fade-in">
+                            Data Komunitas Operasi Mantap Unit Pembangkit Kendari
+                        </p>
+                        <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 fade-in w-50">
+                            <p class="text-xs md:text-base leading-relaxed">
                                 Platform terintegrasi untuk monitoring dan analisis kinerja pembangkit listrik secara real-time. 
                                 Dapatkan insight mendalam untuk pengambilan keputusan yang lebih efektif dan efisien.
                             </p>
                         </div>
                     </div>
-                    <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="w-48">
+                    
+                    <!-- Logo - Hidden on mobile -->
+                    <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
                 </div>
             </div>
 

@@ -64,13 +64,73 @@
                 ['name' => 'Rencana Daya Mampu', 'url' => null]
             ]" />
         </div>
+          <!-- Table Container -->
+          <div class=" p-6">
 
-        <!-- Table Container -->
-        <div class="p-6">
+        <!-- Highlight Cards -->
+        <div class=" bg-white shadow-md rounded-md grid grid-cols-1 md:grid-cols-4 gap-6 p-6">
+            <!-- Card 1: Total Daya PJBTL -->
+            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="p-4">
+                    <div class="text-3xl text-blue-600 mb-2">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-1">Total Daya PJBTL</h3>
+                    <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalDayaPJBTL, 2) }} MW</p>
+                    <span class="text-blue-600 text-sm font-medium">
+                        Seluruh Unit
+                    </span>
+                </div>
+            </div>
+
+            <!-- Card 2: Total DMP Existing -->
+            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="p-4">
+                    <div class="text-3xl text-green-600 mb-2">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-1">Total DMP Existing</h3>
+                    <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalDMPExisting, 2) }} MW</p>
+                    <span class="text-green-600 text-sm font-medium">
+                        Kapasitas Terkini
+                    </span>
+                </div>
+            </div>
+
+            <!-- Card 3: Total Rencana -->
+            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="p-4">
+                    <div class="text-3xl text-purple-600 mb-2">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-1">Total Rencana</h3>
+                    <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalRencana, 2) }} MW</p>
+                    <span class="text-purple-600 text-sm font-medium">
+                        Target Bulanan
+                    </span>
+                </div>
+            </div>
+
+            <!-- Card 4: Total Realisasi -->
+            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="p-4">
+                    <div class="text-3xl text-yellow-600 mb-2">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-1">Total Realisasi</h3>
+                    <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalRealisasi, 2) }} MW</p>
+                    <span class="text-yellow-600 text-sm font-medium">
+                        Pencapaian Aktual
+                    </span>
+                </div>
+            </div>
+        </div>
+
+       
 
                
                 
-            <div class="overflow-x-auto bg-white rounded-lg shadow p-6 mb-4" style="max-width: 100%;">
+            <div class="overflow-x-auto bg-white rounded-lg shadow p-6 mb-4 mt-4" style="max-width: 100%;">
                 <div class="flex justify-between items-center mb-4">
                     <h1 class="text-2xl text-gray-800 font-bold">Rencana Operasi Bulanan (ROB)</h1>
                     <div class="flex gap-2">

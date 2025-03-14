@@ -35,9 +35,14 @@ class RencanaDayaMampuController extends Controller
                 }]);
         }])->orderBy('name')->get();
 
-        // Transform data to include daily values
-        $powerPlants->each(function($plant) use ($currentMonth) {
-            $plant->machines->each(function($machine) use ($currentMonth) {
+        // Calculate totals for highlight cards
+        $totalDayaPJBTL = 0;
+        $totalDMPExisting = 0;
+        $totalRencana = 0;
+        $totalRealisasi = 0;
+
+        $powerPlants->each(function($plant) use ($currentMonth, &$totalDayaPJBTL, &$totalDMPExisting, &$totalRencana, &$totalRealisasi) {
+            $plant->machines->each(function($machine) use ($currentMonth, &$totalDayaPJBTL, &$totalDMPExisting, &$totalRencana, &$totalRealisasi) {
                 // Get the latest record for the month
                 $record = $machine->rencanaDayaMampu->first();
 
@@ -49,13 +54,26 @@ class RencanaDayaMampuController extends Controller
                     $machine->daya_pjbtl_silm = $record->daya_pjbtl_silm;
                     $machine->dmp_existing = $record->dmp_existing;
 
+                    // Add to totals
+                    $totalDayaPJBTL += floatval($record->daya_pjbtl_silm);
+                    $totalDMPExisting += floatval($record->dmp_existing);
+                    $totalRencana += is_numeric($record->rencana) ? floatval($record->rencana) : 0;
+                    $totalRealisasi += is_numeric($record->realisasi) ? floatval($record->realisasi) : 0;
+
                     // Set daily values from JSON
                     $machine->daily_values = $record->getDailyData($currentMonth);
                 }
             });
         });
 
-        return view('admin.rencana-daya-mampu.index', compact('powerPlants', 'unitSource'));
+        return view('admin.rencana-daya-mampu.index', compact(
+            'powerPlants',
+            'unitSource',
+            'totalDayaPJBTL',
+            'totalDMPExisting',
+            'totalRencana',
+            'totalRealisasi'
+        ));
     }
 
     public function update(Request $request)

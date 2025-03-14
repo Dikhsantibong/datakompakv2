@@ -86,6 +86,19 @@
                    window.navigator.standalone === true;
         };
 
+        // Debug function
+        const debugPWA = () => {
+            console.log('Debug PWA Status:');
+            console.log('Protocol:', window.location.protocol);
+            console.log('Service Worker Support:', 'serviceWorker' in navigator);
+            console.log('Display Mode:', window.matchMedia('(display-mode: standalone)').matches);
+            console.log('iOS:', /iPad|iPhone|iPod/.test(navigator.userAgent));
+            console.log('User Agent:', navigator.userAgent);
+        };
+
+        
+        debugPWA();
+
         // Fungsi untuk mengecek kriteria installable yang lebih detail
         const checkInstallable = async () => {
             if (isPWAInstalled()) {
@@ -135,9 +148,9 @@
 
         // Tangkap event beforeinstallprompt
         window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt event triggered');
             e.preventDefault();
             deferredPrompt = e;
-            console.log('Install prompt siap');
             
             // Tampilkan tombol install hanya jika belum terinstall
             if (!isPWAInstalled()) {

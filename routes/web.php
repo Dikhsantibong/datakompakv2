@@ -41,7 +41,7 @@ Route::get('/', function () {
     return view('auth.login', [
         'selectedUnit' => session('selected_unit', 'mysql') // default ke mysql jika belum ada session
     ]);
-})->name('home');
+})->name('homepage');
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);

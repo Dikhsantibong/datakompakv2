@@ -283,19 +283,6 @@
                     </div>
                 </div>
 
-                <!-- Map Section -->
-                <div class="bg-white rounded-xl shadow-lg mb-8 border border-gray-100">
-                    <div class="p-6 border-b border-gray-100">
-                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
-                            <i class="fas fa-map-marked-alt mr-3 text-blue-600"></i>
-                            Lokasi Pembangkit
-                        </h3>
-                    </div>
-                    <div class="p-6">
-                        <div id="map" style="height: 400px; position: relative; overflow: hidden;" class="rounded-lg"></div>
-                    </div>
-                </div>
-
                 <!-- Keterangan Section -->
                 <div class="bg-white rounded-lg shadow">
                     <div class="p-4 border-b border-gray-200 flex justify-between items-center">
@@ -337,7 +324,6 @@
 
 @push('styles')
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
     <style>
         .welcome-card {
             background-size: cover;
@@ -410,31 +396,6 @@
         .welcome-card > div {
             position: relative;
             z-index: 2;
-        }
-
-        /* MapTiler CSS */
-        #map { 
-            width: 100%; 
-            position: relative;
-            overflow: hidden;
-        }
-        .maplibregl-popup {
-            max-width: 200px;
-            z-index: 1;
-        }
-        .maplibregl-popup-content {
-            padding: 15px;
-        }
-        .maplibregl-canvas-container {
-            position: relative;
-            overflow: hidden;
-        }
-        .maplibregl-marker {
-            z-index: 1;
-        }
-        .map-container {
-            position: relative;
-            overflow: hidden;
         }
     </style>
 @endpush
@@ -536,115 +497,5 @@ changeBackground();
 
 // Ganti gambar setiap 5 detik
 setInterval(changeBackground, 5000);
-</script>
-
-<!-- MapTiler JS -->
-<script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get power plants data from PHP
-        const powerPlants = @json($powerPlants);
-        
-        // Validate coordinates
-        const validPowerPlants = powerPlants.filter(plant => {
-            const lat = parseFloat(plant.latitude);
-            const lng = parseFloat(plant.longitude);
-            return !isNaN(lat) && !isNaN(lng) && 
-                   lat >= -90 && lat <= 90 && 
-                   lng >= -180 && lng <= 180;
-        });
-
-        if (validPowerPlants.length === 0) {
-            console.error('No valid coordinates found');
-            return;
-        }
-
-        // Calculate bounds
-        const bounds = new maplibregl.LngLatBounds();
-        validPowerPlants.forEach(plant => {
-            bounds.extend([parseFloat(plant.longitude), parseFloat(plant.latitude)]);
-        });
-
-        // Initialize map
-        const map = new maplibregl.Map({
-            container: 'map',
-            style: {
-                version: 8,
-                sources: {
-                    'satellite': {
-                        type: 'raster',
-                        tiles: [
-                            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-                        ],
-                        tileSize: 256,
-                        attribution: '© Esri'
-                    }
-                },
-                layers: [
-                    {
-                        id: 'satellite-layer',
-                        type: 'raster',
-                        source: 'satellite',
-                        minzoom: 0,
-                        maxzoom: 19
-                    }
-                ]
-            },
-            bounds: bounds,
-            fitBoundsOptions: {
-                padding: 50,
-                maxZoom: 15
-            }
-        });
-
-        // Add navigation controls
-        map.addControl(new maplibregl.NavigationControl());
-        map.addControl(new maplibregl.FullscreenControl());
-
-        // Create markers only once when map loads
-        map.on('load', () => {
-            const markers = [];
-            
-            validPowerPlants.forEach(plant => {
-                const el = document.createElement('div');
-                el.className = 'marker';
-                
-                const marker = new maplibregl.Marker({
-                    element: el,
-                    anchor: 'bottom',
-                    offset: [0, 0]
-                })
-                .setLngLat([parseFloat(plant.longitude), parseFloat(plant.latitude)])
-                .setPopup(
-                    new maplibregl.Popup({
-                        offset: 25,
-                        closeButton: false,
-                        closeOnClick: true,
-                        anchor: 'bottom'
-                    })
-                    .setHTML(`
-                        <h3 class="font-bold">${plant.name}</h3>
-                        <p>Lat: ${plant.latitude}</p>
-                        <p>Long: ${plant.longitude}</p>
-                    `)
-                )
-                .addTo(map);
-
-                markers.push(marker);
-            });
-
-            // Ensure markers stay in correct position
-            map.on('moveend', () => {
-                markers.forEach(marker => {
-                    marker.setOffset([0, 0]);
-                });
-            });
-        });
-
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            map.resize();
-        });
-    });
 </script>
 @endpush 

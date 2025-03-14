@@ -827,3 +827,7 @@ Route::get('/admin/daily-summary/export-pdf', [DailySummaryController::class, 'e
     ->name('admin.daily-summary.export-pdf');
 Route::get('/admin/daily-summary/export-excel', [DailySummaryController::class, 'exportExcel'])
     ->name('admin.daily-summary.export-excel');
+
+Route::get('/install-app', function () {
+    return view('install-pwa');
+})->name('install.pwa');

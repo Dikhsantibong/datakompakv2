@@ -7,6 +7,11 @@
             overflow-y: auto;
             height: calc(100vh - 64px);
         }
+        .welcome-card {
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+        }
     </style>
 @endpush
 
@@ -66,7 +71,7 @@
         <div class="p-6">
             <!-- Welcome Card -->
             
-            <div class="rounded-lg shadow-sm p-6 mb-6 text-white h-64 relative" style="background-image: url('{{ asset('images/welcome.webp') }}'); background-size: cover;">
+            <div class="rounded-lg shadow-sm p-6 mb-6 text-white h-64 relative welcome-card">
                 <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
                 <div class="flex justify-between items-center relative z-10">
                     <div>
@@ -464,3 +469,28 @@
 
 <script src="{{ asset('js/toggle.js') }}"></script>
 @endsection
+
+@push('scripts')
+<script>
+    const backgroundImages = [
+        "{{ asset('images/welcome.webp') }}",
+        "{{ asset('images/welcome2.jpeg') }}",
+        "{{ asset('images/welcome3.jpg') }}",
+        // Tambahkan path gambar lainnya sesuai kebutuhan
+    ];
+
+    let currentImageIndex = 0;
+    const welcomeCard = document.querySelector('.welcome-card');
+
+    function changeBackground() {
+        welcomeCard.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
+        currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+    }
+
+    // Set gambar awal
+    changeBackground();
+
+    // Ganti gambar setiap 5 detik
+    setInterval(changeBackground, 5000);
+</script>
+@endpush

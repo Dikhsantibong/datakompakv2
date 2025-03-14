@@ -62,14 +62,21 @@
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-6 py-8">
                 <!-- Welcome Card -->
-                <div class="rounded-lg shadow-sm p-6 mb-6 text-white h-64 relative" style="background-image: url('{{ asset('images/welcome.webp') }}'); background-size: cover;">
+                <div class="rounded-lg shadow-sm p-6 mb-6 text-white h-64 relative welcome-card">
                     <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
                     <div class="flex justify-between items-center relative z-10">
                         <div>
-                            <h2 class="text-2xl font-semibold mb-2">Monitor Data Kinerja Pembangkit</h2>
-                            <p class="text-lg opacity-90">PLN NUSANTARA POWER UNIT PEMBANGKITAN KENDARI</p>
+                            <div style="overflow: hidden;">
+                                <h2 class="text-2xl font-semibold mb-2 typing-animation">Monitor Data Kinerja Pembangkit</h2>
+                            </div>
+                            <p class="text-lg opacity-90 fade-in">PLN NUSANTARA POWER UNIT PEMBANGKITAN KENDARI</p>
+                            <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 mt-4 max-w-xl fade-in">
+                                <p class="text-base leading-relaxed">
+                                    Platform monitoring kinerja pembangkit secara real-time untuk analisis dan pengambilan keputusan yang lebih efektif.
+                                </p>
+                            </div>
                         </div>
-                        <img src="{{ asset('logo/navlogo1.png') }}" alt="Power Plant" class="w-48">
+                        <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="w-48 fade-in">
                     </div>
                 </div>
 
@@ -308,6 +315,48 @@
 </div>
 @endsection
 
+@push('styles')
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .welcome-card {
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .typing-animation {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid white;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+            margin: 0;
+            width: 0;
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+            animation-delay: 3.5s;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: white }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+@endpush
+
 @push('scripts')
 <script src="{{ asset('js/toggle.js') }}"></script>
 
@@ -385,5 +434,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+const backgroundImages = [
+    "{{ asset('images/welcome.webp') }}",
+    "{{ asset('images/welcome2.jpeg') }}",
+    "{{ asset('images/welcome3.jpg') }}",
+    // Tambahkan path gambar lainnya sesuai kebutuhan
+];
+
+let currentImageIndex = 0;
+const welcomeCard = document.querySelector('.welcome-card');
+
+function changeBackground() {
+    welcomeCard.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
+    currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+}
+
+// Set gambar awal
+changeBackground();
+
+// Ganti gambar setiap 5 detik
+setInterval(changeBackground, 5000);
 </script>
 @endpush 

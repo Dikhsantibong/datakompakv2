@@ -66,15 +66,23 @@
         <div class="p-6">
             <!-- Welcome Card -->
             
-            <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-sm p-6 mb-6 text-white">
-                <div class="flex justify-between items-center">
+            <div class="rounded-lg shadow-sm p-6 mb-6 text-white h-64 relative" style="background-image: url('{{ asset('images/welcome.webp') }}'); background-size: cover;">
+                <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
+                <div class="flex justify-between items-center relative z-10">
                     <div>
-                        <h2 class="text-2xl font-semibold mb-2">Welcome to Datakompak!</h2>
-                        <p class="text-lg opacity-90">Data Kita Komunitas Operasi Mantap Unit Pembangkitan Kendari</p>
+                        <h2 class="text-3xl font-bold mb-3 tracking-tight">Selamat Datang di Datakompak</h2>
+                        <p class="text-xl font-semibold mb-2">Data Komunitas Operasi Mantap Unit Pembangkit Kendari</p>
+                        <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 mt-4 max-w-xl">
+                            <p class="text-base leading-relaxed">
+                                Platform terintegrasi untuk monitoring dan analisis kinerja pembangkit listrik secara real-time. 
+                                Dapatkan insight mendalam untuk pengambilan keputusan yang lebih efektif dan efisien.
+                            </p>
+                        </div>
                     </div>
-                    <img src="{{ asset('images/dashboard/at-work.svg') }}" alt="Welcome" class="w-48">
+                    <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="w-48">
                 </div>
             </div>
+
 
             <!-- Stats Overview -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">

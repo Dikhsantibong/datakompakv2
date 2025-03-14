@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\DailySummary;
+use App\Models\PowerPlant;
 use Illuminate\Http\Request;
 
 class MonitorKinerjaController extends Controller
@@ -12,6 +13,9 @@ class MonitorKinerjaController extends Controller
     {
         // Get the latest daily summary
         $latestSummary = DailySummary::latest()->first();
+
+        // Get power plant locations
+        $powerPlants = PowerPlant::select('name', 'latitude', 'longitude')->get();
 
         // Get data for the chart (last 7 days)
         $chartData = DailySummary::select('eaf', 'sof', 'efor', 'sdof', 'ncf', 'created_at')
@@ -58,6 +62,7 @@ class MonitorKinerjaController extends Controller
                 'nphr' => $latestSummary->nphr ?? 0,
                 'slc' => $latestSummary->slc ?? 0,
             ],
+            'powerPlants' => $powerPlants,
             'chartData' => $chartData,
         ];
 

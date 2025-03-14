@@ -26,7 +26,7 @@
     <div class="max-w-md w-full mx-4">
         <div class="bg-white rounded-lg shadow-lg p-6">
             <div class="text-center mb-8">
-                <img src="{{ asset('logo/navlogo.png') }}" alt="DATAKOMPAK Logo" class="w-24 h-24 mx-auto mb-4">
+                <img src="{{ asset('logo/navlogo.png') }}" alt="DATAKOMPAK Logo" class="w-auto h-24 mx-auto mb-4">
                 <h1 class="text-2xl font-bold text-gray-800">DATAKOMPAK</h1>
                 <p class="text-sm text-gray-600 mt-1">Data Komunitas Operasi Mantap Unit Pembangkit Kendari</p>
                 <p class="text-gray-600 mt-2">Install aplikasi untuk pengalaman yang lebih baik</p>
@@ -86,33 +86,51 @@
                    window.navigator.standalone === true;
         };
 
-        // Fungsi untuk mengecek kriteria installable
-        const checkInstallable = () => {
+        // Fungsi untuk mengecek kriteria installable yang lebih detail
+        const checkInstallable = async () => {
             if (isPWAInstalled()) {
                 console.log('PWA sudah terinstall');
                 installButton.style.display = 'none';
                 return false;
             }
 
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('Service Worker berhasil didaftarkan:', registration.scope);
-                    })
-                    .catch(error => {
-                        console.error('Gagal mendaftarkan Service Worker:', error);
-                    });
-            } else {
-                console.log('Service Worker tidak didukung');
+            // Cek HTTPS
+            if (window.location.protocol !== 'https:') {
+                console.error('PWA membutuhkan HTTPS');
                 return false;
             }
 
-            return true;
+            // Cek Service Worker
+            if (!('serviceWorker' in navigator)) {
+                console.error('Service Worker tidak didukung di browser ini');
+                return false;
+            }
+
+            try {
+                const registration = await navigator.serviceWorker.register('/sw.js');
+                console.log('Service Worker berhasil didaftarkan:', registration.scope);
+                
+                // Cek manifest
+                const manifestLink = document.querySelector('link[rel="manifest"]');
+                if (!manifestLink) {
+                    console.error('Web manifest tidak ditemukan');
+                    return false;
+                }
+
+                return true;
+            } catch (error) {
+                console.error('Gagal mendaftarkan Service Worker:', error);
+                return false;
+            }
         };
 
-        // Inisialisasi
-        window.addEventListener('load', () => {
-            checkInstallable();
+        // Inisialisasi dengan pengecekan yang lebih detail
+        window.addEventListener('load', async () => {
+            const isInstallable = await checkInstallable();
+            if (!isInstallable) {
+                console.log('PWA tidak dapat diinstall karena kriteria tidak terpenuhi');
+                // Tampilkan pesan error jika dibutuhkan
+            }
         });
 
         // Tangkap event beforeinstallprompt
@@ -127,15 +145,20 @@
             }
         });
 
-        // Handle klik tombol install
+        // Handle klik tombol install dengan error handling yang lebih baik
         installButton.addEventListener('click', async () => {
             if (!deferredPrompt) {
                 console.log('Prompt instalasi tidak tersedia');
                 
-                // Tampilkan instruksi manual untuk iOS
+                // Cek apakah running di supported browser
+                const isChrome = /Chrome/.test(navigator.userAgent);
+                const isSafari = /Safari/.test(navigator.userAgent);
+                
                 if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
                     installInstructions.style.display = 'block';
                     installButton.style.display = 'none';
+                } else if (!isChrome && !isSafari) {
+                    console.log('Browser mungkin tidak mendukung instalasi PWA');
                 }
                 return;
             }

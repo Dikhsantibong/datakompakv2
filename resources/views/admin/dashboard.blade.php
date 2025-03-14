@@ -161,7 +161,7 @@
                         @endforeach
                     </div>
                     <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" 
+                        <a href="{{ route('admin.power-plants.index') }}" 
                            class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                             Lihat Semua Unit →
                         </a>
@@ -236,7 +236,7 @@
                         </div>
                     </div>
                     <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" 
+                        <a href="{{ route('admin.machine-monitor.show') }}" 
                            class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                             Lihat Detail Mesin →
                         </a>
@@ -307,6 +307,149 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Production Chart -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-lg font-medium mb-4">Grafik Produksi Harian</h3>
+                    <div style="height: 300px;">
+                        <canvas id="productionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Fuel Consumption Chart -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-lg font-medium mb-4">Konsumsi Bahan Bakar</h3>
+                    <div style="height: 300px;">
+                        <canvas id="fuelChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fuel Monitoring Section -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium">Monitoring Bahan Bakar</h3>
+                    <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Lihat Detail →</a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- HSD Fuel -->
+                    <div class="border rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium">HSD</span>
+                            <span class="text-xs text-gray-500">Stok: 75%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 75%"></div>
+                        </div>
+                        <div class="text-sm text-gray-600">150,000 Liter</div>
+                    </div>
+                    <!-- MFO Fuel -->
+                    <div class="border rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium">MFO</span>
+                            <span class="text-xs text-gray-500">Stok: 45%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 45%"></div>
+                        </div>
+                        <div class="text-sm text-gray-600">90,000 Liter</div>
+                    </div>
+                    <!-- Batubara -->
+                    <div class="border rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium">B35</span>
+                            <span class="text-xs text-gray-500">Stok: 60%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-blue-500 h-2 rounded-full" style="width: 60%"></div>
+                        </div>
+                        <div class="text-sm text-gray-600">1,200 liter</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Initialization Scripts -->
+            <script>
+                // Production Chart
+                const productionCtx = document.getElementById('productionChart').getContext('2d');
+                new Chart(productionCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
+                        datasets: [{
+                            label: 'Produksi Netto (MW)',
+                            data: [65, 59, 80, 81, 56, 55, 70],
+                            borderColor: 'rgb(59, 130, 246)',
+                            tension: 0.1,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                min: 0,
+                                max: 100,
+                                ticks: {
+                                    stepSize: 20
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        }
+                    }
+                });
+
+                // Fuel Consumption Chart
+                const fuelCtx = document.getElementById('fuelChart').getContext('2d');
+                new Chart(fuelCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['HSD', 'MFO', 'B35'],
+                        datasets: [{
+                            label: 'Konsumsi Harian',
+                            data: [12000, 19000, 3000],
+                            backgroundColor: [
+                                'rgba(34, 197, 94, 0.5)',
+                                'rgba(234, 179, 8, 0.5)',
+                                'rgba(59, 130, 246, 0.5)'
+                            ],
+                            borderColor: [
+                                'rgb(34, 197, 94)',
+                                'rgb(234, 179, 8)',
+                                'rgb(59, 130, 246)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                min: 0,
+                                max: 25000,
+                                ticks: {
+                                    stepSize: 5000
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        }
+                    }
+                });
+            </script>
         </div>
     </div>
 </div>

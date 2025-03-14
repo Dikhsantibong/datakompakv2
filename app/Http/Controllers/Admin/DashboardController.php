@@ -91,4 +91,20 @@ class DashboardController extends Controller
                 return "Update status {$plantName}: {$status}";
         }
     }
+
+    public function getMachines()
+    {
+        $machines = Machine::all();
+        $stats = [
+            'total' => $machines->count(),
+            'ops' => $machines->where('status', 'OPS')->count(),
+            'rsh' => $machines->where('status', 'RSH')->count(),
+            'fo' => $machines->where('status', 'FO')->count(),
+            'mo' => $machines->where('status', 'MO')->count(),
+            'po' => $machines->where('status', 'PO')->count(),
+            'mb' => $machines->where('status', 'MB')->count(),
+        ];
+
+        return response()->json($stats);
+    }
 }

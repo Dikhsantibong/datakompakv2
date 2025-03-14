@@ -61,124 +61,119 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-6 py-8">
+                <!-- Welcome Card -->
+                <div class="rounded-lg shadow-sm p-6 mb-6 text-white h-64 relative" style="background-image: url('{{ asset('images/welcome.webp') }}'); background-size: cover;">
+                    <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
+                    <div class="flex justify-between items-center relative z-10">
+                        <div>
+                            <h2 class="text-2xl font-semibold mb-2">Monitor Data Kinerja Pembangkit</h2>
+                            <p class="text-lg opacity-90">PLN NUSANTARA POWER UNIT PEMBANGKITAN KENDARI</p>
+                        </div>
+                        <img src="{{ asset('logo/navlogo1.png') }}" alt="Power Plant" class="w-48">
+                    </div>
+                </div>
+
                 <!-- Performance Indicators -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
                     <!-- EAF Card -->
-                    <div class="bg-white rounded-lg shadow p-4">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 p-3 rounded-full bg-blue-100">
-                                <i class="fas fa-percentage text-blue-600"></i>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-blue-600 mb-2">
+                                <i class="fas fa-chart-line"></i>
                             </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">EAF</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ number_format($performance['eaf'], 1) }}%</p>
-                            </div>
+                            <h3 class="text-lg font-semibold mb-1">EAF</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['eaf'], 1) }}%</p>
+                            <span class="text-blue-600 text-sm font-medium">Equivalent Availability Factor</span>
                         </div>
                     </div>
 
                     <!-- SOF Card -->
-                    <div class="bg-white rounded-lg shadow p-4">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 p-3 rounded-full bg-red-100">
-                                <i class="fas fa-percentage text-red-600"></i>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-red-600 mb-2">
+                                <i class="fas fa-clock"></i>
                             </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">SOF</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ number_format($performance['sof'], 1) }}%</p>
-                            </div>
+                            <h3 class="text-lg font-semibold mb-1">SOF</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['sof'], 1) }}%</p>
+                            <span class="text-red-600 text-sm font-medium">Scheduled Outage Factor</span>
                         </div>
                     </div>
 
                     <!-- EFOR Card -->
-                    <div class="bg-white rounded-lg shadow p-4">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 p-3 rounded-full bg-yellow-100">
-                                <i class="fas fa-percentage text-yellow-600"></i>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-yellow-600 mb-2">
+                                <i class="fas fa-exclamation-triangle"></i>
                             </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">EFOR</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ number_format($performance['efor'], 1) }}%</p>
-                            </div>
+                            <h3 class="text-lg font-semibold mb-1">EFOR</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['efor'], 1) }}%</p>
+                            <span class="text-yellow-600 text-sm font-medium">Equivalent Forced Outage Rate</span>
                         </div>
                     </div>
 
                     <!-- SdOF Card -->
-                    <div class="bg-white rounded-lg shadow p-4">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 p-3 rounded-full bg-indigo-100">
-                                <i class="fas fa-percentage text-indigo-600"></i>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-indigo-600 mb-2">
+                                <i class="fas fa-bolt"></i>
                             </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">SdOF</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ number_format($performance['sdof'], 1) }}%</p>
-                            </div>
+                            <h3 class="text-lg font-semibold mb-1">SdOF</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['sdof'], 1) }}%</p>
+                            <span class="text-indigo-600 text-sm font-medium">Sudden Outage Factor</span>
                         </div>
                     </div>
 
                     <!-- NCF Card -->
-                    <div class="bg-white rounded-lg shadow p-4">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 p-3 rounded-full bg-green-100">
-                                <i class="fas fa-percentage text-green-600"></i>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-emerald-600 mb-2">
+                                <i class="fas fa-tachometer-alt"></i>
                             </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">NCF</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ number_format($performance['ncf'], 1) }}%</p>
-                            </div>
+                            <h3 class="text-lg font-semibold mb-1">NCF</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['ncf'], 1) }}%</p>
+                            <span class="text-emerald-600 text-sm font-medium">Net Capacity Factor</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Detailed Statistics -->
+                <!-- Operating & Production Statistics -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <!-- Operating Statistics -->
-                    <div class="bg-white rounded-lg shadow p-4">
-                        <h3 class="text-lg font-medium text-gray-800 mb-4">
-                            <i class="fas fa-clock mr-2 text-gray-600"></i>
-                            Statistik Operasi
-                        </h3>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-medium">Statistik Operasi</h3>
+                            <i class="fas fa-clock text-blue-600"></i>
+                        </div>
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="bg-blue-50 rounded-lg p-4">
                                 <p class="text-sm text-gray-600">Jam Operasi</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $operatingStats['operating_hours'] }} jam</p>
+                                <p class="text-2xl font-semibold text-blue-600">{{ $operatingStats['operating_hours'] }}</p>
+                                <p class="text-sm text-gray-500">jam</p>
                             </div>
-                            <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="bg-green-50 rounded-lg p-4">
                                 <p class="text-sm text-gray-600">Jam Standby</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $operatingStats['standby_hours'] }} jam</p>
-                            </div>
-                            <div class="p-3 bg-gray-50 rounded-lg">
-                                <p class="text-sm text-gray-600">Planned Outage</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $operatingStats['planned_outage'] }} jam</p>
-                            </div>
-                            <div class="p-3 bg-gray-50 rounded-lg">
-                                <p class="text-sm text-gray-600">Maintenance Outage</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $operatingStats['maintenance_outage'] }} jam</p>
+                                <p class="text-2xl font-semibold text-green-600">{{ $operatingStats['standby_hours'] }}</p>
+                                <p class="text-sm text-gray-500">jam</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Production Statistics -->
-                    <div class="bg-white rounded-lg shadow p-4">
-                        <h3 class="text-lg font-medium text-gray-800 mb-4">
-                            <i class="fas fa-bolt mr-2 text-gray-600"></i>
-                            Statistik Produksi
-                        </h3>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-medium">Statistik Produksi</h3>
+                            <i class="fas fa-bolt text-yellow-600"></i>
+                        </div>
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="bg-purple-50 rounded-lg p-4">
                                 <p class="text-sm text-gray-600">Produksi Bruto</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $productionStats['gross_production'] }} MW</p>
+                                <p class="text-2xl font-semibold text-purple-600">{{ $productionStats['gross_production'] }}</p>
+                                <p class="text-sm text-gray-500">MW</p>
                             </div>
-                            <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="bg-indigo-50 rounded-lg p-4">
                                 <p class="text-sm text-gray-600">Produksi Netto</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $productionStats['net_production'] }} MW</p>
-                            </div>
-                            <div class="p-3 bg-gray-50 rounded-lg">
-                                <p class="text-sm text-gray-600">Beban Puncak</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $productionStats['peak_load_day'] }} MW</p>
-                            </div>
-                            <div class="p-3 bg-gray-50 rounded-lg">
-                                <p class="text-sm text-gray-600">Beban Luar Puncak</p>
-                                <p class="text-lg font-semibold text-gray-800">{{ $productionStats['peak_load_night'] }} MW</p>
+                                <p class="text-2xl font-semibold text-indigo-600">{{ $productionStats['net_production'] }}</p>
+                                <p class="text-sm text-gray-500">MW</p>
                             </div>
                         </div>
                     </div>
@@ -262,15 +257,15 @@
                 </div>
 
                 <!-- Chart Section -->
-                <div class="bg-white rounded-lg shadow mb-6">
-                    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                        <h3 class="text-lg font-medium text-gray-800">
-                            <i class="fas fa-chart-line mr-2 text-gray-600"></i>
+                <div class="bg-white rounded-xl shadow-lg mb-8 border border-gray-100">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                            <i class="fas fa-chart-line mr-3 text-blue-600"></i>
                             Grafik Kinerja Pembangkit
                         </h3>
                     </div>
-                    <div class="p-4">
-                        <canvas id="kinerjaChart" class="w-full" style="min-height: 400px;"></canvas>
+                    <div class="p-6">
+                        <canvas id="kinerjaChart" style="height: 400px;"></canvas>
                     </div>
                 </div>
 
@@ -319,73 +314,76 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const chartData = @json($chartData);
-    
     const ctx = document.getElementById('kinerjaChart').getContext('2d');
+    const chartData = {
+        labels: {!! json_encode($chartData['labels'] ?? []) !!},
+        datasets: [{
+            label: 'EAF',
+            data: {!! json_encode($chartData['eaf'] ?? []) !!},
+            borderColor: 'rgb(59, 130, 246)',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            fill: true,
+            tension: 0.4
+        }, {
+            label: 'SOF',
+            data: {!! json_encode($chartData['sof'] ?? []) !!},
+            borderColor: 'rgb(239, 68, 68)',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            fill: true,
+            tension: 0.4
+        }]
+    };
+
     new Chart(ctx, {
         type: 'line',
-        data: {
-            labels: chartData.map(item => new Date(item.created_at).toLocaleDateString()),
-            datasets: [
-                {
-                    label: 'EAF',
-                    data: chartData.map(item => item.eaf),
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                },
-                {
-                    label: 'SOF',
-                    data: chartData.map(item => item.sof),
-                    borderColor: 'rgb(255, 99, 132)',
-                    tension: 0.1
-                },
-                {
-                    label: 'EFOR',
-                    data: chartData.map(item => item.efor),
-                    borderColor: 'rgb(255, 205, 86)',
-                    tension: 0.1
-                },
-                {
-                    label: 'SdOF',
-                    data: chartData.map(item => item.sdof),
-                    borderColor: 'rgb(54, 162, 235)',
-                    tension: 0.1
-                },
-                {
-                    label: 'NCF',
-                    data: chartData.map(item => item.ncf),
-                    borderColor: 'rgb(153, 102, 255)',
-                    tension: 0.1
-                }
-            ]
-        },
+        data: chartData,
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             interaction: {
-                mode: 'index',
                 intersect: false,
+                mode: 'index'
             },
             plugins: {
                 legend: {
                     position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20
+                    }
                 },
-                title: {
-                    display: true,
-                    text: 'Grafik Kinerja Pembangkit'
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    titleColor: '#1f2937',
+                    bodyColor: '#1f2937',
+                    borderColor: '#e5e7eb',
+                    borderWidth: 1,
+                    padding: 12,
+                    displayColors: true
                 }
             },
             scales: {
                 y: {
                     beginAtZero: true,
+                    grid: {
+                        drawBorder: false,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
                     ticks: {
                         callback: function(value) {
                             return value + '%';
                         }
+                    }
+                },
+                x: {
+                    grid: {
+                        drawBorder: false,
+                        color: 'rgba(0, 0, 0, 0.05)'
                     }
                 }
             }
         }
     });
 });
-</>
+</script>
 @endpush 

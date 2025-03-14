@@ -78,100 +78,231 @@
 
             <!-- Stats Overview -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-                <div class="bg-blue-500 text-white rounded-lg p-4">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-sm opacity-75">Total Produksi Netto</p>
-                            <p class="text-2xl font-bold">{{ number_format($totalNetProduction) }} MW</p>
+                <!-- Card 1: Total Produksi Netto -->
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="p-4">
+                        <div class="text-3xl text-blue-600 mb-2">
+                            <i class="fas fa-chart-line"></i>
                         </div>
-                        <i class="fas fa-chart-line text-3xl opacity-75"></i>
+                        <h3 class="text-lg font-semibold mb-1">Total Produksi Netto</h3>
+                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalNetProduction) }} MW</p>
+                        <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                            Lihat Detail →
+                        </a>
                     </div>
                 </div>
 
-                <div class="bg-green-500 text-white rounded-lg p-4">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-sm opacity-75">Total Produksi Bruto</p>
-                            <p class="text-2xl font-bold">{{ number_format($totalGrossProduction) }} MW</p>
+                <!-- Card 2: Total Produksi Bruto -->
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="p-4">
+                        <div class="text-3xl text-green-600 mb-2">
+                            <i class="fas fa-chart-bar"></i>
                         </div>
-                        <i class="fas fa-chart-bar text-3xl opacity-75"></i>
+                        <h3 class="text-lg font-semibold mb-1">Total Produksi Bruto</h3>
+                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalGrossProduction) }} MW</p>
+                        <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                            Lihat Detail →
+                        </a>
                     </div>
                 </div>
 
-                <div class="bg-yellow-500 text-white rounded-lg p-4">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-sm opacity-75">Beban Puncak</p>
-                            <p class="text-2xl font-bold">{{ number_format($peakLoad) }} MW</p>
+                <!-- Card 3: Beban Puncak -->
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="p-4">
+                        <div class="text-3xl text-yellow-600 mb-2">
+                            <i class="fas fa-bolt"></i>
                         </div>
-                        <i class="fas fa-bolt text-3xl opacity-75"></i>
+                        <h3 class="text-lg font-semibold mb-1">Beban Puncak</h3>
+                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($peakLoad) }} MW</p>
+                        <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                            Lihat Detail →
+                        </a>
                     </div>
                 </div>
 
-                <div class="bg-purple-500 text-white rounded-lg p-4">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-sm opacity-75">Total Jam Operasi</p>
-                            <p class="text-2xl font-bold">{{ number_format($totalOperatingHours) }} Jam</p>
+                <!-- Card 4: Total Jam Operasi -->
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="p-4">
+                        <div class="text-3xl text-purple-600 mb-2">
+                            <i class="fas fa-clock"></i>
                         </div>
-                        <i class="fas fa-clock text-3xl opacity-75"></i>
+                        <h3 class="text-lg font-semibold mb-1">Total Jam Operasi</h3>
+                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalOperatingHours) }} Jam</p>
+                        <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                            Lihat Detail →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit & Machine Stats -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Power Plants Overview -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-medium">Unit Pembangkit</h3>
+                        <span class="text-sm text-gray-500">Total: {{ $powerPlants->count() }}</span>
+                    </div>
+                    <div class="space-y-4">
+                        @foreach($powerPlants->take(4) as $plant)
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                                <div>
+                                    <p class="text-sm font-medium">{{ $plant->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ $plant->machines->count() }} Mesin</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-medium">{{ $plant->machines->sum('capacity') }} MW</p>
+                                <p class="text-xs text-gray-500">Kapasitas Total</p>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" 
+                           class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            Lihat Semua Unit →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Machines Status -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-medium">Status Mesin</h3>
+                        <span class="text-sm text-gray-500">Total: {{ $machines->count() }}</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Operating Machines -->
+                        <div class="bg-green-50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Beroperasi</p>
+                                    <p class="text-2xl font-semibold text-green-600">
+                                        {{ $machines->where('status', 'RUNNING')->count() }}
+                                    </p>
+                                </div>
+                                <div class="text-green-500">
+                                    <i class="fas fa-play-circle text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stopped Machines -->
+                        <div class="bg-red-50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Berhenti</p>
+                                    <p class="text-2xl font-semibold text-red-600">
+                                        {{ $machines->where('status', 'STOP')->count() }}
+                                    </p>
+                                </div>
+                                <div class="text-red-500">
+                                    <i class="fas fa-stop-circle text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Maintenance Machines -->
+                        <div class="bg-yellow-50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Maintenance</p>
+                                    <p class="text-2xl font-semibold text-yellow-600">
+                                        {{ $machines->whereIn('status', ['MAINTENANCE', 'OVERHAUL'])->count() }}
+                                    </p>
+                                </div>
+                                <div class="text-yellow-500">
+                                    <i class="fas fa-tools text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Standby Machines -->
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Standby</p>
+                                    <p class="text-2xl font-semibold text-blue-600">
+                                        {{ $machines->where('status', 'STANDBY')->count() }}
+                                    </p>
+                                </div>
+                                <div class="text-blue-500">
+                                    <i class="fas fa-pause-circle text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" 
+                           class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            Lihat Detail Mesin →
+                        </a>
                     </div>
                 </div>
             </div>
 
             <!-- Progress Trackers -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Progress Tracker Card -->
                 <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-lg font-medium mb-4">Progress Tracker</h3>
+                    <h3 class="text-lg font-medium mb-4">Status Pembangkit</h3>
                     <div class="space-y-4">
                         <div>
                             <div class="flex justify-between mb-1">
-                                <span class="text-sm font-medium">Server Migration</span>
-                                <span class="text-sm font-medium">20%</span>
+                                <span class="text-sm font-medium">Kapasitas Terpasang</span>
+                                <span class="text-sm font-medium">85%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-red-500 h-2 rounded-full" style="width: 20%"></div>
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
                             </div>
                         </div>
                         <div>
                             <div class="flex justify-between mb-1">
-                                <span class="text-sm font-medium">Sales Tracking</span>
-                                <span class="text-sm font-medium">40%</span>
+                                <span class="text-sm font-medium">Efisiensi Pembangkit</span>
+                                <span class="text-sm font-medium">78%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 40%"></div>
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 78%"></div>
                             </div>
                         </div>
                         <div>
                             <div class="flex justify-between mb-1">
-                                <span class="text-sm font-medium">Customer Database</span>
-                                <span class="text-sm font-medium">60%</span>
+                                <span class="text-sm font-medium">Ketersediaan Unit</span>
+                                <span class="text-sm font-medium">92%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-blue-500 h-2 rounded-full" style="width: 60%"></div>
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 92%"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Recent Activity Card -->
                 <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-lg font-medium mb-4">Recent Activity</h3>
+                    <h3 class="text-lg font-medium mb-4">Aktivitas Terkini</h3>
                     <div class="space-y-4">
                         <div class="flex items-center">
-                            <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                            <p class="text-sm">Server migration completed</p>
-                        </div>
-                        <div class="flex items-center">
                             <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-                            <p class="text-sm">Sales report generated</p>
+                            <p class="text-sm">Unit PLTD Bau-Bau beroperasi normal</p>
+                            <span class="text-xs text-gray-500 ml-auto">2 jam yang lalu</span>
                         </div>
                         <div class="flex items-center">
                             <div class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
-                            <p class="text-sm">New user registered</p>
+                            <p class="text-sm">Pemeliharaan rutin PLTU Kendari</p>
+                            <span class="text-xs text-gray-500 ml-auto">4 jam yang lalu</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                            <p class="text-sm">Update data operasional PLTD Wangi-Wangi</p>
+                            <span class="text-xs text-gray-500 ml-auto">5 jam yang lalu</span>
                         </div>
                         <div class="flex items-center">
                             <div class="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
-                            <p class="text-sm">Project deadline updated</p>
+                            <p class="text-sm">Peringatan bahan bakar PLTD Raha</p>
+                            <span class="text-xs text-gray-500 ml-auto">6 jam yang lalu</span>
                         </div>
                     </div>
                 </div>

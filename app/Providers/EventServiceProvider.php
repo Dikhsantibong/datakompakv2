@@ -15,6 +15,8 @@ use App\Events\PesertaUpdated;
 use App\Listeners\SyncPesertaToUpKendari;
 use App\Events\DailySummaryUpdated;
 use App\Listeners\SyncDailySummaryToUpKendari;
+use App\Events\RencanaDayaMampuUpdated;
+use App\Listeners\SyncRencanaDayaMampuToUpKendari;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -39,6 +41,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         DailySummaryUpdated::class => [
             SyncDailySummaryToUpKendari::class,
+        ],
+        RencanaDayaMampuUpdated::class => [
+            SyncRencanaDayaMampuToUpKendari::class,
         ],
     ];
 } 

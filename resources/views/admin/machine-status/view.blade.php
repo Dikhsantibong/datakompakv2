@@ -1,143 +1,136 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex h-screen bg-gray-50 overflow-auto">
+<div class="flex h-screen bg-gray-100 overflow-hidden">
     @include('components.sidebar')
 
     <div id="main-content" class="flex-1 overflow-auto">
         <!-- Header -->
         <header class="bg-white shadow-sm sticky top-0 z-20">
-            <div class="flex justify-between items-center px-6 py-3">
-                <div class="flex items-center gap-x-3">
-                    <!-- Mobile Menu Toggle -->
-                    <button id="mobile-menu-toggle"
-                        class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                        aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-                    </button>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center space-x-4">
+                        <!-- Menu Toggle -->
+                        <button id="desktop-menu-toggle"
+                            class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16"/>
+                            </svg>
+                        </button>
+                        <h1 class="text-xl font-semibold text-gray-800">Status Mesin</h1>
+                    </div>
 
-                    <!-- Desktop Menu Toggle -->
-                    <button id="desktop-menu-toggle"
-                        class="hidden md:block relative items-center justify-center rounded-md text-gray-400 hover:bg-[#009BB9] p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                        aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" aria-hidden="true" data-slot="icon">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-                    </button>
-
-                    <h1 class="text-xl font-semibold text-gray-800">Status Mesin</h1>
-                </div>
-
-                @include('components.timer')
-                
-                <!-- User Dropdown -->
-                <div class="relative">
-                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
-                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}"
-                            class="w-7 h-7 rounded-full mr-2">
-                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
-                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
-                    </button>
-                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                        </form>
+                    <div class="flex items-center space-x-6">
+                        @include('components.timer')
+                        
+                        <!-- User Menu -->
+                        <div class="relative">
+                            <button id="dropdownToggle" class="flex items-center space-x-3 focus:outline-none" onclick="toggleDropdown()">
+                                <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}"
+                                    class="w-8 h-8 rounded-full object-cover border-2 border-gray-200">
+                                <span class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <!-- Dropdown Menu -->
+                            <div id="dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50">
+                                <a href="{{ route('logout') }}" 
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Logout
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                    @csrf
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </header>
 
-        <!-- Loading indicator -->
-        <div id="loading" class="loading fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
-            <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
-            <h2 class="text-center text-white text-xl font-semibold mt-4">Loading...</h2>
-            <p class="w-1/3 text-center text-white">Mohon tunggu sebentar...</p>
+        <!-- Loading Overlay -->
+        <div id="loading" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
+            <div class="bg-white rounded-lg p-8 flex flex-col items-center">
+                <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+                <p class="mt-4 text-gray-600 font-medium">Memuat data...</p>
+            </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="container mx-auto px-4 py-6">
-            <div class="bg-white rounded-lg shadow p-6">
-                <div class="flex flex-col mb-6">
-                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
-                        <h2 class="text-2xl font-semibold text-gray-800 mb-4 sm:mb-0">Status Mesin</h2>
+        <!-- Main Content Area -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <!-- Header Actions -->
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                        <h2 class="text-xl font-semibold text-gray-800">Status Mesin</h2>
                         
-                        <!-- Add Copy Button -->
-                        <button id="copyFormattedData" 
-                            class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mb-4 sm:mb-0">
-                            <i class="fas fa-copy mr-2"></i>
-                            Salin Laporan
-                        </button>
+                        <div class="flex items-center space-x-4">
+                            <button id="copyFormattedData" 
+                                class="inline-flex items-center px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                                </svg>
+                                Salin Laporan
+                            </button>
+                            
+                            <a href="{{ route('admin.pembangkit.ready') }}" 
+                               class="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                </svg>
+                                Update Mesin
+                            </a>
+                        </div>
                     </div>
-                    
-                    <!-- Filter Area -->
-                    <div class="flex flex-col gap-4">
-                        <!-- Row 1: Essential Filters -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                            @if(session('unit') === 'mysql')
-                            <div class="flex items-center">
-                                <label for="unit-source" class="text-sm text-gray-700 font-medium w-20">Unit:</label>
-                                <select id="unit-source" 
-                                    class="border rounded px-3 py-2 text-sm flex-1"
-                                    onchange="updateTable()">
-                                    <option value="">Semua Unit</option>
-                                    <option value="mysql" {{ request('unit_source') == 'mysql' ? 'selected' : '' }}>UP Kendari</option>
-                                    <option value="mysql_wua_wua" {{ request('unit_source') == 'mysql_wua_wua' ? 'selected' : '' }}>Wua Wua</option>
-                                    <option value="mysql_poasia" {{ request('unit_source') == 'mysql_poasia' ? 'selected' : '' }}>Poasia</option>
-                                    <option value="mysql_kolaka" {{ request('unit_source') == 'mysql_kolaka' ? 'selected' : '' }}>Kolaka</option>
-                                    <option value="mysql_bau_bau" {{ request('unit_source') == 'mysql_bau_bau' ? 'selected' : '' }}>Bau Bau</option>
-                                </select>
-                            </div>
-                            @endif
 
-                            <div class="flex items-center">
-                                <label for="date-picker" class="text-sm text-gray-700 font-medium w-20">Tanggal:</label>
-                                <input type="date" id="date-picker" 
-                                    class="border rounded px-3 py-2 text-sm flex-1"
-                                    value="{{ $date }}"
-                                    onchange="updateTable()">
-                            </div>
+                    <!-- Filters -->
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        @if(session('unit') === 'mysql')
+                        <div class="relative">
+                            <label for="unit-source" class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+                            <select id="unit-source" 
+                                class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg"
+                                onchange="updateTable()">
+                                <option value="">Semua Unit</option>
+                                <option value="mysql">UP Kendari</option>
+                                <option value="mysql_wua_wua">Wua Wua</option>
+                                <option value="mysql_poasia">Poasia</option>
+                                <option value="mysql_kolaka">Kolaka</option>
+                                <option value="mysql_bau_bau">Bau Bau</option>
+                            </select>
+                        </div>
+                        @endif
 
-                            <div class="flex items-center">
-                                <label for="input-time" class="text-sm text-gray-700 font-medium w-20">Waktu:</label>
-                                <select id="input-time" 
-                                    class="border rounded px-3 py-2 text-sm flex-1"
-                                    onchange="updateTable()">
-                                    <option value="">Semua Waktu</option>
-                                    <option value="06:00" {{ request('input_time') == '06:00' ? 'selected' : '' }}>06:00 (Pagi)</option>
-                                    <option value="11:00" {{ request('input_time') == '11:00' ? 'selected' : '' }}>11:00 (Siang)</option>
-                                    <option value="14:00" {{ request('input_time') == '14:00' ? 'selected' : '' }}>14:00 (Siang)</option>
-                                    <option value="18:00" {{ request('input_time') == '18:00' ? 'selected' : '' }}>18:00 (Malam)</option>
-                                    <option value="19:00" {{ request('input_time') == '19:00' ? 'selected' : '' }}>19:00 (Malam)</option>
-                                </select>
-                            </div>
+                        <div class="relative">
+                            <label for="date-picker" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                            <input type="date" id="date-picker" 
+                                class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg"
+                                value="{{ $date }}"
+                                onchange="updateTable()">
                         </div>
 
-                        <!-- Row 2: Search and Action -->
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <div class="flex-grow">
-                                <input type="text" id="searchInput" 
-                                    placeholder="Cari unit/mesin/status..." 
-                                    class="border rounded px-3 py-2 text-sm w-full"
-                                    value="{{ request('search') }}">
-                            </div>
+                        <div class="relative">
+                            <label for="input-time" class="block text-sm font-medium text-gray-700 mb-1">Waktu</label>
+                            <select id="input-time" 
+                                class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg"
+                                onchange="updateTable()">
+                                <option value="">Semua Waktu</option>
+                                <option value="06:00">06:00 (Pagi)</option>
+                                <option value="11:00">11:00 (Siang)</option>
+                                <option value="14:00">14:00 (Siang)</option>
+                                <option value="18:00">18:00 (Malam)</option>
+                                <option value="19:00">19:00 (Malam)</option>
+                            </select>
+                        </div>
 
-                            <div class="w-full sm:w-auto">
-                                <a href="{{ route('admin.pembangkit.ready') }}" 
-                                   class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    <i class="fas fa-sync-alt mr-2"></i>
-                                    Update Mesin
-                                </a>
-                            </div>
+                        <div class="relative">
+                            <label for="searchInput" class="block text-sm font-medium text-gray-700 mb-1">Pencarian</label>
+                            <input type="text" id="searchInput" 
+                                placeholder="Cari unit/mesin/status..." 
+                                class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg"
+                                value="{{ request('search') }}">
                         </div>
                     </div>
                 </div>
@@ -153,6 +146,84 @@
 
 <script src="{{ asset('js/toggle.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+/* Base Styles */
+.loading {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.loading.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Component Styles */
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Layout Transitions */
+.sidebar {
+    transition: all 0.3s ease-in-out;
+}
+
+#main-content {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Interactive Elements */
+button, a {
+    transition: all 0.2s ease-in-out;
+}
+
+.hover-scale:hover {
+    transform: scale(1.02);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .responsive-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
 <script>
 function toggleDropdown() {
     document.getElementById('dropdown').classList.toggle('hidden');
@@ -374,57 +445,4 @@ document.getElementById('copyFormattedData').addEventListener('click', function(
     });
 });
 </script>
-
-<style>
-.loading {
-    transition: all 0.3s ease-in-out;
-}
-
-.loading.hidden {
-    opacity: 0;
-    visibility: hidden;
-    display: none;
-}
-
-.animate-spin {
-    border-width: 4px;
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-}
-
-.sidebar {
-    transition: width 0.3s ease;
-}
-
-.sidebar.collapsed {
-    width: 0;
-    overflow: hidden;
-}
-
-#main-content {
-    transition: margin-left 0.3s ease;
-}
-
-#main-content.sidebar-collapsed {
-    margin-left: 0;
-}
-
-/* Override any potential center alignment */
-.table-responsive td[class*="text-left"],
-.table-responsive td div {
-    text-align: left !important;
-}
-
-/* Specific overrides for the columns */
-.table-responsive td div.max-h-[150px] {
-    text-align: left !important;
-    justify-content: flex-start !important;
-}
-
-/* Additional specific column overrides */
-.table-responsive td[data-content-type="equipment"] div,
-.table-responsive td div.whitespace-pre-wrap {
-    text-align: left !important;
-    justify-content: left !important;
-}
-</style>
 @endsection 

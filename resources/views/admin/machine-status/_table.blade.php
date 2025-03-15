@@ -36,10 +36,11 @@
                                             ? \Carbon\Carbon::parse($lastUpdate)->format('d/m/Y H:i:s')
                                             : '-';
                                     @endphp
-                                    <div class="text-sm text-gray-500">
-                                        <span class="font-medium">Update Terakhir:</span>
-                                        <span>{{ $formattedLastUpdate }}</span>
-                                    </div>
+                                    
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    <span class="font-medium">Update Terakhir:</span>
+                                    <span>{{ $formattedLastUpdate }}</span>
                                 </div>
                             </div>
                         </div>

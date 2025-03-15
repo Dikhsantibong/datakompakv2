@@ -6,50 +6,51 @@
 
     <div id="main-content" class="flex-1 overflow-auto">
         <!-- Header -->
-        <header class="bg-white shadow-sm sticky top-0 z-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center py-4">
-                    <div class="flex items-center space-x-4">
-                        <!-- Menu Toggle -->
-                        <button id="desktop-menu-toggle"
-                            class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16"/>
-                            </svg>
-                        </button>
-                        <h1 class="text-xl font-semibold text-gray-800">Status Mesin</h1>
-                    </div>
+        <header class="bg-white shadow-sm sticky top-0 z-10">
+            <div class="flex justify-between items-center px-6 py-3">
+                <div class="flex items-center gap-x-3">
+                    <!-- Mobile Menu Toggle -->
+                    <button id="mobile-menu-toggle"
+                        class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                        aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </button>
 
-                    <div class="flex items-center space-x-6">
-                        @include('components.timer')
-                        
-                        <!-- User Menu -->
-                        <div class="relative">
-                            <button id="dropdownToggle" class="flex items-center space-x-3 focus:outline-none" onclick="toggleDropdown()">
-                                <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}"
-                                    class="w-8 h-8 rounded-full object-cover border-2 border-gray-200">
-                                <span class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </button>
-                            <!-- Dropdown Menu -->
-                            <div id="dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50">
-                                <a href="{{ route('logout') }}" 
-                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                    Logout
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                                    @csrf
-                                </form>
-                            </div>
-                        </div>
+                    <button id="desktop-menu-toggle"
+                        class="hidden md:block relative items-center justify-center rounded-md text-gray-400 hover:bg-[#009BB9] p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </button>
+
+                    <h1 class="text-xl font-semibold text-gray-800">Status Mesin</h1>
+                </div>
+
+                <div class="relative">
+                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
+                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                    </button>
+                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                        <a href="{{ route('logout') }}" 
+                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
+                        </form>
                     </div>
                 </div>
             </div>
         </header>
-
+        
         <!-- Loading Overlay -->
         <div id="loading" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
             <div class="bg-white rounded-lg p-8 flex flex-col items-center">
@@ -368,11 +369,11 @@ function getFormattedReport() {
     report += `Pukul : ${time} Wita\n\n`;
 
     // Get all power plant sections
-    const powerPlantSections = document.querySelectorAll('.bg-white.rounded-lg.shadow.p-6.mb-4');
+    const powerPlantSections = document.querySelectorAll('.bg-white.rounded-xl.shadow-sm.mb-8');
     
     powerPlantSections.forEach(section => {
-        const title = section.querySelector('h1').textContent.replace('STATUS MESIN - ', '');
-        const stats = section.querySelectorAll('.grid.grid-cols-5 .bg-blue-50, .bg-green-50, .bg-purple-50, .bg-orange-50');
+        const title = section.querySelector('h2').textContent.trim();
+        const stats = section.querySelectorAll('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-5 .bg-white.rounded-lg.border');
         
         report += `\n${title}\n`;
         
@@ -382,14 +383,16 @@ function getFormattedReport() {
 
         stats.forEach(stat => {
             const label = stat.querySelector('p:first-child').textContent.trim();
-            const value = stat.querySelector('p:last-child').textContent.trim();
-            report += `${label} ${value}\n`;
-
-            if (label === 'DMP:') {
+            const valueElement = stat.querySelector('p:nth-child(2)') || stat.querySelector('.mt-2');
+            let value = valueElement ? valueElement.textContent.trim().split(' ')[0] : '0';
+            
+            if (label === 'DMP') {
                 totalDMP = parseFloat(value);
-            } else if (label === 'Total Beban:') {
+            } else if (label === 'Total Beban') {
                 totalLoad = parseFloat(value);
             }
+            
+            report += `${label}: ${value} MW\n`;
         });
 
         // Calculate reserve power
@@ -401,11 +404,11 @@ function getFormattedReport() {
         machines.forEach(machine => {
             const cells = machine.querySelectorAll('td');
             if (cells.length >= 6) {
-                const name = cells[1].textContent.trim();
+                const name = cells[1].querySelector('div').textContent.trim();
                 const dmn = cells[2].textContent.trim();
                 const dmp = cells[3].textContent.trim();
                 const load = cells[4].textContent.trim();
-                const status = cells[5].textContent.trim();
+                const status = cells[5].querySelector('span').textContent.trim();
                 const description = cells[6].textContent.trim();
                 
                 report += `- ${name} : ${dmn}/${dmp}/${load} MW ${status} (${description})`;

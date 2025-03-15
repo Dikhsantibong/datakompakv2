@@ -835,3 +835,11 @@ Route::get('/admin/daily-summary/export-excel', [DailySummaryController::class, 
 Route::get('/install-app', function () {
     return view('install-pwa');
 })->name('install.pwa');
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('machine-status/view', [MachineStatusController::class, 'view'])->name('machine-status.view');
+        Route::get('machine-status/export-pdf', [MachineStatusController::class, 'exportPdf'])->name('machine-status.export-pdf');
+        Route::get('machine-status/export-excel', [MachineStatusController::class, 'exportExcel'])->name('machine-status.export-excel');
+    });
+});

@@ -9,9 +9,11 @@ use App\Models\UnitOperationHour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Log;
-
 use Carbon\Carbon;
 use App\Models\Machine;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MachineStatusExport;
 
 class MachineStatusController extends Controller
 {
@@ -232,6 +234,117 @@ class MachineStatusController extends Controller
                 'success' => false,
                 'message' => 'Gagal mengambil data mesin: ' . $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function exportPdf(Request $request)
+    {
+        try {
+            $date = $request->get('date', now()->toDateString());
+            $selectedInputTime = $request->get('input_time');
+            
+            // Query untuk mengambil data pembangkit
+            $query = PowerPlant::with(['machines']);
+            
+            // Filter berdasarkan unit_source
+            if (session('unit') === 'mysql') {
+                if ($request->get('unit_source')) {
+                    $query->where('unit_source', $request->get('unit_source'));
+                }
+            } else {
+                $query->where('unit_source', session('unit'));
+            }
+            
+            $powerPlants = $query->get();
+            
+            // Ambil semua log untuk tanggal dan waktu input yang dipilih
+            $logs = MachineStatusLog::whereDate('tanggal', $date)
+                ->when($selectedInputTime, function($query) use ($selectedInputTime) {
+                    return $query->where('input_time', $selectedInputTime);
+                })
+                ->get();
+
+            // Ambil data HOP
+            $hops = UnitOperationHour::whereDate('tanggal', $date)
+                ->when(session('unit') !== 'mysql', function($query) {
+                    $query->whereHas('powerPlant', function($q) {
+                        $q->where('unit_source', session('unit'));
+                    });
+                })
+                ->when($request->get('unit_source'), function($query) use ($request) {
+                    $query->whereHas('powerPlant', function($q) use ($request) {
+                        $q->where('unit_source', $request->get('unit_source'));
+                    });
+                })
+                ->get();
+
+            $pdf = PDF::loadView('admin.machine-status.export-pdf', compact(
+                'powerPlants',
+                'logs',
+                'hops',
+                'date',
+                'selectedInputTime'
+            ));
+
+            return $pdf->download('laporan-status-mesin-' . $date . '.pdf');
+
+        } catch (\Exception $e) {
+            Log::error('Error in exportPdf: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat mengekspor PDF');
+        }
+    }
+
+    public function exportExcel(Request $request)
+    {
+        try {
+            $date = $request->get('date', now()->toDateString());
+            $selectedInputTime = $request->get('input_time');
+            
+            // Query untuk mengambil data pembangkit
+            $query = PowerPlant::with(['machines']);
+            
+            // Filter berdasarkan unit_source
+            if (session('unit') === 'mysql') {
+                if ($request->get('unit_source')) {
+                    $query->where('unit_source', $request->get('unit_source'));
+                }
+            } else {
+                $query->where('unit_source', session('unit'));
+            }
+            
+            $powerPlants = $query->get();
+            
+            // Ambil semua log untuk tanggal dan waktu input yang dipilih
+            $logs = MachineStatusLog::whereDate('tanggal', $date)
+                ->when($selectedInputTime, function($query) use ($selectedInputTime) {
+                    return $query->where('input_time', $selectedInputTime);
+                })
+                ->get();
+
+            // Ambil data HOP
+            $hops = UnitOperationHour::whereDate('tanggal', $date)
+                ->when(session('unit') !== 'mysql', function($query) {
+                    $query->whereHas('powerPlant', function($q) {
+                        $q->where('unit_source', session('unit'));
+                    });
+                })
+                ->when($request->get('unit_source'), function($query) use ($request) {
+                    $query->whereHas('powerPlant', function($q) use ($request) {
+                        $q->where('unit_source', $request->get('unit_source'));
+                    });
+                })
+                ->get();
+
+            $fileName = 'laporan-status-mesin-' . $date . '.xlsx';
+            
+            return Excel::download(
+                new MachineStatusExport($powerPlants, $logs, $hops, $date, $selectedInputTime),
+                $fileName
+            );
+
+        } catch (\Exception $e) {
+            Log::error('Error in exportExcel: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat mengekspor Excel');
         }
     }
 } 

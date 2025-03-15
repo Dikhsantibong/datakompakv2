@@ -843,3 +843,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('machine-status/export-excel', [MachineStatusController::class, 'exportExcel'])->name('machine-status.export-excel');
     });
 });
+
+// Route for setting unit in session
+Route::post('/set-unit', [DailySummaryController::class, 'setUnit'])->name('set-unit');

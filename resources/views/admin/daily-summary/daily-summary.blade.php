@@ -124,7 +124,7 @@
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200 border table-fixed" style="min-width: 3800px;">
                                 <thead class="bg-gray-50">
-                                    <tr>
+                                    <tr class="text-center border-b">
                                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-mesin">Mesin</th>
                                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-daya">Daya (MW)</th>
                                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-beban">Beban Puncak (kW)</th>
@@ -276,20 +276,20 @@
                                                     <input type="number" 
                                                            step="0.001" 
                                                            name="data[{{ $machine->id }}][installed_power]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
                                                            value="{{ old('data.'.$machine->id.'.installed_power', '') }}"
                                                            min="0">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" 
                                                            name="data[{{ $machine->id }}][dmn_power]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
                                                            value="{{ old('data.'.$machine->id.'.dmn_power') }}">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" 
                                                            name="data[{{ $machine->id }}][capable_power]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
                                                            value="{{ old('data.'.$machine->id.'.capable_power') }}">
                                                 </div>
                                             </div>
@@ -298,29 +298,29 @@
                                             <div class="grid grid-cols-2 gap-0">
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" name="data[{{ $machine->id }}][peak_load_day]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" name="data[{{ $machine->id }}][peak_load_night]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="px-2">
                                                 <input type="number" step="0.01" name="data[{{ $machine->id }}][kit_ratio]"
-                                                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-2 gap-0">
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" name="data[{{ $machine->id }}][gross_production]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" name="data[{{ $machine->id }}][net_production]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                             </div>
                                         </td>
@@ -328,45 +328,45 @@
                                             <div class="grid grid-cols-3 gap-0">
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" name="data[{{ $machine->id }}][aux_power]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" name="data[{{ $machine->id }}][transformer_losses]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][usage_percentage]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="px-2">
                                                 <input type="number" step="0.01" name="data[{{ $machine->id }}][period_hours]"
-                                                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                             </div>
                                         </td>
                                         <td class="px-4 py-3">
                                             <div class="grid grid-cols-5 gap-0">
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][operating_hours]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][standby_hours]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][planned_outage]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][maintenance_outage]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][forced_outage]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                             </div>
                                         </td>
@@ -374,11 +374,11 @@
                                             <div class="grid grid-cols-2 gap-0">
                                                 <div class="input-group">
                                                     <input type="number" step="1" name="data[{{ $machine->id }}][trip_machine]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="1" name="data[{{ $machine->id }}][trip_electrical]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                             </div>
                                         </td>
@@ -386,19 +386,19 @@
                                             <div class="grid grid-cols-4 gap-0">
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][efdh]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][epdh]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][eudh]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][esdh]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                             </div>
                                         </td>
@@ -406,38 +406,38 @@
                                             <div class="grid grid-cols-4 gap-0">
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][eaf]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][sof]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][efor]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="1" name="data[{{ $machine->id }}][sdof]"
-                                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3">
                                             <div class="px-2">
                                                 <input type="number" step="0.01" name="data[{{ $machine->id }}][ncf]"
-                                                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="px-2">
                                                 <input type="number" step="0.01" name="data[{{ $machine->id }}][nof]"
-                                                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="px-2">
                                                 <input type="number" step="0.01" name="data[{{ $machine->id }}][jsi]"
-                                                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border border-gray-300">
@@ -515,7 +515,7 @@
                                         <td class="px-4 py-3">
                                             <div class="px-2">
                                                 <input type="text" name="data[{{ $machine->id }}][notes]"
-                                                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             </div>
                                         </td>
                                     </tr>

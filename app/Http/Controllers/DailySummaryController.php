@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use PDF; // Add this for PDF export
+use Barryvdh\DomPDF\Facade\Pdf; // Add this for PDF export
 use Maatwebsite\Excel\Facades\Excel; // Add this for Excel export
 use App\Exports\DailySummaryExport; // We'll create this class next
 use Carbon\Carbon;
@@ -18,11 +18,14 @@ class DailySummaryController extends Controller
 {
     public function index()
     {
-        // Ambil data unit dari PowerPlant
-        $units = PowerPlant::with('machines')->get(); // Tampilkan semua unit beserta mesin yang terkait
+        // Ambil data unit dari PowerPlant dan urutkan berdasarkan unit_source dan nama
+        $units = PowerPlant::orderBy('unit_source')
+            ->orderBy('name')
+            ->with('machines')
+            ->get();
 
         // Logika untuk menampilkan ikhtisar harian
-        return view('admin.daily-summary.daily-summary', compact('units')); // Kirim data unit ke view
+        return view('admin.daily-summary.daily-summary', compact('units'));
     }
 
     public function store(Request $request)
@@ -214,7 +217,7 @@ class DailySummaryController extends Controller
                 $query->whereDate('created_at', $date);
             }])->get();
 
-            $pdf = PDF::loadView('admin.daily-summary.pdf', [
+            $pdf = Pdf::loadView('admin.daily-summary.pdf', [
                 'date' => $date,
                 'units' => $units
             ]);

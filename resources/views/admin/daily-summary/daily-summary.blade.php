@@ -93,27 +93,46 @@
                     <div class="w-full sm:w-72">
                         <label for="unit-filter" class="block text-sm font-medium text-gray-700 mb-1">Filter Unit Pembangkit</label>
                         <div class="relative">
-                            <select id="unit-filter" class="w-full appearance-none rounded-md border border-gray-300 bg-white pl-4 pr-10 py-2 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer hover:border-gray-400 transition-colors duration-200 select-none">
-                                <option value="">Semua Unit</option>
-                                @foreach($units as $unit)
-                                    <option value="{{ $unit->name }}">{{ $unit->name }}</option>
+                            <select id="unit-filter" name="unit_source" class="w-full appearance-none rounded-md border border-gray-300 bg-white pl-4 pr-10 py-2 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer hover:border-gray-400 transition-colors duration-200 select-none">
+                                <option value="all">Semua Unit</option>
+                                @foreach($unitSources as $source)
+                                    @php
+                                        $sourceName = match($source) {
+                                            'mysql' => 'UP KENDARI',
+                                            'mysql_wua_wua' => 'PLTD WUA-WUA',
+                                            'mysql_poasia' => 'PLTD POASIA',
+                                            'mysql_kolaka' => 'PLTD KOLAKA',
+                                            'mysql_bau_bau' => 'PLTD BAU-BAU',
+                                            default => strtoupper($source)
+                                        };
+                                    @endphp
+                                    <option value="{{ $source }}" {{ $unitSource === $source ? 'selected' : '' }}>
+                                        {{ $sourceName }}
+                                    </option>
                                 @endforeach
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Action Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-2">
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center shadow-sm">
-                            <i class="fas fa-save mr-2 text-sm"></i>Simpan
+                    <div class="flex items-center space-x-4">
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Simpan
                         </button>
-                        <button type="button" onclick="location.reload();" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center shadow-sm">
-                            <i class="fas fa-sync-alt mr-2 text-sm"></i>Refresh
-                        </button>
-                        <button type="button" onclick="window.location.href='{{ route('admin.daily-summary.results') }}'" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center shadow-sm">
-                            <i class="fas fa-cogs mr-2 text-sm"></i>Kelola
+
+                        <button type="button" id="refreshButton" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            Refresh
                         </button>
                     </div>
                 </div>
@@ -532,278 +551,56 @@
 <script src="{{ asset('js/toggle.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Fungsi helper untuk mengambil nilai numerik dari input
-    function getNumericValue(machineId, fieldName) {
-        const value = parseFloat(document.querySelector(`[name="data[${machineId}][${fieldName}]"]`).value) || 0;
-        return value;
-    }
-
-    // Fungsi untuk memperbarui semua kalkulasi
-    function updateCalculations(machineId) {
-        calculateRatioDaya(machineId);
-        calculateSusutTrafo(machineId);
-        calculatePersentasePS(machineId);
-        calculateEAF(machineId);
-        calculateSOF(machineId);
-        calculateEFOR(machineId);
-        calculateSDOF(machineId);
-        calculateNCF(machineId);
-        calculateNOF(machineId);
-        calculateSFC(machineId);
-        calculateSLC(machineId);
-        calculateTotalFuel(machineId);
-        calculateTotalOil(machineId);
-    }
-
-    // Ratio Daya = max(peak_load_day, peak_load_night) / capable_power
-    function calculateRatioDaya(machineId) {
-        const peakDay = getNumericValue(machineId, 'peak_load_day');
-        const peakNight = getNumericValue(machineId, 'peak_load_night');
-        const capablePower = getNumericValue(machineId, 'capable_power');
-        
-        if (capablePower > 0) {
-            const ratio = (Math.max(peakDay, peakNight) / capablePower) * 100;
-            document.querySelector(`[name="data[${machineId}][kit_ratio]"]`).value = ratio.toFixed(2);
-        }
-    }
-
-    // Susut Trafo = gross_production - net_production - aux_power
-    function calculateSusutTrafo(machineId) {
-        const grossProd = getNumericValue(machineId, 'gross_production');
-        const netProd = getNumericValue(machineId, 'net_production');
-        const auxPower = getNumericValue(machineId, 'aux_power');
-        
-        const susutTrafo = grossProd - netProd - auxPower;
-        document.querySelector(`[name="data[${machineId}][transformer_losses]"]`).value = susutTrafo.toFixed(2);
-    }
-
-    // Persentase PS = ((aux_power + transformer_losses) / gross_production) * 100
-    function calculatePersentasePS(machineId) {
-        const auxPower = getNumericValue(machineId, 'aux_power');
-        const susutTrafo = getNumericValue(machineId, 'transformer_losses');
-        const grossProd = getNumericValue(machineId, 'gross_production');
-        
-        if (grossProd > 0) {
-            const percentage = ((auxPower + susutTrafo) / grossProd) * 100;
-            document.querySelector(`[name="data[${machineId}][usage_percentage]"]`).value = percentage.toFixed(2);
-        }
-    }
-
-    // EAF = ((SH + Standby - EFDH - EPDH - EUDH - ESDH) * capable_power) / (period_hours * capable_power) * 100
-    function calculateEAF(machineId) {
-        const operatingHours = getNumericValue(machineId, 'operating_hours');
-        const standbyHours = getNumericValue(machineId, 'standby_hours');
-        const efdh = getNumericValue(machineId, 'efdh');
-        const epdh = getNumericValue(machineId, 'epdh');
-        const eudh = getNumericValue(machineId, 'eudh');
-        const esdh = getNumericValue(machineId, 'esdh');
-        const capablePower = getNumericValue(machineId, 'capable_power');
-        const periodHours = getNumericValue(machineId, 'period_hours');
-        
-        if (periodHours > 0 && capablePower > 0) {
-            const eaf = ((operatingHours + standbyHours - efdh - epdh - eudh - esdh) * capablePower) / 
-                       (periodHours * capablePower) * 100;
-            document.querySelector(`[name="data[${machineId}][eaf]"]`).value = eaf.toFixed(2);
-        }
-    }
-
-    // SOF = ((PO + MO) * capable_power) / (period_hours * capable_power) * 100
-    function calculateSOF(machineId) {
-        const po = getNumericValue(machineId, 'planned_outage');
-        const mo = getNumericValue(machineId, 'maintenance_outage');
-        const capablePower = getNumericValue(machineId, 'capable_power');
-        const periodHours = getNumericValue(machineId, 'period_hours');
-        
-        if (periodHours > 0 && capablePower > 0) {
-            const sof = ((po + mo) * capablePower) / (periodHours * capablePower) * 100;
-            document.querySelector(`[name="data[${machineId}][sof]"]`).value = sof.toFixed(2);
-        }
-    }
-
-    // EFOR = ((FO + EFDH) * capable_power) / ((operating_hours + FO) * capable_power) * 100
-    function calculateEFOR(machineId) {
-        const fo = getNumericValue(machineId, 'forced_outage');
-        const efdh = getNumericValue(machineId, 'efdh');
-        const operatingHours = getNumericValue(machineId, 'operating_hours');
-        const capablePower = getNumericValue(machineId, 'capable_power');
-        
-        if ((operatingHours + fo) > 0 && capablePower > 0) {
-            const efor = ((fo + efdh) * capablePower) / ((operatingHours + fo) * capablePower) * 100;
-            document.querySelector(`[name="data[${machineId}][efor]"]`).value = efor.toFixed(2);
-        }
-    }
-
-    // SDOF = trip_machine + trip_electrical
-    function calculateSDOF(machineId) {
-        const tripMachine = getNumericValue(machineId, 'trip_machine');
-        const tripElectrical = getNumericValue(machineId, 'trip_electrical');
-        
-        const sdof = tripMachine + tripElectrical;
-        document.querySelector(`[name="data[${machineId}][sdof]"]`).value = sdof.toFixed(0);
-    }
-
-    // NCF = net_production / (capable_power * period_hours) * 100
-    function calculateNCF(machineId) {
-        const netProduction = getNumericValue(machineId, 'net_production');
-        const capablePower = getNumericValue(machineId, 'capable_power');
-        const periodHours = getNumericValue(machineId, 'period_hours');
-        
-        if (capablePower > 0 && periodHours > 0) {
-            const ncf = (netProduction / (capablePower * periodHours)) * 100;
-            document.querySelector(`[name="data[${machineId}][ncf]"]`).value = ncf.toFixed(2);
-        }
-    }
-
-    // NOF = (net_production / (capable_power * operating_hours)) * 100
-    function calculateNOF(machineId) {
-        const netProduction = getNumericValue(machineId, 'net_production');
-        const capablePower = getNumericValue(machineId, 'capable_power');
-        const operatingHours = getNumericValue(machineId, 'operating_hours');
-        
-        if (capablePower > 0 && operatingHours > 0) {
-            const nof = (netProduction / (capablePower * operatingHours)) * 100;
-            document.querySelector(`[name="data[${machineId}][nof]"]`).value = nof.toFixed(2);
-        }
-    }
-
-    // SFC = total_fuel / gross_production
-    function calculateSFC(machineId) {
-        const totalFuel = getNumericValue(machineId, 'total_fuel');
-        const grossProduction = getNumericValue(machineId, 'gross_production');
-        
-        if (grossProduction > 0) {
-            const sfc = totalFuel / grossProduction;
-            document.querySelector(`[name="data[${machineId}][sfc_scc]"]`).value = sfc.toFixed(3);
-        }
-    }
-
-    // SLC = (total_oil * 1000) / gross_production
-    function calculateSLC(machineId) {
-        const totalOil = getNumericValue(machineId, 'total_oil');
-        const grossProduction = getNumericValue(machineId, 'gross_production');
-        
-        if (grossProduction > 0) {
-            const slc = (totalOil * 1000) / grossProduction;
-            document.querySelector(`[name="data[${machineId}][slc]"]`).value = slc.toFixed(3);
-        }
-    }
-
-    // Calculate total oil consumption
-    function calculateTotalOil(machineId) {
-        const meditran = getNumericValue(machineId, 'meditran_oil');
-        const salyx420 = getNumericValue(machineId, 'salyx_420');
-        const salyx430 = getNumericValue(machineId, 'salyx_430');
-        const travolube = getNumericValue(machineId, 'travolube_a');
-        const turbolube46 = getNumericValue(machineId, 'turbolube_46');
-        const turbolube68 = getNumericValue(machineId, 'turbolube_68');
-        
-        const totalOil = meditran + salyx420 + salyx430 + travolube + turbolube46 + turbolube68;
-        document.querySelector(`[name="data[${machineId}][total_oil]"]`).value = totalOil.toFixed(2);
-    }
-
-    // Calculate total fuel consumption
-    function calculateTotalFuel(machineId) {
-        const hsd = getNumericValue(machineId, 'hsd_fuel');
-        const b35 = getNumericValue(machineId, 'b35_fuel');
-        const mfo = getNumericValue(machineId, 'mfo_fuel');
-        
-        const totalFuel = hsd + b35 + mfo;
-        document.querySelector(`[name="data[${machineId}][total_fuel]"]`).value = totalFuel.toFixed(2);
-    }
-
-    // Attach event listeners to all numeric inputs
-    document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.addEventListener('change', function() {
-            const machineId = this.name.match(/\[(\d+)\]/)[1];
-            updateCalculations(machineId);
-        });
-    });
-
-    // Modifikasi event listener form submission
-    document.querySelector('form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Cek apakah ada minimal satu data yang diisi
-        const formData = new FormData(this);
-        let hasFilledData = false;
-
-        // Cek setiap mesin, jika ada satu saja yang diisi, maka form bisa disubmit
-        const machineData = {};
-        for (let [key, value] of formData.entries()) {
-            if (key.includes('data[')) {
-                const matches = key.match(/data\[(\d+)\]\[([^\]]+)\]/);
-                if (matches) {
-                    const [, machineId, field] = matches;
-                    if (!machineData[machineId]) {
-                        machineData[machineId] = {};
-                    }
-                    machineData[machineId][field] = value;
-                }
-            }
-        }
-
-        // Cek setiap mesin apakah memiliki data yang diisi
-        for (let machineId in machineData) {
-            const machine = machineData[machineId];
-            // Cek apakah ada nilai yang diisi selain power_plant_id dan machine_name
-            if (machine.installed_power || machine.dmn_power || machine.capable_power || 
-                machine.peak_load_day || machine.peak_load_night || machine.gross_production || 
-                machine.net_production) {
-                hasFilledData = true;
-                break;
-            }
-        }
-
-        if (!hasFilledData) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Harap isi minimal satu data mesin!'
-            });
-            return;
-        }
-
-        // Jika ada data yang diisi, lanjutkan dengan konfirmasi
-        Swal.fire({
-            title: 'Konfirmasi',
-            text: "Apakah Anda yakin ingin menyimpan data?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Simpan!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Tampilkan loading
-                Swal.fire({
-                    title: 'Menyimpan Data...',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-                
-                // Submit form
-                this.submit();
-            }
-        });
-    });
-
     const unitFilter = document.getElementById('unit-filter');
-    const powerPlantDivs = document.querySelectorAll('.bg-white.rounded.shadow-md');
+    const refreshButton = document.getElementById('refreshButton');
 
+    // Handle unit filter change
     unitFilter.addEventListener('change', function() {
         const selectedUnit = this.value;
+        
+        // Show loading indicator
+        const loadingOverlay = document.createElement('div');
+        loadingOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        loadingOverlay.innerHTML = `
+            <div class="bg-white p-4 rounded-lg shadow-lg">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                <p class="mt-2 text-white">Memuat data...</p>
+            </div>
+        `;
+        document.body.appendChild(loadingOverlay);
 
-        powerPlantDivs.forEach(div => {
-            const unitName = div.querySelector('h3').textContent;
-            if (!selectedUnit || unitName.includes(selectedUnit)) {
-                div.style.display = 'block';
+        // Send request to update unit source
+        fetch('{{ route("set-unit-source") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ unit_source: selectedUnit })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Reload the page to reflect the changes
+                window.location.reload();
             } else {
-                div.style.display = 'none';
+                console.error('Failed to update unit source');
+                alert('Gagal mengubah unit. Silakan coba lagi.');
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan. Silakan coba lagi.');
+        })
+        .finally(() => {
+            // Remove loading overlay
+            loadingOverlay.remove();
         });
+    });
+
+    // Handle refresh button click
+    refreshButton.addEventListener('click', function() {
+        window.location.reload();
     });
 });
 </script>

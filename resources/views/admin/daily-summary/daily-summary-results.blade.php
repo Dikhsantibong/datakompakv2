@@ -127,7 +127,7 @@
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 border table-fixed" style="min-width: 3800px;">
                             <thead class="bg-gray-50">
-                                <tr>
+                                <tr class="text-center border-b">
                                     <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-mesin">Mesin</th>
                                     <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-daya">Daya (MW)</th>
                                     <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-beban">Beban Puncak (kW)</th>

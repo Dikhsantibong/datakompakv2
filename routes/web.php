@@ -846,3 +846,8 @@ Route::middleware(['auth'])->group(function () {
 
 // Route for setting unit in session
 Route::post('/set-unit', [DailySummaryController::class, 'setUnit'])->name('set-unit');
+
+// Route for setting unit source
+Route::post('/set-unit-source', [DailySummaryController::class, 'setUnitSource'])
+    ->name('set-unit-source')
+    ->middleware('auth');

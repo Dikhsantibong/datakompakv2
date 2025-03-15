@@ -18,14 +18,32 @@ class DailySummaryController extends Controller
 {
     public function index()
     {
-        // Ambil data unit dari PowerPlant dan urutkan berdasarkan unit_source dan nama
-        $units = PowerPlant::orderBy('unit_source')
+        // Get unit source from session, request, or default to 'mysql'
+        $unitSource = session('unit_source', request('unit_source', 'mysql'));
+
+        // Base query for PowerPlant
+        $query = PowerPlant::query();
+
+        // Apply unit source filter if not viewing all units
+        if ($unitSource !== 'all') {
+            $query->where('unit_source', $unitSource);
+        }
+
+        // Get units ordered by source and name
+        $units = $query->orderBy('unit_source')
             ->orderBy('name')
-            ->with('machines')
+            ->with(['machines' => function($query) {
+                $query->orderBy('name');
+            }])
             ->get();
 
-        // Logika untuk menampilkan ikhtisar harian
-        return view('admin.daily-summary.daily-summary', compact('units'));
+        // Get unique unit sources for dropdown
+        $unitSources = PowerPlant::select('unit_source')
+            ->distinct()
+            ->pluck('unit_source')
+            ->filter(); // Remove any null/empty values
+
+        return view('admin.daily-summary.daily-summary', compact('units', 'unitSources', 'unitSource'));
     }
 
     public function store(Request $request)
@@ -254,5 +272,19 @@ class DailySummaryController extends Controller
             
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengekspor Excel.');
         }
+    }
+
+    // Add method to handle unit source changes
+    public function setUnitSource(Request $request)
+    {
+        $unitSource = $request->input('unit_source', 'mysql');
+        
+        // Store in session
+        session(['unit_source' => $unitSource]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Unit source updated successfully'
+        ]);
     }
 } 

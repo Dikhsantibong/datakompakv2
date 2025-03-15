@@ -10,7 +10,7 @@ use App\Models\MachineOperation;
 use App\Models\MachineStatusLog;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\UnitOperationHour;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -68,6 +68,18 @@ class PembangkitController extends Controller
                 'connection' => DB::connection()->getName()
             ]);
             
+            // Cek duplikasi input untuk waktu yang sama
+            if (!empty($request->logs)) {
+                $firstLog = $request->logs[0];
+                $existingLog = MachineStatusLog::where('tanggal', $firstLog['tanggal'])
+                    ->where('input_time', $inputTime)
+                    ->first();
+                
+                if ($existingLog) {
+                    throw new \Exception("Data untuk jam {$inputTime} sudah diinputkan sebelumnya");
+                }
+            }
+            
             // Simpan data HOP
             foreach ($request->hops as $hopData) {
                 $powerPlant = PowerPlant::find($hopData['power_plant_id']);
@@ -78,14 +90,14 @@ class PembangkitController extends Controller
                 // Cek apakah data sudah ada
                 $existingHop = UnitOperationHour::where([
                     'power_plant_id' => $hopData['power_plant_id'],
-                    'tanggal' => $hopData['tanggal']
+                    'tanggal' => $hopData['tanggal'],
+                    'input_time' => $inputTime
                 ])->first();
 
                 if ($existingHop) {
                     $existingHop->update([
                         'hop_value' => $hopData['hop_value'],
-                        'unit_source' => session('unit', 'mysql'),
-                        'input_time' => $inputTime
+                        'unit_source' => session('unit', 'mysql')
                     ]);
                 } else {
                     UnitOperationHour::create([
@@ -99,57 +111,49 @@ class PembangkitController extends Controller
             }
 
             // Simpan data status mesin
+            $machineStatusLog = new MachineStatusLog();
+            $machineStatusLog->setConnection($currentSession);
+
             foreach ($request->logs as $log) {
-                $equipment = isset($log['equipment']) ? trim($log['equipment']) : null;
-                $operation = MachineOperation::where('machine_id', $log['machine_id'])
-                    ->latest('recorded_at')
-                    ->first();
+                // Prepare data untuk update/create
+                $updateData = [
+                    'status' => $log['status'],
+                    'dmn' => $log['dmn'] ?? 0,
+                    'dmp' => $log['dmp'] ?? 0,
+                    'load_value' => $log['load_value'] ?? 0,
+                    'deskripsi' => $log['deskripsi'] ?? null,
+                    'action_plan' => $log['action_plan'] ?? null,
+                    'progres' => $log['progres'] ?? null,
+                    'kronologi' => $log['kronologi'] ?? null,
+                    'tanggal_mulai' => $log['tanggal_mulai'] ?? null,
+                    'target_selesai' => $log['target_selesai'] ?? null,
+                    'unit_source' => $currentSession,
+                    'input_time' => $inputTime
+                ];
 
-                $dmp = $operation ? $operation->dmp : 0;
-                if (in_array($log['status'], ['Gangguan', 'Pemeliharaan', 'Mothballed', 'Overhaul'])) {
-                    $dmp = 0;
-                }
+                // Cek existing log
+                $existingLog = $machineStatusLog->where([
+                    'machine_id' => $log['machine_id'],
+                    'tanggal' => $log['tanggal'],
+                    'input_time' => $inputTime
+                ])->first();
 
-                if (!empty($log['status']) || !empty($log['deskripsi']) || !empty($log['load_value'])) {
-                    $machineStatusLog = new MachineStatusLog();
-                    $machineStatusLog->setConnection($currentSession);
-
-                    // Cek apakah data sudah ada berdasarkan machine_id, tanggal, dan input_time
-                    $existingLog = MachineStatusLog::where('machine_id', $log['machine_id'])
-                        ->where('tanggal', $log['tanggal'])
-                        ->where('input_time', $inputTime)
-                        ->first();
-
-                    $updateData = [
-                        'dmn' => $operation ? $operation->dmn : 0,
-                        'dmp' => $dmp,
-                        'load_value' => $log['load_value'],
-                        'status' => $log['status'],
-                        'equipment' => $equipment,
-                        'deskripsi' => $log['deskripsi'] ?? null,
-                        'unit_source' => $currentSession,
-                        'input_time' => $inputTime
-                    ];
-
-                    if ($existingLog) {
-                        // Update existing log
-                        $existingLog->setConnection($currentSession);
-                        $existingLog->update($updateData);
-                        $updatedLog = $existingLog;
-                    } else {
-                        // Create new log
-                        $uuid = (string) Str::uuid();
-                        $newLog = new MachineStatusLog(array_merge($updateData, [
-                            'machine_id' => $log['machine_id'],
-                            'tanggal' => $log['tanggal'],
-                            'uuid' => $uuid,
-                            'input_time' => $inputTime // Simpan input_time
-                        ]));
-                        
-                        $newLog->setConnection($currentSession);
-                        $newLog->save();
-                        $updatedLog = $newLog;
-                    }
+                if ($existingLog) {
+                    // Update existing log
+                    $existingLog->update($updateData);
+                    $updatedLog = $existingLog;
+                } else {
+                    // Create new log
+                    $uuid = (string) Str::uuid();
+                    $newLog = new MachineStatusLog(array_merge($updateData, [
+                        'machine_id' => $log['machine_id'],
+                        'tanggal' => $log['tanggal'],
+                        'uuid' => $uuid
+                    ]));
+                    
+                    $newLog->setConnection($currentSession);
+                    $newLog->save();
+                    $updatedLog = $newLog;
 
                     // Verifikasi data tersimpan
                     $savedLog = $machineStatusLog->newQuery()
@@ -185,7 +189,7 @@ class PembangkitController extends Controller
             
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menyimpan data: ' . $e->getMessage()
+                'message' => $e->getMessage()
             ]);
         }
     }

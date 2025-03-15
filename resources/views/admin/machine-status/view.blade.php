@@ -63,9 +63,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                 <!-- Header Actions -->
-                <div class="p-6 border-b border-gray-200">
+                <div class="p-6">
                     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
-                        <h2 class="text-xl font-semibold text-gray-800">Status Mesin</h2>
+                        <h2 class="text-xl font-semibold text-gray-800">Laporan Kesiapan Pembangkit</h2>
                         
                         <div class="flex items-center space-x-4">
                             <button id="copyFormattedData" 

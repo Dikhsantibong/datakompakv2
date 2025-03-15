@@ -264,9 +264,9 @@
                                         <td class="px-4 py-3 border border-gray-200">
                                             <div class="text-sm font-medium text-gray-900 ">{{ $machine->name }}</div>
                                         </td>
-                                        <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">{{ $log?->dmn ?? '-' }}</td>
-                                        <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">{{ $log?->dmp ?? '-' }}</td>
-                                        <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">{{ $log?->load_value ?? '-' }}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">{{ $log?->dmn ?? '-' }}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">{{ $log?->dmp ?? '-' }}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">{{ $log?->load_value ?? '-' }}</td>
                                         <td class="px-4 py-3 border border-gray-200">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $statusClass }}">
                                                 {{ $status }}

@@ -84,13 +84,14 @@
             <x-admin-breadcrumb :breadcrumbs="[['name' => 'IKHTISAR HARIAN', 'url' => null]]" />
         </div>
 
-        <div class="bg-white rounded shadow-md p-6">
+        <div class="bg-white p-6">
             <form action="{{ route('daily-summary.store') }}" method="POST" novalidate>
                 @csrf
                 <!-- Search & Buttons Container -->
                 <div class="flex flex-col sm:flex-row justify-between items-center mb-6 px-4 gap-4">
                     <!-- Search Unit -->
                     <div class="w-full sm:w-72">
+                        @if(session('unit') === 'mysql')
                         <label for="unit-filter" class="block text-sm font-medium text-gray-700 mb-1">Filter Unit Pembangkit</label>
                         <div class="relative">
                             <select id="unit-filter" name="unit_source" class="w-full appearance-none rounded-md border border-gray-300 bg-white pl-4 pr-10 py-2 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer hover:border-gray-400 transition-colors duration-200 select-none">
@@ -99,7 +100,7 @@
                                     @php
                                         $sourceName = match($source) {
                                             'mysql' => 'UP KENDARI',
-                                            'mysql_wua_wua' => 'PLTD WUA-WUA',
+                                            'mysql_wua_wua' => 'PLTD WUA-WUA', 
                                             'mysql_poasia' => 'PLTD POASIA',
                                             'mysql_kolaka' => 'PLTD KOLAKA',
                                             'mysql_bau_bau' => 'PLTD BAU-BAU',
@@ -111,6 +112,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            @endif
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                                 <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -120,7 +122,7 @@
                     </div>
                     
                     <!-- Action Buttons -->
-                    <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-4 justify-end">
                         <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -371,6 +373,7 @@
                                                     // Get the first day of current month
                                                     $firstDayOfMonth = \Carbon\Carbon::now()->startOfMonth();
                                                     $today = \Carbon\Carbon::now();
+                                                    $dayOfMonth = $today->day;
                                                     
                                                     // Get the last record for this machine from previous month
                                                     $lastMonthRecord = \App\Models\DailySummary::where('power_plant_id', $machine->power_plant_id)
@@ -384,18 +387,14 @@
                                                         ->where('machine_name', $machine->name)
                                                         ->whereMonth('created_at', $today->month)
                                                         ->orderBy('created_at', 'desc')
-                                                        ->first();
+                                                        ->get();
 
-                                                    // Calculate period hours
-                                                    if ($currentMonthRecords) {
-                                                        // If we have records this month, use them
-                                                        $periodHours = $currentMonthRecords->period_hours;
-                                                    } else if ($lastMonthRecord) {
-                                                        // If we have records from last month but none this month, start from 24
-                                                        $periodHours = 24;
-                                                    } else {
-                                                        // If no records at all, start from 24
-                                                        $periodHours = 24;
+                                                    // Calculate period hours - always 24 hours per day
+                                                    $periodHours = 24;
+
+                                                    // If there are records this month, calculate cumulative hours
+                                                    if ($currentMonthRecords->isNotEmpty()) {
+                                                        $periodHours = $dayOfMonth * 24; // Jumlah hari dalam bulan ini * 24
                                                     }
                                                 @endphp
                                                 <input type="number" 
@@ -792,5 +791,263 @@ document.querySelector('form').addEventListener('submit', function(e) {
         }
     });
 });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listeners to all input fields
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            const name = input.getAttribute('name');
+            if (!name) return;
+            
+            // Extract machine ID from input name
+            const match = name.match(/data\[(\d+)\]/);
+            if (!match) return;
+            
+            const machineId = match[1];
+            
+            input.addEventListener('input', function() {
+                // Update calculations based on which field was changed
+                const fieldName = name.match(/\[([^\]]+)\]$/)[1];
+                
+                switch(fieldName) {
+                    case 'peak_load_day':
+                    case 'peak_load_night':
+                    case 'capable_power':
+                        calculateRatioDaya(machineId);
+                        break;
+                        
+                    case 'gross_production':
+                    case 'net_production':
+                    case 'aux_power':
+                        calculateSusutTrafo(machineId);
+                        calculatePersentasePS(machineId);
+                        calculateSFC(machineId);
+                        calculateSLC(machineId);
+                        break;
+                        
+                    case 'transformer_losses':
+                        calculatePersentasePS(machineId);
+                        break;
+                        
+                    case 'operating_hours':
+                    case 'standby_hours':
+                    case 'efdh':
+                    case 'epdh':
+                    case 'eudh':
+                    case 'esdh':
+                        calculateEAF(machineId);
+                        calculateEFOR(machineId);
+                        calculateNOF(machineId);
+                        break;
+                        
+                    case 'planned_outage':
+                    case 'maintenance_outage':
+                        calculateSOF(machineId);
+                        break;
+                        
+                    case 'forced_outage':
+                        calculateEFOR(machineId);
+                        break;
+                        
+                    case 'trip_machine':
+                    case 'trip_electrical':
+                        calculateSDOF(machineId);
+                        break;
+                        
+                    case 'period_hours':
+                        calculateEAF(machineId);
+                        calculateSOF(machineId);
+                        calculateNCF(machineId);
+                        break;
+                        
+                    case 'hsd_fuel':
+                    case 'b35_fuel':
+                    case 'mfo_fuel':
+                        calculateTotalFuel(machineId);
+                        calculateSFC(machineId);
+                        break;
+                        
+                    case 'meditran_oil':
+                    case 'salyx_420':
+                    case 'salyx_430':
+                    case 'travolube_a':
+                    case 'turbolube_46':
+                    case 'turbolube_68':
+                        calculateTotalOil(machineId);
+                        calculateSLC(machineId);
+                        break;
+                }
+                
+                // Always update NCF and NOF when any relevant field changes
+                if (['net_production', 'capable_power', 'period_hours', 'operating_hours'].includes(fieldName)) {
+                    calculateNCF(machineId);
+                    calculateNOF(machineId);
+                }
+            });
+        });
+    });
+
+    // Helper function to get numeric value from input
+    function getNumericValue(machineId, field) {
+        const value = document.querySelector(`[name="data[${machineId}][${field}]"]`).value;
+        return parseFloat(value) || 0;
+    }
+
+    // Ratio Daya = max(peak_load_day, peak_load_night) / capable_power
+    function calculateRatioDaya(machineId) {
+        const peakDay = getNumericValue(machineId, 'peak_load_day');
+        const peakNight = getNumericValue(machineId, 'peak_load_night');
+        const capablePower = getNumericValue(machineId, 'capable_power');
+        
+        if (capablePower > 0) {
+            const ratio = (Math.max(peakDay, peakNight) / capablePower) * 100;
+            document.querySelector(`[name="data[${machineId}][kit_ratio]"]`).value = ratio.toFixed(2);
+        }
+    }
+
+    // Susut Trafo = gross_production - net_production - aux_power
+    function calculateSusutTrafo(machineId) {
+        const grossProd = getNumericValue(machineId, 'gross_production');
+        const netProd = getNumericValue(machineId, 'net_production');
+        const auxPower = getNumericValue(machineId, 'aux_power');
+        
+        const susutTrafo = grossProd - netProd - auxPower;
+        document.querySelector(`[name="data[${machineId}][transformer_losses]"]`).value = susutTrafo.toFixed(2);
+    }
+
+    // Persentase PS = ((aux_power + transformer_losses) / gross_production) * 100
+    function calculatePersentasePS(machineId) {
+        const auxPower = getNumericValue(machineId, 'aux_power');
+        const susutTrafo = getNumericValue(machineId, 'transformer_losses');
+        const grossProd = getNumericValue(machineId, 'gross_production');
+        
+        if (grossProd > 0) {
+            const percentage = ((auxPower + susutTrafo) / grossProd) * 100;
+            document.querySelector(`[name="data[${machineId}][usage_percentage]"]`).value = percentage.toFixed(2);
+        }
+    }
+
+    // EAF = ((SH + Standby - EFDH - EPDH - EUDH - ESDH) * capable_power) / (period_hours * capable_power) * 100
+    function calculateEAF(machineId) {
+        const operatingHours = getNumericValue(machineId, 'operating_hours');
+        const standbyHours = getNumericValue(machineId, 'standby_hours');
+        const efdh = getNumericValue(machineId, 'efdh');
+        const epdh = getNumericValue(machineId, 'epdh');
+        const eudh = getNumericValue(machineId, 'eudh');
+        const esdh = getNumericValue(machineId, 'esdh');
+        const capablePower = getNumericValue(machineId, 'capable_power');
+        const periodHours = getNumericValue(machineId, 'period_hours');
+        
+        if (periodHours > 0 && capablePower > 0) {
+            const eaf = ((operatingHours + standbyHours - efdh - epdh - eudh - esdh) * capablePower) / 
+                       (periodHours * capablePower) * 100;
+            document.querySelector(`[name="data[${machineId}][eaf]"]`).value = eaf.toFixed(2);
+        }
+    }
+
+    // SOF = ((PO + MO) * capable_power) / (period_hours * capable_power) * 100
+    function calculateSOF(machineId) {
+        const po = getNumericValue(machineId, 'planned_outage');
+        const mo = getNumericValue(machineId, 'maintenance_outage');
+        const capablePower = getNumericValue(machineId, 'capable_power');
+        const periodHours = getNumericValue(machineId, 'period_hours');
+        
+        if (periodHours > 0 && capablePower > 0) {
+            const sof = ((po + mo) * capablePower) / (periodHours * capablePower) * 100;
+            document.querySelector(`[name="data[${machineId}][sof]"]`).value = sof.toFixed(2);
+        }
+    }
+
+    // EFOR = ((FO + EFDH) * capable_power) / ((operating_hours + FO) * capable_power) * 100
+    function calculateEFOR(machineId) {
+        const fo = getNumericValue(machineId, 'forced_outage');
+        const efdh = getNumericValue(machineId, 'efdh');
+        const operatingHours = getNumericValue(machineId, 'operating_hours');
+        const capablePower = getNumericValue(machineId, 'capable_power');
+        
+        if ((operatingHours + fo) > 0 && capablePower > 0) {
+            const efor = ((fo + efdh) * capablePower) / ((operatingHours + fo) * capablePower) * 100;
+            document.querySelector(`[name="data[${machineId}][efor]"]`).value = efor.toFixed(2);
+        }
+    }
+
+    // SDOF = trip_machine + trip_electrical
+    function calculateSDOF(machineId) {
+        const tripMachine = getNumericValue(machineId, 'trip_machine');
+        const tripElectrical = getNumericValue(machineId, 'trip_electrical');
+        
+        const sdof = tripMachine + tripElectrical;
+        document.querySelector(`[name="data[${machineId}][sdof]"]`).value = sdof.toFixed(0);
+    }
+
+    // NCF = net_production / (capable_power * period_hours) * 100
+    function calculateNCF(machineId) {
+        const netProduction = getNumericValue(machineId, 'net_production');
+        const capablePower = getNumericValue(machineId, 'capable_power');
+        const periodHours = getNumericValue(machineId, 'period_hours');
+        
+        if (capablePower > 0 && periodHours > 0) {
+            const ncf = (netProduction / (capablePower * periodHours)) * 100;
+            document.querySelector(`[name="data[${machineId}][ncf]"]`).value = ncf.toFixed(2);
+        }
+    }
+
+    // NOF = (net_production / (capable_power * operating_hours)) * 100
+    function calculateNOF(machineId) {
+        const netProduction = getNumericValue(machineId, 'net_production');
+        const capablePower = getNumericValue(machineId, 'capable_power');
+        const operatingHours = getNumericValue(machineId, 'operating_hours');
+        
+        if (capablePower > 0 && operatingHours > 0) {
+            const nof = (netProduction / (capablePower * operatingHours)) * 100;
+            document.querySelector(`[name="data[${machineId}][nof]"]`).value = nof.toFixed(2);
+        }
+    }
+
+    // SFC = total_fuel / gross_production
+    function calculateSFC(machineId) {
+        const totalFuel = getNumericValue(machineId, 'total_fuel');
+        const grossProduction = getNumericValue(machineId, 'gross_production');
+        
+        if (grossProduction > 0) {
+            const sfc = totalFuel / grossProduction;
+            document.querySelector(`[name="data[${machineId}][sfc_scc]"]`).value = sfc.toFixed(3);
+        }
+    }
+
+    // SLC = (total_oil * 1000) / gross_production
+    function calculateSLC(machineId) {
+        const totalOil = getNumericValue(machineId, 'total_oil');
+        const grossProduction = getNumericValue(machineId, 'gross_production');
+        
+        if (grossProduction > 0) {
+            const slc = (totalOil * 1000) / grossProduction;
+            document.querySelector(`[name="data[${machineId}][slc]"]`).value = slc.toFixed(3);
+        }
+    }
+
+    // Calculate total oil consumption
+    function calculateTotalOil(machineId) {
+        const meditran = getNumericValue(machineId, 'meditran_oil');
+        const salyx420 = getNumericValue(machineId, 'salyx_420');
+        const salyx430 = getNumericValue(machineId, 'salyx_430');
+        const travolube = getNumericValue(machineId, 'travolube_a');
+        const turbolube46 = getNumericValue(machineId, 'turbolube_46');
+        const turbolube68 = getNumericValue(machineId, 'turbolube_68');
+        
+        const totalOil = meditran + salyx420 + salyx430 + travolube + turbolube46 + turbolube68;
+        document.querySelector(`[name="data[${machineId}][total_oil]"]`).value = totalOil.toFixed(2);
+    }
+
+    // Calculate total fuel consumption
+    function calculateTotalFuel(machineId) {
+        const hsd = getNumericValue(machineId, 'hsd_fuel');
+        const b35 = getNumericValue(machineId, 'b35_fuel');
+        const mfo = getNumericValue(machineId, 'mfo_fuel');
+        
+        const totalFuel = hsd + b35 + mfo;
+        document.querySelector(`[name="data[${machineId}][total_fuel]"]`).value = totalFuel.toFixed(2);
+    }
 </script>
 @endsection 

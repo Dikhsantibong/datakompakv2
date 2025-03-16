@@ -141,30 +141,61 @@ class DailySummaryController extends Controller
                     }
 
                     // Calculate period hours
-                    $firstDayOfMonth = now()->startOfMonth();
-                    $lastMonthRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])
-                        ->where('machine_name', $data['machine_name'])
-                        ->whereMonth('created_at', $firstDayOfMonth->copy()->subMonth()->month)
-                        ->orderBy('created_at', 'desc')
-                        ->first();
+                    $today = now();
+                    $dayOfMonth = $today->day;
 
-                    $currentMonthRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])
-                        ->where('machine_name', $data['machine_name'])
-                        ->whereMonth('created_at', now()->month)
-                        ->orderBy('created_at', 'desc')
-                        ->first();
-
-                    // Calculate new period hours
-                    if ($currentMonthRecord) {
-                        // If we have records this month, increment by 24
-                        $dataToSave['period_hours'] = $currentMonthRecord->period_hours + 24;
-                    } else {
-                        // If this is first record of the month, start from 24
-                        $dataToSave['period_hours'] = 24;
-                    }
+                    // Calculate period hours - always 24 hours per day multiplied by the day of month
+                    $dataToSave['period_hours'] = $dayOfMonth * 24;
 
                     $dataToSave['uuid'] = (string) Str::uuid();
                     $dataToSave['unit_source'] = session('unit', 'mysql');
+
+                    // Add required fields with default values if not provided
+                    $dataToSave['installed_power'] = $data['installed_power'] ?? '-';
+                    $dataToSave['dmn_power'] = $data['dmn_power'] ?? '-';
+                    $dataToSave['capable_power'] = $data['capable_power'] ?? '-';
+                    $dataToSave['peak_load_day'] = $data['peak_load_day'] ?? '-';
+                    $dataToSave['peak_load_night'] = $data['peak_load_night'] ?? '-';
+                    $dataToSave['kit_ratio'] = $data['kit_ratio'] ?? '-';
+                    $dataToSave['gross_production'] = $data['gross_production'] ?? '-';
+                    $dataToSave['net_production'] = $data['net_production'] ?? '-';
+                    $dataToSave['aux_power'] = $data['aux_power'] ?? '-';
+                    $dataToSave['transformer_losses'] = $data['transformer_losses'] ?? '-';
+                    $dataToSave['usage_percentage'] = $data['usage_percentage'] ?? '-';
+                    $dataToSave['operating_hours'] = $data['operating_hours'] ?? '-';
+                    $dataToSave['standby_hours'] = $data['standby_hours'] ?? '-';
+                    $dataToSave['planned_outage'] = $data['planned_outage'] ?? '-';
+                    $dataToSave['maintenance_outage'] = $data['maintenance_outage'] ?? '-';
+                    $dataToSave['forced_outage'] = $data['forced_outage'] ?? '-';
+                    $dataToSave['trip_machine'] = $data['trip_machine'] ?? '-';
+                    $dataToSave['trip_electrical'] = $data['trip_electrical'] ?? '-';
+                    $dataToSave['efdh'] = $data['efdh'] ?? '-';
+                    $dataToSave['epdh'] = $data['epdh'] ?? '-';
+                    $dataToSave['eudh'] = $data['eudh'] ?? '-';
+                    $dataToSave['esdh'] = $data['esdh'] ?? '-';
+                    $dataToSave['eaf'] = $data['eaf'] ?? '-';
+                    $dataToSave['sof'] = $data['sof'] ?? '-';
+                    $dataToSave['efor'] = $data['efor'] ?? '-';
+                    $dataToSave['sdof'] = $data['sdof'] ?? '-';
+                    $dataToSave['ncf'] = $data['ncf'] ?? '-';
+                    $dataToSave['nof'] = $data['nof'] ?? '-';
+                    $dataToSave['jsi'] = $data['jsi'] ?? '-';
+                    $dataToSave['hsd_fuel'] = $data['hsd_fuel'] ?? '-';
+                    $dataToSave['b35_fuel'] = $data['b35_fuel'] ?? '-';
+                    $dataToSave['mfo_fuel'] = $data['mfo_fuel'] ?? '-';
+                    $dataToSave['total_fuel'] = $data['total_fuel'] ?? '-';
+                    $dataToSave['water_usage'] = $data['water_usage'] ?? '-';
+                    $dataToSave['meditran_oil'] = $data['meditran_oil'] ?? '-';
+                    $dataToSave['salyx_420'] = $data['salyx_420'] ?? '-';
+                    $dataToSave['salyx_430'] = $data['salyx_430'] ?? '-';
+                    $dataToSave['travolube_a'] = $data['travolube_a'] ?? '-';
+                    $dataToSave['turbolube_46'] = $data['turbolube_46'] ?? '-';
+                    $dataToSave['turbolube_68'] = $data['turbolube_68'] ?? '-';
+                    $dataToSave['total_oil'] = $data['total_oil'] ?? '-';
+                    $dataToSave['sfc_scc'] = $data['sfc_scc'] ?? '-';
+                    $dataToSave['nphr'] = $data['nphr'] ?? '-';
+                    $dataToSave['slc'] = $data['slc'] ?? '-';
+                    $dataToSave['notes'] = $data['notes'] ?? '';
 
                     // Cek record yang sudah ada
                     $existingRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])

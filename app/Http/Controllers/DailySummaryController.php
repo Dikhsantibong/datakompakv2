@@ -124,6 +124,11 @@ class DailySummaryController extends Controller
             DB::beginTransaction();
             try {
                 foreach ($machineData as $machineId => $data) {
+                    // Skip if no significant data is entered
+                    if (!$this->hasSignificantData($data)) {
+                        continue;
+                    }
+
                     // Prepare base data with only required fields
                     $dataToSave = [
                         'power_plant_id' => $data['power_plant_id'],
@@ -138,14 +143,9 @@ class DailySummaryController extends Controller
                     foreach ($data as $key => $value) {
                         if (!in_array($key, ['power_plant_id', 'machine_name']) && 
                             $value !== null && $value !== '') {
-                            $dataToSave[$key] = is_numeric($value) ? (float) $value : $value;
+                            $dataToSave[$key] = $value;
                         }
                     }
-
-                    // Calculate period hours based on current day
-                    $today = now();
-                    $dayOfMonth = $today->day;
-                    $dataToSave['period_hours'] = $dayOfMonth * 24;
 
                     // Check for existing record
                     $existingRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])
@@ -158,22 +158,19 @@ class DailySummaryController extends Controller
                             $existingRecord->update($dataToSave);
                             Log::info("Updated daily summary", [
                                 'uuid' => $existingRecord->uuid,
-                                'machine' => $data['machine_name'],
-                                'connection' => DB::connection()->getName()
+                                'machine' => $data['machine_name']
                             ]);
                         } else {
                             DailySummary::create($dataToSave);
                             Log::info("Created new daily summary", [
                                 'uuid' => $dataToSave['uuid'],
-                                'machine' => $data['machine_name'],
-                                'connection' => DB::connection()->getName()
+                                'machine' => $data['machine_name']
                             ]);
                         }
                     } catch (\Exception $e) {
                         Log::error("Error saving daily summary", [
                             'message' => $e->getMessage(),
-                            'data' => $dataToSave,
-                            'connection' => DB::connection()->getName()
+                            'data' => $dataToSave
                         ]);
                         throw $e;
                     }
@@ -200,6 +197,45 @@ class DailySummaryController extends Controller
                 ->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage())
                 ->withInput();
         }
+    }
+
+    /**
+     * Check if the machine data has any significant input
+     * 
+     * @param array $data
+     * @return bool
+     */
+    private function hasSignificantData($data)
+    {
+        // Fields to check for significant data
+        $significantFields = [
+            'installed_power',
+            'dmn_power',
+            'capable_power',
+            'peak_load_day',
+            'peak_load_night',
+            'kit_ratio',
+            'gross_production',
+            'net_production',
+            'aux_power',
+            'transformer_losses',
+            'usage_percentage',
+            'operating_hours',
+            'standby_hours',
+            'planned_outage',
+            'maintenance_outage',
+            'forced_outage',
+            'trip_machine',
+            'trip_electrical'
+        ];
+
+        foreach ($significantFields as $field) {
+            if (isset($data[$field]) && $data[$field] !== '' && $data[$field] !== null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function results(Request $request)

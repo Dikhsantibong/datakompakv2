@@ -8,71 +8,63 @@ use Carbon\Carbon;
 use App\Models\DailySummary;
 use App\Models\PowerPlant;
 use App\Models\Machine;
+use App\Models\MachineStatusLog;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Ambil data unit dan mesin
+        // Get today's date
+        $today = Carbon::today();
+        
+        // Fetch daily summaries for today
+        $dailySummaries = DailySummary::whereDate('created_at', $today)->get();
+        
+        // Calculate totals
+        $totalNetProduction = $dailySummaries->sum('net_production');
+        $totalGrossProduction = $dailySummaries->sum('gross_production');
+        $peakLoad = max(
+            $dailySummaries->pluck('peak_load_day')->max() ?? 0,
+            $dailySummaries->pluck('peak_load_night')->max() ?? 0
+        );
+        $totalPeriodHours = $dailySummaries->sum('period_hours');
+
+        // Get latest machine status logs for today
+        $machineStatusLogs = MachineStatusLog::whereDate('tanggal', $today)
+            ->select('machine_id', 'status')
+            ->latest('created_at')
+            ->get()
+            ->unique('machine_id');
+
+        // Count machines by status
+        $machineStats = [
+            'total' => $machineStatusLogs->count(),
+            'ops' => $machineStatusLogs->where('status', 'OPS')->count(),
+            'rsh' => $machineStatusLogs->where('status', 'RSH')->count(),
+            'fo' => $machineStatusLogs->where('status', 'FO')->count(),
+            'mo' => $machineStatusLogs->where('status', 'MO')->count(),
+            'po' => $machineStatusLogs->where('status', 'PO')->count(),
+            'mb' => $machineStatusLogs->where('status', 'MB')->count(),
+        ];
+
+        // Get other required data
         $powerPlants = PowerPlant::with(['machines' => function($query) {
             $query->select('id', 'power_plant_id', 'name', 'status', 'capacity');
         }])->get();
-
+        
         $machines = Machine::all();
 
-        // Hitung statistik pembangkit
-        $totalCapacity = $machines->sum('capacity');
-        $runningCapacity = $machines->where('status', 'RUNNING')->sum('capacity');
-        $capacityPercentage = $totalCapacity > 0 ? ($runningCapacity / $totalCapacity) * 100 : 0;
-
-        // Hitung efisiensi pembangkit (contoh perhitungan)
-        $dailySummaries = DailySummary::whereDate('created_at', Carbon::today())->get();
-        $efficiencyPercentage = $dailySummaries->avg('efficiency') ?? 78; // Default 78% jika tidak ada data
-
-        // Hitung ketersediaan unit
-        $totalMachines = $machines->count();
-        $availableMachines = $machines->whereIn('status', ['RUNNING', 'STANDBY'])->count();
-        $availabilityPercentage = $totalMachines > 0 ? ($availableMachines / $totalMachines) * 100 : 0;
-
-        // Ambil aktivitas terkini (contoh dari status log)
-        $recentActivities = DB::table('machine_status_logs')
-            ->join('machines', 'machine_status_logs.machine_id', '=', 'machines.id')
-            ->join('power_plants', 'machines.power_plant_id', '=', 'power_plants.id')
-            ->select(
-                'power_plants.name as plant_name',
-                'machine_status_logs.status',
-                'machine_status_logs.created_at'
-            )
-            ->orderBy('machine_status_logs.created_at', 'desc')
-            ->limit(4)
-            ->get()
-            ->map(function($activity) {
-                return [
-                    'message' => $this->formatActivityMessage($activity->plant_name, $activity->status),
-                    'status' => $activity->status,
-                    'time' => Carbon::parse($activity->created_at)->diffForHumans()
-                ];
-            });
-
-        // Ambil data summary
-        $totalNetProduction = $dailySummaries->sum('total_net_production') ?? 0;
-        $totalGrossProduction = $dailySummaries->sum('total_gross_production') ?? 0;
-        $peakLoad = $dailySummaries->sum('total_peak_load') ?? 0;
-        $totalOperatingHours = $dailySummaries->sum('total_operating_hours') ?? 0;
-
-        // Kirim data ke view
+        // Pass all variables to the view
         return view('admin.dashboard', compact(
             'powerPlants',
             'machines',
+            'machineStats',
+            'dailySummaries',
             'totalNetProduction',
             'totalGrossProduction',
             'peakLoad',
-            'totalOperatingHours',
-            'capacityPercentage',
-            'efficiencyPercentage',
-            'availabilityPercentage',
-            'recentActivities'
+            'totalPeriodHours'
         ));
     }
 

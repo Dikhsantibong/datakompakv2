@@ -175,7 +175,7 @@
                             <i class="fas fa-chart-line"></i>
                         </div>
                         <h3 class="text-lg font-semibold mb-1">Total Produksi Netto</h3>
-                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalNetProduction) }} MW</p>
+                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalNetProduction, 2) }} kWh</p>
                         <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
                             Lihat Detail →
                         </a>
@@ -189,7 +189,7 @@
                             <i class="fas fa-chart-bar"></i>
                         </div>
                         <h3 class="text-lg font-semibold mb-1">Total Produksi Bruto</h3>
-                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalGrossProduction) }} MW</p>
+                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalGrossProduction, 2) }} kWh</p>
                         <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
                             Lihat Detail →
                         </a>
@@ -203,21 +203,21 @@
                             <i class="fas fa-bolt"></i>
                         </div>
                         <h3 class="text-lg font-semibold mb-1">Beban Puncak</h3>
-                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($peakLoad) }} MW</p>
+                        <p class="text-gray-600 mb-2 text-sm">{{ number_format(max($dailySummaries->pluck('peak_load_day')->max(), $dailySummaries->pluck('peak_load_night')->max()), 2) }} MW</p>
                         <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
                             Lihat Detail →
                         </a>
                     </div>
                 </div>
 
-                <!-- Card 4: Total Jam Operasi -->
+                <!-- Card 4: Total Jam Periode -->
                 <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                     <div class="p-4">
                         <div class="text-3xl text-purple-600 mb-2">
                             <i class="fas fa-clock"></i>
                         </div>
-                        <h3 class="text-lg font-semibold mb-1">Total Jam Operasi</h3>
-                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalOperatingHours) }} Jam</p>
+                        <h3 class="text-lg font-semibold mb-1">Total Jam Periode</h3>
+                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalPeriodHours, 1) }} Jam</p>
                         <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
                             Lihat Detail →
                         </a>
@@ -262,16 +262,16 @@
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-medium">Status Mesin</h3>
-                        <span class="text-sm text-gray-500">Total: {{ $machines->count() }}</span>
+                        <span class="text-sm text-gray-500">Total: {{ $machineStats['total'] }}</span>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
-                        <!-- Operating Machines -->
+                        <!-- OPS Machines -->
                         <div class="bg-green-50 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-600">Beroperasi</p>
+                                    <p class="text-sm text-gray-600">Operasi (OPS)</p>
                                     <p class="text-2xl font-semibold text-green-600">
-                                        {{ $machines->where('status', 'RUNNING')->count() }}
+                                        {{ $machineStats['ops'] }}
                                     </p>
                                 </div>
                                 <div class="text-green-500">
@@ -280,13 +280,13 @@
                             </div>
                         </div>
 
-                        <!-- Stopped Machines -->
+                        <!-- RSH Machines -->
                         <div class="bg-red-50 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-600">Berhenti</p>
+                                    <p class="text-sm text-gray-600">Reserve Shutdown (RSH)</p>
                                     <p class="text-2xl font-semibold text-red-600">
-                                        {{ $machines->where('status', 'STOP')->count() }}
+                                        {{ $machineStats['rsh'] }}
                                     </p>
                                 </div>
                                 <div class="text-red-500">
@@ -295,13 +295,13 @@
                             </div>
                         </div>
 
-                        <!-- Maintenance Machines -->
+                        <!-- MO Machines -->
                         <div class="bg-yellow-50 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-600">Maintenance</p>
+                                    <p class="text-sm text-gray-600">Maintenance Outage (MO)</p>
                                     <p class="text-2xl font-semibold text-yellow-600">
-                                        {{ $machines->whereIn('status', ['MAINTENANCE', 'OVERHAUL'])->count() }}
+                                        {{ $machineStats['mo'] }}
                                     </p>
                                 </div>
                                 <div class="text-yellow-500">
@@ -310,16 +310,46 @@
                             </div>
                         </div>
 
-                        <!-- Standby Machines -->
+                        <!-- FO Machines -->
                         <div class="bg-blue-50 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-600">Standby</p>
+                                    <p class="text-sm text-gray-600">Forced Outage (FO)</p>
                                     <p class="text-2xl font-semibold text-blue-600">
-                                        {{ $machines->where('status', 'STANDBY')->count() }}
+                                        {{ $machineStats['fo'] }}
                                     </p>
                                 </div>
                                 <div class="text-blue-500">
+                                    <i class="fas fa-exclamation-circle text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PO Machines -->
+                        <div class="bg-purple-50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Planned Outage (PO)</p>
+                                    <p class="text-2xl font-semibold text-purple-600">
+                                        {{ $machineStats['po'] }}
+                                    </p>
+                                </div>
+                                <div class="text-purple-500">
+                                    <i class="fas fa-calendar-check text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MB Machines -->
+                        <div class="bg-orange-50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Mothballed (MB)</p>
+                                    <p class="text-2xl font-semibold text-orange-600">
+                                        {{ $machineStats['mb'] }}
+                                    </p>
+                                </div>
+                                <div class="text-orange-500">
                                     <i class="fas fa-pause-circle text-2xl"></i>
                                 </div>
                             </div>

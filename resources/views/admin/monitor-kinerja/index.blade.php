@@ -270,16 +270,30 @@
                     </div>
                 </div>
 
-                <!-- Chart Section -->
-                <div class="bg-white rounded-xl shadow-lg mb-8 border border-gray-100">
-                    <div class="p-6 border-b border-gray-100">
-                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
-                            <i class="fas fa-chart-line mr-3 text-blue-600"></i>
-                            Grafik Kinerja Pembangkit
-                        </h3>
+                <!-- Charts Section -->
+                <!-- Performance Chart -->
+                <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                    <h3 class="text-lg font-medium mb-4">Grafik Kinerja Pembangkit</h3>
+                    <div style="height: 300px;">
+                        <canvas id="performanceChart"></canvas>
                     </div>
-                    <div class="p-6">
-                        <canvas id="kinerjaChart" style="height: 400px;"></canvas>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Production Chart -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-medium mb-4">Grafik Produksi Netto</h3>
+                        <div style="height: 300px;">
+                            <canvas id="productionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Fuel Consumption Chart -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-medium mb-4">Konsumsi Bahan Bakar</h3>
+                        <div style="height: 300px;">
+                            <canvas id="fuelChart"></canvas>
+                        </div>
                     </div>
                 </div>
 
@@ -497,5 +511,197 @@ changeBackground();
 
 // Ganti gambar setiap 5 detik
 setInterval(changeBackground, 5000);
+
+// Performance Chart
+const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+new Chart(performanceCtx, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode($chartData['labels']) !!},
+        datasets: [{
+            label: 'EAF (%)',
+            data: {!! json_encode($chartData['eaf']) !!},
+            borderColor: 'rgb(59, 130, 246)',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            tension: 0.3
+        }, {
+            label: 'SOF (%)',
+            data: {!! json_encode($chartData['sof']) !!},
+            borderColor: 'rgb(239, 68, 68)',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            tension: 0.3
+        }, {
+            label: 'EFOR (%)',
+            data: {!! json_encode($chartData['efor']) !!},
+            borderColor: 'rgb(234, 179, 8)',
+            backgroundColor: 'rgba(234, 179, 8, 0.1)',
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            tension: 0.3
+        }, {
+            label: 'NCF (%)',
+            data: {!! json_encode($chartData['ncf']) !!},
+            borderColor: 'rgb(34, 197, 94)',
+            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    usePointStyle: true,
+                    padding: 20,
+                    font: {
+                        size: 12
+                    }
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                titleColor: '#1f2937',
+                bodyColor: '#1f2937',
+                borderColor: '#e5e7eb',
+                borderWidth: 1,
+                padding: 12,
+                displayColors: true,
+                callbacks: {
+                    label: function(context) {
+                        return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100,
+                grid: {
+                    drawBorder: false,
+                    color: 'rgba(0, 0, 0, 0.05)'
+                },
+                ticks: {
+                    callback: function(value) {
+                        return value + '%';
+                    },
+                    font: {
+                        size: 11
+                    }
+                }
+            },
+            x: {
+                grid: {
+                    drawBorder: false,
+                    color: 'rgba(0, 0, 0, 0.05)'
+                },
+                ticks: {
+                    font: {
+                        size: 11
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Production Chart
+const productionCtx = document.getElementById('productionChart').getContext('2d');
+new Chart(productionCtx, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode($chartData['labels']) !!},
+        datasets: [{
+            label: 'Produksi Netto (MW)',
+            data: {!! json_encode($chartData['production']) !!},
+            borderColor: 'rgb(59, 130, 246)',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return value + ' MW';
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Fuel Consumption Chart
+const fuelCtx = document.getElementById('fuelChart').getContext('2d');
+new Chart(fuelCtx, {
+    type: 'bar',
+    data: {
+        labels: {!! json_encode($chartData['labels']) !!},
+        datasets: [{
+            label: 'HSD',
+            data: {!! json_encode($chartData['fuel']['hsd']) !!},
+            backgroundColor: 'rgba(34, 197, 94, 0.5)',
+            borderColor: 'rgb(34, 197, 94)',
+            borderWidth: 1
+        }, {
+            label: 'MFO',
+            data: {!! json_encode($chartData['fuel']['mfo']) !!},
+            backgroundColor: 'rgba(234, 179, 8, 0.5)',
+            borderColor: 'rgb(234, 179, 8)',
+            borderWidth: 1
+        }, {
+            label: 'B35',
+            data: {!! json_encode($chartData['fuel']['b35']) !!},
+            backgroundColor: 'rgba(59, 130, 246, 0.5)',
+            borderColor: 'rgb(59, 130, 246)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return value + ' L';
+                    }
+                }
+            }
+        }
+    }
+});
 </script>
 @endpush 

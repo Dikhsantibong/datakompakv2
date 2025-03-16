@@ -14,11 +14,43 @@ class MonitorKinerjaController extends Controller
         $latestSummary = DailySummary::latest()->first();
 
         // Get data for the chart (last 7 days)
-        $chartData = DailySummary::select('eaf', 'sof', 'efor', 'sdof', 'ncf', 'created_at')
-            ->latest()
-            ->take(7)
-            ->get()
-            ->reverse();
+        $chartData = [
+            'labels' => [],
+            'eaf' => [],
+            'sof' => [],
+            'efor' => [],
+            'ncf' => [],
+            'production' => [],
+            'fuel' => [
+                'hsd' => [],
+                'mfo' => [],
+                'b35' => []
+            ]
+        ];
+
+        // Fetch last 7 days data
+        $dailyData = DailySummary::select(
+            'eaf', 'sof', 'efor', 'ncf', 
+            'net_production', 'hsd_fuel', 
+            'mfo_fuel', 'b35_fuel', 
+            'created_at'
+        )
+        ->orderBy('created_at', 'desc')
+        ->take(7)
+        ->get()
+        ->reverse();
+
+        foreach ($dailyData as $data) {
+            $chartData['labels'][] = $data->created_at->format('D');
+            $chartData['eaf'][] = $data->eaf;
+            $chartData['sof'][] = $data->sof;
+            $chartData['efor'][] = $data->efor;
+            $chartData['ncf'][] = $data->ncf;
+            $chartData['production'][] = $data->net_production;
+            $chartData['fuel']['hsd'][] = $data->hsd_fuel;
+            $chartData['fuel']['mfo'][] = $data->mfo_fuel;
+            $chartData['fuel']['b35'][] = $data->b35_fuel;
+        }
 
         // Prepare data for the view
         $data = [

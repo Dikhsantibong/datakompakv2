@@ -367,8 +367,43 @@
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="px-2">
-                                                <input type="number" step="0.01" name="data[{{ $machine->id }}][period_hours]"
-                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                @php
+                                                    // Get the first day of current month
+                                                    $firstDayOfMonth = \Carbon\Carbon::now()->startOfMonth();
+                                                    $today = \Carbon\Carbon::now();
+                                                    
+                                                    // Get the last record for this machine from previous month
+                                                    $lastMonthRecord = \App\Models\DailySummary::where('power_plant_id', $machine->power_plant_id)
+                                                        ->where('machine_name', $machine->name)
+                                                        ->whereMonth('created_at', $firstDayOfMonth->copy()->subMonth()->month)
+                                                        ->orderBy('created_at', 'desc')
+                                                        ->first();
+                                                    
+                                                    // Get all records for this machine in current month
+                                                    $currentMonthRecords = \App\Models\DailySummary::where('power_plant_id', $machine->power_plant_id)
+                                                        ->where('machine_name', $machine->name)
+                                                        ->whereMonth('created_at', $today->month)
+                                                        ->orderBy('created_at', 'desc')
+                                                        ->first();
+
+                                                    // Calculate period hours
+                                                    if ($currentMonthRecords) {
+                                                        // If we have records this month, use them
+                                                        $periodHours = $currentMonthRecords->period_hours;
+                                                    } else if ($lastMonthRecord) {
+                                                        // If we have records from last month but none this month, start from 24
+                                                        $periodHours = 24;
+                                                    } else {
+                                                        // If no records at all, start from 24
+                                                        $periodHours = 24;
+                                                    }
+                                                @endphp
+                                                <input type="number" 
+                                                       step="0.01" 
+                                                       name="data[{{ $machine->id }}][period_hours]"
+                                                       value="{{ $periodHours }}"
+                                                       class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                       readonly>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3">

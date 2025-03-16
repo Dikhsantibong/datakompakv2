@@ -123,18 +123,11 @@ class DailySummaryController extends Controller
 
             DB::beginTransaction();
             try {
-                foreach ($machineData as $index => $data) {
+                foreach ($machineData as $machineId => $data) {
                     // Filter data yang akan disimpan
                     $dataToSave = array_filter($data, function($value) {
                         return $value !== '' && $value !== null;
                     });
-
-                    // Konversi string ke float untuk field numerik
-                    foreach ($dataToSave as $key => $value) {
-                        if ($key !== 'power_plant_id' && $key !== 'machine_name' && $key !== 'notes') {
-                            $dataToSave[$key] = floatval($value);
-                        }
-                    }
 
                     // Skip jika hanya ada power_plant_id dan machine_name
                     if (count($dataToSave) <= 2) {
@@ -145,6 +138,29 @@ class DailySummaryController extends Controller
                     $powerPlant = PowerPlant::find($data['power_plant_id']);
                     if (!$powerPlant) {
                         throw new \Exception("Power Plant not found for id: {$data['power_plant_id']}");
+                    }
+
+                    // Calculate period hours
+                    $firstDayOfMonth = now()->startOfMonth();
+                    $lastMonthRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])
+                        ->where('machine_name', $data['machine_name'])
+                        ->whereMonth('created_at', $firstDayOfMonth->copy()->subMonth()->month)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+
+                    $currentMonthRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])
+                        ->where('machine_name', $data['machine_name'])
+                        ->whereMonth('created_at', now()->month)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+
+                    // Calculate new period hours
+                    if ($currentMonthRecord) {
+                        // If we have records this month, increment by 24
+                        $dataToSave['period_hours'] = $currentMonthRecord->period_hours + 24;
+                    } else {
+                        // If this is first record of the month, start from 24
+                        $dataToSave['period_hours'] = 24;
                     }
 
                     $dataToSave['uuid'] = (string) Str::uuid();

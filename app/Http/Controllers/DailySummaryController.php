@@ -124,97 +124,58 @@ class DailySummaryController extends Controller
             DB::beginTransaction();
             try {
                 foreach ($machineData as $machineId => $data) {
-                    // Filter data yang akan disimpan
-                    $dataToSave = array_filter($data, function($value) {
-                        return $value !== '' && $value !== null;
-                    });
+                    // Prepare base data with only required fields
+                    $dataToSave = [
+                        'power_plant_id' => $data['power_plant_id'],
+                        'machine_name' => $data['machine_name'],        
+                        'uuid' => (string) Str::uuid(),
+                        'unit_source' => session('unit', 'mysql'),
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ];
 
-                    // Skip jika hanya ada power_plant_id dan machine_name
-                    if (count($dataToSave) <= 2) {
-                        continue;
+                    // Add only the fields that have actual input
+                    foreach ($data as $key => $value) {
+                        if (!in_array($key, ['power_plant_id', 'machine_name']) && 
+                            $value !== null && $value !== '') {
+                            $dataToSave[$key] = is_numeric($value) ? (float) $value : $value;
+                        }
                     }
 
-                    // Tambahkan UUID dan unit_source
-                    $powerPlant = PowerPlant::find($data['power_plant_id']);
-                    if (!$powerPlant) {
-                        throw new \Exception("Power Plant not found for id: {$data['power_plant_id']}");
-                    }
-
-                    // Calculate period hours
+                    // Calculate period hours based on current day
                     $today = now();
                     $dayOfMonth = $today->day;
-
-                    // Calculate period hours - always 24 hours per day multiplied by the day of month
                     $dataToSave['period_hours'] = $dayOfMonth * 24;
 
-                    $dataToSave['uuid'] = (string) Str::uuid();
-                    $dataToSave['unit_source'] = session('unit', 'mysql');
-
-                    // Add required fields with default values if not provided
-                    $dataToSave['installed_power'] = $data['installed_power'] ?? '-';
-                    $dataToSave['dmn_power'] = $data['dmn_power'] ?? '-';
-                    $dataToSave['capable_power'] = $data['capable_power'] ?? '-';
-                    $dataToSave['peak_load_day'] = $data['peak_load_day'] ?? '-';
-                    $dataToSave['peak_load_night'] = $data['peak_load_night'] ?? '-';
-                    $dataToSave['kit_ratio'] = $data['kit_ratio'] ?? '-';
-                    $dataToSave['gross_production'] = $data['gross_production'] ?? '-';
-                    $dataToSave['net_production'] = $data['net_production'] ?? '-';
-                    $dataToSave['aux_power'] = $data['aux_power'] ?? '-';
-                    $dataToSave['transformer_losses'] = $data['transformer_losses'] ?? '-';
-                    $dataToSave['usage_percentage'] = $data['usage_percentage'] ?? '-';
-                    $dataToSave['operating_hours'] = $data['operating_hours'] ?? '-';
-                    $dataToSave['standby_hours'] = $data['standby_hours'] ?? '-';
-                    $dataToSave['planned_outage'] = $data['planned_outage'] ?? '-';
-                    $dataToSave['maintenance_outage'] = $data['maintenance_outage'] ?? '-';
-                    $dataToSave['forced_outage'] = $data['forced_outage'] ?? '-';
-                    $dataToSave['trip_machine'] = $data['trip_machine'] ?? '-';
-                    $dataToSave['trip_electrical'] = $data['trip_electrical'] ?? '-';
-                    $dataToSave['efdh'] = $data['efdh'] ?? '-';
-                    $dataToSave['epdh'] = $data['epdh'] ?? '-';
-                    $dataToSave['eudh'] = $data['eudh'] ?? '-';
-                    $dataToSave['esdh'] = $data['esdh'] ?? '-';
-                    $dataToSave['eaf'] = $data['eaf'] ?? '-';
-                    $dataToSave['sof'] = $data['sof'] ?? '-';
-                    $dataToSave['efor'] = $data['efor'] ?? '-';
-                    $dataToSave['sdof'] = $data['sdof'] ?? '-';
-                    $dataToSave['ncf'] = $data['ncf'] ?? '-';
-                    $dataToSave['nof'] = $data['nof'] ?? '-';
-                    $dataToSave['jsi'] = $data['jsi'] ?? '-';
-                    $dataToSave['hsd_fuel'] = $data['hsd_fuel'] ?? '-';
-                    $dataToSave['b35_fuel'] = $data['b35_fuel'] ?? '-';
-                    $dataToSave['mfo_fuel'] = $data['mfo_fuel'] ?? '-';
-                    $dataToSave['total_fuel'] = $data['total_fuel'] ?? '-';
-                    $dataToSave['water_usage'] = $data['water_usage'] ?? '-';
-                    $dataToSave['meditran_oil'] = $data['meditran_oil'] ?? '-';
-                    $dataToSave['salyx_420'] = $data['salyx_420'] ?? '-';
-                    $dataToSave['salyx_430'] = $data['salyx_430'] ?? '-';
-                    $dataToSave['travolube_a'] = $data['travolube_a'] ?? '-';
-                    $dataToSave['turbolube_46'] = $data['turbolube_46'] ?? '-';
-                    $dataToSave['turbolube_68'] = $data['turbolube_68'] ?? '-';
-                    $dataToSave['total_oil'] = $data['total_oil'] ?? '-';
-                    $dataToSave['sfc_scc'] = $data['sfc_scc'] ?? '-';
-                    $dataToSave['nphr'] = $data['nphr'] ?? '-';
-                    $dataToSave['slc'] = $data['slc'] ?? '-';
-                    $dataToSave['notes'] = $data['notes'] ?? '';
-
-                    // Cek record yang sudah ada
+                    // Check for existing record
                     $existingRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])
                         ->where('machine_name', $data['machine_name'])
                         ->whereDate('created_at', $today)
                         ->first();
 
-                    if ($existingRecord) {
-                        $existingRecord->update($dataToSave);
-                        Log::info("Updated daily summary", [
-                            'uuid' => $existingRecord->uuid,
-                            'machine' => $data['machine_name']
+                    try {
+                        if ($existingRecord) {
+                            $existingRecord->update($dataToSave);
+                            Log::info("Updated daily summary", [
+                                'uuid' => $existingRecord->uuid,
+                                'machine' => $data['machine_name'],
+                                'connection' => DB::connection()->getName()
+                            ]);
+                        } else {
+                            DailySummary::create($dataToSave);
+                            Log::info("Created new daily summary", [
+                                'uuid' => $dataToSave['uuid'],
+                                'machine' => $data['machine_name'],
+                                'connection' => DB::connection()->getName()
+                            ]);
+                        }
+                    } catch (\Exception $e) {
+                        Log::error("Error saving daily summary", [
+                            'message' => $e->getMessage(),
+                            'data' => $dataToSave,
+                            'connection' => DB::connection()->getName()
                         ]);
-                    } else {
-                        DailySummary::create($dataToSave);
-                        Log::info("Created new daily summary", [
-                            'uuid' => $dataToSave['uuid'],
-                            'machine' => $data['machine_name']
-                        ]);
+                        throw $e;
                     }
                 }
 

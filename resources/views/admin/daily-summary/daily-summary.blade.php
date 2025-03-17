@@ -573,8 +573,10 @@
                                         </td>
                                         <td class="px-4 py-3">
                                             <div class="px-2">
-                                                <input type="text" name="data[{{ $machine->id }}][notes]"
+                                                <textarea name="data[{{ $machine->id }}][notes]"
+                                                       style="width: 200px;"
                                                        class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                                </textarea>
                                             </div>
                                         </td>
                                     </tr>
@@ -695,6 +697,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 .w-keterangan {
     min-width: 150px !important;
+
 }
 .text-pelumas {
     font-size: 11px !important;

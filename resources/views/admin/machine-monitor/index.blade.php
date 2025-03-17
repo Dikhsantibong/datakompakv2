@@ -616,7 +616,7 @@
     </div>
 
     <style>
-        /* Sembunyikan scrollbar tapi tetap bisa scroll */
+        /* Sembunyikan sclrollbar tapi tetap bisa scroll */
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }

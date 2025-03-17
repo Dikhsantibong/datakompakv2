@@ -851,3 +851,15 @@ Route::post('/set-unit', [DailySummaryController::class, 'setUnit'])->name('set-
 Route::post('/set-unit-source', [DailySummaryController::class, 'setUnitSource'])
     ->name('set-unit-source')
     ->middleware('auth');
+
+Route::get('/admin/energiprimer/bahan-bakar', function () {
+    return view('admin.energiprimer.bahan-bakar');
+})->name('admin.energiprimer.bahan-bakar');
+
+Route::get('/admin/energiprimer/pelumas', function () {
+    return view('admin.energiprimer.pelumas');
+})->name('admin.energiprimer.pelumas');
+
+Route::get('/admin/energiprimer/bahan-kima', function () {
+    return view('admin.energiprimer.bahan-kima');
+})->name('admin.energiprimer.bahan-kima');

@@ -82,38 +82,30 @@ class RencanaDayaMampuController extends Controller
             DB::beginTransaction();
 
             $currentDate = now()->format('Y-m-d');
-            $unitSource = session('unit');
+            $currentSession = session('unit');
+            $isMainDatabase = $currentSession === 'mysql';
 
             // Process each machine's data
             foreach ($request->rencana ?? [] as $machineId => $rencanaValue) {
-                $record = RencanaDayaMampu::firstOrNew([
-                    'machine_id' => $machineId,
-                    'tanggal' => $currentDate
-                ]);
+                // Simpan ke database sesuai session saat ini
+                $record = $this->saveRecord($machineId, $currentDate, $request, $currentSession);
 
-                // Basic data
-                $record->rencana = trim($rencanaValue);
-                $record->realisasi = trim($request->realisasi[$machineId] ?? '');
-                $record->daya_pjbtl_silm = floatval($request->daya_pjbtl[$machineId] ?? 0);
-                $record->dmp_existing = floatval($request->dmp_existing[$machineId] ?? 0);
-                
-                // Process daily data
-                if ($request->has('daily_data')) {
-                    $dailyData = json_decode($request->daily_data, true);
-                    if (isset($dailyData[$machineId])) {
-                        $record->daily_data = $dailyData[$machineId];
-                    }
+                // Jika ini adalah unit lokal (bukan UP Kendari), sync ke database utama
+                if (!$isMainDatabase) {
+                    $this->syncToMainDatabase($record);
                 }
-
-                $record->unit_source = $unitSource;
-                $record->save();
+                
+                // Jika ini adalah UP Kendari, sync ke database unit lokal
+                if ($isMainDatabase) {
+                    $this->syncToLocalDatabase($record);
+                }
             }
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Data berhasil disimpan',
+                'message' => 'Data berhasil disimpan dan disinkronkan',
                 'icon' => 'success',
                 'title' => 'Berhasil!'
             ]);
@@ -128,6 +120,86 @@ class RencanaDayaMampuController extends Controller
                 'icon' => 'error',
                 'title' => 'Error!'
             ], 500);
+        }
+    }
+
+    private function saveRecord($machineId, $currentDate, $request, $unitSource)
+    {
+        $record = RencanaDayaMampu::firstOrNew([
+            'machine_id' => $machineId,
+            'tanggal' => $currentDate
+        ]);
+
+        // Basic data
+        $record->rencana = trim($request->rencana[$machineId]);
+        $record->realisasi = trim($request->realisasi[$machineId] ?? '');
+        $record->daya_pjbtl_silm = floatval($request->daya_pjbtl[$machineId] ?? 0);
+        $record->dmp_existing = floatval($request->dmp_existing[$machineId] ?? 0);
+        
+        // Process daily data
+        if ($request->has('daily_data')) {
+            $dailyData = json_decode($request->daily_data, true);
+            if (isset($dailyData[$machineId])) {
+                $record->daily_data = $dailyData[$machineId];
+            }
+        }
+
+        $record->unit_source = $unitSource;
+        $record->save();
+
+        return $record;
+    }
+
+    private function syncToMainDatabase($record)
+    {
+        try {
+            // Temporarily change database connection to main database
+            $mainRecord = RencanaDayaMampu::on('mysql')->firstOrNew([
+                'machine_id' => $record->machine_id,
+                'tanggal' => $record->tanggal
+            ]);
+
+            // Copy data
+            $mainRecord->rencana = $record->rencana;
+            $mainRecord->realisasi = $record->realisasi;
+            $mainRecord->daya_pjbtl_silm = $record->daya_pjbtl_silm;
+            $mainRecord->dmp_existing = $record->dmp_existing;
+            $mainRecord->daily_data = $record->daily_data;
+            $mainRecord->unit_source = $record->unit_source;
+            
+            $mainRecord->save();
+        } catch (\Exception $e) {
+            \Log::error('Sync to main database failed: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    private function syncToLocalDatabase($record)
+    {
+        try {
+            // Get the machine's power plant to determine which local database to sync to
+            $powerPlant = Machine::find($record->machine_id)->powerPlant;
+            
+            if ($powerPlant && $powerPlant->unit_source !== 'mysql') {
+                // Sync to the corresponding local database
+                $localRecord = RencanaDayaMampu::on($powerPlant->unit_source)->firstOrNew([
+                    'machine_id' => $record->machine_id,
+                    'tanggal' => $record->tanggal
+                ]);
+
+                // Copy data
+                $localRecord->rencana = $record->rencana;
+                $localRecord->realisasi = $record->realisasi;
+                $localRecord->daya_pjbtl_silm = $record->daya_pjbtl_silm;
+                $localRecord->dmp_existing = $record->dmp_existing;
+                $localRecord->daily_data = $record->daily_data;
+                $localRecord->unit_source = $powerPlant->unit_source;
+                
+                $localRecord->save();
+            }
+        } catch (\Exception $e) {
+            \Log::error('Sync to local database failed: ' . $e->getMessage());
+            throw $e;
         }
     }
 

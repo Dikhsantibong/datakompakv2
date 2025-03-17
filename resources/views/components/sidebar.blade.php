@@ -21,6 +21,35 @@
                 <i class="fas fa-home w-5 h-5"></i>
                 <span class="ml-3 text-sm">Dashboard</span>
             </a>
+
+            <!-- Dropdown Menu 1 -->
+            <div class="relative" x-data="{ open: false }">
+                <button @click="open = !open" class="flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-gray-100 hover:bg-white/10">
+                    <div class="flex items-center">
+                        <i class="fas fa-chart-bar w-5 h-5"></i>
+                        <span class="ml-3 text-sm">Energi Primer</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-xs transition-transform" :class="{'rotate-180': open}"></i>
+                </button>
+                <div x-show="open" @click.away="open = false" class="pl-4 mt-1 space-y-1">
+                    <a href="{{ route('admin.energiprimer.bahan-bakar') }}" class="flex items-center px-3 py-2 rounded-lg text-gray-100 hover:bg-white/10">
+                        <i class="fas fa-file-alt w-5 h-5"></i>
+                        <span class="ml-3 text-sm">Bahan Bakar</span>
+                    </a>
+                    <a href="{{ route('admin.energiprimer.pelumas') }}" class="flex items-center px-3 py-2 rounded-lg text-gray-100 hover:bg-white/10">
+                        <i class="fas fa-file-contract w-5 h-5"></i>
+                        <span class="ml-3 text-sm">Pelumas</span>
+                    </a>
+                    <a href="{{ route('admin.energiprimer.bahan-kima') }}" class="flex items-center px-3 py-2 rounded-lg text-gray-100 hover:bg-white/10">
+                        <i class="fas fa-file-invoice w-5 h-5"></i>
+                        <span class="ml-3 text-sm">Bahan Kimia</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Dropdown Menu 2 -->
+           
+
             <a href="{{ route('admin.monitor-kinerja') }}"
             class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.monitor-kinerja') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
             <i class="fas fa-chart-line w-5 h-5"></i>
@@ -78,7 +107,7 @@
 
         </nav>
 
-        <!-- Bottom Section: Logout -->
+        {{-- <!-- Bottom Section: Logout -->
         <div class="mt-2">
             <form method="POST" action="{{ route('logout') }}" id="logout-form">
                 @csrf
@@ -89,6 +118,6 @@
                     <span class="ml-3 text-sm">Logout</span>
                 </button>
             </form>
-        </div>
+        </div> --}}
     </div>
 </aside>

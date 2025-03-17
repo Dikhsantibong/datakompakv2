@@ -64,9 +64,8 @@
                 ['name' => 'Rencana Daya Mampu', 'url' => null]
             ]" />
         </div>
-          <!-- Table Container -->
-          <div class=" p-6">
-
+          
+        <main class="px-6">
         <!-- Highlight Cards -->
         <div class=" bg-white shadow-md rounded-md grid grid-cols-1 md:grid-cols-4 gap-6 p-6">
             <!-- Card 1: Total Daya PJBTL -->
@@ -251,7 +250,8 @@
             </div>
         </div>
     </div>
-</div>
+</main>
+
 
 <!-- Add this script at the bottom of your file -->
 <script src="{{asset('js/toggle.js')}}"></script>

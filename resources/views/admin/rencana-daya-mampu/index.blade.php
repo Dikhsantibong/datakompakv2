@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex h-screen bg-gray-100">
+<div class="flex h-screen">
     <!-- Include Sidebar -->
     @include('components.sidebar')
 
@@ -65,7 +65,7 @@
             ]" />
         </div>
           
-        <main class="px-6">
+        <main class="bg-white px-6">
         <!-- Highlight Cards -->
         <div class=" bg-white shadow-md rounded-md grid grid-cols-1 md:grid-cols-4 gap-6 p-6">
             <!-- Card 1: Total Daya PJBTL -->
@@ -327,18 +327,31 @@
         formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
 
         // Add rencana and realisasi data
-        document.querySelectorAll('input[name^="rencana["]').forEach(input => {
+        document.querySelectorAll('textarea[name^="rencana["]').forEach(input => {
             formData.append(input.name, input.value);
         });
-        document.querySelectorAll('input[name^="realisasi["]').forEach(input => {
+        document.querySelectorAll('textarea[name^="realisasi["]').forEach(input => {
             formData.append(input.name, input.value);
         });
+        
+        // Add daya_pjbtl and dmp_existing data
         document.querySelectorAll('input[name^="daya_pjbtl["]').forEach(input => {
             formData.append(input.name, input.value);
         });
         document.querySelectorAll('input[name^="dmp_existing["]').forEach(input => {
             formData.append(input.name, input.value);
         });
+
+        // Collect daily data
+        const dailyData = {};
+        document.querySelectorAll('textarea[name^="days["]').forEach(input => {
+            const [_, machineId, day] = input.name.match(/days\[(\d+)\]\[(\d+)\]/);
+            if (!dailyData[machineId]) {
+                dailyData[machineId] = {};
+            }
+            dailyData[machineId][input.dataset.date] = input.value;
+        });
+        formData.append('daily_data', JSON.stringify(dailyData));
 
         // Make the AJAX request
         fetch('{{ route("admin.rencana-daya-mampu.update") }}', {

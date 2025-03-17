@@ -3,7 +3,7 @@
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<div class="flex h-screen bg-gray-50 overflow-auto">
+<div class="flex h-screen overflow-auto">
     @include('components.sidebar')
     
     <div id="main-content" class="flex-1 overflow-auto">

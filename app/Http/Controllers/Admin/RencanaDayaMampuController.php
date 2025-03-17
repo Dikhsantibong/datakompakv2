@@ -97,8 +97,8 @@ class RencanaDayaMampuController extends Controller
                 $record->daya_pjbtl_silm = floatval($request->daya_pjbtl[$machineId] ?? 0);
                 $record->dmp_existing = floatval($request->dmp_existing[$machineId] ?? 0);
                 
-                // Daily data if exists
-                if ($request->daily_data) {
+                // Process daily data
+                if ($request->has('daily_data')) {
                     $dailyData = json_decode($request->daily_data, true);
                     if (isset($dailyData[$machineId])) {
                         $record->daily_data = $dailyData[$machineId];

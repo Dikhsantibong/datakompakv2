@@ -71,7 +71,7 @@
             </div>
 
             <!-- Main Content -->
-            <main class="px-6 py-6">
+            <main class="px-6">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" style="margin-bottom: 20px;">
                     <div class="p-4 bg-white border-b border-gray-200">
                         <!-- Card Grid -->

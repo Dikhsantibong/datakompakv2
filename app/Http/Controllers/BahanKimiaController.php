@@ -7,6 +7,11 @@ use App\Models\PowerPlant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use PDF;
+use App\Exports\BahanKimiaExport;
+
+use Excel;
+
 class BahanKimiaController extends Controller
 {
     public function index(Request $request)
@@ -169,5 +174,39 @@ class BahanKimiaController extends Controller
             return redirect()->back()
                            ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = BahanKimia::with('unit');
+        $units = PowerPlant::orderBy('name')->get();
+
+        // Filter berdasarkan unit
+        if ($request->filled('unit_id')) {
+            $query->where('unit_id', $request->unit_id);
+        }
+
+        // Filter berdasarkan jenis bahan
+        if ($request->filled('jenis_bahan')) {
+            $query->where('jenis_bahan', 'like', '%' . $request->jenis_bahan . '%');
+        }
+
+        // Filter berdasarkan rentang tanggal
+        if ($request->filled('start_date')) {
+            $query->where('tanggal', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->where('tanggal', '<=', $request->end_date);
+        }
+
+        $bahanKimia = $query->latest('tanggal')->get();
+
+        $pdf = PDF::loadView('admin.energiprimer.exports.bahan-kimia-pdf', compact('bahanKimia', 'units'));
+        return $pdf->download('data-bahan-kimia.pdf');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        return Excel::download(new BahanKimiaExport($request), 'data-bahan-kimia.xlsx');
     }
 } 

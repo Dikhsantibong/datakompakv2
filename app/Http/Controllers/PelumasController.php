@@ -7,6 +7,11 @@ use App\Models\PowerPlant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use PDF;
+use App\Exports\PelumasExport;
+
+use Excel;
+
 class PelumasController extends Controller
 {
     public function index(Request $request)
@@ -173,5 +178,39 @@ class PelumasController extends Controller
             return redirect()->back()
                            ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = Pelumas::with('unit');
+        $units = PowerPlant::orderBy('name')->get();
+
+        // Filter berdasarkan unit
+        if ($request->filled('unit_id')) {
+            $query->where('unit_id', $request->unit_id);
+        }
+
+        // Filter berdasarkan jenis pelumas
+        if ($request->filled('jenis_pelumas')) {
+            $query->where('jenis_pelumas', 'like', '%' . $request->jenis_pelumas . '%');
+        }
+
+        // Filter berdasarkan rentang tanggal
+        if ($request->filled('start_date')) {
+            $query->where('tanggal', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->where('tanggal', '<=', $request->end_date);
+        }
+
+        $pelumas = $query->latest('tanggal')->get();
+
+        $pdf = PDF::loadView('admin.energiprimer.exports.pelumas-pdf', compact('pelumas', 'units'));
+        return $pdf->download('data-pelumas.pdf');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        return Excel::download(new PelumasExport($request), 'data-pelumas.xlsx');
     }
 } 

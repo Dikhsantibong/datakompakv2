@@ -931,3 +931,42 @@ Route::prefix('admin/energiprimer')->name('admin.energiprimer.')->group(function
     Route::put('/pelumas/{id}', [PelumasController::class, 'update'])->name('pelumas.update');
     Route::delete('/pelumas/{id}', [PelumasController::class, 'destroy'])->name('pelumas.destroy');
 });
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // ... existing routes ...
+
+    // Route untuk Energi Primer
+    Route::prefix('energiprimer')->name('energiprimer.')->group(function () {
+        // Bahan Bakar routes
+        Route::get('bahan-bakar', [BahanBakarController::class, 'index'])->name('bahan-bakar');
+        Route::get('bahan-bakar/create', [BahanBakarController::class, 'create'])->name('bahan-bakar.create');
+        Route::post('bahan-bakar', [BahanBakarController::class, 'store'])->name('bahan-bakar.store');
+        Route::get('bahan-bakar/{id}/edit', [BahanBakarController::class, 'edit'])->name('bahan-bakar.edit');
+        Route::put('bahan-bakar/{id}', [BahanBakarController::class, 'update'])->name('bahan-bakar.update');
+        Route::delete('bahan-bakar/{id}', [BahanBakarController::class, 'destroy'])->name('bahan-bakar.destroy');
+        Route::get('bahan-bakar/export-pdf', [BahanBakarController::class, 'exportPdf'])->name('bahan-bakar.export-pdf');
+        Route::get('bahan-bakar/export-excel', [BahanBakarController::class, 'exportExcel'])->name('bahan-bakar.export-excel');
+
+        // Pelumas routes
+        Route::get('pelumas', [PelumasController::class, 'index'])->name('pelumas');
+        Route::get('pelumas/create', [PelumasController::class, 'create'])->name('pelumas.create');
+        Route::post('pelumas', [PelumasController::class, 'store'])->name('pelumas.store');
+        Route::get('pelumas/{id}/edit', [PelumasController::class, 'edit'])->name('pelumas.edit');
+        Route::put('pelumas/{id}', [PelumasController::class, 'update'])->name('pelumas.update');
+        Route::delete('pelumas/{id}', [PelumasController::class, 'destroy'])->name('pelumas.destroy');
+        Route::get('pelumas/export-pdf', [PelumasController::class, 'exportPdf'])->name('pelumas.export-pdf');
+        Route::get('pelumas/export-excel', [PelumasController::class, 'exportExcel'])->name('pelumas.export-excel');
+
+        // Bahan Kimia routes
+        Route::get('bahan-kimia', [BahanKimiaController::class, 'index'])->name('bahan-kimia');
+        Route::get('bahan-kimia/create', [BahanKimiaController::class, 'create'])->name('bahan-kimia.create');
+        Route::post('bahan-kimia', [BahanKimiaController::class, 'store'])->name('bahan-kimia.store');
+        Route::get('bahan-kimia/{id}/edit', [BahanKimiaController::class, 'edit'])->name('bahan-kimia.edit');
+        Route::put('bahan-kimia/{id}', [BahanKimiaController::class, 'update'])->name('bahan-kimia.update');
+        Route::delete('bahan-kimia/{id}', [BahanKimiaController::class, 'destroy'])->name('bahan-kimia.destroy');
+        Route::get('bahan-kimia/export-pdf', [BahanKimiaController::class, 'exportPdf'])->name('bahan-kimia.export-pdf');
+        Route::get('bahan-kimia/export-excel', [BahanKimiaController::class, 'exportExcel'])->name('bahan-kimia.export-excel');
+    });
+
+    // ... existing routes ...
+});

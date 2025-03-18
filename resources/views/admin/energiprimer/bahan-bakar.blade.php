@@ -57,10 +57,21 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-semibold text-gray-900">Data Bahan Bakar</h2>
-                    <a href="{{ route('admin.energiprimer.bahan-bakar.create') }}" 
-                       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Tambah Data
-                    </a>
+                    <div class="flex gap-3">
+                        <!-- Export Buttons -->
+                        <a href="{{ route('admin.energiprimer.bahan-bakar.export-excel', request()->query()) }}" 
+                           class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md">
+                            <i class="fas fa-file-excel mr-2"></i> Export Excel
+                        </a>
+                        <a href="{{ route('admin.energiprimer.bahan-bakar.export-pdf', request()->query()) }}" 
+                           class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md">
+                            <i class="fas fa-file-pdf mr-2"></i> Export PDF
+                        </a>
+                        <a href="{{ route('admin.energiprimer.bahan-bakar.create') }}" 
+                           class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md">
+                            <i class="fas fa-plus mr-2"></i> Tambah Data
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Input Form -->
@@ -121,7 +132,7 @@
                 </div>
 
                 <!-- Update bagian filter -->
-                <div class="mt-4 bg-white rounded-lg shadow-sm justify-end flex">
+                <div class="mt-4 bg-white rounded-lg shadow-sm flex justify-end">
                     <div class="p-4">
                         <form action="{{ route('admin.energiprimer.bahan-bakar') }}" method="GET" class="flex flex-wrap items-end gap-3">
                             <!-- Unit Filter -->
@@ -165,14 +176,14 @@
                             </div>
 
                             <!-- Action Buttons -->
-                            <div class="flex gap-2">
+                            <div class="flex gap-3">
                                 <button type="submit"
-                                        class="h-8 px-3 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md">
-                                    Cari
+                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md">
+                                    <i class="fas fa-search mr-2"></i> Cari
                                 </button>
                                 <a href="{{ route('admin.energiprimer.bahan-bakar') }}" 
-                                   class="h-8 px-3 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md inline-flex items-center">
-                                    Reset
+                                   class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md">
+                                    <i class="fas fa-undo mr-2"></i> Reset
                                 </a>
                             </div>
                         </form>
@@ -256,17 +267,24 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ number_format($item->saldo_akhir, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center">
-                                            <a href="{{ route('admin.energiprimer.bahan-bakar.edit', $item->id) }}" 
-                                               class="text-blue-600 hover:text-blue-900">Edit</a>
-                                            <form action="{{ route('admin.energiprimer.bahan-bakar.destroy', $item->id) }}" 
-                                                  method="POST" 
-                                                  class="inline-block ml-4"
-                                                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
-                                            </form>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center border border-gray-200">
+                                            <div class="flex gap-3">
+                                                <a href="{{ route('admin.energiprimer.bahan-bakar.edit', $item->id) }}" 
+                                                   class="inline-flex items-center px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-900">
+                                                    <i class="fas fa-edit mr-1"></i> Edit
+                                                </a>
+                                                <form action="{{ route('admin.energiprimer.bahan-bakar.destroy', $item->id) }}" 
+                                                      method="POST" 
+                                                      class="inline-block"
+                                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" 
+                                                            class="inline-flex items-center px-3 py-1 text-sm font-medium text-red-600 hover:text-red-900">
+                                                        <i class="fas fa-trash mr-1"></i> Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                     @endforeach

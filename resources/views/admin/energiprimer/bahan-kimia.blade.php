@@ -122,30 +122,38 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($bahanKimia as $item)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ $item->tanggal->format('Y-m-d') }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ $item->unit->name }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ $item->jenis_bahan }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ number_format($item->saldo_awal, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ number_format($item->penerimaan, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ number_format($item->pemakaian, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ number_format($item->saldo_akhir, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-blue-600 hover:text-blue-900">Edit</button>
-                                            <button class="ml-4 text-red-600 hover:text-red-900">Hapus</button>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center">
+                                            <a href="{{ route('admin.energiprimer.bahan-kimia.edit', $item->id) }}" 
+                                               class="text-blue-600 hover:text-blue-900">Edit</a>
+                                            <form action="{{ route('admin.energiprimer.bahan-kimia.destroy', $item->id) }}" 
+                                                  method="POST" 
+                                                  class="inline-block ml-4"
+                                                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
+                                            </form>
                                         </td>
                                     </tr>
                                     @endforeach

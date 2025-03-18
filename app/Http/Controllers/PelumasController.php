@@ -108,4 +108,70 @@ class PelumasController extends Controller
                            ->withInput();
         }
     }
+
+    public function edit($id)
+    {
+        $pelumas = Pelumas::findOrFail($id);
+        $units = PowerPlant::orderBy('name')->get();
+        
+        return view('admin.energiprimer.pelumas-edit', compact('pelumas', 'units'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'tanggal' => 'required|date',
+            'unit_id' => 'required|exists:power_plants,id',
+            'jenis_pelumas' => 'required|string|max:255',
+            'penerimaan' => 'required|numeric|min:0',
+            'pemakaian' => 'required|numeric|min:0',
+        ]);
+
+        $pelumas = Pelumas::findOrFail($id);
+        
+        try {
+            DB::beginTransaction();
+
+            // Hitung saldo akhir
+            $saldoAkhir = $pelumas->saldo_awal + $request->penerimaan - $request->pemakaian;
+
+            $pelumas->update([
+                'tanggal' => $request->tanggal,
+                'unit_id' => $request->unit_id,
+                'jenis_pelumas' => $request->jenis_pelumas,
+                'penerimaan' => $request->penerimaan,
+                'pemakaian' => $request->pemakaian,
+                'saldo_akhir' => $saldoAkhir
+            ]);
+
+            DB::commit();
+            return redirect()->route('admin.energiprimer.pelumas')
+                           ->with('success', 'Data berhasil diupdate');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                           ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                           ->withInput();
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            DB::beginTransaction();
+            
+            $pelumas = Pelumas::findOrFail($id);
+            $pelumas->delete();
+
+            DB::commit();
+            return redirect()->route('admin.energiprimer.pelumas')
+                           ->with('success', 'Data berhasil dihapus');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                           ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 } 

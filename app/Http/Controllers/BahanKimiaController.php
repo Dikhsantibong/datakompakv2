@@ -104,4 +104,70 @@ class BahanKimiaController extends Controller
                            ->withInput();
         }
     }
+
+    public function edit($id)
+    {
+        $bahanKimia = BahanKimia::findOrFail($id);
+        $units = PowerPlant::orderBy('name')->get();
+        
+        return view('admin.energiprimer.bahan-kimia-edit', compact('bahanKimia', 'units'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'tanggal' => 'required|date',
+            'unit_id' => 'required|exists:power_plants,id',
+            'jenis_bahan' => 'required|string',
+            'penerimaan' => 'required|numeric|min:0',
+            'pemakaian' => 'required|numeric|min:0',
+        ]);
+
+        $bahanKimia = BahanKimia::findOrFail($id);
+        
+        try {
+            DB::beginTransaction();
+
+            // Hitung saldo akhir
+            $saldoAkhir = $bahanKimia->saldo_awal + $request->penerimaan - $request->pemakaian;
+
+            $bahanKimia->update([
+                'tanggal' => $request->tanggal,
+                'unit_id' => $request->unit_id,
+                'jenis_bahan' => $request->jenis_bahan,
+                'penerimaan' => $request->penerimaan,
+                'pemakaian' => $request->pemakaian,
+                'saldo_akhir' => $saldoAkhir
+            ]);
+
+            DB::commit();
+            return redirect()->route('admin.energiprimer.bahan-kimia')
+                           ->with('success', 'Data berhasil diupdate');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                           ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                           ->withInput();
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            DB::beginTransaction();
+            
+            $bahanKimia = BahanKimia::findOrFail($id);
+            $bahanKimia->delete();
+
+            DB::commit();
+            return redirect()->route('admin.energiprimer.bahan-kimia')
+                           ->with('success', 'Data berhasil dihapus');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                           ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 } 

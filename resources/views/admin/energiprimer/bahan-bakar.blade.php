@@ -127,7 +127,7 @@
                             <!-- Unit Filter -->
                             <div class="w-48">
                                 <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
-                                <select name="unit_id" class="w-full h-8 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <select name="unit_id" class="w-full h-8 text-sm rounded-md px-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     <option value="">Semua Unit</option>
                                     @foreach($units as $unit)
                                         <option value="{{ $unit->id }}" {{ request('unit_id') == $unit->id ? 'selected' : '' }}>
@@ -140,7 +140,7 @@
                             <!-- Jenis BBM Filter -->
                             <div class="w-36">
                                 <label class="block text-xs font-medium text-gray-700 mb-1">Jenis BBM</label>
-                                <select name="jenis_bbm" class="w-full h-8 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <select name="jenis_bbm" class="w-full h-8 px-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     <option value="">Semua Jenis</option>
                                     <option value="B40" {{ request('jenis_bbm') == 'B40' ? 'selected' : '' }}>B40</option>
                                     <option value="B35" {{ request('jenis_bbm') == 'B35' ? 'selected' : '' }}>B35</option>
@@ -235,30 +235,38 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($bahanBakar as $item)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ $item->tanggal->format('Y-m-d') }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ $item->unit->name }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ $item->jenis_bbm }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ number_format($item->saldo_awal, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ number_format($item->penerimaan, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ number_format($item->pemakaian, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ number_format($item->saldo_akhir, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-blue-600 hover:text-blue-900">Edit</button>
-                                            <button class="ml-4 text-red-600 hover:text-red-900">Hapus</button>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center">
+                                            <a href="{{ route('admin.energiprimer.bahan-bakar.edit', $item->id) }}" 
+                                               class="text-blue-600 hover:text-blue-900">Edit</a>
+                                            <form action="{{ route('admin.energiprimer.bahan-bakar.destroy', $item->id) }}" 
+                                                  method="POST" 
+                                                  class="inline-block ml-4"
+                                                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
+                                            </form>
                                         </td>
                                     </tr>
                                     @endforeach

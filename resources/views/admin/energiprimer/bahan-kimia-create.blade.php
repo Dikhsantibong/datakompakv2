@@ -32,7 +32,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Unit</label>
                                     <select name="unit_id" id="unit_id" required
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                            class="mt-1 block w-full rounded-md px-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                         <option value="">Pilih Unit</option>
                                         @foreach($units as $unit)
                                             <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>

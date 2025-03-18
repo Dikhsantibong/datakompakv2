@@ -108,4 +108,70 @@ class BahanBakarController extends Controller
                            ->withInput();
         }
     }
+
+    public function edit($id)
+    {
+        $bahanBakar = BahanBakar::findOrFail($id);
+        $units = PowerPlant::orderBy('name')->get();
+        
+        return view('admin.energiprimer.bahan-bakar-edit', compact('bahanBakar', 'units'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'tanggal' => 'required|date',
+            'unit_id' => 'required|exists:power_plants,id',
+            'jenis_bbm' => 'required|in:B40,B35,HSD,MFO',
+            'penerimaan' => 'required|numeric|min:0',
+            'pemakaian' => 'required|numeric|min:0',
+        ]);
+
+        $bahanBakar = BahanBakar::findOrFail($id);
+        
+        try {
+            DB::beginTransaction();
+
+            // Hitung saldo akhir
+            $saldoAkhir = $bahanBakar->saldo_awal + $request->penerimaan - $request->pemakaian;
+
+            $bahanBakar->update([
+                'tanggal' => $request->tanggal,
+                'unit_id' => $request->unit_id,
+                'jenis_bbm' => $request->jenis_bbm,
+                'penerimaan' => $request->penerimaan,
+                'pemakaian' => $request->pemakaian,
+                'saldo_akhir' => $saldoAkhir
+            ]);
+
+            DB::commit();
+            return redirect()->route('admin.energiprimer.bahan-bakar')
+                           ->with('success', 'Data berhasil diupdate');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                           ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                           ->withInput();
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            DB::beginTransaction();
+            
+            $bahanBakar = BahanBakar::findOrFail($id);
+            $bahanBakar->delete();
+
+            DB::commit();
+            return redirect()->route('admin.energiprimer.bahan-bakar')
+                           ->with('success', 'Data berhasil dihapus');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                           ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 } 

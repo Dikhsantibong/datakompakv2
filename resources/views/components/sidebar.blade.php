@@ -40,7 +40,7 @@
                         <i class="fas fa-file-contract w-5 h-5"></i>
                         <span class="ml-3 text-sm">Pelumas</span>
                     </a>
-                    <a href="{{ route('admin.energiprimer.bahan-kima') }}" class="flex items-center px-3 py-2 rounded-lg text-gray-100 hover:bg-white/10">
+                    <a href="{{ route('admin.energiprimer.bahan-kimia') }}" class="flex items-center px-3 py-2 rounded-lg text-gray-100 hover:bg-white/10">
                         <i class="fas fa-file-invoice w-5 h-5"></i>
                         <span class="ml-3 text-sm">Bahan Kimia</span>
                     </a>

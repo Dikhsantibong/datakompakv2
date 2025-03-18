@@ -55,17 +55,162 @@
 
         <div class="py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-2xl font-semibold text-gray-900">Data Bahan Bakar</h2>
-                
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-semibold text-gray-900">Data Bahan Bakar</h2>
+                    <a href="{{ route('admin.energiprimer.bahan-bakar.create') }}" 
+                       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Tambah Data
+                    </a>
+                </div>
+
+                <!-- Input Form -->
+                <div id="inputForm" class="mt-6 bg-white rounded-lg shadow-md hidden">
+                    <div class="p-6">
+                        <form action="{{ route('admin.energiprimer.bahan-bakar.store') }}" method="POST">
+                            @csrf
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Tanggal</label>
+                                    <input type="date" name="tanggal" required
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Jenis BBM</label>
+                                    <select name="jenis_bbm" required
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="">Pilih Jenis BBM</option>
+                                        <option value="B40">B40</option>
+                                        <option value="B35">B35</option>
+                                        <option value="HSD">HSD</option>
+                                        <option value="MFO">MFO</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Saldo Awal</label>
+                                    <input type="number" step="0.01" name="saldo_awal" required
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Penerimaan</label>
+                                    <input type="number" step="0.01" name="penerimaan" required
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Pemakaian</label>
+                                    <input type="number" step="0.01" name="pemakaian" required
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+                            </div>
+
+                            <div class="mt-6 flex justify-end">
+                                <button type="button" onclick="document.getElementById('inputForm').style.display='none'"
+                                        class="mr-3 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md">
+                                    Batal
+                                </button>
+                                <button type="submit"
+                                        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md">
+                                    Simpan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Update bagian filter -->
+                <div class="mt-4 bg-white rounded-lg shadow-sm justify-end flex">
+                    <div class="p-4">
+                        <form action="{{ route('admin.energiprimer.bahan-bakar') }}" method="GET" class="flex flex-wrap items-end gap-3">
+                            <!-- Unit Filter -->
+                            <div class="w-48">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
+                                <select name="unit_id" class="w-full h-8 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="">Semua Unit</option>
+                                    @foreach($units as $unit)
+                                        <option value="{{ $unit->id }}" {{ request('unit_id') == $unit->id ? 'selected' : '' }}>
+                                            {{ $unit->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Jenis BBM Filter -->
+                            <div class="w-36">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Jenis BBM</label>
+                                <select name="jenis_bbm" class="w-full h-8 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="">Semua Jenis</option>
+                                    <option value="B40" {{ request('jenis_bbm') == 'B40' ? 'selected' : '' }}>B40</option>
+                                    <option value="B35" {{ request('jenis_bbm') == 'B35' ? 'selected' : '' }}>B35</option>
+                                    <option value="HSD" {{ request('jenis_bbm') == 'HSD' ? 'selected' : '' }}>HSD</option>
+                                    <option value="MFO" {{ request('jenis_bbm') == 'MFO' ? 'selected' : '' }}>MFO</option>
+                                </select>
+                            </div>
+
+                            <!-- Date Range Filters -->
+                            <div class="w-36">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
+                                <input type="date" name="start_date" 
+                                       class="w-full h-8 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                       value="{{ request('start_date') }}">
+                            </div>
+
+                            <div class="w-36">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Akhir</label>
+                                <input type="date" name="end_date" 
+                                       class="w-full h-8 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                       value="{{ request('end_date') }}">
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex gap-2">
+                                <button type="submit"
+                                        class="h-8 px-3 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md">
+                                    Cari
+                                </button>
+                                <a href="{{ route('admin.energiprimer.bahan-bakar') }}" 
+                                   class="h-8 px-3 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md inline-flex items-center">
+                                    Reset
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Update tampilan hasil pencarian -->
+                @if(request()->has('unit_id') || request()->has('jenis_bbm') || request()->has('start_date') || request()->has('end_date'))
+                    <div class="mt-2 text-xs text-gray-500 italic">
+                        Filter aktif:
+                        @if(request('unit_id'))
+                            <span class="mr-2">Unit: {{ $units->find(request('unit_id'))->name }}</span>
+                        @endif
+                        @if(request('jenis_bbm'))
+                            <span class="mr-2">BBM: {{ request('jenis_bbm') }}</span>
+                        @endif
+                        @if(request('start_date'))
+                            <span>Periode: {{ \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') }}
+                            @if(request('end_date'))
+                                - {{ \Carbon\Carbon::parse(request('end_date'))->format('d/m/Y') }}
+                            @endif
+                            </span>
+                        @endif
+                    </div>
+                @endif
+
+                <!-- Display Table -->
                 <div class="mt-6 bg-white rounded-lg shadow-md">
                     <div class="p-6">
-                        <!-- Table -->
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Tanggal
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Unit
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Jenis BBM
@@ -88,31 +233,35 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    <!-- Sample data row -->
+                                    @foreach($bahanBakar as $item)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            2024-03-20
+                                            {{ $item->tanggal->format('Y-m-d') }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            B40
+                                            {{ $item->unit->name }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            1000
+                                            {{ $item->jenis_bbm }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            500
+                                            {{ number_format($item->saldo_awal, 2) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            300
+                                            {{ number_format($item->penerimaan, 2) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            1200
+                                            {{ number_format($item->pemakaian, 2) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {{ number_format($item->saldo_akhir, 2) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button class="text-blue-600 hover:text-blue-900">Edit</button>
                                             <button class="ml-4 text-red-600 hover:text-red-900">Hapus</button>
                                         </td>
                                     </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -125,3 +274,19 @@
 
 <script src="{{ asset('js/toggle.js') }}"></script>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-submit form saat mengubah filter
+    const filterForm = document.querySelector('form');
+    const filterInputs = filterForm.querySelectorAll('select, input[type="date"]');
+
+    filterInputs.forEach(input => {
+        input.addEventListener('change', () => {
+            filterForm.submit();
+        });
+    });
+});
+</script>
+@endpush

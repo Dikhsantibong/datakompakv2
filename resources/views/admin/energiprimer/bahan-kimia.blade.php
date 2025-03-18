@@ -2,62 +2,25 @@
 
 @section('content')
 <div class="flex h-screen">
-    <!-- Include Sidebar -->
     @include('components.sidebar')
 
-    <!-- Main Content -->
     <div id="main-content" class="flex-1 overflow-x-hidden overflow-y-auto">
-        <!-- Header -->
         <header class="bg-white shadow-sm sticky top-0 z-10">
+            <!-- ... existing header content ... -->
             <div class="flex justify-between items-center px-6 py-3">
                 <div class="flex items-center gap-x-3">
-                    <!-- Mobile Menu Toggle -->
-                    <button id="mobile-menu-toggle"
-                        class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                        aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-                    </button>
-
-                    <button id="desktop-menu-toggle"
-                        class="hidden md:block relative items-center justify-center rounded-md text-gray-400 hover:bg-[#009BB9] p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-                    </button>
-
-                    <h1 class="text-xl font-semibold text-gray-800">Data Pelumas</h1>
+                    <!-- ... mobile & desktop menu toggles ... -->
+                    <h1 class="text-xl font-semibold text-gray-800">Data Bahan Kimia</h1>
                 </div>
-
-                <div class="relative">
-                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
-                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
-                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
-                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
-                    </button>
-                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
-                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
-                        </form>
-                    </div>
-                </div>
+                <!-- ... profile dropdown ... -->
             </div>
         </header>
 
         <div class="py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-semibold text-gray-900">Data Pelumas</h2>
-                    <a href="{{ route('admin.energiprimer.pelumas.create') }}" 
+                    <h2 class="text-2xl font-semibold text-gray-900">Data Bahan Kimia</h2>
+                    <a href="{{ route('admin.energiprimer.bahan-kimia.create') }}" 
                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Tambah Data
                     </a>
@@ -66,7 +29,7 @@
                 <!-- Filter Section -->
                 <div class="mt-4 bg-white rounded-lg shadow-sm flex justify-end">
                     <div class="p-4">
-                        <form action="{{ route('admin.energiprimer.pelumas') }}" method="GET" class="flex flex-wrap items-end gap-3">
+                        <form action="{{ route('admin.energiprimer.bahan-kimia') }}" method="GET" class="flex flex-wrap items-end gap-3">
                             <!-- Unit Filter -->
                             <div class="w-48">
                                 <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
@@ -80,12 +43,12 @@
                                 </select>
                             </div>
 
-                            <!-- Jenis Pelumas Filter -->
+                            <!-- Jenis Bahan Kimia Filter -->
                             <div class="w-36">
-                                <label class="block text-xs font-medium text-gray-700 mb-1">Jenis Pelumas</label>
-                                <input type="text" name="jenis_pelumas" 
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Jenis Bahan</label>
+                                <input type="text" name="jenis_bahan" 
                                        class="w-full h-8 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                       value="{{ request('jenis_pelumas') }}"
+                                       value="{{ request('jenis_bahan') }}"
                                        placeholder="Cari jenis...">
                             </div>
 
@@ -110,7 +73,7 @@
                                         class="h-8 px-3 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md">
                                     Cari
                                 </button>
-                                <a href="{{ route('admin.energiprimer.pelumas') }}" 
+                                <a href="{{ route('admin.energiprimer.bahan-kimia') }}" 
                                    class="h-8 px-3 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md inline-flex items-center">
                                     Reset
                                 </a>
@@ -120,14 +83,14 @@
                 </div>
 
                 <!-- Active Filters -->
-                @if(request()->has('unit_id') || request()->has('jenis_pelumas') || request()->has('start_date') || request()->has('end_date'))
+                @if(request()->has('unit_id') || request()->has('jenis_bahan') || request()->has('start_date') || request()->has('end_date'))
                     <div class="mt-2 text-xs text-gray-500 italic">
                         Filter aktif:
                         @if(request('unit_id'))
                             <span class="mr-2">Unit: {{ $units->find(request('unit_id'))->name }}</span>
                         @endif
-                        @if(request('jenis_pelumas'))
-                            <span class="mr-2">Pelumas: {{ request('jenis_pelumas') }}</span>
+                        @if(request('jenis_bahan'))
+                            <span class="mr-2">Bahan: {{ request('jenis_bahan') }}</span>
                         @endif
                         @if(request('start_date'))
                             <span>Periode: {{ \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') }}
@@ -148,7 +111,7 @@
                                     <tr>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Pelumas</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Bahan</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Saldo Awal</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penerimaan</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pemakaian</th>
@@ -157,7 +120,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach($pelumas as $item)
+                                    @foreach($bahanKimia as $item)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {{ $item->tanggal->format('Y-m-d') }}
@@ -166,7 +129,7 @@
                                             {{ $item->unit->name }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $item->jenis_pelumas }}
+                                            {{ $item->jenis_bahan }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {{ number_format($item->saldo_awal, 2) }}
@@ -198,3 +161,19 @@
 
 <script src="{{ asset('js/toggle.js') }}"></script>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-submit form saat mengubah filter
+    const filterForm = document.querySelector('form');
+    const filterInputs = filterForm.querySelectorAll('select, input[type="date"], input[type="text"]');
+
+    filterInputs.forEach(input => {
+        input.addEventListener('change', () => {
+            filterForm.submit();
+        });
+    });
+});
+</script>
+@endpush 

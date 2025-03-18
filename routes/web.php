@@ -36,6 +36,13 @@ use App\Http\Controllers\Admin\MonitorKinerjaController;
 use App\Http\Controllers\Admin\RencanaDayaMampuController;
 use App\Http\Controllers\Admin\AdministrasiOperasiController;
 use App\Http\Controllers\Admin\LibraryController;
+use App\Http\Controllers\BahanBakarController;
+use App\Http\Controllers\PelumasController;
+use App\Http\Controllers\BahanKimiaController;
+use Illuminate\Http\Request;
+use App\Models\BahanBakar;
+use App\Models\Pelumas;
+use App\Models\BahanKimia;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -711,7 +718,7 @@ Route::get('/admin/laporan/download-backlog-document/{no_wo}', [LaporanControlle
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
-        // ... existing routes ...
+        // ... other routes ...
         
         // Daftar Hadir routes
         Route::prefix('daftar-hadir')->name('daftar_hadir.')->group(function () {
@@ -852,14 +859,49 @@ Route::post('/set-unit-source', [DailySummaryController::class, 'setUnitSource']
     ->name('set-unit-source')
     ->middleware('auth');
 
-Route::get('/admin/energiprimer/bahan-bakar', function () {
-    return view('admin.energiprimer.bahan-bakar');
-})->name('admin.energiprimer.bahan-bakar');
 
-Route::get('/admin/energiprimer/pelumas', function () {
-    return view('admin.energiprimer.pelumas');
-})->name('admin.energiprimer.pelumas');
 
-Route::get('/admin/energiprimer/bahan-kima', function () {
-    return view('admin.energiprimer.bahan-kima');
-})->name('admin.energiprimer.bahan-kima');
+Route::get('/admin/energiprimer/bahan-bakar', [BahanBakarController::class, 'index'])->name('admin.energiprimer.bahan-bakar');
+Route::post('/admin/energiprimer/bahan-bakar', [BahanBakarController::class, 'store'])->name('admin.energiprimer.bahan-bakar.store');
+
+Route::get('/admin/energiprimer/bahan-bakar/create', [BahanBakarController::class, 'create'])->name('admin.energiprimer.bahan-bakar.create');
+
+Route::prefix('admin/energiprimer')->name('admin.energiprimer.')->group(function () {
+    Route::get('/pelumas', [PelumasController::class, 'index'])->name('pelumas');
+    Route::get('/pelumas/create', [PelumasController::class, 'create'])->name('pelumas.create');
+    Route::post('/pelumas', [PelumasController::class, 'store'])->name('pelumas.store');
+    
+    // API route untuk cek saldo sebelumnya
+    Route::get('/api/check-previous-balance-pelumas', function (Request $request) {
+        $previousBalance = Pelumas::where('unit_id', $request->unit_id)
+            ->where('jenis_pelumas', $request->jenis_pelumas)
+            ->where('tanggal', '<', $request->tanggal)
+            ->orderBy('tanggal', 'desc')
+            ->first();
+
+        return response()->json([
+            'has_previous' => $previousBalance !== null,
+            'previous_balance' => $previousBalance ? $previousBalance->saldo_akhir : null
+        ]);
+    });
+});
+
+Route::prefix('admin/energiprimer')->name('admin.energiprimer.')->group(function () {
+    Route::get('/bahan-kimia', [BahanKimiaController::class, 'index'])->name('bahan-kimia');
+    Route::get('/bahan-kimia/create', [BahanKimiaController::class, 'create'])->name('bahan-kimia.create');
+    Route::post('/bahan-kimia', [BahanKimiaController::class, 'store'])->name('bahan-kimia.store');
+    
+    // API route untuk cek saldo sebelumnya
+    Route::get('/api/check-previous-balance-kimia', function (Request $request) {
+        $previousBalance = BahanKimia::where('unit_id', $request->unit_id)
+            ->where('jenis_bahan', $request->jenis_bahan)
+            ->where('tanggal', '<', $request->tanggal)
+            ->orderBy('tanggal', 'desc')
+            ->first();
+
+        return response()->json([
+            'has_previous' => $previousBalance !== null,
+            'previous_balance' => $previousBalance ? $previousBalance->saldo_akhir : null
+        ]);
+    });
+});

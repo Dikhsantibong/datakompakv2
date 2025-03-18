@@ -44,7 +44,7 @@
                             <!-- Unit Filter -->
                             <div class="w-48">
                                 <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
-                                <select name="unit_id" class="w-full h-8 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <select name="unit_id" class="w-full h-8 text-sm rounded-md px-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     <option value="">Semua Unit</option>
                                     @foreach($units as $unit)
                                         <option value="{{ $unit->id }}" {{ request('unit_id') == $unit->id ? 'selected' : '' }}>

@@ -37,7 +37,7 @@
 </head>
 <body>
     <div class="header">
-        <img src="{{ public_path('navlogo.png') }}" class="logo">
+        <img src="{{ public_path('logo/navlogo.png') }}" class="logo">
         <h2>Data Pelumas</h2>
         <p>PT PLN Nusantara Power</p>
     </div>

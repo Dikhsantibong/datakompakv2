@@ -75,110 +75,103 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $items = [
+                                        'Potensi gangguan keamanan',
+                                        'Potensi gangguan kebakaran',
+                                        'Peralatan K3 KAM (CCTV, etc)',
+                                        'Peralatan Fire Fighting',
+                                        'Peralatan safety',
+                                        'Lainnya'
+                                    ];
+                                @endphp
+
                                 <!-- K3 & Keamanan Section -->
                                 <tr>
                                     <td class="border px-4 py-2 font-medium bg-gray-50" colspan="7">K3 & Keamanan</td>
                                 </tr>
+                                
+                                @foreach($items as $index => $item)
                                 <tr>
-                                    <td class="border px-4 py-2">Potensi gangguan keamanan</td>
+                                    <td class="border px-4 py-2">{{ $item }}</td>
                                     <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="keamanan_status" value="ada" class="w-4 h-4 cursor-pointer">
+                                        <input type="radio" name="status_{{ $index }}" value="ada" class="w-4 h-4 cursor-pointer">
                                     </td>
                                     <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="keamanan_status" value="tidak_ada" class="w-4 h-4 cursor-pointer">
+                                        <input type="radio" name="status_{{ $index }}" value="tidak_ada" class="w-4 h-4 cursor-pointer">
                                     </td>
                                     <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="keamanan_kondisi" value="normal" class="w-4 h-4 cursor-pointer">
+                                        <input type="radio" name="kondisi_{{ $index }}" value="normal" class="w-4 h-4 cursor-pointer">
                                     </td>
                                     <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="keamanan_kondisi" value="abnormal" class="w-4 h-4 cursor-pointer">
+                                        <input type="radio" name="kondisi_{{ $index }}" value="abnormal" class="w-4 h-4 cursor-pointer">
                                     </td>
                                     <td class="border px-4 py-2">
-                                        <textarea class="w-full p-2 border rounded resize-y min-h-[80px]" placeholder="Masukkan keterangan..."></textarea>
+                                        <textarea name="keterangan_{{ $index }}" class="w-full p-2 border rounded resize-y min-h-[80px]" placeholder="Masukkan keterangan..."></textarea>
                                     </td>
                                     <td class="border px-4 py-2">
-                                        <div class="space-y-2">
-                                            <select class="w-full p-2 border rounded text-sm mb-2" onchange="toggleFileInput(this)">
-                                                <option value="">Pilih Tipe File</option>
-                                                <option value="image">Foto</option>
-                                                <option value="document">Dokumen</option>
-                                                <option value="video">Video</option>
-                                            </select>
-                                            <input type="file" class="w-full text-sm hidden file-input" 
-                                                   accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.mp4,.mov"
-                                                   data-type="image">
+                                        <button type="button" 
+                                                onclick="showMediaModal('row_{{ $index }}')"
+                                                class="w-full px-3 py-2 text-sm font-medium text-blue-600 
+                                                       bg-blue-50 rounded-lg hover:bg-blue-100
+                                                       focus:outline-none focus:ring-2 focus:ring-blue-200
+                                                       transition-all duration-300">
+                                            <i class="fas fa-upload mr-2"></i>
+                                            Upload Media
+                                        </button>
+                                        <div id="preview_row_{{ $index }}" class="hidden mt-2">
+                                            <!-- Preview will be shown here after upload -->
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="border px-4 py-2">Potensi gangguan kebakaran</td>
-                                    <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="kebakaran_status" value="ada" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="kebakaran_status" value="tidak_ada" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="kebakaran_kondisi" value="normal" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="kebakaran_kondisi" value="abnormal" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <textarea class="w-full p-2 border rounded resize-y min-h-[80px]" placeholder="Masukkan keterangan..."></textarea>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="space-y-2">
-                                            <select class="w-full p-2 border rounded text-sm mb-2" onchange="toggleFileInput(this)">
-                                                <option value="">Pilih Tipe File</option>
-                                                <option value="image">Foto</option>
-                                                <option value="document">Dokumen</option>
-                                                <option value="video">Video</option>
-                                            </select>
-                                            <input type="file" class="w-full text-sm hidden file-input" 
-                                                   accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.mp4,.mov"
-                                                   data-type="image">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!-- Add other K3 & Keamanan items similarly -->
+                                @endforeach
 
                                 <!-- Lingkungan Section -->
                                 <tr>
                                     <td class="border px-4 py-2 font-medium bg-gray-50" colspan="7">Lingkungan</td>
                                 </tr>
+                                @php
+                                    $lingkunganItems = [
+                                        'Unsafe action',
+                                        'Unsafe condition',
+                                        'Lainnya'
+                                    ];
+                                @endphp
+
+                                @foreach($lingkunganItems as $index => $item)
                                 <tr>
-                                    <td class="border px-4 py-2">Unsafe action</td>
+                                    <td class="border px-4 py-2">{{ $item }}</td>
                                     <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="unsafe_action_status" value="ada" class="w-4 h-4 cursor-pointer">
+                                        <input type="radio" name="status_lingkungan_{{ $index }}" value="ada" class="w-4 h-4 cursor-pointer">
                                     </td>
                                     <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="unsafe_action_status" value="tidak_ada" class="w-4 h-4 cursor-pointer">
+                                        <input type="radio" name="status_lingkungan_{{ $index }}" value="tidak_ada" class="w-4 h-4 cursor-pointer">
                                     </td>
                                     <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="unsafe_action_kondisi" value="normal" class="w-4 h-4 cursor-pointer">
+                                        <input type="radio" name="kondisi_lingkungan_{{ $index }}" value="normal" class="w-4 h-4 cursor-pointer">
                                     </td>
                                     <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="unsafe_action_kondisi" value="abnormal" class="w-4 h-4 cursor-pointer">
+                                        <input type="radio" name="kondisi_lingkungan_{{ $index }}" value="abnormal" class="w-4 h-4 cursor-pointer">
                                     </td>
                                     <td class="border px-4 py-2">
-                                        <textarea class="w-full p-2 border rounded resize-y min-h-[80px]" placeholder="Masukkan keterangan..."></textarea>
+                                        <textarea name="keterangan_lingkungan_{{ $index }}" class="w-full p-2 border rounded resize-y min-h-[80px]" placeholder="Masukkan keterangan..."></textarea>
                                     </td>
                                     <td class="border px-4 py-2">
-                                        <div class="space-y-2">
-                                            <select class="w-full p-2 border rounded text-sm mb-2" onchange="toggleFileInput(this)">
-                                                <option value="">Pilih Tipe File</option>
-                                                <option value="image">Foto</option>
-                                                <option value="document">Dokumen</option>
-                                                <option value="video">Video</option>
-                                            </select>
-                                            <input type="file" class="w-full text-sm hidden file-input" 
-                                                   accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.mp4,.mov"
-                                                   data-type="image">
+                                        <button type="button" 
+                                                onclick="showMediaModal('lingkungan_{{ $index }}')"
+                                                class="w-full px-3 py-2 text-sm font-medium text-blue-600 
+                                                       bg-blue-50 rounded-lg hover:bg-blue-100
+                                                       focus:outline-none focus:ring-2 focus:ring-blue-200
+                                                       transition-all duration-300">
+                                            <i class="fas fa-upload mr-2"></i>
+                                            Upload Media
+                                        </button>
+                                        <div id="preview_lingkungan_{{ $index }}" class="hidden mt-2">
+                                            <!-- Preview will be shown here after upload -->
                                         </div>
                                     </td>
                                 </tr>
-                                <!-- Add other Lingkungan items similarly -->
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -196,6 +189,9 @@
         </div>
     </div>
 </div>
+
+<!-- Include the media upload modal component -->
+<x-media-upload-modal />
 
 <style>
     /* Table Styles */
@@ -305,5 +301,17 @@ document.querySelectorAll('.file-input').forEach(input => {
         }
     });
 });
+
+function showMediaModal(rowId) {
+    const modal = document.getElementById('mediaUploadModal');
+    document.getElementById('mediaRowId').value = rowId;
+    modal.classList.remove('hidden');
+}
+
+function closeMediaModal() {
+    const modal = document.getElementById('mediaUploadModal');
+    modal.classList.add('hidden');
+    document.getElementById('mediaType').value = '';
+}
 </script>
 @endsection 

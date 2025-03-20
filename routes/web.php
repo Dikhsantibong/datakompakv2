@@ -44,6 +44,7 @@ use App\Models\BahanBakar;
 use App\Models\Pelumas;
 use App\Models\BahanKimia;
 use App\Http\Controllers\Admin\DataEngineController;
+use App\Http\Controllers\Admin\K3KampController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -982,8 +983,9 @@ Route::middleware(['auth'])->group(function () {
         // ... existing routes ...
         
         // K3 KAMP routes
-        Route::get('/k3-kamp', function () {
-            return view('admin.k3-kamp.index');
-        })->name('k3-kamp.index');
+        Route::get('/k3-kamp', [K3KampController::class, 'index'])->name('k3-kamp.index');
+        Route::post('/k3-kamp', [K3KampController::class, 'store'])->name('k3-kamp.store');
+        Route::post('/k3-kamp/upload-media', [K3KampController::class, 'uploadMedia'])->name('k3-kamp.upload-media');
+        Route::delete('/k3-kamp/media/{id}', [K3KampController::class, 'deleteMedia'])->name('k3-kamp.delete-media');
     });
 });

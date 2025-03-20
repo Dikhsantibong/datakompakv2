@@ -69,9 +69,17 @@
                                 <i class="fas fa-chart-bar w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Energi Primer</span>
                             </div>
-                            <i class="fas fa-chevron-down text-xs transition-transform" :class="{'rotate-180': open}"></i>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
                         </button>
-                        <div x-show="open" @click.away="open = false" class="pl-4 mt-1 space-y-1">
+                        <div x-show="open" 
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="transform opacity-0 scale-95"
+                             x-transition:enter-end="transform opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="transform opacity-100 scale-100"
+                             x-transition:leave-end="transform opacity-0 scale-95"
+                             @click.away="open = false" 
+                             class="pl-4 mt-1 space-y-1">
                             <a href="{{ route('admin.energiprimer.bahan-bakar') }}" class="flex items-center px-4 py-2 rounded-lg text-gray-100 hover:bg-white/10">
                                 <i class="fas fa-file-alt w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Bahan Bakar</span>
@@ -94,9 +102,17 @@
                                 <i class="fas fa-clipboard-list w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Administrasi Operasi</span>
                             </div>
-                            <i class="fas fa-chevron-down text-xs transition-transform" :class="{'rotate-180': open}"></i>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
                         </button>
-                        <div x-show="open" @click.away="open = false" class="pl-4 mt-1 space-y-1">
+                        <div x-show="open" 
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="transform opacity-0 scale-95"
+                             x-transition:enter-end="transform opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="transform opacity-100 scale-100"
+                             x-transition:leave-end="transform opacity-0 scale-95"
+                             @click.away="open = false" 
+                             class="pl-4 mt-1 space-y-1">
                             <a href="#" class="flex items-center px-4 py-2 rounded-lg text-gray-100 hover:bg-white/10">
                                 <i class="fas fa-exchange-alt w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Mutasi</span>
@@ -117,9 +133,9 @@
                                 <i class="fas fa-hard-hat w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Laporan K3 KAMP dan Lingkungan</span>
                             </a>
-                            <a href="#" class="flex items-center px-4 py-2 rounded-lg text-gray-100 hover:bg-white/10">
+                            <a href="{{ route('admin.data-engine.index') }}" class="flex items-center px-4 py-2 rounded-lg text-gray-100 hover:bg-white/10">
                                 <i class="fas fa-database w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Data Engineer</span>
+                                <span class="ml-3 text-sm">Data Engine</span>
                             </a>
                             <a href="#" class="flex items-center px-4 py-2 rounded-lg text-gray-100 hover:bg-white/10">
                                 <i class="fas fa-check-circle w-5 h-5"></i>

@@ -43,6 +43,7 @@ use Illuminate\Http\Request;
 use App\Models\BahanBakar;
 use App\Models\Pelumas;
 use App\Models\BahanKimia;
+use App\Http\Controllers\Admin\DataEngineController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -969,4 +970,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     });
 
     // ... existing routes ...
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/data-engine', [DataEngineController::class, 'index'])
+        ->name('admin.data-engine.index');
 });

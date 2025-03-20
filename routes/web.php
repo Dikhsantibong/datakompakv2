@@ -976,3 +976,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/data-engine', [DataEngineController::class, 'index'])
         ->name('admin.data-engine.index');
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
+        // ... existing routes ...
+        
+        // K3 KAMP routes
+        Route::get('/k3-kamp', function () {
+            return view('admin.k3-kamp.index');
+        })->name('k3-kamp.index');
+    });
+});

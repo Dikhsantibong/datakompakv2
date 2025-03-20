@@ -45,7 +45,7 @@
                             </svg>
                         </button>
     
-                        <h1 class="text-xl font-semibold text-gray-800">Administrasi Operasi</h1>
+                        <h1 class="text-xl font-semibold text-gray-800">Administrasi Operator</h1>
                     </div>
     
                     <div class="relative">

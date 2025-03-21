@@ -121,7 +121,7 @@
                                 <i class="fas fa-exclamation-triangle w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Laporan Abnormal/Gangguan</span>
                             </a>
-                            <a href="#" class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <a href="{{ route('admin.flm.index') }}" class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10 {{ request()->routeIs('admin.flm.*') ? 'bg-white/10 text-white font-medium' : '' }}">
                                 <i class="fas fa-tasks w-5 h-5"></i>
                                 <span class="ml-3 text-sm">FLM</span>
                             </a>

@@ -989,3 +989,12 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/k3-kamp/media/{id}', [K3KampController::class, 'deleteMedia'])->name('k3-kamp.delete-media');
     });
 });
+
+Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+    // ... existing routes ...
+    
+    // FLM Routes
+    Route::get('/flm', function () {
+        return view('admin.flm.index');
+    })->name('flm.index');
+});

@@ -19,4 +19,19 @@ class DataEngineController extends Controller
 
         return view('admin.data-engine.index', compact('powerPlants', 'date'));
     }
+    
+    public function edit($date)
+    {
+        $powerPlants = PowerPlant::with('machines')->get();
+        return view('admin.data-engine.edit', compact('powerPlants', 'date'));
+    }
+
+    public function update(Request $request)
+    {
+        // Validate and save the data
+        // Redirect back to index with success message
+        return redirect()
+            ->route('admin.data-engine.index', ['date' => $request->date])
+            ->with('success', 'Data berhasil diperbarui');
+    }
 } 

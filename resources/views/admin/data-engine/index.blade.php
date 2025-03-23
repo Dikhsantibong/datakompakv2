@@ -66,6 +66,10 @@
                                 class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                             Tampilkan Data
                         </button>
+                        <a href="{{ route('admin.data-engine.edit', ['date' => request('date', now()->format('Y-m-d'))]) }}"
+                           class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                            Update Data
+                        </a>
                     </form>
                 </div>
 

@@ -998,3 +998,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         return view('admin.flm.index');
     })->name('flm.index');
 });
+
+Route::get('/admin/data-engine/{date}/edit', [DataEngineController::class, 'edit'])->name('admin.data-engine.edit');
+Route::post('/admin/data-engine/update', [DataEngineController::class, 'update'])->name('admin.data-engine.update');

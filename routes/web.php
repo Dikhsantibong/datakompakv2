@@ -997,6 +997,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('/flm', function () {
         return view('admin.flm.index');
     })->name('flm.index');
+    Route::get('/flm/update-view', function () {
+        return view('admin.flm.update');
+    })->name('flm.update-view');
 });
 
 Route::get('/admin/data-engine/{date}/edit', [DataEngineController::class, 'edit'])->name('admin.data-engine.edit');

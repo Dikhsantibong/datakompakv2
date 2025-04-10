@@ -50,8 +50,17 @@
                 </div>
             </div>
         </header>
+
+        <div class="mt-6 flex justify-end gap-x-4">
+            <a href="{{ route('admin.flm.update-view') }}" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                Update
+            </a>
+            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Simpan
+            </button>
+        </div>
         
-        <main class="px-6 py-8">
+        <main class="px-6 py-8 bg-white rounded-lg shadow-md ">
             <!-- Tab Navigation -->
             <div class="mb-6">
                 <div class="border-b border-gray-200">
@@ -240,11 +249,7 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="mt-6 flex justify-end">
-                <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    Simpan
-                </button>
-            </div>
+           
         </main>
     </div>
 </div>

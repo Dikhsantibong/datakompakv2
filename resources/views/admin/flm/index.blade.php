@@ -99,7 +99,7 @@
                                     <td class="px-4 py-3 text-sm text-gray-900">1</td>
                                     <td class="px-4 py-3 text-sm text-gray-900">Mesin Utama</td>
                                     <td class="px-4 py-3 text-sm">
-                                        <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
                                             <option value="baik">Baik</option>
                                             <option value="rusak">Rusak</option>
                                         </select>
@@ -131,7 +131,7 @@
                                     <td class="px-4 py-3 text-sm text-gray-900">1</td>
                                     <td class="px-4 py-3 text-sm text-gray-900">Fuel Pump</td>
                                     <td class="px-4 py-3 text-sm">
-                                        <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
                                             <option value="baik">Baik</option>
                                             <option value="rusak">Rusak</option>
                                         </select>
@@ -163,7 +163,7 @@
                                     <td class="px-4 py-3 text-sm text-gray-900">1</td>
                                     <td class="px-4 py-3 text-sm text-gray-900">Baut Pompa JW</td>
                                     <td class="px-4 py-3 text-sm">
-                                        <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
                                             <option value="normal">Normal</option>
                                             <option value="tidak_normal">Tidak Normal</option>
                                         </select>
@@ -195,16 +195,16 @@
                                 <tr>
                                     <td class="px-4 py-3 text-sm text-gray-900">1</td>
                                     <td class="px-4 py-3 text-sm">
-                                        <input type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <textarea type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"></textarea>
                                     </td>
                                     <td class="px-4 py-3 text-sm">
-                                        <input type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <textarea type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"></textarea>
                                     </td>
                                     <td class="px-4 py-3 text-sm">
                                         <input type="datetime-local" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                                     </td>
                                     <td class="px-4 py-3 text-sm">
-                                        <input type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <textarea type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"></textarea>
                                     </td>
                                 </tr>
                             </tbody>

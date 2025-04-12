@@ -51,12 +51,15 @@
             </div>
         </header>
 
-        <div class="mt-6 flex justify-end gap-x-4">
+        <div class="mt-6 flex justify-end gap-x-4 mb-6">
             <a href="{{ route('admin.flm.update-view') }}" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                Update
+                <i class="fas fa-cog mr-2"></i>Kelola Data
             </a>
+            <button type="button" class="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+                <i class="fas fa-sync-alt mr-2"></i>Refresh Data
+            </button>
             <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                Simpan
+                <i class="fas fa-save mr-2"></i>Simpan
             </button>
         </div>
         

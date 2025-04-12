@@ -29,13 +29,13 @@
                     <a href="{{ route('admin.monitor-kinerja') }}"
                         class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.monitor-kinerja') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                         <i class="fas fa-chart-line w-5 h-5"></i>
-                        <span class="ml-3 text-sm">Monitor Kinerja Pembangkit</span>
+                        <span class="ml-3 text-sm">Monitoring Kinerja UP Kendari</span>
                     </a>
 
                     <a href="{{ route('admin.machine-monitor') }}"
                         class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.machine-monitor') || request()->routeIs('admin.machine-monitor.show') || request()->routeIs('admin.power-plants.index') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                         <i class="fas fa-cogs w-5 h-5"></i>
-                        <span class="ml-3 text-sm">Monitor Mesin</span>
+                        <span class="ml-3 text-sm">Data Mesin Pembangkit</span>
                     </a>
                 </div>
 
@@ -63,8 +63,14 @@
                 <!-- Resource Management Section -->
                 <div class="pt-2 border-t border-white/10">
                     <!-- Energi Primer Dropdown -->
-                    <div class="relative mb-2" x-data="{ open: false }">
-                        <button @click="open = !open" class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                    <div class="relative mb-2" x-data="{ 
+                        open: {{ request()->routeIs('admin.energiprimer.*') ? 'true' : 'false' }},
+                        toggle() {
+                            this.open = !this.open
+                        }
+                    }">
+                        <button @click="toggle()" 
+                                class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <div class="flex items-center">
                                 <i class="fas fa-chart-bar w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Energi Primer</span>
@@ -80,15 +86,19 @@
                              x-transition:leave-end="transform opacity-0 scale-95"
                              @click.away="open = false" 
                              class="pl-4 mt-1 space-y-1">
-                            <a href="{{ route('admin.energiprimer.bahan-bakar') }}" class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <a href="{{ route('admin.energiprimer.bahan-bakar') }}" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.bahan-bakar*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                                 <i class="fas fa-file-alt w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Bahan Bakar</span>
                             </a>
-                            <a href="{{ route('admin.energiprimer.pelumas') }}" class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            
+                            <a href="{{ route('admin.energiprimer.pelumas') }}" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.pelumas*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                                 <i class="fas fa-file-contract w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Pelumas</span>
                             </a>
-                            <a href="{{ route('admin.energiprimer.bahan-kimia') }}" class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <a href="{{ route('admin.energiprimer.bahan-kimia') }}" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.bahan-kimia*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                                 <i class="fas fa-file-invoice w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Bahan Kimia</span>
                             </a>
@@ -96,8 +106,14 @@
                     </div>
 
                     <!-- Administrasi Operasi Dropdown -->
-                    <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-left {{ request()->routeIs('admin.administrasi_operasi.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                    <div class="relative" x-data="{ 
+                        open: {{ request()->routeIs('admin.administrasi_operasi.*') || request()->routeIs('admin.flm.*') || request()->routeIs('admin.k3-kamp.*') || request()->routeIs('admin.data-engine.*') ? 'true' : 'false' }},
+                        toggle() {
+                            this.open = !this.open
+                        }
+                    }">
+                        <button @click="toggle()" 
+                                class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.administrasi_operasi.*') || request()->routeIs('admin.flm.*') || request()->routeIs('admin.k3-kamp.*') || request()->routeIs('admin.data-engine.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <div class="flex items-center">
                                 <i class="fas fa-clipboard-list w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Administrasi Operasi</span>
@@ -113,31 +129,38 @@
                              x-transition:leave-end="transform opacity-0 scale-95"
                              @click.away="open = false" 
                              class="pl-4 mt-1 space-y-1">
-                            <a href="#" class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <a href="#" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
                                 <i class="fas fa-exchange-alt w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Mutasi</span>
                             </a>
-                            <a href="#" class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <a href="#" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
                                 <i class="fas fa-exclamation-triangle w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Laporan Abnormal/Gangguan</span>
                             </a>
-                            <a href="{{ route('admin.flm.index') }}" class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10 {{ request()->routeIs('admin.flm.*') ? 'bg-white/10 text-white font-medium' : '' }}">
+                            <a href="{{ route('admin.flm.index') }}" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.flm.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                                 <i class="fas fa-tasks w-5 h-5"></i>
                                 <span class="ml-3 text-sm">FLM</span>
                             </a>
-                            <a href="#" class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <a href="#" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
                                 <i class="fas fa-check-double w-5 h-5"></i>
                                 <span class="ml-3 text-sm">5S5R Operator</span>
                             </a>
-                            <a href="{{ route('admin.k3-kamp.index') }}" class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10 {{ request()->routeIs('admin.k3-kamp.*') ? 'bg-white/10 text-white font-medium' : '' }}">
+                            <a href="{{ route('admin.k3-kamp.index') }}" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.k3-kamp.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                                 <i class="fas fa-hard-hat w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Laporan K3 KAMP dan Lingkungan</span>
                             </a>
-                            <a href="{{ route('admin.data-engine.index') }}" class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <a href="{{ route('admin.data-engine.index') }}" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.data-engine.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                                 <i class="fas fa-database w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Data Engine</span>
                             </a>
-                            <a href="#" class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <a href="#" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
                                 <i class="fas fa-check-circle w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Ceklis</span>
                             </a>

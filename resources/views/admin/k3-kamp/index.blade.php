@@ -57,7 +57,23 @@
         <!-- Content -->
         <div class="container mx-auto px-6 py-8">
             <div class="p-6 bg-white rounded-lg shadow-md">
-                <h2 class="text-2xl font-bold mb-6">Laporan K3 KAMP dan Lingkungan</h2>
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Laporan K3 KAMP dan Lingkungan</h2>
+                    <div class="flex gap-4">
+                        <a href="{{ route('admin.k3-kamp.view') }}" 
+                           class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            <i class="fas fa-eye mr-2"></i>Lihat Data
+                        </a>
+                        <button type="button" 
+                                class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+                            <i class="fas fa-sync-alt mr-2"></i>Refresh Data
+                        </button>
+                        <button type="submit" 
+                                class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                            <i class="fas fa-save mr-2"></i>Simpan
+                        </button>
+                    </div>
+                </div>
 
                 <form action="#" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -174,15 +190,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
-
-                    <div class="mt-6 flex justify-end gap-4">
-                        <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
-                            Batal
-                        </button>
-                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                            Simpan Laporan
-                        </button>
                     </div>
                 </form>
             </div>

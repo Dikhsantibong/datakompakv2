@@ -50,10 +50,16 @@
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-lg font-semibold">Daftar Dokumen Standarisasi dan Peraturan</h2>
-                        <button onclick="showUploadModal('standarisasi')" 
-                                class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
-                            <i class="fas fa-upload mr-2"></i>Upload Dokumen
-                        </button>
+                        <div class="flex gap-4">
+                            <a href="{{ route('admin.library.index') }}" 
+                               class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                <i class="fas fa-arrow-left mr-2"></i>Kembali
+                            </a>
+                            <button onclick="showUploadModal('standarisasi')" 
+                                    class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                                <i class="fas fa-upload mr-2"></i>Upload Dokumen
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Search Bar -->

@@ -57,7 +57,10 @@
                     <input type="hidden" name="date" value="{{ $date }}">
                     
                     <div class="flex justify-end gap-4 mb-6">
-                        
+                        <a href="{{ route('admin.data-engine.index', ['date' => $date]) }}" 
+                           class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                            <i class="fas fa-arrow-left mr-2"></i>Kembali
+                        </a>
                         <div class="flex items-center gap-4">
                             <div class="relative flex items-center gap-2">
                                 <label for="timeSelector" class="block text-sm font-medium text-gray-700">

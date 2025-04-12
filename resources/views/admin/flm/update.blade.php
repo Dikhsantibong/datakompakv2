@@ -11,26 +11,43 @@
                 <div class="flex items-center gap-x-3">
                     <button id="desktop-menu-toggle"
                         class="hidden md:block relative items-center justify-center rounded-md text-gray-400 hover:bg-[#009BB9] p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                        <span class="sr-only">Open main menu</span>
+                        <span class="sr-only">Buka menu utama</span>
                         <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                         </svg>
                     </button>
 
-                    <h1 class="text-xl font-semibold text-gray-800">Update Form Pemeriksaan FLM</h1>
-                </div>
-
-                <div class="flex items-center gap-x-4">
-                    <a href="{{ route('admin.flm.index') }}" class="px-4 py-2 text-gray-600 hover:text-gray-800">
-                        <i class="fas fa-arrow-left mr-2"></i>
-                        Kembali
-                    </a>
+                    <h1 class="text-xl font-semibold text-gray-800">Perbarui Form Pemeriksaan FLM</h1>
                 </div>
             </div>
         </header>
 
         <main class="p-6">
             <div class="bg-white rounded-lg shadow-md p-6">
+                <!-- Filter Options -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center gap-x-4">
+                        <div class="flex items-center gap-x-2">
+                            <label class="text-sm font-medium text-gray-700">Tanggal:</label>
+                            <input type="date" class="rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        </div>
+                        <div class="flex items-center gap-x-2">
+                            <label class="text-sm font-medium text-gray-700">Pilih Unit:</label>
+                            <select class="rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                <option value="">Pilih Unit</option>
+                                <option value="1">Unit 1</option>
+                                <option value="2">Unit 2</option>
+                                <option value="3">Unit 3</option>
+                                <option value="4">Unit 4</option>
+                                <option value="5">Unit 5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <a href="{{ route('admin.flm.index') }}" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                        <i class="fas fa-arrow-left mr-2"></i>Kembali
+                    </a>
+                </div>
+
                 <!-- Tab Navigation -->
                 <div class="mb-6">
                     <div class="border-b border-gray-200">
@@ -63,20 +80,20 @@
                 <div class="tab-contents space-y-6">
                     <!-- Pemeriksaan Visual Tab -->
                     <div id="pemeriksaan-visual-content" class="tab-content">
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
+                        <div class="overflow-x-auto shadow-md rounded-lg border border-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200 border-collapse border border-gray-200">
+                                <thead class="bg-[#0A749B]">
                                     <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Komponen</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kondisi</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Keterangan</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Komponen</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Kondisi</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Keterangan</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-200">
+                                <tbody class="bg-white divide-y divide-gray-200">
                                     <tr>
-                                        <td class="px-4 py-3">Mesin Utama</td>
-                                        <td class="px-4 py-3 text-green-600">Baik</td>
-                                        <td class="px-4 py-3">-</td>
+                                        <td class="px-4 py-3 border border-gray-200">Mesin Utama</td>
+                                        <td class="px-4 py-3 text-green-600 border border-gray-200">Baik</td>
+                                        <td class="px-4 py-3 border border-gray-200">-</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -85,20 +102,20 @@
 
                     <!-- Lumasi Tab -->
                     <div id="lumasi-content" class="tab-content hidden">
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
+                        <div class="overflow-x-auto shadow-md rounded-lg border border-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200 border-collapse border border-gray-200">
+                                <thead class="bg-[#0A749B]">
                                     <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fungsi</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kondisi</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Keterangan</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Fungsi</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Kondisi</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Keterangan</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-200">
+                                <tbody class="bg-white divide-y divide-gray-200">
                                     <tr>
-                                        <td class="px-4 py-3">Fuel Pump</td>
-                                        <td class="px-4 py-3 text-green-600">Baik</td>
-                                        <td class="px-4 py-3">Sudah dilumasi</td>
+                                        <td class="px-4 py-3 border border-gray-200">Fuel Pump</td>
+                                        <td class="px-4 py-3 text-green-600 border border-gray-200">Baik</td>
+                                        <td class="px-4 py-3 border border-gray-200">Sudah dilumasi</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -107,20 +124,20 @@
 
                     <!-- Kencangkan Tab -->
                     <div id="kencangkan-content" class="tab-content hidden">
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
+                        <div class="overflow-x-auto shadow-md rounded-lg border border-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200 border-collapse border border-gray-200">
+                                <thead class="bg-[#0A749B]">
                                     <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Komponen</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kondisi</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Keterangan</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Komponen</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Kondisi</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Keterangan</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-200">
+                                <tbody class="bg-white divide-y divide-gray-200">
                                     <tr>
-                                        <td class="px-4 py-3">Baut Pompa JW</td>
-                                        <td class="px-4 py-3 text-green-600">Normal</td>
-                                        <td class="px-4 py-3">Sudah dikencangkan</td>
+                                        <td class="px-4 py-3 border border-gray-200">Baut Pompa JW</td>
+                                        <td class="px-4 py-3 text-green-600 border border-gray-200">Normal</td>
+                                        <td class="px-4 py-3 border border-gray-200">Sudah dikencangkan</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -130,22 +147,22 @@
                     <!-- Permasalahan Tab -->
                     <div id="permasalahan-content" class="tab-content hidden">
                         <div class="space-y-6">
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
+                            <div class="overflow-x-auto shadow-md rounded-lg border border-gray-200">
+                                <table class="min-w-full divide-y divide-gray-200 border-collapse border border-gray-200">
+                                    <thead class="bg-[#0A749B]">
                                         <tr>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Masalah Ditemukan</th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tindakan</th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Waktu Pelaksanaan</th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Keterangan</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Masalah Ditemukan</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Tindakan</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Waktu Pelaksanaan</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase border border-gray-300">Keterangan</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-gray-200">
+                                    <tbody class="bg-white divide-y divide-gray-200">
                                         <tr>
-                                            <td class="px-4 py-3">Kebocoran oli</td>
-                                            <td class="px-4 py-3">Penggantian seal</td>
-                                            <td class="px-4 py-3">2024-03-15 09:30</td>
-                                            <td class="px-4 py-3">Sudah diperbaiki</td>
+                                            <td class="px-4 py-3 border border-gray-200">Kebocoran oli</td>
+                                            <td class="px-4 py-3 border border-gray-200">Penggantian seal</td>
+                                            <td class="px-4 py-3 border border-gray-200">2024-03-15 09:30</td>
+                                            <td class="px-4 py-3 border border-gray-200">Sudah diperbaiki</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -175,10 +192,10 @@
                 <!-- Action Buttons -->
                 <div class="mt-6 flex justify-end gap-x-4">
                     <button type="button" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        Edit
+                        <i class="fas fa-edit mr-2"></i>Ubah
                     </button>
                     <button type="button" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                        Delete
+                        <i class="fas fa-trash mr-2"></i>Hapus
                     </button>
                 </div>
             </div>

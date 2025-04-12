@@ -29,22 +29,24 @@
                     <h1 class="text-xl font-semibold text-gray-800">Manajemen Data Rencana Daya Mampu</h1>
                 </div>
 
-                <div class="relative">
-                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
-                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
-                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
-                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
-                    </button>
-                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
-                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
-                        </form>
+                <div class="flex items-center gap-2">
+                    <div class="relative">
+                        <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                            <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
+                            <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                            <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                        </button>
+                        <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                            <a href="{{ route('logout') }}" 
+                               class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                @csrf
+                                <input type="hidden" name="redirect" value="{{ route('homepage') }}">
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -108,6 +110,10 @@
 
                             <!-- Export Buttons -->
                             <div class="flex gap-2">
+                                <a href="{{ route('admin.rencana-daya-mampu') }}" 
+                                   class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 transition-colors duration-200 flex items-center gap-2">
+                                    <i class="fas fa-arrow-left"></i> Kembali
+                                </a>
                                 <button type="button" 
                                         onclick="exportData('pdf')" 
                                         class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600 transition-colors duration-200 flex items-center gap-2">

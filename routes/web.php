@@ -95,9 +95,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/monitor-kinerja', [MonitorKinerjaController::class, 'index'])->name('monitor-kinerja');
 
     // Add rencana-daya-mampu route (temporary view only)
-    Route::get('/rencana-daya-mampu', function() {
-        return view('admin.rencana-daya-mampu.index');
-    })->name('rencana-daya-mampu');
+    Route::prefix('rencana-daya-mampu')->name('rencana-daya-mampu.')->group(function () {
+        Route::get('/', [RencanaDayaMampuController::class, 'index'])->name('index');
+        Route::get('/manage', [RencanaDayaMampuController::class, 'manage'])->name('manage');
+        Route::get('/export', [RencanaDayaMampuController::class, 'export'])->name('export');
+        Route::post('/update', [RencanaDayaMampuController::class, 'update'])->name('update');
+        Route::get('/get-status', [RencanaDayaMampuController::class, 'getStatus'])->name('get-status');
+        Route::post('/save-status', [RencanaDayaMampuController::class, 'saveStatus'])->name('save-status');
+    });
 
     Route::prefix('machine-monitor')->group(function () {
         Route::get('/', [MachineMonitorController::class, 'index'])->name('machine-monitor');
@@ -982,11 +987,14 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         // ... existing routes ...
         
-        // K3 KAMP routes
-        Route::get('/k3-kamp', [K3KampController::class, 'index'])->name('k3-kamp.index');
-        Route::post('/k3-kamp', [K3KampController::class, 'store'])->name('k3-kamp.store');
-        Route::post('/k3-kamp/upload-media', [K3KampController::class, 'uploadMedia'])->name('k3-kamp.upload-media');
-        Route::delete('/k3-kamp/media/{id}', [K3KampController::class, 'deleteMedia'])->name('k3-kamp.delete-media');
+        // K3 KAMP routes (temporary views)
+        Route::get('/k3-kamp', function () {
+            return view('admin.k3-kamp.index');
+        })->name('k3-kamp.index');
+        
+        Route::get('/k3-kamp/view', function () {
+            return view('admin.k3-kamp.view');
+        })->name('k3-kamp.view');
     });
 });
 

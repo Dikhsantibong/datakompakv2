@@ -191,6 +191,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     });
 
     Route::get('/machine-monitor', [MachineMonitorController::class, 'index'])->name('machine-monitor');
+
+    // Link Koordinasi routes
+    Route::prefix('link-koordinasi')->name('link-koordinasi.')->group(function () {
+        Route::get('/coordination-links', function () {
+            return view('admin.link-koordinasi.coordination-links');
+        })->name('coordination-links');
+    });
 });
 
 
@@ -1018,15 +1025,12 @@ Route::middleware(['auth'])->group(function () {
         // ... existing routes ...
         
         // Calendar routes
-        Route::get('/kalender', function () {
-            return view('admin.kalender.calendar');
-        })->name('kalender.calendar');
-
-        // Coordination Links routes
-        Route::get('/link-koordinasi', function () {
-            return view('admin.link-koordinasi.coordination-links');
-        })->name('link-koordinasi.coordination-links');
-
-        // ... existing routes ...
+        Route::get('/kalender', [App\Http\Controllers\Admin\OperationScheduleController::class, 'index'])->name('kalender.calendar');
+        Route::get('/kalender/create', [App\Http\Controllers\Admin\OperationScheduleController::class, 'create'])->name('kalender.create');
+        Route::post('/kalender', [App\Http\Controllers\Admin\OperationScheduleController::class, 'store'])->name('kalender.store');
+        Route::get('/kalender/{schedule}/edit', [App\Http\Controllers\Admin\OperationScheduleController::class, 'edit'])->name('kalender.edit');
+        Route::put('/kalender/{schedule}', [App\Http\Controllers\Admin\OperationScheduleController::class, 'update'])->name('kalender.update');
+        Route::delete('/kalender/{schedule}', [App\Http\Controllers\Admin\OperationScheduleController::class, 'destroy'])->name('kalender.destroy');
+        Route::get('/kalender/schedules/{date}', [App\Http\Controllers\Admin\OperationScheduleController::class, 'getSchedulesByDate'])->name('kalender.schedules');
     });
 });

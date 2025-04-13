@@ -1012,3 +1012,21 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
 Route::get('/admin/data-engine/{date}/edit', [DataEngineController::class, 'edit'])->name('admin.data-engine.edit');
 Route::post('/admin/data-engine/update', [DataEngineController::class, 'update'])->name('admin.data-engine.update');
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
+        // ... existing routes ...
+        
+        // Calendar routes
+        Route::get('/kalender', function () {
+            return view('admin.kalender.calendar');
+        })->name('kalender.calendar');
+
+        // Coordination Links routes
+        Route::get('/link-koordinasi', function () {
+            return view('admin.link-koordinasi.coordination-links');
+        })->name('link-koordinasi.coordination-links');
+
+        // ... existing routes ...
+    });
+});

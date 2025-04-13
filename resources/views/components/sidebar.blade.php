@@ -175,20 +175,55 @@
                         <i class="fas fa-book w-5 h-5"></i>
                         <span class="ml-3 text-sm">Library</span>
                     </a>
+                </div>
 
-                    <a href="{{ route('admin.users') }}"
-                        class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.users') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                        <i class="fas fa-users w-5 h-5"></i>
-                        <span class="ml-3 text-sm">Manajemen Pengguna</span>
-                    </a>
+                <!-- Fitur Pendukung Section -->
+                <div class="pt-2 border-t border-white/10">
+                    <div class="relative" x-data="{ 
+                        open: {{ request()->routeIs('admin.kalender.calendar') || request()->routeIs('admin.link-koordinasi.coordination-links') || request()->routeIs('admin.users') || request()->routeIs('admin.settings') ? 'true' : 'false' }}
+                    }">
+                        <button @click="open = !open" 
+                                class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.kalender.calendar') || request()->routeIs('admin.link-koordinasi.coordination-links') || request()->routeIs('admin.users') || request()->routeIs('admin.settings') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                            <div class="flex items-center">
+                                <i class="fas fa-tools w-5 h-5"></i>
+                                <span class="ml-3 text-sm">Fitur Pendukung</span>
+                            </div>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
+                        </button>
+                        <div x-show="open" 
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="transform opacity-0 scale-95"
+                             x-transition:enter-end="transform opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="transform opacity-100 scale-100"
+                             x-transition:leave-end="transform opacity-0 scale-95"
+                             @click.away="open = false" 
+                             class="pl-4 mt-1 space-y-1">
+                            <a href="{{ route('admin.kalender.calendar') }}" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.kalender.calendar') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                                <i class="fas fa-calendar-alt w-5 h-5"></i>
+                                <span class="ml-3 text-sm">Kalender Operasi</span>
+                            </a>
+                            
+                            <a href="{{ route('admin.link-koordinasi.coordination-links') }}" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.link-koordinasi.coordination-links') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                                <i class="fas fa-link w-5 h-5"></i>
+                                <span class="ml-3 text-sm">Link Koordinasi Operasi</span>
+                            </a>
 
-                    @if(auth()->user()->isSuperAdmin())
-                        <a href="{{ route('admin.settings') }}"
-                            class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.settings') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                            <i class="fas fa-cog w-5 h-5"></i>
-                            <span class="ml-3 text-sm">Pengaturan</span>
-                        </a>
-                    @endif
+                            <a href="{{ route('admin.users') }}" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.users') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                                <i class="fas fa-users w-5 h-5"></i>
+                                <span class="ml-3 text-sm">Manajemen Pengguna</span>
+                            </a>
+
+                            <a href="{{ route('admin.settings') }}" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.settings') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                                <i class="fas fa-cog w-5 h-5"></i>
+                                <span class="ml-3 text-sm">Pengaturan</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>

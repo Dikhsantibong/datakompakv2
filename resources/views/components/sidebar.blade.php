@@ -116,7 +116,7 @@
                                 class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.administrasi_operasi.*') || request()->routeIs('admin.flm.*') || request()->routeIs('admin.k3-kamp.*') || request()->routeIs('admin.data-engine.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <div class="flex items-center">
                                 <i class="fas fa-clipboard-list w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Administrasi Operasi</span>
+                                <span class="ml-3 text-sm">Operasi UL/Sentral</span>
                             </div>
                             <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
                         </button>

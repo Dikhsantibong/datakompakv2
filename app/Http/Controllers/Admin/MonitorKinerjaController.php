@@ -90,6 +90,11 @@ class MonitorKinerjaController extends Controller
                 'nphr' => $latestSummary->nphr ?? 0,
                 'slc' => $latestSummary->slc ?? 0,
             ],
+            'transformerLosses' => [
+                'current' => $latestSummary->transformer_losses ?? 0,
+                'unit' => 'kWh',
+                'description' => 'Susut Trafo'
+            ],
             'chartData' => $chartData,
         ];
 

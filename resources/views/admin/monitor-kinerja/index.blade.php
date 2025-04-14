@@ -266,6 +266,10 @@
                                 <span class="text-sm text-gray-600">SLC</span>
                                 <span class="font-semibold text-gray-800">{{ $technicalParams['slc'] }}</span>
                             </div>
+                            <div class="flex justify-between items-center pt-2 border-t">
+                                <span class="text-sm text-gray-600">{{ $transformerLosses['description'] }}</span>
+                                <span class="font-semibold text-gray-800">{{ number_format($transformerLosses['current'], 2) }} {{ $transformerLosses['unit'] }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>

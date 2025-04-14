@@ -106,9 +106,6 @@
                                     <div class="relative">
                                         <input type="date" name="schedule_date" id="schedule_date" required
                                             class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('schedule_date') border-red-500 @else border-gray-300 @enderror transition-all duration-300">
-                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                            <i class="fas fa-calendar text-gray-400"></i>
-                                        </div>
                                     </div>
                                     @error('schedule_date')
                                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -121,9 +118,6 @@
                                         <div class="relative">
                                             <input type="time" name="start_time" id="start_time" required
                                                 class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('start_time') border-red-500 @else border-gray-300 @enderror transition-all duration-300">
-                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                                <i class="far fa-clock text-gray-400"></i>
-                                            </div>
                                         </div>
                                         @error('start_time')
                                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -135,9 +129,6 @@
                                         <div class="relative">
                                             <input type="time" name="end_time" id="end_time" required
                                                 class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('end_time') border-red-500 @else border-gray-300 @enderror transition-all duration-300">
-                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                                <i class="far fa-clock text-gray-400"></i>
-                                            </div>
                                         </div>
                                         @error('end_time')
                                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>

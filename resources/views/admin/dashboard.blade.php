@@ -225,6 +225,55 @@
                 </div>
             </div>
 
+             <!-- Operation Schedule Section -->
+             <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium">Jadwal Operasi Hari Ini</h3>
+                    <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Lihat Semua Jadwal →</a>
+                </div>
+                @if($operationSchedules->count() > 0)
+                    <div class="space-y-4">
+                        @foreach($operationSchedules as $schedule)
+                            <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-medium text-gray-800">{{ $schedule->title }}</h4>
+                                        <p class="text-sm text-gray-600 mt-1">{{ $schedule->description }}</p>
+                                        <div class="flex items-center mt-2 text-sm text-gray-500">
+                                            <i class="fas fa-map-marker-alt mr-2"></i>
+                                            <span>{{ $schedule->location }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm font-medium text-gray-800">
+                                            {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }} - 
+                                            {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }}
+                                        </div>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                            @if($schedule->status == 'completed') bg-green-100 text-green-800
+                                            @elseif($schedule->status == 'in_progress') bg-blue-100 text-blue-800
+                                            @else bg-yellow-100 text-yellow-800 @endif">
+                                            {{ ucfirst($schedule->status) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                @if($schedule->participants)
+                                    <div class="mt-3 flex items-center text-sm text-gray-500">
+                                        <i class="fas fa-users mr-2"></i>
+                                        <span>{{ count($schedule->participants) }} Peserta</span>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-calendar-times text-4xl mb-3"></i>
+                        <p>Tidak ada jadwal operasi untuk hari ini</p>
+                    </div>
+                @endif
+            </div>
+
             <!-- Unit & Machine Stats -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <!-- Power Plants Overview -->
@@ -489,6 +538,8 @@
                     </div>
                 </div>
             </div>
+
+           
 
             <!-- Chart Initialization Scripts -->
             <script>

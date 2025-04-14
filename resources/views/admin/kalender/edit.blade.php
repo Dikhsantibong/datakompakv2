@@ -107,7 +107,7 @@
                                         value="{{ old('schedule_date', $schedule->schedule_date->format('Y-m-d')) }}"
                                         class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('schedule_date') border-red-500 @else border-gray-300 @enderror transition-all duration-300">
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                        <i class="fas fa-calendar text-gray-400"></i>
+                                        <!-- Removed duplicate icon -->
                                     </div>
                                 </div>
                                 @error('schedule_date')
@@ -123,7 +123,7 @@
                                             value="{{ old('start_time', $schedule->start_time) }}"
                                             class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('start_time') border-red-500 @else border-gray-300 @enderror transition-all duration-300">
                                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                            <i class="far fa-clock text-gray-400"></i>
+                                            <!-- Removed duplicate icon -->
                                         </div>
                                     </div>
                                     @error('start_time')
@@ -138,7 +138,7 @@
                                             value="{{ old('end_time', $schedule->end_time) }}"
                                             class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('end_time') border-red-500 @else border-gray-300 @enderror transition-all duration-300">
                                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                            <i class="far fa-clock text-gray-400"></i>
+                                            <!-- Removed duplicate icon -->
                                         </div>
                                     </div>
                                     @error('end_time')

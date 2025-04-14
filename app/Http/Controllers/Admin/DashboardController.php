@@ -10,6 +10,7 @@ use App\Models\PowerPlant;
 use App\Models\Machine;
 use App\Models\MachineStatusLog;
 use Illuminate\Support\Facades\DB;
+use App\Models\OperationSchedule;
 
 class DashboardController extends Controller
 {
@@ -55,6 +56,11 @@ class DashboardController extends Controller
         
         $machines = Machine::all();
 
+        // Get operation schedules for today
+        $operationSchedules = OperationSchedule::whereDate('schedule_date', $today)
+            ->orderBy('start_time')
+            ->get();
+
         // Pass all variables to the view
         return view('admin.dashboard', compact(
             'powerPlants',
@@ -64,7 +70,8 @@ class DashboardController extends Controller
             'totalNetProduction',
             'totalGrossProduction',
             'peakLoad',
-            'totalPeriodHours'
+            'totalPeriodHours',
+            'operationSchedules'
         ));
     }
 

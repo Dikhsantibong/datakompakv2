@@ -1055,3 +1055,11 @@ Route::post('/admin/meeting-shift/store-resource', [MeetingShiftController::clas
 Route::post('/admin/meeting-shift/store-k3l', [MeetingShiftController::class, 'storeK3L'])->name('admin.meeting-shift.store-k3l');
 Route::post('/admin/meeting-shift/store-sistem', [MeetingShiftController::class, 'storeSistem'])->name('admin.meeting-shift.store-sistem');
 Route::post('/admin/meeting-shift/store-catatan-umum', [MeetingShiftController::class, 'storeCatatanUmum'])->name('admin.meeting-shift.store-catatan-umum');
+
+Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+    // ... existing routes ...
+    
+    // 5S5R Routes
+    Route::get('/5s5r', [App\Http\Controllers\Admin\FiveS5RController::class, 'index'])->name('5s5r.index');
+    Route::post('/5s5r', [App\Http\Controllers\Admin\FiveS5RController::class, 'store'])->name('5s5r.store');
+});

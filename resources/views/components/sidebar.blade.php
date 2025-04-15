@@ -144,7 +144,7 @@
                                 <i class="fas fa-tasks w-5 h-5"></i>
                                 <span class="ml-3 text-sm">FLM</span>
                             </a>
-                            <a href="#" 
+                            <a href="{{ route('admin.5s5r.index')}}" 
                                class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
                                 <i class="fas fa-check-double w-5 h-5"></i>
                                 <span class="ml-3 text-sm">5S5R Operator</span>

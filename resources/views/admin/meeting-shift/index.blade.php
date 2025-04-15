@@ -241,16 +241,148 @@
 
                     <!-- Kondisi Resource -->
                     <div x-show="activeTab === 'kondisi-resource'" class="space-y-4">
-                        <div class="text-gray-500 text-center py-8">
-                            Konten untuk Kondisi Resource akan ditampilkan di sini
-                        </div>
+                        <form action="{{ route('admin.meeting-shift.store-resource') }}" method="POST">
+                            @csrf
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border border-gray-300">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2" class="border border-gray-300 px-4 py-2 text-center align-middle bg-gray-50">Stok</th>
+                                            <th colspan="5" class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Status</th>
+                                            <th rowspan="2" class="border border-gray-300 px-4 py-2 text-center align-middle bg-gray-50">Keterangan</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">0%-20%</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">21%-40%</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">41%-61%</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">61%-80%</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">up to 80%</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                        $resources = [
+                                            ['name' => 'PELUMAS', 'is_category' => true],
+                                            ['name' => 'stok pelumas', 'is_category' => false],
+                                            ['name' => 'BBM', 'is_category' => true],
+                                            ['name' => 'storage tank', 'is_category' => false],
+                                            ['name' => 'service tank', 'is_category' => false],
+                                            ['name' => 'AIR PENDINGIN', 'is_category' => true],
+                                            ['name' => 'storage/bak air', 'is_category' => false],
+                                            ['name' => 'service tank', 'is_category' => false],
+                                            ['name' => 'UDARA START', 'is_category' => true],
+                                            ['name' => 'storage tank', 'is_category' => false],
+                                            ['name' => 'service tank', 'is_category' => false],
+                                        ];
+                                        @endphp
+
+                                        @foreach($resources as $index => $resource)
+                                        <tr class="{{ $resource['is_category'] ? 'bg-gray-100 font-semibold' : 'pl-8' }}">
+                                            <td class="border border-gray-300 px-4 py-2 {{ $resource['is_category'] ? 'text-lg' : 'pl-8' }}">
+                                                {{ $resource['name'] }}
+                                                <input type="hidden" name="resources[{{ $index }}][name]" value="{{ $resource['name'] }}">
+                                            </td>
+                                            @if(!$resource['is_category'])
+                                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                                    <input type="radio" name="resources[{{ $index }}][status]" value="0-20" class="form-radio" required>
+                                                </td>
+                                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                                    <input type="radio" name="resources[{{ $index }}][status]" value="21-40" class="form-radio">
+                                                </td>
+                                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                                    <input type="radio" name="resources[{{ $index }}][status]" value="41-61" class="form-radio">
+                                                </td>
+                                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                                    <input type="radio" name="resources[{{ $index }}][status]" value="61-80" class="form-radio">
+                                                </td>
+                                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                                    <input type="radio" name="resources[{{ $index }}][status]" value="up-80" class="form-radio">
+                                                </td>
+                                                <td class="border border-gray-300 px-4 py-2">
+                                                    <input type="text" name="resources[{{ $index }}][keterangan]" class="w-full p-1 border rounded" placeholder="Masukkan keterangan">
+                                                </td>
+                                            @else
+                                                <td colspan="6" class="border border-gray-300"></td>
+                                            @endif
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Tombol Submit -->
+                            <div class="flex justify-end mt-4">
+                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                    <i class="fas fa-save mr-2"></i> Simpan
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
                     <!-- Kondisi K3L -->
                     <div x-show="activeTab === 'kondisi-k3l'" class="space-y-4">
-                        <div class="text-gray-500 text-center py-8">
-                            Konten untuk Kondisi K3L akan ditampilkan di sini
-                        </div>
+                        <form action="{{ route('admin.meeting-shift.store-k3l') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border border-gray-300">
+                                    <thead>
+                                        <tr>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Potensi Bahaya</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Uraian</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Saran & Tindak Lanjut</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Eviden</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Unsafe Action -->
+                                        <tr>
+                                            <td class="border border-gray-300 px-4 py-2 font-semibold bg-gray-100">
+                                                Unsafe Action
+                                                <input type="hidden" name="k3l[0][type]" value="unsafe_action">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <textarea name="k3l[0][uraian]" rows="3" class="w-full p-2 border rounded" placeholder="Masukkan uraian unsafe action..."></textarea>
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <textarea name="k3l[0][saran]" rows="3" class="w-full p-2 border rounded" placeholder="Masukkan saran dan tindak lanjut..."></textarea>
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <div class="flex flex-col space-y-2">
+                                                    <input type="file" name="k3l[0][eviden]" class="p-1 border rounded" accept="image/*,.pdf">
+                                                    <span class="text-sm text-gray-500">Format: JPG, PNG, PDF (Max 2MB)</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <!-- Unsafe Condition -->
+                                        <tr>
+                                            <td class="border border-gray-300 px-4 py-2 font-semibold bg-gray-100">
+                                                Unsafe Condition
+                                                <input type="hidden" name="k3l[1][type]" value="unsafe_condition">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <textarea name="k3l[1][uraian]" rows="3" class="w-full p-2 border rounded" placeholder="Masukkan uraian unsafe condition..."></textarea>
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <textarea name="k3l[1][saran]" rows="3" class="w-full p-2 border rounded" placeholder="Masukkan saran dan tindak lanjut..."></textarea>
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <div class="flex flex-col space-y-2">
+                                                    <input type="file" name="k3l[1][eviden]" class="p-1 border rounded" accept="image/*,.pdf">
+                                                    <span class="text-sm text-gray-500">Format: JPG, PNG, PDF (Max 2MB)</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Tombol Submit -->
+                            <div class="flex justify-end mt-4">
+                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                    <i class="fas fa-save mr-2"></i> Simpan
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
                     <!-- Catatan Kondisi Sistem -->

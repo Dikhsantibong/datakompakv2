@@ -200,6 +200,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
             return view('admin.link-koordinasi.coordination-links');
         })->name('coordination-links');
     });
+
+    Route::prefix('meeting-shift')->group(function () {
+        Route::get('/', [MeetingShiftController::class, 'index'])->name('meeting-shift.index');
+        Route::post('/', [MeetingShiftController::class, 'store'])->name('meeting-shift.store');
+        Route::post('/store-alat-bantu', [MeetingShiftController::class, 'storeAlatBantu'])->name('meeting-shift.store-alat-bantu');
+        Route::post('/store-resource', [MeetingShiftController::class, 'storeResource'])->name('meeting-shift.store-resource');
+    });
 });
 
 
@@ -1040,4 +1047,6 @@ Route::middleware(['auth'])->group(function () {
 // Meeting dan Mutasi Shift routes
 Route::get('/meeting-shift', [MeetingShiftController::class, 'index'])->name('admin.meeting-shift.index');
 Route::post('/meeting-shift', [MeetingShiftController::class, 'store'])->name('admin.meeting-shift.store');
-Route::post('/meeting-shift/alat-bantu', [MeetingShiftController::class, 'storeAlatBantu'])->name('admin.meeting-shift.store-alat-bantu');
+Route::post('/admin/meeting-shift/store-alat-bantu', [MeetingShiftController::class, 'storeAlatBantu'])->name('admin.meeting-shift.store-alat-bantu');
+Route::post('/admin/meeting-shift/store-resource', [MeetingShiftController::class, 'storeResource'])->name('admin.meeting-shift.store-resource');
+Route::post('/admin/meeting-shift/store-k3l', [MeetingShiftController::class, 'storeK3L'])->name('admin.meeting-shift.store-k3l');

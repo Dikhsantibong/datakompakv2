@@ -43,4 +43,19 @@ class MeetingShiftController extends Controller
 
         return redirect()->back()->with('success', 'Status alat bantu berhasil disimpan');
     }
+
+    public function storeResource(Request $request)
+    {
+        $validated = $request->validate([
+            'resources' => 'required|array',
+            'resources.*.name' => 'required|string',
+            'resources.*.status' => 'required|in:0-20,21-40,41-61,61-80,up-80',
+            'resources.*.keterangan' => 'nullable|string'
+        ]);
+
+        // Process the data here
+        // You can store it in a new model for meeting records
+
+        return redirect()->back()->with('success', 'Status resource berhasil disimpan');
+    }
 } 

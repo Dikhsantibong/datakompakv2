@@ -998,7 +998,7 @@ document.getElementById('systemTableBody').addEventListener('change', function(e
         const loadValue = parseFloat(loadInput.value);
 
         if (loadValue > 0) {
-            statusSelect.value = 'RSH';
+            statusSelect.value = 'OPS';
             statusSelect.style.backgroundColor = '#FF9800';
             statusSelect.style.color = 'black';
         }

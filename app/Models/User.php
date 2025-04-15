@@ -15,6 +15,17 @@ class User extends Authenticatable
 
     public static $isSyncing = false;
 
+    // Role constants
+    const ROLE_SUPER_ADMIN = 'super_admin';
+    const ROLE_ADMIN = 'admin';
+    const ROLE_USER = 'user';
+    const ROLE_ASMAN_UNIT = 'asman_unit';
+    const ROLE_TL_RON = 'tl_ron';
+    const ROLE_TL_EP = 'tl_ep';
+    const ROLE_OPERATOR = 'operator';
+    const ROLE_STAF = 'staf';
+    const ROLE_TL_RON_UPKD = 'tl_ron_upkd';
+
     protected $fillable = [
         'name',
         'email',

@@ -90,6 +90,13 @@
                                 required>
                             <option value="user">User</option>
                             <option value="admin">Admin</option>
+                            <option value="super_admin">Super Admin</option>
+                            <option value="asman_unit">ASMAN UNIT</option>
+                            <option value="tl_ron">TL RON</option>
+                            <option value="tl_ep">TL EP</option>
+                            <option value="operator">OPERATOR</option>
+                            <option value="staf">STAF</option>
+                            <option value="tl_ron_upkd">TL RON UPKD</option>
                         </select>
                     </div>
 

@@ -99,7 +99,7 @@
                                 :class="{'border-blue-500 text-blue-600': activeTab === 'catatan-validasi',
                                         'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'catatan-validasi'}"
                                 class="py-4 px-1 border-b-2 font-medium text-sm">
-                            Catatan Umum Shift Validasi Serah Terima
+                            Catatan Umum
                         </button>
                         
                         <button @click="activeTab = 'absensi-resume'"
@@ -387,23 +387,111 @@
 
                     <!-- Catatan Kondisi Sistem -->
                     <div x-show="activeTab === 'catatan-sistem'" class="space-y-4">
-                        <div class="text-gray-500 text-center py-8">
-                            Konten untuk Catatan Kondisi Sistem akan ditampilkan di sini
-                        </div>
+                        <form action="{{ route('admin.meeting-shift.store-sistem') }}" method="POST">
+                            @csrf
+                            <div class="bg-white p-6 rounded-lg shadow-sm">
+                                <label for="catatan_sistem" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Catatan Kondisi Sistem
+                                </label>
+                                <textarea 
+                                    id="catatan_sistem"
+                                    name="catatan_sistem" 
+                                    rows="10" 
+                                    class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Masukkan catatan kondisi sistem..."
+                                ></textarea>
+                                
+                                <!-- Tombol Submit -->
+                                <div class="flex justify-end mt-4">
+                                    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                        <i class="fas fa-save mr-2"></i> Simpan
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
 
-                    <!-- Catatan Umum Shift Validasi -->
+                    <!-- Catatan Umum -->
                     <div x-show="activeTab === 'catatan-validasi'" class="space-y-4">
-                        <div class="text-gray-500 text-center py-8">
-                            Konten untuk Catatan Umum Shift Validasi Serah Terima akan ditampilkan di sini
-                        </div>
+                        <form action="{{ route('admin.meeting-shift.store-catatan-umum') }}" method="POST">
+                            @csrf
+                            <div class="bg-white p-6 rounded-lg shadow-sm">
+                                <label for="catatan_umum" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Catatan Umum
+                                </label>
+                                <textarea 
+                                    id="catatan_umum"
+                                    name="catatan_umum" 
+                                    rows="10" 
+                                    class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Masukkan catatan umum..."
+                                ></textarea>
+                                
+                                <!-- Tombol Submit -->
+                                <div class="flex justify-end mt-4">
+                                    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                        <i class="fas fa-save mr-2"></i> Simpan
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
 
                     <!-- Absensi dan Resume -->
                     <div x-show="activeTab === 'absensi-resume'" class="space-y-4">
-                        <div class="text-gray-500 text-center py-8">
-                            Konten untuk Absensi dan Resume Rapat akan ditampilkan di sini
-                        </div>
+                        <form action="{{ route('admin.meeting-shift.store-absensi') }}" method="POST">
+                            @csrf
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border border-gray-300">
+                                    <thead>
+                                        <tr>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">No</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Nama</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Shift</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for ($i = 1; $i <= 5; $i++)
+                                        <tr>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">{{ $i }}</td>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <input type="text" 
+                                                    name="absensi[{{ $i }}][nama]" 
+                                                    class="w-full p-1 border rounded" 
+                                                    placeholder="Masukkan nama..."
+                                                    required>
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <select name="absensi[{{ $i }}][shift]" 
+                                                    class="w-full p-1 border rounded"
+                                                    required>
+                                                    <option value="">Pilih Shift</option>
+                                                    <option value="pagi">Pagi</option>
+                                                    <option value="sore">Sore</option>
+                                                    <option value="malam">Malam</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        @endfor
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Tombol untuk menambah baris -->
+                            <div class="flex justify-start mt-4">
+                                <button type="button" 
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                                    <i class="fas fa-plus mr-2"></i> Tambah Baris
+                                </button>
+                            </div>
+                            
+                            <!-- Tombol Submit -->
+                            <div class="flex justify-end mt-4">
+                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                    <i class="fas fa-save mr-2"></i> Simpan
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

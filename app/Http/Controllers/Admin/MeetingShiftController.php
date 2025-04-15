@@ -58,4 +58,42 @@ class MeetingShiftController extends Controller
 
         return redirect()->back()->with('success', 'Status resource berhasil disimpan');
     }
+
+    public function storeSistem(Request $request)
+    {
+        $validated = $request->validate([
+            'catatan_sistem' => 'required|string'
+        ]);
+
+        // Process the data here
+        // You can store it in a new model for meeting records
+
+        return redirect()->back()->with('success', 'Catatan kondisi sistem berhasil disimpan');
+    }
+
+    public function storeCatatanUmum(Request $request)
+    {
+        $validated = $request->validate([
+            'catatan_umum' => 'required|string'
+        ]);
+
+        // Process the data here
+        // You can store it in a new model for meeting records
+
+        return redirect()->back()->with('success', 'Catatan umum berhasil disimpan');
+    }
+
+    public function storeAbsensi(Request $request)
+    {
+        $validated = $request->validate([
+            'absensi' => 'required|array',
+            'absensi.*.nama' => 'required|string',
+            'absensi.*.shift' => 'required|in:pagi,sore,malam'
+        ]);
+
+        // Process the data here
+        // You can store it in a new model for meeting records
+
+        return redirect()->back()->with('success', 'Data absensi berhasil disimpan');
+    }
 } 

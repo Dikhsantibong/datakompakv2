@@ -206,6 +206,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::post('/', [MeetingShiftController::class, 'store'])->name('meeting-shift.store');
         Route::post('/store-alat-bantu', [MeetingShiftController::class, 'storeAlatBantu'])->name('meeting-shift.store-alat-bantu');
         Route::post('/store-resource', [MeetingShiftController::class, 'storeResource'])->name('meeting-shift.store-resource');
+        Route::post('/store-k3l', [MeetingShiftController::class, 'storeK3L'])->name('meeting-shift.store-k3l');
+        Route::post('/store-sistem', [MeetingShiftController::class, 'storeSistem'])->name('meeting-shift.store-sistem');
+        Route::post('/store-catatan-umum', [MeetingShiftController::class, 'storeCatatanUmum'])->name('meeting-shift.store-catatan-umum');
+        Route::post('/store-absensi', [MeetingShiftController::class, 'storeAbsensi'])->name('meeting-shift.store-absensi');
     });
 });
 
@@ -1050,3 +1054,5 @@ Route::post('/meeting-shift', [MeetingShiftController::class, 'store'])->name('a
 Route::post('/admin/meeting-shift/store-alat-bantu', [MeetingShiftController::class, 'storeAlatBantu'])->name('admin.meeting-shift.store-alat-bantu');
 Route::post('/admin/meeting-shift/store-resource', [MeetingShiftController::class, 'storeResource'])->name('admin.meeting-shift.store-resource');
 Route::post('/admin/meeting-shift/store-k3l', [MeetingShiftController::class, 'storeK3L'])->name('admin.meeting-shift.store-k3l');
+Route::post('/admin/meeting-shift/store-sistem', [MeetingShiftController::class, 'storeSistem'])->name('admin.meeting-shift.store-sistem');
+Route::post('/admin/meeting-shift/store-catatan-umum', [MeetingShiftController::class, 'storeCatatanUmum'])->name('admin.meeting-shift.store-catatan-umum');

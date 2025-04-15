@@ -45,6 +45,7 @@ use App\Models\Pelumas;
 use App\Models\BahanKimia;
 use App\Http\Controllers\Admin\DataEngineController;
 use App\Http\Controllers\Admin\K3KampController;
+use App\Http\Controllers\Admin\MeetingShiftController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -1035,3 +1036,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/kalender/schedules/{date}', [App\Http\Controllers\Admin\OperationScheduleController::class, 'getSchedulesByDate'])->name('kalender.schedules');
     });
 });
+
+// Meeting dan Mutasi Shift routes
+Route::get('/meeting-shift', [MeetingShiftController::class, 'index'])->name('admin.meeting-shift.index');

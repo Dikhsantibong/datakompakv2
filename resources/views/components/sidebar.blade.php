@@ -129,8 +129,8 @@
                              x-transition:leave-end="transform opacity-0 scale-95"
                              @click.away="open = false" 
                              class="pl-4 mt-1 space-y-1">
-                            <a href="#" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <a href="{{ route('admin.meeting-shift.index') }}" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.meeting-shift.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                                 <i class="fas fa-exchange-alt w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Meeting dan Mutasi Shift Operator</span>
                             </a>

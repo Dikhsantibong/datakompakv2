@@ -299,8 +299,12 @@ function renderCalendar() {
                         ` : ''}
                     </div>
                     
-                    <!-- Hover Popup -->
-                    <div class="hidden group-hover:block absolute left-full top-0 ml-4 z-50 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 p-4 transform transition-all duration-300 ease-in-out hover:shadow-2xl">
+                    <!-- Hover Popup dengan posisi dinamis -->
+                    <div class="hidden group-hover:block absolute z-50 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 p-4 transform transition-all duration-300 ease-in-out hover:shadow-2xl popup-calendar"
+                         style="
+                            ${((firstDay.getDay() + day - 1) % 7 >= 5) ? 'right: calc(100% + 1rem); left: auto;' : 'left: calc(100% + 1rem);'}
+                            top: 0;
+                         ">
                         <div class="flex justify-between items-start mb-4">
                             <div>
                                 <h4 class="font-semibold text-gray-800 text-lg">
@@ -582,6 +586,37 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Popup positioning animations */
+.popup-calendar[style*="right: 100%"] {
+    animation: fadeInRight 0.2s ease-out;
+}
+
+.popup-calendar[style*="left: 100%"] {
+    animation: fadeInLeft 0.2s ease-out;
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInLeft {
     from {
         opacity: 0;
         transform: translateX(-10px);

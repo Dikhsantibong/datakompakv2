@@ -59,18 +59,18 @@
         </div>
 
         <!-- Main Content -->
-        <main class="p-6">
+        <main class="px-6">
             <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
                 <div class="flex flex-wrap gap-4">
                     <a href="{{ route('admin.kalender.create') }}" 
-                       class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-lg">
+                       class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-[#009BB9] to-[#0A749B] text-white rounded-lg hover:from-[#0A749B] hover:to-[#009BB9] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#009BB9] focus:ring-offset-2 shadow-lg">
                         <i class="fas fa-plus mr-2"></i>
                         <span>Tambah Jadwal</span>
                     </a>
                     <div class="relative">
                         <button id="filterButton" 
-                                class="inline-flex items-center px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm">
-                            <i class="fas fa-filter mr-2 text-blue-600"></i>
+                                class="inline-flex items-center px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#009BB9] focus:ring-offset-2 shadow-sm">
+                            <i class="fas fa-filter mr-2 text-[#009BB9]"></i>
                             <span>Filter</span>
                         </button>
                         <div id="filterDropdown" class="hidden absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-xl z-10 p-4 animate-fade-in-down border border-gray-100">
@@ -78,7 +78,7 @@
                             <div class="space-y-3">
                                 <div>
                                     <label class="block text-sm text-gray-700 mb-1">Status</label>
-                                    <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-[#009BB9] focus:ring focus:ring-[#009BB9]/20">
                                         <option value="">Semua Status</option>
                                         <option value="scheduled">Terjadwal</option>
                                         <option value="completed">Selesai</option>
@@ -86,7 +86,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm text-gray-700 mb-1">Periode</label>
-                                    <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-[#009BB9] focus:ring focus:ring-[#009BB9]/20">
                                         <option value="week">Minggu Ini</option>
                                         <option value="month">Bulan Ini</option>
                                         <option value="custom">Kustom</option>
@@ -95,7 +95,7 @@
                             </div>
                             <div class="mt-4 flex justify-end space-x-2">
                                 <button class="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 transition-colors">Reset</button>
-                                <button class="px-3 py-1.5 text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-md hover:from-blue-700 hover:to-blue-800 transition-all duration-300">Terapkan</button>
+                                <button class="px-3 py-1.5 text-sm bg-gradient-to-r from-[#009BB9] to-[#0A749B] text-white rounded-md hover:from-[#0A749B] hover:to-[#009BB9] transition-all duration-300">Terapkan</button>
                             </div>
                         </div>
                     </div>
@@ -110,18 +110,18 @@
                             <div class="flex justify-between items-center mb-6">
                                 <h2 class="text-lg font-semibold text-gray-800">Kalender</h2>
                                 <div class="flex items-center space-x-4">
-                                    <button class="p-2 hover:bg-blue-50 rounded-lg transition-all duration-300" onclick="previousMonth()">
-                                        <i class="fas fa-chevron-left text-blue-600"></i>
+                                    <button class="p-2 hover:bg-[#009BB9]/10 rounded-lg transition-all duration-300" onclick="previousMonth()">
+                                        <i class="fas fa-chevron-left text-[#009BB9]"></i>
                                     </button>
                                     <span class="text-lg font-medium text-gray-700 min-w-[150px] text-center" id="currentMonth"></span>
-                                    <button class="p-2 hover:bg-blue-50 rounded-lg transition-all duration-300" onclick="nextMonth()">
-                                        <i class="fas fa-chevron-right text-blue-600"></i>
+                                    <button class="p-2 hover:bg-[#009BB9]/10 rounded-lg transition-all duration-300" onclick="nextMonth()">
+                                        <i class="fas fa-chevron-right text-[#009BB9]"></i>
                                     </button>
                                 </div>
                             </div>
                             
                             <!-- Calendar Header -->
-                            <div class="grid grid-cols-7 bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-lg">
+                            <div class="grid grid-cols-7 bg-gradient-to-r from-[#009BB9] to-[#0A749B] rounded-t-lg">
                                 <div class="text-center py-3 text-sm font-semibold text-white">Minggu</div>
                                 <div class="text-center py-3 text-sm font-semibold text-white">Senin</div>
                                 <div class="text-center py-3 text-sm font-semibold text-white">Selasa</div>
@@ -145,39 +145,39 @@
                             <div class="space-y-4 overflow-auto max-h-[calc(100vh-20rem)] custom-scrollbar" id="schedule-list">
                                 @forelse($allSchedules as $date => $daySchedules)
                                     <div class="border-b border-gray-200 pb-4 last:border-b-0">
-                                        <h3 class="font-medium text-gray-800 mb-3 bg-gradient-to-r from-blue-50 to-transparent px-3 py-2 rounded-lg">
+                                        <h3 class="font-medium text-gray-800 mb-3 bg-gradient-to-r from-[#009BB9]/10 to-transparent px-3 py-2 rounded-lg">
                                             {{ \Carbon\Carbon::parse($date)->format('d F Y') }}
                                         </h3>
                                         <div class="space-y-3">
                                             @foreach($daySchedules as $schedule)
-                                                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:border-blue-300 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:border-[#009BB9] transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md">
                                                     <div class="flex justify-between items-start">
                                                         <div>
                                                             <h4 class="font-medium text-gray-800">{{ $schedule['title'] }}</h4>
                                                             <p class="text-sm text-gray-600 mt-1">
-                                                                <i class="far fa-clock mr-1 text-blue-500"></i>
+                                                                <i class="far fa-clock mr-1 text-[#009BB9]"></i>
                                                                 {{ $schedule['start_time'] }} - {{ $schedule['end_time'] }}
                                                             </p>
                                                         </div>
-                                                        <span class="px-2 py-1 text-xs rounded-full {{ $schedule['status'] === 'completed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
+                                                        <span class="px-2 py-1 text-xs rounded-full {{ $schedule['status'] === 'completed' ? 'bg-green-100 text-green-800' : 'bg-[#009BB9]/10 text-[#009BB9]' }}">
                                                             {{ ucfirst($schedule['status']) }}
                                                         </span>
                                                     </div>
                                                     @if($schedule['location'])
                                                         <p class="mt-2 text-sm text-gray-600">
-                                                            <i class="fas fa-map-marker-alt mr-1 text-blue-500"></i>
+                                                            <i class="fas fa-map-marker-alt mr-1 text-[#009BB9]"></i>
                                                             {{ $schedule['location'] }}
                                                         </p>
                                                     @endif
                                                     @if($schedule['participants'])
                                                         <p class="mt-2 text-sm text-gray-600">
-                                                            <i class="fas fa-users mr-1 text-blue-500"></i>
+                                                            <i class="fas fa-users mr-1 text-[#009BB9]"></i>
                                                             {{ implode(', ', $schedule['participants']) }}
                                                         </p>
                                                     @endif
                                                     <div class="mt-3 pt-3 border-t border-gray-100 flex justify-end space-x-2">
                                                         <a href="{{ route('admin.kalender.edit', $schedule['id']) }}" 
-                                                           class="text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 rounded-lg transition-all duration-300">
+                                                           class="text-[#009BB9] hover:text-[#0A749B] p-2 hover:bg-[#009BB9]/10 rounded-lg transition-all duration-300">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <form action="{{ route('admin.kalender.destroy', $schedule['id']) }}" 
@@ -197,8 +197,8 @@
                                     </div>
                                 @empty
                                     <div class="text-center py-8">
-                                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 mb-4">
-                                            <i class="fas fa-calendar-day text-2xl text-blue-500"></i>
+                                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#009BB9]/10 mb-4">
+                                            <i class="fas fa-calendar-day text-2xl text-[#009BB9]"></i>
                                         </div>
                                         <p class="text-gray-500">Tidak ada jadwal yang tersedia</p>
                                     </div>
@@ -272,28 +272,28 @@ function renderCalendar() {
         calendarHTML += `
             <div class="relative group min-h-[120px] p-3 border-b border-r border-gray-200 ${
                 isWeekend ? 'bg-gray-50' : 'bg-white'
-            } hover:bg-blue-50 transition-all duration-300">
+            } hover:bg-[#009BB9]/5 transition-all duration-300">
                 <div class="flex justify-between items-center mb-2">
                     <span class="inline-flex items-center justify-center ${
                         isToday 
-                        ? 'w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold shadow-lg' 
+                        ? 'w-8 h-8 rounded-full bg-gradient-to-r from-[#009BB9] to-[#0A749B] text-white font-semibold shadow-lg' 
                         : 'text-gray-700'
                     } ${isWeekend ? 'text-gray-500' : ''}">${day}</span>
                     ${hasSchedule ? `
-                        <span class="w-2 h-2 rounded-full ${isToday ? 'bg-white' : 'bg-blue-500'} animate-pulse shadow-lg"></span>
+                        <span class="w-2 h-2 rounded-full ${isToday ? 'bg-white' : 'bg-[#009BB9]'} animate-pulse shadow-lg"></span>
                     ` : ''}
                 </div>
                 
                 ${hasSchedule ? `
                     <div class="space-y-1">
                         ${schedules[dateStr].slice(0, 2).map(schedule => `
-                            <div class="text-xs p-2 rounded-lg bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 text-blue-700 truncate cursor-pointer hover:from-blue-100 hover:to-blue-200 transition-all duration-300 transform hover:-translate-y-0.5">
+                            <div class="text-xs p-2 rounded-lg bg-gradient-to-r from-[#009BB9]/10 to-[#009BB9]/20 border border-[#009BB9]/20 text-[#009BB9] truncate cursor-pointer hover:from-[#009BB9]/20 hover:to-[#009BB9]/30 transition-all duration-300 transform hover:-translate-y-0.5">
                                 <div class="font-medium">${schedule.title}</div>
-                                <div class="text-blue-600 text-[10px]">${schedule.start_time}</div>
+                                <div class="text-[#009BB9] text-[10px]">${schedule.start_time}</div>
                             </div>
                         `).join('')}
                         ${schedules[dateStr].length > 2 ? `
-                            <div class="text-xs text-center p-1 text-blue-500 font-medium">
+                            <div class="text-xs text-center p-1 text-[#009BB9] font-medium">
                                 +${schedules[dateStr].length - 2} lainnya
                             </div>
                         ` : ''}
@@ -310,42 +310,42 @@ function renderCalendar() {
                                     ${schedules[dateStr].length} Jadwal Kegiatan
                                 </p>
                             </div>
-                            <span class="px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg">
+                            <span class="px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-[#009BB9] to-[#0A749B] text-white shadow-lg">
                                 ${schedules[dateStr].length} Jadwal
                             </span>
                         </div>
                         <div class="space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar">
                             ${schedules[dateStr].map(schedule => `
-                                <div class="p-3 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 hover:from-blue-50 hover:to-blue-100 transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-md">
+                                <div class="p-3 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 hover:from-[#009BB9]/10 hover:to-[#009BB9]/20 transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-md">
                                     <div class="flex justify-between items-start mb-2">
                                         <h5 class="font-medium text-gray-800">${schedule.title}</h5>
                                         <span class="px-2 py-1 text-xs rounded-full ${
                                             schedule.status === 'completed' 
                                             ? 'bg-green-100 text-green-800' 
-                                            : 'bg-blue-100 text-blue-800'
+                                            : 'bg-[#009BB9]/10 text-[#009BB9]'
                                         }">
                                             ${schedule.status.charAt(0).toUpperCase() + schedule.status.slice(1)}
                                         </span>
                                     </div>
                                     <div class="text-sm text-gray-600 mb-2">
-                                        <i class="far fa-clock mr-1 text-blue-500"></i>
+                                        <i class="far fa-clock mr-1 text-[#009BB9]"></i>
                                         ${schedule.start_time} - ${schedule.end_time}
                                     </div>
                                     ${schedule.location ? `
                                         <div class="text-sm text-gray-600 mb-1">
-                                            <i class="fas fa-map-marker-alt mr-1 text-blue-500"></i>
+                                            <i class="fas fa-map-marker-alt mr-1 text-[#009BB9]"></i>
                                             ${schedule.location}
                                         </div>
                                     ` : ''}
                                     ${schedule.participants ? `
                                         <div class="text-sm text-gray-600">
-                                            <i class="fas fa-users mr-1 text-blue-500"></i>
+                                            <i class="fas fa-users mr-1 text-[#009BB9]"></i>
                                             ${schedule.participants.join(', ')}
                                         </div>
                                     ` : ''}
                                     <div class="mt-3 pt-3 border-t border-gray-200 flex justify-end space-x-2">
                                         <a href="/admin/kalender/${schedule.id}/edit" 
-                                           class="text-blue-600 hover:text-blue-800 p-1.5 hover:bg-blue-100 rounded-lg transition-all duration-300">
+                                           class="text-[#009BB9] hover:text-[#0A749B] p-1.5 hover:bg-[#009BB9]/10 rounded-lg transition-all duration-300">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <button onclick="deleteSchedule(${schedule.id})" 
@@ -393,8 +393,8 @@ function showSchedules(date) {
             if (data.length === 0) {
                 scheduleList.innerHTML = `
                     <div class="text-center py-8">
-                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-                            <i class="fas fa-calendar-day text-2xl text-gray-400"></i>
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#009BB9]/10 mb-4">
+                            <i class="fas fa-calendar-day text-2xl text-[#009BB9]"></i>
                         </div>
                         <p class="text-gray-500">Tidak ada jadwal untuk tanggal ini</p>
                     </div>
@@ -403,35 +403,35 @@ function showSchedules(date) {
             }
             
             scheduleList.innerHTML = data.map(schedule => `
-                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:border-blue-300 transition-colors">
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:border-[#009BB9] transition-colors">
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="font-medium text-gray-800">${schedule.title}</h3>
                             <p class="text-sm text-gray-600 mt-1">
-                                <i class="far fa-clock mr-1"></i>
+                                <i class="far fa-clock mr-1 text-[#009BB9]"></i>
                                 ${schedule.start_time} - ${schedule.end_time}
                             </p>
                         </div>
-                        <span class="px-2 py-1 text-xs rounded-full ${schedule.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}">
+                        <span class="px-2 py-1 text-xs rounded-full ${schedule.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-[#009BB9]/10 text-[#009BB9]'}">
                             ${schedule.status.charAt(0).toUpperCase() + schedule.status.slice(1)}
                         </span>
                     </div>
                     <p class="mt-2 text-sm text-gray-600">${schedule.description}</p>
                     ${schedule.location ? `
                         <p class="mt-2 text-sm text-gray-600">
-                            <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                            <i class="fas fa-map-marker-alt mr-1 text-[#009BB9]"></i>
                             ${schedule.location}
                         </p>
                     ` : ''}
                     ${schedule.participants ? `
                         <p class="mt-2 text-sm text-gray-600">
-                            <i class="fas fa-users mr-1 text-gray-400"></i>
+                            <i class="fas fa-users mr-1 text-[#009BB9]"></i>
                             ${schedule.participants.join(', ')}
                         </p>
                     ` : ''}
                     <div class="mt-3 pt-3 border-t border-gray-100 flex justify-end space-x-2">
                         <a href="/admin/kalender/${schedule.id}/edit" 
-                           class="text-blue-600 hover:text-blue-800 p-1">
+                           class="text-[#009BB9] hover:text-[#0A749B] p-1">
                             <i class="fas fa-edit"></i>
                         </a>
                         <button onclick="deleteSchedule(${schedule.id})" 
@@ -455,7 +455,7 @@ function showScheduleDetail(schedule) {
             <div>
                 <p class="text-sm text-gray-500">Waktu</p>
                 <p class="text-gray-700">
-                    <i class="far fa-clock mr-1"></i>
+                    <i class="far fa-clock mr-1 text-[#009BB9]"></i>
                     ${schedule.start_time} - ${schedule.end_time}
                 </p>
             </div>
@@ -467,7 +467,7 @@ function showScheduleDetail(schedule) {
                 <div>
                     <p class="text-sm text-gray-500">Lokasi</p>
                     <p class="text-gray-700">
-                        <i class="fas fa-map-marker-alt mr-1"></i>
+                        <i class="fas fa-map-marker-alt mr-1 text-[#009BB9]"></i>
                         ${schedule.location}
                     </p>
                 </div>
@@ -476,7 +476,7 @@ function showScheduleDetail(schedule) {
                 <div>
                     <p class="text-sm text-gray-500">Peserta</p>
                     <p class="text-gray-700">
-                        <i class="fas fa-users mr-1"></i>
+                        <i class="fas fa-users mr-1 text-[#009BB9]"></i>
                         ${schedule.participants.join(', ')}
                     </p>
                 </div>
@@ -484,7 +484,7 @@ function showScheduleDetail(schedule) {
             <div>
                 <p class="text-sm text-gray-500">Status</p>
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    schedule.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                    schedule.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-[#009BB9]/10 text-[#009BB9]'
                 }">
                     ${schedule.status.charAt(0).toUpperCase() + schedule.status.slice(1)}
                 </span>

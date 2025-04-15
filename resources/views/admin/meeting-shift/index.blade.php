@@ -115,9 +115,62 @@
                 <div class="p-4">
                     <!-- Kondisi Mesin -->
                     <div x-show="activeTab === 'kondisi-mesin'" class="space-y-4">
-                        <div class="text-gray-500 text-center py-8">
-                            Konten untuk Kondisi Mesin akan ditampilkan di sini
-                        </div>
+                        <form action="{{ route('admin.meeting-shift.store') }}" method="POST">
+                            @csrf
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border border-gray-300">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2" class="border border-gray-300 px-4 py-2 text-center align-middle bg-gray-50">Mesin</th>
+                                            <th colspan="5" class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Status</th>
+                                            <th rowspan="2" class="border border-gray-300 px-4 py-2 text-center align-middle bg-gray-50">Keterangan</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Operasi</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Stand By</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">HAR Rutin</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">HAR Non Rutin</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Gangguan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($machines as $index => $machine)
+                                        <tr>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                {{ $machine->name }}
+                                                <input type="hidden" name="machine_status[{{ $index }}][machine_id]" value="{{ $machine->id }}">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                                <input type="radio" name="machine_status[{{ $index }}][status]" value="operasi" class="form-radio" required>
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                                <input type="radio" name="machine_status[{{ $index }}][status]" value="standby" class="form-radio">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                                <input type="radio" name="machine_status[{{ $index }}][status]" value="har_rutin" class="form-radio">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                                <input type="radio" name="machine_status[{{ $index }}][status]" value="har_nonrutin" class="form-radio">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                                <input type="radio" name="machine_status[{{ $index }}][status]" value="gangguan" class="form-radio">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <input type="text" name="machine_status[{{ $index }}][keterangan]" class="w-full p-1 border rounded" placeholder="Masukkan keterangan">
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Tombol Submit -->
+                            <div class="flex justify-end mt-4">
+                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                    <i class="fas fa-save mr-2"></i> Simpan
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
                     <!-- Kondisi Alat Bantu -->

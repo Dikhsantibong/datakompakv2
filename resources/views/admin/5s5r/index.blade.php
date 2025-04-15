@@ -121,7 +121,9 @@
                                             Berarti melakukan sesuatu yang benar sebagai kebiasaan. Prinsipnya adalah pembentukan kebiasaan dan tempat kerja yang mantap.
                                         @endif
                                     </td>
-                                    <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
+                                    <td class="border px-4 py-2">
+                                        <textarea class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 300px"></textarea>
+                                    </td>
                                     <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
                                     <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
                                     <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
@@ -180,14 +182,14 @@
                                 <tr>
                                     <td class="border px-4 py-2 text-center">{{ $letter }}</td>
                                     <td class="border px-4 py-2">shift {{ $index + 1 }}</td>
-                                    <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
-                                    <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
+                                    <td class="border px-4 py-2"><textarea class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
+                                    <td class="border px-4 py-2"><textarea class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
                                     <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $letter }}" value="0-25"></td>
                                     <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $letter }}" value="26-50"></td>
                                     <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $letter }}" value="51-75"></td>
                                     <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $letter }}" value="76-100"></td>
-                                    <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
-                                    <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
+                                    <td class="border px-4 py-2"><textarea class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
+                                    <td class="border px-4 py-2"><textarea class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
                                     <td class="border px-4 py-2">
                                         <input type="file" class="hidden" id="eviden2-{{ $index }}">
                                         <label for="eviden2-{{ $index }}" class="cursor-pointer bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">

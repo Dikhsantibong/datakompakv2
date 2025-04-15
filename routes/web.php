@@ -1040,3 +1040,4 @@ Route::middleware(['auth'])->group(function () {
 // Meeting dan Mutasi Shift routes
 Route::get('/meeting-shift', [MeetingShiftController::class, 'index'])->name('admin.meeting-shift.index');
 Route::post('/meeting-shift', [MeetingShiftController::class, 'store'])->name('admin.meeting-shift.store');
+Route::post('/meeting-shift/alat-bantu', [MeetingShiftController::class, 'storeAlatBantu'])->name('admin.meeting-shift.store-alat-bantu');

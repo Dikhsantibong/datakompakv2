@@ -175,9 +175,68 @@
 
                     <!-- Kondisi Alat Bantu -->
                     <div x-show="activeTab === 'kondisi-alat-bantu'" class="space-y-4">
-                        <div class="text-gray-500 text-center py-8">
-                            Konten untuk Kondisi Alat Bantu akan ditampilkan di sini
-                        </div>
+                        <form action="{{ route('admin.meeting-shift.store-alat-bantu') }}" method="POST">
+                            @csrf
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border border-gray-300">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2" class="border border-gray-300 px-4 py-2 text-center align-middle bg-gray-50">Alat Bantu</th>
+                                            <th colspan="4" class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Status</th>
+                                            <th rowspan="2" class="border border-gray-300 px-4 py-2 text-center align-middle bg-gray-50">Keterangan</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Normal</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Abnormal</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Gangguan</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">FLM</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                        $alatBantu = [
+                                            'system pelumas',
+                                            'system bbm',
+                                            'system jcw/HT',
+                                            'system cw/LT',
+                                            'system start'
+                                        ];
+                                        @endphp
+
+                                        @foreach($alatBantu as $index => $alat)
+                                        <tr>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                {{ $alat }}
+                                                <input type="hidden" name="alat_bantu[{{ $index }}][name]" value="{{ $alat }}">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                                <input type="radio" name="alat_bantu[{{ $index }}][status]" value="normal" class="form-radio" required>
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                                <input type="radio" name="alat_bantu[{{ $index }}][status]" value="abnormal" class="form-radio">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                                <input type="radio" name="alat_bantu[{{ $index }}][status]" value="gangguan" class="form-radio">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                                <input type="radio" name="alat_bantu[{{ $index }}][status]" value="flm" class="form-radio">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <input type="text" name="alat_bantu[{{ $index }}][keterangan]" class="w-full p-1 border rounded" placeholder="Masukkan keterangan">
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Tombol Submit -->
+                            <div class="flex justify-end mt-4">
+                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                    <i class="fas fa-save mr-2"></i> Simpan
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
                     <!-- Kondisi Resource -->

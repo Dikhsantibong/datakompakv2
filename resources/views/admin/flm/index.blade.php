@@ -51,208 +51,71 @@
             </div>
         </header>
 
-        <div class="mt-6 flex justify-end gap-x-4 mb-6">
-            <a href="{{ route('admin.flm.update-view') }}" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                <i class="fas fa-cog mr-2"></i>Kelola Data
-            </a>
-            <button type="button" class="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
-                <i class="fas fa-sync-alt mr-2"></i>Refresh Data
-            </button>
-            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                <i class="fas fa-save mr-2"></i>Simpan
-            </button>
-        </div>
         
-        <main class="px-6 py-8 bg-white rounded-lg shadow-md ">
-            <!-- Tab Navigation -->
-            <div class="mb-6">
-                <div class="border-b border-gray-200">
-                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                        <button type="button" 
-                            class="tab-btn flex items-center whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-blue-500 text-blue-600" 
-                            data-target="pemeriksaan-visual">
-                            Pemeriksaan Visual
-                        </button>
-                        <button type="button" 
-                            class="tab-btn flex items-center whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" 
-                            data-target="lumasi">
-                            Lumasi
-                        </button>
-                        <button type="button" 
-                            class="tab-btn flex items-center whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" 
-                            data-target="kencangkan">
-                            Kencangkan
-                        </button>
-                        <button type="button" 
-                            class="tab-btn flex items-center whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" 
-                            data-target="permasalahan">
-                            Permasalahan
-                        </button>
-                    </nav>
+        <main class="px-6 py-8">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border px-4 py-2 text-sm">No.</th>
+                                <th class="border px-4 py-2 text-sm">Mesin/peralatan</th>
+                                <th class="border px-4 py-2 text-sm">Sistem pembangkit</th>
+                                <th class="border px-4 py-2 text-sm">Masalah awal yang ditemukan</th>
+                                <th class="border px-4 py-2 text-sm">kondisi awal</th>
+                                <th colspan="5" class="border px-4 py-2 text-sm text-center">Tindakan FLM</th>
+                                <th class="border px-4 py-2 text-sm">kondisi akhir</th>
+                                <th class="border px-4 py-2 text-sm">Catatan FLM</th>
+                                <th class="border px-4 py-2 text-sm">eviden</th>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <th class="border px-4 py-2"></th>
+                                <th class="border px-4 py-2"></th>
+                                <th class="border px-4 py-2"></th>
+                                <th class="border px-4 py-2"></th>
+                                <th class="border px-4 py-2"></th>
+                                <th class="border px-4 py-2 text-sm">bersihkan</th>
+                                <th class="border px-4 py-2 text-sm">lumasi</th>
+                                <th class="border px-4 py-2 text-sm">kencangkan</th>
+                                <th class="border px-4 py-2 text-sm">perbaikan koneksi</th>
+                                <th class="border px-4 py-2 text-sm">lainnya</th>
+                                <th class="border px-4 py-2"></th>
+                                <th class="border px-4 py-2"></th>
+                                <th class="border px-4 py-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for ($i = 1; $i <= 4; $i++)
+                            <tr>
+                                <td class="border px-4 py-2 text-center">{{ $i }}</td>
+                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
+                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
+                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
+                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
+                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
+                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
+                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
+                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
+                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
+                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
+                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
+                                <td class="border px-4 py-2">
+                                    <input type="file" class="hidden" id="eviden-{{ $i }}">
+                                    <label for="eviden-{{ $i }}" class="cursor-pointer bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
+                                        Upload
+                                    </label>
+                                </td>
+                            </tr>
+                            @endfor
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-4 flex justify-end">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        Simpan
+                    </button>
                 </div>
             </div>
-
-            <!-- Tab Contents -->
-            <div class="tab-contents">
-                <!-- Pemeriksaan Visual Tab -->
-                <div id="pemeriksaan-visual-content" class="tab-content">
-                    <div class="overflow-x-auto shadow-md rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-[#0A749B]">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">No</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Komponen</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Kondisi (Baik/Rusak)</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-4 py-3 text-sm text-gray-900">1</td>
-                                    <td class="px-4 py-3 text-sm text-gray-900">Mesin Utama</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
-                                            <option value="baik">Baik</option>
-                                            <option value="rusak">Rusak</option>
-                                        </select>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <input type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                    </td>
-                                </tr>
-                                <!-- Add more rows as needed -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Lumasi Tab -->
-                <div id="lumasi-content" class="tab-content hidden">
-                    <div class="overflow-x-auto shadow-md rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-[#0A749B]">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">No</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Fungsi</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Kondisi (Baik/Rusak)</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-4 py-3 text-sm text-gray-900">1</td>
-                                    <td class="px-4 py-3 text-sm text-gray-900">Fuel Pump</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
-                                            <option value="baik">Baik</option>
-                                            <option value="rusak">Rusak</option>
-                                        </select>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <input type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                    </td>
-                                </tr>
-                                <!-- Add more rows as needed -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Kencangkan Tab -->
-                <div id="kencangkan-content" class="tab-content hidden">
-                    <div class="overflow-x-auto shadow-md rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-[#0A749B]">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">No</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Komponen</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Kondisi (Normal/Tidak Normal)</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-4 py-3 text-sm text-gray-900">1</td>
-                                    <td class="px-4 py-3 text-sm text-gray-900">Baut Pompa JW</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
-                                            <option value="normal">Normal</option>
-                                            <option value="tidak_normal">Tidak Normal</option>
-                                        </select>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <input type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                    </td>
-                                </tr>
-                                <!-- Add more rows as needed -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Permasalahan Tab -->
-                <div id="permasalahan-content" class="tab-content hidden">
-                    <div class="overflow-x-auto shadow-md rounded-lg mb-8">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-[#0A749B]">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">No</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Masalah Ditemukan</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Tindakan</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Waktu Pelaksanaan</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase">Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-4 py-3 text-sm text-gray-900">1</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <textarea type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"></textarea>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <textarea type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"></textarea>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <input type="datetime-local" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                    </td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <textarea type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"></textarea>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700">Deskripsi kondisi akhir</label>
-                            <textarea class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="3"></textarea>
-                        </div>
-                        
-                        <div class="flex items-center gap-x-4">
-                            <label class="text-sm font-medium text-gray-700">Checklist dokumentasi:</label>
-                            <div class="flex items-center gap-x-4">
-                                <label class="inline-flex items-center">
-                                    <input type="radio" name="dokumentasi" value="ada" class="form-radio text-blue-600">
-                                    <span class="ml-2 text-sm text-gray-700">Ada</span>
-                                </label>
-                                <label class="inline-flex items-center">
-                                    <input type="radio" name="dokumentasi" value="tidak_ada" class="form-radio text-blue-600">
-                                    <span class="ml-2 text-sm text-gray-700">Tidak Ada</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <label class="block text-sm font-medium text-gray-700">Catatan Tambahan</label>
-                            <textarea class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="3"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Submit Button -->
-           
         </main>
     </div>
 </div>

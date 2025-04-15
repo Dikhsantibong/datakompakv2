@@ -46,6 +46,7 @@ use App\Models\BahanKimia;
 use App\Http\Controllers\Admin\DataEngineController;
 use App\Http\Controllers\Admin\K3KampController;
 use App\Http\Controllers\Admin\MeetingShiftController;
+use App\Http\Controllers\FlmController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -1025,9 +1026,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('/flm', function () {
         return view('admin.flm.index');
     })->name('flm.index');
-    Route::get('/flm/update-view', function () {
-        return view('admin.flm.update');
-    })->name('flm.update-view');
+    Route::post('/flm', [FlmController::class, 'store'])->name('flm.store');
 });
 
 Route::get('/admin/data-engine/{date}/edit', [DataEngineController::class, 'edit'])->name('admin.data-engine.edit');

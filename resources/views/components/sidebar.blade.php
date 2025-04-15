@@ -116,7 +116,7 @@
                                 class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.administrasi_operasi.*') || request()->routeIs('admin.flm.*') || request()->routeIs('admin.k3-kamp.*') || request()->routeIs('admin.data-engine.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <div class="flex items-center">
                                 <i class="fas fa-clipboard-list w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Operasi UL/Sentral</span>
+                                <span class="ml-3 text-sm">Operasi UL/Sentral UPKD</span>
                             </div>
                             <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
                         </button>
@@ -132,7 +132,7 @@
                             <a href="#" 
                                class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
                                 <i class="fas fa-exchange-alt w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Mutasi</span>
+                                <span class="ml-3 text-sm">Meeting dan Mutasi Shift Operator</span>
                             </a>
                             <a href="#" 
                                class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
@@ -152,7 +152,7 @@
                             <a href="{{ route('admin.k3-kamp.index') }}" 
                                class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.k3-kamp.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                                 <i class="fas fa-hard-hat w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Laporan K3 KAMP dan Lingkungan</span>
+                                <span class="ml-3 text-sm">K3, KAM dan Lingkungan</span>
                             </a>
                             <a href="{{ route('admin.data-engine.index') }}" 
                                class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.data-engine.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
@@ -199,10 +199,17 @@
                              x-transition:leave-end="transform opacity-0 scale-95"
                              @click.away="open = false" 
                              class="pl-4 mt-1 space-y-1">
+
+                             
                             <a href="{{ route('admin.kalender.calendar') }}" 
                                class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.kalender.calendar') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                                 <i class="fas fa-calendar-alt w-5 h-5"></i>
                                 <span class="ml-3 text-sm">Kalender Operasi</span>
+                            </a>
+                            <a href="#" 
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.kalender.calendar') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                                <i class="fas fa-calendar-alt w-5 h-5"></i>
+                                <span class="ml-3 text-sm">Monitoring Input Datakompak</span>
                             </a>
                             
                             <a href="{{ route('admin.link-koordinasi.coordination-links') }}" 

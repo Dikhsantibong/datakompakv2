@@ -21,6 +21,9 @@ class DailySummaryController extends Controller
         // Get unit source from session, request, or default to 'mysql'
         $unitSource = session('unit_source', request('unit_source', 'mysql'));
 
+        // Get input date from request or default to today
+        $inputDate = request('input_date', now()->format('Y-m-d'));
+
         // Base query for PowerPlant
         $query = PowerPlant::query();
 
@@ -43,18 +46,19 @@ class DailySummaryController extends Controller
             ->pluck('unit_source')
             ->filter(); // Remove any null/empty values
 
-        return view('admin.daily-summary.daily-summary', compact('units', 'unitSources', 'unitSource'));
+        return view('admin.daily-summary.daily-summary', compact('units', 'unitSources', 'unitSource', 'inputDate'));
     }
 
     public function store(Request $request)
     {
         try {
             $machineData = $request->input('data', []);
-            $today = now()->format('Y-m-d');
+            $inputDate = $request->input('input_date', now()->format('Y-m-d'));
             
             Log::info('Processing daily summary data', [
                 'session' => session('unit', 'mysql'),
-                'data_count' => count($machineData)
+                'data_count' => count($machineData),
+                'input_date' => $inputDate
             ]);
 
             // Validasi format input
@@ -135,7 +139,7 @@ class DailySummaryController extends Controller
                         'machine_name' => $data['machine_name'],        
                         'uuid' => (string) Str::uuid(),
                         'unit_source' => session('unit', 'mysql'),
-                        'created_at' => now(),
+                        'created_at' => $inputDate . ' ' . now()->format('H:i:s'),
                         'updated_at' => now()
                     ];
 
@@ -150,7 +154,7 @@ class DailySummaryController extends Controller
                     // Check for existing record
                     $existingRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])
                         ->where('machine_name', $data['machine_name'])
-                        ->whereDate('created_at', $today)
+                        ->whereDate('created_at', $inputDate)
                         ->first();
 
                     try {
@@ -158,13 +162,15 @@ class DailySummaryController extends Controller
                             $existingRecord->update($dataToSave);
                             Log::info("Updated daily summary", [
                                 'uuid' => $existingRecord->uuid,
-                                'machine' => $data['machine_name']
+                                'machine' => $data['machine_name'],
+                                'date' => $inputDate
                             ]);
                         } else {
                             DailySummary::create($dataToSave);
                             Log::info("Created new daily summary", [
                                 'uuid' => $dataToSave['uuid'],
-                                'machine' => $data['machine_name']
+                                'machine' => $data['machine_name'],
+                                'date' => $inputDate
                             ]);
                         }
                     } catch (\Exception $e) {

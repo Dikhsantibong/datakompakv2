@@ -89,6 +89,16 @@
                 @csrf
                 <!-- Search & Buttons Container -->
                 <div class="flex flex-col sm:flex-row justify-between items-center mb-6 px-4 gap-4">
+                    <!-- Date Input -->
+                    <div class="w-full sm:w-72">
+                        <label for="input-date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Input</label>
+                        <input type="date" 
+                               id="input-date" 
+                               name="input_date" 
+                               value="{{ request('input_date', now()->format('Y-m-d')) }}"
+                               class="w-full appearance-none rounded-md border border-gray-300 bg-white pl-4 pr-10 py-2 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer hover:border-gray-400 transition-colors duration-200">
+                    </div>
+
                     <!-- Search Unit -->
                     <div class="w-full sm:w-72">
                         @if(session('unit') === 'mysql')

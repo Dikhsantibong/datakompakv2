@@ -115,12 +115,17 @@ class PembangkitController extends Controller
             $machineStatusLog->setConnection($currentSession);
 
             foreach ($request->logs as $log) {
+                    // Pastikan nilai DMN, DMP, dan load_value adalah numerik
+                $dmn = is_numeric($log['dmn']) ? floatval($log['dmn']) : 0;
+                $dmp = is_numeric($log['dmp']) ? floatval($log['dmp']) : 0;
+                $loadValue = is_numeric($log['load_value']) ? floatval($log['load_value']) : 0;
+
                 // Prepare data untuk update/create
                 $updateData = [
                     'status' => $log['status'],
-                    'dmn' => $log['dmn'] ?? 0,
-                    'dmp' => $log['dmp'] ?? 0,
-                    'load_value' => $log['load_value'] ?? 0,
+                    'dmn' => $dmn,
+                    'dmp' => $dmp,
+                    'load_value' => $loadValue,
                     'deskripsi' => $log['deskripsi'] ?? null,
                     'action_plan' => $log['action_plan'] ?? null,
                     'progres' => $log['progres'] ?? null,
@@ -130,6 +135,14 @@ class PembangkitController extends Controller
                     'unit_source' => $currentSession,
                     'input_time' => $inputTime
                 ];
+
+                // Debug log untuk melihat data yang akan disimpan
+                Log::info("Saving machine status", [
+                    'machine_id' => $log['machine_id'],
+                    'dmn' => $dmn,
+                    'dmp' => $dmp,
+                    'load_value' => $loadValue
+                ]);
 
                 // Cek existing log
                 $existingLog = $machineStatusLog->where([

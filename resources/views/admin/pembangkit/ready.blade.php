@@ -230,14 +230,25 @@
                                                     <td class="px-3 py-2 border-r border-gray-200 text-gray-800" data-id="{{ $machine->id }}">
                                                         {{ $machine->name }}
                                                     </td>   
-                                                    <td class="px-3 py-2 border-r border-gray-200 text-center text-gray-800 w-12" style="width: 100px;">
-                                                        {{ $operations->where('machine_id', $machine->id)->first()->dmp ?? 'N/A' }}
+                                                    <td class="px-3 py-2 border-r border-gray-200 text-center text-gray-800 w-12">
+                                                        <input type="number"
+                                                               name="dmn[{{ $machine->id }}]"
+                                                               class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-400 text-gray-800"
+                                                               style="width: 100px;"
+                                                               value="{{ $operations->where('machine_id', $machine->id)->first()->dmn ?? '0' }}"
+                                                               step="0.01"
+                                                               min="0"
+                                                               placeholder="Masukkan DMN...">
                                                     </td>
                                                     <td class="px-3 py-2 border-r border-gray-200 text-center text-gray-800 w-12">
-                                                        <input type="number"                                                                                                                                
+                                                        <input type="number"
+                                                               name="dmp[{{ $machine->id }}]"
                                                                class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-400 text-gray-800"
-                                                               style="width: 100px;"     value="{{ $operations->where('machine_id', $machine->id)->first()->dmn ?? '0' }}"
-                                                            placeholder="Masukkan DMP...">
+                                                               style="width: 100px;"
+                                                               value="{{ $operations->where('machine_id', $machine->id)->first()->dmp ?? '0' }}"
+                                                               step="0.01"
+                                                               min="0"
+                                                               placeholder="Masukkan DMP...">
                                                     </td>
                                                     <td class="px-2 py-2 border-r border-gray-200">
                                                         <input type="number" 
@@ -441,7 +452,7 @@
         const data = {
             logs: [],
             hops: [],
-            inputTime: inputTime // Tambahkan waktu input ke data yang akan dikirim
+            inputTime: inputTime
         };
 
         const tables = document.querySelectorAll('.unit-table table');
@@ -464,41 +475,28 @@
             // Tambahkan data status mesin
             const rows = table.querySelectorAll('tbody tr');
             rows.forEach(row => {
-                const machineId = row.querySelector('td[data-id]').getAttribute('data-id');
-                const statusSelect = row.querySelector('select');
-                const componentSelect = row.querySelector('.system-select');
-                const equipmentTextarea = row.querySelector('textarea[name^="equipment"]');
-                const equipmentValue = equipmentTextarea ? equipmentTextarea.value.trim() : '';
-                const dmpInput = row.querySelector('td:nth-child(3) input');
-                const inputDeskripsi = row.querySelector(`textarea[name="deskripsi[${machineId}]"]`);
-                const inputActionPlan = row.querySelector(`textarea[name="action_plan[${machineId}]"]`);
-                const inputBeban = row.querySelector('td:nth-child(4) input');
-                const inputProgres = row.querySelector(`textarea[name="progres[${machineId}]"]`);
-                const inputKronologi = row.querySelector(`textarea[name="kronologi[${machineId}]"]`);
-                const inputTanggalMulai = row.querySelector(`input[name="tanggal_mulai[${machineId}]"]`);
-                const inputTargetSelesai = row.querySelector(`input[name="target_selesai[${machineId}]"]`);
+                const machineId = row.getAttribute('data-machine-id');
+                const statusSelect = row.querySelector(`select[name="status[${machineId}]"]`);
+                const dmnInput = row.querySelector(`input[name="dmn[${machineId}]"]`);
+                const dmpInput = row.querySelector(`input[name="dmp[${machineId}]"]`);
+                const loadInput = row.querySelector(`input[name="load_value[${machineId}]"]`);
+                const deskripsiInput = row.querySelector(`textarea[name="deskripsi[${machineId}]"]`);
 
-                const loadInput = row.querySelector('td:nth-child(5) input[type="number"]');
-                const loadValue = loadInput ? parseFloat(loadInput.value) || 0 : 0;
+                // Pastikan nilai numerik valid
+                const dmn = parseFloat(dmnInput?.value || 0);
+                const dmp = parseFloat(dmpInput?.value || 0);
+                const loadValue = parseFloat(loadInput?.value || 0);
 
                 if (statusSelect && statusSelect.value) {
                     data.logs.push({
                         machine_id: machineId,
                         tanggal: tanggal,
-                        hop: hopValue,
                         status: statusSelect.value,
-                        component: componentSelect ? componentSelect.value : null,
-                        equipment: equipmentValue,
-                        dmn: row.querySelector('td:nth-child(2)').textContent.trim(),
-                        dmp: dmpInput ? dmpInput.value.trim() : null,
-                        load_value: loadValue,
-                        deskripsi: inputDeskripsi ? inputDeskripsi.value.trim() : null,
-                        action_plan: inputActionPlan ? inputActionPlan.value.trim() : null,
-                        progres: inputProgres ? inputProgres.value.trim() : null,
-                        kronologi: inputKronologi ? inputKronologi.value.trim() : null,
-                        tanggal_mulai: inputTanggalMulai ? inputTanggalMulai.value : null,
-                        target_selesai: inputTargetSelesai ? inputTargetSelesai.value : null,
-                        input_time: inputTime // Ensure input_time is included here
+                        dmn: isNaN(dmn) ? 0 : dmn,
+                        dmp: isNaN(dmp) ? 0 : dmp,
+                        load_value: isNaN(loadValue) ? 0 : loadValue,
+                        deskripsi: deskripsiInput ? deskripsiInput.value.trim() : null,
+                        input_time: inputTime
                     });
                 }
             });

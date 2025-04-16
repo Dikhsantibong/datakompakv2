@@ -96,6 +96,13 @@
                                     <input type="number" step="0.01" name="pemakaian" value="{{ $bahanKimia->pemakaian }}" required
                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 </div>
+
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700">Catatan Transaksi</label>
+                                    <textarea name="catatan_transaksi" rows="3"
+                                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                              placeholder="Masukkan catatan transaksi...">{{ $bahanKimia->catatan_transaksi }}</textarea>
+                                </div>
                             </div>
 
                             <div class="mt-6 flex justify-end gap-3">

@@ -107,9 +107,21 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Pemakaian</label>
                                     <input type="number" step="0.01" name="pemakaian" required
-                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                           value="{{ old('pemakaian') }}"
-                                           placeholder="0.00">
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('pemakaian') border-red-500 @enderror"
+                                           value="{{ old('pemakaian') }}">
+                                    @error('pemakaian')
+                                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700">Catatan Transaksi</label>
+                                    <textarea name="catatan_transaksi" rows="3"
+                                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('catatan_transaksi') border-red-500 @enderror"
+                                              placeholder="Masukkan catatan transaksi...">{{ old('catatan_transaksi') }}</textarea>
+                                    @error('catatan_transaksi')
+                                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
 

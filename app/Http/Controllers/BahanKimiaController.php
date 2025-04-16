@@ -6,11 +6,10 @@ use App\Models\BahanKimia;
 use App\Models\PowerPlant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\PDF;
+use Maatwebsite\Excel\Facades\Excel;
 
-use PDF;
 use App\Exports\BahanKimiaExport;
-
-use Excel;
 
 class BahanKimiaController extends Controller
 {
@@ -95,6 +94,7 @@ class BahanKimiaController extends Controller
                 'penerimaan' => $request->penerimaan,
                 'pemakaian' => $request->pemakaian,
                 'saldo_akhir' => $saldoAkhir,
+                'catatan_transaksi' => $request->catatan_transaksi,
                 'is_opening_balance' => $isOpeningBalance
             ]);
 
@@ -142,7 +142,8 @@ class BahanKimiaController extends Controller
                 'jenis_bahan' => $request->jenis_bahan,
                 'penerimaan' => $request->penerimaan,
                 'pemakaian' => $request->pemakaian,
-                'saldo_akhir' => $saldoAkhir
+                'saldo_akhir' => $saldoAkhir,
+                'catatan_transaksi' => $request->catatan_transaksi
             ]);
 
             DB::commit();

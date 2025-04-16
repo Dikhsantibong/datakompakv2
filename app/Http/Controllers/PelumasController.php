@@ -63,6 +63,7 @@ class PelumasController extends Controller
             'jenis_pelumas' => 'required|string|max:255',
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
+            'catatan_transaksi' => 'nullable|string|max:1000',
         ]);
 
         // Cek apakah ini data pertama untuk unit dan jenis pelumas tersebut
@@ -99,7 +100,8 @@ class PelumasController extends Controller
                 'penerimaan' => $request->penerimaan,
                 'pemakaian' => $request->pemakaian,
                 'saldo_akhir' => $saldoAkhir,
-                'is_opening_balance' => $isOpeningBalance
+                'is_opening_balance' => $isOpeningBalance,
+                'catatan_transaksi' => $request->catatan_transaksi
             ]);
 
             DB::commit();
@@ -130,6 +132,7 @@ class PelumasController extends Controller
             'jenis_pelumas' => 'required|string|max:255',
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
+            'catatan_transaksi' => 'nullable|string|max:1000',
         ]);
 
         $pelumas = Pelumas::findOrFail($id);
@@ -146,7 +149,8 @@ class PelumasController extends Controller
                 'jenis_pelumas' => $request->jenis_pelumas,
                 'penerimaan' => $request->penerimaan,
                 'pemakaian' => $request->pemakaian,
-                'saldo_akhir' => $saldoAkhir
+                'saldo_akhir' => $saldoAkhir,
+                'catatan_transaksi' => $request->catatan_transaksi
             ]);
 
             DB::commit();

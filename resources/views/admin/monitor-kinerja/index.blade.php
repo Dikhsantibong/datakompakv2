@@ -88,7 +88,7 @@
                 </div>
 
                 <!-- Performance Indicators -->
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-6 gap-6 mb-6">
                     <!-- EAF Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div class="p-4">
@@ -146,6 +146,18 @@
                             <h3 class="text-lg font-semibold mb-1">NCF</h3>
                             <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['ncf'], 1) }}%</p>
                             <span class="text-emerald-600 text-sm font-medium">Net Capacity Factor</span>
+                        </div>
+                    </div>
+
+                    <!-- Transformer Losses Card -->
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-purple-600 mb-2">
+                                <i class="fas fa-plug"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">Susut Trafo</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($transformerLosses['current'], 2) }}</p>
+                            <span class="text-purple-600 text-sm font-medium">{{ $transformerLosses['unit'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -265,10 +277,6 @@
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-600">SLC</span>
                                 <span class="font-semibold text-gray-800">{{ $technicalParams['slc'] }}</span>
-                            </div>
-                            <div class="flex justify-between items-center pt-2 border-t">
-                                <span class="text-sm text-gray-600">{{ $transformerLosses['description'] }}</span>
-                                <span class="font-semibold text-gray-800">{{ number_format($transformerLosses['current'], 2) }} {{ $transformerLosses['unit'] }}</span>
                             </div>
                         </div>
                     </div>

@@ -16,7 +16,9 @@ class BahanKimia extends Model
         'penerimaan',
         'pemakaian',
         'saldo_akhir',
-        'is_opening_balance'
+        'is_opening_balance',
+        'catatan_transaksi',
+        'evidence'
     ];
 
     protected $casts = [

@@ -6,6 +6,7 @@ use App\Models\BahanKimia;
 use App\Models\PowerPlant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\PDF;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -58,6 +59,7 @@ class BahanKimiaController extends Controller
             'jenis_bahan' => 'required|string',
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
+            'evidence' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048'
         ]);
 
         // Cek apakah ini data pertama untuk unit dan jenis bahan tersebut
@@ -86,6 +88,14 @@ class BahanKimiaController extends Controller
         try {
             DB::beginTransaction();
 
+            // Handle file upload
+            $evidencePath = null;
+            if ($request->hasFile('evidence')) {
+                $file = $request->file('evidence');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $evidencePath = $file->storeAs('public/bahan-kimia/evidence', $fileName);
+            }
+
             BahanKimia::create([
                 'tanggal' => $request->tanggal,
                 'unit_id' => $request->unit_id,
@@ -95,6 +105,7 @@ class BahanKimiaController extends Controller
                 'pemakaian' => $request->pemakaian,
                 'saldo_akhir' => $saldoAkhir,
                 'catatan_transaksi' => $request->catatan_transaksi,
+                'evidence' => $evidencePath,
                 'is_opening_balance' => $isOpeningBalance
             ]);
 
@@ -104,6 +115,9 @@ class BahanKimiaController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            if (isset($evidencePath)) {
+                Storage::delete($evidencePath);
+            }
             return redirect()->back()
                            ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
                            ->withInput();
@@ -126,6 +140,7 @@ class BahanKimiaController extends Controller
             'jenis_bahan' => 'required|string',
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
+            'evidence' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048'
         ]);
 
         $bahanKimia = BahanKimia::findOrFail($id);
@@ -136,6 +151,19 @@ class BahanKimiaController extends Controller
             // Hitung saldo akhir
             $saldoAkhir = $bahanKimia->saldo_awal + $request->penerimaan - $request->pemakaian;
 
+            // Handle file upload
+            $evidencePath = $bahanKimia->evidence;
+            if ($request->hasFile('evidence')) {
+                // Delete old file if exists
+                if ($bahanKimia->evidence) {
+                    Storage::delete($bahanKimia->evidence);
+                }
+                
+                $file = $request->file('evidence');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $evidencePath = $file->storeAs('public/bahan-kimia/evidence', $fileName);
+            }
+
             $bahanKimia->update([
                 'tanggal' => $request->tanggal,
                 'unit_id' => $request->unit_id,
@@ -143,7 +171,8 @@ class BahanKimiaController extends Controller
                 'penerimaan' => $request->penerimaan,
                 'pemakaian' => $request->pemakaian,
                 'saldo_akhir' => $saldoAkhir,
-                'catatan_transaksi' => $request->catatan_transaksi
+                'catatan_transaksi' => $request->catatan_transaksi,
+                'evidence' => $evidencePath
             ]);
 
             DB::commit();
@@ -164,6 +193,12 @@ class BahanKimiaController extends Controller
             DB::beginTransaction();
             
             $bahanKimia = BahanKimia::findOrFail($id);
+            
+            // Delete evidence file if exists
+            if ($bahanKimia->evidence) {
+                Storage::delete($bahanKimia->evidence);
+            }
+            
             $bahanKimia->delete();
 
             DB::commit();

@@ -165,6 +165,7 @@
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pemakaian</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Saldo Akhir</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Catatan</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Eviden</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                     </tr>
                                 </thead>
@@ -194,6 +195,17 @@
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 border border-gray-200">
                                             {{ $item->catatan_transaksi }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                            @if($item->evidence)
+                                                <a href="{{ Storage::url($item->evidence) }}" 
+                                                   target="_blank"
+                                                   class="text-blue-600 hover:text-blue-800">
+                                                    <i class="fas fa-download mr-1"></i> Download
+                                                </a>
+                                            @else
+                                                <span class="text-gray-400">Tidak ada file</span>
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex gap-3">

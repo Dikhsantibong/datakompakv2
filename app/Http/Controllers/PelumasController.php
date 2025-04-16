@@ -6,11 +6,11 @@ use App\Models\Pelumas;
 use App\Models\PowerPlant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\PDF;
+use Maatwebsite\Excel\Facades\Excel;
 
-use PDF;
 use App\Exports\PelumasExport;
-
-use Excel;
 
 class PelumasController extends Controller
 {
@@ -64,6 +64,7 @@ class PelumasController extends Controller
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
             'catatan_transaksi' => 'nullable|string|max:1000',
+            'evidence' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048'
         ]);
 
         // Cek apakah ini data pertama untuk unit dan jenis pelumas tersebut
@@ -74,23 +75,28 @@ class PelumasController extends Controller
             ->first();
 
         if (!$previousBalance) {
-            // Jika tidak ada data sebelumnya, validasi saldo awal harus diisi
             $request->validate([
                 'saldo_awal' => 'required|numeric|min:0',
             ]);
             $saldoAwal = $request->saldo_awal;
             $isOpeningBalance = true;
         } else {
-            // Jika ada data sebelumnya, gunakan saldo akhir sebelumnya
             $saldoAwal = $previousBalance->saldo_akhir;
             $isOpeningBalance = false;
         }
 
-        // Hitung saldo akhir
         $saldoAkhir = $saldoAwal + $request->penerimaan - $request->pemakaian;
 
         try {
             DB::beginTransaction();
+
+            // Handle file upload
+            $evidencePath = null;
+            if ($request->hasFile('evidence')) {
+                $file = $request->file('evidence');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $evidencePath = $file->storeAs('public/pelumas/evidence', $fileName);
+            }
 
             Pelumas::create([
                 'tanggal' => $request->tanggal,
@@ -101,7 +107,8 @@ class PelumasController extends Controller
                 'pemakaian' => $request->pemakaian,
                 'saldo_akhir' => $saldoAkhir,
                 'is_opening_balance' => $isOpeningBalance,
-                'catatan_transaksi' => $request->catatan_transaksi
+                'catatan_transaksi' => $request->catatan_transaksi,
+                'evidence' => $evidencePath
             ]);
 
             DB::commit();
@@ -110,6 +117,9 @@ class PelumasController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            if (isset($evidencePath)) {
+                Storage::delete($evidencePath);
+            }
             return redirect()->back()
                            ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
                            ->withInput();
@@ -133,6 +143,7 @@ class PelumasController extends Controller
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
             'catatan_transaksi' => 'nullable|string|max:1000',
+            'evidence' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048'
         ]);
 
         $pelumas = Pelumas::findOrFail($id);
@@ -140,8 +151,20 @@ class PelumasController extends Controller
         try {
             DB::beginTransaction();
 
-            // Hitung saldo akhir
             $saldoAkhir = $pelumas->saldo_awal + $request->penerimaan - $request->pemakaian;
+
+            // Handle file upload
+            $evidencePath = $pelumas->evidence;
+            if ($request->hasFile('evidence')) {
+                // Delete old file if exists
+                if ($pelumas->evidence) {
+                    Storage::delete($pelumas->evidence);
+                }
+                
+                $file = $request->file('evidence');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $evidencePath = $file->storeAs('public/pelumas/evidence', $fileName);
+            }
 
             $pelumas->update([
                 'tanggal' => $request->tanggal,
@@ -150,7 +173,8 @@ class PelumasController extends Controller
                 'penerimaan' => $request->penerimaan,
                 'pemakaian' => $request->pemakaian,
                 'saldo_akhir' => $saldoAkhir,
-                'catatan_transaksi' => $request->catatan_transaksi
+                'catatan_transaksi' => $request->catatan_transaksi,
+                'evidence' => $evidencePath
             ]);
 
             DB::commit();
@@ -171,6 +195,12 @@ class PelumasController extends Controller
             DB::beginTransaction();
             
             $pelumas = Pelumas::findOrFail($id);
+            
+            // Delete evidence file if exists
+            if ($pelumas->evidence) {
+                Storage::delete($pelumas->evidence);
+            }
+            
             $pelumas->delete();
 
             DB::commit();

@@ -57,7 +57,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="bg-white rounded-lg shadow-md">
                     <div class="p-6">
-                        <form action="{{ route('admin.energiprimer.pelumas.update', $pelumas->id) }}" method="POST">
+                        <form action="{{ route('admin.energiprimer.pelumas.update', $pelumas->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -102,6 +102,30 @@
                                     <textarea name="catatan_transaksi" rows="3"
                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                               placeholder="Masukkan catatan transaksi...">{{ $pelumas->catatan_transaksi }}</textarea>
+                                </div>
+
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700">Upload Eviden</label>
+                                    @if($pelumas->evidence)
+                                        <div class="mt-2 flex items-center space-x-2">
+                                            <span class="text-sm text-gray-500">File saat ini:</span>
+                                            <a href="{{ Storage::url($pelumas->evidence) }}" 
+                                               target="_blank"
+                                               class="text-sm text-blue-600 hover:text-blue-800">
+                                                Lihat Eviden
+                                            </a>
+                                        </div>
+                                    @endif
+                                    <input type="file" name="evidence" 
+                                           class="mt-2 block w-full text-sm text-gray-500
+                                                  file:mr-4 file:py-2 file:px-4
+                                                  file:rounded-md file:border-0
+                                                  file:text-sm file:font-semibold
+                                                  file:bg-blue-50 file:text-blue-700
+                                                  hover:file:bg-blue-100">
+                                    <p class="mt-1 text-sm text-gray-500">
+                                        Format yang diizinkan: JPG, JPEG, PNG, PDF. Maksimal 2MB
+                                    </p>
                                 </div>
                             </div>
 

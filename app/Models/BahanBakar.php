@@ -15,7 +15,8 @@ class BahanBakar extends Model
         'saldo_awal',
         'penerimaan',
         'pemakaian',
-        'saldo_akhir'
+        'saldo_akhir',
+        'catatan_transaksi'
     ];
 
     protected $casts = [

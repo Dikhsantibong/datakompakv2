@@ -75,7 +75,7 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" style="margin-bottom: 20px;">
                     <div class="p-4 bg-white border-b border-gray-200">
                         <!-- Card Grid -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             <!-- Card 1: Laporan Berita Acara -->
                             <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                                 <div class="p-4">
@@ -145,6 +145,35 @@
                                     </a>
                                 </div>
                             </div>
+
+                            <!-- Card 6: BA Transaksi Energi -->
+                            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                                <div class="p-4">
+                                    <div class="text-3xl text-orange-600 mb-2">
+                                        <i class="fas fa-bolt"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-1">BA Transaksi Energi</h3>
+                                    <p class="text-gray-600 mb-2 text-sm">Akses dokumen BA Transaksi Energi</p>
+                                    <a href="{{ route('admin.library.ba-transaksi') }}" class="text-orange-600 hover:text-orange-800 font-medium text-sm">
+                                        Lihat Detail →
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Card 7: Dokumen Operasi Lainnya -->
+                            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                                <div class="p-4">
+                                    <div class="text-3xl text-teal-600 mb-2">
+                                        <i class="fas fa-folder-open"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-1">Dokumen Operasi Lainnya</h3>
+                                    <p class="text-gray-600 mb-2 text-sm">Akses dokumen operasi lainnya</p>
+                                    <a href="{{ route('admin.library.operasi-lainnya') }}" class="text-teal-600 hover:text-teal-800 font-medium text-sm">
+                                        Lihat Detail →
+                                    </a>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -343,6 +372,92 @@
                             </div>
                             <div class="space-y-4">
                                 @foreach($sopKitFiles->take(5) as $file)
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-pdf text-red-500 mr-3"></i>
+                                        <div>
+                                            <p class="font-medium">{{ $file->name }}</p>
+                                            <p class="text-sm text-gray-500">{{ $file->created_at->format('d M Y') }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <a href="{{ route('admin.library.download', $file->id) }}" 
+                                           class="text-blue-500 hover:text-blue-700">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                        <button onclick="deleteFile({{ $file->id }})" 
+                                                class="text-red-500 hover:text-red-700">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- BA Transaksi Section -->
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-bolt text-orange-500 mr-2"></i>
+                                    BA Transaksi Energi
+                                </h2>
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('admin.library.ba-transaksi') }}" 
+                                       class="text-orange-500 hover:text-orange-700">
+                                        Lihat Semua
+                                    </a>
+                                    <button onclick="showUploadModal('ba-transaksi')" 
+                                            class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">
+                                        <i class="fas fa-upload mr-2"></i>Upload
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                @foreach($baTransaksiFiles->take(5) as $file)
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-pdf text-red-500 mr-3"></i>
+                                        <div>
+                                            <p class="font-medium">{{ $file->name }}</p>
+                                            <p class="text-sm text-gray-500">{{ $file->created_at->format('d M Y') }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <a href="{{ route('admin.library.download', $file->id) }}" 
+                                           class="text-blue-500 hover:text-blue-700">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                        <button onclick="deleteFile({{ $file->id }})" 
+                                                class="text-red-500 hover:text-red-700">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- Dokumen Operasi Lainnya Section -->
+                        <div class="bg-white rounded-lg shadow-md p-6 ">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-folder-open text-teal-500 mr-2"></i>
+                                    Dokumen Operasi Lainnya
+                                </h2>
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('admin.library.operasi-lainnya') }}" 
+                                       class="text-teal-500 hover:text-teal-700">
+                                        Lihat Semua
+                                    </a>
+                                    <button onclick="showUploadModal('operasi-lainnya')" 
+                                            class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600">
+                                        <i class="fas fa-upload mr-2"></i>Upload
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                @foreach($operasiLainnyaFiles->take(5) as $file)
                                 <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                     <div class="flex items-center">
                                         <i class="fas fa-file-pdf text-red-500 mr-3"></i>

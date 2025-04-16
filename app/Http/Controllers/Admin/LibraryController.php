@@ -17,13 +17,17 @@ class LibraryController extends Controller
         $bacaanDigitalFiles = Document::where('category', 'bacaan-digital')->get();
         $diklatFiles = Document::where('category', 'diklat')->get();
         $sopKitFiles = Document::where('category', 'sop-kit')->get();
+        $baTransaksiFiles = Document::where('category', 'ba-transaksi')->get();
+        $operasiLainnyaFiles = Document::where('category', 'operasi-lainnya')->get();
 
         return view('admin.library.index', compact(
             'beritaAcaraFiles',
             'standarisasiFiles',
             'bacaanDigitalFiles',
             'diklatFiles',
-            'sopKitFiles'
+            'sopKitFiles',
+            'baTransaksiFiles',
+            'operasiLainnyaFiles'
         ));
     }
 
@@ -70,6 +74,24 @@ class LibraryController extends Controller
             ->get();
         
         return view('admin.library.sop-kit', compact('sopKitFiles'));
+    }
+
+    public function baTransaksi()
+    {
+        $baTransaksiFiles = Document::where('category', 'ba-transaksi')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('admin.library.ba-transaksi', compact('baTransaksiFiles'));
+    }
+
+    public function operasiLainnya()
+    {
+        $operasiLainnyaFiles = Document::where('category', 'operasi-lainnya')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('admin.library.operasi-lainnya', compact('operasiLainnyaFiles'));
     }
 
     public function upload(Request $request)

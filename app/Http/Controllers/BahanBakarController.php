@@ -63,6 +63,7 @@ class BahanBakarController extends Controller
             'jenis_bbm' => 'required|in:B40,B35,HSD,MFO',
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
+            'catatan_transaksi' => 'nullable|string|max:1000',
         ]);
 
         // Cek apakah ini data pertama untuk unit dan jenis BBM tersebut
@@ -99,7 +100,8 @@ class BahanBakarController extends Controller
                 'penerimaan' => $request->penerimaan,
                 'pemakaian' => $request->pemakaian,
                 'saldo_akhir' => $saldoAkhir,
-                'is_opening_balance' => $isOpeningBalance
+                'is_opening_balance' => $isOpeningBalance,
+                'catatan_transaksi' => $request->catatan_transaksi
             ]);
 
             DB::commit();
@@ -130,6 +132,7 @@ class BahanBakarController extends Controller
             'jenis_bbm' => 'required|in:B40,B35,HSD,MFO',
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
+            'catatan_transaksi' => 'nullable|string|max:1000',
         ]);
 
         $bahanBakar = BahanBakar::findOrFail($id);
@@ -146,7 +149,8 @@ class BahanBakarController extends Controller
                 'jenis_bbm' => $request->jenis_bbm,
                 'penerimaan' => $request->penerimaan,
                 'pemakaian' => $request->pemakaian,
-                'saldo_akhir' => $saldoAkhir
+                'saldo_akhir' => $saldoAkhir,
+                'catatan_transaksi' => $request->catatan_transaksi
             ]);
 
             DB::commit();

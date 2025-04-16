@@ -16,12 +16,14 @@ class LibraryController extends Controller
         $standarisasiFiles = Document::where('category', 'standarisasi')->get();
         $bacaanDigitalFiles = Document::where('category', 'bacaan-digital')->get();
         $diklatFiles = Document::where('category', 'diklat')->get();
+        $sopKitFiles = Document::where('category', 'sop-kit')->get();
 
         return view('admin.library.index', compact(
             'beritaAcaraFiles',
             'standarisasiFiles',
             'bacaanDigitalFiles',
-            'diklatFiles'
+            'diklatFiles',
+            'sopKitFiles'
         ));
     }
 
@@ -61,11 +63,20 @@ class LibraryController extends Controller
         return view('admin.library.diklat', compact('diklatFiles'));
     }
 
+    public function sopKit()
+    {
+        $sopKitFiles = Document::where('category', 'sop-kit')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('admin.library.sop-kit', compact('sopKitFiles'));
+    }
+
     public function upload(Request $request)
     {
         $request->validate([
             'document' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:10240',
-            'category' => 'required|in:berita-acara,standarisasi,bacaan-digital,diklat',
+            'category' => 'required|in:berita-acara,standarisasi,bacaan-digital,diklat,sop-kit',
             'description' => 'nullable|string'
         ]);
 

@@ -851,6 +851,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/library/standarisasi', [LibraryController::class, 'standarisasi'])->name('library.standarisasi');
         Route::get('/library/bacaan-digital', [LibraryController::class, 'bacaanDigital'])->name('library.bacaan-digital');
         Route::get('/library/diklat', [LibraryController::class, 'diklat'])->name('library.diklat');
+        Route::get('/library/sop-kit', [LibraryController::class, 'sopKit'])->name('library.sop-kit');
         Route::post('/library/upload', [LibraryController::class, 'upload'])->name('library.upload');
         Route::get('/library/{document}/download', [LibraryController::class, 'download'])->name('library.download');
         Route::delete('/library/delete/{document}', [LibraryController::class, 'destroy'])->name('library.delete');

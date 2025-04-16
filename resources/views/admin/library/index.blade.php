@@ -75,7 +75,7 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" style="margin-bottom: 20px;">
                     <div class="p-4 bg-white border-b border-gray-200">
                         <!-- Card Grid -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                             <!-- Card 1: Laporan Berita Acara -->
                             <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                                 <div class="p-4">
@@ -117,6 +117,7 @@
                                     </a>
                                 </div>
                             </div>
+
                             <!-- Card 4: Diklat -->
                             <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                                 <div class="p-4">
@@ -126,6 +127,20 @@
                                     <h3 class="text-lg font-semibold mb-1">Diklat</h3>
                                     <p class="text-gray-600 mb-2 text-sm">Akses dokumen Diklat</p>
                                     <a href="{{ route('admin.library.diklat') }}" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm">
+                                        Lihat Detail →
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Card 5: SOP KIT -->
+                            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                                <div class="p-4">
+                                    <div class="text-3xl text-red-600 mb-2">
+                                        <i class="fas fa-file-contract"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-1">SOP KIT</h3>
+                                    <p class="text-gray-600 mb-2 text-sm">Akses dokumen SOP KIT</p>
+                                    <a href="{{ route('admin.library.sop-kit') }}" class="text-red-600 hover:text-red-800 font-medium text-sm">
                                         Lihat Detail →
                                     </a>
                                 </div>
@@ -285,6 +300,49 @@
                             </div>
                             <div class="space-y-4">
                                 @foreach($diklatFiles->take(5) as $file)
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-pdf text-red-500 mr-3"></i>
+                                        <div>
+                                            <p class="font-medium">{{ $file->name }}</p>
+                                            <p class="text-sm text-gray-500">{{ $file->created_at->format('d M Y') }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <a href="{{ route('admin.library.download', $file->id) }}" 
+                                           class="text-blue-500 hover:text-blue-700">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                        <button onclick="deleteFile({{ $file->id }})" 
+                                                class="text-red-500 hover:text-red-700">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- SOP KIT Section -->
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-file-contract text-red-500 mr-2"></i>
+                                    SOP KIT
+                                </h2>
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('admin.library.sop-kit') }}" 
+                                       class="text-red-500 hover:text-red-700">
+                                        Lihat Semua
+                                    </a>
+                                    <button onclick="showUploadModal('sop-kit')" 
+                                            class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+                                        <i class="fas fa-upload mr-2"></i>Upload
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                @foreach($sopKitFiles->take(5) as $file)
                                 <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                     <div class="flex items-center">
                                         <i class="fas fa-file-pdf text-red-500 mr-3"></i>

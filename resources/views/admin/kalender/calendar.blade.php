@@ -272,42 +272,7 @@
                         </div>
                     </div>
 
-                    <!-- Schedule Categories -->
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                        <div class="p-4">
-                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Kategori Jadwal</h2>
-                            <div class="space-y-3">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <span class="w-3 h-3 rounded-full bg-blue-600 mr-2"></span>
-                                        <span class="text-sm text-gray-600">Operasi</span>
-                                    </div>
-                                    <span class="text-sm font-medium text-gray-700">12</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <span class="w-3 h-3 rounded-full bg-green-600 mr-2"></span>
-                                        <span class="text-sm text-gray-600">Pemeliharaan</span>
-                                    </div>
-                                    <span class="text-sm font-medium text-gray-700">8</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <span class="w-3 h-3 rounded-full bg-yellow-600 mr-2"></span>
-                                        <span class="text-sm text-gray-600">Inspeksi</span>
-                                    </div>
-                                    <span class="text-sm font-medium text-gray-700">5</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <span class="w-3 h-3 rounded-full bg-red-600 mr-2"></span>
-                                        <span class="text-sm text-gray-600">Perbaikan</span>
-                                    </div>
-                                    <span class="text-sm font-medium text-gray-700">3</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </main>

@@ -24,217 +24,265 @@
                     <span class="ml-3 text-sm">Dashboard</span>
                 </a>
 
+                <!-- Kalender Operasi -->
+                <a href="{{ route('admin.kalender.calendar') }}"
+                    class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.kalender.calendar') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                    <i class="fas fa-calendar-alt w-5 h-5"></i>
+                    <span class="ml-3 text-sm">Kalender Operasi</span>
+                </a>
+
                 <!-- Monitoring Section -->
-                <div class="pt-2 border-t border-white/10">
-                    <a href="{{ route('admin.monitor-kinerja') }}"
-                        class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.monitor-kinerja') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                        <i class="fas fa-chart-line w-5 h-5"></i>
-                        <span class="ml-3 text-sm">Monitoring Kinerja UP Kendari</span>
-                    </a>
+                <a href="{{ route('admin.monitor-kinerja') }}"
+                    class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.monitor-kinerja') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                    <i class="fas fa-chart-line w-5 h-5"></i>
+                    <span class="ml-3 text-sm">Monitoring Kinerja UP Kendari</span>
+                </a>
 
-                    <a href="{{ route('admin.machine-monitor') }}"
-                        class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.machine-monitor') || request()->routeIs('admin.machine-monitor.show') || request()->routeIs('admin.power-plants.index') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                        <i class="fas fa-cogs w-5 h-5"></i>
-                        <span class="ml-3 text-sm">Data Mesin Pembangkit</span>
-                    </a>
-                </div>
+                <a href="{{ route('admin.machine-monitor') }}"
+                    class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.machine-monitor') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                    <i class="fas fa-cogs w-5 h-5"></i>
+                    <span class="ml-3 text-sm">Data Mesin Pembangkit</span>
+                </a>
 
-                <!-- Reports Section -->
-                <div class="pt-2 border-t border-white/10">
-                    <a href="{{ route('admin.daily-summary') }}"
-                        class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.daily-summary') || request()->routeIs('admin.daily-summary.results') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                        <i class="fas fa-calendar-day w-5 h-5"></i>
-                        <span class="ml-3 text-sm">Ikhtisar Harian</span>
-                    </a>
-
-                    <a href="{{ route('admin.machine-status.view') }}"
-                        class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.machine-status.view') || request()->routeIs('admin.machine-status.*') || request()->routeIs('admin.pembangkit.ready') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                        <i class="fas fa-tools w-5 h-5"></i>
-                        <span class="ml-3 text-sm">Laporan Kesiapan Kit</span>
-                    </a>
-
-                    <a href="{{ route('admin.rencana-daya-mampu') }}"
-                        class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.rencana-daya-mampu') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                        <i class="fas fa-bolt w-5 h-5"></i>
-                        <span class="ml-3 text-sm">Rencana Daya Mampu Bulanan</span>
-                    </a>
-                </div>
-
-                <!-- Resource Management Section -->
-                <div class="pt-2 border-t border-white/10">
-                    <!-- Energi Primer Dropdown -->
-                    <div class="relative mb-2" x-data="{ 
-                        open: {{ request()->routeIs('admin.energiprimer.*') ? 'true' : 'false' }},
-                        toggle() {
-                            this.open = !this.open
-                        }
-                    }">
-                        <button @click="toggle()" 
-                                class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                            <div class="flex items-center">
-                                <i class="fas fa-chart-bar w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Energi Primer</span>
-                            </div>
-                            <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
-                        </button>
-                        <div x-show="open" 
-                             x-transition:enter="transition ease-out duration-300"
-                             x-transition:enter-start="transform opacity-0 scale-95"
-                             x-transition:enter-end="transform opacity-100 scale-100"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="transform opacity-100 scale-100"
-                             x-transition:leave-end="transform opacity-0 scale-95"
-                             @click.away="open = false" 
-                             class="pl-4 mt-1 space-y-1">
-                            <a href="{{ route('admin.energiprimer.bahan-bakar') }}" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.bahan-bakar*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                                <i class="fas fa-file-alt w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Bahan Bakar</span>
-                            </a>
-                            
-                            <a href="{{ route('admin.energiprimer.pelumas') }}" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.pelumas*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                                <i class="fas fa-file-contract w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Pelumas</span>
-                            </a>
-                            <a href="{{ route('admin.energiprimer.bahan-kimia') }}" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.bahan-kimia*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                                <i class="fas fa-file-invoice w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Bahan Kimia</span>
-                            </a>
+                <!-- Operator KIT Dropdown -->
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" 
+                            class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                        <div class="flex items-center">
+                            <i class="fas fa-users-cog w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Operator KIT</span>
                         </div>
-                    </div>
-
-                    <!-- Administrasi Operasi Dropdown -->
-                    <div class="relative" x-data="{ 
-                        open: {{ request()->routeIs('admin.administrasi_operasi.*') || request()->routeIs('admin.flm.*') || request()->routeIs('admin.k3-kamp.*') || request()->routeIs('admin.data-engine.*') ? 'true' : 'false' }},
-                        toggle() {
-                            this.open = !this.open
-                        }
-                    }">
-                        <button @click="toggle()" 
-                                class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.administrasi_operasi.*') || request()->routeIs('admin.flm.*') || request()->routeIs('admin.k3-kamp.*') || request()->routeIs('admin.data-engine.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                            <div class="flex items-center">
-                                <i class="fas fa-clipboard-list w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Operasi UL/Sentral UPKD</span>
-                            </div>
-                            <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
-                        </button>
-                        <div x-show="open" 
-                             x-transition:enter="transition ease-out duration-300"
-                             x-transition:enter-start="transform opacity-0 scale-95"
-                             x-transition:enter-end="transform opacity-100 scale-100"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="transform opacity-100 scale-100"
-                             x-transition:leave-end="transform opacity-0 scale-95"
-                             @click.away="open = false" 
-                             class="pl-4 mt-1 space-y-1">
-                            <a href="{{ route('admin.meeting-shift.index') }}" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.meeting-shift.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                                <i class="fas fa-exchange-alt w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Meeting dan Mutasi Shift Operator</span>
-                            </a>
-                            <a href="#" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
-                                <i class="fas fa-exclamation-triangle w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Laporan Abnormal/Gangguan</span>
-                            </a>
-                            <a href="{{ route('admin.flm.index') }}" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.flm.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                                <i class="fas fa-tasks w-5 h-5"></i>
-                                <span class="ml-3 text-sm">FLM</span>
-                            </a>
-                            <a href="{{ route('admin.5s5r.index')}}" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
-                                <i class="fas fa-check-double w-5 h-5"></i>
-                                <span class="ml-3 text-sm">5S5R Operator</span>
-                            </a>
-                            <a href="{{ route('admin.k3-kamp.index') }}" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.k3-kamp.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                                <i class="fas fa-hard-hat w-5 h-5"></i>
-                                <span class="ml-3 text-sm">K3, KAM dan Lingkungan</span>
-                            </a>
-                            <a href="{{ route('admin.data-engine.index') }}" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.data-engine.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                                <i class="fas fa-database w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Data Engine</span>
-                            </a>
-                            <a href="#" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
-                                <i class="fas fa-check-circle w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Ceklis</span>
-                            </a>
-                            <a href="#" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
-                                <i class="fas fa-clipboard-check w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Rendal Operasi & Niaga</span>
-                            </a>
-                        </div>
+                        <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="transform opacity-0 scale-95"
+                         x-transition:enter-end="transform opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-200"
+                         x-transition:leave-start="transform opacity-100 scale-100"
+                         x-transition:leave-end="transform opacity-0 scale-95"
+                         @click.away="open = false" 
+                         class="pl-4 mt-1 space-y-1">
+                        <a href="{{ route('admin.meeting-shift.index') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-exchange-alt w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Meeting-Mutasi-shift</span>
+                        </a>
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-exclamation-triangle w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Laporan Abnormal/Gangguan</span>
+                        </a>
+                        <a href="{{ route('admin.flm.index') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-tasks w-5 h-5"></i>
+                            <span class="ml-3 text-sm">FLM</span>
+                        </a>
+                        <a href="{{ route('admin.5s5r.index') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-check-double w-5 h-5"></i>
+                            <span class="ml-3 text-sm">5S5R</span>
+                        </a>
+                        <a href="{{ route('admin.k3-kamp.index') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-hard-hat w-5 h-5"></i>
+                            <span class="ml-3 text-sm">K3, KAM & Lingkungan</span>
+                        </a>
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-clock w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Laporan KIT 00.00</span>
+                        </a>
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-clipboard-check w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Patrol Check</span>
+                        </a>
                     </div>
                 </div>
 
-                <!-- System Section -->
-                <div class="pt-2 border-t border-white/10">
-                    <a href="{{ route('admin.library.index')}}"
-                        class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.library.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                        <i class="fas fa-book w-5 h-5"></i>
-                        <span class="ml-3 text-sm">Library</span>
-                    </a>
+                <!-- Operasi UL/Sentral Dropdown -->
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" 
+                            class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                        <div class="flex items-center">
+                            <i class="fas fa-industry w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Operasi UL/Sentral</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="transform opacity-0 scale-95"
+                         x-transition:enter-end="transform opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-200"
+                         x-transition:leave-start="transform opacity-100 scale-100"
+                         x-transition:leave-end="transform opacity-0 scale-95"
+                         @click.away="open = false" 
+                         class="pl-4 mt-1 space-y-1">
+                        <a href="{{ route('admin.daily-summary') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-calendar-day w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Ikhtisar Harian</span>
+                        </a>
+                        <a href="{{ route('admin.machine-status.view') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-tools w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Kesiapan KIT</span>
+                        </a>
+                        <a href="{{ route('admin.rencana-daya-mampu') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-bolt w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Rencana Daya Mampu Bulanan</span>
+                        </a>
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-battery-full w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Energi Primer</span>
+                        </a>
+                    </div>
                 </div>
 
-                <!-- Fitur Pendukung Section -->
-                <div class="pt-2 border-t border-white/10">
-                    <div class="relative" x-data="{ 
-                        open: {{ request()->routeIs('admin.kalender.calendar') || request()->routeIs('admin.link-koordinasi.coordination-links') || request()->routeIs('admin.users') || request()->routeIs('admin.settings') ? 'true' : 'false' }}
-                    }">
-                        <button @click="open = !open" 
-                                class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.kalender.calendar') || request()->routeIs('admin.link-koordinasi.coordination-links') || request()->routeIs('admin.users') || request()->routeIs('admin.settings') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                            <div class="flex items-center">
-                                <i class="fas fa-tools w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Fitur Pendukung</span>
-                            </div>
-                            <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
-                        </button>
-                        <div x-show="open" 
-                             x-transition:enter="transition ease-out duration-300"
-                             x-transition:enter-start="transform opacity-0 scale-95"
-                             x-transition:enter-end="transform opacity-100 scale-100"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="transform opacity-100 scale-100"
-                             x-transition:leave-end="transform opacity-0 scale-95"
-                             @click.away="open = false" 
-                             class="pl-4 mt-1 space-y-1">
-
-                             
-                            <a href="{{ route('admin.kalender.calendar') }}" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.kalender.calendar') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                                <i class="fas fa-calendar-alt w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Kalender Operasi</span>
-                            </a>
-                            <a href="#" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.kalender.calendar') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                                <i class="fas fa-calendar-alt w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Monitoring Input Datakompak</span>
-                            </a>
-                            
-                            <a href="{{ route('admin.link-koordinasi.coordination-links') }}" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.link-koordinasi.coordination-links') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                                <i class="fas fa-link w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Link Koordinasi Operasi</span>
-                            </a>
-
-                            <a href="{{ route('admin.users') }}" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.users') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                                <i class="fas fa-users w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Manajemen Pengguna</span>
-                            </a>
-
-                            <a href="{{ route('admin.settings') }}" 
-                               class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.settings') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                                <i class="fas fa-cog w-5 h-5"></i>
-                                <span class="ml-3 text-sm">Pengaturan</span>
-                            </a>
+                <!-- Operasi UPKD Dropdown -->
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" 
+                            class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                        <div class="flex items-center">
+                            <i class="fas fa-building w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Operasi UPKD</span>
                         </div>
+                        <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="transform opacity-0 scale-95"
+                         x-transition:enter-end="transform opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-200"
+                         x-transition:leave-start="transform opacity-100 scale-100"
+                         x-transition:leave-end="transform opacity-0 scale-95"
+                         @click.away="open = false" 
+                         class="pl-4 mt-1 space-y-1">
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-handshake w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Rapat & Link Koordinasi RON</span>
+                        </a>
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-project-diagram w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Program Kerja</span>
+                        </a>
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-chart-bar w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Kinerja dan Transaksi Energi</span>
+                        </a>
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-shopping-cart w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Pengadaan Barang dan Jasa</span>
+                        </a>
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-chart-line w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Maturity Level</span>
+                        </a>
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-file-alt w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Laporan Operasi UPKD</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Energi Primer UPKD Dropdown -->
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" 
+                            class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                        <div class="flex items-center">
+                            <i class="fas fa-battery-three-quarters w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Energi Primer UPKD</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="transform opacity-0 scale-95"
+                         x-transition:enter-end="transform opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-200"
+                         x-transition:leave-start="transform opacity-100 scale-100"
+                         x-transition:leave-end="transform opacity-0 scale-95"
+                         @click.away="open = false" 
+                         class="pl-4 mt-1 space-y-1">
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-handshake w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Rapat dan Link Koordinasi EP</span>
+                        </a>
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-project-diagram w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Program Kerja</span>
+                        </a>
+                        <a href="#" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-chart-line w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Maturity Level</span>
+                        </a>
+                        <a href="{{ route('admin.energiprimer.bahan-bakar') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-gas-pump w-5 h-5"></i>
+                            <span class="ml-3 text-sm">BBM</span>
+                        </a>
+                        <a href="{{ route('admin.energiprimer.pelumas') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-oil-can w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Pelumas</span>
+                        </a>
+                        <a href="{{ route('admin.energiprimer.bahan-kimia') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-flask w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Bahan Kimia</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Library -->
+                <a href="{{ route('admin.library.index') }}"
+                    class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.library.index') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                    <i class="fas fa-book w-5 h-5"></i>
+                    <span class="ml-3 text-sm">Library</span>
+                </a>
+
+                <!-- Fitur Pendukung -->
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" 
+                            class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                        <div class="flex items-center">
+                            <i class="fas fa-tools w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Fitur Pendukung</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="transform opacity-0 scale-95"
+                         x-transition:enter-end="transform opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-200"
+                         x-transition:leave-start="transform opacity-100 scale-100"
+                         x-transition:leave-end="transform opacity-0 scale-95"
+                         @click.away="open = false" 
+                         class="pl-4 mt-1 space-y-1">
+                        <a href="{{ route('admin.users') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-users w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Manajemen Pengguna</span>
+                        </a>
+                        <a href="{{ route('admin.settings') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            <i class="fas fa-cog w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Pengaturan</span>
+                        </a>
                     </div>
                 </div>
             </nav>

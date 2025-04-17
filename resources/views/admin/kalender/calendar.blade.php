@@ -57,6 +57,114 @@
 
         <!-- Main Content -->
         <main class="p-6">
+            <!-- Welcome Card -->
+            <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400 opacity-90 rounded-lg"></div>
+                <div class="relative z-10">
+                    <!-- Text Content -->
+                    <div class="space-y-2 md:space-y-4">
+                        <div style="overflow: hidden;">
+                            <h2 class="text-2xl md:text-3xl font-bold tracking-tight typing-animation">
+                                Kalender Operasi Pembangkit
+                            </h2>
+                        </div>
+                        <p class="text-sm md:text-lg font-medium fade-in">
+                            PLN NUSANTARA POWER UNIT PEMBANGKITAN KENDARI
+                        </p>
+                        <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 fade-in">
+                            <p class="text-xs md:text-base leading-relaxed">
+                                Platform manajemen jadwal operasi dan pemeliharaan pembangkit untuk perencanaan yang lebih efektif.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Logo - Hidden on mobile -->
+                    <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
+                </div>
+            </div>
+
+            <!-- Quick Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <!-- Today's Events -->
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="p-4">
+                        <div class="text-3xl text-blue-600 mb-2">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-1">Jadwal Hari Ini</h3>
+                        <p class="text-gray-600 mb-2 text-sm">
+                            @php
+                                $todayDate = now()->format('Y-m-d');
+                                $todaySchedules = $allSchedules[$todayDate] ?? [];
+                                $todayCount = count($todaySchedules);
+                            @endphp
+                            {{ $todayCount }} kegiatan
+                        </p>
+                        <span class="text-blue-600 text-sm font-medium">Perlu Perhatian</span>
+                    </div>
+                </div>
+
+                <!-- Upcoming Events -->
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="p-4">
+                        <div class="text-3xl text-green-600 mb-2">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-1">Jadwal Mendatang</h3>
+                        <p class="text-gray-600 mb-2 text-sm">
+                            @php
+                                $upcomingCount = collect($allSchedules)
+                                    ->flatten(1)
+                                    ->where('status', 'scheduled')
+                                    ->count();
+                            @endphp
+                            {{ $upcomingCount }} kegiatan
+                        </p>
+                        <span class="text-green-600 text-sm font-medium">Terjadwal</span>
+                    </div>
+                </div>
+
+                <!-- Completed Events -->
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="p-4">
+                        <div class="text-3xl text-purple-600 mb-2">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-1">Selesai</h3>
+                        <p class="text-gray-600 mb-2 text-sm">
+                            @php
+                                $completedCount = collect($allSchedules)
+                                    ->flatten(1)
+                                    ->where('status', 'completed')
+                                    ->count();
+                            @endphp
+                            {{ $completedCount }} kegiatan
+                        </p>
+                        <span class="text-purple-600 text-sm font-medium">Terlaksana</span>
+                    </div>
+                </div>
+
+                <!-- Total Events -->
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="p-4">
+                        <div class="text-3xl text-yellow-600 mb-2">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-1">Total Jadwal</h3>
+                        <p class="text-gray-600 mb-2 text-sm">
+                            @php
+                                $totalCount = collect($allSchedules)
+                                    ->flatten(1)
+                                    ->count();
+                            @endphp
+                            {{ $totalCount }} kegiatan
+                        </p>
+                        <span class="text-yellow-600 text-sm font-medium">Keseluruhan</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons and Filter -->
             <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
                 <div class="flex flex-wrap gap-4">
                     <a href="{{ route('admin.kalender.create') }}" 
@@ -64,40 +172,24 @@
                         <i class="fas fa-plus mr-2"></i>
                         <span>Tambah Jadwal</span>
                     </a>
-                    <div class="relative">
-                        <button id="filterButton" 
-                                class="inline-flex items-center px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors">
-                            <i class="fas fa-filter mr-2 text-blue-600"></i>
-                            <span>Filter</span>
-                        </button>
-                        <div id="filterDropdown" class="hidden absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg z-10 p-4 border border-gray-100">
-                            <h3 class="text-sm font-medium text-gray-700 mb-3">Filter Jadwal</h3>
-                            <div class="space-y-3">
-                                <div>
-                                    <label class="block text-sm text-gray-600 mb-1">Status</label>
-                                    <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500/20">
-                                        <option value="">Semua Status</option>
-                                        <option value="scheduled">Terjadwal</option>
-                                        <option value="completed">Selesai</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm text-gray-600 mb-1">Periode</label>
-                                    <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500/20">
-                                        <option value="week">Minggu Ini</option>
-                                        <option value="month">Bulan Ini</option>
-                                        <option value="custom">Kustom</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="mt-4 flex justify-end space-x-2">
-                                <button class="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800">Reset</button>
-                                <button class="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                                    Terapkan
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <button id="filterButton" 
+                            class="inline-flex items-center px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors">
+                        <i class="fas fa-filter mr-2 text-blue-600"></i>
+                        <span>Filter</span>
+                    </button>
+                    <button class="inline-flex items-center px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors">
+                        <i class="fas fa-download mr-2 text-blue-600"></i>
+                        <span>Export</span>
+                    </button>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="previousMonth()">
+                        <i class="fas fa-chevron-left text-gray-600"></i>
+                    </button>
+                    <span class="text-base font-medium text-gray-700 min-w-[150px] text-center" id="currentMonth"></span>
+                    <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="nextMonth()">
+                        <i class="fas fa-chevron-right text-gray-600"></i>
+                    </button>
                 </div>
             </div>
 
@@ -106,19 +198,6 @@
                 <div class="lg:col-span-3">
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                         <div class="p-4">
-                            <div class="flex justify-between items-center mb-4">
-                                <h2 class="text-lg font-semibold text-gray-800">Kalender</h2>
-                                <div class="flex items-center space-x-4">
-                                    <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="previousMonth()">
-                                        <i class="fas fa-chevron-left text-gray-600"></i>
-                                    </button>
-                                    <span class="text-base font-medium text-gray-700 min-w-[150px] text-center" id="currentMonth"></span>
-                                    <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="nextMonth()">
-                                        <i class="fas fa-chevron-right text-gray-600"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
                             <!-- Calendar Header -->
                             <div class="grid grid-cols-7 bg-gray-50 rounded-t-lg border-b border-gray-200">
                                 <div class="text-center py-2 text-sm font-medium text-gray-600">Min</div>
@@ -136,66 +215,100 @@
                     </div>
                 </div>
 
-                <!-- Schedule List -->
-                <div class="lg:col-span-1">
+                <!-- Right Sidebar -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Today's Schedule -->
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                         <div class="p-4">
                             <h2 class="text-lg font-semibold text-gray-800 mb-4">Jadwal Hari Ini</h2>
-                            <div class="space-y-3 overflow-auto max-h-[calc(100vh-16rem)] custom-scrollbar" id="schedule-list">
-                                @forelse($allSchedules as $date => $daySchedules)
-                                    <div class="border-b border-gray-100 pb-3 last:border-b-0">
-                                        <h3 class="font-medium text-gray-700 mb-2 bg-gray-50 px-3 py-1.5 rounded-md text-sm">
-                                            {{ \Carbon\Carbon::parse($date)->format('d F Y') }}
-                                        </h3>
-                                        <div class="space-y-2">
-                                            @foreach($daySchedules as $schedule)
-                                                <div class="bg-white p-3 rounded-lg border border-gray-200 hover:border-blue-500 transition-colors">
-                                                    <div class="flex justify-between items-start">
-                                                        <div>
-                                                            <h4 class="font-medium text-gray-800 text-sm">{{ $schedule['title'] }}</h4>
-                                                            <p class="text-xs text-gray-500 mt-1">
-                                                                <i class="far fa-clock mr-1 text-blue-600"></i>
-                                                                {{ $schedule['start_time'] }} - {{ $schedule['end_time'] }}
-                                                            </p>
-                                                        </div>
-                                                        <span class="px-2 py-0.5 text-xs rounded-full {{ $schedule['status'] === 'completed' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' }}">
-                                                            {{ ucfirst($schedule['status']) }}
-                                                        </span>
-                                                    </div>
-                                                    @if($schedule['location'])
-                                                        <p class="mt-2 text-xs text-gray-600">
-                                                            <i class="fas fa-map-marker-alt mr-1 text-blue-600"></i>
-                                                            {{ $schedule['location'] }}
-                                                        </p>
-                                                    @endif
-                                                    <div class="mt-2 pt-2 border-t border-gray-100 flex justify-end space-x-2">
-                                                        <a href="{{ route('admin.kalender.edit', $schedule['id']) }}" 
-                                                           class="text-blue-600 hover:text-blue-700 p-1 hover:bg-blue-50 rounded transition-colors">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        <form action="{{ route('admin.kalender.destroy', $schedule['id']) }}" 
-                                                              method="POST" 
-                                                              class="inline"
-                                                              onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="text-red-600 hover:text-red-700 p-1 hover:bg-red-50 rounded transition-colors">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
+                            <div class="space-y-3 overflow-auto max-h-[300px] custom-scrollbar" id="schedule-list">
+                                @if(isset($allSchedules[now()->format('Y-m-d')]))
+                                    @foreach($allSchedules[now()->format('Y-m-d')] as $schedule)
+                                        <div class="bg-white p-3 rounded-lg border border-gray-200 hover:border-blue-500 transition-colors">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-800 text-sm">{{ $schedule['title'] }}</h4>
+                                                    <p class="text-xs text-gray-500 mt-1">
+                                                        <i class="far fa-clock mr-1 text-blue-600"></i>
+                                                        {{ $schedule['start_time'] }} - {{ $schedule['end_time'] }}
+                                                    </p>
                                                 </div>
-                                            @endforeach
+                                                <span class="px-2 py-0.5 text-xs rounded-full {{ $schedule['status'] === 'completed' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' }}">
+                                                    {{ ucfirst($schedule['status']) }}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                @empty
+                                    @endforeach
+                                @else
                                     <div class="text-center py-6">
                                         <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-3">
                                             <i class="fas fa-calendar-day text-xl text-gray-400"></i>
                                         </div>
                                         <p class="text-gray-500 text-sm">Tidak ada jadwal hari ini</p>
                                     </div>
-                                @endforelse
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="p-4">
+                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Aksi Cepat</h2>
+                            <div class="space-y-2">
+                                <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
+                                    <i class="fas fa-plus-circle mr-2 text-blue-600"></i>
+                                    <span>Tambah Jadwal Baru</span>
+                                </button>
+                                <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
+                                    <i class="fas fa-sync-alt mr-2 text-green-600"></i>
+                                    <span>Segarkan Kalender</span>
+                                </button>
+                                <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
+                                    <i class="fas fa-calendar-week mr-2 text-purple-600"></i>
+                                    <span>Tampilkan Minggu Ini</span>
+                                </button>
+                                <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
+                                    <i class="fas fa-filter mr-2 text-yellow-600"></i>
+                                    <span>Filter Jadwal</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Schedule Categories -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="p-4">
+                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Kategori Jadwal</h2>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-blue-600 mr-2"></span>
+                                        <span class="text-sm text-gray-600">Operasi</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-700">12</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-green-600 mr-2"></span>
+                                        <span class="text-sm text-gray-600">Pemeliharaan</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-700">8</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-yellow-600 mr-2"></span>
+                                        <span class="text-sm text-gray-600">Inspeksi</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-700">5</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+                                        <span class="text-sm text-gray-600">Perbaikan</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-700">3</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -230,7 +343,7 @@
 <script src="{{ asset('js/toggle.js') }}"></script>
 <script>
 let currentDate = new Date();
-let schedules = @json($allSchedules);
+let schedules = @json($allSchedules ?? []);
 
 function renderCalendar() {
     const year = currentDate.getFullYear();
@@ -258,101 +371,38 @@ function renderCalendar() {
     // Add days of month
     for (let day = 1; day <= lastDay.getDate(); day++) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const hasSchedule = schedules[dateStr] !== undefined;
+        const hasSchedule = schedules && schedules[dateStr] !== undefined;
         const isToday = new Date().toDateString() === new Date(year, month, day).toDateString();
         const isWeekend = new Date(year, month, day).getDay() === 0 || new Date(year, month, day).getDay() === 6;
         
         calendarHTML += `
             <div class="relative group min-h-[120px] p-3 border-b border-r border-gray-200 ${
                 isWeekend ? 'bg-gray-50' : 'bg-white'
-            } hover:bg-[#009BB9]/5 transition-all duration-300">
+            } hover:bg-blue-50/50 transition-all duration-300">
                 <div class="flex justify-between items-center mb-2">
                     <span class="inline-flex items-center justify-center ${
                         isToday 
-                        ? 'w-8 h-8 rounded-full bg-gradient-to-r from-[#009BB9] to-[#0A749B] text-white font-semibold shadow-lg' 
+                        ? 'w-8 h-8 rounded-full bg-blue-600 text-white font-semibold shadow-lg' 
                         : 'text-gray-700'
                     } ${isWeekend ? 'text-gray-500' : ''}">${day}</span>
                     ${hasSchedule ? `
-                        <span class="w-2 h-2 rounded-full ${isToday ? 'bg-white' : 'bg-[#009BB9]'} animate-pulse shadow-lg"></span>
+                        <span class="w-2 h-2 rounded-full ${isToday ? 'bg-white' : 'bg-blue-600'} animate-pulse shadow-lg"></span>
                     ` : ''}
                 </div>
                 
                 ${hasSchedule ? `
                     <div class="space-y-1">
                         ${schedules[dateStr].slice(0, 2).map(schedule => `
-                            <div class="text-xs p-2 rounded-lg bg-gradient-to-r from-[#009BB9]/10 to-[#009BB9]/20 border border-[#009BB9]/20 text-[#009BB9] truncate cursor-pointer hover:from-[#009BB9]/20 hover:to-[#009BB9]/30 transition-all duration-300 transform hover:-translate-y-0.5">
+                            <div class="text-xs p-2 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 truncate cursor-pointer hover:bg-blue-100 transition-all duration-300 transform hover:-translate-y-0.5">
                                 <div class="font-medium">${schedule.title}</div>
-                                <div class="text-[#009BB9] text-[10px]">${schedule.start_time}</div>
+                                <div class="text-blue-600 text-[10px]">${schedule.start_time}</div>
                             </div>
                         `).join('')}
                         ${schedules[dateStr].length > 2 ? `
-                            <div class="text-xs text-center p-1 text-[#009BB9] font-medium">
+                            <div class="text-xs text-center p-1 text-blue-600 font-medium">
                                 +${schedules[dateStr].length - 2} lainnya
                             </div>
                         ` : ''}
-                    </div>
-                    
-                    <!-- Hover Popup dengan posisi dinamis -->
-                    <div class="hidden group-hover:block absolute z-50 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 p-4 transform transition-all duration-300 ease-in-out hover:shadow-2xl popup-calendar"
-                         style="
-                            ${((firstDay.getDay() + day - 1) % 7 >= 5) ? 'right: calc(100% + 1rem); left: auto;' : 'left: calc(100% + 1rem);'}
-                            top: 0;
-                         ">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h4 class="font-semibold text-gray-800 text-lg">
-                                    ${day} ${monthNames[month]} ${year}
-                                </h4>
-                                <p class="text-sm text-gray-500 mt-1">
-                                    ${schedules[dateStr].length} Jadwal Kegiatan
-                                </p>
-                            </div>
-                            <span class="px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-[#009BB9] to-[#0A749B] text-white shadow-lg">
-                                ${schedules[dateStr].length} Jadwal
-                            </span>
-                        </div>
-                        <div class="space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar">
-                            ${schedules[dateStr].map(schedule => `
-                                <div class="p-3 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 hover:from-[#009BB9]/10 hover:to-[#009BB9]/20 transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-md">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <h5 class="font-medium text-gray-800">${schedule.title}</h5>
-                                        <span class="px-2 py-1 text-xs rounded-full ${
-                                            schedule.status === 'completed' 
-                                            ? 'bg-green-100 text-green-800' 
-                                            : 'bg-[#009BB9]/10 text-[#009BB9]'
-                                        }">
-                                            ${schedule.status.charAt(0).toUpperCase() + schedule.status.slice(1)}
-                                        </span>
-                                    </div>
-                                    <div class="text-sm text-gray-600 mb-2">
-                                        <i class="far fa-clock mr-1 text-[#009BB9]"></i>
-                                        ${schedule.start_time} - ${schedule.end_time}
-                                    </div>
-                                    ${schedule.location ? `
-                                        <div class="text-sm text-gray-600 mb-1">
-                                            <i class="fas fa-map-marker-alt mr-1 text-[#009BB9]"></i>
-                                            ${schedule.location}
-                                        </div>
-                                    ` : ''}
-                                    ${schedule.participants ? `
-                                        <div class="text-sm text-gray-600">
-                                            <i class="fas fa-users mr-1 text-[#009BB9]"></i>
-                                            ${schedule.participants.join(', ')}
-                                        </div>
-                                    ` : ''}
-                                    <div class="mt-3 pt-3 border-t border-gray-200 flex justify-end space-x-2">
-                                        <a href="/admin/kalender/${schedule.id}/edit" 
-                                           class="text-[#009BB9] hover:text-[#0A749B] p-1.5 hover:bg-[#009BB9]/10 rounded-lg transition-all duration-300">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <button onclick="deleteSchedule(${schedule.id})" 
-                                                class="text-red-600 hover:text-red-800 p-1.5 hover:bg-red-100 rounded-lg transition-all duration-300">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
                     </div>
                 ` : ''}
             </div>
@@ -390,8 +440,8 @@ function showSchedules(date) {
             if (data.length === 0) {
                 scheduleList.innerHTML = `
                     <div class="text-center py-8">
-                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#009BB9]/10 mb-4">
-                            <i class="fas fa-calendar-day text-2xl text-[#009BB9]"></i>
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-50 mb-4">
+                            <i class="fas fa-calendar-day text-2xl text-blue-600"></i>
                         </div>
                         <p class="text-gray-500">Tidak ada jadwal untuk tanggal ini</p>
                     </div>
@@ -400,35 +450,35 @@ function showSchedules(date) {
             }
             
             scheduleList.innerHTML = data.map(schedule => `
-                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:border-[#009BB9] transition-colors">
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:border-blue-500 transition-colors">
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="font-medium text-gray-800">${schedule.title}</h3>
                             <p class="text-sm text-gray-600 mt-1">
-                                <i class="far fa-clock mr-1 text-[#009BB9]"></i>
+                                <i class="far fa-clock mr-1 text-blue-600"></i>
                                 ${schedule.start_time} - ${schedule.end_time}
                             </p>
                         </div>
-                        <span class="px-2 py-1 text-xs rounded-full ${schedule.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-[#009BB9]/10 text-[#009BB9]'}">
+                        <span class="px-2 py-1 text-xs rounded-full ${schedule.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-600'}">
                             ${schedule.status.charAt(0).toUpperCase() + schedule.status.slice(1)}
                         </span>
                     </div>
                     <p class="mt-2 text-sm text-gray-600">${schedule.description}</p>
                     ${schedule.location ? `
                         <p class="mt-2 text-sm text-gray-600">
-                            <i class="fas fa-map-marker-alt mr-1 text-[#009BB9]"></i>
+                            <i class="fas fa-map-marker-alt mr-1 text-blue-600"></i>
                             ${schedule.location}
                         </p>
                     ` : ''}
                     ${schedule.participants ? `
                         <p class="mt-2 text-sm text-gray-600">
-                            <i class="fas fa-users mr-1 text-[#009BB9]"></i>
+                            <i class="fas fa-users mr-1 text-blue-600"></i>
                             ${schedule.participants.join(', ')}
                         </p>
                     ` : ''}
                     <div class="mt-3 pt-3 border-t border-gray-100 flex justify-end space-x-2">
                         <a href="/admin/kalender/${schedule.id}/edit" 
-                           class="text-[#009BB9] hover:text-[#0A749B] p-1">
+                           class="text-blue-600 hover:text-blue-700 p-1">
                             <i class="fas fa-edit"></i>
                         </a>
                         <button onclick="deleteSchedule(${schedule.id})" 
@@ -452,7 +502,7 @@ function showScheduleDetail(schedule) {
             <div>
                 <p class="text-sm text-gray-500">Waktu</p>
                 <p class="text-gray-700">
-                    <i class="far fa-clock mr-1 text-[#009BB9]"></i>
+                    <i class="far fa-clock mr-1 text-blue-600"></i>
                     ${schedule.start_time} - ${schedule.end_time}
                 </p>
             </div>
@@ -464,7 +514,7 @@ function showScheduleDetail(schedule) {
                 <div>
                     <p class="text-sm text-gray-500">Lokasi</p>
                     <p class="text-gray-700">
-                        <i class="fas fa-map-marker-alt mr-1 text-[#009BB9]"></i>
+                        <i class="fas fa-map-marker-alt mr-1 text-blue-600"></i>
                         ${schedule.location}
                     </p>
                 </div>
@@ -473,7 +523,7 @@ function showScheduleDetail(schedule) {
                 <div>
                     <p class="text-sm text-gray-500">Peserta</p>
                     <p class="text-gray-700">
-                        <i class="fas fa-users mr-1 text-[#009BB9]"></i>
+                        <i class="fas fa-users mr-1 text-blue-600"></i>
                         ${schedule.participants.join(', ')}
                     </p>
                 </div>
@@ -481,7 +531,7 @@ function showScheduleDetail(schedule) {
             <div>
                 <p class="text-sm text-gray-500">Status</p>
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    schedule.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-[#009BB9]/10 text-[#009BB9]'
+                    schedule.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-600'
                 }">
                     ${schedule.status.charAt(0).toUpperCase() + schedule.status.slice(1)}
                 </span>
@@ -596,6 +646,66 @@ document.addEventListener('DOMContentLoaded', function() {
 .calendar-event:hover {
     background-color: #dbeafe;
     transform: translateY(-1px);
+}
+
+/* Additional Styles */
+.welcome-card {
+    background-size: cover;
+    background-position: center;
+    transition: all 0.3s ease;
+}
+
+.welcome-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(37, 99, 235, 0.9),
+        rgba(59, 130, 246, 0.8)
+    );
+    border-radius: 0.5rem;
+}
+
+.calendar-day {
+    min-height: 120px;
+    transition: all 0.2s ease;
+}
+
+.calendar-day:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.calendar-event {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    margin-bottom: 0.25rem;
+    border-radius: 0.25rem;
+    background-color: #eff6ff;
+    color: #2563eb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.calendar-event:hover {
+    background-color: #dbeafe;
+    transform: translateY(-1px);
+}
+
+.popup-calendar {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 </style>
 @endpush

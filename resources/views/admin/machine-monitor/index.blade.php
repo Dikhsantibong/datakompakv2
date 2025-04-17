@@ -4,56 +4,56 @@
 
 @section('content')
 <div class="flex h-screen bg-gray-100">
-    @include('components.sidebar')
+        @include('components.sidebar')
 
-    <!-- Main Content -->
+        <!-- Main Content -->
     <div class="flex-1 flex flex-col overflow-hidden">
-        <!-- Header -->
+            <!-- Header -->
         <header class="bg-white shadow-sm">
             <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center">
-                    <!-- Mobile Menu Toggle -->
-                    <button id="mobile-menu-toggle"
-                        class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                        aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        <!-- Mobile Menu Toggle -->
+                        <button id="mobile-menu-toggle"
+                            class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                            aria-controls="mobile-menu" aria-expanded="false">
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-                    </button>
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                            </svg>
+                        </button>
 
-                    <!--  Menu Toggle Sidebar-->
-                    <button id="desktop-menu-toggle"
-                        class="hidden md:block relative items-center justify-center rounded-md text-gray-400 hover:bg-[#009BB9] p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                        aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        <!--  Menu Toggle Sidebar-->
+                        <button id="desktop-menu-toggle"
+                            class="hidden md:block relative items-center justify-center rounded-md text-gray-400 hover:bg-[#009BB9] p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                            aria-controls="mobile-menu" aria-expanded="false">
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-                    </button>
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                            </svg>
+                        </button>
                     <h1 class="text-xl font-semibold text-gray-900">Monitor Mesin</h1>
-                </div>
-                <div class="relative">
-                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
-                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}"
-                            class="w-7 h-7 rounded-full mr-2">
-                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
-                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
-                    </button>
-                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                        </form>
+                    </div>
+                    <div class="relative">
+                        <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                            <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}"
+                                class="w-7 h-7 rounded-full mr-2">
+                            <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                            <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                        </button>
+                        <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                            <a href="{{ route('logout') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                @csrf
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
 
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
@@ -66,7 +66,7 @@
                         <div class="space-y-2 md:space-y-4">
                             <div style="overflow: hidden;">
                                 <h2 class="text-2xl md:text-3xl font-bold tracking-tight typing-animation">
-                                    Monitor Status Mesin Pembangkit
+                                    Monitor Data Mesin Pembangkit
                                 </h2>
                             </div>
                             <p class="text-sm md:text-lg font-medium fade-in">
@@ -77,8 +77,8 @@
                                     Platform monitoring status mesin secara real-time untuk analisis dan pengambilan keputusan yang lebih efektif.
                                 </p>
                             </div>
-                        </div>
-                        
+            </div>
+
                         <!-- Logo - Hidden on mobile -->
                         <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
                     </div>
@@ -133,12 +133,12 @@
                         <div class="p-4">
                             <div class="text-3xl text-green-600 mb-2">
                                 <i class="fas fa-play-circle"></i>
-                            </div>
+                                        </div>
                             <h3 class="text-lg font-semibold mb-1">OPS</h3>
                             <p class="text-gray-600 mb-2 text-sm">{{ $machineStatusLogs->where('status', 'OPS')->count() }} kali</p>
                             <span class="text-green-600 text-sm font-medium">Operation</span>
-                        </div>
-                    </div>
+                                        </div>
+                                    </div>
 
                     <!-- RSH Status Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
@@ -149,8 +149,8 @@
                             <h3 class="text-lg font-semibold mb-1">RSH</h3>
                             <p class="text-gray-600 mb-2 text-sm">{{ $machineStatusLogs->where('status', 'RSH')->count() }} kali</p>
                             <span class="text-blue-600 text-sm font-medium">Reserve Shutdown</span>
+                            </div>
                         </div>
-                    </div>
 
                     <!-- FO Status Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
@@ -161,8 +161,8 @@
                             <h3 class="text-lg font-semibold mb-1">FO</h3>
                             <p class="text-gray-600 mb-2 text-sm">{{ $machineStatusLogs->where('status', 'FO')->count() }} kali</p>
                             <span class="text-red-600 text-sm font-medium">Forced Outage</span>
-                        </div>
-                    </div>
+                                        </div>
+                                    </div>
 
                     <!-- MO Status Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
@@ -181,12 +181,12 @@
                         <div class="p-4">
                             <div class="text-3xl text-purple-600 mb-2">
                                 <i class="fas fa-chart-area"></i>
-                            </div>
+                                    </div>
                             <h3 class="text-lg font-semibold mb-1">DMN</h3>
                             <p class="text-gray-600 mb-2 text-sm">{{ number_format($machineStatusLogs->avg('dmn'), 2) }}</p>
                             <span class="text-purple-600 text-sm font-medium">Rata-rata DMN</span>
-                        </div>
-                    </div>
+                                    </div>
+                                </div>
 
                     <!-- Average DMP -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
@@ -197,9 +197,9 @@
                             <h3 class="text-lg font-semibold mb-1">DMP</h3>
                             <p class="text-gray-600 mb-2 text-sm">{{ number_format($machineStatusLogs->avg('dmp'), 2) }}</p>
                             <span class="text-indigo-600 text-sm font-medium">Rata-rata DMP</span>
-                        </div>
-                    </div>
-                </div>
+                                    </div>
+                                    </div>
+                                </div>
 
                 <!-- Operating & Production Statistics -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -219,9 +219,9 @@
                                 <p class="text-sm text-gray-600">Status Aktif</p>
                                 <p class="text-2xl font-semibold text-green-600">{{ $machineStatusLogs->where('tanggal', now()->toDateString())->count() }}</p>
                                 <p class="text-sm text-gray-500">hari ini</p>
-                            </div>
-                        </div>
-                    </div>
+                                    </div>
+                                    </div>
+                                </div>
 
                     <!-- Load Statistics -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
@@ -247,8 +247,8 @@
                 <!-- Status Statistics -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <!-- Monthly Status Frequency -->
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <div class="flex justify-between items-center mb-4">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-medium text-gray-800">
                                 <i class="fas fa-chart-bar mr-2 text-blue-600"></i>
                                 Frekuensi Status Mesin (Bulan Ini)
@@ -259,8 +259,8 @@
                                 @foreach($machines as $machine)
                                     <option value="{{ $machine->id }}">{{ $machine->name }}</option>
                                 @endforeach
-                            </select>
-                        </div>
+                                </select>
+                            </div>
                         <div class="h-80">
                             <canvas id="statusFrequencyChart"></canvas>
                         </div>
@@ -290,7 +290,7 @@
                             <canvas id="statusTrendChart"></canvas>
                         </div>
                     </div>
-
+                    
                     <!-- Status Comparison -->
                     <div class="bg-white rounded-lg shadow-md p-6">
                         <h3 class="text-lg font-medium mb-4 text-gray-800">
@@ -428,8 +428,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Status Frequency Chart
     const frequencyCtx = document.getElementById('statusFrequencyChart').getContext('2d');
     new Chart(frequencyCtx, {
-        type: 'bar',
-        data: {
+                    type: 'bar',
+                    data: {
             labels: Object.keys(monthlyData),
             datasets: [{
                 label: 'Frekuensi',
@@ -443,21 +443,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 ],
                 borderWidth: 1
             }]
-        },
-        options: {
-            responsive: true,
+                    },
+                    options: {
+                        responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
                         text: 'Jumlah Kejadian'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
                     display: false
                 },
                 tooltip: {
@@ -495,7 +495,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }]
         },
         options: {
-            responsive: true,
+                        responsive: true,
             maintainAspectRatio: false,
             plugins: {
                 legend: {
@@ -528,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     new Chart(trendCtx, {
         type: 'line',
-        data: {
+                    data: {
             labels: months,
             datasets: statuses.map((status, index) => ({
                 label: status,
@@ -540,17 +540,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     'rgb(251, 191, 36)',
                     'rgb(107, 114, 128)'
                 ][index],
-                tension: 0.1
+                            tension: 0.1
             }))
-        },
-        options: {
-            responsive: true,
+                    },
+                    options: {
+                        responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
                         text: 'Jumlah Kejadian'
                     }
                 }
@@ -600,21 +600,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 y: {
                     stacked: true,
                     beginAtZero: true,
-                    title: {
-                        display: true,
+                            title: {
+                                display: true,
                         text: 'Jumlah Kejadian'
                     }
-                }
-            }
-        }
-    });
+                            }
+                        }
+                    }
+                });
 
     // Handle machine selection change
     document.getElementById('machineSelect').addEventListener('change', function(e) {
         const machineId = e.target.value;
         if (machineId !== 'all') {
             window.location.href = `?machine_id=${machineId}`;
-        } else {
+                        } else {
             window.location.href = window.location.pathname;
         }
     });
@@ -639,7 +639,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Change background every 5 seconds
     setInterval(changeBackground, 5000);
-});
-</script>
-@endpush
+                });
+            </script>
+            @endpush
 @endsection

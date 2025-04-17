@@ -47,6 +47,7 @@ use App\Http\Controllers\Admin\DataEngineController;
 use App\Http\Controllers\Admin\K3KampController;
 use App\Http\Controllers\Admin\MeetingShiftController;
 use App\Http\Controllers\FlmController;
+use App\Http\Controllers\Admin\AbnormalReportController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -1065,4 +1066,12 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // 5S5R Routes
     Route::get('/5s5r', [App\Http\Controllers\Admin\FiveS5RController::class, 'index'])->name('5s5r.index');
     Route::post('/5s5r', [App\Http\Controllers\Admin\FiveS5RController::class, 'store'])->name('5s5r.store');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    // ... existing routes ...
+    
+    // Abnormal Report Routes
+    Route::get('/abnormal-report', [AbnormalReportController::class, 'index'])->name('admin.abnormal-report.index');
+    Route::post('/abnormal-report', [AbnormalReportController::class, 'store'])->name('admin.abnormal-report.store');
 });

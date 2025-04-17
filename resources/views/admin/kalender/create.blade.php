@@ -157,7 +157,7 @@
                                 <div class="relative">
                                     <input type="text" name="participants" id="participants"
                                         class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('participants') border-red-500 @else border-gray-300 @enderror transition-all duration-300"
-                                        placeholder="Contoh: John Doe, Jane Smith, ...">
+                                        placeholder="Contoh: Dikhsan, Diki, ...">
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                         <i class="fas fa-users text-gray-400"></i>
                                     </div>

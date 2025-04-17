@@ -172,11 +172,7 @@
                         <i class="fas fa-plus mr-2"></i>
                         <span>Tambah Jadwal</span>
                     </a>
-                    <button id="filterButton" 
-                            class="inline-flex items-center px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors">
-                        <i class="fas fa-filter mr-2 text-blue-600"></i>
-                        <span>Filter</span>
-                    </button>
+                    
                     <button class="inline-flex items-center px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors">
                         <i class="fas fa-download mr-2 text-blue-600"></i>
                         <span>Export</span>

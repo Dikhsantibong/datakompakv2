@@ -49,22 +49,20 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-6">
                             @php
                                 $filteredLogs = $logs->filter(function($log) use ($date) {
-                                    return $log->created_at->format('Y-m-d') === $date;
+                                    return $log->tanggal->format('Y-m-d') === $date;
                                 });
 
-                                $totalDMP = $filteredLogs->whereIn('machine_id', $powerPlant->machines->pluck('id'))
-                                    ->sum(fn($log) => (float) $log->dmp);
+                                $machineLogs = $filteredLogs->whereIn('machine_id', $powerPlant->machines->pluck('id'));
+
+                                $totalDMP = $machineLogs->sum(fn($log) => (float) $log->dmp);
+                                $totalDMN = $machineLogs->sum(fn($log) => (float) $log->dmn);
                                 
-                                $totalDMN = $filteredLogs->whereIn('machine_id', $powerPlant->machines->pluck('id'))
-                                    ->sum(fn($log) => (float) $log->dmn);
-                                
-                                $totalBeban = $filteredLogs->whereIn('machine_id', $powerPlant->machines->pluck('id'))
-                                    ->sum(function($log) {
-                                        if ($log->status === 'Operasi') {
-                                            return (float) $log->load_value;
-                                        }
-                                        return 0;
-                                    });
+                                $totalBeban = $machineLogs->sum(function($log) {
+                                    if ($log->status === 'Operasi' || $log->status === 'OPS') {
+                                        return (float) $log->load_value;
+                                    }
+                                    return 0;
+                                });
 
                                 $hopValue = \App\Models\UnitOperationHour::where('power_plant_id', $powerPlant->id)
                                     ->whereDate('tanggal', $date)
@@ -177,11 +175,10 @@
                             @php
                                 $machineCount = $powerPlant->machines->count();
                                 
-                                $latestLogs = $filteredLogs
-                                    ->whereIn('machine_id', $powerPlant->machines->pluck('id'))
+                                $latestLogs = $machineLogs
                                     ->groupBy('machine_id')
                                     ->map(function ($machineLogs) {
-                                        return $machineLogs->sortByDesc('created_at')->first();
+                                        return $machineLogs->sortByDesc('input_time')->first();
                                     });
                                 
                                 $rshCount = $latestLogs->where('status', 'RSH')->count();
@@ -247,7 +244,10 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse($powerPlant->machines as $index => $machine)
                                     @php
-                                        $log = $filteredLogs->firstWhere('machine_id', $machine->id);
+                                        $log = $machineLogs->where('machine_id', $machine->id)
+                                            ->sortByDesc('input_time')
+                                            ->first();
+                                        
                                         $status = $log?->status ?? '-';
                                         $statusClass = match($status) {
                                             'RSH' => 'bg-green-100 text-green-800',

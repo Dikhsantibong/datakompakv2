@@ -73,7 +73,7 @@
                             <i class="fas fa-exchange-alt w-5 h-5"></i>
                             <span class="ml-3 text-sm">Meeting-Mutasi-shift</span>
                         </a>
-                        <a href="#" 
+                        <a href="{{ route('admin.abnormal-report.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.laporan-abnormal.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-exclamation-triangle w-5 h-5"></i>
                             <span class="ml-3 text-sm">Laporan Abnormal/Gangguan</span>

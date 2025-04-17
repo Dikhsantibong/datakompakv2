@@ -52,6 +52,10 @@
             </div>
         </header>
 
+        <div class="flex items-center pt-2">
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'BAHAN BAKAR', 'url' => null]]" />
+        </div>
+
 
         <div class="py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,7 +76,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Unit</label>
                                     <select name="unit_id" required
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 ">
                                         @foreach($units as $unit)
                                             <option value="{{ $unit->id }}" {{ $bahanBakar->unit_id == $unit->id ? 'selected' : '' }}>
                                                 {{ $unit->name }}
@@ -84,7 +88,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Jenis BBM</label>
                                     <select name="jenis_bbm" required
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                            class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                         @foreach(['B40', 'B35', 'HSD', 'MFO'] as $jenis)
                                             <option value="{{ $jenis }}" {{ $bahanBakar->jenis_bbm == $jenis ? 'selected' : '' }}>
                                                 {{ $jenis }}
@@ -110,7 +114,7 @@
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700">Catatan Transaksi</label>
                                     <textarea name="catatan_transaksi" rows="3"
-                                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                              class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                               placeholder="Masukkan catatan transaksi...">{{ $bahanBakar->catatan_transaksi }}</textarea>
                                 </div>
                             </div>

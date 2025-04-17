@@ -65,7 +65,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Unit</label>
                                     <select name="unit_id" required
-                                            class="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('unit_id') border-red-500 @enderror">
+                                            class="p-2 mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('unit_id') border-red-500 @enderror">
                                         <option value="">Pilih Unit</option>
                                         @foreach($units as $unit)
                                             <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
@@ -81,7 +81,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Jenis BBM</label>
                                     <select name="jenis_bbm" required
-                                            class="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('jenis_bbm') border-red-500 @enderror">
+                                            class=" p-2 mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('jenis_bbm') border-red-500 @enderror">
                                         <option value="">Pilih Jenis BBM</option>
                                         <option value="B40" {{ old('jenis_bbm') == 'B40' ? 'selected' : '' }}>B40</option>
                                         <option value="B35" {{ old('jenis_bbm') == 'B35' ? 'selected' : '' }}>B35</option>
@@ -129,7 +129,7 @@
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700">Catatan Transaksi</label>
                                     <textarea name="catatan_transaksi" rows="3"
-                                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('catatan_transaksi') border-red-500 @enderror"
+                                              class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('catatan_transaksi') border-red-500 @enderror"
                                               placeholder="Masukkan catatan transaksi...">{{ old('catatan_transaksi') }}</textarea>
                                     @error('catatan_transaksi')
                                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>

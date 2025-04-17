@@ -73,7 +73,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Unit</label>
                                     <select name="unit_id" required
-                                            class="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('unit_id') border-red-500 @enderror">
+                                            class="p-2 mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('unit_id') border-red-500 @enderror">
                                         <option value="">Pilih Unit</option>
                                         @foreach($units as $unit)
                                             <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
@@ -89,7 +89,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Jenis Pelumas</label>
                                     <input type="text" name="jenis_pelumas" required
-                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('jenis_pelumas') border-red-500 @enderror"
+                                           class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('jenis_pelumas') border-red-500 @enderror"
                                            value="{{ old('jenis_pelumas') }}"
                                            placeholder="Masukkan jenis pelumas">
                                     @error('jenis_pelumas')
@@ -133,7 +133,7 @@
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700">Catatan Transaksi</label>
                                     <textarea name="catatan_transaksi" rows="3"
-                                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('catatan_transaksi') border-red-500 @enderror"
+                                              class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('catatan_transaksi') border-red-500 @enderror"
                                               placeholder="Masukkan catatan transaksi...">{{ old('catatan_transaksi') }}</textarea>
                                     @error('catatan_transaksi')
                                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>

@@ -114,19 +114,45 @@
                                             <td class="border px-4 py-2">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}:00</td>
                                             <td class="border px-4 py-2"><input type="text" class="w-full border-gray-300 rounded-md shadow-sm" name="uraian_kejadian[]"></td>
                                             <td class="border px-4 py-2"><input type="text" class="w-full border-gray-300 rounded-md shadow-sm" name="visual_parameter[]"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="turun_beban[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="off_cba[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="stop[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="tl_ophar[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="tl_op[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="tl_har[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="mul[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="flm[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="mo_rutin[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="flm_sr[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="pm[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="em[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="phw[]" placeholder="√/x"></td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="turun_beban[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="off_cba[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="stop[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="tl_ophar[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="tl_op[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="tl_har[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="mul[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="flm[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="mo_rutin[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="flm_sr[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="pm[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="em[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="phw[]" value="1">
+                                            </td>
                                         </tr>
                                         @endfor
                                     </tbody>
@@ -157,8 +183,12 @@
                                         <tr>
                                             <td class="border px-4 py-2">{{ $i }}</td>
                                             <td class="border px-4 py-2"><input type="text" class="w-full border-gray-300 rounded-md shadow-sm" name="nama_mesin[]"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="kondisi_rusak[]" placeholder="√/x"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="kondisi_abnormal[]" placeholder="√/x"></td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="kondisi_rusak[]" value="1">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="kondisi_abnormal[]" value="1">
+                                            </td>
                                             <td class="border px-4 py-2"><input type="text" class="w-full border-gray-300 rounded-md shadow-sm" name="keterangan[]"></td>
                                         </tr>
                                         @endfor
@@ -183,9 +213,13 @@
                                         <tbody class="bg-white divide-y divide-gray-200">
                                             @for ($i = 1; $i <= 3; $i++)
                                             <tr>
-                                                <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="flm_tindakan[]" placeholder="√/x"></td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="flm_tindakan[]" value="1">
+                                                </td>
                                                 <td class="border px-4 py-2"><input type="text" class="w-full border-gray-300 rounded-md shadow-sm" name="usul_mo_rutin[]"></td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="mo_non_rutin[]" placeholder="√/x"></td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="mo_non_rutin[]" value="1">
+                                                </td>
                                             </tr>
                                             @endfor
                                         </tbody>
@@ -206,10 +240,18 @@
                                         <tbody class="bg-white divide-y divide-gray-200">
                                             @for ($i = 1; $i <= 3; $i++)
                                             <tr>
-                                                <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="tl_ophar_koordinasi[]" placeholder="√/x"></td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="tlop_koordinasi[]" placeholder="√/x"></td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="tl_har_koordinasi[]" placeholder="√/x"></td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="mul_koordinasi[]" placeholder="√/x"></td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="tl_ophar_koordinasi[]" value="1">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="tlop_koordinasi[]" value="1">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="tl_har_koordinasi[]" value="1">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="mul_koordinasi[]" value="1">
+                                                </td>
                                             </tr>
                                             @endfor
                                         </tbody>
@@ -229,9 +271,15 @@
                                         <tbody class="bg-white divide-y divide-gray-200">
                                             @for ($i = 1; $i <= 3; $i++)
                                             <tr>
-                                                <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="flm_adm[]" placeholder="√/x"></td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="pm_adm[]" placeholder="√/x"></td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-16 border-gray-300 rounded-md shadow-sm text-center" name="cm_adm[]" placeholder="√/x"></td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="flm_adm[]" value="1">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="pm_adm[]" value="1">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="cm_adm[]" value="1">
+                                                </td>
                                             </tr>
                                             @endfor
                                         </tbody>

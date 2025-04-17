@@ -45,7 +45,6 @@
                             <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                         </button>
                         <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-
                             <a href="{{ route('logout') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
@@ -54,8 +53,8 @@
                         </div>
                     </div>
                 </div>
-
             </header>
+
             <div class="flex items-center pt-2">
                 <x-admin-breadcrumb :breadcrumbs="[['name' => 'Monitor Mesin', 'url' => null]]" />
             </div>
@@ -63,7 +62,7 @@
             <!-- Dashboard Content -->
             <main class="p-6">
                 <!-- Indikator Kinerja -->
-                <div class=" bg-white grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 rounded-lg shadow-md" style="padding:20px">
+                <div class="bg-white grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 rounded-lg shadow-md" style="padding:20px">
                     <div class="bg-blue-50 rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div class="p-4">
                             <div class="text-3xl text-blue-600 mb-2">
@@ -104,576 +103,283 @@
                     </div>
                 </div>
 
-                <!-- Machine Status Overview -->
-                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                        <i class="fas fa-chart-line mr-2 text-blue-600"></i>
-                        Status Mesin Terkini
-                    </h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Status Distribution Card -->
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <h3 class="text-lg font-medium mb-3 text-gray-700">Distribusi Status</h3>
-                            <div class="space-y-3">
-                                @php
-                                    $statusCounts = $machineStatusLogs->groupBy('status');
-                                    $totalLogs = $machineStatusLogs->count();
-                                @endphp
-                                
-                                @foreach($statusCounts as $status => $logs)
-                                    @php
-                                        $percentage = ($logs->count() / $totalLogs) * 100;
-                                        $colorClass = match($status) {
-                                            'START' => 'bg-green-500',
-                                            'PARALLEL' => 'bg-blue-500',
-                                            'STOP' => 'bg-red-500',
-                                            default => 'bg-gray-500'
-                                        };
-                                    @endphp
-                                    <div>
-                                        <div class="flex justify-between text-sm mb-1">
-                                            <span>{{ $status }}</span>
-                                            <span>{{ $logs->count() }} ({{ number_format($percentage, 1) }}%)</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-2">
-                                            <div class="{{ $colorClass }} h-2 rounded-full" style="width: {{ $percentage }}%"></div>
-                                        </div>
-                                    </div>
+                <!-- Chart Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Monthly Status Frequency -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-lg font-semibold text-gray-800">
+                                <i class="fas fa-chart-bar mr-2 text-blue-600"></i>
+                                Frekuensi Status Mesin (Bulan Ini)
+                            </h2>
+                            <select id="machineSelect"
+                                    class="p-2 rounded-md border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500 ">
+                                <option value="all">Semua Mesin</option>
+                                @foreach($machines as $machine)
+                                    <option value="{{ $machine->id }}">{{ $machine->name }}</option>
                                 @endforeach
-                            </div>
+                            </select>
                         </div>
-
-                        <!-- Recent Status Changes -->
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <h3 class="text-lg font-medium mb-3 text-gray-700">Perubahan Status Terakhir</h3>
-                            <div class="space-y-3">
-                                @foreach($machineStatusLogs->take(5) as $log)
-                                    <div class="flex items-center justify-between border-b border-gray-200 pb-2">
-                                        <div>
-                                            <span class="font-medium">{{ $log->machine->name }}</span>
-                                            <span class="text-sm text-gray-500 block">{{ $log->tanggal->format('d M Y H:i') }}</span>
-                                        </div>
-                                        <span class="px-3 py-1 rounded-full text-sm font-medium
-                                            {{ $log->status === 'START' ? 'bg-green-100 text-green-800' : '' }}
-                                            {{ $log->status === 'STOP' ? 'bg-red-100 text-red-800' : '' }}
-                                            {{ $log->status === 'PARALLEL' ? 'bg-blue-100 text-blue-800' : '' }}">
-                                            {{ $log->status }}
-                                        </span>
-                                    </div>
-                                @endforeach
-                            </div>
+                        <div class="h-80">
+                            <canvas id="statusFrequencyChart"></canvas>
                         </div>
+                    </div>
 
-                        <!-- Performance Metrics -->
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <h3 class="text-lg font-medium mb-3 text-gray-700">Metrik Kinerja</h3>
-                            <div class="space-y-4">
-                                @php
-                                    $avgDmn = $machineStatusLogs->avg('dmn');
-                                    $avgDmp = $machineStatusLogs->avg('dmp');
-                                    $avgLoad = $machineStatusLogs->avg('load_value');
-                                @endphp
-                                
-                                <!-- DMN Metric -->
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-sm font-medium">DMN Rata-rata</span>
-                                        <span class="text-sm">{{ number_format($avgDmn, 2) }}</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: {{ min(($avgDmn/100) * 100, 100) }}%"></div>
-                                    </div>
-                                </div>
-
-                                <!-- DMP Metric -->
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-sm font-medium">DMP Rata-rata</span>
-                                        <span class="text-sm">{{ number_format($avgDmp, 2) }}</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-purple-500 h-2 rounded-full" style="width: {{ min(($avgDmp/100) * 100, 100) }}%"></div>
-                                    </div>
-                                </div>
-
-                                <!-- Load Value Metric -->
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-sm font-medium">Beban Rata-rata</span>
-                                        <span class="text-sm">{{ number_format($avgLoad, 2) }}%</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-blue-500 h-2 rounded-full" style="width: {{ min($avgLoad, 100) }}%"></div>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Status Duration -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h2 class="text-lg font-semibold mb-4 text-gray-800">
+                            <i class="fas fa-clock mr-2 text-green-600"></i>
+                            Durasi Status (Jam)
+                        </h2>
+                        <div class="h-80">
+                            <canvas id="statusDurationChart"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <!-- Detailed Status Table -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-semibold text-gray-800">Log Status Detail</h2>
-                        <div class="flex gap-4">
-                            <!-- Time Filter -->
-                            <div class="flex items-center gap-2">
-                                <label class="text-sm text-gray-600">Filter Waktu:</label>
-                                <select id="timeFilter" class="rounded-lg border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500 p-2" style="padding: 2px; width: 120px;">
-                                    <option value="all" {{ $selectedTime == 'all' ? 'selected' : '' }}>Semua</option>
-                                    <option value="06:00" {{ $selectedTime == '06:00' ? 'selected' : '' }}>06:00 Pagi</option>
-                                    <option value="11:00" {{ $selectedTime == '11:00' ? 'selected' : '' }}>11:00 Siang</option>
-                                    <option value="14:00" {{ $selectedTime == '14:00' ? 'selected' : '' }}>14:00 Siang</option>
-                                    <option value="18:00" {{ $selectedTime == '18:00' ? 'selected' : '' }}>18:00 Malam</option>
-                                    <option value="19:00" {{ $selectedTime == '19:00' ? 'selected' : '' }}>19:00 Malam</option>
-                                </select>
-                            </div>
+                <!-- Monthly Trends -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Status Trend -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h2 class="text-lg font-semibold mb-4 text-gray-800">
+                            <i class="fas fa-chart-line mr-2 text-purple-600"></i>
+                            Tren Status Bulanan
+                        </h2>
+                        <div class="h-80">
+                            <canvas id="statusTrendChart"></canvas>
                         </div>
                     </div>
-                    
-                    <div id="statusTableContent" class="overflow-x-auto">
-                        @include('admin.machine-monitor.partials.status-table', ['logs' => $filteredLogs])
+
+                    <!-- Status Comparison -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h2 class="text-lg font-semibold mb-4 text-gray-800">
+                            <i class="fas fa-balance-scale mr-2 text-red-600"></i>
+                            Perbandingan Status Antar Unit
+                        </h2>
+                        <div class="h-80">
+                            <canvas id="statusComparisonChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </main>
-
-            <!-- Edit Machine Modal -->
-            <div id="editMachineModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
-                <!-- Similar structure to Add Machine Modal but with pre-filled values -->
-            </div>
-            <!-- Chart.js CDN -->
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="{{ asset('js/toggle.js') }}"></script>
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script>
-                // Data sementara untuk demonstrasi
-                const monthlyIssuesData = [{
-                        date: 'Januari',
-                        count: 10
-                    },
-                    {
-                        date: 'Februari',
-                        count: 20
-                    },
-                    {
-                        date: 'Maret',
-                        count: 15
-                    },
-                    {
-                        date: 'April',
-                        count: 25
-                    },
-                    {
-                        date: 'Mei',
-                        count: 30
-                    },
-                    {
-                        date: 'Juni',
-                        count: 35
-                    },
-                    {
-                        date: 'Juli',
-                        count: 40
-                    },
-                    {
-                        date: 'Agustus',
-                        count: 45
-                    },
-                    {
-                        date: 'September',
-                        count: 50
-                    },
-                    {
-                        date: 'Oktober',
-                        count: 55
-                    },
-                    {
-                        date: 'November',
-                        count: 60
-                    },
-                    {
-                        date: 'Desember',
-                        count: 65
-                    }
-                ];
-
-                // Ambil data dari PHP dan konversi ke format yang sesuai untuk Chart.js
-                const powerPlantData = {!! json_encode($powerPlants->map(function($powerPlant) {
-                    return [
-                        'name' => $powerPlant->name,
-                        'issues' => $powerPlant->machines->sum(function($machine) {
-                            return $machine->statusLogs()->count();
-                        }),
-                        'operations' => $powerPlant->machines->sum(function($machine) {
-                            return $machine->machineOperations()->count();
-                        })
-                    ];
-                })) !!};
-
-                // Siapkan data untuk grafik
-                const datasets = [{
-                    label: 'Jumlah Gangguan',
-                    data: powerPlantData.map(plant => plant.issues),
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 2
-                }, {
-                    label: 'Jumlah Operasi',
-                    data: powerPlantData.map(plant => plant.operations),
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 2
-                }];
-
-                // Inisialisasi grafik
-                const ctx = document.getElementById('monthlyIssuesChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: powerPlantData.map(plant => plant.name),
-                        datasets: datasets
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Jumlah'
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Unit'
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
-                            },
-                            title: {
-                                display: true,
-                                text: 'Gangguan dan Operasi per Unit'
-                            }
-                        }
-                    }
-                });
-
-                // Fungsi untuk membuka modal laporan masalah baru
-                function openNewIssueModal() {
-                    document.getElementById('newIssueModal').classList.remove('hidden');
-                }
-
-                // Fungsi untuk menutup modal laporan masalah baru
-                function closeNewIssueModal() {
-                    document.getElementById('newIssueModal').classList.add('hidden');
-                }
-
-                // Tutup modal saat mengklik di luar
-                document.getElementById('newIssueModal').addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        closeNewIssueModal();
-                    }
-                });
-
-                // Inisialisasi DataTable
-                $(document).ready(function() {
-                    $('table').DataTable({
-                        responsive: true,
-                        pageLength: 10,
-                        order: [
-                            [0, 'desc']
-                        ]
-                    });
-                });
-
-                // Fungsi untuk mengedit mesin
-                function editMachine(machineId) {
-                    // Fetch detail mesin dan buka modal edit
-                    fetch(`/admin/machine-monitor/machines/${machineId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            // Isi form edit dengan data mesin
-                            document.getElementById('editMachineModal').classList.remove('hidden');
-                        });
-                }
-
-                // Fungsi untuk menghapus mesin
-                function deleteMachine(machineId) {
-                    if (confirm('Apakah Anda yakin ingin menghapus mesin ini?')) {
-                        fetch(`/admin/machine-monitor/machines/${machineId}`, {
-                                method: 'DELETE',
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                    'Accept': 'application/json'
-                                }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    location.reload();
-                                }
-                            });
-                    }
-                }
-
-                // Fungsi untuk mengupdate status mesin
-                function updateMachineStatus(machineId, status) {
-                    fetch(`/admin/machine-monitor/machines/${machineId}/status`, {
-                            method: 'PUT',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                status: status
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                location.reload();
-                            }
-                        });
-                }
-
-                // Fungsi untuk refresh status mesin
-                function refreshMachineStatus() {
-                    location.reload();
-                }
-
-                // Data sementara untuk demonstrasi efisiensi mesin
-                const efficiencyData = [{
-                        name: 'Mesin 1',
-                        efficiency: 80
-                    },
-                    {
-                        name: 'Mesin 2',
-                        efficiency: 75
-                    },
-                    {
-                        name: 'Mesin 3',
-                        efficiency: 90
-                    },
-                    {
-                        name: 'Mesin 4',
-                        efficiency: 85
-                    },
-                    {
-                        name: 'Mesin 5',
-                        efficiency: 95
-                    }
-                ];
-
-                // Grafik Efisiensi Mesin
-                const ctxEfficiency = document.getElementById('efficiencyChart').getContext('2d');
-
-                // Ambil data mesin dari PHP
-                const machineData = {!! json_encode($machines->map(function($machine) {
-                    return [
-                        'name' => $machine->name,
-                        'status' => $machine->statusLogs()->latest()->first()->status ?? 'N/A',
-                        'operations' => $machine->machineOperations()->count(),
-                        'issues' => $machine->statusLogs()->count(),
-                        'capacity' => $machine->capacity,
-                        'efficiency' => $machine->machineOperations()
-                            ->whereNotNull('load_value')
-                            ->avg('load_value') ?? 0
-                    ];
-                })) !!};
-
-                new Chart(ctxEfficiency, {
-                    type: 'bar',
-                    data: {
-                        labels: machineData.map(machine => machine.name),
-                        datasets: [{
-                            label: 'Jumlah Gangguan',
-                            data: machineData.map(machine => machine.issues),
-                            type: 'line',
-                            fill: false,
-                            borderColor: 'rgba(255, 159, 64, 1)',
-                            tension: 0.1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Nilai'
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Mesin'
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
-                            },
-                            title: {
-                                display: true,
-                                text: 'Efisiensi dan Gangguan per Mesin'
-                            }
-                        }
-                    }
-                });
-
-                function populateEditForm(machine) {
-                    document.getElementById('name').value = machine.name;
-                    document.getElementById('code').value = machine.code;
-                    // Isi input lainnya sesuai kebutuhan
-                }
-
-                // Fungsi untuk toggle dropdown
-                document.addEventListener('DOMContentLoaded', function() {
-                    const dropdownButton = document.querySelector('#machine-monitor-dropdown');
-                    const submenu = document.querySelector('#machine-monitor-submenu');
-                    let isOpen = false;
-
-                    // Check if current route is machine monitor or its children
-                    const isMonitorRoute = window.location.pathname.includes('/machine-monitor');
-                    if (isMonitorRoute) {
-                        submenu.style.maxHeight = submenu.scrollHeight + 'px';
-                        dropdownButton.classList.add('rotate-180');
-                        isOpen = true;
-                    }
-
-                    dropdownButton.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        isOpen = !isOpen;
-                        
-                        if (isOpen) {
-                            submenu.style.maxHeight = submenu.scrollHeight + 'px';
-                            dropdownButton.classList.add('rotate-180');
-                        } else {
-                            submenu.style.maxHeight = '0';
-                            dropdownButton.classList.remove('rotate-180');
-                        }
-                    });
-                });
-
-                $(document).ready(function() {
-                    // Debug check
-                    console.log('Script loaded');
-                    
-                    // Setup CSRF
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-
-                    // Handle filter change
-                    $('#timeFilter').on('change', function(e) {
-                        e.preventDefault();
-                        console.log('Filter changed:', $(this).val());
-                        
-                        const selectedTime = $(this).val();
-                        const url = "{{ route('admin.machine-monitor.filter') }}";
-                        
-                        $.ajax({
-                            url: url,
-                            type: 'GET',
-                            data: { time_filter: selectedTime },
-                            beforeSend: function() {
-                                console.log('Sending request to:', url);
-                                $('#statusTableContent').addClass('opacity-50');
-                            },
-                            success: function(response) {
-                                console.log('Response received');
-                                $('#statusTableContent').html(response);
-                            },
-                            error: function(xhr, status, error) {
-                                console.error('Error:', error);
-                                console.error('Status:', status);
-                                console.error('Response:', xhr.responseText);
-                                alert('Terjadi kesalahan saat memuat data');
-                            },
-                            complete: function() {
-                                $('#statusTableContent').removeClass('opacity-50');
-                            }
-                        });
-                    });
-                });
-            </script>
-
-            @push('scripts')
-            @endpush
         </div>
     </div>
 
-    <style>
-        /* Sembunyikan sclrollbar tapi tetap bisa scroll */
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get current month's data
+            const currentDate = new Date();
+            const monthlyData = @json($machineStatusLogs->filter(function($log) {
+                return Carbon\Carbon::parse($log->tanggal)->month === now()->month;
+            })->groupBy('status')->map->count());
 
-        .main-content {
-        .scrollbar-hide {
-            /* -ms-overflow-style: none; */
-            /* scrollbar-width: none; */
-        }
+            // Status Frequency Chart
+            const frequencyCtx = document.getElementById('statusFrequencyChart').getContext('2d');
+            new Chart(frequencyCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(monthlyData),
+                    datasets: [{
+                        label: 'Frekuensi',
+                        data: Object.values(monthlyData),
+                        backgroundColor: [
+                            'rgba(52, 211, 153, 0.8)',  // OPS - Green
+                            'rgba(59, 130, 246, 0.8)',  // RSH - Blue
+                            'rgba(239, 68, 68, 0.8)',   // FO - Red
+                            'rgba(251, 191, 36, 0.8)',  // MO - Yellow
+                            'rgba(107, 114, 128, 0.8)'  // Others - Gray
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Kejadian'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.parsed.y} kali`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
 
-        /* Animasi untuk rotasi icon dropdown */
-        .rotate-180 {
-            transform: rotate(180deg);
-        }
+            // Status Duration Chart (Hours per Status)
+            const durationData = @json($machineStatusLogs->filter(function($log) {
+                return Carbon\Carbon::parse($log->tanggal)->month === now()->month;
+            })->groupBy('status')->map(function($logs) {
+                return $logs->count() * 24; // Assuming each status log represents 24 hours
+            }));
 
-        /* Transisi untuk submenu */
-        #machine-monitor-submenu {
-            transition: max-height 0.3s ease-in-out;
-            overflow: hidden; /* Menyembunyikan konten yang tidak terlihat */
-        }
+            const durationCtx = document.getElementById('statusDurationChart').getContext('2d');
+            new Chart(durationCtx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(durationData),
+                    datasets: [{
+                        data: Object.values(durationData),
+                        backgroundColor: [
+                            'rgba(52, 211, 153, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(251, 191, 36, 0.8)',
+                            'rgba(107, 114, 128, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.parsed} jam`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
 
-        /* Style untuk submenu items */
-        #machine-monitor-submenu a {
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-
-        #machine-monitor-submenu a:hover {
-            padding-left: 1.5rem;
-        }
-
-        .bg-stripes {
-            background-image: linear-gradient(
-                45deg,
-                rgba(255, 255, 255, 0.15) 25%,
-                transparent 25%,
-                transparent 50%,
-                rgba(255, 255, 255, 0.15) 50%,
-                rgba(255, 255, 255, 0.15) 75%,
-                transparent 75%,
-                transparent
+            // Monthly Status Trend
+            const monthlyTrend = @json($machineStatusLogs
+                ->groupBy(function($log) {
+                    return Carbon\Carbon::parse($log->tanggal)->format('Y-m');
+                })
+                ->map(function($logs) {
+                    return $logs->groupBy('status')->map->count();
+                })
             );
-            background-size: 1rem 1rem;
-        }
 
-        .hover\:scale-\[1\.02\]:hover {
-            transform: scale(1.02);
-        }
+            const trendCtx = document.getElementById('statusTrendChart').getContext('2d');
+            const months = Object.keys(monthlyTrend);
+            const statuses = [...new Set(Object.values(monthlyTrend).flatMap(m => Object.keys(m)))];
+            
+            new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: statuses.map((status, index) => ({
+                        label: status,
+                        data: months.map(month => monthlyTrend[month]?.[status] || 0),
+                        borderColor: [
+                            'rgb(52, 211, 153)',
+                            'rgb(59, 130, 246)',
+                            'rgb(239, 68, 68)',
+                            'rgb(251, 191, 36)',
+                            'rgb(107, 114, 128)'
+                        ][index],
+                        tension: 0.1
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Kejadian'
+                            }
+                        }
+                    }
+                }
+            });
 
-        @keyframes move-stripes {
-            from { background-position: 0 0; }
-            to { background-position: 1rem 1rem; }
-        }
+            // Status Comparison by Unit
+            const unitComparison = @json($machines->map(function($machine) {
+                return [
+                    'name' => $machine->name,
+                    'statuses' => $machine->statusLogs()
+                        ->whereMonth('tanggal', now()->month)
+                        ->get()
+                        ->groupBy('status')
+                        ->map->count()
+                ];
+            }));
 
-        .animate-move-stripes {
-            animation: move-stripes 1s linear infinite;
+            const comparisonCtx = document.getElementById('statusComparisonChart').getContext('2d');
+            const units = unitComparison.map(u => u.name);
+            const statusTypes = [...new Set(unitComparison.flatMap(u => Object.keys(u.statuses)))];
+
+            new Chart(comparisonCtx, {
+                type: 'bar',
+                data: {
+                    labels: units,
+                    datasets: statusTypes.map((status, index) => ({
+                        label: status,
+                        data: unitComparison.map(u => u.statuses[status] || 0),
+                        backgroundColor: [
+                            'rgba(52, 211, 153, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(251, 191, 36, 0.8)',
+                            'rgba(107, 114, 128, 0.8)'
+                        ][index % 5]
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Kejadian'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Handle machine selection change
+            document.getElementById('machineSelect').addEventListener('change', function(e) {
+                const machineId = e.target.value;
+                // You can implement AJAX call here to update the charts based on selected machine
+                // For now, we'll just reload the page with the machine ID as a parameter
+                if (machineId !== 'all') {
+                    window.location.href = `?machine_id=${machineId}`;
+                } else {
+                    window.location.href = window.location.pathname;
+                }
+            });
+        });
+    </script>
+
+    <style>
+        .main-content {
+            min-height: 100vh;
+        }
+        
+        canvas {
+            max-height: 100%;
         }
     </style>
-
 @endsection

@@ -48,6 +48,7 @@ use App\Http\Controllers\Admin\K3KampController;
 use App\Http\Controllers\Admin\MeetingShiftController;
 use App\Http\Controllers\FlmController;
 use App\Http\Controllers\Admin\AbnormalReportController;
+use App\Http\Controllers\Admin\CalendarController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -1076,3 +1077,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/abnormal-report', [AbnormalReportController::class, 'index'])->name('admin.abnormal-report.index');
     Route::post('/abnormal-report', [AbnormalReportController::class, 'store'])->name('admin.abnormal-report.store');
 });
+
+Route::get('/admin/kalender/export/excel', [CalendarController::class, 'exportExcel'])->name('admin.kalender.export.excel');
+Route::get('/admin/kalender/export/pdf', [CalendarController::class, 'exportPDF'])->name('admin.kalender.export.pdf');

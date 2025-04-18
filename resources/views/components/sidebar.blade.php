@@ -212,7 +212,7 @@
                     open: {{ request()->routeIs('admin.energiprimer.*') || request()->routeIs('admin.energiprimer-upkd.*') ? 'true' : 'false' }} 
                 }">
                     <button @click="open = !open" 
-                            class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.*') || request()->routeIs('admin.energiprimer-upkd.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                            class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-left {{ request()->routeIs('admin.energiprimer.*') || request()->routeIs('admin.energiprimer-upkd.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                         <div class="flex items-center">
                             <i class="fas fa-battery-three-quarters w-5 h-5"></i>
                             <span class="ml-3 text-sm">Energi Primer UPKD</span>
@@ -274,7 +274,7 @@
                              request()->routeIs('admin.settings') ? 'true' : 'false' }} 
                 }">
                     <button @click="open = !open" 
-                            class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                            class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-left text-gray-100 hover:bg-white/10">
                         <div class="flex items-center">
                             <i class="fas fa-tools w-5 h-5"></i>
                             <span class="ml-3 text-sm">Fitur Pendukung</span>

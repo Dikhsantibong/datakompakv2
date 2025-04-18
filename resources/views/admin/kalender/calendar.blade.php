@@ -173,10 +173,28 @@
                         <span>Tambah Jadwal</span>
                     </a>
                     
-                    <button class="inline-flex items-center px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors">
-                        <i class="fas fa-download mr-2 text-blue-600"></i>
-                        <span>Export</span>
-                    </button>
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" class="inline-flex items-center px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors">
+                            <i class="fas fa-download mr-2 text-blue-600"></i>
+                            <span>Export</span>
+                            <i class="fas fa-chevron-down ml-2 text-gray-400"></i>
+                        </button>
+                        
+                        <div x-show="open" 
+                             @click.away="open = false"
+                             class="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none z-10">
+                            <div class="py-1">
+                                <a href="{{ route('admin.kalender.export.excel') }}" class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-file-excel mr-3 text-green-500"></i>
+                                    Export to Excel
+                                </a>
+                                <a href="{{ route('admin.kalender.export.pdf') }}" class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-file-pdf mr-3 text-red-500"></i>
+                                    Export to PDF
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="flex items-center space-x-4">
                     <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="previousMonth()">

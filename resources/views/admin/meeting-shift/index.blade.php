@@ -46,117 +46,197 @@
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                             @csrf
-                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
                         </form>
                     </div>
                 </div>
             </div>
         </header>
-        
 
         <!-- Main Content Area -->
         <div class="container mx-auto px-6 py-8">
-            <div x-data="{ activeTab: 'kondisi-mesin' }" class="bg-white rounded-lg shadow-md">
+            <div x-data="{ activeTab: 'kondisi-mesin' }" class="bg-white rounded-xl shadow-sm border border-gray-200">
                 <!-- Tabs Navigation -->
                 <div class="border-b border-gray-200">
-                    <nav class="flex space-x-4 px-4" aria-label="Tabs">
+                    <nav class="flex space-x-6 px-6 overflow-x-auto" aria-label="Tabs">
                         <button @click="activeTab = 'kondisi-mesin'" 
-                                :class="{'border-blue-500 text-blue-600': activeTab === 'kondisi-mesin',
+                                :class="{'border-[#009BB9] text-[#009BB9]': activeTab === 'kondisi-mesin',
                                         'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'kondisi-mesin'}"
-                                class="py-4 px-1 border-b-2 font-medium text-sm">
+                                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200">
+                            <i class="fas fa-cogs mr-2"></i>
                             Kondisi Mesin
                         </button>
                         
                         <button @click="activeTab = 'kondisi-alat-bantu'"
-                                :class="{'border-blue-500 text-blue-600': activeTab === 'kondisi-alat-bantu',
+                                :class="{'border-[#009BB9] text-[#009BB9]': activeTab === 'kondisi-alat-bantu',
                                         'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'kondisi-alat-bantu'}"
-                                class="py-4 px-1 border-b-2 font-medium text-sm">
+                                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200">
+                            <i class="fas fa-tools mr-2"></i>
                             Kondisi Alat Bantu
                         </button>
                         
                         <button @click="activeTab = 'kondisi-resource'"
-                                :class="{'border-blue-500 text-blue-600': activeTab === 'kondisi-resource',
+                                :class="{'border-[#009BB9] text-[#009BB9]': activeTab === 'kondisi-resource',
                                         'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'kondisi-resource'}"
-                                class="py-4 px-1 border-b-2 font-medium text-sm">
+                                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200">
+                            <i class="fas fa-boxes mr-2"></i>
                             Kondisi Resource
                         </button>
                         
                         <button @click="activeTab = 'kondisi-k3l'"
-                                :class="{'border-blue-500 text-blue-600': activeTab === 'kondisi-k3l',
+                                :class="{'border-[#009BB9] text-[#009BB9]': activeTab === 'kondisi-k3l',
                                         'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'kondisi-k3l'}"
-                                class="py-4 px-1 border-b-2 font-medium text-sm">
+                                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200">
+                            <i class="fas fa-hard-hat mr-2"></i>
                             Kondisi K3L
                         </button>
                         
                         <button @click="activeTab = 'catatan-sistem'"
-                                :class="{'border-blue-500 text-blue-600': activeTab === 'catatan-sistem',
+                                :class="{'border-[#009BB9] text-[#009BB9]': activeTab === 'catatan-sistem',
                                         'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'catatan-sistem'}"
-                                class="py-4 px-1 border-b-2 font-medium text-sm">
+                                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200">
+                            <i class="fas fa-clipboard-list mr-2"></i>
                             Catatan Kondisi Sistem
                         </button>
                         
                         <button @click="activeTab = 'catatan-validasi'"
-                                :class="{'border-blue-500 text-blue-600': activeTab === 'catatan-validasi',
+                                :class="{'border-[#009BB9] text-[#009BB9]': activeTab === 'catatan-validasi',
                                         'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'catatan-validasi'}"
-                                class="py-4 px-1 border-b-2 font-medium text-sm">
+                                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200">
+                            <i class="fas fa-clipboard-check mr-2"></i>
                             Catatan Umum
                         </button>
                         
                         <button @click="activeTab = 'absensi-resume'"
-                                :class="{'border-blue-500 text-blue-600': activeTab === 'absensi-resume',
+                                :class="{'border-[#009BB9] text-[#009BB9]': activeTab === 'absensi-resume',
                                         'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'absensi-resume'}"
-                                class="py-4 px-1 border-b-2 font-medium text-sm">
+                                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200">
+                            <i class="fas fa-users mr-2"></i>
                             Absensi dan Resume Rapat
                         </button>
                     </nav>
                 </div>
 
                 <!-- Tab Panels -->
-                <div class="p-4">
+                <div class="p-6">
                     <!-- Kondisi Mesin -->
-                    <div x-show="activeTab === 'kondisi-mesin'" class="space-y-4">
-                        <form action="{{ route('admin.meeting-shift.store') }}" method="POST">
+                    <div x-show="activeTab === 'kondisi-mesin'" 
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0 transform scale-95"
+                         x-transition:enter-end="opacity-100 transform scale-100"
+                         class="space-y-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-lg font-semibold text-gray-800">Status Kondisi Mesin</h2>
+                            <div class="flex gap-2">
+                                <button type="button" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
+                                    <i class="fas fa-download mr-2"></i>
+                                    Export
+                                </button>
+                                <button type="button" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
+                                    <i class="fas fa-print mr-2"></i>
+                                    Print
+                                </button>
+                            </div>
+                        </div>
+                        <form action="{{ route('admin.meeting-shift.store') }}" method="POST" class="space-y-6">
                             @csrf
                             <div class="overflow-x-auto">
-                                <table class="min-w-full bg-white border border-gray-300">
+                                <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden">
                                     <thead>
-                                        <tr>
-                                            <th rowspan="2" class="border border-gray-300 px-4 py-2 text-center align-middle bg-gray-50">Mesin</th>
-                                            <th colspan="5" class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Status</th>
-                                            <th rowspan="2" class="border border-gray-300 px-4 py-2 text-center align-middle bg-gray-50">Keterangan</th>
+                                        <tr class="bg-gray-50">
+                                            <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider align-middle border-r">
+                                                Mesin
+                                            </th>
+                                            <th colspan="5" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
+                                                Status
+                                            </th>
+                                            <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider align-middle">
+                                                Keterangan
+                                            </th>
                                         </tr>
-                                        <tr>
-                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Operasi</th>
-                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Stand By</th>
-                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">HAR Rutin</th>
-                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">HAR Non Rutin</th>
-                                            <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Gangguan</th>
+                                        <tr class="bg-gray-50">
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <div class="flex flex-col items-center gap-1">
+                                                    <span>Operasi</span>
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                        Normal
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <div class="flex flex-col items-center gap-1">
+                                                    <span>Stand By</span>
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                        Siap
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <div class="flex flex-col items-center gap-1">
+                                                    <span>HAR Rutin</span>
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                        Maintenance
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <div class="flex flex-col items-center gap-1">
+                                                    <span>HAR Non Rutin</span>
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                                        Perbaikan
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <div class="flex flex-col items-center gap-1">
+                                                    <span>Gangguan</span>
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                        Masalah
+                                                    </span>
+                                                </div>
+                                            </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="bg-white divide-y divide-gray-200">
                                         @foreach($machines as $index => $machine)
-                                        <tr>
-                                            <td class="border border-gray-300 px-4 py-2">
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r">
                                                 {{ $machine->name }}
                                                 <input type="hidden" name="machine_status[{{ $index }}][machine_id]" value="{{ $machine->id }}">
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                                <input type="radio" name="machine_status[{{ $index }}][status]" value="operasi" class="form-radio" required>
+                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                <label class="inline-flex items-center justify-center">
+                                                    <input type="checkbox" name="machine_status[{{ $index }}][status][]" value="operasi" 
+                                                           class="form-checkbox h-5 w-5 text-green-600 rounded border-gray-300 focus:ring-green-500 transition-all cursor-pointer">
+                                                </label>
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                                <input type="radio" name="machine_status[{{ $index }}][status]" value="standby" class="form-radio">
+                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                <label class="inline-flex items-center justify-center">
+                                                    <input type="checkbox" name="machine_status[{{ $index }}][status][]" value="standby" 
+                                                           class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 transition-all cursor-pointer">
+                                                </label>
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                                <input type="radio" name="machine_status[{{ $index }}][status]" value="har_rutin" class="form-radio">
+                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                <label class="inline-flex items-center justify-center">
+                                                    <input type="checkbox" name="machine_status[{{ $index }}][status][]" value="har_rutin" 
+                                                           class="form-checkbox h-5 w-5 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500 transition-all cursor-pointer">
+                                                </label>
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                                <input type="radio" name="machine_status[{{ $index }}][status]" value="har_nonrutin" class="form-radio">
+                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                <label class="inline-flex items-center justify-center">
+                                                    <input type="checkbox" name="machine_status[{{ $index }}][status][]" value="har_nonrutin" 
+                                                           class="form-checkbox h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500 transition-all cursor-pointer">
+                                                </label>
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                                <input type="radio" name="machine_status[{{ $index }}][status]" value="gangguan" class="form-radio">
+                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                <label class="inline-flex items-center justify-center">
+                                                    <input type="checkbox" name="machine_status[{{ $index }}][status][]" value="gangguan" 
+                                                           class="form-checkbox h-5 w-5 text-red-600 rounded border-gray-300 focus:ring-red-500 transition-all cursor-pointer">
+                                                </label>
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2">
-                                                <input type="text" name="machine_status[{{ $index }}][keterangan]" class="w-full p-1 border rounded" placeholder="Masukkan keterangan">
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <input type="text" name="machine_status[{{ $index }}][keterangan]" 
+                                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
+                                                       placeholder="Masukkan keterangan...">
                                             </td>
                                         </tr>
                                         @endforeach
@@ -165,9 +245,10 @@
                             </div>
                             
                             <!-- Tombol Submit -->
-                            <div class="flex justify-end mt-4">
-                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                    <i class="fas fa-save mr-2"></i> Simpan
+                            <div class="flex justify-end mt-6">
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] transition-all duration-200">
+                                    <i class="fas fa-save mr-2"></i>
+                                    Simpan Perubahan
                                 </button>
                             </div>
                         </form>
@@ -204,25 +285,39 @@
                                         @endphp
 
                                         @foreach($alatBantu as $index => $alat)
-                                        <tr>
-                                            <td class="border border-gray-300 px-4 py-2">
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r">
                                                 {{ $alat }}
                                                 <input type="hidden" name="alat_bantu[{{ $index }}][name]" value="{{ $alat }}">
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                                <input type="radio" name="alat_bantu[{{ $index }}][status]" value="normal" class="form-radio" required>
+                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                <label class="inline-flex items-center justify-center">
+                                                    <input type="checkbox" name="alat_bantu[{{ $index }}][status][]" value="normal" 
+                                                           class="form-checkbox h-5 w-5 text-green-600 rounded border-gray-300 focus:ring-green-500 transition-all cursor-pointer">
+                                                </label>
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                                <input type="radio" name="alat_bantu[{{ $index }}][status]" value="abnormal" class="form-radio">
+                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                <label class="inline-flex items-center justify-center">
+                                                    <input type="checkbox" name="alat_bantu[{{ $index }}][status][]" value="abnormal" 
+                                                           class="form-checkbox h-5 w-5 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500 transition-all cursor-pointer">
+                                                </label>
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                                <input type="radio" name="alat_bantu[{{ $index }}][status]" value="gangguan" class="form-radio">
+                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                <label class="inline-flex items-center justify-center">
+                                                    <input type="checkbox" name="alat_bantu[{{ $index }}][status][]" value="gangguan" 
+                                                           class="form-checkbox h-5 w-5 text-red-600 rounded border-gray-300 focus:ring-red-500 transition-all cursor-pointer">
+                                                </label>
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                                <input type="radio" name="alat_bantu[{{ $index }}][status]" value="flm" class="form-radio">
+                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                <label class="inline-flex items-center justify-center">
+                                                    <input type="checkbox" name="alat_bantu[{{ $index }}][status][]" value="flm" 
+                                                           class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 transition-all cursor-pointer">
+                                                </label>
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2">
-                                                <input type="text" name="alat_bantu[{{ $index }}][keterangan]" class="w-full p-1 border rounded" placeholder="Masukkan keterangan">
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <input type="text" name="alat_bantu[{{ $index }}][keterangan]" 
+                                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
+                                                       placeholder="Masukkan keterangan...">
                                             </td>
                                         </tr>
                                         @endforeach
@@ -277,29 +372,46 @@
                                         @endphp
 
                                         @foreach($resources as $index => $resource)
-                                        <tr class="{{ $resource['is_category'] ? 'bg-gray-100 font-semibold' : 'pl-8' }}">
-                                            <td class="border border-gray-300 px-4 py-2 {{ $resource['is_category'] ? 'text-lg' : 'pl-8' }}">
+                                        <tr class="{{ $resource['is_category'] ? 'bg-gray-50 font-semibold' : '' }} hover:bg-gray-50 transition-colors">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r {{ $resource['is_category'] ? 'text-lg' : 'pl-8' }}">
                                                 {{ $resource['name'] }}
                                                 <input type="hidden" name="resources[{{ $index }}][name]" value="{{ $resource['name'] }}">
                                             </td>
                                             @if(!$resource['is_category'])
-                                                <td class="border border-gray-300 px-4 py-2 text-center">
-                                                    <input type="radio" name="resources[{{ $index }}][status]" value="0-20" class="form-radio" required>
+                                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                    <label class="inline-flex items-center justify-center">
+                                                        <input type="checkbox" name="resources[{{ $index }}][status][]" value="0-20" 
+                                                               class="form-checkbox h-5 w-5 text-red-600 rounded border-gray-300 focus:ring-red-500 transition-all cursor-pointer">
+                                                    </label>
                                                 </td>
-                                                <td class="border border-gray-300 px-4 py-2 text-center">
-                                                    <input type="radio" name="resources[{{ $index }}][status]" value="21-40" class="form-radio">
+                                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                    <label class="inline-flex items-center justify-center">
+                                                        <input type="checkbox" name="resources[{{ $index }}][status][]" value="21-40" 
+                                                               class="form-checkbox h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500 transition-all cursor-pointer">
+                                                    </label>
                                                 </td>
-                                                <td class="border border-gray-300 px-4 py-2 text-center">
-                                                    <input type="radio" name="resources[{{ $index }}][status]" value="41-61" class="form-radio">
+                                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                    <label class="inline-flex items-center justify-center">
+                                                        <input type="checkbox" name="resources[{{ $index }}][status][]" value="41-61" 
+                                                               class="form-checkbox h-5 w-5 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500 transition-all cursor-pointer">
+                                                    </label>
                                                 </td>
-                                                <td class="border border-gray-300 px-4 py-2 text-center">
-                                                    <input type="radio" name="resources[{{ $index }}][status]" value="61-80" class="form-radio">
+                                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                    <label class="inline-flex items-center justify-center">
+                                                        <input type="checkbox" name="resources[{{ $index }}][status][]" value="61-80" 
+                                                               class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 transition-all cursor-pointer">
+                                                    </label>
                                                 </td>
-                                                <td class="border border-gray-300 px-4 py-2 text-center">
-                                                    <input type="radio" name="resources[{{ $index }}][status]" value="up-80" class="form-radio">
+                                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                    <label class="inline-flex items-center justify-center">
+                                                        <input type="checkbox" name="resources[{{ $index }}][status][]" value="up-80" 
+                                                               class="form-checkbox h-5 w-5 text-green-600 rounded border-gray-300 focus:ring-green-500 transition-all cursor-pointer">
+                                                    </label>
                                                 </td>
-                                                <td class="border border-gray-300 px-4 py-2">
-                                                    <input type="text" name="resources[{{ $index }}][keterangan]" class="w-full p-1 border rounded" placeholder="Masukkan keterangan">
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <input type="text" name="resources[{{ $index }}][keterangan]" 
+                                                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
+                                                           placeholder="Masukkan keterangan...">
                                                 </td>
                                             @else
                                                 <td colspan="6" class="border border-gray-300"></td>

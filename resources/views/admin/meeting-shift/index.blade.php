@@ -62,6 +62,9 @@
                         <h2 class="text-2xl font-bold mb-2">Meeting dan Mutasi Shift Operator</h2>
                         <p class="text-blue-100 mb-4">Kelola dan monitor aktivitas meeting dan mutasi shift operator untuk memastikan operasional yang optimal.</p>
                         <div class="flex flex-wrap gap-3">
+                            <a href="{{ route('admin.meeting-shift.list') }}" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-600 bg-white rounded-md hover:bg-gray-50">
+                                <i class="fas fa-list-alt mr-2"></i> Lihat Hasil Meeting
+                            </a>
                             <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <i class="fas fa-file-excel mr-2"></i> Export Excel
                             </button>

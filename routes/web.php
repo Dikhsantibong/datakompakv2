@@ -214,7 +214,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::post('/store-catatan-umum', [MeetingShiftController::class, 'storeCatatanUmum'])->name('meeting-shift.store-catatan-umum');
         Route::post('/store-absensi', [MeetingShiftController::class, 'storeAbsensi'])->name('meeting-shift.store-absensi');
         Route::post('/store-resume', [MeetingShiftController::class, 'storeResume'])->name('meeting-shift.store-resume');
+        Route::get('/list', [MeetingShiftController::class, 'list'])->name('meeting-shift.list');
+        Route::get('/show', [MeetingShiftController::class, 'show'])->name('meeting-shift.show');
+        Route::get('/create', [MeetingShiftController::class, 'create'])->name('meeting-shift.create');
     });
+
+   
 });
 
 

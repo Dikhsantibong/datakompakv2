@@ -2,15 +2,12 @@
 
 @section('content')
 <div class="flex h-screen bg-gray-100">
-    <!-- Sidebar -->
-    <x-sidebar />
-    
-    <!-- Main Content -->
-    <div class="flex-1 overflow-x-hidden overflow-y-auto">
-        <!-- Header -->
-        <header class="bg-white shadow-sm sticky top-0 z-10">
-            <div class="flex justify-between items-center px-6 py-3">
-                <div class="flex items-center gap-x-3">
+    @include('components.sidebar')
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <header class="bg-white shadow-sm">
+            <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center">
                     <!-- Mobile Menu Toggle -->
                     <button id="mobile-menu-toggle"
                         class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -28,8 +25,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                         </svg>
                     </button>
-
-                    <h1 class="text-xl font-semibold text-gray-800">Dashboard</h1>
+                    <h1 class="text-xl font-semibold text-gray-900">Input Data K3 KAMP dan Lingkungan</h1>
                 </div>
 
                 <div class="relative">
@@ -54,149 +50,163 @@
         </header>
 
         <div class="flex items-center pt-2">
-            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Laporan K3 KAMP dan Lingkungan', 'url' => null]]" />
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Input Data K3 KAMP dan Lingkungan', 'url' => null]]" />
         </div>
 
-        <!-- Content -->
-        <div class="container mx-auto px-6 py-8">
-            <div class="p-6 bg-white rounded-lg shadow-md">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold">Laporan K3 KAMP dan Lingkungan</h2>
-                    <div class="flex gap-4">
-                        <a href="{{ route('admin.k3-kamp.view') }}" 
-                           class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                            <i class="fas fa-eye mr-2"></i>Lihat Data
-                        </a>
-                        <button type="button" 
-                                class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
-                            <i class="fas fa-sync-alt mr-2"></i>Refresh Data
-                        </button>
-                        <button type="submit" 
-                                class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                            <i class="fas fa-save mr-2"></i>Simpan
-                        </button>
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto px-4 sm:px-6">
+                <!-- Welcome Card -->
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
+                    <div class="max-w-3xl">
+                        <h2 class="text-2xl font-bold mb-2">Input Data K3 KAMP dan Lingkungan</h2>
+                        <p class="text-blue-100 mb-4">Kelola dan monitor data K3 KAMP dan lingkungan untuk memastikan keselamatan dan keamanan operasional.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="{{ route('admin.k3-kamp.view') }}" 
+                               class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-600 bg-white rounded-md hover:bg-gray-50">
+                                <i class="fas fa-eye mr-2"></i> Lihat Data
+                            </a>
+                            <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                                <i class="fas fa-sync-alt mr-2"></i> Refresh
+                            </button>
+                            <button type="submit" form="k3-form" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
+                                <i class="fas fa-save mr-2"></i> Simpan
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <form action="#" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse">
-                            <thead>
-                                <tr class="bg-gray-100">
-                                    <th class="border px-4 py-2 text-left w-1/4">K3 & Keamanan</th>
-                                    <th class="border px-4 py-2 text-center w-[80px]">Ada</th>
-                                    <th class="border px-4 py-2 text-center w-[80px]">Tidak Ada</th>
-                                    <th class="border px-4 py-2 text-center w-[80px]">Normal</th>
-                                    <th class="border px-4 py-2 text-center w-[80px]">Abnormal</th>
-                                    <th class="border px-4 py-2 text-left w-1/4">Keterangan</th>
-                                    <th class="border px-4 py-2 text-left w-[200px]">Eviden</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $items = [
-                                        'Potensi gangguan keamanan',
-                                        'Potensi gangguan kebakaran',
-                                        'Peralatan K3 KAM (CCTV, etc)',
-                                        'Peralatan Fire Fighting',
-                                        'Peralatan safety',
-                                        'Lainnya'
-                                    ];
-                                @endphp
+                <!-- Form Content -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="p-6">
+                        <form id="k3-form" action="#" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">Item</th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border w-[100px]">Ada</th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border w-[100px]">Tidak Ada</th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border w-[100px]">Normal</th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border w-[100px]">Abnormal</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">Keterangan</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border w-[200px]">Eviden</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <!-- K3 & Keamanan Section -->
+                                        <tr>
+                                            <td colspan="7" class="px-6 py-3 text-sm font-medium text-gray-900 bg-gray-50 border-r border">K3 & Keamanan</td>
+                                        </tr>
+                                        
+                                        @php
+                                        $items = [
+                                            'Potensi gangguan keamanan',
+                                            'Potensi gangguan kebakaran',
+                                            'Peralatan K3 KAM (CCTV, etc)',
+                                            'Peralatan Fire Fighting',
+                                            'Peralatan safety',
+                                            'Lainnya'
+                                        ];
+                                        @endphp
 
-                                <!-- K3 & Keamanan Section -->
-                                <tr>
-                                    <td class="border px-4 py-2 font-medium bg-gray-50" colspan="7">K3 & Keamanan</td>
-                                </tr>
-                                
-                                @foreach($items as $index => $item)
-                                <tr>
-                                    <td class="border px-4 py-2">{{ $item }}</td>
-                                    <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="status_{{ $index }}" value="ada" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="status_{{ $index }}" value="tidak_ada" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="kondisi_{{ $index }}" value="normal" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="kondisi_{{ $index }}" value="abnormal" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <textarea name="keterangan_{{ $index }}" class="w-full p-2 border rounded resize-y min-h-[80px]" placeholder="Masukkan keterangan..."></textarea>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <button type="button" 
-                                                onclick="showMediaModal('row_{{ $index }}')"
-                                                class="w-full px-3 py-2 text-sm font-medium text-blue-600 
-                                                       bg-blue-50 rounded-lg hover:bg-blue-100
-                                                       focus:outline-none focus:ring-2 focus:ring-blue-200
-                                                       transition-all duration-300">
-                                            <i class="fas fa-upload mr-2"></i>
-                                            Upload Media
-                                        </button>
-                                        <div id="preview_row_{{ $index }}" class="hidden mt-2">
-                                            <!-- Preview will be shown here after upload -->
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
+                                        @foreach($items as $index => $item)
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="px-6 py-4 text-sm text-gray-900 border-r border">{{ $item }}</td>
+                                            <td class="px-6 py-4 text-center border-r border">
+                                                <input type="checkbox" name="status_{{ $index }}[]" value="ada" 
+                                                       class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            </td>
+                                            <td class="px-6 py-4 text-center border-r border">
+                                                <input type="checkbox" name="status_{{ $index }}[]" value="tidak_ada" 
+                                                       class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            </td>
+                                            <td class="px-6 py-4 text-center border-r border">
+                                                <input type="checkbox" name="kondisi_{{ $index }}[]" value="normal" 
+                                                       class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            </td>
+                                            <td class="px-6 py-4 text-center border-r border">
+                                                <input type="checkbox" name="kondisi_{{ $index }}[]" value="abnormal" 
+                                                       class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            </td>
+                                            <td class="px-6 py-4 border-r border">
+                                                <textarea name="keterangan_{{ $index }}" rows="2" 
+                                                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                                                          placeholder="Masukkan keterangan..."></textarea>
+                                            </td>
+                                            <td class="px-6 py-4 border-r border">
+                                                <button type="button" 
+                                                        onclick="showMediaModal('row_{{ $index }}')"
+                                                        class="w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-200">
+                                                    <i class="fas fa-upload mr-2"></i>
+                                                    Upload Media
+                                                </button>
+                                                <div id="preview_row_{{ $index }}" class="hidden mt-2">
+                                                    <!-- Preview will be shown here -->
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
 
-                                <!-- Lingkungan Section -->
-                                <tr>
-                                    <td class="border px-4 py-2 font-medium bg-gray-50" colspan="7">Lingkungan</td>
-                                </tr>
-                                @php
-                                    $lingkunganItems = [
-                                        'Unsafe action',
-                                        'Unsafe condition',
-                                        'Lainnya'
-                                    ];
-                                @endphp
+                                        <!-- Lingkungan Section -->
+                                        <tr>
+                                            <td colspan="7" class="px-6 py-3 text-sm font-medium text-gray-900 bg-gray-50 border-r border">Lingkungan</td>
+                                        </tr>
+                                        
+                                        @php
+                                        $lingkunganItems = [
+                                            'Unsafe action',
+                                            'Unsafe condition',
+                                            'Lainnya'
+                                        ];
+                                        @endphp
 
-                                @foreach($lingkunganItems as $index => $item)
-                                <tr>
-                                    <td class="border px-4 py-2">{{ $item }}</td>
-                                    <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="status_lingkungan_{{ $index }}" value="ada" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="status_lingkungan_{{ $index }}" value="tidak_ada" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="kondisi_lingkungan_{{ $index }}" value="normal" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="border px-4 py-2 text-center">
-                                        <input type="radio" name="kondisi_lingkungan_{{ $index }}" value="abnormal" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <textarea name="keterangan_lingkungan_{{ $index }}" class="w-full p-2 border rounded resize-y min-h-[80px]" placeholder="Masukkan keterangan..."></textarea>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <button type="button" 
-                                                onclick="showMediaModal('lingkungan_{{ $index }}')"
-                                                class="w-full px-3 py-2 text-sm font-medium text-blue-600 
-                                                       bg-blue-50 rounded-lg hover:bg-blue-100
-                                                       focus:outline-none focus:ring-2 focus:ring-blue-200
-                                                       transition-all duration-300">
-                                            <i class="fas fa-upload mr-2"></i>
-                                            Upload Media
-                                        </button>
-                                        <div id="preview_lingkungan_{{ $index }}" class="hidden mt-2">
-                                            <!-- Preview will be shown here after upload -->
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                        @foreach($lingkunganItems as $index => $item)
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="px-6 py-4 text-sm text-gray-900 border-r border">{{ $item }}</td>
+                                            <td class="px-6 py-4 text-center border-r border">
+                                                <input type="checkbox" name="status_lingkungan_{{ $index }}[]" value="ada" 
+                                                       class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            </td>
+                                            <td class="px-6 py-4 text-center border-r border">
+                                                <input type="checkbox" name="status_lingkungan_{{ $index }}[]" value="tidak_ada" 
+                                                       class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            </td>
+                                            <td class="px-6 py-4 text-center border-r border">
+                                                <input type="checkbox" name="kondisi_lingkungan_{{ $index }}[]" value="normal" 
+                                                       class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            </td>
+                                            <td class="px-6 py-4 text-center border-r border">
+                                                <input type="checkbox" name="kondisi_lingkungan_{{ $index }}[]" value="abnormal" 
+                                                       class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            </td>
+                                            <td class="px-6 py-4 border-r border">
+                                                <textarea name="keterangan_lingkungan_{{ $index }}" rows="2" 
+                                                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                                                          placeholder="Masukkan keterangan..."></textarea>
+                                            </td>
+                                            <td class="px-6 py-4 border-r border">
+                                                <button type="button" 
+                                                        onclick="showMediaModal('lingkungan_{{ $index }}')"
+                                                        class="w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-200">
+                                                    <i class="fas fa-upload mr-2"></i>
+                                                    Upload Media
+                                                </button>
+                                                <div id="preview_lingkungan_{{ $index }}" class="hidden mt-2">
+                                                    <!-- Preview will be shown here -->
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
+        </main>
     </div>
 </div>
 
@@ -204,113 +214,87 @@
 <x-media-upload-modal />
 
 <style>
-    /* Table Styles */
-    .table-container {
-        overflow-x: auto;
-        margin-top: 1rem;
-    }
-    
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-    
-    th, td {
-        border: 1px solid #e2e8f0;
-    }
-    
-    th {
-        background-color: #f8fafc;
-        font-weight: 600;
-    }
-    
-    /* Form Element Styles */
-    textarea {
-        font-size: 0.875rem;
-        line-height: 1.25rem;
-    }
-    
-    textarea:focus {
-        outline: none;
-        border-color: #3b82f6;
-        ring: 2px;
-        ring-color: #93c5fd;
-    }
-    
-    select {
-        background-color: white;
-        border-radius: 0.375rem;
-    }
-    
-    select:focus {
-        outline: none;
-        border-color: #3b82f6;
-    }
-    
-    /* File Input Styles */
-    input[type="file"] {
-        border: 1px solid #e2e8f0;
-        border-radius: 0.375rem;
-        padding: 0.25rem;
-    }
-    
-    input[type="file"]::-webkit-file-upload-button {
-        background-color: #f3f4f6;
-        border: 1px solid #d1d5db;
-        border-radius: 0.25rem;
-        padding: 0.25rem 0.75rem;
-        margin-right: 0.5rem;
-        cursor: pointer;
-    }
-    
-    /* Radio Button Styles */
-    input[type="radio"] {
-        cursor: pointer;
-        width: 1rem;
-        height: 1rem;
-    }
-</style>
-
-<script>
-function toggleFileInput(select) {
-    const fileInput = select.parentElement.querySelector('.file-input');
-    if (!fileInput) return;
-
-    fileInput.classList.remove('hidden');
-    
-    // Set accept attribute based on selected type
-    switch(select.value) {
-        case 'image':
-            fileInput.accept = '.jpg,.jpeg,.png';
-            break;
-        case 'document':
-            fileInput.accept = '.pdf,.doc,.docx';
-            break;
-        case 'video':
-            fileInput.accept = '.mp4,.mov';
-            break;
-        default:
-            fileInput.classList.add('hidden');
-            break;
-    }
+/* Smooth transitions */
+.bg-gradient-to-r {
+    transition: all 0.3s ease-in-out;
+    max-height: 1000px; /* Adjust this value based on your content */
+    opacity: 1;
+    overflow: hidden;
 }
 
-// Preview file if it's an image
-document.querySelectorAll('.file-input').forEach(input => {
-    input.addEventListener('change', function(e) {
-        if (this.files && this.files[0]) {
-            const file = this.files[0];
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // You can add preview functionality here if needed
-                    console.log('Image loaded:', e.target.result);
-                }
-                reader.readAsDataURL(file);
-            }
+.bg-gradient-to-r.hidden-section {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    transition: padding 0.3s ease-in-out;
+}
+</style>
+
+<script src="{{ asset('js/toggle.js') }}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle checkbox exclusivity within groups
+    const checkboxGroups = document.querySelectorAll('tr');
+    checkboxGroups.forEach(row => {
+        const statusCheckboxes = row.querySelectorAll('input[type="checkbox"][name^="status"]');
+        const kondisiCheckboxes = row.querySelectorAll('input[type="checkbox"][name^="kondisi"]');
+
+        function handleCheckboxGroup(checkboxes) {
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        checkboxes.forEach(cb => {
+                            if (cb !== this) cb.checked = false;
+                        });
+                    }
+                });
+            });
         }
+
+        handleCheckboxGroup(statusCheckboxes);
+        handleCheckboxGroup(kondisiCheckboxes);
     });
 });
+
+// Add full table view toggle functionality
+function toggleFullTableView() {
+    const button = document.getElementById('toggleFullTable');
+    const welcomeCard = document.querySelector('.bg-gradient-to-r');
+    const mainContent = document.querySelector('main');
+    
+    // Toggle full table mode
+    const isFullTable = button.classList.contains('bg-blue-600');
+    
+    if (isFullTable) {
+        // Restore normal view
+        button.classList.remove('bg-blue-600', 'text-white');
+        button.classList.add('bg-blue-50', 'text-blue-600');
+        button.innerHTML = '<i class="fas fa-expand mr-1"></i> Full Table';
+        
+        if (welcomeCard) {
+            welcomeCard.classList.remove('hidden-section');
+            setTimeout(() => welcomeCard.style.display = '', 10);
+        }
+        if (mainContent) mainContent.classList.remove('pt-0');
+        
+    } else {
+        // Enable full table view
+        button.classList.remove('bg-blue-50', 'text-blue-600');
+        button.classList.add('bg-blue-600', 'text-white');
+        button.innerHTML = '<i class="fas fa-compress mr-1"></i> Normal View';
+        
+        if (welcomeCard) {
+            welcomeCard.classList.add('hidden-section');
+            setTimeout(() => welcomeCard.style.display = 'none', 300);
+        }
+        if (mainContent) mainContent.classList.add('pt-0');
+    }
+}
 
 function showMediaModal(rowId) {
     const modal = document.getElementById('mediaUploadModal');

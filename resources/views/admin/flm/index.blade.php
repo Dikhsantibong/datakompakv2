@@ -51,6 +51,10 @@
             </div>
         </header>
 
+        <div class="flex items-center pt-2">
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Form Pemeriksaan FLM', 'url' => null]]" />
+        </div>
+
         
         <main class="px-6 py-8">
             <div class="bg-white rounded-lg shadow-sm p-6">

@@ -134,6 +134,10 @@
                 </div>
             </div>
         </header>
+
+        <div class="flex items-center pt-2">
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Dashboard', 'url' => null]]" />
+        </div>
         
         <!-- Main Content -->
         

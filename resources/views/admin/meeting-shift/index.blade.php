@@ -52,6 +52,10 @@
             </div>
         </header>
 
+        <div class="flex items-center pt-2">
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Meeting dan Mutasi Shift Operator', 'url' => null]]" />
+        </div>
+
         <!-- Main Content Area -->
         <div class="container mx-auto px-6 py-8">
             <div x-data="{ activeTab: 'kondisi-mesin' }" class="bg-white rounded-xl shadow-sm border border-gray-200">

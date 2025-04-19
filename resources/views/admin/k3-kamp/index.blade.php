@@ -52,7 +52,10 @@
                 </div>
             </div>
         </header>
-        
+
+        <div class="flex items-center pt-2">
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Laporan K3 KAMP dan Lingkungan', 'url' => null]]" />
+        </div>
 
         <!-- Content -->
         <div class="container mx-auto px-6 py-8">

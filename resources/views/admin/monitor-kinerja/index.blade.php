@@ -58,9 +58,13 @@
             </div>
         </header>
 
+        <div class="flex items-center pt-2">
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Kinerja Pembangkit', 'url' => null]]" />
+        </div>
+
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto px-6 py-8">
+            <div class="container mx-auto px-6">
                 <!-- Welcome Card -->
                 <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
                     <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>

@@ -56,7 +56,7 @@
         </div>
 
         <!-- Main Content -->
-        <main class="p-6">
+        <main class="px-6">
             <!-- Welcome Card -->
             <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
                 <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400 opacity-90 rounded-lg"></div>

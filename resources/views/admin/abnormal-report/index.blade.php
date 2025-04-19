@@ -51,6 +51,10 @@
             </div>
         </header>
 
+        <div class="flex items-center pt-2">
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Laporan Abnormal/Gangguan', 'url' => null]]" />
+        </div>
+
         <!-- Main Content -->
         <div class="p-6">
             <div class="bg-white rounded-lg shadow-sm">

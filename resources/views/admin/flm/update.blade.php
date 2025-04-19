@@ -22,6 +22,10 @@
             </div>
         </header>
 
+        <div class="flex items-center pt-2">
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Form Pemeriksaan FLM', 'url' => null]]" />
+        </div>
+
         <main class="p-6">
         
                

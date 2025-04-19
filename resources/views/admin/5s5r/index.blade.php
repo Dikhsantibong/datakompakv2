@@ -57,6 +57,10 @@
             </div>
         </header>
 
+        <div class="flex items-center pt-2">
+            <x-admin-breadcrumb :breadcrumbs="[['name' => '5S5R', 'url' => null]]" />
+        </div>
+
         <main class="px-6 py-8">
             <!-- Tab Navigation -->
             <div class="mb-6 border-b border-gray-200">

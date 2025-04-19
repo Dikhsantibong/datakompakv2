@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex h-screen bg-gray-50 overflow-auto">
+<div class="flex h-screen bg-gray-100">
     @include('components.sidebar')
     
-    <div id="main-content" class="flex-1 main-content">
+    <div class="flex-1 flex flex-col overflow-hidden">
         <!-- Header -->
-        <header class="bg-white shadow-sm sticky top-0 z-10">
-            <div class="flex justify-between items-center px-6 py-3">
-                <div class="flex items-center gap-x-3">
+        <header class="bg-white shadow-sm">
+            <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center">
                     <!-- Mobile Menu Toggle -->
                     <button id="mobile-menu-toggle"
                         class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -27,7 +27,7 @@
                         </svg>
                     </button>
 
-                    <h1 class="text-xl font-semibold text-gray-800">Form Pemeriksaan FLM</h1>
+                    <h1 class="text-xl font-semibold text-gray-900">Form Pemeriksaan FLM</h1>
                 </div>
 
                 <div class="relative">
@@ -55,144 +55,102 @@
             <x-admin-breadcrumb :breadcrumbs="[['name' => 'Form Pemeriksaan FLM', 'url' => null]]" />
         </div>
 
-        
-        <main class="px-6 py-8">
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border px-4 py-2 text-sm">No.</th>
-                                <th class="border px-4 py-2 text-sm">Mesin/peralatan</th>
-                                <th class="border px-4 py-2 text-sm">Sistem pembangkit</th>
-                                <th class="border px-4 py-2 text-sm">Masalah awal yang ditemukan</th>
-                                <th class="border px-4 py-2 text-sm">kondisi awal</th>
-                                <th colspan="5" class="border px-4 py-2 text-sm text-center">Tindakan FLM</th>
-                                <th class="border px-4 py-2 text-sm">kondisi akhir</th>
-                                <th class="border px-4 py-2 text-sm">Catatan FLM</th>
-                                <th class="border px-4 py-2 text-sm">eviden</th>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <th class="border px-4 py-2"></th>
-                                <th class="border px-4 py-2"></th>
-                                <th class="border px-4 py-2"></th>
-                                <th class="border px-4 py-2"></th>
-                                <th class="border px-4 py-2"></th>
-                                <th class="border px-4 py-2 text-sm">bersihkan</th>
-                                <th class="border px-4 py-2 text-sm">lumasi</th>
-                                <th class="border px-4 py-2 text-sm">kencangkan</th>
-                                <th class="border px-4 py-2 text-sm">perbaikan koneksi</th>
-                                <th class="border px-4 py-2 text-sm">lainnya</th>
-                                <th class="border px-4 py-2"></th>
-                                <th class="border px-4 py-2"></th>
-                                <th class="border px-4 py-2"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for ($i = 1; $i <= 4; $i++)
-                            <tr>
-                                <td class="border px-4 py-2 text-center">{{ $i }}</td>
-                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
-                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
-                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
-                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
-                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
-                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
-                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
-                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
-                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
-                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
-                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
-                                <td class="border px-4 py-2">
-                                    <input type="file" class="hidden" id="eviden-{{ $i }}">
-                                    <label for="eviden-{{ $i }}" class="cursor-pointer bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
-                                        Upload
-                                    </label>
-                                </td>
-                            </tr>
-                            @endfor
-                        </tbody>
-                    </table>
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto px-4 sm:px-6">
+                <!-- Welcome Card -->
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
+                    <div class="max-w-3xl">
+                        <h2 class="text-2xl font-bold mb-2">Form Pemeriksaan FLM</h2>
+                        <p class="text-blue-100 mb-4">Kelola dan monitor pemeriksaan First Line Maintenance untuk memastikan kinerja optimal peralatan.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                                <i class="fas fa-file-excel mr-2"></i> Export Excel
+                            </button>
+                            <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-white rounded-md hover:bg-red-50">
+                                <i class="fas fa-file-pdf mr-2"></i> Export PDF
+                            </button>
+                            <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
+                                <i class="fas fa-print mr-2"></i> Print
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="mt-4 flex justify-end">
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                        Simpan
-                    </button>
+
+                <!-- Main Content -->
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="p-6">
+                        <form action="#" method="POST" class="space-y-6">
+                            @csrf
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full border border-gray-300">
+                                    <thead>
+                                        <tr class="bg-gray-100">
+                                            <th class="border px-4 py-2 text-sm">No.</th>
+                                            <th class="border px-4 py-2 text-sm">Mesin/peralatan</th>
+                                            <th class="border px-4 py-2 text-sm">Sistem pembangkit</th>
+                                            <th class="border px-4 py-2 text-sm">Masalah awal yang ditemukan</th>
+                                            <th class="border px-4 py-2 text-sm">kondisi awal</th>
+                                            <th colspan="5" class="border px-4 py-2 text-sm text-center">Tindakan FLM</th>
+                                            <th class="border px-4 py-2 text-sm">kondisi akhir</th>
+                                            <th class="border px-4 py-2 text-sm">Catatan FLM</th>
+                                            <th class="border px-4 py-2 text-sm">eviden</th>
+                                        </tr>
+                                        <tr class="bg-gray-50">
+                                            <th class="border px-4 py-2"></th>
+                                            <th class="border px-4 py-2"></th>
+                                            <th class="border px-4 py-2"></th>
+                                            <th class="border px-4 py-2"></th>
+                                            <th class="border px-4 py-2"></th>
+                                            <th class="border px-4 py-2 text-sm">bersihkan</th>
+                                            <th class="border px-4 py-2 text-sm">lumasi</th>
+                                            <th class="border px-4 py-2 text-sm">kencangkan</th>
+                                            <th class="border px-4 py-2 text-sm">perbaikan koneksi</th>
+                                            <th class="border px-4 py-2 text-sm">lainnya</th>
+                                            <th class="border px-4 py-2"></th>
+                                            <th class="border px-4 py-2"></th>
+                                            <th class="border px-4 py-2"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for ($i = 1; $i <= 4; $i++)
+                                        <tr>
+                                            <td class="border px-4 py-2 text-center">{{ $i }}</td>
+                                            <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded" name="mesin_{{ $i }}"></td>
+                                            <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded" name="sistem_{{ $i }}"></td>
+                                            <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded" name="masalah_{{ $i }}"></td>
+                                            <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded" name="kondisi_awal_{{ $i }}"></td>
+                                            <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox" name="tindakan_{{ $i }}[]" value="bersihkan"></td>
+                                            <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox" name="tindakan_{{ $i }}[]" value="lumasi"></td>
+                                            <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox" name="tindakan_{{ $i }}[]" value="kencangkan"></td>
+                                            <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox" name="tindakan_{{ $i }}[]" value="perbaikan_koneksi"></td>
+                                            <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox" name="tindakan_{{ $i }}[]" value="lainnya"></td>
+                                            <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded" name="kondisi_akhir_{{ $i }}"></td>
+                                            <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded" name="catatan_{{ $i }}"></td>
+                                            <td class="border px-4 py-2">
+                                                <input type="file" class="hidden" id="eviden-{{ $i }}" name="eviden_{{ $i }}">
+                                                <label for="eviden-{{ $i }}" class="cursor-pointer bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
+                                                    Upload
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        @endfor
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="flex justify-end mt-6">
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <i class="fas fa-save mr-2"></i>
+                                    Simpan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 </div>
 
-<style>
-    .tab-btn {
-        transition: all 0.3s ease-in-out;
-    }
-
-    .tab-btn:hover {
-        color: #1a56db;
-    }
-
-    .tab-content {
-        transition: opacity 0.3s ease-in-out;
-    }
-</style>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Tab switching functionality
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        function switchTab(tabName) {
-            // Hide all tab contents
-            tabContents.forEach(content => {
-                content.classList.add('hidden');
-            });
-
-            // Remove active classes from all tabs
-            tabButtons.forEach(btn => {
-                btn.classList.remove('border-blue-500', 'text-blue-600');
-                btn.classList.add('border-transparent', 'text-gray-500');
-            });
-
-            // Show selected tab content
-            const selectedContent = document.getElementById(`${tabName}-content`);
-            if (selectedContent) {
-                selectedContent.classList.remove('hidden');
-            }
-
-            // Activate selected tab button
-            const selectedTab = document.querySelector(`[data-target="${tabName}"]`);
-            if (selectedTab) {
-                selectedTab.classList.remove('border-transparent', 'text-gray-500');
-                selectedTab.classList.add('border-blue-500', 'text-blue-600');
-            }
-        }
-
-        // Add click event listeners to tab buttons
-        tabButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const tabName = this.getAttribute('data-target');
-                switchTab(tabName);
-            });
-        });
-
-        // Initialize dropdown toggle
-        window.toggleDropdown = function() {
-            const dropdown = document.getElementById('dropdown');
-            dropdown.classList.toggle('hidden');
-        };
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdown');
-            const dropdownToggle = document.getElementById('dropdownToggle');
-            
-            if (!dropdown.contains(event.target) && !dropdownToggle.contains(event.target)) {
-                dropdown.classList.add('hidden');
-            }
-        });
-    });
-</script>
+<script src="{{ asset('js/toggle.js') }}"></script>
 @endsection

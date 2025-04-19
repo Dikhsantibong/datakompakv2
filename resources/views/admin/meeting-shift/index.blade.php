@@ -128,13 +128,21 @@
                                     <i class="fas fa-clipboard-check mr-2"></i>
                                     Catatan Umum
                                 </button>
+
+                                <button @click="activeTab = 'resume-rapat'"
+                                        :class="{'border-[#009BB9] text-[#009BB9]': activeTab === 'resume-rapat',
+                                                'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'resume-rapat'}"
+                                        class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200">
+                                    <i class="fas fa-file-alt mr-2"></i>
+                                    Resume Rapat
+                                </button>
                                 
-                                <button @click="activeTab = 'absensi-resume'"
-                                        :class="{'border-[#009BB9] text-[#009BB9]': activeTab === 'absensi-resume',
-                                                'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'absensi-resume'}"
+                                <button @click="activeTab = 'absensi'"
+                                        :class="{'border-[#009BB9] text-[#009BB9]': activeTab === 'absensi',
+                                                'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'absensi'}"
                                         class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200">
                                     <i class="fas fa-users mr-2"></i>
-                                    Absensi dan Resume Rapat
+                                    Absensi
                                 </button>
                             </nav>
 
@@ -142,41 +150,27 @@
                             <div class="mt-6">
                                 <!-- Kondisi Mesin -->
                                 <div x-show="activeTab === 'kondisi-mesin'" 
-                                     x-transition:enter="transition ease-out duration-300"
-                                     x-transition:enter-start="opacity-0 transform scale-95"
-                                     x-transition:enter-end="opacity-100 transform scale-100"
+                               
                                      class="space-y-6">
-                                    <div class="flex justify-between items-center mb-6">
-                                        <h2 class="text-lg font-semibold text-gray-800">Status Kondisi Mesin</h2>
-                                        <div class="flex gap-2">
-                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
-                                                <i class="fas fa-download mr-2"></i>
-                                                Export
-                                            </button>
-                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
-                                                <i class="fas fa-print mr-2"></i>
-                                                Print
-                                            </button>
-                                        </div>
-                                    </div>
+                                   
                                     <form action="{{ route('admin.meeting-shift.store') }}" method="POST" class="space-y-6">
                                         @csrf
                                         <div class="overflow-x-auto">
-                                            <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden">
+                                            <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
                                                 <thead>
                                                     <tr class="bg-gray-50">
-                                                        <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider align-middle border-r">
+                                                        <th rowspan="2" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider align-middle border-r border">
                                                             Mesin
                                                         </th>
-                                                        <th colspan="5" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
+                                                        <th colspan="5" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-r border">
                                                             Status
                                                         </th>
-                                                        <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider align-middle">
+                                                        <th rowspan="2" class="px-6 py-3 text-center  text-xs font-medium text-gray-500 uppercase tracking-wider align-middle border-r border">
                                                             Keterangan
                                                         </th>
                                                     </tr>
                                                     <tr class="bg-gray-50">
-                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">
                                                             <div class="flex flex-col items-center gap-1">
                                                                 <span>Operasi</span>
                                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -184,7 +178,7 @@
                                                                 </span>
                                                             </div>
                                                         </th>
-                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">
                                                             <div class="flex flex-col items-center gap-1">
                                                                 <span>Stand By</span>
                                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -192,7 +186,7 @@
                                                                 </span>
                                                             </div>
                                                         </th>
-                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">
                                                             <div class="flex flex-col items-center gap-1">
                                                                 <span>HAR Rutin</span>
                                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
@@ -200,7 +194,7 @@
                                                                 </span>
                                                             </div>
                                                         </th>
-                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">
                                                             <div class="flex flex-col items-center gap-1">
                                                                 <span>HAR Non Rutin</span>
                                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
@@ -208,7 +202,7 @@
                                                                 </span>
                                                             </div>
                                                         </th>
-                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">
                                                             <div class="flex flex-col items-center gap-1">
                                                                 <span>Gangguan</span>
                                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
@@ -221,44 +215,45 @@
                                                 <tbody class="bg-white divide-y divide-gray-200">
                                                     @foreach($machines as $index => $machine)
                                                     <tr class="hover:bg-gray-50 transition-colors">
-                                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r">
+                                                        <td class="px-6 py-4 text-sm text-gray-900 border-r border">
                                                             {{ $machine->name }}
                                                             <input type="hidden" name="machine_status[{{ $index }}][machine_id]" value="{{ $machine->id }}">
                                                         </td>
-                                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                        <td class="px-6 py-4 text-center border-r border">
                                                             <label class="inline-flex items-center justify-center">
                                                                 <input type="checkbox" name="machine_status[{{ $index }}][status][]" value="operasi" 
-                                                                       class="form-checkbox h-5 w-5 text-green-600 rounded border-gray-300 focus:ring-green-500 transition-all cursor-pointer">
+                                                                       class="form-checkbox h-5 w-5 text-green-600 rounded border-gray-300 focus:ring-green-500">
                                                             </label>
                                                         </td>
-                                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                        <td class="px-6 py-4 text-center border-r border">
                                                             <label class="inline-flex items-center justify-center">
                                                                 <input type="checkbox" name="machine_status[{{ $index }}][status][]" value="standby" 
-                                                                       class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 transition-all cursor-pointer">
+                                                                       class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
                                                             </label>
                                                         </td>
-                                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                        <td class="px-6 py-4 text-center border-r border">
                                                             <label class="inline-flex items-center justify-center">
                                                                 <input type="checkbox" name="machine_status[{{ $index }}][status][]" value="har_rutin" 
-                                                                       class="form-checkbox h-5 w-5 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500 transition-all cursor-pointer">
+                                                                       class="form-checkbox h-5 w-5 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500">
                                                             </label>
                                                         </td>
-                                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                        <td class="px-6 py-4 text-center border-r border">
                                                             <label class="inline-flex items-center justify-center">
                                                                 <input type="checkbox" name="machine_status[{{ $index }}][status][]" value="har_nonrutin" 
-                                                                       class="form-checkbox h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500 transition-all cursor-pointer">
+                                                                       class="form-checkbox h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500">
                                                             </label>
                                                         </td>
-                                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                        <td class="px-6 py-4 text-center border-r border">
                                                             <label class="inline-flex items-center justify-center">
                                                                 <input type="checkbox" name="machine_status[{{ $index }}][status][]" value="gangguan" 
-                                                                       class="form-checkbox h-5 w-5 text-red-600 rounded border-gray-300 focus:ring-red-500 transition-all cursor-pointer">
+                                                                       class="form-checkbox h-5 w-5 text-red-600 rounded border-gray-300 focus:ring-red-500">
                                                             </label>
                                                         </td>
-                                                        <td class="px-6 py-4 whitespace-nowrap">
-                                                            <input type="text" name="machine_status[{{ $index }}][keterangan]" 
-                                                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
-                                                                   placeholder="Masukkan keterangan...">
+                                                        <td class="px-6 py-4 border-r border">
+                                                            <textarea name="machine_status[{{ $index }}][keterangan]" 
+                                                                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
+                                                                      rows="3"
+                                                                      placeholder="Masukkan keterangan..."></textarea>
                                                         </td>
                                                     </tr>
                                                     @endforeach
@@ -281,21 +276,27 @@
                                     <form action="{{ route('admin.meeting-shift.store-alat-bantu') }}" method="POST">
                                         @csrf
                                         <div class="overflow-x-auto">
-                                            <table class="min-w-full bg-white border border-gray-300">
+                                            <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
                                                 <thead>
-                                                    <tr>
-                                                        <th rowspan="2" class="border border-gray-300 px-4 py-2 text-center align-middle bg-gray-50">Alat Bantu</th>
-                                                        <th colspan="4" class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Status</th>
-                                                        <th rowspan="2" class="border border-gray-300 px-4 py-2 text-center align-middle bg-gray-50">Keterangan</th>
+                                                    <tr class="bg-gray-50">
+                                                        <th rowspan="2" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider align-middle border-r border">
+                                                            Alat Bantu
+                                                        </th>
+                                                        <th colspan="4" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-r border">
+                                                            Status
+                                                        </th>
+                                                        <th rowspan="2" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider align-middle border-r border">
+                                                            Keterangan
+                                                        </th>
                                                     </tr>
-                                                    <tr>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Normal</th>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Abnormal</th>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Gangguan</th>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">FLM</th>
+                                                    <tr class="bg-gray-50">
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">Normal</th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">Abnormal</th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">Gangguan</th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">FLM</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody class="bg-white divide-y divide-gray-200">
                                                     @php
                                                     $alatBantu = [
                                                         'system pelumas',
@@ -308,38 +309,36 @@
 
                                                     @foreach($alatBantu as $index => $alat)
                                                     <tr class="hover:bg-gray-50 transition-colors">
-                                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r">
-                                                            {{ $alat }}
-                                                            <input type="hidden" name="alat_bantu[{{ $index }}][name]" value="{{ $alat }}">
-                                                        </td>
-                                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                        <td class="px-6 py-4 text-sm text-gray-900 border-r border">{{ $alat }}</td>
+                                                        <td class="px-6 py-4 text-center border-r border">
                                                             <label class="inline-flex items-center justify-center">
                                                                 <input type="checkbox" name="alat_bantu[{{ $index }}][status][]" value="normal" 
-                                                                       class="form-checkbox h-5 w-5 text-green-600 rounded border-gray-300 focus:ring-green-500 transition-all cursor-pointer">
+                                                                       class="form-checkbox h-5 w-5 text-green-600 rounded border-gray-300 focus:ring-green-500">
                                                             </label>
                                                         </td>
-                                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                        <td class="px-6 py-4 text-center border-r border">
                                                             <label class="inline-flex items-center justify-center">
                                                                 <input type="checkbox" name="alat_bantu[{{ $index }}][status][]" value="abnormal" 
-                                                                       class="form-checkbox h-5 w-5 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500 transition-all cursor-pointer">
+                                                                       class="form-checkbox h-5 w-5 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500">
                                                             </label>
                                                         </td>
-                                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                        <td class="px-6 py-4 text-center border-r border">
                                                             <label class="inline-flex items-center justify-center">
                                                                 <input type="checkbox" name="alat_bantu[{{ $index }}][status][]" value="gangguan" 
-                                                                       class="form-checkbox h-5 w-5 text-red-600 rounded border-gray-300 focus:ring-red-500 transition-all cursor-pointer">
+                                                                       class="form-checkbox h-5 w-5 text-red-600 rounded border-gray-300 focus:ring-red-500">
                                                             </label>
                                                         </td>
-                                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                        <td class="px-6 py-4 text-center border-r border">
                                                             <label class="inline-flex items-center justify-center">
                                                                 <input type="checkbox" name="alat_bantu[{{ $index }}][status][]" value="flm" 
-                                                                       class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 transition-all cursor-pointer">
+                                                                       class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
                                                             </label>
                                                         </td>
-                                                        <td class="px-6 py-4 whitespace-nowrap">
-                                                            <input type="text" name="alat_bantu[{{ $index }}][keterangan]" 
-                                                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
-                                                                   placeholder="Masukkan keterangan...">
+                                                        <td class="px-6 py-4 border-r border">
+                                                            <textarea name="alat_bantu[{{ $index }}][keterangan]" 
+                                                                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
+                                                                      rows="3"
+                                                                      placeholder="Masukkan keterangan..."></textarea>
                                                         </td>
                                                     </tr>
                                                     @endforeach
@@ -361,22 +360,28 @@
                                     <form action="{{ route('admin.meeting-shift.store-resource') }}" method="POST">
                                         @csrf
                                         <div class="overflow-x-auto">
-                                            <table class="min-w-full bg-white border border-gray-300">
+                                            <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
                                                 <thead>
-                                                    <tr>
-                                                        <th rowspan="2" class="border border-gray-300 px-4 py-2 text-center align-middle bg-gray-50">Stok</th>
-                                                        <th colspan="5" class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Status</th>
-                                                        <th rowspan="2" class="border border-gray-300 px-4 py-2 text-center align-middle bg-gray-50">Keterangan</th>
+                                                    <tr class="bg-gray-50">
+                                                        <th rowspan="2" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider align-middle border-r border">
+                                                            Stok
+                                                        </th>
+                                                        <th colspan="5" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-r border">
+                                                            Status
+                                                        </th>
+                                                        <th rowspan="2" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider align-middle border-r border">
+                                                            Keterangan
+                                                        </th>
                                                     </tr>
-                                                    <tr>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">0%-20%</th>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">21%-40%</th>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">41%-61%</th>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">61%-80%</th>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">up to 80%</th>
+                                                    <tr class="bg-gray-50">
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">0%-20%</th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">21%-40%</th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">41%-61%</th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">61%-80%</th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">up to 80%</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody class="bg-white divide-y divide-gray-200">
                                                     @php
                                                     $resources = [
                                                         ['name' => 'PELUMAS', 'is_category' => true],
@@ -395,45 +400,46 @@
 
                                                     @foreach($resources as $index => $resource)
                                                     <tr class="{{ $resource['is_category'] ? 'bg-gray-50 font-semibold' : '' }} hover:bg-gray-50 transition-colors">
-                                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r {{ $resource['is_category'] ? 'text-lg' : 'pl-8' }}">
+                                                        <td class="px-6 py-4 text-sm text-gray-900 border-r border {{ $resource['is_category'] ? 'text-lg' : 'pl-8' }}">
                                                             {{ $resource['name'] }}
                                                             <input type="hidden" name="resources[{{ $index }}][name]" value="{{ $resource['name'] }}">
                                                         </td>
                                                         @if(!$resource['is_category'])
-                                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                            <td class="px-6 py-4 text-center border-r border">
                                                                 <label class="inline-flex items-center justify-center">
                                                                     <input type="checkbox" name="resources[{{ $index }}][status][]" value="0-20" 
-                                                                           class="form-checkbox h-5 w-5 text-red-600 rounded border-gray-300 focus:ring-red-500 transition-all cursor-pointer">
+                                                                           class="form-checkbox h-5 w-5 text-red-600 rounded border-gray-300 focus:ring-red-500">
                                                                 </label>
                                                             </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                            <td class="px-6 py-4 text-center border-r border">
                                                                 <label class="inline-flex items-center justify-center">
                                                                     <input type="checkbox" name="resources[{{ $index }}][status][]" value="21-40" 
-                                                                           class="form-checkbox h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500 transition-all cursor-pointer">
+                                                                           class="form-checkbox h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500">
                                                                 </label>
                                                             </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                            <td class="px-6 py-4 text-center border-r border">
                                                                 <label class="inline-flex items-center justify-center">
                                                                     <input type="checkbox" name="resources[{{ $index }}][status][]" value="41-61" 
-                                                                           class="form-checkbox h-5 w-5 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500 transition-all cursor-pointer">
+                                                                           class="form-checkbox h-5 w-5 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500">
                                                                 </label>
                                                             </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                            <td class="px-6 py-4 text-center border-r border">
                                                                 <label class="inline-flex items-center justify-center">
                                                                     <input type="checkbox" name="resources[{{ $index }}][status][]" value="61-80" 
-                                                                           class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 transition-all cursor-pointer">
+                                                                           class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
                                                                 </label>
                                                             </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                            <td class="px-6 py-4 text-center border-r border">
                                                                 <label class="inline-flex items-center justify-center">
                                                                     <input type="checkbox" name="resources[{{ $index }}][status][]" value="up-80" 
-                                                                           class="form-checkbox h-5 w-5 text-green-600 rounded border-gray-300 focus:ring-green-500 transition-all cursor-pointer">
+                                                                           class="form-checkbox h-5 w-5 text-green-600 rounded border-gray-300 focus:ring-green-500">
                                                                 </label>
                                                             </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <input type="text" name="resources[{{ $index }}][keterangan]" 
-                                                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
-                                                                       placeholder="Masukkan keterangan...">
+                                                            <td class="px-6 py-4 border-r border">
+                                                                <textarea name="resources[{{ $index }}][keterangan]" 
+                                                                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
+                                                                          rows="3"
+                                                                          placeholder="Masukkan keterangan..."></textarea>
                                                             </td>
                                                         @else
                                                             <td colspan="6" class="border border-gray-300"></td>
@@ -458,16 +464,24 @@
                                     <form action="{{ route('admin.meeting-shift.store-k3l') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="overflow-x-auto">
-                                            <table class="min-w-full bg-white border border-gray-300">
+                                            <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
                                                 <thead>
-                                                    <tr>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Potensi Bahaya</th>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Uraian</th>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Saran & Tindak Lanjut</th>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Eviden</th>
+                                                    <tr class="bg-gray-50">
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">
+                                                            Potensi Bahaya
+                                                        </th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">
+                                                            Uraian
+                                                        </th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">
+                                                            Saran & Tindak Lanjut
+                                                        </th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">
+                                                            Eviden
+                                                        </th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody class="bg-white divide-y divide-gray-200">
                                                     <!-- Unsafe Action -->
                                                     <tr>
                                                         <td class="border border-gray-300 px-4 py-2 font-semibold bg-gray-100">
@@ -571,39 +585,139 @@
                                     </form>
                                 </div>
 
-                                <!-- Absensi dan Resume -->
-                                <div x-show="activeTab === 'absensi-resume'" class="space-y-4">
+                                <!-- Resume Rapat Tab -->
+                                <div x-show="activeTab === 'resume-rapat'" class="space-y-4">
+                                    <form action="{{ route('admin.meeting-shift.store-resume') }}" method="POST">
+                                        @csrf
+                                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                                            <label for="resume_rapat" class="block text-sm font-medium text-gray-700 mb-2">
+                                                Resume Rapat
+                                            </label>
+                                            <textarea 
+                                                id="resume_rapat"
+                                                name="resume_rapat" 
+                                                rows="10" 
+                                                class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="Masukkan resume rapat..."
+                                            ></textarea>
+                                            
+                                            <!-- Tombol Submit -->
+                                            <div class="flex justify-end mt-4">
+                                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] transition-all duration-200">
+                                                    <i class="fas fa-save mr-2"></i>
+                                                    Simpan Resume
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Absensi Tab -->
+                                <div x-show="activeTab === 'absensi'" class="space-y-4">
                                     <form action="{{ route('admin.meeting-shift.store-absensi') }}" method="POST">
                                         @csrf
-                                        <div class="overflow-x-auto">
-                                            <table class="min-w-full bg-white border border-gray-300">
+                                        <!-- Shift Selection Header -->
+                                        <div class="mb-4 bg-white p-4 rounded-lg shadow-sm">
+                                            <h3 class="text-lg font-medium text-gray-900 mb-2">Pilih Shift Saat Ini</h3>
+                                            <div class="grid grid-cols-4 gap-4">
+                                                <label class="relative flex items-center justify-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                                    <input type="radio" name="current_shift" value="A" class="sr-only peer" required>
+                                                    <div class="peer-checked:border-[#009BB9] peer-checked:ring-2 peer-checked:ring-[#009BB9] absolute inset-0 rounded-lg border"></div>
+                                                    <div class="text-center">
+                                                        <span class="text-lg font-medium block">Shift A</span>
+                                                        <span class="text-sm text-gray-500">00:00 - 08:00</span>
+                                                    </div>
+                                                </label>
+                                                <label class="relative flex items-center justify-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                                    <input type="radio" name="current_shift" value="B" class="sr-only peer">
+                                                    <div class="peer-checked:border-[#009BB9] peer-checked:ring-2 peer-checked:ring-[#009BB9] absolute inset-0 rounded-lg border"></div>
+                                                    <div class="text-center">
+                                                        <span class="text-lg font-medium block">Shift B</span>
+                                                        <span class="text-sm text-gray-500">08:00 - 16:00</span>
+                                                    </div>
+                                                </label>
+                                                <label class="relative flex items-center justify-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                                    <input type="radio" name="current_shift" value="C" class="sr-only peer">
+                                                    <div class="peer-checked:border-[#009BB9] peer-checked:ring-2 peer-checked:ring-[#009BB9] absolute inset-0 rounded-lg border"></div>
+                                                    <div class="text-center">
+                                                        <span class="text-lg font-medium block">Shift C</span>
+                                                        <span class="text-sm text-gray-500">16:00 - 00:00</span>
+                                                    </div>
+                                                </label>
+                                                <label class="relative flex items-center justify-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                                    <input type="radio" name="current_shift" value="D" class="sr-only peer">
+                                                    <div class="peer-checked:border-[#009BB9] peer-checked:ring-2 peer-checked:ring-[#009BB9] absolute inset-0 rounded-lg border"></div>
+                                                    <div class="text-center">
+                                                        <span class="text-lg font-medium block">Shift D</span>
+                                                        <span class="text-sm text-gray-500">Day Shift</span>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="overflow-x-auto bg-white rounded-lg shadow-sm">
+                                            <table class="min-w-full divide-y divide-gray-200">
                                                 <thead>
-                                                    <tr>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">No</th>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Nama</th>
-                                                        <th class="border border-gray-300 px-4 py-2 text-center bg-gray-50">Shift</th>
+                                                    <tr class="bg-gray-50">
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r">
+                                                            No
+                                                        </th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r">
+                                                            Nama Operator
+                                                        </th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r">
+                                                            Shift
+                                                        </th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r">
+                                                            Status Kehadiran
+                                                        </th>
+                                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r">
+                                                            Keterangan
+                                                        </th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody class="bg-white divide-y divide-gray-200">
                                                     @for ($i = 1; $i <= 5; $i++)
-                                                    <tr>
-                                                        <td class="border border-gray-300 px-4 py-2 text-center">{{ $i }}</td>
-                                                        <td class="border border-gray-300 px-4 py-2">
+                                                    <tr class="hover:bg-gray-50 transition-colors">
+                                                        <td class="px-6 py-4 text-sm text-center border-r">
+                                                            {{ $i }}
+                                                        </td>
+                                                        <td class="px-6 py-4 border-r">
                                                             <input type="text" 
                                                                 name="absensi[{{ $i }}][nama]" 
-                                                                class="w-full p-1 border rounded" 
-                                                                placeholder="Masukkan nama..."
+                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
+                                                                placeholder="Masukkan nama operator..."
                                                                 required>
                                                         </td>
-                                                        <td class="border border-gray-300 px-4 py-2">
+                                                        <td class="px-6 py-4 border-r">
                                                             <select name="absensi[{{ $i }}][shift]" 
-                                                                class="w-full p-1 border rounded"
+                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm"
                                                                 required>
                                                                 <option value="">Pilih Shift</option>
-                                                                <option value="pagi">Pagi</option>
-                                                                <option value="sore">Sore</option>
-                                                                <option value="malam">Malam</option>
+                                                                <option value="A">Shift A</option>
+                                                                <option value="B">Shift B</option>
+                                                                <option value="C">Shift C</option>
+                                                                <option value="D">Shift D</option>
                                                             </select>
+                                                        </td>
+                                                        <td class="px-6 py-4 border-r">
+                                                            <select name="absensi[{{ $i }}][status]" 
+                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm"
+                                                                required>
+                                                                <option value="">Pilih Status</option>
+                                                                <option value="hadir">Hadir</option>
+                                                                <option value="izin">Izin</option>
+                                                                <option value="sakit">Sakit</option>
+                                                                <option value="cuti">Cuti</option>
+                                                                <option value="alpha">Alpha</option>
+                                                            </select>
+                                                        </td>
+                                                        <td class="px-6 py-4 border-r">
+                                                            <textarea 
+                                                                name="absensi[{{ $i }}][keterangan]" 
+                                                                rows="1"
+                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm resize-none" 
+                                                                placeholder="Masukkan keterangan jika diperlukan..."></textarea>
                                                         </td>
                                                     </tr>
                                                     @endfor
@@ -611,18 +725,19 @@
                                             </table>
                                         </div>
 
-                                        <!-- Tombol untuk menambah baris -->
-                                        <div class="flex justify-start mt-4">
+                                        <div class="mt-4 flex justify-between">
+                                            <!-- Tombol untuk menambah baris -->
                                             <button type="button" 
-                                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
-                                                <i class="fas fa-plus mr-2"></i> Tambah Baris
+                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
+                                                <i class="fas fa-plus mr-2"></i>
+                                                Tambah Operator
                                             </button>
-                                        </div>
-                                        
-                                        <!-- Tombol Submit -->
-                                        <div class="flex justify-end mt-4">
-                                            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                                <i class="fas fa-save mr-2"></i> Simpan
+
+                                            <!-- Tombol Submit -->
+                                            <button type="submit" 
+                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] transition-all duration-200">
+                                                <i class="fas fa-save mr-2"></i>
+                                                Simpan Absensi
                                             </button>
                                         </div>
                                     </form>

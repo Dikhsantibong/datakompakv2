@@ -213,6 +213,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::post('/store-sistem', [MeetingShiftController::class, 'storeSistem'])->name('meeting-shift.store-sistem');
         Route::post('/store-catatan-umum', [MeetingShiftController::class, 'storeCatatanUmum'])->name('meeting-shift.store-catatan-umum');
         Route::post('/store-absensi', [MeetingShiftController::class, 'storeAbsensi'])->name('meeting-shift.store-absensi');
+        Route::post('/store-resume', [MeetingShiftController::class, 'storeResume'])->name('meeting-shift.store-resume');
     });
 });
 

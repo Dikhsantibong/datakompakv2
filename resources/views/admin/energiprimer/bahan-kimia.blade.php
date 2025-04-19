@@ -1,14 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex h-screen">
+<div class="flex h-screen bg-gray-100">
     @include('components.sidebar')
 
-    <div id="main-content" class="flex-1 overflow-x-hidden overflow-y-auto">
-        <header class="bg-white shadow-sm sticky top-0 z-20
-        ">
-            <div class="flex justify-between items-center px-6 py-3">
-                <div class="flex items-center gap-x-3">
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <header class="bg-white shadow-sm">
+            <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center">
                     <!-- Mobile Menu Toggle -->
                     <button id="mobile-menu-toggle"
                         class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -26,8 +25,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                         </svg>
                     </button>
-
-                    <h1 class="text-xl font-semibold text-gray-800">Bahan Kimia</h1>
+                    <h1 class="text-xl font-semibold text-gray-900">Data Bahan Kimia</h1>
                 </div>
 
                 <div class="relative">
@@ -55,106 +53,130 @@
             <x-admin-breadcrumb :breadcrumbs="[['name' => 'Data Bahan Kimia', 'url' => null]]" />
         </div>
 
-        <div class="py-6">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-semibold text-gray-900">Data Bahan Kimia</h2>
-                    <div class="flex gap-3">
-                        <!-- Export Buttons -->
-                        <a href="{{ route('admin.energiprimer.bahan-kimia.export-excel', request()->query()) }}" 
-                           class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md">
-                            <i class="fas fa-file-excel mr-2"></i> Export Excel
-                        </a>
-                        <a href="{{ route('admin.energiprimer.bahan-kimia.export-pdf', request()->query()) }}" 
-                           class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md">
-                            <i class="fas fa-file-pdf mr-2"></i> Export PDF
-                        </a>
-                        <a href="{{ route('admin.energiprimer.bahan-kimia.create') }}" 
-                           class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md">
-                            <i class="fas fa-plus mr-2"></i> Tambah Data
-                        </a>
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto px-4 sm:px-6">
+                <!-- Welcome Card -->
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
+                    <div class="max-w-3xl">
+                        <h2 class="text-2xl font-bold mb-2">Manajemen Data Bahan Kimia</h2>
+                        <p class="text-blue-100 mb-4">Kelola dan monitor penggunaan bahan kimia untuk optimasi operasional pembangkit listrik.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="{{ route('admin.energiprimer.bahan-kimia.export-excel', request()->query()) }}" 
+                               class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                                <i class="fas fa-file-excel mr-2"></i> Excel
+                            </a>
+                            <a href="{{ route('admin.energiprimer.bahan-kimia.export-pdf', request()->query()) }}" 
+                               class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-white rounded-md hover:bg-red-50">
+                                <i class="fas fa-file-pdf mr-2"></i> PDF
+                            </a>
+                            <a href="{{ route('admin.energiprimer.bahan-kimia.create') }}" 
+                               class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
+                                <i class="fas fa-plus mr-2"></i> Tambah
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Filter Section -->
-                <div class="mt-4 bg-white rounded-lg shadow-sm flex justify-end">
-                    <div class="p-4">
-                        <form action="{{ route('admin.energiprimer.bahan-kimia') }}" method="GET" class="flex flex-wrap items-end gap-3">
-                            <!-- Unit Filter -->
-                            <div class="w-48">
-                                <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
-                                <select name="unit_id" class="w-full h-8 text-sm rounded-md px-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                    <option value="">Semua Unit</option>
-                                    @foreach($units as $unit)
-                                        <option value="{{ $unit->id }}" {{ request('unit_id') == $unit->id ? 'selected' : '' }}>
-                                            {{ $unit->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Jenis Bahan Kimia Filter -->
-                            <div class="w-36">
-                                <label class="block text-xs font-medium text-gray-700 mb-1">Jenis Bahan</label>
-                                <input type="text" name="jenis_bahan" 
-                                       class="w-full h-8 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                       value="{{ request('jenis_bahan') }}"
-                                       placeholder="Cari jenis...">
-                            </div>
-
-                            <!-- Date Range Filters -->
-                            <div class="w-36">
-                                <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                <input type="date" name="start_date" 
-                                       class="w-full h-8 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                       value="{{ request('start_date') }}">
-                            </div>
-
-                            <div class="w-36">
-                                <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Akhir</label>
-                                <input type="date" name="end_date" 
-                                       class="w-full h-8 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                       value="{{ request('end_date') }}">
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="flex gap-3">
-                                <button type="submit"
-                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md">
-                                    <i class="fas fa-search mr-2"></i> Cari
-                                </button>
-                                <a href="{{ route('admin.energiprimer.bahan-kimia') }}" 
-                                   class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md">
-                                    <i class="fas fa-undo mr-2"></i> Reset
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Active Filters -->
-                @if(request()->has('unit_id') || request()->has('jenis_bahan') || request()->has('start_date') || request()->has('end_date'))
-                    <div class="mt-2 text-xs text-gray-500 italic">
-                        Filter aktif:
-                        @if(request('unit_id'))
-                            <span class="mr-2">Unit: {{ $units->find(request('unit_id'))->name }}</span>
-                        @endif
-                        @if(request('jenis_bahan'))
-                            <span class="mr-2">Bahan: {{ request('jenis_bahan') }}</span>
-                        @endif
-                        @if(request('start_date'))
-                            <span>Periode: {{ \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') }}
-                            @if(request('end_date'))
-                                - {{ \Carbon\Carbon::parse(request('end_date'))->format('d/m/Y') }}
-                            @endif
-                            </span>
-                        @endif
-                    </div>
-                @endif
-
-                <!-- Table -->
-                <div class="mt-6 bg-white rounded-lg shadow-md">
+                <!-- Data Table -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <div class="p-6">
+                        <!-- Table Header with Filters -->
+                        <div class="mb-4">
+                            <div class="flex flex-wrap items-center justify-between gap-4">
+                                <div class="flex items-center gap-2">
+                                    <h2 class="text-lg font-semibold text-gray-900">Data Bahan Kimia</h2>
+                                    <button id="toggleFullTable" 
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
+                                            onclick="toggleFullTableView()">
+                                        <i class="fas fa-expand mr-1"></i> Full Table
+                                    </button>
+                                    @if(request()->has('unit_id') || request()->has('jenis_bahan') || request()->has('start_date') || request()->has('end_date'))
+                                        <div class="flex flex-wrap gap-2" id="active-filters">
+                                            @if(request('unit_id'))
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Unit: {{ $units->find(request('unit_id'))->name }}
+                                                    <button onclick="removeFilter('unit_id')" class="ml-1 text-blue-600 hover:text-blue-800">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </span>
+                                            @endif
+                                            @if(request('jenis_bahan'))
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Bahan: {{ request('jenis_bahan') }}
+                                                    <button onclick="removeFilter('jenis_bahan')" class="ml-1 text-blue-600 hover:text-blue-800">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </span>
+                                            @endif
+                                            @if(request('start_date'))
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Periode: {{ \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') }}
+                                                    @if(request('end_date'))
+                                                        - {{ \Carbon\Carbon::parse(request('end_date'))->format('d/m/Y') }}
+                                                    @endif
+                                                    <button onclick="removeFilter('start_date'); removeFilter('end_date')" class="ml-1 text-blue-600 hover:text-blue-800">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Horizontal Filters -->
+                            <div class="mt-2 border-b border-gray-200 pb-4" id="filters-section">
+                                <form action="{{ route('admin.energiprimer.bahan-kimia') }}" method="GET" 
+                                      class="flex flex-wrap items-end gap-4">
+                                    <div class="w-40">
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
+                                        <select name="unit_id" class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                            <option value="">Semua Unit</option>
+                                            @foreach($units as $unit)
+                                                <option value="{{ $unit->id }}" {{ request('unit_id') == $unit->id ? 'selected' : '' }}>
+                                                    {{ $unit->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="w-40">
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Jenis Bahan</label>
+                                        <input type="text" name="jenis_bahan" 
+                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                                               value="{{ request('jenis_bahan') }}"
+                                               placeholder="Cari jenis...">
+                                    </div>
+
+                                    <div class="w-40">
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
+                                        <input type="date" name="start_date" 
+                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                                               value="{{ request('start_date') }}">
+                                    </div>
+
+                                    <div class="w-40">
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Akhir</label>
+                                        <input type="date" name="end_date" 
+                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                                               value="{{ request('end_date') }}">
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <button type="submit"
+                                                class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                                            <i class="fas fa-search mr-2"></i> Cari
+                                        </button>
+                                        <a href="{{ route('admin.energiprimer.bahan-kimia') }}" 
+                                           class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                                            <i class="fas fa-undo mr-2"></i> Reset
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
@@ -236,7 +258,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </div>
 
@@ -246,7 +268,7 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Auto-submit form saat mengubah filter
+    // Auto-submit form when changing filters
     const filterForm = document.querySelector('form');
     const filterInputs = filterForm.querySelectorAll('select, input[type="date"], input[type="text"]');
 
@@ -256,5 +278,47 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function removeFilter(filterName) {
+    const form = document.querySelector('form');
+    const input = form.querySelector(`[name="${filterName}"]`);
+    if (input) {
+        input.value = '';
+        form.submit();
+    }
+}
+
+function toggleFullTableView() {
+    const button = document.getElementById('toggleFullTable');
+    const filtersSection = document.getElementById('filters-section');
+    const activeFilters = document.getElementById('active-filters');
+    const welcomeCard = document.querySelector('.welcome-card')?.parentElement;
+    const mainContent = document.querySelector('main');
+    
+    const isFullTable = button.classList.contains('bg-blue-600');
+    
+    if (isFullTable) {
+        // Restore normal view
+        button.classList.remove('bg-blue-600', 'text-white');
+        button.classList.add('bg-blue-50', 'text-blue-600');
+        button.innerHTML = '<i class="fas fa-expand mr-1"></i> Full Table';
+        
+        if (filtersSection) filtersSection.style.display = '';
+        if (activeFilters) activeFilters.style.display = '';
+        if (welcomeCard) welcomeCard.style.display = '';
+        if (mainContent) mainContent.classList.remove('pt-0');
+        
+    } else {
+        // Enable full table view
+        button.classList.remove('bg-blue-50', 'text-blue-600');
+        button.classList.add('bg-blue-600', 'text-white');
+        button.innerHTML = '<i class="fas fa-compress mr-1"></i> Normal View';
+        
+        if (filtersSection) filtersSection.style.display = 'none';
+        if (activeFilters) activeFilters.style.display = 'none';
+        if (welcomeCard) welcomeCard.style.display = 'none';
+        if (mainContent) mainContent.classList.add('pt-0');
+    }
+}
 </script>
 @endpush 

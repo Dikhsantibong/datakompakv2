@@ -137,8 +137,8 @@
                                             @for ($i = 0; $i < 7; $i++)
                                             <tr>
                                                 <td class="border px-4 py-2">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}:00</td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-full border-gray-300 rounded-md shadow-sm" name="uraian_kejadian[]"></td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-full border-gray-300 rounded-md shadow-sm" name="visual_parameter[]"></td>
+                                                <td class="border px-4 py-2"><textarea class="w-full border-gray-300 rounded-md shadow-sm resize-none" name="uraian_kejadian[]" rows="2"></textarea></td>
+                                                <td class="border px-4 py-2"><textarea class="w-full border-gray-300 rounded-md shadow-sm resize-none" name="visual_parameter[]" rows="2"></textarea></td>
                                                 <td class="border px-4 py-2 text-center">
                                                     <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="turun_beban[]" value="1">
                                                 </td>
@@ -207,14 +207,14 @@
                                             @for ($i = 1; $i <= 3; $i++)
                                             <tr>
                                                 <td class="border px-4 py-2">{{ $i }}</td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-full border-gray-300 rounded-md shadow-sm" name="nama_mesin[]"></td>
+                                                <td class="border px-4 py-2"><textarea class="w-full border-gray-300 rounded-md shadow-sm resize-none" name="nama_mesin[]" rows="2"></textarea></td>
                                                 <td class="border px-4 py-2 text-center">
                                                     <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="kondisi_rusak[]" value="1">
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
                                                     <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="kondisi_abnormal[]" value="1">
                                                 </td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-full border-gray-300 rounded-md shadow-sm" name="keterangan[]"></td>
+                                                <td class="border px-4 py-2"><textarea class="w-full border-gray-300 rounded-md shadow-sm resize-none" name="keterangan[]" rows="2"></textarea></td>
                                             </tr>
                                             @endfor
                                         </tbody>
@@ -241,7 +241,7 @@
                                                     <td class="border px-4 py-2 text-center">
                                                         <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="flm_tindakan[]" value="1">
                                                     </td>
-                                                    <td class="border px-4 py-2"><input type="text" class="w-full border-gray-300 rounded-md shadow-sm" name="usul_mo_rutin[]"></td>
+                                                    <td class="border px-4 py-2"><textarea class="w-full border-gray-300 rounded-md shadow-sm resize-none" name="usul_mo_rutin[]" rows="2"></textarea></td>
                                                     <td class="border px-4 py-2 text-center">
                                                         <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="mo_non_rutin[]" value="1">
                                                     </td>
@@ -338,7 +338,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="border px-4 py-2">4</td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-full border-gray-300 rounded-md shadow-sm" name="rekomendasi_tambahan"></td>
+                                                <td class="border px-4 py-2"><textarea class="w-full border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi_tambahan" rows="2"></textarea></td>
                                             </tr>
                                         </tbody>
                                     </table>

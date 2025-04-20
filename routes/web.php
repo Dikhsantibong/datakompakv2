@@ -1086,3 +1086,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::get('/admin/kalender/export/excel', [CalendarController::class, 'exportExcel'])->name('admin.kalender.export.excel');
 Route::get('/admin/kalender/export/pdf', [CalendarController::class, 'exportPDF'])->name('admin.kalender.export.pdf');
+
+// Operasi UPKD Routes
+Route::prefix('admin/operasi-upkd')->name('admin.operasi-upkd.')->middleware(['auth'])->group(function () {
+    Route::get('/rapat', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'index'])->name('rapat.index');
+    Route::get('/program-kerja', [App\Http\Controllers\Admin\OperasiUpkd\ProgramKerjaController::class, 'index'])->name('program-kerja.index');
+    Route::get('/kinerja', [App\Http\Controllers\Admin\OperasiUpkd\KinerjaController::class, 'index'])->name('kinerja.index');
+    Route::get('/pengadaan', [App\Http\Controllers\Admin\OperasiUpkd\PengadaanController::class, 'index'])->name('pengadaan.index');
+    Route::get('/maturity', [App\Http\Controllers\Admin\OperasiUpkd\MaturityController::class, 'index'])->name('maturity.index');
+    Route::get('/laporan', [App\Http\Controllers\Admin\OperasiUpkd\LaporanController::class, 'index'])->name('laporan.index');
+});

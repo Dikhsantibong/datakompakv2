@@ -174,32 +174,32 @@
                          x-transition:leave-end="transform opacity-0 scale-95"
                          @click.away="open = false" 
                          class="pl-4 mt-1 space-y-1">
-                        <a href="#" 
+                        <a href="{{ route('admin.operasi-upkd.rapat.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.operasi-upkd.rapat.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-handshake w-5 h-5"></i>
                             <span class="ml-3 text-sm">Rapat & Link Koordinasi RON</span>
                         </a>
-                        <a href="#" 
+                        <a href="{{ route('admin.operasi-upkd.program-kerja.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.operasi-upkd.program-kerja.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-project-diagram w-5 h-5"></i>
                             <span class="ml-3 text-sm">Program Kerja</span>
                         </a>
-                        <a href="#" 
+                        <a href="{{ route('admin.operasi-upkd.kinerja.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.operasi-upkd.kinerja.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-chart-bar w-5 h-5"></i>
                             <span class="ml-3 text-sm">Kinerja dan Transaksi Energi</span>
                         </a>
-                        <a href="#" 
+                        <a href="{{ route('admin.operasi-upkd.pengadaan.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.operasi-upkd.pengadaan.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-shopping-cart w-5 h-5"></i>
                             <span class="ml-3 text-sm">Pengadaan Barang dan Jasa</span>
                         </a>
-                        <a href="#" 
+                        <a href="{{ route('admin.operasi-upkd.maturity.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.operasi-upkd.maturity.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-chart-line w-5 h-5"></i>
                             <span class="ml-3 text-sm">Maturity Level</span>
                         </a>
-                        <a href="#" 
+                        <a href="{{ route('admin.operasi-upkd.laporan.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.operasi-upkd.laporan.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-file-alt w-5 h-5"></i>
                             <span class="ml-3 text-sm">Laporan Operasi UPKD</span>

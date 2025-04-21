@@ -57,16 +57,25 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             
-        <a href="{{ route('admin.meeting-shift.list') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
-            <i class="fas fa-list mr-2"></i>
-            Lihat Daftar Meeting
-        </a>
+       
             <div class="container mx-auto px-4 sm:px-6">
               
 
                 <!-- Main Content -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="flex space-x-4">
+                                <a href="{{ route('admin.meeting-shift.list') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
+                                    <i class="fas fa-list mr-2"></i>
+                                    Lihat Daftar Meeting
+                                </a>
+                                <button type="submit" form="meetingForm" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] transition-all duration-200">
+                                    <i class="fas fa-save mr-2"></i>
+                                    Simpan Semua Data
+                                </button>
+                            </div>
+                        </div>
                         <!-- Tab Navigation -->
                         <div x-data="{ activeTab: 'kondisi-mesin' }" class="space-y-6">
                             <nav class="flex space-x-6 border-b border-gray-200 overflow-x-auto" aria-label="Tabs">
@@ -136,14 +145,11 @@
                             </nav>
 
                             <!-- Tab Panels -->
-                            <div class="mt-6">
-                                <!-- Kondisi Mesin -->
-                                <div x-show="activeTab === 'kondisi-mesin'" 
-                               
-                                     class="space-y-6">
-                                   
-                                    <form action="{{ route('admin.meeting-shift.store') }}" method="POST" class="space-y-6">
-                                        @csrf
+                            <form id="meetingForm" action="{{ route('admin.meeting-shift.store') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="mt-6">
+                                    <!-- Kondisi Mesin -->
+                                    <div x-show="activeTab === 'kondisi-mesin'" class="space-y-6">
                                         <div class="overflow-x-auto">
                                             <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
                                                 <thead>
@@ -240,7 +246,7 @@
                                                         </td>
                                                         <td class="px-6 py-4 border-r border">
                                                             <textarea name="machine_status[{{ $index }}][keterangan]" 
-                                                                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
+                                                                      class="w-[300px] h-[100px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
                                                                       rows="3"
                                                                       placeholder="Masukkan keterangan..."></textarea>
                                                         </td>
@@ -249,22 +255,10 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        
-                                        <!-- Tombol Submit -->
-                                        <div class="flex justify-end mt-6 space-x-4">
-                                            
-                                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] transition-all duration-200">
-                                                <i class="fas fa-save mr-2"></i>
-                                                Simpan Perubahan
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                                    </div>
 
-                                <!-- Kondisi Alat Bantu -->
-                                <div x-show="activeTab === 'kondisi-alat-bantu'" class="space-y-4">
-                                    <form action="{{ route('admin.meeting-shift.store-alat-bantu') }}" method="POST">
-                                        @csrf
+                                    <!-- Kondisi Alat Bantu -->
+                                    <div x-show="activeTab === 'kondisi-alat-bantu'" class="space-y-4">
                                         <div class="overflow-x-auto">
                                             <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
                                                 <thead>
@@ -326,7 +320,7 @@
                                                         </td>
                                                         <td class="px-6 py-4 border-r border">
                                                             <textarea name="alat_bantu[{{ $index }}][keterangan]" 
-                                                                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
+                                                                      class="w-[300px] h-[100px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
                                                                       rows="3"
                                                                       placeholder="Masukkan keterangan..."></textarea>
                                                         </td>
@@ -335,20 +329,10 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        
-                                        <!-- Tombol Submit -->
-                                        <div class="flex justify-end mt-4">
-                                            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                                <i class="fas fa-save mr-2"></i> Simpan
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                                    </div>
 
-                                <!-- Kondisi Resource -->
-                                <div x-show="activeTab === 'kondisi-resource'" class="space-y-4">
-                                    <form action="{{ route('admin.meeting-shift.store-resource') }}" method="POST">
-                                        @csrf
+                                    <!-- Kondisi Resource -->
+                                    <div x-show="activeTab === 'kondisi-resource'" class="space-y-4">
                                         <div class="overflow-x-auto">
                                             <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
                                                 <thead>
@@ -427,7 +411,7 @@
                                                             </td>
                                                             <td class="px-6 py-4 border-r border">
                                                                 <textarea name="resources[{{ $index }}][keterangan]" 
-                                                                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
+                                                                          class="w-[300px] h-[100px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
                                                                           rows="3"
                                                                           placeholder="Masukkan keterangan..."></textarea>
                                                             </td>
@@ -439,20 +423,10 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        
-                                        <!-- Tombol Submit -->
-                                        <div class="flex justify-end mt-4">
-                                            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                                <i class="fas fa-save mr-2"></i> Simpan
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                                    </div>
 
-                                <!-- Kondisi K3L -->
-                                <div x-show="activeTab === 'kondisi-k3l'" class="space-y-4">
-                                    <form action="{{ route('admin.meeting-shift.store-k3l') }}" method="POST" enctype="multipart/form-data">
-                                        @csrf
+                                    <!-- Kondisi K3L -->
+                                    <div x-show="activeTab === 'kondisi-k3l'" class="space-y-4">
                                         <div class="overflow-x-auto">
                                             <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
                                                 <thead>
@@ -479,10 +453,10 @@
                                                             <input type="hidden" name="k3l[0][type]" value="unsafe_action">
                                                         </td>
                                                         <td class="border border-gray-300 px-4 py-2">
-                                                            <textarea name="k3l[0][uraian]" rows="3" class="w-full p-2 border rounded" placeholder="Masukkan uraian unsafe action..."></textarea>
+                                                            <textarea name="k3l[0][uraian]" rows="3" class="w-[300px] h-[100px] p-2 border rounded" placeholder="Masukkan uraian unsafe action..."></textarea>
                                                         </td>
                                                         <td class="border border-gray-300 px-4 py-2">
-                                                            <textarea name="k3l[0][saran]" rows="3" class="w-full p-2 border rounded" placeholder="Masukkan saran dan tindak lanjut..."></textarea>
+                                                            <textarea name="k3l[0][saran]" rows="3" class="w-[300px] h-[100px] p-2 border rounded" placeholder="Masukkan saran dan tindak lanjut..."></textarea>
                                                         </td>
                                                         <td class="border border-gray-300 px-4 py-2">
                                                             <div class="flex flex-col space-y-2">
@@ -498,10 +472,10 @@
                                                             <input type="hidden" name="k3l[1][type]" value="unsafe_condition">
                                                         </td>
                                                         <td class="border border-gray-300 px-4 py-2">
-                                                            <textarea name="k3l[1][uraian]" rows="3" class="w-full p-2 border rounded" placeholder="Masukkan uraian unsafe condition..."></textarea>
+                                                            <textarea name="k3l[1][uraian]" rows="3" class="w-[300px] h-[100px] p-2 border rounded" placeholder="Masukkan uraian unsafe condition..."></textarea>
                                                         </td>
                                                         <td class="border border-gray-300 px-4 py-2">
-                                                            <textarea name="k3l[1][saran]" rows="3" class="w-full p-2 border rounded" placeholder="Masukkan saran dan tindak lanjut..."></textarea>
+                                                            <textarea name="k3l[1][saran]" rows="3" class="w-[300px] h-[100px] p-2 border rounded" placeholder="Masukkan saran dan tindak lanjut..."></textarea>
                                                         </td>
                                                         <td class="border border-gray-300 px-4 py-2">
                                                             <div class="flex flex-col space-y-2">
@@ -513,20 +487,10 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        
-                                        <!-- Tombol Submit -->
-                                        <div class="flex justify-end mt-4">
-                                            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                                <i class="fas fa-save mr-2"></i> Simpan
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                                    </div>
 
-                                <!-- Catatan Kondisi Sistem -->
-                                <div x-show="activeTab === 'catatan-sistem'" class="space-y-4">
-                                    <form action="{{ route('admin.meeting-shift.store-sistem') }}" method="POST">
-                                        @csrf
+                                    <!-- Catatan Kondisi Sistem -->
+                                    <div x-show="activeTab === 'catatan-sistem'" class="space-y-4">
                                         <div class="bg-white p-6 rounded-lg shadow-sm">
                                             <label for="catatan_sistem" class="block text-sm font-medium text-gray-700 mb-2">
                                                 Catatan Kondisi Sistem
@@ -535,24 +499,14 @@
                                                 id="catatan_sistem"
                                                 name="catatan_sistem" 
                                                 rows="10" 
-                                                class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                class="w-[300px] h-[100px] p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                                                 placeholder="Masukkan catatan kondisi sistem..."
                                             ></textarea>
-                                            
-                                            <!-- Tombol Submit -->
-                                            <div class="flex justify-end mt-4">
-                                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                                    <i class="fas fa-save mr-2"></i> Simpan
-                                                </button>
-                                            </div>
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
 
-                                <!-- Catatan Umum -->
-                                <div x-show="activeTab === 'catatan-validasi'" class="space-y-4">
-                                    <form action="{{ route('admin.meeting-shift.store-catatan-umum') }}" method="POST">
-                                        @csrf
+                                    <!-- Catatan Umum -->
+                                    <div x-show="activeTab === 'catatan-validasi'" class="space-y-4">
                                         <div class="bg-white p-6 rounded-lg shadow-sm">
                                             <label for="catatan_umum" class="block text-sm font-medium text-gray-700 mb-2">
                                                 Catatan Umum
@@ -561,24 +515,14 @@
                                                 id="catatan_umum"
                                                 name="catatan_umum" 
                                                 rows="10" 
-                                                class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                class="w-[300px] h-[100px] p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                                                 placeholder="Masukkan catatan umum..."
                                             ></textarea>
-                                            
-                                            <!-- Tombol Submit -->
-                                            <div class="flex justify-end mt-4">
-                                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                                    <i class="fas fa-save mr-2"></i> Simpan
-                                                </button>
-                                            </div>
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
 
-                                <!-- Resume Rapat Tab -->
-                                <div x-show="activeTab === 'resume-rapat'" class="space-y-4">
-                                    <form action="{{ route('admin.meeting-shift.store-resume') }}" method="POST">
-                                        @csrf
+                                    <!-- Resume Rapat Tab -->
+                                    <div x-show="activeTab === 'resume-rapat'" class="space-y-4">
                                         <div class="bg-white p-6 rounded-lg shadow-sm">
                                             <label for="resume_rapat" class="block text-sm font-medium text-gray-700 mb-2">
                                                 Resume Rapat
@@ -587,25 +531,14 @@
                                                 id="resume_rapat"
                                                 name="resume_rapat" 
                                                 rows="10" 
-                                                class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                class="w-[300px] h-[100px] p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                                                 placeholder="Masukkan resume rapat..."
                                             ></textarea>
-                                            
-                                            <!-- Tombol Submit -->
-                                            <div class="flex justify-end mt-4">
-                                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] transition-all duration-200">
-                                                    <i class="fas fa-save mr-2"></i>
-                                                    Simpan Resume
-                                                </button>
-                                            </div>
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
 
-                                <!-- Absensi Tab -->
-                                <div x-show="activeTab === 'absensi'" class="space-y-4">
-                                    <form action="{{ route('admin.meeting-shift.store-absensi') }}" method="POST">
-                                        @csrf
+                                    <!-- Absensi Tab -->
+                                    <div x-show="activeTab === 'absensi'" class="space-y-4">
                                         <!-- Shift Selection Header -->
                                         <div class="mb-4 bg-white p-4 rounded-lg shadow-sm">
                                             <h3 class="text-lg font-medium text-gray-900 mb-2">Pilih Shift Saat Ini</h3>
@@ -675,7 +608,7 @@
                                                         <td class="px-6 py-4 border-r">
                                                             <input type="text" 
                                                                 name="absensi[{{ $i }}][nama]" 
-                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
+                                                                class="w-[300px] h-[100px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm" 
                                                                 placeholder="Masukkan nama operator..."
                                                                 required>
                                                         </td>
@@ -706,7 +639,7 @@
                                                             <textarea 
                                                                 name="absensi[{{ $i }}][keterangan]" 
                                                                 rows="1"
-                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm resize-none" 
+                                                                class="w-[300px] h-[100px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm resize-none" 
                                                                 placeholder="Masukkan keterangan jika diperlukan..."></textarea>
                                                         </td>
                                                     </tr>
@@ -714,25 +647,9 @@
                                                 </tbody>
                                             </table>
                                         </div>
-
-                                        <div class="mt-4 flex justify-between">
-                                            <!-- Tombol untuk menambah baris -->
-                                            <button type="button" 
-                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
-                                                <i class="fas fa-plus mr-2"></i>
-                                                Tambah Operator
-                                            </button>
-
-                                            <!-- Tombol Submit -->
-                                            <button type="submit" 
-                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] transition-all duration-200">
-                                                <i class="fas fa-save mr-2"></i>
-                                                Simpan Absensi
-                                            </button>
-                                        </div>
-                                    </form>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>

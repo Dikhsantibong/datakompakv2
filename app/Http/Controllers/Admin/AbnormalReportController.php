@@ -17,4 +17,14 @@ class AbnormalReportController extends Controller
         // TODO: Implement store logic
         return redirect()->back()->with('success', 'Data berhasil disimpan');
     }
+
+    public function list()
+    {
+        return view('admin.abnormal-report.list');
+    }
+
+    public function show($id)
+    {
+        return view('admin.abnormal-report.show');
+    }
 } 

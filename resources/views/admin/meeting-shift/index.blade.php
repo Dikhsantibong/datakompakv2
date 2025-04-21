@@ -53,8 +53,14 @@
             <x-admin-breadcrumb :breadcrumbs="[['name' => 'Meeting dan Mutasi Shift Operator', 'url' => null]]" />
         </div>
 
+
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            
+        <a href="{{ route('admin.meeting-shift.list') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
+            <i class="fas fa-list mr-2"></i>
+            Lihat Daftar Meeting
+        </a>
             <div class="container mx-auto px-4 sm:px-6">
               
 
@@ -245,7 +251,8 @@
                                         </div>
                                         
                                         <!-- Tombol Submit -->
-                                        <div class="flex justify-end mt-6">
+                                        <div class="flex justify-end mt-6 space-x-4">
+                                            
                                             <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] transition-all duration-200">
                                                 <i class="fas fa-save mr-2"></i>
                                                 Simpan Perubahan

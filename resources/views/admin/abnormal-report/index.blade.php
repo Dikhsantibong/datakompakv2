@@ -55,13 +55,21 @@
             <x-admin-breadcrumb :breadcrumbs="[['name' => 'Laporan Abnormal/Gangguan', 'url' => null]]" />
         </div>
 
+        
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-4 sm:px-6">
-              
                 <!-- Main Content -->
                 <div class="bg-white rounded-lg shadow-sm">
                     <div class="p-6">
+                        <!-- Action Buttons -->
+                        <div class="mb-6 flex justify-end">
+                            <a href="{{ route('admin.abnormal-report.list') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
+                                <i class="fas fa-list mr-2"></i>
+                                Lihat Daftar Laporan
+                            </a>
+                        </div>
+                        
                         <!-- Tab Navigation -->
                         <div class="mb-6">
                             <div class="border-b border-gray-200">
@@ -189,14 +197,14 @@
                                             @for ($i = 1; $i <= 3; $i++)
                                             <tr>
                                                 <td class="border px-4 py-2">{{ $i }}</td>
-                                                <td class="border px-4 py-2"><textarea class="w-[300px] border-gray-300 rounded-md shadow-sm resize-none" name="nama_mesin[]" rows="2"></textarea></td>
+                                                <td class="border px-4 py-2"><textarea class="w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm resize-none" name="nama_mesin[]" rows="2"></textarea></td>
                                                 <td class="border px-4 py-2 text-center">
                                                     <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="kondisi_rusak[]" value="1">
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
                                                     <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="kondisi_abnormal[]" value="1">
                                                 </td>
-                                                <td class="border px-4 py-2"><textarea class="w-[300px] border-gray-300 rounded-md shadow-sm resize-none" name="keterangan[]" rows="2"></textarea></td>
+                                                <td class="border px-4 py-2"><textarea class="w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm resize-none" name="keterangan[]" rows="2"></textarea></td>
                                             </tr>
                                             @endfor
                                         </tbody>
@@ -223,7 +231,7 @@
                                                     <td class="border px-4 py-2 text-center">
                                                         <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="flm_tindakan[]" value="1">
                                                     </td>
-                                                    <td class="border px-4 py-2"><textarea class="w-[300px] border-gray-300 rounded-md shadow-sm resize-none" name="usul_mo_rutin[]" rows="2"></textarea></td>
+                                                    <td class="border px-4 py-2"><textarea class="w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm resize-none" name="usul_mo_rutin[]" rows="2"></textarea></td>
                                                     <td class="border px-4 py-2 text-center">
                                                         <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="mo_non_rutin[]" value="1">
                                                     </td>
@@ -320,7 +328,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="border px-4 py-2">4</td>
-                                                <td class="border px-4 py-2"><textarea class="w-[300px] border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi_tambahan" rows="2"></textarea></td>
+                                                <td class="border px-4 py-2"><textarea class="w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi_tambahan" rows="2"></textarea></td>
                                             </tr>
                                         </tbody>
                                     </table>

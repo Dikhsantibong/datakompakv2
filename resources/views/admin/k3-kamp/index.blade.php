@@ -73,7 +73,7 @@
                                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border w-[100px]">Normal</th>
                                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border w-[100px]">Abnormal</th>
                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border">Keterangan</th>
-                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border w-[200px]">Eviden</th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border w-[200px]">Eviden</th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
@@ -114,7 +114,7 @@
                                             </td>
                                             <td class="px-6 py-4 border-r border">
                                                 <textarea name="keterangan_{{ $index }}" rows="2" 
-                                                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                                                          class="w-[300px] h-[100px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
                                                           placeholder="Masukkan keterangan..."></textarea>
                                             </td>
                                             <td class="px-6 py-4 border-r border">

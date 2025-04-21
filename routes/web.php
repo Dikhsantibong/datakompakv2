@@ -1082,6 +1082,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Abnormal Report Routes
     Route::get('/abnormal-report', [AbnormalReportController::class, 'index'])->name('admin.abnormal-report.index');
     Route::post('/abnormal-report', [AbnormalReportController::class, 'store'])->name('admin.abnormal-report.store');
+    
 });
 
 Route::get('/admin/kalender/export/excel', [CalendarController::class, 'exportExcel'])->name('admin.kalender.export.excel');
@@ -1095,4 +1096,11 @@ Route::prefix('admin/operasi-upkd')->name('admin.operasi-upkd.')->middleware(['a
     Route::get('/pengadaan', [App\Http\Controllers\Admin\OperasiUpkd\PengadaanController::class, 'index'])->name('pengadaan.index');
     Route::get('/maturity', [App\Http\Controllers\Admin\OperasiUpkd\MaturityController::class, 'index'])->name('maturity.index');
     Route::get('/laporan', [App\Http\Controllers\Admin\OperasiUpkd\LaporanController::class, 'index'])->name('laporan.index');
+});
+
+Route::prefix('abnormal-report')->name('admin.abnormal-report.')->group(function () {
+    Route::get('/', [AbnormalReportController::class, 'index'])->name('index');
+    Route::get('/list', [AbnormalReportController::class, 'list'])->name('list');
+    Route::get('/show/{id}', [AbnormalReportController::class, 'show'])->name('show');
+    Route::post('/store', [AbnormalReportController::class, 'store'])->name('store');
 });

@@ -30,23 +30,12 @@
                     <h1 class="text-xl font-semibold text-gray-900">5S5R</h1>
                 </div>
 
-                <div class="relative">
-                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
-                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
-                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
-                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
-                    </button>
-                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
-                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
-                        </form>
-                    </div>
+                <div class="flex items-center space-x-4">
+                    <a href="{{ route('admin.5s5r.list') }}" 
+                       class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
+                        <i class="fas fa-list mr-2"></i>
+                        Lihat Daftar
+                    </a>
                 </div>
             </div>
         </header>
@@ -210,10 +199,14 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <div class="mt-6 flex justify-end">
+                        <div class="mt-6 flex justify-end space-x-3">
                             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                                 Simpan
                             </button>
+                            <a href="{{ route('admin.5s5r.list') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                                <i class="fas fa-list mr-2"></i>
+                                Lihat Daftar
+                            </a>
                         </div>
                     </div>
                 </div>

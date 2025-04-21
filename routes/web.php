@@ -93,7 +93,6 @@ Route::prefix('attendance')->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    
     Route::get('/dashboard/refresh', [DashboardController::class, 'refresh'])->name('dashboard.refresh');
 
     // Add monitor-kinerja route
@@ -219,7 +218,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/create', [MeetingShiftController::class, 'create'])->name('meeting-shift.create');
     });
 
-   
+    // Add 5S5R routes
+    Route::prefix('5s5r')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\FiveS5RController::class, 'index'])->name('5s5r.index');
+        Route::get('/list', [App\Http\Controllers\Admin\FiveS5RController::class, 'list'])->name('5s5r.list');
+        Route::get('/{id}', [App\Http\Controllers\Admin\FiveS5RController::class, 'show'])->name('5s5r.show');
+        Route::post('/', [App\Http\Controllers\Admin\FiveS5RController::class, 'store'])->name('5s5r.store');
+    });
 });
 
 

@@ -58,25 +58,7 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-4 sm:px-6">
-                <!-- Welcome Card -->
-                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
-                    <div class="max-w-3xl">
-                        <h2 class="text-2xl font-bold mb-2">Laporan Abnormal/Gangguan</h2>
-                        <p class="text-blue-100 mb-4">Kelola dan monitor laporan abnormal dan gangguan untuk memastikan penanganan yang tepat dan cepat.</p>
-                        <div class="flex flex-wrap gap-3">
-                            <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
-                                <i class="fas fa-file-excel mr-2"></i> Export Excel
-                            </button>
-                            <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-white rounded-md hover:bg-red-50">
-                                <i class="fas fa-file-pdf mr-2"></i> Export PDF
-                            </button>
-                            <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
-                                <i class="fas fa-print mr-2"></i> Print
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
+              
                 <!-- Main Content -->
                 <div class="bg-white rounded-lg shadow-sm">
                     <div class="p-6">

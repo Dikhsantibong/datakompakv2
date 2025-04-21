@@ -56,25 +56,7 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-4 sm:px-6">
-                <!-- Welcome Card -->
-                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
-                    <div class="max-w-3xl">
-                        <h2 class="text-2xl font-bold mb-2">Input Data K3 KAMP dan Lingkungan</h2>
-                        <p class="text-blue-100 mb-4">Kelola dan monitor data K3 KAMP dan lingkungan untuk memastikan keselamatan dan keamanan operasional.</p>
-                        <div class="flex flex-wrap gap-3">
-                            <a href="{{ route('admin.k3-kamp.view') }}" 
-                               class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-600 bg-white rounded-md hover:bg-gray-50">
-                                <i class="fas fa-eye mr-2"></i> Lihat Data
-                            </a>
-                            <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
-                                <i class="fas fa-sync-alt mr-2"></i> Refresh
-                            </button>
-                            <button type="submit" form="k3-form" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
-                                <i class="fas fa-save mr-2"></i> Simpan
-                            </button>
-                        </div>
-                    </div>
-                </div>
+              
 
                 <!-- Form Content -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">

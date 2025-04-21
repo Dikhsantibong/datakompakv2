@@ -30,22 +30,30 @@
                     <h1 class="text-xl font-semibold text-gray-900">Form Pemeriksaan FLM</h1>
                 </div>
 
-                <div class="relative">
-                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
-                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
-                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
-                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
-                    </button>
-                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
-                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
-                        </form>
+                <!-- Add View List Button -->
+                <div class="flex items-center space-x-4">
+                    <a href="{{ route('admin.flm.list') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <i class="fas fa-list mr-2"></i>
+                        Lihat Data
+                    </a>
+
+                    <div class="relative">
+                        <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                            <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
+                            <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                            <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                        </button>
+                        <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                            <a href="{{ route('logout') }}" 
+                               class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                @csrf
+                                <input type="hidden" name="redirect" value="{{ route('homepage') }}">
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,7 +70,14 @@
                 <!-- Main Content -->
                 <div class="bg-white rounded-lg shadow-sm">
                     <div class="p-6">
-                        <form action="#" method="POST" class="space-y-6">
+                        <!-- Add success message display -->
+                        @if(session('success'))
+                            <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        <form action="{{ route('admin.flm.store') }}" method="POST" class="space-y-6">
                             @csrf
                             <div class="overflow-x-auto">
                                 <table class="min-w-full border border-gray-300">

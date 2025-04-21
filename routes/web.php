@@ -1034,10 +1034,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // ... existing routes ...
     
     // FLM Routes
-    Route::get('/flm', function () {
-        return view('admin.flm.index');
-    })->name('flm.index');
+    Route::get('/flm', [FlmController::class, 'index'])->name('flm.index');
     Route::post('/flm', [FlmController::class, 'store'])->name('flm.store');
+    Route::get('/flm/list', [FlmController::class, 'list'])->name('flm.list');
+    Route::get('/flm/{id}', [FlmController::class, 'show'])->name('flm.show');
 });
 
 Route::get('/admin/data-engine/{date}/edit', [DataEngineController::class, 'edit'])->name('admin.data-engine.edit');

@@ -123,19 +123,20 @@
                                     <tbody class="bg-white divide-y divide-gray-200" id="transaksi-container">
                                         <tr class="transaksi-row">
                                             <td class="px-6 py-4 border-r">
-                                                <input type="text" name="transaksi[0][keterangan]" 
-                                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
-                                                       placeholder="Masukkan keterangan transaksi">
+                                                <textarea name="transaksi[0][keterangan]" 
+                                                       class="w-[300px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
+                                                       placeholder="Masukkan keterangan transaksi"
+                                                       rows="3"></textarea>
                                             </td>
                                             <td class="px-6 py-4 border-r">
-                                                <input type="number" name="transaksi[0][debit]" 
-                                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
-                                                       placeholder="0" min="0">
+                                                <textarea name="transaksi[0][debit]" 
+                                                       class="w-[300px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
+                                                       placeholder="0" rows="3"></textarea>
                                             </td>
                                             <td class="px-6 py-4 border-r">
-                                                <input type="number" name="transaksi[0][kredit]" 
-                                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
-                                                       placeholder="0" min="0">
+                                                <textarea name="transaksi[0][kredit]" 
+                                                       class="w-[300px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
+                                                       placeholder="0" rows="3"></textarea>
                                             </td>
                                             <td class="px-6 py-4 text-right font-medium">
                                                 0

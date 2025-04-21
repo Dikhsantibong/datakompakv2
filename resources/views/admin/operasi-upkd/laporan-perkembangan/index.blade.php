@@ -126,29 +126,33 @@
                                     <tbody class="bg-white divide-y divide-gray-200" id="kegiatan-container">
                                         <tr class="kegiatan-row">
                                             <td class="px-6 py-4 border-r">
-                                                <input type="text" name="kegiatan[0][nama]" 
-                                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
-                                                       placeholder="Nama kegiatan">
+                                                <textarea name="kegiatan[0][nama]" 
+                                                       class="w-[300px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
+                                                       placeholder="Nama kegiatan"
+                                                       rows="3"></textarea>
                                             </td>
                                             <td class="px-6 py-4 border-r">
-                                                <input type="text" name="kegiatan[0][target]" 
-                                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
-                                                       placeholder="Target">
+                                                <textarea name="kegiatan[0][target]" 
+                                                       class="w-[300px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
+                                                       placeholder="Target"
+                                                       rows="3"></textarea>
                                             </td>
                                             <td class="px-6 py-4 border-r">
-                                                <input type="text" name="kegiatan[0][realisasi]" 
-                                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
-                                                       placeholder="Realisasi">
+                                                <textarea name="kegiatan[0][realisasi]" 
+                                                       class="w-[300px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
+                                                       placeholder="Realisasi"
+                                                       rows="3"></textarea>
                                             </td>
                                             <td class="px-6 py-4 border-r">
-                                                <input type="number" name="kegiatan[0][progress]" 
-                                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
-                                                       placeholder="0" min="0" max="100">
+                                                <textarea name="kegiatan[0][progress]" 
+                                                       class="w-[300px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
+                                                       placeholder="0"
+                                                       rows="3"></textarea>
                                             </td>
                                             <td class="px-6 py-4">
                                                 <textarea name="kegiatan[0][keterangan]" 
-                                                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
-                                                          rows="1"
+                                                          class="w-[300px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9]"
+                                                          rows="3"
                                                           placeholder="Keterangan"></textarea>
                                             </td>
                                         </tr>

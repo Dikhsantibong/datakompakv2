@@ -60,6 +60,11 @@ class Machine extends Model
         return $this->hasMany(RencanaDayaMampu::class);
     }
 
+    public function logs()
+    {
+        return $this->hasMany(MachineLog::class);
+    }
+
     public function getConnectionName()
     {
         return session('unit');
@@ -260,5 +265,13 @@ class Machine extends Model
             ->where('tanggal', $date->format('Y-m-d'))
             ->first()
             ?->rencana;
+    }
+
+    public function getLatestLog($date)
+    {
+        return $this->logs()
+            ->where('date', $date)
+            ->latest('time')
+            ->first();
     }
 }

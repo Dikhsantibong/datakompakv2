@@ -136,16 +136,16 @@
                                         <tr class="flm-row">
                                             <td class="border px-4 py-2 text-center row-number">1</td>
                                             <td class="border px-4 py-2">
-                                                <input type="text" class="w-full p-1 border-gray-300 rounded" name="mesin[]" value="{{ old('mesin.0') }}">
+                                                <textarea type="text" class="w-[200px] h-[100px] p-1 border-gray-300 rounded" name="mesin[]" value="{{ old('mesin.0') }}"></textarea>
                                             </td>
                                             <td class="border px-4 py-2">
-                                                <input type="text" class="w-full p-1 border-gray-300 rounded" name="sistem[]" value="{{ old('sistem.0') }}">
+                                                <textarea type="text" class="w-[200px] h-[100px] p-1 border-gray-300 rounded" name="sistem[]" value="{{ old('sistem.0') }}"></textarea>
                                             </td>
                                             <td class="border px-4 py-2">
-                                                <input type="text" class="w-full p-1 border-gray-300 rounded" name="masalah[]" value="{{ old('masalah.0') }}">
+                                                <textarea type="text" class="w-[200px] h-[100px] p-1 border-gray-300 rounded" name="masalah[]" value="{{ old('masalah.0') }}"></textarea>
                                             </td>
                                             <td class="border px-4 py-2">
-                                                <input type="text" class="w-full p-1 border-gray-300 rounded" name="kondisi_awal[]" value="{{ old('kondisi_awal.0') }}">
+                                                <textarea type="text" class="w-[200px] h-[100px] p-1 border-gray-300 rounded" name="kondisi_awal[]" value="{{ old('kondisi_awal.0') }}"></textarea>
                                             </td>
                                             <td class="border px-4 py-2 text-center">
                                                 <input type="checkbox" class="form-checkbox" name="tindakan[0][]" value="bersihkan" {{ in_array('bersihkan', old('tindakan.0', [])) ? 'checked' : '' }}>
@@ -163,13 +163,13 @@
                                                 <input type="checkbox" class="form-checkbox" name="tindakan[0][]" value="lainnya" {{ in_array('lainnya', old('tindakan.0', [])) ? 'checked' : '' }}>
                                             </td>
                                             <td class="border px-4 py-2">
-                                                <input type="text" class="w-full p-1 border-gray-300 rounded" name="kondisi_akhir[]" value="{{ old('kondisi_akhir.0') }}">
+                                                <textarea type="text" class="w-[200px] h-[100px] p-1 border-gray-300 rounded" name="kondisi_akhir[]" value="{{ old('kondisi_akhir.0') }}"></textarea>
                                             </td>
                                             <td class="border px-4 py-2">
-                                                <input type="text" class="w-full p-1 border-gray-300 rounded" name="catatan[]" value="{{ old('catatan.0') }}">
+                                                <textarea type="text" class="w-[200px] h-[100px] p-1 border-gray-300 rounded" name="catatan[]" value="{{ old('catatan.0') }}"></textarea>
                                             </td>
-                                            <td class="border px-4 py-2">
-                                                <div class="space-y-2">
+                                            <td class="border px-4 py-2 w-[300px]">
+                                                <div class="space-y-2 w-[100px]">
                                                     <div>
                                                         <label class="block text-xs text-gray-600">Sebelum:</label>
                                                         <input type="file" name="eviden_sebelum[]" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">

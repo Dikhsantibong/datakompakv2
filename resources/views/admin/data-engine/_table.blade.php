@@ -36,13 +36,16 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse($powerPlant->machines as $index => $machine)
+                                @php
+                                    $latestLog = $machine->getLatestLog($date);
+                                @endphp
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">{{ $index + 1 }}</td>
                                     <td class="px-4 py-3 border border-gray-200">
                                         <div class="text-sm font-medium text-gray-900">{{ $machine->name }}</div>
                                     </td>
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">
-                                        {{ now()->format('H:i') }}
+                                        {{ $latestLog ? \Carbon\Carbon::parse($latestLog->time)->format('H:i') : '-' }}
                                     </td>
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
                                         {{ $machine->kw ?? '-' }}

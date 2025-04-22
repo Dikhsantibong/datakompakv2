@@ -139,12 +139,12 @@
                                                 name="waktu[]">
                                         </td>
                                         <td class="border px-4 py-2">
-                                            <textarea class="w-full h-20 border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                                            <textarea class="p-2 w-[200px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
                                                 name="uraian_kejadian[]" 
                                                 placeholder="Masukkan uraian kejadian..."></textarea>
                                         </td>
                                         <td class="border px-4 py-2">
-                                            <textarea class="w-full h-20 border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                                            <textarea class="p-2 w-[200px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
                                                 name="visual_parameter[]" 
                                                 placeholder="Masukkan parameter visual..."></textarea>
                                                 </td>
@@ -213,7 +213,7 @@
                                     <tr>
                                         <td class="border px-4 py-2">1</td>
                                         <td class="border px-4 py-2">
-                                            <textarea class="w-full h-20 border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                                            <textarea class="p-2 w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
                                                 name="nama_mesin[]" 
                                                 placeholder="Masukkan nama mesin/peralatan/material..."></textarea>
                                         </td>
@@ -224,7 +224,7 @@
                                             <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="kondisi_abnormal[]" value="1">
                                         </td>
                                         <td class="border px-4 py-2">
-                                            <textarea class="w-full h-20 border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                                            <textarea class="p-2 w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
                                                 name="keterangan[]" 
                                                 placeholder="Masukkan keterangan..."></textarea>
                                                 </td>
@@ -267,7 +267,7 @@
                                             <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="flm_tindakan[]" value="1">
                                         </td>
                                         <td class="border px-4 py-2">
-                                            <textarea class="w-full h-20 border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                                            <textarea class="p-2 w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
                                                 name="usul_mo_rutin[]" 
                                                 placeholder="Masukkan usul MO rutin..."></textarea>
                                         </td>
@@ -310,7 +310,7 @@
                                             <tr>
                                                 <td class="border px-4 py-2">1</td>
                                                 <td class="border px-4 py-2">
-                                            <textarea class="w-full h-20 border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                                            <textarea class="p-2 w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
                                                 name="rekomendasi[]" 
                                                 placeholder="Masukkan rekomendasi..."></textarea>
                                                 </td>
@@ -469,12 +469,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     name="waktu[]">
             </td>
             <td class="border px-4 py-2">
-                <textarea class="w-full h-20 border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                <textarea class="p-2 w-[200px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
                     name="uraian_kejadian[]" 
                     placeholder="Masukkan uraian kejadian..."></textarea>
             </td>
             <td class="border px-4 py-2">
-                <textarea class="w-full h-20 border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                <textarea class="p-2 w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
                     name="visual_parameter[]" 
                     placeholder="Masukkan parameter visual..."></textarea>
             </td>
@@ -518,7 +518,7 @@ document.addEventListener('DOMContentLoaded', function() {
         newRow.innerHTML = `
             <td class="border px-4 py-2">${rowCount}</td>
             <td class="border px-4 py-2">
-                <textarea class="w-full h-20 border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                <textarea class="p-2 w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
                     name="nama_mesin[]" 
                     placeholder="Masukkan nama mesin/peralatan/material..."></textarea>
             </td>
@@ -529,7 +529,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="kondisi_abnormal[]" value="1">
             </td>
             <td class="border px-4 py-2">
-                <textarea class="w-full h-20 border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                <textarea class="p-2 w-full h-20 border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
                     name="keterangan[]" 
                     placeholder="Masukkan keterangan..."></textarea>
             </td>

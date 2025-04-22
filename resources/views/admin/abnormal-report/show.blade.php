@@ -25,6 +25,25 @@
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-4 sm:px-6 py-8">
                 <div class="space-y-6">
+                    <!-- Report Info -->
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">Informasi Laporan</h2>
+                        </div>
+                        <div class="p-6">
+                            <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500">Dibuat Oleh</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $report->creator->name ?? 'N/A' }}</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500">Tanggal Dibuat</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $report->created_at->format('d/m/Y H:i') }}</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+
                     <!-- Kronologi Kejadian -->
                     <div class="bg-white rounded-lg shadow overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200">
@@ -35,25 +54,71 @@
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead>
                                         <tr>
-                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Pukul (WIB)</th>
-                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Uraian Kejadian</th>
-                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Visual Parameter</th>
-                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Status</th>
+                                            <th rowspan="2" class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Pukul (WIB)</th>
+                                            <th rowspan="2" class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Uraian kejadian</th>
+                                            <th colspan="4" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Pengamatan</th>
+                                            <th colspan="4" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Koordinasi</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Visual parameter terkait</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Turun beban</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Off CBG</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Stop</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">TL Ophar</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">TL OP</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">TL HAR</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">MUL</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @for($i = 0; $i < 3; $i++)
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @forelse($report->chronologies as $chronology)
                                         <tr>
-                                            <td class="border px-4 py-2">{{ str_pad($i * 2, 2, '0', STR_PAD_LEFT) }}:00</td>
-                                            <td class="border px-4 py-2">Uraian kejadian {{ $i + 1 }}</td>
-                                            <td class="border px-4 py-2">Parameter {{ $i + 1 }}</td>
+                                            <td class="border px-4 py-2">{{ $chronology->waktu->format('H:i') }}</td>
+                                            <td class="border px-4 py-2">{{ $chronology->uraian_kejadian }}</td>
+                                            <td class="border px-4 py-2">{{ $chronology->visual_parameter }}</td>
                                             <td class="border px-4 py-2 text-center">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                                    Abnormal
-                                                </span>
+                                                @if($chronology->turun_beban)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($chronology->off_cbg)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($chronology->stop)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($chronology->tl_ophar)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($chronology->tl_op)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($chronology->tl_har)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($chronology->mul)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
                                             </td>
                                         </tr>
-                                        @endfor
+                                        @empty
+                                        <tr>
+                                            <td colspan="10" class="border px-4 py-2 text-center text-gray-500">
+                                                Tidak ada data kronologi
+                                            </td>
+                                        </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -72,23 +137,78 @@
                                         <tr>
                                             <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">No</th>
                                             <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Nama Mesin/Peralatan</th>
-                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Kondisi</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Rusak</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Abnormal</th>
                                             <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Keterangan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @for($i = 1; $i <= 3; $i++)
+                                        @forelse($report->affectedMachines as $index => $machine)
                                         <tr>
-                                            <td class="border px-4 py-2">{{ $i }}</td>
-                                            <td class="border px-4 py-2">Mesin {{ $i }}</td>
+                                            <td class="border px-4 py-2">{{ $index + 1 }}</td>
+                                            <td class="border px-4 py-2">{{ $machine->nama_mesin }}</td>
                                             <td class="border px-4 py-2 text-center">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $i % 2 == 0 ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                                    {{ $i % 2 == 0 ? 'Rusak' : 'Abnormal' }}
-                                                </span>
+                                                @if($machine->kondisi_rusak)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
                                             </td>
-                                            <td class="border px-4 py-2">Keterangan mesin {{ $i }}</td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($machine->kondisi_abnormal)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                            <td class="border px-4 py-2">{{ $machine->keterangan }}</td>
                                         </tr>
-                                        @endfor
+                                        @empty
+                                        <tr>
+                                            <td colspan="5" class="border px-4 py-2 text-center text-gray-500">
+                                                Tidak ada data mesin/peralatan
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tindak Lanjut -->
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">Tindak Lanjut</h2>
+                        </div>
+                        <div class="p-6">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead>
+                                        <tr>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">FLM</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Usul MO Rutin</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">MO Non Rutin</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($report->followUpActions as $action)
+                                        <tr>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($action->flm_tindakan)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                            <td class="border px-4 py-2">{{ $action->usul_mo_rutin }}</td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($action->mo_non_rutin)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="3" class="border px-4 py-2 text-center text-gray-500">
+                                                Tidak ada data tindak lanjut
+                                            </td>
+                                        </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -102,29 +222,87 @@
                         </div>
                         <div class="p-6">
                             <div class="space-y-4">
+                                @forelse($report->recommendations as $index => $recommendation)
                                 <div class="flex items-center">
-                                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-500 mr-3">1</span>
-                                    <span class="text-gray-700">Ganti material/peralatan terdampak</span>
+                                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-500 mr-3">
+                                        {{ $index + 1 }}
+                                    </span>
+                                    <span class="text-gray-700">{{ $recommendation->rekomendasi }}</span>
                                 </div>
-                                <div class="flex items-center">
-                                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-500 mr-3">2</span>
-                                    <span class="text-gray-700">Pemeriksaan kembali saat har rutin</span>
+                                @empty
+                                <div class="text-center text-gray-500">
+                                    Tidak ada rekomendasi
                                 </div>
-                                <div class="flex items-center">
-                                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-500 mr-3">3</span>
-                                    <span class="text-gray-700">Pemeliharaan dilaksanakan offline mesin</span>
-                                </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ADM -->
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">ADM</h2>
+                        </div>
+                        <div class="p-6">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead>
+                                        <tr>
+                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">No</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">FLM</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">PM</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">CM</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">PtW</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($report->admActions as $index => $adm)
+                                        <tr>
+                                            <td class="border px-4 py-2">{{ $index + 1 }}</td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($adm->flm)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($adm->pm)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($adm->cm)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($adm->ptw)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="5" class="border px-4 py-2 text-center text-gray-500">
+                                                Tidak ada data ADM
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="flex justify-end space-x-3">
-                        <a href="{{ route('admin.abnormal-report.list') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        <a href="{{ route('admin.abnormal-report.list') }}" 
+                           class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                             <i class="fas fa-arrow-left mr-2"></i>
                             Kembali
                         </a>
-                        <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#009BB9] hover:bg-[#009BB9]/80">
+                        <button type="button" 
+                                onclick="window.print()"
+                                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#009BB9] hover:bg-[#009BB9]/80">
                             <i class="fas fa-print mr-2"></i>
                             Cetak
                         </button>

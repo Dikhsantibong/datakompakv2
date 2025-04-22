@@ -1100,6 +1100,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/abnormal-report', [AbnormalReportController::class, 'index'])->name('admin.abnormal-report.index');
     Route::post('/abnormal-report', [AbnormalReportController::class, 'store'])->name('admin.abnormal-report.store');
     
+    Route::get('/abnormal-report/list', [AbnormalReportController::class, 'list'])->name('admin.abnormal-report.list');
+    Route::get('/abnormal-report/show/{id}', [AbnormalReportController::class, 'show'])->name('admin.abnormal-report.show');
+    Route::post('/abnormal-report/destroy/{id}', [AbnormalReportController::class, 'destroy'])->name('admin.abnormal-report.destroy');
 });
 
 Route::get('/admin/kalender/export/excel', [CalendarController::class, 'exportExcel'])->name('admin.kalender.export.excel');

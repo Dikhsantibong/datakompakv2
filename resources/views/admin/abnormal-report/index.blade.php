@@ -86,6 +86,9 @@
                                     <button class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="rekomendasi">
                                         Rekomendasi
                                     </button>
+                                    <button class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="adm">
+                                        ADM
+                                    </button>
                                 </nav>
                             </div>
                         </div>
@@ -104,7 +107,6 @@
                                                 <th colspan="4" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Pengamatan</th>
                                                 <th colspan="4" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Koordinasi</th>
                                                 <th colspan="2" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Tindak lanjut</th>
-                                                <th colspan="4" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Adm. SR</th>
                                             </tr>
                                             <tr>
                                                 <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Visual parameter terkait</th>
@@ -117,10 +119,6 @@
                                                 <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">MUL</th>
                                                 <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">FLM</th>
                                                 <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">MO rutin (PO-PS)</th>
-                                                <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">FLM</th>
-                                                <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">PM</th>
-                                                <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">EM</th>
-                                                <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">PHW</th>
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
@@ -155,18 +153,6 @@
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
                                                     <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="mo_rutin[]" value="1">
-                                                </td>
-                                                <td class="border px-4 py-2 text-center">
-                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="flm_sr[]" value="1">
-                                                </td>
-                                                <td class="border px-4 py-2 text-center">
-                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="pm[]" value="1">
-                                                </td>
-                                                <td class="border px-4 py-2 text-center">
-                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="em[]" value="1">
-                                                </td>
-                                                <td class="border px-4 py-2 text-center">
-                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="phw[]" value="1">
                                                 </td>
                                             </tr>
                                             @endfor
@@ -214,7 +200,7 @@
 
                             <!-- Tindak Lanjut Tindakan Table -->
                             <div id="tindakan" class="tab-content hidden">
-                                <div class="grid grid-cols-3 gap-6">
+                                <div class="grid grid-cols-1 gap-6">
                                     <!-- Tindak Lanjut Tindakan -->
                                     <div class="overflow-x-auto">
                                         <table class="min-w-full divide-y divide-gray-200">
@@ -241,95 +227,96 @@
                                         </table>
                                     </div>
 
-                                    <!-- Tindak Lanjut Koordinasi -->
-                                    <div class="overflow-x-auto">
-                                        <table class="min-w-full divide-y divide-gray-200">
-                                            <thead>
-                                                <tr>
-                                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">TL Ophar</th>
-                                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">TLOP</th>
-                                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">TL HAR</th>
-                                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">MUL</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="bg-white divide-y divide-gray-200">
-                                                @for ($i = 1; $i <= 3; $i++)
-                                                <tr>
-                                                    <td class="border px-4 py-2 text-center">
-                                                        <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="tl_ophar_koordinasi[]" value="1">
-                                                    </td>
-                                                    <td class="border px-4 py-2 text-center">
-                                                        <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="tlop_koordinasi[]" value="1">
-                                                    </td>
-                                                    <td class="border px-4 py-2 text-center">
-                                                        <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="tl_har_koordinasi[]" value="1">
-                                                    </td>
-                                                    <td class="border px-4 py-2 text-center">
-                                                        <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="mul_koordinasi[]" value="1">
-                                                    </td>
-                                                </tr>
-                                                @endfor
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <!-- Tindak Lanjut Adm -->
-                                    <div class="overflow-x-auto">
-                                        <table class="min-w-full divide-y divide-gray-200">
-                                            <thead>
-                                                <tr>
-                                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">FLM</th>
-                                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">PM</th>
-                                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">CM</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="bg-white divide-y divide-gray-200">
-                                                @for ($i = 1; $i <= 3; $i++)
-                                                <tr>
-                                                    <td class="border px-4 py-2 text-center">
-                                                        <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="flm_adm[]" value="1">
-                                                    </td>
-                                                    <td class="border px-4 py-2 text-center">
-                                                        <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="pm_adm[]" value="1">
-                                                    </td>
-                                                    <td class="border px-4 py-2 text-center">
-                                                        <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="cm_adm[]" value="1">
-                                                    </td>
-                                                </tr>
-                                                @endfor
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    
                                 </div>
                             </div>
 
                             <!-- Rekomendasi Table -->
                             <div id="rekomendasi" class="tab-content hidden">
                                 <div class="overflow-x-auto">
-                                    <table class="min-w-full divide-y divide-gray-200">
+                                    <table class="min-w-full divide-y divide-gray-200" id="rekomendasi-table">
                                         <thead>
                                             <tr>
                                                 <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">No</th>
                                                 <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Uraian</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
                                             <tr>
                                                 <td class="border px-4 py-2">1</td>
-                                                <td class="border px-4 py-2">ganti material/ peralatan terdampak</td>
+                                                <td class="border px-4 py-2">
+                                                    <textarea class="w-[300px] border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi[]" rows="2">ganti material/ peralatan terdampak</textarea>
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <button type="button" class="delete-row text-red-600 hover:text-red-800">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="border px-4 py-2">2</td>
-                                                <td class="border px-4 py-2">pemeriksaan kembali saat har rutin</td>
+                                                <td class="border px-4 py-2">
+                                                    <textarea class="w-[300px] border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi[]" rows="2">pemeriksaan kembali saat har rutin</textarea>
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <button type="button" class="delete-row text-red-600 hover:text-red-800">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="border px-4 py-2">3</td>
-                                                <td class="border px-4 py-2">pemeliharaan dilaksanakan offline mesin</td>
+                                                <td class="border px-4 py-2">
+                                                    <textarea class="w-[300px] border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi[]" rows="2">pemeliharaan dilaksanakan offline mesin</textarea>
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <button type="button" class="delete-row text-red-600 hover:text-red-800">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="mt-4">
+                                        <button type="button" id="add-rekomendasi" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                            <i class="fas fa-plus mr-2"></i>Tambah Rekomendasi
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ADM Table -->
+                            <div id="adm" class="tab-content hidden">
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead>
                                             <tr>
-                                                <td class="border px-4 py-2">4</td>
-                                                <td class="border px-4 py-2"><textarea class="w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi_tambahan" rows="2"></textarea></td>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">No</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">FLM</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">PM</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">CM</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">PtW</th>
                                             </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            @for ($i = 1; $i <= 3; $i++)
+                                            <tr>
+                                                <td class="border px-4 py-2">{{ $i }}</td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="adm_flm[]" value="1">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="adm_pm[]" value="1">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="adm_em[]" value="1">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="adm_ptw[]" value="1">
+                                                </td>
+                                            </tr>
+                                            @endfor
                                         </tbody>
                                     </table>
                                 </div>
@@ -366,15 +353,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            // Remove active class from all tabs and contents
             tabs.forEach(t => t.classList.remove('active', 'border-blue-500', 'text-blue-600'));
             contents.forEach(c => c.classList.add('hidden'));
 
-            // Add active class to clicked tab and show corresponding content
             tab.classList.add('active', 'border-blue-500', 'text-blue-600');
             const content = document.getElementById(tab.dataset.tab);
             content.classList.remove('hidden');
         });
+    });
+
+    const addRekomendasiBtn = document.getElementById('add-rekomendasi');
+    const rekomendasiTable = document.getElementById('rekomendasi-table').getElementsByTagName('tbody')[0];
+
+    addRekomendasiBtn.addEventListener('click', function() {
+        const rowCount = rekomendasiTable.getElementsByTagName('tr').length + 1;
+        const newRow = document.createElement('tr');
+        
+        newRow.innerHTML = `
+            <td class="border px-4 py-2">${rowCount}</td>
+            <td class="border px-4 py-2">
+                <textarea class="w-[300px] border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi[]" rows="2"></textarea>
+            </td>
+            <td class="border px-4 py-2 text-center">
+                <button type="button" class="delete-row text-red-600 hover:text-red-800">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+        
+        rekomendasiTable.appendChild(newRow);
+    });
+
+    rekomendasiTable.addEventListener('click', function(e) {
+        if (e.target.closest('.delete-row')) {
+            const row = e.target.closest('tr');
+            row.remove();
+            
+            const rows = rekomendasiTable.getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].getElementsByTagName('td')[0].textContent = i + 1;
+            }
+        }
     });
 });
 </script>

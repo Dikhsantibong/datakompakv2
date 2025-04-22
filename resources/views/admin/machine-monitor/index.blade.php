@@ -186,9 +186,9 @@
                             <div class="text-3xl text-purple-600 mb-2">
                                 <i class="fas fa-chart-area"></i>
                                     </div>
-                            <h3 class="text-lg font-semibold mb-1">DMN</h3>
+                            <h3 class="text-lg font-semibold mb-1">DMN SLO</h3>
                             <p class="text-gray-600 mb-2 text-sm">{{ number_format($machineStatusLogs->avg('dmn'), 2) }}</p>
-                            <span class="text-purple-600 text-sm font-medium">Rata-rata DMN</span>
+                            <span class="text-purple-600 text-sm font-medium">Rata-rata DMN </span>
                                     </div>
                                 </div>
 
@@ -198,7 +198,7 @@
                             <div class="text-3xl text-indigo-600 mb-2">
                                 <i class="fas fa-chart-line"></i>
                             </div>
-                            <h3 class="text-lg font-semibold mb-1">DMP</h3>
+                            <h3 class="text-lg font-semibold mb-1">DMP AKTUAL</h3>
                             <p class="text-gray-600 mb-2 text-sm">{{ number_format($machineStatusLogs->avg('dmp'), 2) }}</p>
                             <span class="text-indigo-600 text-sm font-medium">Rata-rata DMP</span>
                                     </div>

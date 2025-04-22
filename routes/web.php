@@ -49,6 +49,7 @@ use App\Http\Controllers\Admin\MeetingShiftController;
 use App\Http\Controllers\FlmController;
 use App\Http\Controllers\Admin\AbnormalReportController;
 use App\Http\Controllers\Admin\CalendarController;
+use App\Http\Controllers\Admin\MonitoringDatakompakController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -1134,4 +1135,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::post('data-engine/update', [DataEngineController::class, 'update'])->name('data-engine.update');
     Route::get('data-engine/export-excel', [DataEngineController::class, 'exportExcel'])->name('data-engine.export-excel');
     Route::get('data-engine/export-pdf', [DataEngineController::class, 'exportPdf'])->name('data-engine.export-pdf');
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Monitoring Datakompak
+    Route::get('/admin/monitoring-datakompak', [MonitoringDatakompakController::class, 'index'])->name('admin.monitoring-datakompak');
 });

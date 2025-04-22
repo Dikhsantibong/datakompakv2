@@ -47,26 +47,23 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-4 sm:px-6">
-               
+                <form action="{{ route('admin.5s5r.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
 
-                <!-- Main Content -->
-                <div class="bg-white rounded-lg shadow-sm">
-                    <div class="p-6">
-                        <!-- Tab Navigation -->
-                        <div class="mb-6 border-b border-gray-200">
-                            <nav class="flex space-x-4" aria-label="Tabs">
-                                <button class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-blue-500 text-blue-600" data-target="table1">
-                                    Tabel Pemeriksaan 5S5R
-                                </button>
-                                <button class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-target="table2">
-                                    Tabel Program Kerja 5R
-                                </button>
-                            </nav>
+                    <!-- Form Header -->
+                    <div class="mb-6">
+                        <div class="w-full md:w-1/3">
+                            <label class="block text-sm font-medium text-gray-700">Tanggal</label>
+                            <input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         </div>
+                    </div>
 
-                        <!-- Table 1 Content -->
-                        <div id="table1-content" class="tab-content">
-                            <div class="bg-white rounded-lg shadow-sm p-6">
+                    <!-- Main Content -->
+                    <div class="space-y-6">
+                        <!-- Tabel Pemeriksaan 5S5R -->
+                        <div class="bg-white rounded-lg shadow-sm">
+                            <div class="p-6">
+                                <h2 class="text-lg font-medium text-gray-900 mb-4">Tabel Pemeriksaan 5S5R</h2>
                                 <div class="overflow-x-auto">
                                     <table class="min-w-full border border-gray-300">
                                         <thead>
@@ -102,7 +99,7 @@
                                             <tr>
                                                 <td class="border px-4 py-2 text-center">{{ $index + 1 }}</td>
                                                 <td class="border px-4 py-2">{{ $item }}</td>
-                                                <td class="border px-4 py-2 " style="width: 400px">
+                                                <td class="border px-4 py-2" style="width: 400px">
                                                     @if($item == 'Ringkas')
                                                         membedakan antara yang diperlukan dan yang tidak diperlukan serta membuang yang tidak diperlukan. Prinsip dan Ringkas (Seiri) yaitu dengan mengguanakan stratifikasi dan menangani sebab masalah.
                                                     @elseif($item == 'Rapi')
@@ -116,19 +113,19 @@
                                                     @endif
                                                 </td>
                                                 <td class="border px-4 py-2">
-                                                    <textarea class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 300px"></textarea>
+                                                    <textarea name="kondisi_awal_pemeriksaan_{{ $item }}" class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 300px"></textarea>
                                                 </td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
-                                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
-                                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
-                                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
-                                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
-                                                <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox"></td>
-                                                <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded"></td>
+                                                <td class="border px-4 py-2"><input type="text" name="pic_{{ $item }}" class="w-full p-1 border-gray-300 rounded"></td>
+                                                <td class="border px-4 py-2"><input type="text" name="area_kerja_{{ $item }}" class="w-full p-1 border-gray-300 rounded"></td>
+                                                <td class="border px-4 py-2"><input type="text" name="area_produksi_{{ $item }}" class="w-full p-1 border-gray-300 rounded"></td>
+                                                <td class="border px-4 py-2 text-center"><input type="checkbox" name="membersihkan_{{ $item }}" class="form-checkbox"></td>
+                                                <td class="border px-4 py-2 text-center"><input type="checkbox" name="merapikan_{{ $item }}" class="form-checkbox"></td>
+                                                <td class="border px-4 py-2 text-center"><input type="checkbox" name="membuang_sampah_{{ $item }}" class="form-checkbox"></td>
+                                                <td class="border px-4 py-2 text-center"><input type="checkbox" name="mengecat_{{ $item }}" class="form-checkbox"></td>
+                                                <td class="border px-4 py-2 text-center"><input type="checkbox" name="lainnya_{{ $item }}" class="form-checkbox"></td>
+                                                <td class="border px-4 py-2"><input type="text" name="kondisi_akhir_pemeriksaan_{{ $item }}" class="w-full p-1 border-gray-300 rounded"></td>
                                                 <td class="border px-4 py-2">
-                                                    <input type="file" class="hidden" id="eviden-{{ $index }}">
+                                                    <input type="file" name="eviden_pemeriksaan_{{ $item }}" class="hidden" id="eviden-{{ $index }}">
                                                     <label for="eviden-{{ $index }}" class="cursor-pointer bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
                                                         Upload
                                                     </label>
@@ -141,9 +138,10 @@
                             </div>
                         </div>
 
-                        <!-- Table 2 Content -->
-                        <div id="table2-content" class="tab-content hidden">
-                            <div class="bg-white rounded-lg shadow-sm p-6">
+                        <!-- Tabel Program Kerja 5R -->
+                        <div class="bg-white rounded-lg shadow-sm">
+                            <div class="p-6">
+                                <h2 class="text-lg font-medium text-gray-900 mb-4">Tabel Program Kerja 5R</h2>
                                 <div class="overflow-x-auto">
                                     <table class="min-w-full border border-gray-300">
                                         <thead>
@@ -176,16 +174,16 @@
                                             <tr>
                                                 <td class="border px-4 py-2 text-center">{{ $letter }}</td>
                                                 <td class="border px-4 py-2">shift {{ $index + 1 }}</td>
-                                                <td class="border px-4 py-2"><textarea class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
-                                                <td class="border px-4 py-2"><textarea class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
-                                                <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $letter }}" value="0-25"></td>
-                                                <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $letter }}" value="26-50"></td>
-                                                <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $letter }}" value="51-75"></td>
-                                                <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $letter }}" value="76-100"></td>
-                                                <td class="border px-4 py-2"><textarea class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
-                                                <td class="border px-4 py-2"><textarea class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
+                                                <td class="border px-4 py-2"><textarea name="goal_{{ $index + 1 }}" class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
+                                                <td class="border px-4 py-2"><textarea name="kondisi_awal_program_{{ $index + 1 }}" class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
+                                                <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $index + 1 }}" value="0-25"></td>
+                                                <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $index + 1 }}" value="26-50"></td>
+                                                <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $index + 1 }}" value="51-75"></td>
+                                                <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $index + 1 }}" value="76-100"></td>
+                                                <td class="border px-4 py-2"><textarea name="kondisi_akhir_program_{{ $index + 1 }}" class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
+                                                <td class="border px-4 py-2"><textarea name="catatan_{{ $index + 1 }}" class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
                                                 <td class="border px-4 py-2">
-                                                    <input type="file" class="hidden" id="eviden2-{{ $index }}">
+                                                    <input type="file" name="eviden_program_{{ $index + 1 }}" class="hidden" id="eviden2-{{ $index }}">
                                                     <label for="eviden2-{{ $index }}" class="cursor-pointer bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
                                                         Upload
                                                     </label>
@@ -199,17 +197,15 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <div class="mt-6 flex justify-end space-x-3">
-                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        <div class="flex justify-end space-x-3">
+                            <button type="submit" class="mb-4 bg-[#009BB9] text-white px-4 py-2 rounded hover:bg-[#009BB9]/80">
+                                <i class="fas fa-save mr-2"></i>
                                 Simpan
                             </button>
-                            <a href="{{ route('admin.5s5r.list') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
-                                <i class="fas fa-list mr-2"></i>
-                                Lihat Daftar
-                            </a>
+                            
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </main>
     </div>

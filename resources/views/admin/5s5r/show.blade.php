@@ -21,9 +21,9 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-500">{{ $data['date'] }}</span>
+                    <span class="text-sm text-gray-500">{{ date('Y-m-d', strtotime($pemeriksaan->first()->created_at)) }}</span>
                     <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                        ID: {{ $data['id'] }}
+                        ID: {{ $pemeriksaan->first()->id }}
                     </span>
                 </div>
             </div>
@@ -61,37 +61,129 @@
                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Area Produksi</th>
                                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tindakan</th>
                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kondisi Akhir</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Eviden</th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
-                                        @foreach($data['details'] as $category => $detail)
+                                        @foreach($pemeriksaan as $item)
                                         <tr class="hover:bg-gray-50">
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                {{ ucfirst($category) }}
+                                                {{ $item->kategori }}
                                             </td>
                                             <td class="px-6 py-4 text-sm text-gray-500">
-                                                {{ $detail['kondisi_awal'] }}
+                                                {{ $item->kondisi_awal }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $detail['pic'] }}
+                                                {{ $item->pic }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $detail['area_kerja'] }}
+                                                {{ $item->area_kerja }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $detail['area_produksi'] }}
+                                                {{ $item->area_produksi }}
                                             </td>
                                             <td class="px-6 py-4 text-sm text-gray-500">
                                                 <div class="flex flex-wrap gap-1 justify-center">
-                                                    @foreach($detail['tindakan'] as $tindakan)
+                                                    @if($item->membersihkan)
                                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                            {{ $tindakan }}
+                                                            Membersihkan
                                                         </span>
-                                                    @endforeach
+                                                    @endif
+                                                    @if($item->merapikan)
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                            Merapikan
+                                                        </span>
+                                                    @endif
+                                                    @if($item->membuang_sampah)
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                            Membuang Sampah
+                                                        </span>
+                                                    @endif
+                                                    @if($item->mengecat)
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                            Mengecat
+                                                        </span>
+                                                    @endif
+                                                    @if($item->lainnya)
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                            Lainnya
+                                                        </span>
+                                                    @endif
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 text-sm text-gray-500">
-                                                {{ $detail['kondisi_akhir'] }}
+                                                {{ $item->kondisi_akhir }}
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-500">
+                                                @if($item->eviden)
+                                                    <a href="{{ Storage::url($item->eviden) }}" target="_blank" class="text-blue-600 hover:text-blue-900">
+                                                        Lihat Eviden
+                                                    </a>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Program Kerja 5R -->
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">
+                                <i class="fas fa-tasks mr-2 text-gray-400"></i>
+                                Program Kerja 5R
+                            </h2>
+                        </div>
+                        <div class="p-6">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program Kerja</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Goal</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kondisi Awal</th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kondisi Akhir</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Catatan</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Eviden</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @foreach($programKerja as $program)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                {{ $program->program_kerja }}
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-500">
+                                                {{ $program->goal }}
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-500">
+                                                {{ $program->kondisi_awal }}
+                                            </td>
+                                            <td class="px-6 py-4 text-center text-sm text-gray-500">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    {{ $program->progress }}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-500">
+                                                {{ $program->kondisi_akhir }}
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-500">
+                                                {{ $program->catatan }}
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-500">
+                                                @if($program->eviden)
+                                                    <a href="{{ Storage::url($program->eviden) }}" target="_blank" class="text-blue-600 hover:text-blue-900">
+                                                        Lihat Eviden
+                                                    </a>
+                                                @else
+                                                    -
+                                                @endif
                                             </td>
                                         </tr>
                                         @endforeach
@@ -107,11 +199,6 @@
                             class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
                             <i class="fas fa-arrow-left mr-2"></i>
                             Kembali
-                        </a>
-                        <a href="#" 
-                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
-                            <i class="fas fa-edit mr-2"></i>
-                            Edit
                         </a>
                         <button type="button"
                             onclick="window.print()"

@@ -1033,7 +1033,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
-        // ... existing routes ...
+        // ... other routes ...
         
         // K3 KAMP routes (temporary views)
         Route::get('/k3-kamp', function () {
@@ -1061,7 +1061,7 @@ Route::post('/admin/data-engine/update', [DataEngineController::class, 'update']
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
-        // ... existing routes ...
+        // ... other routes ...
         
         // Calendar routes
         Route::get('/kalender', [App\Http\Controllers\Admin\OperationScheduleController::class, 'index'])->name('kalender.calendar');
@@ -1123,4 +1123,15 @@ Route::prefix('abnormal-report')->name('admin.abnormal-report.')->group(function
     Route::get('/list', [AbnormalReportController::class, 'list'])->name('list');
     Route::get('/show/{id}', [AbnormalReportController::class, 'show'])->name('show');
     Route::post('/store', [AbnormalReportController::class, 'store'])->name('store');
+});
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    // ... other admin routes ...
+
+    // Data Engine routes
+    Route::get('data-engine', [DataEngineController::class, 'index'])->name('data-engine.index');
+    Route::get('data-engine/edit/{date}', [DataEngineController::class, 'edit'])->name('data-engine.edit');
+    Route::post('data-engine/update', [DataEngineController::class, 'update'])->name('data-engine.update');
+    Route::get('data-engine/export-excel', [DataEngineController::class, 'exportExcel'])->name('data-engine.export-excel');
+    Route::get('data-engine/export-pdf', [DataEngineController::class, 'exportPdf'])->name('data-engine.export-pdf');
 });

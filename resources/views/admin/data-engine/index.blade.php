@@ -55,28 +55,86 @@
         <!-- Main Content -->
         <div class="py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Date Picker -->
-                <div class="mb-6">
-                    <form action="{{ route('admin.data-engine.index') }}" method="GET" class="flex gap-4">
+                <!-- Date Picker and Actions -->
+                <div class="mb-6 flex flex-wrap gap-4">
+                    <form id="dateFilterForm" action="{{ route('admin.data-engine.index') }}" method="GET" class="flex-grow flex gap-4">
                         <input type="date" 
+                               id="datePicker"
                                name="date" 
                                value="{{ request('date', now()->format('Y-m-d')) }}"
                                class="rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                         <button type="submit" 
+                                id="submitBtn"
                                 class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                            <i class="fas fa-eye mr-2"></i>Tampilkan Data
+                            <span class="inline-flex items-center">
+                                <svg id="loadingIcon" class="hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <i class="fas fa-eye mr-2"></i>Tampilkan Data
+                            </span>
                         </button>
                         <a href="{{ route('admin.data-engine.edit', ['date' => request('date', now()->format('Y-m-d'))]) }}"
                            class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                             <i class="fas fa-edit mr-2"></i>Update Data
                         </a>
                     </form>
+
+                    <!-- Export Buttons -->
+                    <div class="flex gap-2">
+                        <a href="{{ route('admin.data-engine.export-excel', ['date' => request('date', now()->format('Y-m-d'))]) }}"
+                           class="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 inline-flex items-center">
+                            <i class="fas fa-file-excel mr-2"></i>Export Excel
+                        </a>
+                        <a href="{{ route('admin.data-engine.export-pdf', ['date' => request('date', now()->format('Y-m-d'))]) }}"
+                           class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 inline-flex items-center">
+                            <i class="fas fa-file-pdf mr-2"></i>Export PDF
+                        </a>
+                    </div>
                 </div>
 
-                @include('admin.data-engine._table')
+                <div id="tableContainer">
+                    @include('admin.data-engine._table')
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('dateFilterForm');
+    const datePicker = document.getElementById('datePicker');
+    const submitBtn = document.getElementById('submitBtn');
+    const loadingIcon = document.getElementById('loadingIcon');
+    const tableContainer = document.getElementById('tableContainer');
+
+    // Function to show loading state
+    function showLoading() {
+        loadingIcon.classList.remove('hidden');
+        submitBtn.disabled = true;
+        tableContainer.classList.add('opacity-50');
+    }
+
+    // Function to hide loading state
+    function hideLoading() {
+        loadingIcon.classList.add('hidden');
+        submitBtn.disabled = false;
+        tableContainer.classList.remove('opacity-50');
+    }
+
+    // Handle date change
+    datePicker.addEventListener('change', function() {
+        showLoading();
+        form.submit();
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', function() {
+        showLoading();
+    });
+});
+</script>
+
 <script src="{{ asset('js/toggle.js') }}"></script>
 @endsection

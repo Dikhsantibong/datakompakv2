@@ -9,11 +9,17 @@ class MeetingShiftMachineStatus extends Model
 {
     use HasFactory;
 
+    protected $table = 'machine_statuses';
+
     protected $fillable = [
         'meeting_shift_id',
         'machine_id',
         'status',
         'keterangan'
+    ];
+
+    protected $casts = [
+        'status' => 'json'
     ];
 
     public function meetingShift()

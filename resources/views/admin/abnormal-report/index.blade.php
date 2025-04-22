@@ -246,7 +246,7 @@
                                             <tr>
                                                 <td class="border px-4 py-2">1</td>
                                                 <td class="border px-4 py-2">
-                                                    <textarea class="w-[300px] border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi[]" rows="2">ganti material/ peralatan terdampak</textarea>
+                                                    <textarea class="w-[300px] p-2 border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi[]" rows="2">ganti material/ peralatan terdampak</textarea>
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
                                                     <button type="button" class="delete-row text-red-600 hover:text-red-800">
@@ -257,7 +257,7 @@
                                             <tr>
                                                 <td class="border px-4 py-2">2</td>
                                                 <td class="border px-4 py-2">
-                                                    <textarea class="w-[300px] border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi[]" rows="2">pemeriksaan kembali saat har rutin</textarea>
+                                                    <textarea class="w-[300px] p-2 border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi[]" rows="2">pemeriksaan kembali saat har rutin</textarea>
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
                                                     <button type="button" class="delete-row text-red-600 hover:text-red-800">
@@ -268,7 +268,7 @@
                                             <tr>
                                                 <td class="border px-4 py-2">3</td>
                                                 <td class="border px-4 py-2">
-                                                    <textarea class="w-[300px] border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi[]" rows="2">pemeliharaan dilaksanakan offline mesin</textarea>
+                                                    <textarea class="w-[300px] p-2 border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi[]" rows="2">pemeliharaan dilaksanakan offline mesin</textarea>
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
                                                     <button type="button" class="delete-row text-red-600 hover:text-red-800">
@@ -372,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
         newRow.innerHTML = `
             <td class="border px-4 py-2">${rowCount}</td>
             <td class="border px-4 py-2">
-                <textarea class="w-[300px] border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi[]" rows="2"></textarea>
+                <textarea class="w-[300px] p-2 border-gray-300 rounded-md shadow-sm resize-none" name="rekomendasi[]" rows="2"></textarea>
             </td>
             <td class="border px-4 py-2 text-center">
                 <button type="button" class="delete-row text-red-600 hover:text-red-800">

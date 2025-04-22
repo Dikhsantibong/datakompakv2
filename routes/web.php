@@ -168,6 +168,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         ->name('admin.meetings.print'); 
     });
 
+    // Meeting Shift Routes
+    Route::prefix('meeting-shift')->group(function () {
+        Route::get('/', [MeetingShiftController::class, 'index'])->name('meeting-shift.index');
+        Route::get('/list', [MeetingShiftController::class, 'list'])->name('meeting-shift.list');
+        Route::post('/store', [MeetingShiftController::class, 'store'])->name('meeting-shift.store');
+        Route::get('/{meetingShift}/edit', [MeetingShiftController::class, 'edit'])->name('meeting-shift.edit');
+        Route::put('/{meetingShift}', [MeetingShiftController::class, 'update'])->name('meeting-shift.update');
+        Route::delete('/{meetingShift}', [MeetingShiftController::class, 'destroy'])->name('meeting-shift.destroy');
+        Route::get('/{meetingShift}', [MeetingShiftController::class, 'show'])->name('meeting-shift.show');
+    });
+
     Route::prefix('users')->group(function () {
         Route::get('/', [AdminUserController::class, 'index'])->name('users');
         Route::get('/create', [AdminUserController::class, 'create'])->name('users.create');
@@ -1066,6 +1077,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Meeting dan Mutasi Shift routes
 Route::get('/meeting-shift', [MeetingShiftController::class, 'index'])->name('admin.meeting-shift.index');
+Route::get('/meeting-shift/{id}', [MeetingShiftController::class, 'show'])->name('admin.meeting-shift.show');
 Route::post('/meeting-shift', [MeetingShiftController::class, 'store'])->name('admin.meeting-shift.store');
 Route::post('/admin/meeting-shift/store-alat-bantu', [MeetingShiftController::class, 'storeAlatBantu'])->name('admin.meeting-shift.store-alat-bantu');
 Route::post('/admin/meeting-shift/store-resource', [MeetingShiftController::class, 'storeResource'])->name('admin.meeting-shift.store-resource');

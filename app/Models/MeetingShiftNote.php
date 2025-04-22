@@ -19,4 +19,6 @@ class MeetingShiftNote extends Model
     {
         return $this->belongsTo(MeetingShift::class);
     }
+    
+    
 } 

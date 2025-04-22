@@ -10,14 +10,16 @@ class MeetingShift extends Model
     use HasFactory;
 
     protected $fillable = [
-        'date',
+        'tanggal',
         'current_shift',
         'created_by'
     ];
 
     protected $casts = [
-        'date' => 'date'
+        'tanggal' => 'date'
     ];
+
+    protected $primaryKey = 'id';
 
     public function creator()
     {
@@ -29,7 +31,7 @@ class MeetingShift extends Model
         return $this->hasMany(MeetingShiftMachineStatus::class);
     }
 
-    public function auxiliaryEquipment()
+    public function auxiliaryEquipments()
     {
         return $this->hasMany(MeetingShiftAuxiliaryEquipment::class);
     }
@@ -39,9 +41,14 @@ class MeetingShift extends Model
         return $this->hasMany(MeetingShiftResource::class);
     }
 
-    public function k3l()
+    public function k3ls()
     {
         return $this->hasMany(MeetingShiftK3l::class);
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(MeetingShiftNote::class);
     }
 
     public function systemNote()
@@ -59,7 +66,7 @@ class MeetingShift extends Model
         return $this->hasOne(MeetingShiftResume::class);
     }
 
-    public function attendance()
+    public function attendances()
     {
         return $this->hasMany(MeetingShiftAttendance::class);
     }

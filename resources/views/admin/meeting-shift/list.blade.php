@@ -69,7 +69,8 @@
                                     @forelse($meetingShifts as $meetingShift)
                                     <tr class="hover:bg-gray-50 transition-colors">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            {{ $meetingShift->date->format('d F Y') }}
+                                            {{ $meetingShift->date ? $meetingShift->date->format('d F Y') : '-' }}
+
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
@@ -105,8 +106,8 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                             @php
-                                                $presentCount = $meetingShift->attendance->where('status', 'hadir')->count();
-                                                $totalAttendance = $meetingShift->attendance->count();
+                                                $presentCount = $meetingShift->attendances ? $meetingShift->attendances->where('status', 'hadir')->count() : 0;
+                                                $totalAttendance = $meetingShift->attendances ? $meetingShift->attendances->count() : 0;
                                             @endphp
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 {{ $presentCount }}/{{ $totalAttendance }} Hadir

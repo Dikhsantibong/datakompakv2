@@ -159,7 +159,7 @@
                             <div class="text-3xl text-purple-600 mb-2">
                                 <i class="fas fa-plug"></i>
                             </div>
-                            <h3 class="text-lg font-semibold mb-1">Susut Trafo</h3>
+                            <h3 class="text-lg font-semibold mb-1">PS Susut Trafo</h3>
                             <p class="text-gray-600 mb-2 text-sm">{{ number_format($transformerLosses['current'], 2) }}</p>
                             <span class="text-purple-600 text-sm font-medium">{{ $transformerLosses['unit'] }}</span>
                         </div>

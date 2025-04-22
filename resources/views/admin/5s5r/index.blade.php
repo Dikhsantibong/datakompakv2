@@ -113,17 +113,17 @@
                                                     @endif
                                                 </td>
                                                 <td class="border px-4 py-2">
-                                                    <textarea name="kondisi_awal_pemeriksaan_{{ $item }}" class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 300px"></textarea>
+                                                    <textarea name="kondisi_awal_pemeriksaan_{{ $item }}" class="w-full h-[100px] p-1 border-gray-300 rounded" rows="3" style="width: 300px"></textarea>
                                                 </td>
-                                                <td class="border px-4 py-2"><input type="text" name="pic_{{ $item }}" class="w-full p-1 border-gray-300 rounded"></td>
-                                                <td class="border px-4 py-2"><input type="text" name="area_kerja_{{ $item }}" class="w-full p-1 border-gray-300 rounded"></td>
-                                                <td class="border px-4 py-2"><input type="text" name="area_produksi_{{ $item }}" class="w-full p-1 border-gray-300 rounded"></td>
+                                                <td class="border px-4 py-2"><textarea type="text" name="pic_{{ $item }}" class="w-[200px] h-[100px] p-1 border-gray-300 rounded"></textarea></td>
+                                                <td class="border px-4 py-2"><textarea type="text" name="area_kerja_{{ $item }}" class="w-[200px] h-[100px] p-1 border-gray-300 rounded"></textarea></td>
+                                                <td class="border px-4 py-2"><textarea type="text" name="area_produksi_{{ $item }}" class="w-[200px] h-[100px] p-1 border-gray-300 rounded"></textarea></td>
                                                 <td class="border px-4 py-2 text-center"><input type="checkbox" name="membersihkan_{{ $item }}" class="form-checkbox"></td>
                                                 <td class="border px-4 py-2 text-center"><input type="checkbox" name="merapikan_{{ $item }}" class="form-checkbox"></td>
                                                 <td class="border px-4 py-2 text-center"><input type="checkbox" name="membuang_sampah_{{ $item }}" class="form-checkbox"></td>
                                                 <td class="border px-4 py-2 text-center"><input type="checkbox" name="mengecat_{{ $item }}" class="form-checkbox"></td>
                                                 <td class="border px-4 py-2 text-center"><input type="checkbox" name="lainnya_{{ $item }}" class="form-checkbox"></td>
-                                                <td class="border px-4 py-2"><input type="text" name="kondisi_akhir_pemeriksaan_{{ $item }}" class="w-full p-1 border-gray-300 rounded"></td>
+                                                <td class="border px-4 py-2"><textarea type="text" name="kondisi_akhir_pemeriksaan_{{ $item }}" class="w-[200px] h-[100px] p-1 border-gray-300 rounded"></textarea></td>
                                                 <td class="border px-4 py-2">
                                                     <input type="file" name="eviden_pemeriksaan_{{ $item }}" class="hidden" id="eviden-{{ $index }}">
                                                     <label for="eviden-{{ $index }}" class="cursor-pointer bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">

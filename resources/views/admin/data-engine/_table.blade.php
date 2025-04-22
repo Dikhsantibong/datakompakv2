@@ -30,6 +30,8 @@
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Beban (kW)</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">kVAR</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cos φ</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -43,21 +45,24 @@
                                         {{ now()->format('H:i') }}
                                     </td>
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
-                                        <!-- Placeholder for kW value -->
-                                        -
+                                        {{ $machine->kw ?? '-' }}
                                     </td>
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
-                                        <!-- Placeholder for kVAR value -->
-                                        -
+                                        {{ $machine->kvar ?? '-' }}
                                     </td>
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
-                                        <!-- Placeholder for Cos φ value -->
-                                        -
+                                        {{ $machine->cos_phi ?? '-' }}
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">
+                                        {{ $machine->status ?? '-' }}
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">
+                                        {{ $machine->keterangan ?? '-' }}
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="px-4 py-8 text-center text-sm text-gray-500 border border-gray-200">
+                                    <td colspan="8" class="px-4 py-8 text-center text-sm text-gray-500 border border-gray-200">
                                         Tidak ada data mesin untuk unit ini
                                     </td>
                                 </tr>

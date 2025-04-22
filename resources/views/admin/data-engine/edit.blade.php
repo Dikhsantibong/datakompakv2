@@ -7,7 +7,7 @@
     <div class="flex-1 overflow-x-hidden overflow-y-auto">
         <header class="bg-white shadow-sm sticky top-0 z-10">
             <div class="flex justify-between items-center px-6 py-3">
-                <div class="flex items-center gap-x-3">
+                <div class="flex items-center gap-x-3>
                     <!-- Mobile Menu Toggle -->
                     <button id="mobile-menu-toggle"
                         class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -100,6 +100,8 @@
                                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Beban (kW)</th>
                                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">kVAR</th>
                                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cos φ</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
@@ -134,10 +136,28 @@
                                                                step="0.01"
                                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                                                     </td>
+                                                    <td class="px-4 py-3 border border-gray-200">
+                                                        <select name="machines[{{ $machine->id }}][status]" 
+                                                                class="p-2 w-[120px] rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                                            <option value="">Pilih Status</option>
+                                                            <option value="RSH">RSH</option>
+                                                            <option value="FO">FO</option>
+                                                            <option value="MO">MO</option>
+                                                            <option value="P0">P0</option>
+                                                            <option value="MB">MB</option>
+                                                            <option value="OPS">OPS</option>
+                                                        </select>
+                                                    </td>
+                                                    <td class="px-4 py-3 border border-gray-200">
+                                                        <textarea type="text" 
+                                                               name="machines[{{ $machine->id }}][keterangan]" 
+                                                               class="w-[200px] rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                                               placeholder="Masukkan keterangan"></textarea>
+                                                    </td>
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="6" class="px-4 py-8 text-center text-sm text-gray-500 border border-gray-200">
+                                                    <td colspan="8" class="px-4 py-8 text-center text-sm text-gray-500 border border-gray-200">
                                                         Tidak ada data mesin untuk unit ini
                                                     </td>
                                                 </tr>

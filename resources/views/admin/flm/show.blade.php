@@ -22,9 +22,9 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-500">{{ $flmDetail['tanggal'] }}</span>
+                    <span class="text-sm text-gray-500">{{ $flmDetail->tanggal }}</span>
                     <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                        Shift {{ $flmDetail['shift'] }}
+                        Shift {{ $flmDetail->shift }}
                     </span>
                 </div>
             </div>
@@ -53,19 +53,19 @@
                             <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Operator</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail['operator'] }}</dd>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->operator }}</dd>
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Tanggal & Waktu</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail['created_at'] }}</dd>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->created_at }}</dd>
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Mesin/Peralatan</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail['mesin'] }}</dd>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->mesin }}</dd>
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Sistem Pembangkit</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail['sistem'] }}</dd>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->sistem }}</dd>
                                 </div>
                             </dl>
                         </div>
@@ -83,34 +83,56 @@
                             <dl class="space-y-6">
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Masalah yang Ditemukan</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail['masalah'] }}</dd>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->masalah }}</dd>
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Kondisi Awal</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail['kondisi_awal'] }}</dd>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->kondisi_awal }}</dd>
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Tindakan yang Dilakukan</dt>
                                     <dd class="mt-1">
                                         <ul class="grid grid-cols-2 gap-2">
-                                            @foreach($flmDetail['tindakan'] as $tindakan => $dilakukan)
-                                                <li class="flex items-center text-sm">
-                                                    <span class="inline-flex items-center justify-center size-5 mr-2 {{ $dilakukan ? 'text-green-500' : 'text-gray-300' }}">
-                                                        <i class="fas {{ $dilakukan ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                                                    </span>
-                                                    {{ ucfirst(str_replace('_', ' ', $tindakan)) }}
-                                                </li>
-                                            @endforeach
+                                            <li class="flex items-center text-sm">
+                                                <span class="inline-flex items-center justify-center size-5 mr-2 {{ $flmDetail->tindakan_bersihkan ? 'text-green-500' : 'text-gray-300' }}">
+                                                    <i class="fas {{ $flmDetail->tindakan_bersihkan ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
+                                                </span>
+                                                Bersihkan
+                                            </li>
+                                            <li class="flex items-center text-sm">
+                                                <span class="inline-flex items-center justify-center size-5 mr-2 {{ $flmDetail->tindakan_lumasi ? 'text-green-500' : 'text-gray-300' }}">
+                                                    <i class="fas {{ $flmDetail->tindakan_lumasi ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
+                                                </span>
+                                                Lumasi
+                                            </li>
+                                            <li class="flex items-center text-sm">
+                                                <span class="inline-flex items-center justify-center size-5 mr-2 {{ $flmDetail->tindakan_kencangkan ? 'text-green-500' : 'text-gray-300' }}">
+                                                    <i class="fas {{ $flmDetail->tindakan_kencangkan ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
+                                                </span>
+                                                Kencangkan
+                                            </li>
+                                            <li class="flex items-center text-sm">
+                                                <span class="inline-flex items-center justify-center size-5 mr-2 {{ $flmDetail->tindakan_setting ? 'text-green-500' : 'text-gray-300' }}">
+                                                    <i class="fas {{ $flmDetail->tindakan_setting ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
+                                                </span>
+                                                Setting
+                                            </li>
+                                            <li class="flex items-center text-sm">
+                                                <span class="inline-flex items-center justify-center size-5 mr-2 {{ $flmDetail->tindakan_ganti ? 'text-green-500' : 'text-gray-300' }}">
+                                                    <i class="fas {{ $flmDetail->tindakan_ganti ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
+                                                </span>
+                                                Ganti
+                                            </li>
                                         </ul>
                                     </dd>
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Kondisi Akhir</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail['kondisi_akhir'] }}</dd>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->kondisi_akhir }}</dd>
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Catatan</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail['catatan'] }}</dd>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->catatan }}</dd>
                                 </div>
                             </dl>
                         </div>
@@ -129,7 +151,7 @@
                                 <div>
                                     <h3 class="text-sm font-medium text-gray-500 mb-2">Foto Sebelum</h3>
                                     <div class="border rounded-lg overflow-hidden">
-                                        <img src="{{ asset('storage/' . $flmDetail['eviden']['sebelum']) }}" 
+                                        <img src="{{ asset($flmDetail->eviden_sebelum) }}" 
                                              alt="Foto Sebelum"
                                              class="w-full h-48 object-cover">
                                     </div>
@@ -137,7 +159,7 @@
                                 <div>
                                     <h3 class="text-sm font-medium text-gray-500 mb-2">Foto Sesudah</h3>
                                     <div class="border rounded-lg overflow-hidden">
-                                        <img src="{{ asset('storage/' . $flmDetail['eviden']['sesudah']) }}" 
+                                        <img src="{{ asset($flmDetail->eviden_sesudah) }}" 
                                              alt="Foto Sesudah"
                                              class="w-full h-48 object-cover">
                                     </div>

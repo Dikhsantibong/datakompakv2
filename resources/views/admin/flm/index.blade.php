@@ -77,8 +77,28 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('admin.flm.store') }}" method="POST" class="space-y-6">
+                        <!-- Add error message display -->
+                        @if($errors->any())
+                            <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                                <ul>
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('admin.flm.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                             @csrf
+                            
+                            <!-- Form Header -->
+                            <div class="mb-6">
+                                <div class="w-full md:w-1/3">
+                                    <label class="block text-sm font-medium text-gray-700">Tanggal</label>
+                                    <input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+                            </div>
+
                             <div class="overflow-x-auto">
                                 <table class="min-w-full border border-gray-300">
                                     <thead>
@@ -91,7 +111,8 @@
                                             <th colspan="5" class="border px-4 py-2 text-sm text-center">Tindakan FLM</th>
                                             <th class="border px-4 py-2 text-sm">kondisi akhir</th>
                                             <th class="border px-4 py-2 text-sm">Catatan FLM</th>
-                                            <th class="border px-4 py-2 text-sm">eviden</th>
+                                            <th class="border px-4 py-2 text-sm">Eviden</th>
+                                            <th class="border px-4 py-2 text-sm">Aksi</th>
                                         </tr>
                                         <tr class="bg-gray-50">
                                             <th class="border px-4 py-2"></th>
@@ -107,33 +128,72 @@
                                             <th class="border px-4 py-2"></th>
                                             <th class="border px-4 py-2"></th>
                                             <th class="border px-4 py-2"></th>
+                                            <th class="border px-4 py-2"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @for ($i = 1; $i <= 4; $i++)
-                                        <tr>
-                                            <td class="border px-4 py-2 text-center">{{ $i }}</td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded" name="mesin_{{ $i }}"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded" name="sistem_{{ $i }}"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded" name="masalah_{{ $i }}"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded" name="kondisi_awal_{{ $i }}"></td>
-                                            <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox" name="tindakan_{{ $i }}[]" value="bersihkan"></td>
-                                            <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox" name="tindakan_{{ $i }}[]" value="lumasi"></td>
-                                            <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox" name="tindakan_{{ $i }}[]" value="kencangkan"></td>
-                                            <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox" name="tindakan_{{ $i }}[]" value="perbaikan_koneksi"></td>
-                                            <td class="border px-4 py-2 text-center"><input type="checkbox" class="form-checkbox" name="tindakan_{{ $i }}[]" value="lainnya"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded" name="kondisi_akhir_{{ $i }}"></td>
-                                            <td class="border px-4 py-2"><input type="text" class="w-full p-1 border-gray-300 rounded" name="catatan_{{ $i }}"></td>
+                                    <tbody id="flmTableBody">
+                                        <!-- Template row that will be cloned -->
+                                        <tr class="flm-row">
+                                            <td class="border px-4 py-2 text-center row-number">1</td>
                                             <td class="border px-4 py-2">
-                                                <input type="file" class="hidden" id="eviden-{{ $i }}" name="eviden_{{ $i }}">
-                                                <label for="eviden-{{ $i }}" class="cursor-pointer bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
-                                                    Upload
-                                                </label>
+                                                <input type="text" class="w-full p-1 border-gray-300 rounded" name="mesin[]" value="{{ old('mesin.0') }}">
+                                            </td>
+                                            <td class="border px-4 py-2">
+                                                <input type="text" class="w-full p-1 border-gray-300 rounded" name="sistem[]" value="{{ old('sistem.0') }}">
+                                            </td>
+                                            <td class="border px-4 py-2">
+                                                <input type="text" class="w-full p-1 border-gray-300 rounded" name="masalah[]" value="{{ old('masalah.0') }}">
+                                            </td>
+                                            <td class="border px-4 py-2">
+                                                <input type="text" class="w-full p-1 border-gray-300 rounded" name="kondisi_awal[]" value="{{ old('kondisi_awal.0') }}">
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="form-checkbox" name="tindakan[0][]" value="bersihkan" {{ in_array('bersihkan', old('tindakan.0', [])) ? 'checked' : '' }}>
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="form-checkbox" name="tindakan[0][]" value="lumasi" {{ in_array('lumasi', old('tindakan.0', [])) ? 'checked' : '' }}>
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="form-checkbox" name="tindakan[0][]" value="kencangkan" {{ in_array('kencangkan', old('tindakan.0', [])) ? 'checked' : '' }}>
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="form-checkbox" name="tindakan[0][]" value="perbaikan_koneksi" {{ in_array('perbaikan_koneksi', old('tindakan.0', [])) ? 'checked' : '' }}>
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <input type="checkbox" class="form-checkbox" name="tindakan[0][]" value="lainnya" {{ in_array('lainnya', old('tindakan.0', [])) ? 'checked' : '' }}>
+                                            </td>
+                                            <td class="border px-4 py-2">
+                                                <input type="text" class="w-full p-1 border-gray-300 rounded" name="kondisi_akhir[]" value="{{ old('kondisi_akhir.0') }}">
+                                            </td>
+                                            <td class="border px-4 py-2">
+                                                <input type="text" class="w-full p-1 border-gray-300 rounded" name="catatan[]" value="{{ old('catatan.0') }}">
+                                            </td>
+                                            <td class="border px-4 py-2">
+                                                <div class="space-y-2">
+                                                    <div>
+                                                        <label class="block text-xs text-gray-600">Sebelum:</label>
+                                                        <input type="file" name="eviden_sebelum[]" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                                    </div>
+                                                    <div>
+                                                        <label class="block text-xs text-gray-600">Sesudah:</label>
+                                                        <input type="file" name="eviden_sesudah[]" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                <button type="button" onclick="deleteRow(this)" class="text-red-600 hover:text-red-800">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             </td>
                                         </tr>
-                                        @endfor
                                     </tbody>
                                 </table>
+                                <div class="mt-4 flex justify-start">
+                                    <button type="button" onclick="addNewRow()" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
+                                        <i class="fas fa-plus mr-2"></i>
+                                        Tambah Baris
+                                    </button>
+                                </div>
                             </div>
                             <div class="flex justify-end mt-6">
                                 <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
@@ -149,5 +209,56 @@
     </div>
 </div>
 
-<script src="{{ asset('js/toggle.js') }}"></script>
+@push('scripts')
+<script>
+function addNewRow() {
+    const tbody = document.getElementById('flmTableBody');
+    const template = tbody.querySelector('.flm-row').cloneNode(true);
+    const rowCount = tbody.children.length;
+    
+    // Update row number
+    template.querySelector('.row-number').textContent = rowCount + 1;
+    
+    // Update input names and clear values
+    template.querySelectorAll('input[type="text"]').forEach(input => {
+        input.value = '';
+    });
+    
+    template.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+        checkbox.name = checkbox.name.replace('[0]', `[${rowCount}]`);
+    });
+    
+    template.querySelectorAll('input[type="file"]').forEach(input => {
+        input.value = '';
+    });
+    
+    tbody.appendChild(template);
+    updateRowNumbers();
+}
+
+function deleteRow(button) {
+    const tbody = document.getElementById('flmTableBody');
+    if (tbody.children.length > 1) {
+        button.closest('tr').remove();
+        updateRowNumbers();
+    } else {
+        alert('Minimal harus ada satu baris data!');
+    }
+}
+
+function updateRowNumbers() {
+    const rows = document.getElementById('flmTableBody').getElementsByClassName('flm-row');
+    Array.from(rows).forEach((row, index) => {
+        row.querySelector('.row-number').textContent = index + 1;
+        
+        // Update checkbox names
+        row.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.name = checkbox.name.replace(/\[\d+\]/, `[${index}]`);
+        });
+    });
+}
+</script>
+@endpush
+
 @endsection

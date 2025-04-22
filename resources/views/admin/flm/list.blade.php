@@ -93,19 +93,27 @@
                                             {{ $index + 1 }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $data['tanggal'] }}
+                                            {{ $data->tanggal }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            {{ $data['mesin'] }}
+                                            {{ $data->mesin }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $data['sistem'] }}
+                                            {{ $data->sistem }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $data['masalah'] }}
+                                            {{ $data->masalah }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ implode(', ', $data['tindakan']) }}
+                                            @php
+                                                $tindakan = [];
+                                                if ($data->tindakan_bersihkan) $tindakan[] = 'Bersihkan';
+                                                if ($data->tindakan_lumasi) $tindakan[] = 'Lumasi';
+                                                if ($data->tindakan_kencangkan) $tindakan[] = 'Kencangkan';
+                                                if ($data->tindakan_setting) $tindakan[] = 'Setting';
+                                                if ($data->tindakan_ganti) $tindakan[] = 'Ganti';
+                                            @endphp
+                                            {{ implode(', ', $tindakan) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">

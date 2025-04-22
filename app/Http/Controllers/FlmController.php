@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FlmInspection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class FlmController extends Controller
 {
@@ -13,73 +16,66 @@ class FlmController extends Controller
 
     public function store(Request $request)
     {
-        // This is just a placeholder for now since we're not implementing database functionality yet
-        return redirect()->back()->with('success', 'Form submitted successfully');
+        $request->validate([
+            'tanggal' => 'required|date',
+            'mesin.*' => 'required|string|max:100',
+            'sistem.*' => 'required|string|max:100',
+            'masalah.*' => 'required|string',
+            'kondisi_awal.*' => 'required|string',
+            'kondisi_akhir.*' => 'required|string',
+            'catatan.*' => 'nullable|string',
+            'eviden_sebelum.*' => 'nullable|image|max:2048',
+            'eviden_sesudah.*' => 'nullable|image|max:2048',
+        ]);
+
+        foreach ($request->mesin as $key => $mesin) {
+            if (empty($mesin)) continue;
+
+            $data = [
+                'tanggal' => $request->tanggal,
+                'mesin' => $mesin,
+                'sistem' => $request->sistem[$key],
+                'masalah' => $request->masalah[$key],
+                'kondisi_awal' => $request->kondisi_awal[$key],
+                'tindakan_bersihkan' => in_array('bersihkan', $request->tindakan[$key] ?? []),
+                'tindakan_lumasi' => in_array('lumasi', $request->tindakan[$key] ?? []),
+                'tindakan_kencangkan' => in_array('kencangkan', $request->tindakan[$key] ?? []),
+                'tindakan_perbaikan_koneksi' => in_array('perbaikan_koneksi', $request->tindakan[$key] ?? []),
+                'tindakan_lainnya' => in_array('lainnya', $request->tindakan[$key] ?? []),
+                'kondisi_akhir' => $request->kondisi_akhir[$key],
+                'catatan' => $request->catatan[$key],
+                'status' => 'selesai'
+            ];
+
+            // Handle file uploads
+            if ($request->hasFile("eviden_sebelum.{$key}")) {
+                $path = $request->file("eviden_sebelum.{$key}")->store('public/flm/eviden');
+                $data['eviden_sebelum'] = Storage::url($path);
+            }
+
+            if ($request->hasFile("eviden_sesudah.{$key}")) {
+                $path = $request->file("eviden_sesudah.{$key}")->store('public/flm/eviden');
+                $data['eviden_sesudah'] = Storage::url($path);
+            }
+
+            FlmInspection::create($data);
+        }
+
+        return redirect()->route('admin.flm.list')->with('success', 'Data FLM berhasil disimpan');
     }
 
     public function list()
     {
-        // Dummy data for demonstration
-        $flmData = [
-            [
-                'id' => 1,
-                'tanggal' => '2024-03-20',
-                'mesin' => 'Mesin A',
-                'sistem' => 'Sistem Pembangkit 1',
-                'masalah' => 'Kebocoran',
-                'kondisi_awal' => 'Tidak optimal',
-                'tindakan' => ['bersihkan', 'kencangkan'],
-                'kondisi_akhir' => 'Sudah diperbaiki',
-                'catatan' => 'Perlu pemantauan rutin',
-                'eviden' => 'foto1.jpg'
-            ],
-            [
-                'id' => 2,
-                'tanggal' => '2024-03-21',
-                'mesin' => 'Mesin B',
-                'sistem' => 'Sistem Pembangkit 2',
-                'masalah' => 'Getaran berlebih',
-                'kondisi_awal' => 'Tidak stabil',
-                'tindakan' => ['lumasi', 'kencangkan'],
-                'kondisi_akhir' => 'Normal',
-                'catatan' => 'Sudah normal kembali',
-                'eviden' => 'foto2.jpg'
-            ],
-        ];
+        $flmData = FlmInspection::orderBy('tanggal', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
         return view('admin.flm.list', compact('flmData'));
     }
 
     public function show($id)
     {
-        // Dummy data for demonstration
-        $flmDetail = [
-            'id' => $id,
-            'tanggal' => '2024-03-20',
-            'shift' => 'A',
-            'operator' => 'John Doe',
-            'mesin' => 'Mesin A',
-            'sistem' => 'Sistem Pembangkit 1',
-            'masalah' => 'Kebocoran pada pipa pendingin',
-            'kondisi_awal' => 'Terdapat kebocoran yang menyebabkan air pendingin menetes',
-            'tindakan' => [
-                'bersihkan' => true,
-                'lumasi' => false,
-                'kencangkan' => true,
-                'perbaikan_koneksi' => false,
-                'lainnya' => false
-            ],
-            'kondisi_akhir' => 'Kebocoran sudah diperbaiki, sistem berjalan normal',
-            'catatan' => 'Perlu pemantauan rutin untuk mencegah kebocoran berulang',
-            'eviden' => [
-                'sebelum' => 'foto_sebelum.jpg',
-                'sesudah' => 'foto_sesudah.jpg'
-            ],
-            'status' => 'selesai',
-            'created_at' => '2024-03-20 08:30:00',
-            'updated_at' => '2024-03-20 09:15:00'
-        ];
-
+        $flmDetail = FlmInspection::findOrFail($id);
         return view('admin.flm.show', compact('flmDetail'));
     }
 } 

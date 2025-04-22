@@ -223,7 +223,7 @@
                                                         </td>
                                             <td class="px-6 py-4">
                                                 <textarea name="machine_statuses[{{ $index }}][keterangan]" rows="3"
-                                                    class="shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
+                                                    class="p-2 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                                                       placeholder="Masukkan keterangan..."></textarea>
                                                         </td>
                                                     </tr>
@@ -274,7 +274,7 @@
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Keterangan</label>
                                             <textarea name="auxiliary_equipment[0][keterangan]" rows="3"
-                                                class="mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
+                                                class="p-2 mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                                                       placeholder="Masukkan keterangan..."></textarea>
                                         </div>
                                     </div>
@@ -328,7 +328,7 @@
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Keterangan</label>
                                             <textarea name="resources[0][keterangan]" rows="3"
-                                                class="mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
+                                                class="p-2 mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                                                           placeholder="Masukkan keterangan..."></textarea>
                                         </div>
                                     </div>
@@ -363,13 +363,13 @@
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Uraian</label>
                                             <textarea name="k3l[0][uraian]" required rows="3"
-                                                class="mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
+                                                class="p-2 mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                                 placeholder="Masukkan uraian..."></textarea>
                                                             </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Saran</label>
                                             <textarea name="k3l[0][saran]" required rows="3"
-                                                class="mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
+                                                class="p-2 mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                                 placeholder="Masukkan saran..."></textarea>
                                         </div>
                                         <div>
@@ -398,7 +398,7 @@
                                 <h3 class="text-lg leading-6 font-medium text-gray-900">Catatan Sistem</h3>
                                 <div class="mt-2">
                                     <textarea name="catatan_sistem" rows="4" required
-                                        class="shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
+                                        class="p-2 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                         placeholder="Masukkan catatan sistem..."></textarea>
                                 </div>
                                         </div>
@@ -410,7 +410,7 @@
                                 <h3 class="text-lg leading-6 font-medium text-gray-900">Catatan Umum</h3>
                                 <div class="mt-2">
                                     <textarea name="catatan_umum" rows="4" required
-                                        class="shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
+                                        class="p-2 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                         placeholder="Masukkan catatan umum..."></textarea>
                                         </div>
                                     </div>
@@ -423,7 +423,7 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900">Resume Rapat</h3>
                             <div class="mt-2">
                                 <textarea name="resume" rows="4" required
-                                    class="shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
+                                    class="p-2 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                     placeholder="Masukkan resume rapat..."></textarea>
                                                     </div>
                                                     </div>
@@ -467,7 +467,7 @@
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Keterangan</label>
                                             <textarea name="absensi[0][keterangan]" rows="3"
-                                                class="mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
+                                                class="p-2 mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                                 placeholder="Masukkan keterangan..."></textarea>
                                         </div>
                                     </div>

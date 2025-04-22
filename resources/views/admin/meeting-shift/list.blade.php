@@ -57,6 +57,7 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Shift</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Oleh</th>
@@ -68,11 +69,14 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($meetingShifts as $meetingShift)
                                     <tr class="hover:bg-gray-50 transition-colors">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
+                                            {{ $loop->iteration }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
                                             {{ $meetingShift->tanggal ? $meetingShift->tanggal->format('d F Y') : '-' }}
 
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                 @if($meetingShift->current_shift == 'A') bg-blue-100 text-blue-800
                                                 @elseif($meetingShift->current_shift == 'B') bg-green-100 text-green-800
@@ -81,10 +85,10 @@
                                                 Shift {{ $meetingShift->current_shift }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
                                             {{ $meetingShift->creator->name }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
                                             @php
                                                 $operatingCount = $meetingShift->machineStatuses->filter(function($status) {
                                                     return str_contains($status->status, 'operasi');
@@ -104,7 +108,7 @@
                                                 </span>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
                                             @php
                                                 $presentCount = $meetingShift->attendances ? $meetingShift->attendances->where('status', 'hadir')->count() : 0;
                                                 $totalAttendance = $meetingShift->attendances ? $meetingShift->attendances->count() : 0;
@@ -113,7 +117,7 @@
                                                 {{ $presentCount }}/{{ $totalAttendance }} Hadir
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
                                             <div class="flex items-center justify-center space-x-2">
                                                 <a href="{{ route('admin.meeting-shift.show', $meetingShift) }}"
                                                     class="text-blue-600 hover:text-blue-900"

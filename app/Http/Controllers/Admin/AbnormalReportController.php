@@ -298,6 +298,10 @@ class AbnormalReportController extends Controller
             ])->findOrFail($id);
 
             $pdf = PDF::loadView('admin.abnormal-report.pdf', compact('report'));
+            
+            // Set paper size to A4 and landscape orientation for better table display
+            $pdf->setPaper('a4', 'landscape');
+            
             return $pdf->download('laporan-abnormal-' . $id . '.pdf');
         } catch (\Exception $e) {
             return redirect()

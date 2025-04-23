@@ -28,23 +28,12 @@
                     <h1 class="text-xl font-semibold text-gray-900">Data K3 KAMP dan Lingkungan</h1>
                 </div>
 
-                <div class="relative">
-                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
-                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
-                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
-                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
-                    </button>
-                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
-                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
-                        </form>
-                    </div>
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('admin.k3-kamp.index') }}" 
+                       class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-plus mr-2"></i>
+                        Tambah Data
+                    </a>
                 </div>
             </div>
         </header>
@@ -151,84 +140,91 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            <div class="flex items-center">
-                                                <span>Tanggal</span>
-                                                <i class="fas fa-sort ml-2 text-gray-400"></i>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            <div class="flex items-center">
-                                                <span>Kategori</span>
-                                                <i class="fas fa-sort ml-2 text-gray-400"></i>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            <div class="flex items-center">
-                                                <span>Item</span>
-                                                <i class="fas fa-sort ml-2 text-gray-400"></i>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            <div class="flex items-center">
-                                                <span>Status</span>
-                                                <i class="fas fa-sort ml-2 text-gray-400"></i>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            <div class="flex items-center">
-                                                <span>Kondisi</span>
-                                                <i class="fas fa-sort ml-2 text-gray-400"></i>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            <div class="flex items-center">
-                                                <span>Keterangan</span>
-                                                <i class="fas fa-sort ml-2 text-gray-400"></i>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            <div class="flex items-center">
-                                                <span>Eviden</span>
-                                                <i class="fas fa-sort ml-2 text-gray-400"></i>
-                                            </div>
-                                        </th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kondisi</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach($k3Data ?? [] as $item)
-                                    <tr class="hover:bg-gray-50 transition-colors">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border">
-                                            {{ $item->tanggal ?? '2024-03-20' }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border">
-                                            {{ $item->kategori ?? 'K3 & Keamanan' }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border">
-                                            {{ $item->item ?? 'Potensi gangguan keamanan' }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->status == 'Ada' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                {{ $item->status ?? 'Ada' }}
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->kondisi == 'Normal' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                                {{ $item->kondisi ?? 'Normal' }}
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 border-r border">
-                                            {{ $item->keterangan ?? 'Kondisi keamanan dalam keadaan baik' }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border">
-                                            <button class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded hover:bg-blue-100">
-                                                <i class="fas fa-image mr-1"></i> Lihat
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    @foreach($reports as $index => $report)
+                                        @foreach($report->items as $item)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ $index + 1 }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ date('d/m/Y', strtotime($report->date)) }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ $item->item_type === 'k3_keamanan' ? 'K3 & Keamanan' : 'Lingkungan' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ $item->item_name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->status === 'ada' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                    {{ ucfirst($item->status) }}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->kondisi === 'normal' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                                    {{ ucfirst($item->kondisi) }}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-500">
+                                                {{ $item->keterangan }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                                <div class="flex items-center justify-center space-x-2">
+                                                    <a href="{{ route('admin.k3-kamp.show', $report->id) }}" 
+                                                       class="text-blue-600 hover:text-blue-900" 
+                                                       title="Lihat Detail">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a href="{{ route('admin.k3-kamp.edit', $report->id) }}" 
+                                                       class="text-green-600 hover:text-green-900"
+                                                       title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="{{ route('admin.k3-kamp.export-pdf', $report->id) }}" 
+                                                       class="text-red-600 hover:text-red-900"
+                                                       title="Export PDF">
+                                                        <i class="fas fa-file-pdf"></i>
+                                                    </a>
+                                                    <a href="{{ route('admin.k3-kamp.export-excel', $report->id) }}" 
+                                                       class="text-green-600 hover:text-green-900"
+                                                       title="Export Excel">
+                                                        <i class="fas fa-file-excel"></i>
+                                                    </a>
+                                                    <form action="{{ route('admin.k3-kamp.destroy', $report->id) }}" 
+                                                          method="POST" 
+                                                          class="inline-block"
+                                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" 
+                                                                class="text-red-600 hover:text-red-900"
+                                                                title="Hapus">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        <div class="mt-4">
+                            {{ $reports->links() }}
                         </div>
                     </div>
                 </div>

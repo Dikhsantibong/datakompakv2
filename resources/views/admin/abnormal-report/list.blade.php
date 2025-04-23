@@ -61,21 +61,21 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($reports as $index => $report)
                                     <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
                                             {{ ($reports->currentPage() - 1) * $reports->perPage() + $index + 1 }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
                                             {{ $report->created_at->format('d/m/Y H:i') }}
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                        <td class="px-6 py-4 text-sm text-gray-900 text-center border border-gray-200">
                                             @foreach($report->affectedMachines as $machine)
                                                 <div class="mb-1">{{ $machine->nama_mesin }}</div>
                                             @endforeach
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
                                             {{ $report->creator->name ?? 'N/A' }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
                                             @php
                                                 $hasRusak = $report->affectedMachines->contains('kondisi_rusak', true);
                                                 $hasAbnormal = $report->affectedMachines->contains('kondisi_abnormal', true);
@@ -94,7 +94,7 @@
                                                 </span>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center border border-gray-200">
                                             <a href="{{ route('admin.abnormal-report.show', $report->id) }}" 
                                                class="text-blue-600 hover:text-blue-900 mr-3" 
                                                title="Lihat Detail">

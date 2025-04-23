@@ -28,22 +28,32 @@
                     <h1 class="text-xl font-semibold text-gray-900">Input Data K3 KAMP dan Lingkungan</h1>
                 </div>
 
-                <div class="relative">
-                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
-                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
-                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
-                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
-                    </button>
-                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
-                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
-                        </form>
+                <div class="flex items-center gap-4">
+                    <!-- View Data Button -->
+                    <a href="{{ route('admin.k3-kamp.view') }}" 
+                       class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-table mr-2"></i>
+                        Lihat Data
+                    </a>
+
+                    <!-- User Profile Dropdown -->
+                    <div class="relative">
+                        <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                            <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
+                            <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                            <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                        </button>
+                        <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                            <a href="{{ route('logout') }}" 
+                               class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                @csrf
+                                <input type="hidden" name="redirect" value="{{ route('homepage') }}">
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -183,6 +193,14 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                            <!-- Add Save Button -->
+                            <div class="mt-6 flex justify-end">
+                                <button type="submit" form="k3-form"
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <i class="fas fa-save mr-2"></i>
+                                    Simpan Data
+                                </button>
                             </div>
                         </form>
                     </div>

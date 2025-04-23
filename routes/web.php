@@ -51,6 +51,7 @@ use App\Http\Controllers\Admin\AbnormalReportController;
 use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\MonitoringDatakompakController;
 use App\Http\Controllers\Admin\FiveS5RController;
+use App\Http\Controllers\Admin\OperasiUpkd\PengadaanController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -1166,4 +1167,36 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 Route::middleware(['auth'])->group(function () {
     // Monitoring Datakompak
     Route::get('/admin/monitoring-datakompak', [MonitoringDatakompakController::class, 'index'])->name('admin.monitoring-datakompak');
+});
+
+// K3 KAMP Routes
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('k3-kamp')->name('k3-kamp.')->group(function () {
+        Route::get('/', [K3KampController::class, 'index'])->name('index');
+        Route::post('/', [K3KampController::class, 'store'])->name('store');
+        Route::get('/view', [K3KampController::class, 'view'])->name('view');
+        Route::get('/{id}', [K3KampController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [K3KampController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [K3KampController::class, 'update'])->name('update');
+        Route::delete('/{id}', [K3KampController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}/export-pdf', [K3KampController::class, 'exportPdf'])->name('export-pdf');
+        Route::get('/{id}/export-excel', [K3KampController::class, 'exportExcel'])->name('export-excel');
+        Route::post('/upload-media', [K3KampController::class, 'uploadMedia'])->name('upload-media');
+        Route::delete('/media/{id}', [K3KampController::class, 'deleteMedia'])->name('delete-media');
+    });
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::prefix('operasi-upkd')->name('operasi-upkd.')->group(function () {
+            Route::prefix('pengadaan')->name('pengadaan.')->group(function () {
+                Route::get('/', [App\Http\Controllers\Admin\OperasiUpkd\PengadaanController::class, 'index'])->name('index');
+                Route::get('/create', [App\Http\Controllers\Admin\OperasiUpkd\PengadaanController::class, 'create'])->name('create');
+                Route::post('/', [App\Http\Controllers\Admin\OperasiUpkd\PengadaanController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [App\Http\Controllers\Admin\OperasiUpkd\PengadaanController::class, 'edit'])->name('edit');
+                Route::put('/{id}', [App\Http\Controllers\Admin\OperasiUpkd\PengadaanController::class, 'update'])->name('update');
+                Route::delete('/{id}', [App\Http\Controllers\Admin\OperasiUpkd\PengadaanController::class, 'destroy'])->name('destroy');
+            });
+        });
+    });
 });

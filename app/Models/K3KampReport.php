@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class K3KampReport extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'date',
         'created_by'
     ];
 
-    protected $casts = [
-        'date' => 'date'
+    protected $dates = [
+        'date'
     ];
 
     public function items(): HasMany

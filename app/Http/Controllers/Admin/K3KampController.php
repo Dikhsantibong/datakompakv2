@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\K3KampReport;
 use App\Models\K3KampItem;
 use App\Models\K3KampMedia;
+use App\Exports\K3KampExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class K3KampController extends Controller
 {
@@ -29,7 +33,7 @@ class K3KampController extends Controller
             // Create report
             $report = K3KampReport::create([
                 'date' => today(),
-                'created_by' => auth()->id()
+                'created_by' => Auth::user()->id
             ]);
 
             // Process K3 & Keamanan items
@@ -43,13 +47,15 @@ class K3KampController extends Controller
             ];
 
             foreach ($k3Items as $index => $itemName) {
-                $report->items()->create([
-                    'item_type' => 'k3_keamanan',
-                    'item_name' => $itemName,
-                    'status' => $request->input("status_$index"),
-                    'kondisi' => $request->input("kondisi_$index"),
-                    'keterangan' => $request->input("keterangan_$index")
-                ]);
+                if ($request->has("status_$index")) {
+                    $report->items()->create([
+                        'item_type' => 'k3_keamanan',
+                        'item_name' => $itemName,
+                        'status' => $request->input("status_$index")[0] ?? null,
+                        'kondisi' => $request->input("kondisi_$index")[0] ?? null,
+                        'keterangan' => $request->input("keterangan_$index")
+                    ]);
+                }
             }
 
             // Process Lingkungan items
@@ -60,21 +66,124 @@ class K3KampController extends Controller
             ];
 
             foreach ($lingkunganItems as $index => $itemName) {
-                $report->items()->create([
-                    'item_type' => 'lingkungan',
-                    'item_name' => $itemName,
-                    'status' => $request->input("status_lingkungan_$index"),
-                    'kondisi' => $request->input("kondisi_lingkungan_$index"),
-                    'keterangan' => $request->input("keterangan_lingkungan_$index")
+                if ($request->has("status_lingkungan_$index")) {
+                    $report->items()->create([
+                        'item_type' => 'lingkungan',
+                        'item_name' => $itemName,
+                        'status' => $request->input("status_lingkungan_$index")[0] ?? null,
+                        'kondisi' => $request->input("kondisi_lingkungan_$index")[0] ?? null,
+                        'keterangan' => $request->input("keterangan_lingkungan_$index")
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return redirect()->route('admin.k3-kamp.view')->with('success', 'Laporan berhasil disimpan');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan laporan: ' . $e->getMessage());
+        }
+    }
+
+    public function view()
+    {
+        $reports = K3KampReport::with(['items.media', 'creator'])
+            ->orderBy('date', 'desc')
+            ->paginate(10);
+
+        return view('admin.k3-kamp.view', compact('reports'));
+    }
+
+    public function show($id)
+    {
+        $report = K3KampReport::with(['items.media', 'creator'])
+            ->findOrFail($id);
+
+        return view('admin.k3-kamp.show', compact('report'));
+    }
+
+    public function edit($id)
+    {
+        $report = K3KampReport::with(['items.media'])
+            ->findOrFail($id);
+
+        return view('admin.k3-kamp.edit', compact('report'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $report = K3KampReport::findOrFail($id);
+            
+            // Update items
+            foreach ($report->items as $item) {
+                $item->update([
+                    'status' => $request->input("status_" . $item->id),
+                    'kondisi' => $request->input("kondisi_" . $item->id),
+                    'keterangan' => $request->input("keterangan_" . $item->id)
                 ]);
             }
 
             DB::commit();
-            return redirect()->back()->with('success', 'Laporan berhasil disimpan');
+            return redirect()->route('admin.k3-kamp.view')
+                ->with('success', 'Laporan berhasil diperbarui');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan laporan');
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat memperbarui laporan');
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $report = K3KampReport::findOrFail($id);
+            
+            // Delete associated media files
+            foreach ($report->items as $item) {
+                foreach ($item->media as $media) {
+                    Storage::delete($media->file_path);
+                }
+            }
+            
+            $report->delete();
+
+            return redirect()->route('admin.k3-kamp.view')
+                ->with('success', 'Laporan berhasil dihapus');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat menghapus laporan');
+        }
+    }
+
+    public function exportExcel($id)
+    {
+        try {
+            $report = K3KampReport::with(['items.media', 'creator'])
+                ->findOrFail($id);
+
+            return Excel::download(new K3KampExport($report), 'laporan-k3-kamp-' . $id . '.xlsx');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat mengekspor Excel');
+        }
+    }
+
+    public function exportPdf($id)
+    {
+        try {
+            $report = K3KampReport::with(['items.media', 'creator'])
+                ->findOrFail($id);
+
+            $pdf = PDF::loadView('admin.k3-kamp.pdf', compact('report'));
+            return $pdf->download('laporan-k3-kamp-' . $id . '.pdf');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat mengekspor PDF');
         }
     }
 

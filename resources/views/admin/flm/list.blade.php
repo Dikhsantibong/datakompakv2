@@ -56,19 +56,25 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-4 sm:px-6 py-8">
+                @if(session('success'))
+                <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+                @endif
+
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <div class="p-6">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-lg font-semibold text-gray-900">Daftar Pemeriksaan FLM</h2>
                             <div class="flex space-x-2">
-                                <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                <a href="{{ route('admin.flm.exportExcel') }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                     <i class="fas fa-file-excel mr-2"></i>
                                     Export Excel
-                                </button>
-                                <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                </a>
+                                <a href="{{ route('admin.flm.exportPdf') }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                     <i class="fas fa-file-pdf mr-2"></i>
                                     Export PDF
-                                </button>
+                                </a>
                             </div>
                         </div>
 
@@ -122,21 +128,35 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex space-x-2">
-                                                <a href="{{ route('admin.flm.show', $data['id']) }}" class="text-indigo-600 hover:text-indigo-900">
+                                                <a href="{{ route('admin.flm.show', $data->id) }}" class="text-indigo-600 hover:text-indigo-900" title="Lihat Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <button class="text-blue-600 hover:text-blue-900">
+                                                <a href="{{ route('admin.flm.edit', $data->id) }}" class="text-blue-600 hover:text-blue-900" title="Edit">
                                                     <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="text-red-600 hover:text-red-900">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                </a>
+                                                <form action="{{ route('admin.flm.destroy', $data->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-red-600 hover:text-red-900" title="Hapus">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                                <a href="{{ route('admin.flm.exportExcel', $data->id) }}" class="text-green-600 hover:text-green-900" title="Export Excel">
+                                                    <i class="fas fa-file-excel"></i>
+                                                </a>
+                                                <a href="{{ route('admin.flm.exportPdf', $data->id) }}" class="text-red-600 hover:text-red-900" title="Export PDF">
+                                                    <i class="fas fa-file-pdf"></i>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                        
+                        <div class="mt-4">
+                            {{ $flmData->links() }}
                         </div>
                     </div>
                 </div>

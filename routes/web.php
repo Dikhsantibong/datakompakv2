@@ -1071,6 +1071,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::post('/flm', [FlmController::class, 'store'])->name('flm.store');
     Route::get('/flm/list', [FlmController::class, 'list'])->name('flm.list');
     Route::get('/flm/{id}', [FlmController::class, 'show'])->name('flm.show');
+    Route::get('/flm/{id}/edit', [FlmController::class, 'edit'])->name('flm.edit');
+    Route::put('/flm/{id}', [FlmController::class, 'update'])->name('flm.update');
+    Route::delete('/flm/{id}', [FlmController::class, 'destroy'])->name('flm.destroy');
+    Route::get('/flm/export-excel/{id?}', [FlmController::class, 'exportExcel'])->name('flm.exportExcel');
+    Route::get('/flm/export-pdf/{id?}', [FlmController::class, 'exportPdf'])->name('flm.exportPdf');
 });
 
 Route::get('/admin/data-engine/{date}/edit', [DataEngineController::class, 'edit'])->name('admin.data-engine.edit');

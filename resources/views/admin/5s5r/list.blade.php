@@ -87,12 +87,22 @@
                                                     title="Lihat Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="#"
+                                                <a href="{{ route('admin.5s5r.edit', $item['id']) }}"
                                                     class="text-yellow-600 hover:text-yellow-900"
                                                     title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form action="#" 
+                                                <a href="{{ route('admin.5s5r.export.pdf', $item['id']) }}"
+                                                    class="text-red-600 hover:text-red-900"
+                                                    title="Export PDF">
+                                                    <i class="fas fa-file-pdf"></i>
+                                                </a>
+                                                <a href="{{ route('admin.5s5r.export.excel', $item['id']) }}"
+                                                    class="text-green-600 hover:text-green-900"
+                                                    title="Export Excel">
+                                                    <i class="fas fa-file-excel"></i>
+                                                </a>
+                                                <form action="{{ route('admin.5s5r.destroy', $item['id']) }}" 
                                                       method="POST" 
                                                       class="inline-block"
                                                       onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">

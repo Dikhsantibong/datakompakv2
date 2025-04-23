@@ -8,6 +8,8 @@ use App\Models\Pemeriksaan5s5r;
 use App\Models\ProgramKerja5r;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use PDF;
+use Excel;
 
 class FiveS5RController extends Controller
 {
@@ -115,5 +117,115 @@ class FiveS5RController extends Controller
             });
 
         return view('admin.5s5r.list', compact('items'));
+    }
+
+    public function edit($id)
+    {
+        // Get the date of the selected record
+        $mainRecord = Pemeriksaan5s5r::findOrFail($id);
+        $date = date('Y-m-d', strtotime($mainRecord->created_at));
+        
+        // Get all records for that date
+        $pemeriksaan = Pemeriksaan5s5r::whereDate('created_at', $date)->get();
+        $programKerja = ProgramKerja5r::whereDate('created_at', $date)->get();
+
+        if ($pemeriksaan->isEmpty()) {
+            return redirect()->route('admin.5s5r.list')->with('error', 'Data tidak ditemukan');
+        }
+
+        return view('admin.5s5r.edit', compact('pemeriksaan', 'programKerja'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $mainRecord = Pemeriksaan5s5r::findOrFail($id);
+        $date = date('Y-m-d', strtotime($mainRecord->created_at));
+
+        DB::beginTransaction();
+        try {
+            // Update Pemeriksaan 5S5R data
+            foreach(['Ringkas', 'Rapi', 'Resik', 'Rawat', 'Rajin'] as $kategori) {
+                $record = Pemeriksaan5s5r::whereDate('created_at', $date)
+                    ->where('kategori', $kategori)
+                    ->first();
+
+                if ($record) {
+                    $updateData = [
+                        'kondisi_awal' => $request->input("kondisi_awal_pemeriksaan_$kategori"),
+                        'pic' => $request->input("pic_$kategori"),
+                        'area_kerja' => $request->input("area_kerja_$kategori"),
+                        'area_produksi' => $request->input("area_produksi_$kategori"),
+                        'membersihkan' => $request->has("membersihkan_$kategori"),
+                        'merapikan' => $request->has("merapikan_$kategori"),
+                        'membuang_sampah' => $request->has("membuang_sampah_$kategori"),
+                        'mengecat' => $request->has("mengecat_$kategori"),
+                        'lainnya' => $request->has("lainnya_$kategori"),
+                        'kondisi_akhir' => $request->input("kondisi_akhir_pemeriksaan_$kategori")
+                    ];
+
+                    if ($request->hasFile("eviden_pemeriksaan_$kategori")) {
+                        if ($record->eviden) {
+                            Storage::delete($record->eviden);
+                        }
+                        $updateData['eviden'] = $request->file("eviden_pemeriksaan_$kategori")->store('public/5s5r/pemeriksaan');
+                    }
+
+                    $record->update($updateData);
+                }
+            }
+
+            // Update Program Kerja 5R data
+            for($i = 1; $i <= 4; $i++) {
+                $record = ProgramKerja5r::whereDate('created_at', $date)
+                    ->where('program_kerja', "Shift $i")
+                    ->first();
+
+                if ($record) {
+                    $updateData = [
+                        'goal' => $request->input("goal_$i"),
+                        'kondisi_awal' => $request->input("kondisi_awal_program_$i"),
+                        'progress' => $request->input("progress_$i"),
+                        'kondisi_akhir' => $request->input("kondisi_akhir_program_$i"),
+                        'catatan' => $request->input("catatan_$i")
+                    ];
+
+                    if ($request->hasFile("eviden_program_$i")) {
+                        if ($record->eviden) {
+                            Storage::delete($record->eviden);
+                        }
+                        $updateData['eviden'] = $request->file("eviden_program_$i")->store('public/5s5r/program');
+                    }
+
+                    $record->update($updateData);
+                }
+            }
+
+            DB::commit();
+            return redirect()->route('admin.5s5r.show', $id)->with('success', 'Data berhasil diperbarui');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui data');
+        }
+    }
+
+    public function exportPdf($id)
+    {
+        $mainRecord = Pemeriksaan5s5r::findOrFail($id);
+        $date = date('Y-m-d', strtotime($mainRecord->created_at));
+        
+        $pemeriksaan = Pemeriksaan5s5r::whereDate('created_at', $date)->get();
+        $programKerja = ProgramKerja5r::whereDate('created_at', $date)->get();
+
+        $pdf = PDF::loadView('admin.5s5r.export.pdf', compact('pemeriksaan', 'programKerja'));
+        
+        return $pdf->download('5s5r-report-' . $date . '.pdf');
+    }
+
+    public function exportExcel($id)
+    {
+        $mainRecord = Pemeriksaan5s5r::findOrFail($id);
+        $date = date('Y-m-d', strtotime($mainRecord->created_at));
+        
+        return Excel::download(new FiveS5RExport($date), '5s5r-report-' . $date . '.xlsx');
     }
 } 

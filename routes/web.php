@@ -50,6 +50,7 @@ use App\Http\Controllers\FlmController;
 use App\Http\Controllers\Admin\AbnormalReportController;
 use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\MonitoringDatakompakController;
+use App\Http\Controllers\Admin\FiveS5RController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -233,11 +234,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     });
 
     // Add 5S5R routes
-    Route::prefix('5s5r')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\FiveS5RController::class, 'index'])->name('5s5r.index');
-        Route::get('/list', [App\Http\Controllers\Admin\FiveS5RController::class, 'list'])->name('5s5r.list');
-        Route::get('/{id}', [App\Http\Controllers\Admin\FiveS5RController::class, 'show'])->name('5s5r.show');
-        Route::post('/', [App\Http\Controllers\Admin\FiveS5RController::class, 'store'])->name('5s5r.store');
+    Route::prefix('5s5r')->name('5s5r.')->group(function () {
+        Route::get('/', [FiveS5RController::class, 'index'])->name('index');
+        Route::get('/list', [FiveS5RController::class, 'list'])->name('list');
+        Route::get('/{id}', [FiveS5RController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [FiveS5RController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [FiveS5RController::class, 'update'])->name('update');
+        Route::delete('/{id}', [FiveS5RController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}/export/pdf', [FiveS5RController::class, 'exportPdf'])->name('export.pdf');
+        Route::get('/{id}/export/excel', [FiveS5RController::class, 'exportExcel'])->name('export.excel');
     });
 
     // Abnormal Report routes

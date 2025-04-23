@@ -55,7 +55,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="p-6">
+        <div class="px-6">
             <!-- Overview Card -->
             <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg shadow-lg p-6 mb-6 text-white relative welcome-card">
                 <div class="relative z-10">

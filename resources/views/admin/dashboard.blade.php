@@ -141,7 +141,7 @@
         
         <!-- Main Content -->
         
-        <div class="p-6">
+        <div class="px-6">
             <!-- Welcome Card -->
             
             <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">

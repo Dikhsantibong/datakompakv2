@@ -49,7 +49,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="bg-white rounded-lg shadow-md">
                     <div class="p-6">
-                        <form action="{{ route('admin.energiprimer.bahan-bakar.store') }}" method="POST">
+                        <form action="{{ route('admin.energiprimer.bahan-bakar.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
@@ -132,6 +132,21 @@
                                               class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('catatan_transaksi') border-red-500 @enderror"
                                               placeholder="Masukkan catatan transaksi...">{{ old('catatan_transaksi') }}</textarea>
                                     @error('catatan_transaksi')
+                                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700">Upload Dokumen</label>
+                                    <div class="mt-1 flex items-center">
+                                        <input type="file" name="document" 
+                                               class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 @error('document') border-red-500 @enderror"
+                                               accept=".pdf,.doc,.docx,.xls,.xlsx">
+                                    </div>
+                                    <p class="mt-1 text-sm text-gray-500">
+                                        Format yang diizinkan: PDF, DOC, DOCX, XLS, XLSX (Maks. 2MB)
+                                    </p>
+                                    @error('document')
                                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                                     @enderror
                                 </div>

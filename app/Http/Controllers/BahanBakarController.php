@@ -6,6 +6,7 @@ use App\Models\BahanBakar;
 use App\Models\PowerPlant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 use PDF;
 use App\Exports\BahanBakarExport;
@@ -64,6 +65,7 @@ class BahanBakarController extends Controller
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
             'catatan_transaksi' => 'nullable|string|max:1000',
+            'document' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:2048'
         ]);
 
         // Cek apakah ini data pertama untuk unit dan jenis BBM tersebut
@@ -92,7 +94,7 @@ class BahanBakarController extends Controller
         try {
             DB::beginTransaction();
 
-            BahanBakar::create([
+            $data = [
                 'tanggal' => $request->tanggal,
                 'unit_id' => $request->unit_id,
                 'jenis_bbm' => $request->jenis_bbm,
@@ -102,7 +104,17 @@ class BahanBakarController extends Controller
                 'saldo_akhir' => $saldoAkhir,
                 'is_opening_balance' => $isOpeningBalance,
                 'catatan_transaksi' => $request->catatan_transaksi
-            ]);
+            ];
+
+            // Handle file upload
+            if ($request->hasFile('document')) {
+                $file = $request->file('document');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('public/documents/bahan-bakar', $fileName);
+                $data['document'] = $fileName;
+            }
+
+            BahanBakar::create($data);
 
             DB::commit();
             return redirect()->route('admin.energiprimer.bahan-bakar')
@@ -133,6 +145,7 @@ class BahanBakarController extends Controller
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
             'catatan_transaksi' => 'nullable|string|max:1000',
+            'document' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:2048'
         ]);
 
         $bahanBakar = BahanBakar::findOrFail($id);
@@ -143,7 +156,7 @@ class BahanBakarController extends Controller
             // Hitung saldo akhir
             $saldoAkhir = $bahanBakar->saldo_awal + $request->penerimaan - $request->pemakaian;
 
-            $bahanBakar->update([
+            $data = [
                 'tanggal' => $request->tanggal,
                 'unit_id' => $request->unit_id,
                 'jenis_bbm' => $request->jenis_bbm,
@@ -151,7 +164,22 @@ class BahanBakarController extends Controller
                 'pemakaian' => $request->pemakaian,
                 'saldo_akhir' => $saldoAkhir,
                 'catatan_transaksi' => $request->catatan_transaksi
-            ]);
+            ];
+
+            // Handle file upload
+            if ($request->hasFile('document')) {
+                // Delete old file if exists
+                if ($bahanBakar->document) {
+                    Storage::delete('public/documents/bahan-bakar/' . $bahanBakar->document);
+                }
+
+                $file = $request->file('document');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('public/documents/bahan-bakar', $fileName);
+                $data['document'] = $fileName;
+            }
+
+            $bahanBakar->update($data);
 
             DB::commit();
             return redirect()->route('admin.energiprimer.bahan-bakar')
@@ -171,6 +199,12 @@ class BahanBakarController extends Controller
             DB::beginTransaction();
             
             $bahanBakar = BahanBakar::findOrFail($id);
+            
+            // Delete associated document if exists
+            if ($bahanBakar->document) {
+                Storage::delete('public/documents/bahan-bakar/' . $bahanBakar->document);
+            }
+            
             $bahanBakar->delete();
 
             DB::commit();

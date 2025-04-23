@@ -214,6 +214,9 @@
                                             Catatan
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Dokumen
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Aksi
                                         </th>
                                     </tr>
@@ -244,6 +247,17 @@
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 border border-gray-200">
                                             {{ $item->catatan_transaksi }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                            @if($item->document)
+                                                <a href="{{ Storage::url('documents/bahan-bakar/' . $item->document) }}" 
+                                                   target="_blank"
+                                                   class="text-blue-600 hover:text-blue-900">
+                                                    <i class="fas fa-file-download mr-1"></i> Download
+                                                </a>
+                                            @else
+                                                <span class="text-gray-400">Tidak ada dokumen</span>
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center border border-gray-200">
                                             <div class="flex gap-3">

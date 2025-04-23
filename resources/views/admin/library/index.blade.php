@@ -187,7 +187,7 @@
                             </div>
 
                             <!-- Card 7: Dokumen Operasi Lainnya -->
-                            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                            <div class=" mb-7 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                                 <div class="p-4">
                                     <div class="text-3xl text-teal-600 mb-2">
                                         <i class="fas fa-folder-open"></i>

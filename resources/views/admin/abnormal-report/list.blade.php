@@ -100,6 +100,21 @@
                                                title="Lihat Detail">
                                                 <i class="fas fa-eye"></i>
                                             </a>
+                                            <a href="{{ route('admin.abnormal-report.edit', $report->id) }}" 
+                                               class="text-yellow-600 hover:text-yellow-900 mr-3" 
+                                               title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{{ route('admin.abnormal-report.export-excel', $report->id) }}" 
+                                               class="text-green-600 hover:text-green-900 mr-3" 
+                                               title="Export Excel">
+                                                <i class="fas fa-file-excel"></i>
+                                            </a>
+                                            <a href="{{ route('admin.abnormal-report.export-pdf', $report->id) }}" 
+                                               class="text-red-600 hover:text-red-900 mr-3" 
+                                               title="Export PDF">
+                                                <i class="fas fa-file-pdf"></i>
+                                            </a>
                                             <form action="{{ route('admin.abnormal-report.destroy', $report->id) }}" 
                                                   method="POST" 
                                                   class="inline"

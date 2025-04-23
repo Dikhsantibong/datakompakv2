@@ -239,6 +239,20 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/{id}', [App\Http\Controllers\Admin\FiveS5RController::class, 'show'])->name('5s5r.show');
         Route::post('/', [App\Http\Controllers\Admin\FiveS5RController::class, 'store'])->name('5s5r.store');
     });
+
+    // Abnormal Report routes
+    Route::prefix('abnormal-report')->name('abnormal-report.')->group(function () {
+        Route::get('/', [AbnormalReportController::class, 'index'])->name('index');
+        Route::get('/list', [AbnormalReportController::class, 'list'])->name('list');
+        Route::get('/create', [AbnormalReportController::class, 'create'])->name('create');
+        Route::post('/', [AbnormalReportController::class, 'store'])->name('store');
+        Route::get('/{id}', [AbnormalReportController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [AbnormalReportController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AbnormalReportController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AbnormalReportController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}/export-excel', [AbnormalReportController::class, 'exportExcel'])->name('export-excel');
+        Route::get('/{id}/export-pdf', [AbnormalReportController::class, 'exportPdf'])->name('export-pdf');
+    });
 });
 
 

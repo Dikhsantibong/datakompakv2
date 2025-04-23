@@ -141,6 +141,16 @@
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
+                                                <a href="{{ route('admin.meeting-shift.download-pdf', $meetingShift) }}"
+                                                    class="text-red-600 hover:text-red-900"
+                                                    title="Download PDF">
+                                                    <i class="fas fa-file-pdf"></i>
+                                                </a>
+                                                <a href="{{ route('admin.meeting-shift.download-excel', $meetingShift) }}"
+                                                    class="text-green-600 hover:text-green-900"
+                                                    title="Download Excel">
+                                                    <i class="fas fa-file-excel"></i>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>

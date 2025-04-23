@@ -178,6 +178,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::put('/{meetingShift}', [MeetingShiftController::class, 'update'])->name('meeting-shift.update');
         Route::delete('/{meetingShift}', [MeetingShiftController::class, 'destroy'])->name('meeting-shift.destroy');
         Route::get('/{meetingShift}', [MeetingShiftController::class, 'show'])->name('meeting-shift.show');
+        Route::get('/{meetingShift}/download-pdf', [MeetingShiftController::class, 'downloadPdf'])->name('meeting-shift.download-pdf');
+        Route::get('/{meetingShift}/download-excel', [MeetingShiftController::class, 'downloadExcel'])->name('meeting-shift.download-excel');
     });
 
     Route::prefix('users')->group(function () {

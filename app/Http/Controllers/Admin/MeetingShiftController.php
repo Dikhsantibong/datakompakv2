@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MeetingShiftExport;
 
 class MeetingShiftController extends Controller
 {
@@ -465,6 +468,53 @@ class MeetingShiftController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data absensi');
+        }
+    }
+
+    public function downloadPdf(MeetingShift $meetingShift)
+    {
+        try {
+            $meetingShift->load([
+                'machineStatuses.machine',
+                'auxiliaryEquipments',
+                'resources',
+                'k3ls',
+                'notes',
+                'resume',
+                'attendances',
+                'creator'
+            ]);
+
+            $pdf = PDF::loadView('admin.meeting-shift.pdf', compact('meetingShift'));
+            
+            return $pdf->download('meeting-shift-' . $meetingShift->tanggal->format('Y-m-d') . '-shift-' . $meetingShift->current_shift . '.pdf');
+        } catch (\Exception $e) {
+            Log::error('Error generating PDF: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengunduh PDF');
+        }
+    }
+
+    public function downloadExcel(MeetingShift $meetingShift)
+    {
+        try {
+            $meetingShift->load([
+                'machineStatuses.machine',
+                'auxiliaryEquipments',
+                'resources',
+                'k3ls',
+                'notes',
+                'resume',
+                'attendances',
+                'creator'
+            ]);
+
+            return Excel::download(
+                new MeetingShiftExport($meetingShift),
+                'meeting-shift-' . $meetingShift->tanggal->format('Y-m-d') . '-shift-' . $meetingShift->current_shift . '.xlsx'
+            );
+        } catch (\Exception $e) {
+            Log::error('Error generating Excel: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengunduh Excel');
         }
     }
 } 

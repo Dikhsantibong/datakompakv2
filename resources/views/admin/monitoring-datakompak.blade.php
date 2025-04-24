@@ -11,7 +11,74 @@
         .welcome-card {
             background-size: cover;
             background-position: center;
-            transition: all 0.3s ease;
+            transition: background-image 1s ease-in-out;
+            font-family: 'Poppins', sans-serif;
+            min-height: 200px;
+        }
+
+        .typing-animation {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid white;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+            margin: 0;
+            width: 0;
+        }
+
+        @media (max-width: 768px) {
+            .typing-animation {
+                white-space: normal;
+                border-right: none;
+                width: 100%;
+                font-size: 1.5rem;
+                line-height: 1.2;
+                animation: fadeIn 1s ease-in forwards;
+            }
+            
+            .welcome-card {
+                background-position: center;
+                padding: 1.5rem;
+                min-height: 180px;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+            animation-delay: 1s;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: white }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.2),
+                rgba(0, 0, 0, 0.4)
+            );
+            border-radius: 0.5rem;
+            z-index: 1;
+        }
+
+        .welcome-card > div {
+            position: relative;
+            z-index: 2;
         }
         .status-badge {
             transition: all 0.3s ease;
@@ -57,32 +124,43 @@
         <!-- Main Content -->
         <div class="px-6">
             <!-- Overview Card -->
-            <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg shadow-lg p-6 mb-6 text-white relative welcome-card">
+            <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
+                <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
                 <div class="relative z-10">
-                    <div class="flex justify-between items-start">
-                        <div class="space-y-2">
-                            <h2 class="text-2xl font-bold">Status Unit Pembangkit</h2>
-                            <p class="text-blue-100">Monitoring status input data unit pembangkit</p>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                                <div class="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                    <!-- Text Content -->
+                    <div class="space-y-2 md:space-y-4">
+                        <div style="overflow: hidden;">
+                            <h2 class="text-2xl md:text-3xl font-bold tracking-tight typing-animation">
+                                Status Unit Pembangkit
+                            </h2>
+                        </div>
+                        <p class="text-sm md:text-lg font-medium fade-in">
+                            Monitoring status input data unit pembangkit
+                        </p>
+                        <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 fade-in">
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="text-center">
                                     <div class="text-2xl font-bold">{{ $stats['total_units'] }}</div>
-                                    <div class="text-sm text-blue-100">Total Unit</div>
+                                    <div class="text-sm">Total Unit</div>
                                 </div>
-                                <div class="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                                <div class="text-center">
                                     <div class="text-2xl font-bold">{{ $stats['completed'] }}</div>
-                                    <div class="text-sm text-blue-100">Sudah Input</div>
+                                    <div class="text-sm">Sudah Input</div>
                                 </div>
-                                <div class="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                                <div class="text-center">
                                     <div class="text-2xl font-bold">{{ $stats['pending'] }}</div>
-                                    <div class="text-sm text-blue-100">Belum Input</div>
+                                    <div class="text-sm">Belum Input</div>
                                 </div>
-                                <div class="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                                <div class="text-center">
                                     <div class="text-2xl font-bold">{{ $stats['overdue'] }}</div>
-                                    <div class="text-sm text-blue-100">Terlambat</div>
+                                    <div class="text-sm">Terlambat</div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Logo - Hidden on mobile -->
+                    <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
                 </div>
             </div>
 
@@ -301,6 +379,26 @@
             cutout: '70%'
         }
     });
+
+    const backgroundImages = [
+        "{{ asset('images/welcome.webp') }}",
+        "{{ asset('images/welcome2.jpeg') }}",
+        "{{ asset('images/welcome3.jpg') }}"
+    ];
+
+    let currentImageIndex = 0;
+    const welcomeCard = document.querySelector('.welcome-card');
+
+    function changeBackground() {
+        welcomeCard.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
+        currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+    }
+
+    // Set initial background
+    changeBackground();
+
+    // Change background every 5 seconds
+    setInterval(changeBackground, 5000);
 </script>
 @endpush
 

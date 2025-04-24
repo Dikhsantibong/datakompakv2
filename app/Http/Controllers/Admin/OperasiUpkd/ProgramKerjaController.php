@@ -9,6 +9,36 @@ class ProgramKerjaController extends Controller
 {
     public function index()
     {
-        return view('admin.operasi-upkd.program-kerja.index');
+        $programKerja = [
+            'RUTIN' => [],
+            'OPERATION' => [],
+            'WORKSHOP' => []
+        ];
+        
+        return view('admin.operasi-upkd.program-kerja.index', compact('programKerja'));
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            // Validate the request data
+            $request->validate([
+                'type' => 'required|string',
+                'data' => 'required|array'
+            ]);
+
+            // Process and store the data
+            // TODO: Add your storage logic here
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Program kerja berhasil disimpan'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan program kerja: ' . $e->getMessage()
+            ], 500);
+        }
     }
 } 

@@ -278,7 +278,7 @@
                                                 <input type="date" name="rutin[{{ str_replace('.', '_', $item[0]) }}][deadline]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <select name="rutin[{{ str_replace('.', '_', $item[0]) }}][status]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <select name="rutin[{{ str_replace('.', '_', $item[0]) }}][status]" class=" p-2 w-[120px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                                     <option value="">Pilih Status</option>
                                                     <option value="on_track">On Track</option>
                                                     <option value="delayed">Delayed</option>

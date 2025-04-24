@@ -23,33 +23,51 @@ class MachineMonitorController extends Controller
 {
     public function index(Request $request)
     {
-        // Mengambil data mesin dan relasinya
-        $machines = Machine::with(['issues', 'metrics'])->get();
+        // Get selected unit source from request
+        $selectedUnitSource = $request->input('unit_source');
         
-        // Menghitung efisiensi untuk setiap mesin
+        // Get all power plants for the filter dropdown
+        $powerPlants = PowerPlant::all();
+
+        // Base query for machines
+        $machinesQuery = Machine::with(['issues', 'metrics']);
+        
+        // If a specific unit is selected, switch to that database and filter
+        if ($selectedUnitSource) {
+            // Get the database connection for the selected unit
+            $dbConnection = PowerPlant::getConnectionByUnitSource($selectedUnitSource);
+            
+            // Set the database connection for the Machine model
+            config(['database.default' => $dbConnection]);
+            
+            // Filter machines by unit_source
+            $machinesQuery->where('unit_source', $selectedUnitSource);
+        }
+
+        // Execute the query
+        $machines = $machinesQuery->get();
+        
+        // Calculate efficiency data
         $efficiencyData = $machines->map(function ($machine) {
             return [
                 'name' => $machine->name,
-                'efficiency' => $machine->metrics->avg('efficiency') ?? 0 // Rata-rata efisiensi
+                'efficiency' => $machine->metrics->avg('efficiency') ?? 0
             ];
         });
 
-        // Menggunakan MachineHealthCategory yang sudah ada
-        $healthCategories = Machine::with(['statusLogs', 'operations'])
-            ->get()
-            ->map(function ($machine) {
-                return [
-                    'machine_id' => $machine->id,
-                    'name' => $machine->name,
-                    'open_issues' => $machine->issues()->where('status', 'open')->count(),
-                    'status_logs' => $machine->statusLogs,
-                    'operations' => $machine->operations,
-                ];
-            });
+        // Calculate health categories
+        $healthCategories = $machines->map(function ($machine) {
+            return [
+                'machine_id' => $machine->id,
+                'name' => $machine->name,
+                'open_issues' => $machine->issues()->where('status', 'open')->count(),
+                'status_logs' => $machine->statusLogs,
+                'operations' => $machine->operations,
+            ];
+        });
 
-        // Menghitung uptime/downtime untuk setiap mesin
+        // Calculate uptime/downtime
         $uptime = $machines->map(function($machine) {
-            // Ambil log status mesin dalam 24 jam terakhir
             $logs = MachineStatusLog::where('machine_id', $machine->id)
                 ->where('tanggal', '>=', Carbon::now()->subDay())
                 ->get();
@@ -75,7 +93,6 @@ class MachineMonitorController extends Controller
                 $uptimePercentage = $totalTime > 0 ? ($uptimeMinutes / $totalTime) * 100 : 0;
                 $downtimePercentage = $totalTime > 0 ? 100 - $uptimePercentage : 0;
             } else {
-                // Jika tidak ada log, gunakan status terakhir mesin
                 $uptimePercentage = $machine->status === 'START' ? 100 : 0;
                 $downtimePercentage = $machine->status === 'STOP' ? 100 : 0;
             }
@@ -87,35 +104,42 @@ class MachineMonitorController extends Controller
             ];
         });
 
-        // Mengambil masalah terbaru
-        $recentIssues = MachineIssue::with(['machine', 'category'])
-            ->latest()
-            ->take(10)
-            ->get();
+        // Get recent issues
+        $recentIssuesQuery = MachineIssue::with(['machine', 'category']);
+        if ($selectedUnitSource) {
+            $recentIssuesQuery->whereHas('machine', function($query) use ($selectedUnitSource) {
+                $query->where('unit_source', $selectedUnitSource);
+            });
+        }
+        $recentIssues = $recentIssuesQuery->latest()->take(10)->get();
 
-        // Menghitung jumlah masalah per bulan
-        $monthlyIssues = MachineIssue::selectRaw('COUNT(*) as count, MONTH(created_at) as month')
-            ->whereYear('created_at', date('Y'))
-            ->groupBy('month')
-            ->pluck('count', 'month')
-            ->toArray();
+        // Calculate monthly issues
+        $monthlyIssuesQuery = MachineIssue::selectRaw('COUNT(*) as count, MONTH(created_at) as month')
+            ->whereYear('created_at', date('Y'));
+        if ($selectedUnitSource) {
+            $monthlyIssuesQuery->whereHas('machine', function($query) use ($selectedUnitSource) {
+                $query->where('unit_source', $selectedUnitSource);
+            });
+        }
+        $monthlyIssues = $monthlyIssuesQuery->groupBy('month')->pluck('count', 'month')->toArray();
         
-        // Menyiapkan array 12 bulan
+        // Prepare monthly issues data array
         $monthlyIssuesData = array_fill(1, 12, 0);
         foreach ($monthlyIssues as $month => $count) {
             $monthlyIssuesData[$month] = $count;
         }
 
-        // Ambil data dari MachineStatusLog
-        $machineStatusLogs = MachineStatusLog::with('machine')->get(); // Ambil data status mesin
+        // Get machine status logs
+        $machineStatusLogsQuery = MachineStatusLog::with('machine');
+        if ($selectedUnitSource) {
+            $machineStatusLogsQuery->whereHas('machine', function($query) use ($selectedUnitSource) {
+                $query->where('unit_source', $selectedUnitSource);
+            });
+        }
+        $machineStatusLogs = $machineStatusLogsQuery->get();
 
-        // Ambil semua power plants untuk filter
-        $powerPlants = PowerPlant::all();
-
-        // Get today's date
+        // Get today's date and define shift times
         $today = Carbon::today();
-        
-        // Define shift times
         $shiftTimes = [
             '06:00' => '06:00:00',
             '11:00' => '11:00:00',
@@ -142,6 +166,11 @@ class MachineMonitorController extends Controller
             return false;
         });
 
+        // Reset the default database connection
+        if ($selectedUnitSource) {
+            config(['database.default' => 'mysql']);
+        }
+
         return view('admin.machine-monitor.index', compact(
             'machines',
             'healthCategories',
@@ -152,7 +181,8 @@ class MachineMonitorController extends Controller
             'filteredLogs',
             'selectedTime',
             'efficiencyData',
-            'powerPlants'
+            'powerPlants',
+            'selectedUnitSource'
         ));
     }
 

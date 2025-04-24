@@ -52,6 +52,7 @@ use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\MonitoringDatakompakController;
 use App\Http\Controllers\Admin\FiveS5RController;
 use App\Http\Controllers\Admin\OperasiUpkd\PengadaanController;
+use App\Http\Controllers\Admin\OperasiUpkd\ProgramKerjaController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -258,6 +259,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::delete('/{id}', [AbnormalReportController::class, 'destroy'])->name('destroy');
         Route::get('/{id}/export-excel', [AbnormalReportController::class, 'exportExcel'])->name('export-excel');
         Route::get('/{id}/export-pdf', [AbnormalReportController::class, 'exportPdf'])->name('export-pdf');
+    });
+
+    // Operasi UPKD routes
+    Route::prefix('operasi-upkd')->name('operasi-upkd.')->group(function () {
+        // Program Kerja routes
+        Route::prefix('program-kerja')->name('program-kerja.')->group(function () {
+            Route::get('/', [ProgramKerjaController::class, 'index'])->name('index');
+            Route::post('/store', [ProgramKerjaController::class, 'store'])->name('store');
+        });
     });
 });
 
@@ -1203,3 +1213,16 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 });
+
+Route::get('/admin/operasi-upkd/program-kerja/export-excel', [ProgramKerjaController::class, 'exportExcel'])->name('admin.operasi-upkd.program-kerja.export-excel');
+Route::get('/admin/operasi-upkd/program-kerja/export-pdf', [ProgramKerjaController::class, 'exportPDF'])->name('admin.operasi-upkd.program-kerja.export-pdf');
+
+// ... existing code ...
+    // Add program kerja routes
+    Route::prefix('operasi-upkd')->name('operasi-upkd.')->group(function () {
+        Route::prefix('program-kerja')->name('program-kerja.')->group(function () {
+            Route::get('/', [ProgramKerjaController::class, 'index'])->name('index');
+            Route::post('/store', [ProgramKerjaController::class, 'store'])->name('store');
+        });
+    });
+// ... existing code ...

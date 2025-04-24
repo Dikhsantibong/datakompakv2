@@ -88,6 +88,24 @@
                     </div>
                 </div>
 
+                <!-- Unit Filter -->
+                <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-medium text-gray-800">
+                            <i class="fas fa-filter mr-2 text-blue-600"></i>
+                            Filter Unit
+                        </h3>
+                        <select id="unitFilter" name="unit_source" class="form-select rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                            <option value="">Semua Unit</option>
+                            @foreach($powerPlants as $powerPlant)
+                                <option value="{{ $powerPlant->unit_source }}" {{ request('unit_source') == $powerPlant->unit_source ? 'selected' : '' }}>
+                                    {{ $powerPlant->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
                 <!-- Status Indicators -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
@@ -131,7 +149,7 @@
                 </div>
 
                 <!-- Performance Indicators -->
-                <div class="grid grid-cols-1 md:grid-cols-6 gap-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-7 gap-6 mb-6">
                     <!-- OPS Status Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div class="p-4">
@@ -201,9 +219,21 @@
                             <h3 class="text-lg font-semibold mb-1">DMP AKTUAL</h3>
                             <p class="text-gray-600 mb-2 text-sm">{{ number_format($machineStatusLogs->avg('dmp'), 2) }}</p>
                             <span class="text-indigo-600 text-sm font-medium">Rata-rata DMP</span>
-                                    </div>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+
+                    <!-- DMP Performance Test Card -->
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-orange-600 mb-2">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">DMP TEST</h3>
+                            <p class="text-gray-600 mb-2 text-sm">0.00</p>
+                            <span class="text-orange-600 text-sm font-medium">Performance Test</span>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Operating & Production Statistics -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -643,7 +673,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Change background every 5 seconds
     setInterval(changeBackground, 5000);
-                });
-            </script>
-            @endpush
+
+    // Handle unit filter change
+    document.getElementById('unitFilter').addEventListener('change', function(e) {
+        window.location.href = `${window.location.pathname}?unit_source=${e.target.value}`;
+    });
+});
+</script>
+@endpush
 @endsection

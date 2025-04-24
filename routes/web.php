@@ -53,6 +53,7 @@ use App\Http\Controllers\Admin\MonitoringDatakompakController;
 use App\Http\Controllers\Admin\FiveS5RController;
 use App\Http\Controllers\Admin\OperasiUpkd\PengadaanController;
 use App\Http\Controllers\Admin\OperasiUpkd\ProgramKerjaController;
+use App\Http\Controllers\Admin\OperasiUpkd\RjppDprController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -267,6 +268,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::prefix('program-kerja')->name('program-kerja.')->group(function () {
             Route::get('/', [ProgramKerjaController::class, 'index'])->name('index');
             Route::post('/store', [ProgramKerjaController::class, 'store'])->name('store');
+        });
+        
+        // RJPP-DPR Routes
+        Route::prefix('rjpp-dpr')->name('rjpp-dpr.')->group(function () {
+            Route::get('/', [RjppDprController::class, 'index'])->name('index');
+            Route::post('/store', [RjppDprController::class, 'store'])->name('store');
         });
     });
 });
@@ -1218,6 +1225,12 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/{id}', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'update'])->name('update');
                 Route::delete('/{id}', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'destroy'])->name('destroy');
             });
+            
+            // RJPP-DPR Routes
+            Route::prefix('rjpp-dpr')->name('rjpp-dpr.')->group(function () {
+                Route::get('/', [App\Http\Controllers\Admin\OperasiUpkd\RjppDprController::class, 'index'])->name('index');
+                Route::post('/store', [App\Http\Controllers\Admin\OperasiUpkd\RjppDprController::class, 'store'])->name('store');
+            });
         });
     });
 });
@@ -1234,4 +1247,22 @@ Route::get('/admin/operasi-upkd/program-kerja/export-pdf', [ProgramKerjaControll
             
         });
     });
+// ... existing code ...
+
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    // ... existing code ...
+    
+    Route::prefix('operasi-upkd')->name('admin.operasi-upkd.')->group(function () {
+        // ... existing code ...
+        
+        // RJPP-DPR routes
+        Route::get('/rjpp-dpr', [App\Http\Controllers\Admin\OperasiUpkd\RjppDprController::class, 'index'])->name('rjpp-dpr.index');
+        Route::post('/rjpp-dpr/store', [App\Http\Controllers\Admin\OperasiUpkd\RjppDprController::class, 'store'])->name('rjpp-dpr.store');
+        
+        // ... existing code ...
+    });
+    
+    // ... existing code ...
+});
+
 // ... existing code ...

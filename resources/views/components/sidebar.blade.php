@@ -217,6 +217,11 @@
                             <i class="fas fa-file-alt w-5 h-5"></i>
                             <span class="ml-3 text-sm">Laporan Operasi UPKD</span>
                         </a>
+                        <a href="{{ route('admin.operasi-upkd.rjpp-dpr.index') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.operasi-upkd.rjpp-dpr.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                            <i class="fas fa-chart-line w-5 h-5"></i>
+                            <span class="ml-3 text-sm">RJPP-DPR</span>
+                        </a>
                     </div>
                 </div>
 

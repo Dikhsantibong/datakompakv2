@@ -1210,6 +1210,14 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/{id}', [App\Http\Controllers\Admin\OperasiUpkd\PengadaanController::class, 'update'])->name('update');
                 Route::delete('/{id}', [App\Http\Controllers\Admin\OperasiUpkd\PengadaanController::class, 'destroy'])->name('destroy');
             });
+            Route::prefix('rapat')->name('rapat.')->group(function () {
+                Route::get('/', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'index'])->name('index');
+                Route::get('/create', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'create'])->name('create');
+                Route::post('/', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'edit'])->name('edit');
+                Route::put('/{id}', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'update'])->name('update');
+                Route::delete('/{id}', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'destroy'])->name('destroy');
+            });
         });
     });
 });
@@ -1223,6 +1231,7 @@ Route::get('/admin/operasi-upkd/program-kerja/export-pdf', [ProgramKerjaControll
         Route::prefix('program-kerja')->name('program-kerja.')->group(function () {
             Route::get('/', [ProgramKerjaController::class, 'index'])->name('index');
             Route::post('/store', [ProgramKerjaController::class, 'store'])->name('store');
+            
         });
     });
 // ... existing code ...

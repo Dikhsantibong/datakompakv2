@@ -66,6 +66,9 @@
                         <h2 class="text-2xl font-bold mb-2">Rapat & Link Koordinasi RON</h2>
                         <p class="text-blue-100 mb-4">Kelola dan pantau rapat serta koordinasi RON untuk memastikan komunikasi yang efektif antar tim.</p>
                         <div class="flex flex-wrap gap-3">
+                            <a href="{{ route('admin.operasi-upkd.rapat.create') }}" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700">
+                                <i class="fas fa-plus mr-2"></i> Tambah Data
+                            </a>
                             <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <i class="fas fa-file-excel mr-2"></i> Export Excel
                             </button>
@@ -82,6 +85,71 @@
                 <!-- Table Content -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <div class="p-6">
+                        <!-- Table Header -->
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold text-gray-900">Data Rapat & Koordinasi</h2>
+                            <button id="toggleFullTable" 
+                                    class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
+                                    onclick="toggleFullTableView()">
+                                <i class="fas fa-expand mr-1"></i> Full Table
+                            </button>
+                        </div>
+
+                        <!-- Filter Controls -->
+                        <div id="table-controls">
+                            <div class="flex flex-wrap items-center justify-between gap-4">
+                                <div class="flex items-center gap-2">
+                                    @if(request()->has('section'))
+                                        <div class="flex flex-wrap gap-2" id="active-filters">
+                                            @if(request('section'))
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Bagian: {{ request('section') }}
+                                                    <button onclick="removeFilter('section')" class="ml-1 text-blue-600 hover:text-blue-800">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Horizontal Filters -->
+                            <div class="mt-2 border-b border-gray-200 pb-4" id="filters-section">
+                                <form action="{{ route('admin.operasi-upkd.rapat.index') }}" method="GET" 
+                                      class="flex flex-wrap items-end gap-4">
+                                    <div class="w-64">
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Bagian</label>
+                                        <select name="section" 
+                                                class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                            <option value="">Semua Bagian</option>
+                                            <option value="A" {{ request('section') == 'A' ? 'selected' : '' }}>A. PEKERJAAN TENTATIF</option>
+                                            <option value="B1" {{ request('section') == 'B1' ? 'selected' : '' }}>B1. OPERATION MANAGEMENT</option>
+                                            <option value="B2" {{ request('section') == 'B2' ? 'selected' : '' }}>B2. EFISIENSI MANAGEMENT</option>
+                                            <option value="C" {{ request('section') == 'C' ? 'selected' : '' }}>C. PROGRAM KERJA</option>
+                                            <option value="D" {{ request('section') == 'D' ? 'selected' : '' }}>D. MONITORING PENGADAAN BARANG DAN JASA</option>
+                                            <option value="E" {{ request('section') == 'E' ? 'selected' : '' }}>E. MONITORING PENGAWASAN APLIKASI</option>
+                                            <option value="F" {{ request('section') == 'F' ? 'selected' : '' }}>F. HSE</option>
+                                            <option value="G1" {{ request('section') == 'G1' ? 'selected' : '' }}>G1. LAPORAN PEMBANGKIT</option>
+                                            <option value="G2" {{ request('section') == 'G2' ? 'selected' : '' }}>G2. LAPORAN TRANSAKSI ENERGI</option>
+                                            <option value="H" {{ request('section') == 'H' ? 'selected' : '' }}>H. RAPAT</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <button type="submit"
+                                                class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                                            <i class="fas fa-search mr-2"></i> Cari
+                                        </button>
+                                        <a href="{{ route('admin.operasi-upkd.rapat.index') }}" 
+                                           class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                                            <i class="fas fa-undo mr-2"></i> Reset
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <!-- A. PEKERJAAN TENTATIF -->
@@ -131,16 +199,83 @@
                                         </th>
                                     </tr>
                                 </thead>
+                                <!-- B1. Operation Management -->
+                                <thead>
+                                    <tr>
+                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider pl-12 bg-gray-50">
+                                            B1. Operation Management
+                                        </th>
+                                    </tr>
+                                </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <tr>
                                         <td class="px-6 py-4">1</td>
-                                        <td class="px-6 py-4">Isu B</td>
-                                        <td class="px-6 py-4">Detail isu B</td>
-                                        <td class="px-6 py-4">Tim B</td>
-                                        <td class="px-6 py-4">Kondisi awal B</td>
-                                        <td class="px-6 py-4">Tindak lanjut B</td>
-                                        <td class="px-6 py-4">Kondisi akhir B</td>
-                                        <td class="px-6 py-4">Target B</td>
+                                        <td class="px-6 py-4">Isu B1.1</td>
+                                        <td class="px-6 py-4">Detail isu B1.1</td>
+                                        <td class="px-6 py-4">Tim B1</td>
+                                        <td class="px-6 py-4">Kondisi awal B1.1</td>
+                                        <td class="px-6 py-4">Tindak lanjut B1.1</td>
+                                        <td class="px-6 py-4">Kondisi akhir B1.1</td>
+                                        <td class="px-6 py-4">Target B1.1</td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+                                                In Progress
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4">Sedang berjalan</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4">2</td>
+                                        <td class="px-6 py-4">Isu B1.2</td>
+                                        <td class="px-6 py-4">Detail isu B1.2</td>
+                                        <td class="px-6 py-4">Tim B1</td>
+                                        <td class="px-6 py-4">Kondisi awal B1.2</td>
+                                        <td class="px-6 py-4">Tindak lanjut B1.2</td>
+                                        <td class="px-6 py-4">Kondisi akhir B1.2</td>
+                                        <td class="px-6 py-4">Target B1.2</td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                                                Completed
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4">Selesai</td>
+                                    </tr>
+                                </tbody>
+
+                                <!-- B2. Efisiensi Management -->
+                                <thead>
+                                    <tr>
+                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider pl-12 bg-gray-50">
+                                            B2. Efisiensi Management
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4">1</td>
+                                        <td class="px-6 py-4">Isu B2.1</td>
+                                        <td class="px-6 py-4">Detail isu B2.1</td>
+                                        <td class="px-6 py-4">Tim B2</td>
+                                        <td class="px-6 py-4">Kondisi awal B2.1</td>
+                                        <td class="px-6 py-4">Tindak lanjut B2.1</td>
+                                        <td class="px-6 py-4">Kondisi akhir B2.1</td>
+                                        <td class="px-6 py-4">Target B2.1</td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                                On Track
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4">Berjalan lancar</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4">2</td>
+                                        <td class="px-6 py-4">Isu B2.2</td>
+                                        <td class="px-6 py-4">Detail isu B2.2</td>
+                                        <td class="px-6 py-4">Tim B2</td>
+                                        <td class="px-6 py-4">Kondisi awal B2.2</td>
+                                        <td class="px-6 py-4">Tindak lanjut B2.2</td>
+                                        <td class="px-6 py-4">Kondisi akhir B2.2</td>
+                                        <td class="px-6 py-4">Target B2.2</td>
                                         <td class="px-6 py-4">
                                             <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
                                                 In Progress
@@ -266,16 +401,83 @@
                                         </th>
                                     </tr>
                                 </thead>
+                                <!-- G1. Laporan Pembangkit -->
+                                <thead>
+                                    <tr>
+                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider pl-12 bg-gray-50">
+                                            G1. Laporan Pembangkit
+                                        </th>
+                                    </tr>
+                                </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <tr>
                                         <td class="px-6 py-4">1</td>
-                                        <td class="px-6 py-4">Administrasi G</td>
-                                        <td class="px-6 py-4">Detail administrasi G</td>
-                                        <td class="px-6 py-4">Tim G</td>
-                                        <td class="px-6 py-4">Kondisi awal G</td>
-                                        <td class="px-6 py-4">Tindak lanjut G</td>
-                                        <td class="px-6 py-4">Kondisi akhir G</td>
-                                        <td class="px-6 py-4">Target G</td>
+                                        <td class="px-6 py-4">Laporan G1.1</td>
+                                        <td class="px-6 py-4">Detail laporan G1.1</td>
+                                        <td class="px-6 py-4">Tim G1</td>
+                                        <td class="px-6 py-4">Kondisi awal G1.1</td>
+                                        <td class="px-6 py-4">Tindak lanjut G1.1</td>
+                                        <td class="px-6 py-4">Kondisi akhir G1.1</td>
+                                        <td class="px-6 py-4">Target G1.1</td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                                Running
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4">Berjalan</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4">2</td>
+                                        <td class="px-6 py-4">Laporan G1.2</td>
+                                        <td class="px-6 py-4">Detail laporan G1.2</td>
+                                        <td class="px-6 py-4">Tim G1</td>
+                                        <td class="px-6 py-4">Kondisi awal G1.2</td>
+                                        <td class="px-6 py-4">Tindak lanjut G1.2</td>
+                                        <td class="px-6 py-4">Kondisi akhir G1.2</td>
+                                        <td class="px-6 py-4">Target G1.2</td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                                                Done
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4">Selesai</td>
+                                    </tr>
+                                </tbody>
+
+                                <!-- G2. Laporan Transaksi Energi -->
+                                <thead>
+                                    <tr>
+                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider pl-12 bg-gray-50">
+                                            G2. Laporan Transaksi Energi
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4">1</td>
+                                        <td class="px-6 py-4">Laporan G2.1</td>
+                                        <td class="px-6 py-4">Detail laporan G2.1</td>
+                                        <td class="px-6 py-4">Tim G2</td>
+                                        <td class="px-6 py-4">Kondisi awal G2.1</td>
+                                        <td class="px-6 py-4">Tindak lanjut G2.1</td>
+                                        <td class="px-6 py-4">Kondisi akhir G2.1</td>
+                                        <td class="px-6 py-4">Target G2.1</td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+                                                In Progress
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4">Sedang berjalan</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4">2</td>
+                                        <td class="px-6 py-4">Laporan G2.2</td>
+                                        <td class="px-6 py-4">Detail laporan G2.2</td>
+                                        <td class="px-6 py-4">Tim G2</td>
+                                        <td class="px-6 py-4">Kondisi awal G2.2</td>
+                                        <td class="px-6 py-4">Tindak lanjut G2.2</td>
+                                        <td class="px-6 py-4">Kondisi akhir G2.2</td>
+                                        <td class="px-6 py-4">Target G2.2</td>
                                         <td class="px-6 py-4">
                                             <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
                                                 Running
@@ -357,7 +559,58 @@ document.addEventListener('DOMContentLoaded', function() {
     mobileMenuBtn.addEventListener('click', () => {
         sidebar.classList.toggle('hidden');
     });
+
+    // Auto-submit form when changing filters
+    const filterForm = document.querySelector('form');
+    const filterInputs = filterForm.querySelectorAll('select');
+
+    filterInputs.forEach(input => {
+        input.addEventListener('change', () => {
+            filterForm.submit();
+        });
+    });
 });
+
+function removeFilter(filterName) {
+    const form = document.querySelector('form');
+    const input = form.querySelector(`[name="${filterName}"]`);
+    if (input) {
+        input.value = '';
+        form.submit();
+    }
+}
+
+// Add full table view toggle functionality
+function toggleFullTableView() {
+    const button = document.getElementById('toggleFullTable');
+    const tableControls = document.getElementById('table-controls');
+    const welcomeCard = document.querySelector('.bg-gradient-to-r').closest('.mb-6');
+    const successAlert = document.querySelector('.bg-green-100');
+    
+    // Toggle full table mode
+    const isFullTable = button.classList.contains('bg-blue-600');
+    
+    if (isFullTable) {
+        // Restore normal view
+        button.classList.remove('bg-blue-600', 'text-white');
+        button.classList.add('bg-blue-50', 'text-blue-600');
+        button.innerHTML = '<i class="fas fa-expand mr-1"></i> Full Table';
+        
+        if (tableControls) tableControls.style.display = '';
+        if (welcomeCard) welcomeCard.style.display = '';
+        if (successAlert) successAlert.style.display = '';
+        
+    } else {
+        // Enable full table view
+        button.classList.remove('bg-blue-50', 'text-blue-600');
+        button.classList.add('bg-blue-600', 'text-white');
+        button.innerHTML = '<i class="fas fa-compress mr-1"></i> Normal View';
+        
+        if (tableControls) tableControls.style.display = 'none';
+        if (welcomeCard) welcomeCard.style.display = 'none';
+        if (successAlert) successAlert.style.display = 'none';
+    }
+}
 </script>
 @endpush
 

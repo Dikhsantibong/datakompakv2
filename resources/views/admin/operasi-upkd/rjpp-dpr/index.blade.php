@@ -187,7 +187,7 @@
                                                 <textarea name="data[{{ $year }}][1][kondisi_eksisting]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" rows="3"></textarea>
                                             </td>
                                             <td class="px-3 py-2 border" style="min-width: 120px;">
-                                                <select name="data[{{ $year }}][1][status]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <select name="data[{{ $year }}][1][status]" class="p-2 w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                                     <option value="">Pilih Status</option>
                                                     <option value="On Track">On Track</option>
                                                     <option value="Delayed">Delayed</option>
@@ -249,7 +249,7 @@
                                                 <textarea name="data[{{ $year }}][2][kondisi_eksisting]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" rows="3"></textarea>
                                             </td>
                                             <td class="px-3 py-2 border" style="min-width: 120px;">
-                                                <select name="data[{{ $year }}][2][status]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <select name="data[{{ $year }}][2][status]" class="p-2 w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                                     <option value="">Pilih Status</option>
                                                     <option value="On Track">On Track</option>
                                                     <option value="Delayed">Delayed</option>

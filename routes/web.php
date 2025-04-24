@@ -1266,3 +1266,17 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 });
 
 // ... existing code ...
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    // Operasi UPKD - Rapat Routes
+    Route::prefix('operasi-upkd/rapat')->name('operasi-upkd.rapat.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'store'])->name('store');
+        Route::get('/{rapat}/edit', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'edit'])->name('edit');
+        Route::put('/{rapat}', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'update'])->name('update');
+        Route::delete('/{rapat}', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'destroy'])->name('destroy');
+    });
+});
+
+// ... existing code ...

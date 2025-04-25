@@ -450,6 +450,11 @@
                                                                 <option value="B">Shift B</option>
                                                                 <option value="C">Shift C</option>
                                                                 <option value="D">Shift D</option>
+                                                                <option value="staf ops">Staf Ops</option>
+                                                                <option value="TL OP">TL OP</option>
+                                                                <option value="TL HAR">TL HAR</option>
+                                                                <option value="TL OPHAR">TL OPHAR</option>
+                                                                <option value="MUL">MUL</option>
                                                             </select>
                                         </div>
                                         <div>
@@ -462,6 +467,8 @@
                                                                 <option value="sakit">Sakit</option>
                                                                 <option value="cuti">Cuti</option>
                                                                 <option value="alpha">Alpha</option>
+                                                                <option value="terlambat">Terlambat</option>
+                                                                <option value="ganti shift">Ganti Shift</option>
                                                             </select>
                                         </div>
                                         <div>

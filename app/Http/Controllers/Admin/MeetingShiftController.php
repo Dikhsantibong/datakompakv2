@@ -101,8 +101,8 @@ class MeetingShiftController extends Controller
                 // Attendance
                 'absensi' => 'required|array',
                 'absensi.*.nama' => 'required|string',
-                'absensi.*.shift' => 'required|in:A,B,C,D',
-                'absensi.*.status' => 'required|in:hadir,izin,sakit,cuti,alpha',
+                'absensi.*.shift' => 'required|in:A,B,C,D,staf ops,TL OP,TL HAR,TL OPHAR,MUL',
+                'absensi.*.status' => 'required|in:hadir,izin,sakit,cuti,alpha,terlambat,ganti shift',
                 'absensi.*.keterangan' => 'nullable|string',
         ]);
 
@@ -441,8 +441,8 @@ class MeetingShiftController extends Controller
         $validated = $request->validate([
             'absensi' => 'required|array',
             'absensi.*.nama' => 'required|string',
-            'absensi.*.shift' => 'required|in:A,B,C,D',
-            'absensi.*.status' => 'required|string',
+            'absensi.*.shift' => 'required|in:A,B,C,D,staf ops,TL OP,TL HAR,TL OPHAR,MUL',
+            'absensi.*.status' => 'required|in:hadir,izin,sakit,cuti,alpha,terlambat,ganti shift',
             'absensi.*.keterangan' => 'nullable|string'
         ]);
 

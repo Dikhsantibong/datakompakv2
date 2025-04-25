@@ -58,8 +58,8 @@
                         </div>
                     </div>
 
-                    <!-- Main Form -->
-                    <div class="bg-white rounded-lg shadow p-6">
+                    <!-- Main Form (Default) -->
+                    <div id="defaultForm" class="bg-white rounded-lg shadow p-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="uraian" class="block text-sm font-medium text-gray-700">Uraian</label>
@@ -121,40 +121,94 @@
                                 <textarea name="keterangan" id="keterangan" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Additional Fields for Section H (Rapat) -->
-                        <div id="rapatFields" class="hidden mt-6 border-t pt-6">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Informasi Tambahan Rapat</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="jadwal" class="block text-sm font-medium text-gray-700">Jadwal</label>
-                                    <input type="datetime-local" name="jadwal" id="jadwal" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                </div>
+                    <!-- Monitoring Aplikasi Form (Section E) -->
+                    <div id="monitoringAplikasiForm" class="hidden bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Form Monitoring Aplikasi</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="no" class="block text-sm font-medium text-gray-700">No</label>
+                                <input type="number" name="no" id="no" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
 
-                                <div>
-                                    <label for="mode" class="block text-sm font-medium text-gray-700">Mode</label>
-                                    <select name="mode" id="mode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        <option value="">Pilih Mode</option>
-                                        <option value="online">Online</option>
-                                        <option value="offline">Offline</option>
-                                        <option value="hybrid">Hybrid</option>
-                                    </select>
-                                </div>
+                            <div>
+                                <label for="aplikasi" class="block text-sm font-medium text-gray-700">Aplikasi</label>
+                                <select name="aplikasi" id="aplikasi" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="">Pilih Aplikasi</option>
+                                    <option value="datakompak">Datakompak</option>
+                                    <option value="navitas">Navitas</option>
+                                    <option value="omamo">Omamo</option>
+                                </select>
+                            </div>
 
-                                <div>
-                                    <label for="resume" class="block text-sm font-medium text-gray-700">Resume</label>
-                                    <textarea name="resume" id="resume" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
-                                </div>
+                            <div>
+                                <label for="subkolom_harian" class="block text-sm font-medium text-gray-700">Subkolom Harian</label>
+                                <input type="number" name="subkolom_harian" id="subkolom_harian" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
 
-                                <div>
-                                    <label for="notulen" class="block text-sm font-medium text-gray-700">Notulen</label>
-                                    <input type="file" name="notulen" id="notulen" class="mt-1 block w-full">
-                                </div>
+                            <div>
+                                <label for="subkolom_bulanan" class="block text-sm font-medium text-gray-700">Subkolom Bulanan</label>
+                                <input type="number" name="subkolom_bulanan" id="subkolom_bulanan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
 
-                                <div>
-                                    <label for="eviden" class="block text-sm font-medium text-gray-700">Eviden</label>
-                                    <input type="file" name="eviden" id="eviden" class="mt-1 block w-full">
-                                </div>
+                            <div>
+                                <label for="pic_operasi" class="block text-sm font-medium text-gray-700">PIC Operasi</label>
+                                <select name="pic_operasi" id="pic_operasi" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="">Pilih PIC Operasi</option>
+                                    <option value="asman operasi">Asman Operasi</option>
+                                    <option value="TL RON">TL RON</option>
+                                    <option value="ROHMAT">ROHMAT</option>
+                                    <option value="IMAM">IMAM</option>
+                                    <option value="KASMAN">KASMAN</option>
+                                    <option value="AMINAH">AMINAH</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="keterangan" class="block text-sm font-medium text-gray-700">Keterangan</label>
+                                <textarea name="keterangan" id="keterangan" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                            </div>
+
+                            <div>
+                                <label for="tindak_lanjut" class="block text-sm font-medium text-gray-700">Tindak Lanjut</label>
+                                <textarea name="tindak_lanjut" id="tindak_lanjut" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Fields for Section H (Rapat) -->
+                    <div id="rapatFields" class="hidden mt-6 border-t pt-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Informasi Tambahan Rapat</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="jadwal" class="block text-sm font-medium text-gray-700">Jadwal</label>
+                                <input type="datetime-local" name="jadwal" id="jadwal" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+
+                            <div>
+                                <label for="mode" class="block text-sm font-medium text-gray-700">Mode</label>
+                                <select name="mode" id="mode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="">Pilih Mode</option>
+                                    <option value="online">Online</option>
+                                    <option value="offline">Offline</option>
+                                    <option value="hybrid">Hybrid</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="resume" class="block text-sm font-medium text-gray-700">Resume</label>
+                                <textarea name="resume" id="resume" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                            </div>
+
+                            <div>
+                                <label for="notulen" class="block text-sm font-medium text-gray-700">Notulen</label>
+                                <input type="file" name="notulen" id="notulen" class="mt-1 block w-full">
+                            </div>
+
+                            <div>
+                                <label for="eviden" class="block text-sm font-medium text-gray-700">Eviden</label>
+                                <input type="file" name="eviden" id="eviden" class="mt-1 block w-full">
                             </div>
                         </div>
                     </div>
@@ -179,12 +233,27 @@
 document.addEventListener('DOMContentLoaded', function() {
     const sectionSelect = document.getElementById('section');
     const rapatFields = document.getElementById('rapatFields');
+    const defaultForm = document.getElementById('defaultForm');
+    const monitoringAplikasiForm = document.getElementById('monitoringAplikasiForm');
 
     sectionSelect.addEventListener('change', function() {
-        if (this.value === 'H') {
-            rapatFields.classList.remove('hidden');
-        } else {
-            rapatFields.classList.add('hidden');
+        // Hide all forms first
+        rapatFields.classList.add('hidden');
+        defaultForm.classList.add('hidden');
+        monitoringAplikasiForm.classList.add('hidden');
+
+        // Show appropriate form based on selection
+        switch(this.value) {
+            case 'H':
+                rapatFields.classList.remove('hidden');
+                defaultForm.classList.remove('hidden');
+                break;
+            case 'E':
+                monitoringAplikasiForm.classList.remove('hidden');
+                break;
+            default:
+                defaultForm.classList.remove('hidden');
+                break;
         }
     });
 });

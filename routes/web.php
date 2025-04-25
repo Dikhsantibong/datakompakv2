@@ -54,6 +54,7 @@ use App\Http\Controllers\Admin\FiveS5RController;
 use App\Http\Controllers\Admin\OperasiUpkd\PengadaanController;
 use App\Http\Controllers\Admin\OperasiUpkd\ProgramKerjaController;
 use App\Http\Controllers\Admin\OperasiUpkd\RjppDprController;
+use App\Http\Controllers\Admin\LaporanKitController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -1290,3 +1291,13 @@ Route::get('admin/operasi-upkd/rjpp-dpr/create', [RjppDprController::class, 'cre
 
 
 // ... existing code ...
+
+// ... existing code ...
+Route::middleware(['auth', 'admin'])->group(function () {
+    // ... existing routes ...
+    
+    // Laporan KIT 00.00
+    Route::get('/admin/laporan-kit', [App\Http\Controllers\Admin\LaporanKitController::class, 'index'])->name('admin.laporan-kit.index');
+    
+    // ... existing routes ...
+});

@@ -118,7 +118,6 @@
                                                 <th rowspan="2" class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Pukul (WIB)</th>
                                                 <th rowspan="2" class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Uraian kejadian</th>
                                                 <th colspan="4" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Pengamatan</th>
-                                                <th colspan="4" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Koordinasi</th>
                                         <th rowspan="2" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Aksi</th>
                                             </tr>
                                             <tr>
@@ -126,10 +125,6 @@
                                         <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Turun beban</th>
                                                 <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Off CBG</th>
                                                 <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Stop</th>
-                                                <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">TL Ophar</th>
-                                                <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">TL OP</th>
-                                                <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">TL HAR</th>
-                                                <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">MUL</th>
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
@@ -158,18 +153,6 @@
                                             <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="stop[]" value="1">
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
-                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="tl_ophar[]" value="1">
-                                                </td>
-                                                <td class="border px-4 py-2 text-center">
-                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="tl_op[]" value="1">
-                                                </td>
-                                                <td class="border px-4 py-2 text-center">
-                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="tl_har[]" value="1">
-                                                </td>
-                                                <td class="border px-4 py-2 text-center">
-                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="mul[]" value="1">
-                                                </td>
-                                                <td class="border px-4 py-2 text-center">
                                             <button type="button" class="delete-row text-red-600 hover:text-red-800">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -186,7 +169,55 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Koordinasi -->
+                <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Koordinasi</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200" id="koordinasi-table">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">TL Ophar</th>
+                                        <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">TL OP</th>
+                                        <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">TL HAR</th>
+                                        <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">MUL</th>
+                                        <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="border px-4 py-2 text-center">
+                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="tl_ophar[]" value="1">
+                                        </td>
+                                        <td class="border px-4 py-2 text-center">
+                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="tl_op[]" value="1">
+                                        </td>
+                                        <td class="border px-4 py-2 text-center">
+                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="tl_har[]" value="1">
+                                        </td>
+                                        <td class="border px-4 py-2 text-center">
+                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="mul[]" value="1">
+                                        </td>
+                                        <td class="border px-4 py-2 text-center">
+                                            <button type="button" class="delete-row text-red-600 hover:text-red-800">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="mt-4">
+                                <button type="button" id="add-koordinasi" 
+                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Tambah Koordinasi
+                                </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Mesin/Peralatan Terdampak -->
                 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
@@ -474,7 +505,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     placeholder="Masukkan uraian kejadian..."></textarea>
             </td>
             <td class="border px-4 py-2">
-                <textarea class="p-2 w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                <textarea class="p-2 w-[200px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
                     name="visual_parameter[]" 
                     placeholder="Masukkan parameter visual..."></textarea>
             </td>
@@ -487,6 +518,22 @@ document.addEventListener('DOMContentLoaded', function() {
             <td class="border px-4 py-2 text-center">
                 <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="stop[]" value="1">
             </td>
+            <td class="border px-4 py-2 text-center">
+                <button type="button" class="delete-row text-red-600 hover:text-red-800">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+        kronologiTable.appendChild(newRow);
+    });
+
+    // Koordinasi
+    const addKoordinasiBtn = document.getElementById('add-koordinasi');
+    const koordinasiTable = document.getElementById('koordinasi-table').getElementsByTagName('tbody')[0];
+
+    addKoordinasiBtn.addEventListener('click', function() {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
             <td class="border px-4 py-2 text-center">
                 <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="tl_ophar[]" value="1">
             </td>
@@ -505,7 +552,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </button>
             </td>
         `;
-        kronologiTable.appendChild(newRow);
+        koordinasiTable.appendChild(newRow);
     });
 
     // Mesin/Peralatan Terdampak

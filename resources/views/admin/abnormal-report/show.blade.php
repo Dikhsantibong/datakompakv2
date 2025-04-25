@@ -185,6 +185,7 @@
                                             <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">FLM</th>
                                             <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Usul MO Rutin</th>
                                             <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">MO Non Rutin</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Lainnya</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -201,10 +202,11 @@
                                                     <i class="fas fa-check text-green-500"></i>
                                                 @endif
                                             </td>
+                                            <td class="border px-4 py-2">{{ $action->lainnya }}</td>
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="3" class="border px-4 py-2 text-center text-gray-500">
+                                            <td colspan="4" class="border px-4 py-2 text-center text-gray-500">
                                                 Tidak ada data tindak lanjut
                                             </td>
                                         </tr>
@@ -253,6 +255,7 @@
                                             <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">PM</th>
                                             <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">CM</th>
                                             <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">PtW</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">SR</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -279,10 +282,15 @@
                                                     <i class="fas fa-check text-green-500"></i>
                                                 @endif
                                             </td>
+                                            <td class="border px-4 py-2 text-center">
+                                                @if($adm->sr)
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                @endif
+                                            </td>
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="5" class="border px-4 py-2 text-center text-gray-500">
+                                            <td colspan="6" class="border px-4 py-2 text-center text-gray-500">
                                                 Tidak ada data ADM
                                             </td>
                                         </tr>

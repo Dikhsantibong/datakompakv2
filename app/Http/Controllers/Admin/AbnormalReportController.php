@@ -73,7 +73,8 @@ class AbnormalReportController extends Controller
                         $report->followUpActions()->create([
                             'flm_tindakan' => isset($request->flm_tindakan) && is_array($request->flm_tindakan) && in_array($key, array_keys($request->flm_tindakan)) ? 1 : 0,
                             'usul_mo_rutin' => $usul,
-                            'mo_non_rutin' => isset($request->mo_non_rutin) && is_array($request->mo_non_rutin) && in_array($key, array_keys($request->mo_non_rutin)) ? 1 : 0
+                            'mo_non_rutin' => isset($request->mo_non_rutin) && is_array($request->mo_non_rutin) && in_array($key, array_keys($request->mo_non_rutin)) ? 1 : 0,
+                            'lainnya' => $request->lainnya[$key] ?? null
                         ]);
                     }
                 }
@@ -97,7 +98,8 @@ class AbnormalReportController extends Controller
                         'flm' => isset($request->adm_flm) && is_array($request->adm_flm) && in_array($key, array_keys($request->adm_flm)) ? 1 : 0,
                         'pm' => isset($request->adm_pm) && is_array($request->adm_pm) && in_array($key, array_keys($request->adm_pm)) ? 1 : 0,
                         'cm' => isset($request->adm_cm) && is_array($request->adm_cm) && in_array($key, array_keys($request->adm_cm)) ? 1 : 0,
-                        'ptw' => isset($request->adm_ptw) && is_array($request->adm_ptw) && in_array($key, array_keys($request->adm_ptw)) ? 1 : 0
+                        'ptw' => isset($request->adm_ptw) && is_array($request->adm_ptw) && in_array($key, array_keys($request->adm_ptw)) ? 1 : 0,
+                        'sr' => isset($request->adm_sr) && is_array($request->adm_sr) && in_array($key, array_keys($request->adm_sr)) ? 1 : 0
                     ]);
                 }
             }
@@ -222,7 +224,8 @@ class AbnormalReportController extends Controller
                         $report->followUpActions()->create([
                             'flm_tindakan' => isset($request->flm_tindakan) && is_array($request->flm_tindakan) && in_array($key, array_keys($request->flm_tindakan)) ? 1 : 0,
                             'usul_mo_rutin' => $usul,
-                            'mo_non_rutin' => isset($request->mo_non_rutin) && is_array($request->mo_non_rutin) && in_array($key, array_keys($request->mo_non_rutin)) ? 1 : 0
+                            'mo_non_rutin' => isset($request->mo_non_rutin) && is_array($request->mo_non_rutin) && in_array($key, array_keys($request->mo_non_rutin)) ? 1 : 0,
+                            'lainnya' => $request->lainnya[$key] ?? null
                         ]);
                     }
                 }
@@ -246,7 +249,8 @@ class AbnormalReportController extends Controller
                         'flm' => isset($request->adm_flm) && is_array($request->adm_flm) && in_array($key, array_keys($request->adm_flm)) ? 1 : 0,
                         'pm' => isset($request->adm_pm) && is_array($request->adm_pm) && in_array($key, array_keys($request->adm_pm)) ? 1 : 0,
                         'cm' => isset($request->adm_cm) && is_array($request->adm_cm) && in_array($key, array_keys($request->adm_cm)) ? 1 : 0,
-                        'ptw' => isset($request->adm_ptw) && is_array($request->adm_ptw) && in_array($key, array_keys($request->adm_ptw)) ? 1 : 0
+                        'ptw' => isset($request->adm_ptw) && is_array($request->adm_ptw) && in_array($key, array_keys($request->adm_ptw)) ? 1 : 0,
+                        'sr' => isset($request->adm_sr) && is_array($request->adm_sr) && in_array($key, array_keys($request->adm_sr)) ? 1 : 0
                     ]);
                 }
             }

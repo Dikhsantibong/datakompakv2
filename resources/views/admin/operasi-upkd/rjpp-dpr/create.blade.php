@@ -71,7 +71,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Tahun</label>
-                                    <select name="tahun" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                    <select name="tahun" class="p-2 w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                         @foreach([2025, 2026, 2027, 2028, 2029] as $year)
                                             <option value="{{ $year }}">{{ $year }}</option>
                                         @endforeach
@@ -79,7 +79,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Semester</label>
-                                    <select name="semester" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                    <select name="semester" class="p-2 w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                     </select>
@@ -117,17 +117,32 @@
                             <!-- PIC and Budget -->
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">PIC</label>
-                                    <input type="text" name="pic" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                    <label for="pic" class="block text-sm font-medium text-gray-700">PIC</label>
+                                    <select name="pic" id="pic" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="">-- Pilih PIC --</option>
+                                        <option value="asman operasi">Asman Operasi</option>
+                                        <option value="TL RON">TL RON</option>
+                                        <option value="ROHMAT">ROHMAT</option>
+                                        <option value="IMAM">IMAM</option>
+                                        <option value="KASMAN">KASMAN</option>
+                                        <option value="AMINAH">AMINAH</option>
+                                    </select>
                                 </div>
+                                
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Anggaran AI</label>
-                                    <input type="number" name="anggaran_ai" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Anggaran</label>
+                                    <div class="flex flex-col space-y-2">
+                                        <div class="flex items-center">
+                                            <input id="anggaran_ai" name="anggaran[]" type="checkbox" value="AI" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            <label for="anggaran_ai" class="ml-2 block text-sm text-gray-700">Anggaran AI</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="anggaran_ao" name="anggaran[]" type="checkbox" value="AO" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            <label for="anggaran_ao" class="ml-2 block text-sm text-gray-700">Anggaran AO</label>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Anggaran AO</label>
-                                    <input type="number" name="anggaran_ao" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                                </div>
+                                
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Harga</label>
                                     <input type="number" name="harga" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>

@@ -174,7 +174,7 @@
                 <!-- Koordinasi -->
                 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                     <div class="px-4 py-5 sm:p-6">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Koordinasi</h3>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4"> Tindak Lanjut Koordinasi</h3>
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200" id="koordinasi-table">
                                 <thead>
@@ -289,6 +289,7 @@
                                                     <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">FLM</th>
                                                     <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Usul MO rutin (PO-PS)</th>
                                                     <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">MO non rutin</th>
+                                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Lainnya</th>
                                         <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Aksi</th>
                                                 </tr>
                                             </thead>
@@ -304,6 +305,11 @@
                                         </td>
                                         <td class="border px-4 py-2 text-center">
                                             <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="mo_non_rutin[]" value="1">
+                                                    </td>
+                                                    <td class="border px-4 py-2">
+                                                        <textarea class="p-2 w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                                                            name="lainnya[]" 
+                                                            placeholder="Masukkan keterangan lainnya..."></textarea>
                                                     </td>
                                                     <td class="border px-4 py-2 text-center">
                                             <button type="button" class="delete-row text-red-600 hover:text-red-800">
@@ -367,7 +373,7 @@
                 <!-- ADM -->
                 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                     <div class="px-4 py-5 sm:p-6">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">ADM</h3>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Tindak Lanjut Administrasi</h3>
                                 <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200" id="adm-table">
                                         <thead>
@@ -377,6 +383,7 @@
                                                 <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">PM</th>
                                                 <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">CM</th>
                                                 <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">PtW</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">SR</th>
                                         <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Aksi</th>
                                             </tr>
                                         </thead>
@@ -394,6 +401,9 @@
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
                                             <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_ptw[]" value="1">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_sr[]" value="1">
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
                                             <button type="button" class="delete-row text-red-600 hover:text-red-800">
@@ -607,6 +617,11 @@ document.addEventListener('DOMContentLoaded', function() {
             <td class="border px-4 py-2 text-center">
                 <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="mo_non_rutin[]" value="1">
             </td>
+            <td class="border px-4 py-2">
+                <textarea class="p-2 w-[300px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                    name="lainnya[]" 
+                    placeholder="Masukkan keterangan lainnya..."></textarea>
+            </td>
             <td class="border px-4 py-2 text-center">
                 <button type="button" class="delete-row text-red-600 hover:text-red-800">
                     <i class="fas fa-trash"></i>
@@ -659,6 +674,9 @@ document.addEventListener('DOMContentLoaded', function() {
             </td>
             <td class="border px-4 py-2 text-center">
                 <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_ptw[]" value="1">
+            </td>
+            <td class="border px-4 py-2 text-center">
+                <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_sr[]" value="1">
             </td>
             <td class="border px-4 py-2 text-center">
                 <button type="button" class="delete-row text-red-600 hover:text-red-800">

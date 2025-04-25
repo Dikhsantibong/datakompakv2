@@ -73,8 +73,17 @@
 
                             <div>
                                 <label for="pic" class="block text-sm font-medium text-gray-700">PIC</label>
-                                <input type="text" name="pic" id="pic" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <select name="pic" id="pic" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="">-- Pilih PIC --</option>
+                                    <option value="asman operasi">Asman Operasi</option>
+                                    <option value="TL RON">TL RON</option>
+                                    <option value="ROHMAT">ROHMAT</option>
+                                    <option value="IMAM">IMAM</option>
+                                    <option value="KASMAN">KASMAN</option>
+                                    <option value="AMINAH">AMINAH</option>
+                                </select>
                             </div>
+                            
 
                             <div>
                                 <label for="kondisi_eksisting" class="block text-sm font-medium text-gray-700">Kondisi Eksisting</label>
@@ -102,9 +111,8 @@
                                     <option value="">Pilih Status</option>
                                     <option value="completed">Completed</option>
                                     <option value="in_progress">In Progress</option>
-                                    <option value="on_track">On Track</option>
-                                    <option value="done">Done</option>
-                                    <option value="running">Running</option>
+                                    <option value="pending">pending</option>
+                                    
                                 </select>
                             </div>
 

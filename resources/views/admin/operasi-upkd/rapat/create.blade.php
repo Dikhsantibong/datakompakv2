@@ -49,7 +49,7 @@
                                     <option value="C">C. PROGRAM KERJA</option>
                                     <option value="D">D. MONITORING PENGADAAN BARANG DAN JASA</option>
                                     <option value="E">E. MONITORING PENGAWASAN APLIKASI</option>
-                                    <option value="F">F. HSE</option>
+                                    <option value="F">F. PENGAWASAN KONTRAK</option>
                                     <option value="G1">G1. LAPORAN PEMBANGKIT</option>
                                     <option value="G2">G2. LAPORAN TRANSAKSI ENERGI</option>
                                     <option value="H">H. RAPAT</option>

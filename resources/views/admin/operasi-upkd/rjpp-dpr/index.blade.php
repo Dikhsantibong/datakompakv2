@@ -73,9 +73,9 @@
                             <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
                                 <i class="fas fa-print mr-2"></i> Print
                             </button>
-                            <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700" onclick="addNewRow()">
+                            <a href="{{ route('admin.operasi-upkd.rjpp-dpr.create') }}" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700">
                                 <i class="fas fa-plus mr-2"></i> Tambah Data
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -105,30 +105,30 @@
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead>
                                         <tr>
-                                            <th rowspan="2" class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">TAHUN</th>
-                                            <th rowspan="2" class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">URAIAN</th>
-                                            <th rowspan="2" class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">GOAL</th>
-                                            <th colspan="3" class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">DEADLINE</th>
-                                            <th rowspan="2" class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">PIC</th>
-                                            <th colspan="2" class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">ANGGARAN</th>
-                                            <th rowspan="2" class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">HARGA</th>
-                                            <th colspan="7" class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">PROGRESS</th>
-                                            <th rowspan="2" class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">KONDISI EKSISTING</th>
-                                            <th rowspan="2" class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">STATUS</th>
+                                            <th rowspan="2" class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">TAHUN</th>
+                                            <th rowspan="2" class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">URAIAN</th>
+                                            <th rowspan="2" class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">GOAL</th>
+                                            <th colspan="3" class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">DEADLINE</th>
+                                            <th rowspan="2" class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">PIC</th>
+                                            <th colspan="2" class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">ANGGARAN</th>
+                                            <th rowspan="2" class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">HARGA</th>
+                                            <th colspan="7" class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">PROGRESS</th>
+                                            <th rowspan="2" class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">KONDISI EKSISTING</th>
+                                            <th rowspan="2" class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">STATUS</th>
                                         </tr>
                                         <tr>
-                                            <th class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">PERENCANAAN</th>
-                                            <th class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">PELAKSANAAN</th>
-                                            <th class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">NAGIHA/LAIN</th>
-                                            <th class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">AI</th>
-                                            <th class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">AO</th>
-                                            <th class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">LIST</th>
-                                            <th class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">RAB</th>
-                                            <th class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">TOR</th>
-                                            <th class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">ND DRP</th>
-                                            <th class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">MUP</th>
-                                            <th class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">RENDAN</th>
-                                            <th class="px-3 py-3 bg-[#009BB9] text-center text-xs font-medium text-white uppercase tracking-wider border">KP</th>
+                                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">PERENCANAAN</th>
+                                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">PELAKSANAAN</th>
+                                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">TAGIHAN/LAIN</th>
+                                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">AI</th>
+                                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">AO</th>
+                                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">JUSTIFIKASI</th>
+                                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">RAB</th>
+                                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">TOR</th>
+                                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">ND DRP</th>
+                                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">MUP</th>
+                                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">RENDAN</th>
+                                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">KP</th>
                                         </tr>
                                     </thead>
                                     <tbody id="rjppDprTableBody" class="bg-white divide-y divide-gray-200">
@@ -187,10 +187,10 @@
                                                 <textarea name="data[{{ $year }}][1][kondisi_eksisting]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" rows="3"></textarea>
                                             </td>
                                             <td class="px-3 py-2 border" style="min-width: 120px;">
-                                                <select name="data[{{ $year }}][1][status]" class="p-2 w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <select name="data[{{ $year }}][1][status]" class="p-2 w-[110px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                                     <option value="">Pilih Status</option>
-                                                    <option value="On Track">On Track</option>
-                                                    <option value="Delayed">Delayed</option>
+                                                    <option value="On Track">On Progres</option>
+                                                    <option value="Delayed">Pending</option>
                                                     <option value="Completed">Completed</option>
                                                 </select>
                                             </td>

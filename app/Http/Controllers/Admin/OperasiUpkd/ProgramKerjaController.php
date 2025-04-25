@@ -18,6 +18,14 @@ class ProgramKerjaController extends Controller
         return view('admin.operasi-upkd.program-kerja.index', compact('programKerja'));
     }
 
+    /**
+     * Show the form for creating a new program kerja.
+     */
+    public function create()
+    {
+        return view('admin.operasi-upkd.program-kerja.create');
+    }
+
     public function store(Request $request)
     {
         try {

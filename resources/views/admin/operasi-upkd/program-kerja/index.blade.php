@@ -74,7 +74,7 @@
                             <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
                                 <i class="fas fa-print mr-2"></i> Print
                             </button>
-                            <a href="#" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700">
+                            <a href="{{ route('admin.operasi-upkd.program-kerja.create') }}" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700">
                                 <i class="fas fa-plus mr-2"></i> Tambah Data
                             </a>
                         </div>

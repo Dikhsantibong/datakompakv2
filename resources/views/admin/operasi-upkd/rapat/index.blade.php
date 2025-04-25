@@ -370,7 +370,7 @@
                                 <thead>
                                     <tr class="bg-gray-50">
                                         <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-100">
-                                            F. HSE
+                                            F. PENGAWASAN KONTRAK 
                                         </th>
                                     </tr>
                                 </thead>

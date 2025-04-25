@@ -47,4 +47,10 @@ class RjppDprController extends Controller
             ], 500);
         }
     }
+    
+    public function create ()
+    {
+
+        return view('admin.operasi-upkd.rjpp-dpr.create');
+    }
 } 

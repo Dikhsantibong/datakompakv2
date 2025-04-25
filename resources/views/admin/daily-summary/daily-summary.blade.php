@@ -613,7 +613,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle date change
     inputDate.addEventListener('change', function() {
-        window.location.href = '{{ route("daily-summary.index") }}?input_date=' + this.value + '&unit_source=' + unitFilter.value;
+        window.location.href = '{{ route("admin.daily-summary") }}?input_date=' + this.value + '&unit_source=' + unitFilter.value;
     });
 
     // Handle unit filter change
@@ -644,7 +644,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 // Reload the page with both date and unit source parameters
-                window.location.href = '{{ route("daily-summary.index") }}?input_date=' + inputDate.value + '&unit_source=' + selectedUnit;
+                window.location.href = '{{ route("admin.daily-summary") }}?input_date=' + inputDate.value + '&unit_source=' + selectedUnit;
             } else {
                 console.error('Failed to update unit source');
                 alert('Gagal mengubah unit. Silakan coba lagi.');

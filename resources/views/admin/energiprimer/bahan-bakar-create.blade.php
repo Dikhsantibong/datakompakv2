@@ -126,6 +126,16 @@
                                     @enderror
                                 </div>
 
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">HOP (Hours of Production)</label>
+                                    <input type="number" step="0.01" name="hop" required
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('hop') border-red-500 @enderror"
+                                           value="{{ old('hop') }}">
+                                    @error('hop')
+                                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700">Catatan Transaksi</label>
                                     <textarea name="catatan_transaksi" rows="3"

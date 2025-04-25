@@ -64,6 +64,7 @@ class BahanBakarController extends Controller
             'jenis_bbm' => 'required|in:B40,B35,HSD,MFO',
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
+            'hop' => 'required|numeric|min:0',
             'catatan_transaksi' => 'nullable|string|max:1000',
             'document' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:2048'
         ]);
@@ -102,6 +103,7 @@ class BahanBakarController extends Controller
                 'penerimaan' => $request->penerimaan,
                 'pemakaian' => $request->pemakaian,
                 'saldo_akhir' => $saldoAkhir,
+                'hop' => $request->hop,
                 'is_opening_balance' => $isOpeningBalance,
                 'catatan_transaksi' => $request->catatan_transaksi
             ];
@@ -144,6 +146,7 @@ class BahanBakarController extends Controller
             'jenis_bbm' => 'required|in:B40,B35,HSD,MFO',
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
+            'hop' => 'required|numeric|min:0',
             'catatan_transaksi' => 'nullable|string|max:1000',
             'document' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:2048'
         ]);
@@ -163,6 +166,7 @@ class BahanBakarController extends Controller
                 'penerimaan' => $request->penerimaan,
                 'pemakaian' => $request->pemakaian,
                 'saldo_akhir' => $saldoAkhir,
+                'hop' => $request->hop,
                 'catatan_transaksi' => $request->catatan_transaksi
             ];
 

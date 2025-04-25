@@ -16,6 +16,7 @@ class BahanBakar extends Model
         'penerimaan',
         'pemakaian',
         'saldo_akhir',
+        'hop',
         'catatan_transaksi',
         'document'
     ];
@@ -26,6 +27,7 @@ class BahanBakar extends Model
         'penerimaan' => 'decimal:2',
         'pemakaian' => 'decimal:2',
         'saldo_akhir' => 'decimal:2',
+        'hop' => 'decimal:2',
     ];
 
     public function unit()

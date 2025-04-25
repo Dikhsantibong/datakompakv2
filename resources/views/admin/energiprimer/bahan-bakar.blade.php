@@ -211,6 +211,10 @@
                                             Saldo Akhir
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            HOP
+                                        </th>
+                                        
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Catatan
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -244,6 +248,9 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ number_format($item->saldo_akhir, 2) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                            {{ number_format($item->hop, 2) }}
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 border border-gray-200">
                                             {{ $item->catatan_transaksi }}

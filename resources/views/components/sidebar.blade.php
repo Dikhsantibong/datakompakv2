@@ -163,6 +163,21 @@
                             <i class="fas fa-battery-full w-5 h-5"></i>
                             <span class="ml-3 text-sm">Energi Primer</span>
                         </a>
+                        <a href="{{ route('admin.energiprimer.bahan-bakar') }}" 
+                        class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.bahan-bakar') || request()->routeIs('admin.energiprimer.bahan-bakar.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                         <i class="fas fa-gas-pump w-5 h-5"></i>
+                         <span class="ml-3 text-sm">BBM</span>
+                     </a>
+                     <a href="{{ route('admin.energiprimer.pelumas') }}" 
+                        class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.pelumas') || request()->routeIs('admin.energiprimer.pelumas.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                         <i class="fas fa-oil-can w-5 h-5"></i>
+                         <span class="ml-3 text-sm">Pelumas</span>
+                     </a>
+                     <a href="{{ route('admin.energiprimer.bahan-kimia') }}" 
+                        class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.bahan-kimia') || request()->routeIs('admin.energiprimer.bahan-kimia.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                         <i class="fas fa-flask w-5 h-5"></i>
+                         <span class="ml-3 text-sm">Bahan Kimia</span>
+                     </a>
                     </div>
                 </div>
 
@@ -261,21 +276,7 @@
                             <i class="fas fa-chart-line w-5 h-5"></i>
                             <span class="ml-3 text-sm">Maturity Level</span>
                         </a>
-                        <a href="{{ route('admin.energiprimer.bahan-bakar') }}" 
-                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.bahan-bakar') || request()->routeIs('admin.energiprimer.bahan-bakar.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                            <i class="fas fa-gas-pump w-5 h-5"></i>
-                            <span class="ml-3 text-sm">BBM</span>
-                        </a>
-                        <a href="{{ route('admin.energiprimer.pelumas') }}" 
-                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.pelumas') || request()->routeIs('admin.energiprimer.pelumas.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                            <i class="fas fa-oil-can w-5 h-5"></i>
-                            <span class="ml-3 text-sm">Pelumas</span>
-                        </a>
-                        <a href="{{ route('admin.energiprimer.bahan-kimia') }}" 
-                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.bahan-kimia') || request()->routeIs('admin.energiprimer.bahan-kimia.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                            <i class="fas fa-flask w-5 h-5"></i>
-                            <span class="ml-3 text-sm">Bahan Kimia</span>
-                        </a>
+                       
                     </div>
                 </div>
 

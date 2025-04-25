@@ -142,6 +142,7 @@ class SyncDailySummaryToUpKendari
             'power_plant_id' => $dailySummary->power_plant_id,
             'machine_name' => $dailySummary->machine_name,
             'unit_source' => $powerPlant->unit_source,
+            'date' => $dailySummary->date,
             
             // Installed & Power
             'installed_power' => $dailySummary->installed_power,
@@ -211,6 +212,7 @@ class SyncDailySummaryToUpKendari
             
             // Timestamps
             'updated_at' => now()
+            
         ];
     }
 } 

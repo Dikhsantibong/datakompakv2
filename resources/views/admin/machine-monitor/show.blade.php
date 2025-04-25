@@ -119,6 +119,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Tipe</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">No. Seri</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Unit</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Daya Terpasang</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">DMN/SLO</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">DMP/PT</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Beban /AKTUAL(MW)</th>
@@ -169,6 +170,10 @@
                                        class="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
                                         {{ $machine->powerPlant->name ?? 'N/A' }}
                                     </a>
+                                </td>
+
+                                <td class="px-6 py-4 text-center whitespace-nowrap border-r border-gray-200">
+                                    {{ $machine->operations->first()->dmn ?? '0' }}
                                 </td>
                                 <td class="px-6 py-4 text-center whitespace-nowrap border-r border-gray-200">
                                     {{ $machine->operations->first()->dmn ?? '0' }}

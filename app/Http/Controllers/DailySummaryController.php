@@ -40,13 +40,20 @@ class DailySummaryController extends Controller
             }])
             ->get();
 
+        // Get existing data for the selected date
+        $existingData = DailySummary::whereDate('date', $inputDate)
+            ->get()
+            ->keyBy(function($item) {
+                return $item->power_plant_id . '_' . $item->machine_name;
+            });
+
         // Get unique unit sources for dropdown
         $unitSources = PowerPlant::select('unit_source')
             ->distinct()
             ->pluck('unit_source')
             ->filter(); // Remove any null/empty values
 
-        return view('admin.daily-summary.daily-summary', compact('units', 'unitSources', 'unitSource', 'inputDate'));
+        return view('admin.daily-summary.daily-summary', compact('units', 'unitSources', 'unitSource', 'inputDate', 'existingData'));
     }
 
     public function store(Request $request)
@@ -139,7 +146,8 @@ class DailySummaryController extends Controller
                         'machine_name' => $data['machine_name'],        
                         'uuid' => (string) Str::uuid(),
                         'unit_source' => session('unit', 'mysql'),
-                        'created_at' => $inputDate . ' ' . now()->format('H:i:s'),
+                        'date' => $inputDate,
+                        'created_at' => now(),
                         'updated_at' => now()
                     ];
 
@@ -154,7 +162,7 @@ class DailySummaryController extends Controller
                     // Check for existing record
                     $existingRecord = DailySummary::where('power_plant_id', $data['power_plant_id'])
                         ->where('machine_name', $data['machine_name'])
-                        ->whereDate('created_at', $inputDate)
+                        ->whereDate('date', $inputDate)
                         ->first();
 
                     try {

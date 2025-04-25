@@ -314,14 +314,18 @@
                                                            step="0.001" 
                                                            name="data[{{ $machine->id }}][installed_power]"
                                                            class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
-                                                           value="{{ old('data.'.$machine->id.'.installed_power', '') }}"
+                                                           value="{{ old('data.'.$machine->id.'.installed_power', 
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->installed_power : '') }}"
                                                            min="0">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" 
                                                            name="data[{{ $machine->id }}][dmn_power]"
                                                            class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
-                                                           value="{{ old('data.'.$machine->id.'.dmn_power') }}">
+                                                           value="{{ old('data.'.$machine->id.'.dmn_power',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->dmn_power : '') }}">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" 
@@ -603,8 +607,14 @@
 <script src="{{ asset('js/toggle.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const inputDate = document.getElementById('input-date');
     const unitFilter = document.getElementById('unit-filter');
     const refreshButton = document.getElementById('refreshButton');
+
+    // Handle date change
+    inputDate.addEventListener('change', function() {
+        window.location.href = '{{ route("daily-summary.index") }}?input_date=' + this.value + '&unit_source=' + unitFilter.value;
+    });
 
     // Handle unit filter change
     unitFilter.addEventListener('change', function() {
@@ -633,8 +643,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Reload the page to reflect the changes
-                window.location.reload();
+                // Reload the page with both date and unit source parameters
+                window.location.href = '{{ route("daily-summary.index") }}?input_date=' + inputDate.value + '&unit_source=' + selectedUnit;
             } else {
                 console.error('Failed to update unit source');
                 alert('Gagal mengubah unit. Silakan coba lagi.');

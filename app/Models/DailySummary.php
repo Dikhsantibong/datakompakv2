@@ -23,6 +23,7 @@ class DailySummary extends Model
         'power_plant_id',
         'machine_name',
         'unit_source',
+        'date',
         'installed_power',    // Terpasang
         'dmn_power',         // DMN
         'capable_power',     // Mampu
@@ -73,6 +74,7 @@ class DailySummary extends Model
 
     // Sesuaikan casting dengan tipe data di database
     protected $casts = [
+        'date' => 'date',
         'installed_power' => 'decimal:3',
         'dmn_power' => 'decimal:3',
         'capable_power' => 'decimal:3',

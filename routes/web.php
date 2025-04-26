@@ -249,6 +249,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/{id}/export/excel', [FiveS5RController::class, 'exportExcel'])->name('export.excel');
     });
 
+    // Laporan KIT routes
+    Route::prefix('laporan-kit')->name('laporan-kit.')->group(function () {
+        Route::get('/', [LaporanKitController::class, 'index'])->name('index');
+        Route::get('/create', [LaporanKitController::class, 'create'])->name('create');
+    });
+
     // Abnormal Report routes
     Route::prefix('abnormal-report')->name('abnormal-report.')->group(function () {
         Route::get('/', [AbnormalReportController::class, 'index'])->name('index');

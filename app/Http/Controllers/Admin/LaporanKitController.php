@@ -11,4 +11,9 @@ class LaporanKitController extends Controller
     {
         return view('admin.laporan-kit.index');
     }
+
+    public function create()
+    {
+        return view('admin.laporan-kit.create');
+    }
 } 

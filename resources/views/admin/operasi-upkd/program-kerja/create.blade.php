@@ -196,7 +196,7 @@
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Tindak Lanjut</label>
-                                    <textarea name="tindak_lanjut" rows="3" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                                    <textarea name="tindak_lanjut" rows="3" class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
                                 </div>
                             </div>
 

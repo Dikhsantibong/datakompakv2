@@ -48,7 +48,7 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="container mx-auto px-4 sm:px-6 py-6">
+        <div class="container mx-auto px-4 sm:px-6">
             <!-- Welcome Card -->
             <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white">
                 <div class="max-w-3xl">
@@ -72,10 +72,9 @@
             </div>
 
             <!-- Data Tables Container -->
-            <div class="space-y-8">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2 ">
                 <!-- DATA PEMERIKSAAN BBM -->
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                    <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
+                <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
                         <h3 class="text-lg font-semibold text-gray-900">DATA PEMERIKSAAN BBM</h3>
                     </div>
                     <div class="overflow-x-auto">
@@ -129,7 +128,7 @@
                 </div>
 
                 <!-- DATA PEMERIKSAAN KWH -->
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2">
                     <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
                         <h3 class="text-lg font-semibold text-gray-900">DATA PEMERIKSAAN KWH</h3>
                     </div>
@@ -171,7 +170,7 @@
                 </div>
 
                 <!-- DATA PEMERIKSAAN PELUMAS -->
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2">
                     <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
                         <h3 class="text-lg font-semibold text-gray-900">DATA PEMERIKSAAN PELUMAS</h3>
                     </div>
@@ -219,7 +218,7 @@
                 </div>
 
                 <!-- Pemeriksaan Bahan Kimia -->
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2 mb-6">
                     <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
                         <h3 class="text-lg font-semibold text-gray-900">Pemeriksaan Bahan Kimia</h3>
                     </div>

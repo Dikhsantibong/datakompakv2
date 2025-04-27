@@ -258,7 +258,7 @@ class DailySummaryController extends Controller
             $date = $request->input('date', now()->format('Y-m-d'));
 
             $units = PowerPlant::with(['dailySummaries' => function($query) use ($date) {
-                $query->whereDate('created_at', $date);
+                $query->whereDate('date', $date);
             }])->get();
 
             if ($request->ajax()) {
@@ -290,7 +290,7 @@ class DailySummaryController extends Controller
             $fileName = "Ikhtisar Harian ({$formattedDate}).pdf";
 
             $units = PowerPlant::with(['machines', 'dailySummaries' => function($query) use ($date) {
-                $query->whereDate('created_at', $date);
+                $query->whereDate('date', $date);
             }])->get();
 
             $pdf = Pdf::loadView('admin.daily-summary.pdf', [
@@ -318,7 +318,7 @@ class DailySummaryController extends Controller
             $fileName = "Ikhtisar Harian ({$formattedDate}).xlsx";
 
             $units = PowerPlant::with(['machines', 'dailySummaries' => function($query) use ($date) {
-                $query->whereDate('created_at', $date);
+                $query->whereDate('date', $date);
             }])->get();
 
             return Excel::download(new DailySummaryExport($date, $units), $fileName);

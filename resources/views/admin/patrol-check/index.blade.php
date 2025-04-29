@@ -1,0 +1,215 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="flex h-screen bg-gray-100">
+    @include('components.sidebar')
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <header class="bg-white shadow-sm">
+            <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-semibold text-gray-900">Patrol Check KIT</h1>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex items-center pt-2">
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Patrol Check KIT', 'url' => route('admin.patrol-check.index')]]" />
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto px-4 sm:px-6 py-8">
+                @if(session('success'))
+                <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+                @endif
+
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="p-6">
+                        <form action="{{ route('admin.patrol-check.store') }}" method="POST">
+                            @csrf
+                            
+                            <!-- Equipment Conditions Table -->
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Kondisi Umum Peralatan Bantu</h3>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead>
+                                            <tr>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">NO</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">SISTEM</th>
+                                                <th colspan="2" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Kondisi Umum</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Keterangan</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Normal</th>
+                                                <th class="border px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Abnormal</th>
+                                                <th class="border px-4 py-2"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $systems = ['Exhaust', 'Pelumas', 'BBM', 'JCW/HT', 'CW/LT'];
+                                            @endphp
+
+                                            @foreach($systems as $index => $system)
+                                            <tr>
+                                                <td class="border px-4 py-2 text-center">{{ $index + 1 }}</td>
+                                                <td class="border px-4 py-2">{{ $system }}</td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="radio" name="condition[{{ $index }}]" value="normal" class="form-radio h-4 w-4 text-blue-600">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="radio" name="condition[{{ $index }}]" value="abnormal" class="form-radio h-4 w-4 text-red-600">
+                                                </td>
+                                                <td class="border px-4 py-2">
+                                                    <input type="text" name="notes[{{ $index }}]" class="form-input w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Abnormal Equipment Data -->
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Data Kondisi Abnormal Alat Bantu</h3>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200" id="abnormalTable">
+                                        <thead>
+                                            <tr>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">NO</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">ALAT BANTU</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Kondisi Abnormal</th>
+                                                <th colspan="3" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Tindak Lanjut</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Keterangan</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Aksi</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">FLM</th>
+                                                <th class="border px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">SR</th>
+                                                <th class="border px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Lainnya</th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="border px-4 py-2 text-center">1</td>
+                                                <td class="border px-4 py-2">
+                                                    <input type="text" name="abnormal[0][equipment]" class="form-input w-full rounded-md">
+                                                </td>
+                                                <td class="border px-4 py-2">
+                                                    <input type="text" name="abnormal[0][condition]" class="form-input w-full rounded-md">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" name="abnormal[0][flm]" class="form-checkbox h-4 w-4">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" name="abnormal[0][sr]" class="form-checkbox h-4 w-4">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <input type="checkbox" name="abnormal[0][other]" class="form-checkbox h-4 w-4">
+                                                </td>
+                                                <td class="border px-4 py-2">
+                                                    <input type="text" name="abnormal[0][notes]" class="form-input w-full rounded-md">
+                                                </td>
+                                                <td class="border px-4 py-2 text-center">
+                                                    <button type="button" onclick="deleteRow(this)" class="text-red-600 hover:text-red-900">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <button type="button" onclick="addRow()" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                                        <i class="fas fa-plus mr-2"></i>
+                                        Tambah Baris
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end space-x-3">
+                                <a href="{{ route('admin.patrol-check.list') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                                    <i class="fas fa-list mr-2"></i>
+                                    Lihat Daftar
+                                </a>
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                                    <i class="fas fa-save mr-2"></i>
+                                    Simpan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+    function addRow() {
+        const tbody = document.querySelector('#abnormalTable tbody');
+        const rowCount = tbody.children.length;
+        const newRow = document.createElement('tr');
+        
+        newRow.innerHTML = `
+            <td class="border px-4 py-2 text-center">${rowCount + 1}</td>
+            <td class="border px-4 py-2">
+                <input type="text" name="abnormal[${rowCount}][equipment]" class="form-input w-full rounded-md">
+            </td>
+            <td class="border px-4 py-2">
+                <input type="text" name="abnormal[${rowCount}][condition]" class="form-input w-full rounded-md">
+            </td>
+            <td class="border px-4 py-2 text-center">
+                <input type="checkbox" name="abnormal[${rowCount}][flm]" class="form-checkbox h-4 w-4">
+            </td>
+            <td class="border px-4 py-2 text-center">
+                <input type="checkbox" name="abnormal[${rowCount}][sr]" class="form-checkbox h-4 w-4">
+            </td>
+            <td class="border px-4 py-2 text-center">
+                <input type="checkbox" name="abnormal[${rowCount}][other]" class="form-checkbox h-4 w-4">
+            </td>
+            <td class="border px-4 py-2">
+                <input type="text" name="abnormal[${rowCount}][notes]" class="form-input w-full rounded-md">
+            </td>
+            <td class="border px-4 py-2 text-center">
+                <button type="button" onclick="deleteRow(this)" class="text-red-600 hover:text-red-900">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+        
+        tbody.appendChild(newRow);
+    }
+
+    function deleteRow(button) {
+        const row = button.closest('tr');
+        row.remove();
+        
+        // Renumber the rows
+        const tbody = document.querySelector('#abnormalTable tbody');
+        Array.from(tbody.children).forEach((row, index) => {
+            row.children[0].textContent = index + 1;
+            Array.from(row.querySelectorAll('input')).forEach(input => {
+                const name = input.getAttribute('name');
+                if (name) {
+                    input.setAttribute('name', name.replace(/\d+/, index));
+                }
+            });
+        });
+    }
+</script>
+@endpush
+
+@endsection 

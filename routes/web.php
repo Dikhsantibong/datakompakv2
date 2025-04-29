@@ -55,6 +55,7 @@ use App\Http\Controllers\Admin\OperasiUpkd\PengadaanController;
 use App\Http\Controllers\Admin\OperasiUpkd\ProgramKerjaController;
 use App\Http\Controllers\Admin\OperasiUpkd\RjppDprController;
 use App\Http\Controllers\Admin\LaporanKitController;
+use App\Http\Controllers\Admin\PatrolCheckController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -1307,3 +1308,20 @@ Route::middleware(['auth', 'admin'])->group(function () {
     
     // ... existing routes ...
 });
+
+// ... existing code ...
+
+// Patrol Check Routes
+Route::prefix('admin/patrol-check')->name('admin.patrol-check.')->group(function () {
+    Route::get('/', [PatrolCheckController::class, 'index'])->name('index');
+    Route::get('/list', [PatrolCheckController::class, 'list'])->name('list');
+    Route::post('/', [PatrolCheckController::class, 'store'])->name('store');
+    Route::get('/{id}', [PatrolCheckController::class, 'show'])->name('show');
+    Route::get('/{id}/edit', [PatrolCheckController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [PatrolCheckController::class, 'update'])->name('update');
+    Route::delete('/{id}', [PatrolCheckController::class, 'destroy'])->name('destroy');
+    Route::get('/{id}/export-excel', [PatrolCheckController::class, 'exportExcel'])->name('export-excel');
+    Route::get('/{id}/export-pdf', [PatrolCheckController::class, 'exportPdf'])->name('export-pdf');
+});
+
+// ... existing code ...

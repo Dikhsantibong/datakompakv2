@@ -37,8 +37,202 @@
                 <form action="#" method="POST" class="space-y-8">
                     @csrf
                     
-                    <!-- DATA PEMERIKSAAN BBM -->
+                    <!-- JAM OPERASI MESIN -->
                     <div class="space-y-4">
+                        <h3 class="text-lg font-semibold border-b pb-2">JAM OPERASI MESIN</h3>
+                        
+                        <!-- Mesin 1 -->
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Mesin 1</h4>
+                                <div class="grid grid-cols-5 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">OPS</label>
+                                        <input type="number" step="0.1" name="mesin1_ops" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">HAR</label>
+                                        <input type="number" step="0.1" name="mesin1_har" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">GGN</label>
+                                        <input type="number" step="0.1" name="mesin1_ggn" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">STBY/RSH</label>
+                                        <input type="number" step="0.1" name="mesin1_stby" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Jam/Hari</label>
+                                        <input type="number" step="0.1" name="mesin1_jam_hari" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mesin 2 -->
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Mesin 2</h4>
+                                <div class="grid grid-cols-5 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">OPS</label>
+                                        <input type="number" step="0.1" name="mesin2_ops" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">HAR</label>
+                                        <input type="number" step="0.1" name="mesin2_har" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">GGN</label>
+                                        <input type="number" step="0.1" name="mesin2_ggn" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">STBY/RSH</label>
+                                        <input type="number" step="0.1" name="mesin2_stby" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Jam/Hari</label>
+                                        <input type="number" step="0.1" name="mesin2_jam_hari" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mesin 3 -->
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Mesin 3</h4>
+                                <div class="grid grid-cols-5 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">OPS</label>
+                                        <input type="number" step="0.1" name="mesin3_ops" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">HAR</label>
+                                        <input type="number" step="0.1" name="mesin3_har" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">GGN</label>
+                                        <input type="number" step="0.1" name="mesin3_ggn" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">STBY/RSH</label>
+                                        <input type="number" step="0.1" name="mesin3_stby" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Jam/Hari</label>
+                                        <input type="number" step="0.1" name="mesin3_jam_hari" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mesin 4 -->
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Mesin 4</h4>
+                                <div class="grid grid-cols-5 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">OPS</label>
+                                        <input type="number" step="0.1" name="mesin4_ops" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">HAR</label>
+                                        <input type="number" step="0.1" name="mesin4_har" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">GGN</label>
+                                        <input type="number" step="0.1" name="mesin4_ggn" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">STBY/RSH</label>
+                                        <input type="number" step="0.1" name="mesin4_stby" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Jam/Hari</label>
+                                        <input type="number" step="0.1" name="mesin4_jam_hari" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- JENIS GANGGUAN MESIN -->
+                    <div class="space-y-4 pt-8">
+                        <h3 class="text-lg font-semibold border-b pb-2">JENIS GANGGUAN MESIN</h3>
+                        
+                        <!-- Mesin 1 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Mesin 1</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Mekanik</label>
+                                        <input type="number" name="mesin1_gangguan_mekanik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Elektrik</label>
+                                        <input type="number" name="mesin1_gangguan_elektrik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mesin 2 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Mesin 2</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Mekanik</label>
+                                        <input type="number" name="mesin2_gangguan_mekanik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Elektrik</label>
+                                        <input type="number" name="mesin2_gangguan_elektrik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mesin 3 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Mesin 3</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Mekanik</label>
+                                        <input type="number" name="mesin3_gangguan_mekanik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Elektrik</label>
+                                        <input type="number" name="mesin3_gangguan_elektrik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mesin 4 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Mesin 4</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Mekanik</label>
+                                        <input type="number" name="mesin4_gangguan_mekanik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Elektrik</label>
+                                        <input type="number" name="mesin4_gangguan_elektrik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DATA PEMERIKSAAN BBM -->
+                    <div class="space-y-4 pt-8">
                         <h3 class="text-lg font-semibold border-b pb-2">DATA PEMERIKSAAN BBM</h3>
                         
                         <!-- Storage Tank -->

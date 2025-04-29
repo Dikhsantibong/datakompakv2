@@ -72,6 +72,113 @@
             </div>
 
             <!-- Data Tables Container -->
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2">
+                <!-- JAM OPERASI MESIN -->
+                <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
+                    <h3 class="text-lg font-semibold text-gray-900">JAM OPERASI MESIN</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">mesin</th>
+                                <th colspan="4" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">Jam Mesin</th>
+                                <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">jam/hari</th>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">ops</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">har</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">ggn</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">stby/rsh</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 1</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">1</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">0,5</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">0</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">22,5</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 2</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 3</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 4</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- JENIS GANGGUAN MESIN -->
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2">
+                <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
+                    <h3 class="text-lg font-semibold text-gray-900">JENIS GANGGUAN MESIN</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">mesin</th>
+                                <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 text-center">Jenis Gangguan</th>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">mekanik</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center">elektrik</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 1</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">angka</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 text-center">angka</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 2</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 text-center"></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 3</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 text-center"></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 4</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 text-center"></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-sm font-medium text-gray-900 border-r">Total</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                <td class="px-4 py-2 text-sm text-gray-900 text-center"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- DATA PEMERIKSAAN BBM -->
             <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2 ">
                 <!-- DATA PEMERIKSAAN BBM -->
                 <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">

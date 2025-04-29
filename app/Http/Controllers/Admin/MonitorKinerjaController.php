@@ -4,16 +4,31 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\DailySummary;
+use App\Models\PowerPlant;
 use Illuminate\Http\Request;
 
 class MonitorKinerjaController extends Controller
 {
     public function index()
     {
-        // Get the latest daily summary
-        $latestSummary = DailySummary::latest()->first();
+        // Get selected unit source from request
+        $selectedUnitSource = request('unit_source');
+        
+        // Get all power plants for the filter dropdown
+        $powerPlants = PowerPlant::all();
 
-        // Get data for the chart (last 7 days)
+        // Base query for daily summaries
+        $query = DailySummary::query();
+        
+        // If a specific unit is selected, filter by unit_source
+        if ($selectedUnitSource) {
+            $query->where('unit_source', $selectedUnitSource);
+        }
+
+        // Get the latest daily summary based on filter
+        $latestSummary = $query->latest()->first();
+
+        // Get data for the chart (last 7 days) with unit filter
         $chartData = [
             'labels' => [],
             'eaf' => [],
@@ -28,8 +43,8 @@ class MonitorKinerjaController extends Controller
             ]
         ];
 
-        // Fetch last 7 days data
-        $dailyData = DailySummary::select(
+        // Fetch last 7 days data with unit filter
+        $dailyData = $query->select(
             'eaf', 'sof', 'efor', 'ncf', 
             'net_production', 'hsd_fuel', 
             'mfo_fuel', 'b35_fuel', 
@@ -96,6 +111,8 @@ class MonitorKinerjaController extends Controller
                 'description' => 'Susut Trafo'
             ],
             'chartData' => $chartData,
+            'powerPlants' => $powerPlants,
+            'selectedUnitSource' => $selectedUnitSource
         ];
 
         return view('admin.monitor-kinerja.index', $data);

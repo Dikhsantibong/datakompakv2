@@ -157,7 +157,7 @@
                 <div class="bg-gray-50 p-4 rounded-lg mb-4 border border-gray-200">
                     <label for="unit-source" class="text-sm font-medium text-gray-700 mr-2">Pilih Sumber Unit:</label>
                     <select id="unit-source" 
-                            class="border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+                            class="p-2 border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
                             style="width: 120px;"
                             onchange="updateTable()">
                         <option value="mysql" {{ $unitSource == 'mysql' ? 'selected' : '' }}>UP Kendari</option>
@@ -175,16 +175,16 @@
                             <tr>
                                 <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky left-0 bg-gray-50 border-r-2 border-b z-20">No</th>
                                 <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky left-16 bg-gray-50 border-r-2 border-b z-20">Sistem Kelistrikan</th>
-                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">Mesin Pembangkit</th>
                                 <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">Site Pembangkit</th>
-                                <th colspan="2" class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b bg-blue-50">Rencana Realisasi</th>
-                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">Daya PJBTL SILM</th>
-                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">DMP Existing</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">Mesin Pembangkit</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">DMN SLO</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">DMP PT</th>
+                                <th colspan="2" class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b ">Rencana Realisasi</th>
                                 <th colspan="{{ date('t') }}" class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider bg-gray-50">Tanggal</th>
                             </tr>
                             <tr>
-                                <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-r bg-blue-50">Rencana</th>
-                                <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-r bg-blue-50">Realisasi</th>
+                                <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-r ">Rencana</th>
+                                <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-r ">Realisasi</th>
                                 @for ($i = 1; $i <= date('t'); $i++)
                                     <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider {{ $i % 2 == 0 ? 'bg-gray-50' : '' }}">{{ $i }}</th>
                                 @endfor
@@ -199,22 +199,10 @@
                                         <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white border-r-2">
                                             <div class="truncate max-w-[150px]">{{ $plant->name }}</div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap border-r-2">{{ $machine->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap border-r-2">
                                             <div class="truncate max-w-[150px]">{{ $plant->name }}</div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center border-r bg-blue-50">
-                                            <span class="data-display">{{ $machine->rencana ?? '-' }}</span>
-                                            <textarea name="rencana[{{ $machine->id }}]"
-                                                      class="data-input hidden w-full text-center border rounded"
-                                                      rows="3">{{ $machine->rencana }}</textarea>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center border-r bg-blue-50">
-                                            <span class="data-display">{{ $machine->realisasi ?? '-' }}</span>
-                                            <textarea name="realisasi[{{ $machine->id }}]"
-                                                      class="data-input hidden w-full text-center border rounded"
-                                                      rows="3">{{ $machine->realisasi }}</textarea>
-                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap border-r-2">{{ $machine->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center border-r">
                                             <span class="data-display">{{ $machine->daya_pjbtl_silm ?? '-' }}</span>
                                             <input type="number" 
@@ -231,6 +219,19 @@
                                                    value="{{ $machine->dmp_existing }}"
                                                    step="0.01">
                                         </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center border-r ">
+                                            <span class="data-display">{{ $machine->rencana ?? '-' }}</span>
+                                            <textarea name="rencana[{{ $machine->id }}]"
+                                                      class="data-input hidden w-full text-center border rounded"
+                                                      rows="3">{{ $machine->rencana }}</textarea>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center border-r ">
+                                            <span class="data-display">{{ $machine->realisasi ?? '-' }}</span>
+                                            <textarea name="realisasi[{{ $machine->id }}]"
+                                                      class="data-input hidden w-full text-center border rounded"
+                                                      rows="3">{{ $machine->realisasi }}</textarea>
+                                        </td>
+                                       
                                         @for ($i = 1; $i <= date('t'); $i++)
                                             @php
                                                 $date = now()->format('Y-m-') . sprintf('%02d', $i);

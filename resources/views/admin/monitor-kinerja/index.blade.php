@@ -91,6 +91,24 @@
                     </div>
                 </div>
 
+                <!-- Unit Filter -->
+                <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-medium text-gray-800">
+                            <i class="fas fa-filter mr-2 text-blue-600"></i>
+                            Filter Unit
+                        </h3>
+                        <select id="unitFilter" name="unit_source" class="form-select rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                            <option value="">Semua Unit</option>
+                            @foreach($powerPlants as $powerPlant)
+                                <option value="{{ $powerPlant->unit_source }}" {{ $selectedUnitSource == $powerPlant->unit_source ? 'selected' : '' }}>
+                                    {{ $powerPlant->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
                 <!-- Performance Indicators -->
                 <div class="grid grid-cols-1 md:grid-cols-6 gap-6 mb-6">
                     <!-- EAF Card -->
@@ -718,6 +736,11 @@ new Chart(fuelCtx, {
             }
         }
     }
+});
+
+// Handle unit filter change
+document.getElementById('unitFilter').addEventListener('change', function(e) {
+    window.location.href = `${window.location.pathname}?unit_source=${e.target.value}`;
 });
 </script>
 @endpush 

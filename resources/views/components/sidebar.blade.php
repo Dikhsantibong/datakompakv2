@@ -100,11 +100,12 @@
                             <i class="fas fa-hard-hat w-5 h-5"></i>
                             <span class="ml-3 text-sm">K3, KAM & Lingkungan</span>
                         </a>
-                        <a href="{{ route('admin.data-engine.index') }}" 
-                        class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.laporan-kit.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                         <i class="fas fa-clock w-5 h-5"></i>
-                         <span class="ml-3 text-sm">Data Engine Perjam</span>
-                     </a>
+                    <a href="{{ route('admin.data-engine.index') }}" 
+                    class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.data-engine.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                        <i class="fas fa-cogs w-5 h-5"></i> 
+                        <span class="ml-3 text-sm">Data Engine Perjam</span>
+                        </a>
+
                         <a href="{{ route('admin.laporan-kit.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.laporan-kit.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-clock w-5 h-5"></i>
@@ -158,11 +159,7 @@
                             <i class="fas fa-bolt w-5 h-5"></i>
                             <span class="ml-3 text-sm">Rencana Daya Mampu Bulanan</span>
                         </a>
-                        <a href="#" 
-                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energi-primer.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                            <i class="fas fa-battery-full w-5 h-5"></i>
-                            <span class="ml-3 text-sm">Energi Primer</span>
-                        </a>
+                        
                         <a href="{{ route('admin.energiprimer.bahan-bakar') }}" 
                         class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer.bahan-bakar') || request()->routeIs('admin.energiprimer.bahan-bakar.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                          <i class="fas fa-gas-pump w-5 h-5"></i>

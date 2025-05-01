@@ -71,117 +71,100 @@
                 </div>
             </div>
 
-            <!-- Data Tables Container -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2">
+            <form action="{{ route('admin.laporan-kit.store') }}" method="POST" class="space-y-6">
+                @csrf
+                
                 <!-- JAM OPERASI MESIN -->
-                <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
-                    <h3 class="text-lg font-semibold text-gray-900">JAM OPERASI MESIN</h3>
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2">
+                    <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
+                        <h3 class="text-lg font-semibold text-gray-900">JAM OPERASI MESIN</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">mesin</th>
+                                    <th colspan="4" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">Jam Mesin</th>
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">jam/hari</th>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">ops</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">har</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">ggn</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">stby/rsh</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @forelse($machines as $machine)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">{{ $machine->name }}</td>
+                                    <td class="px-4 py-2 border-r">
+                                        <input type="number" step="0.1" name="mesin[{{ $machine->id }}][ops]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </td>
+                                    <td class="px-4 py-2 border-r">
+                                        <input type="number" step="0.1" name="mesin[{{ $machine->id }}][har]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </td>
+                                    <td class="px-4 py-2 border-r">
+                                        <input type="number" step="0.1" name="mesin[{{ $machine->id }}][ggn]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </td>
+                                    <td class="px-4 py-2 border-r">
+                                        <input type="number" step="0.1" name="mesin[{{ $machine->id }}][stby]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </td>
+                                    <td class="px-4 py-2 border-r">
+                                        <input type="number" step="0.1" name="mesin[{{ $machine->id }}][jam_hari]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="6" class="px-4 py-4 text-sm text-gray-500 text-center">Tidak ada data mesin</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead>
-                            <tr class="bg-gray-50">
-                                <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">mesin</th>
-                                <th colspan="4" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">Jam Mesin</th>
-                                <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">jam/hari</th>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">ops</th>
-                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">har</th>
-                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">ggn</th>
-                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">stby/rsh</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 1</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">1</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">0,5</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">0</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">22,5</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
-                            </tr>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 2</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
-                            </tr>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 3</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
-                            </tr>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 4</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">24</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
-            <!-- JENIS GANGGUAN MESIN -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2">
-                <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
-                    <h3 class="text-lg font-semibold text-gray-900">JENIS GANGGUAN MESIN</h3>
+                <!-- JENIS GANGGUAN MESIN -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2">
+                    <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
+                        <h3 class="text-lg font-semibold text-gray-900">JENIS GANGGUAN MESIN</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">mesin</th>
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 text-center">Jenis Gangguan</th>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">mekanik</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center">elektrik</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @forelse($machines as $machine)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">{{ $machine->name }}</td>
+                                    <td class="px-4 py-2 border-r">
+                                        <input type="number" name="gangguan[{{ $machine->id }}][mekanik]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <input type="number" name="gangguan[{{ $machine->id }}][elektrik]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="3" class="px-4 py-4 text-sm text-gray-500 text-center">Tidak ada data mesin</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead>
-                            <tr class="bg-gray-50">
-                                <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">mesin</th>
-                                <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 text-center">Jenis Gangguan</th>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">mekanik</th>
-                                <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center">elektrik</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 1</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">angka</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 text-center">angka</td>
-                            </tr>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 2</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 text-center"></td>
-                            </tr>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 3</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 text-center"></td>
-                            </tr>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 4</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 text-center"></td>
-                            </tr>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-sm font-medium text-gray-900 border-r">Total</td>
-                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                <td class="px-4 py-2 text-sm text-gray-900 text-center"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
-            <!-- DATA PEMERIKSAAN BBM -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2 ">
                 <!-- DATA PEMERIKSAAN BBM -->
-                <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2">
+                    <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
                         <h3 class="text-lg font-semibold text-gray-900">DATA PEMERIKSAAN BBM</h3>
                     </div>
                     <div class="overflow-x-auto">
@@ -225,12 +208,15 @@
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center">liter</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="hover:bg-gray-50">
-                                    <td colspan="18" class="px-4 py-4 text-sm text-gray-500 text-center">Tidak ada data</td>
-                                </tr>
+                            <tbody id="bbm-tbody" class="bg-white divide-y divide-gray-200">
+                                <!-- Rows will be added here dynamically -->
                             </tbody>
                         </table>
+                    </div>
+                    <div class="mt-4 flex justify-end">
+                        <button type="button" onclick="addBBMRow()" class="inline-flex items-center px-3 py-2 border border-blue-600 text-sm leading-4 font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <i class="fas fa-plus mr-2"></i> Tambah Data
+                        </button>
                     </div>
                 </div>
 
@@ -267,12 +253,15 @@
                                     <th colspan="2" class="px-4 py-2 text-xs font-medium text-gray-500 text-center">kWH</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="hover:bg-gray-50">
-                                    <td colspan="20" class="px-4 py-4 text-sm text-gray-500 text-center">Tidak ada data</td>
-                                </tr>
+                            <tbody id="kwh-tbody" class="bg-white divide-y divide-gray-200">
+                                <!-- Rows will be added here dynamically -->
                             </tbody>
                         </table>
+                    </div>
+                    <div class="mt-4 flex justify-end">
+                        <button type="button" onclick="addKWHRow()" class="inline-flex items-center px-3 py-2 border border-blue-600 text-sm leading-4 font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <i class="fas fa-plus mr-2"></i> Tambah Data
+                        </button>
                     </div>
                 </div>
 
@@ -315,12 +304,15 @@
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center">text</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="hover:bg-gray-50">
-                                    <td colspan="12" class="px-4 py-4 text-sm text-gray-500 text-center">Tidak ada data</td>
-                                </tr>
+                            <tbody id="pelumas-tbody" class="bg-white divide-y divide-gray-200">
+                                <!-- Rows will be added here dynamically -->
                             </tbody>
                         </table>
+                    </div>
+                    <div class="mt-4 flex justify-end">
+                        <button type="button" onclick="addPelumasRow()" class="inline-flex items-center px-3 py-2 border border-blue-600 text-sm leading-4 font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <i class="fas fa-plus mr-2"></i> Tambah Data
+                        </button>
                     </div>
                 </div>
 
@@ -339,12 +331,15 @@
                                     <th class="px-4 py-3 text-sm font-semibold text-gray-900 text-center bg-gray-100">total pakai</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="hover:bg-gray-50">
-                                    <td colspan="4" class="px-4 py-4 text-sm text-gray-500 text-center">Tidak ada data</td>
-                                </tr>
+                            <tbody id="bahan-kimia-tbody" class="bg-white divide-y divide-gray-200">
+                                <!-- Rows will be added here dynamically -->
                             </tbody>
                         </table>
+                    </div>
+                    <div class="mt-4 flex justify-end">
+                        <button type="button" onclick="addBahanKimiaRow()" class="inline-flex items-center px-3 py-2 border border-blue-600 text-sm leading-4 font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <i class="fas fa-plus mr-2"></i> Tambah Data
+                        </button>
                     </div>
                 </div>
 
@@ -366,36 +361,32 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
+                                @forelse($machines as $machine)
                                 <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 1</td>
-                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">angka</td>
-                                    <td class="px-4 py-2 text-sm text-gray-900 text-center">angka</td>
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">{{ $machine->name }}</td>
+                                    <td class="px-4 py-2 border-r">
+                                        <input type="number" step="0.1" name="beban[{{ $machine->id }}][siang]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <input type="number" step="0.1" name="beban[{{ $machine->id }}][malam]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </td>
                                 </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 2</td>
-                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">angka</td>
-                                    <td class="px-4 py-2 text-sm text-gray-900 text-center">angka</td>
+                                @empty
+                                <tr>
+                                    <td colspan="3" class="px-4 py-4 text-sm text-gray-500 text-center">Tidak ada data mesin</td>
                                 </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 3</td>
-                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">angka</td>
-                                    <td class="px-4 py-2 text-sm text-gray-900 text-center">angka</td>
-                                </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 4</td>
-                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">angka</td>
-                                    <td class="px-4 py-2 text-sm text-gray-900 text-center">angka</td>
-                                </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 text-sm font-medium text-gray-900 border-r">Total</td>
-                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
-                                    <td class="px-4 py-2 text-sm text-gray-900 text-center"></td>
-                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
+
+                <div class="flex justify-end space-x-4 p-6">
+                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Simpan Data
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -429,12 +420,243 @@
         box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     }
 
-    /* Transition effects */
-    .transition-colors {
-        transition-property: background-color, border-color, color, fill, stroke;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-duration: 150ms;
+    /* Input styles */
+    input[type="number"] {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+
+    input[readonly] {
+        background-color: #f3f4f6;
+    }
+
+    .delete-row {
+        color: #dc2626;
+        cursor: pointer;
+    }
+    .delete-row:hover {
+        color: #991b1b;
     }
 </style>
 @endpush
+
+@push('scripts')
+<script>
+    let bbmRowCount = 0;
+    let kwhRowCount = 0;
+    let pelumasRowCount = 0;
+    let bahanKimiaRowCount = 0;
+
+    function addBBMRow() {
+        const tbody = document.getElementById('bbm-tbody');
+        const rowIndex = bbmRowCount++;
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50';
+        row.innerHTML = `
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_1_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_1_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_2_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_2_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][total_stok]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_1_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_1_percentage]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_2_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_2_percentage]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][total_stok_tangki]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][terima_bbm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_pakai]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_pakai]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            </td>
+            <td class="px-4 py-2">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][total_pakai]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            </td>
+            <td class="px-4 py-2">
+                <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+        setupBBMCalculations(row);
+    }
+
+    function addKWHRow() {
+        const tbody = document.getElementById('kwh-tbody');
+        const rowIndex = kwhRowCount++;
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50';
+        row.innerHTML = `
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="kwh[${rowIndex}][panel1_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="kwh[${rowIndex}][panel1_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="kwh[${rowIndex}][panel2_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="kwh[${rowIndex}][panel2_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="kwh[${rowIndex}][total_prod]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            </td>
+            <td class="px-4 py-2">
+                <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    }
+
+    function addPelumasRow() {
+        const tbody = document.getElementById('pelumas-tbody');
+        const rowIndex = pelumasRowCount++;
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50';
+        row.innerHTML = `
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][storage_tank_1_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][storage_tank_1_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][storage_tank_2_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][storage_tank_2_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][total_stok]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][area_1]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][area_2]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][total_stok]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            </td>
+            <td class="px-4 py-2">
+                <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    }
+
+    function addBahanKimiaRow() {
+        const tbody = document.getElementById('bahan-kimia-tbody');
+        const rowIndex = bahanKimiaRowCount++;
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50';
+        row.innerHTML = `
+            <td class="px-4 py-2 border-r">
+                <input type="text" name="bahan_kimia[${rowIndex}][jenis]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" name="bahan_kimia[${rowIndex}][stok_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" name="bahan_kimia[${rowIndex}][terima]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2">
+                <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    }
+
+    function setupBBMCalculations(row) {
+        // Add event listeners for BBM calculations in the new row
+        const inputs = row.querySelectorAll('input[type="number"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', calculateBBMTotals);
+        });
+    }
+
+    // Initialize with one row for each table when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        addBBMRow();
+        addKWHRow();
+        addPelumasRow();
+        addBahanKimiaRow();
+    });
+
+    // Add JavaScript for automatic calculations
+    document.addEventListener('DOMContentLoaded', function() {
+        // BBM calculations
+        function calculateBBMTotals() {
+            // Storage Tank total
+            const st1Liter = parseFloat(document.querySelector('input[name="bbm[storage_tank_1_liter]"]').value) || 0;
+            const st2Liter = parseFloat(document.querySelector('input[name="bbm[storage_tank_2_liter]"]').value) || 0;
+            document.querySelector('input[name="bbm[total_stok]"]').value = (st1Liter + st2Liter).toFixed(1);
+
+            // Flowmeter usage calculations
+            const fm1Awal = parseFloat(document.querySelector('input[name="bbm[flowmeter_1_awal]"]').value) || 0;
+            const fm1Akhir = parseFloat(document.querySelector('input[name="bbm[flowmeter_1_akhir]"]').value) || 0;
+            const fm2Awal = parseFloat(document.querySelector('input[name="bbm[flowmeter_2_awal]"]').value) || 0;
+            const fm2Akhir = parseFloat(document.querySelector('input[name="bbm[flowmeter_2_akhir]"]').value) || 0;
+
+            const pakai1 = fm1Akhir - fm1Awal;
+            const pakai2 = fm2Akhir - fm2Awal;
+
+            document.querySelector('input[name="bbm[flowmeter_1_pakai]"]').value = pakai1.toFixed(1);
+            document.querySelector('input[name="bbm[flowmeter_2_pakai]"]').value = pakai2.toFixed(1);
+            document.querySelector('input[name="bbm[total_pakai]"]').value = (pakai1 + pakai2).toFixed(1);
+        }
+
+        // Add event listeners to BBM input fields
+        const bbmInputs = document.querySelectorAll('input[name^="bbm["]');
+        bbmInputs.forEach(input => {
+            input.addEventListener('input', calculateBBMTotals);
+        });
+    });
+</script>
+@endpush
+
 @endsection 

@@ -255,6 +255,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::prefix('laporan-kit')->name('laporan-kit.')->group(function () {
         Route::get('/', [LaporanKitController::class, 'index'])->name('index');
         Route::get('/create', [LaporanKitController::class, 'create'])->name('create');
+        Route::post('/store', [LaporanKitController::class, 'store'])->name('store');
     });
 
     // Abnormal Report routes

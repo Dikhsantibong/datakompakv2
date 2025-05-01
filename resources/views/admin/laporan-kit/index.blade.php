@@ -347,6 +347,54 @@
                         </table>
                     </div>
                 </div>
+
+                <!-- Beban Tertinggi Harian -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2 mb-6">
+                    <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
+                        <h3 class="text-lg font-semibold text-gray-900">Beban Tertinggi Harian</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center bg-gray-100">Mesin</th>
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 text-center bg-gray-100">Beban Tertinggi</th>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">Siang (07:00 s/d 17:00)</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center">Malam (18:00 s/d 06:0)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 1</td>
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">angka</td>
+                                    <td class="px-4 py-2 text-sm text-gray-900 text-center">angka</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 2</td>
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">angka</td>
+                                    <td class="px-4 py-2 text-sm text-gray-900 text-center">angka</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 3</td>
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">angka</td>
+                                    <td class="px-4 py-2 text-sm text-gray-900 text-center">angka</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r">mesin 4</td>
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">angka</td>
+                                    <td class="px-4 py-2 text-sm text-gray-900 text-center">angka</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-sm font-medium text-gray-900 border-r">Total</td>
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center"></td>
+                                    <td class="px-4 py-2 text-sm text-gray-900 text-center"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

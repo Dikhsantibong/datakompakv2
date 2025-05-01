@@ -481,6 +481,79 @@
                         </div>
                     </div>
 
+                    <!-- Beban Tertinggi Harian -->
+                    <div class="space-y-4 pt-8">
+                        <h3 class="text-lg font-semibold border-b pb-2">Beban Tertinggi Harian</h3>
+                        
+                        <!-- Mesin 1 -->
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Mesin 1</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Siang (07:00 s/d 17:00)</label>
+                                        <input type="number" step="0.1" name="beban_siang_mesin1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Malam (18:00 s/d 06:0)</label>
+                                        <input type="number" step="0.1" name="beban_malam_mesin1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mesin 2 -->
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Mesin 2</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Siang (07:00 s/d 17:00)</label>
+                                        <input type="number" step="0.1" name="beban_siang_mesin2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Malam (18:00 s/d 06:0)</label>
+                                        <input type="number" step="0.1" name="beban_malam_mesin2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mesin 3 -->
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Mesin 3</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Siang (07:00 s/d 17:00)</label>
+                                        <input type="number" step="0.1" name="beban_siang_mesin3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Malam (18:00 s/d 06:0)</label>
+                                        <input type="number" step="0.1" name="beban_malam_mesin3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mesin 4 -->
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Mesin 4</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Siang (07:00 s/d 17:00)</label>
+                                        <input type="number" step="0.1" name="beban_siang_mesin4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Malam (18:00 s/d 06:0)</label>
+                                        <input type="number" step="0.1" name="beban_malam_mesin4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="pt-8 flex justify-end space-x-4">
                         <a href="{{ route('admin.laporan-kit.index') }}" class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Batal

@@ -245,8 +245,8 @@
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase  "></th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase  "></th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
@@ -255,11 +255,11 @@
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Mulai</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Selesai</th>

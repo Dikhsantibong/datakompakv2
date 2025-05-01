@@ -254,7 +254,7 @@
 
                         <!-- Main Blackstart Table -->
                         <div class="overflow-x-auto mb-8">
-                            <h2 class="text-xl font-semibold text-gray-800 mb-4">Data Blackstart</h2>
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">Komitmen dan Pembahasan</h2>
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>

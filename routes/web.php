@@ -1333,6 +1333,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     // Blackstart routes
     Route::get('/blackstart', [BlackstartController::class, 'index'])->name('blackstart.index');
     Route::get('/blackstart/show', [BlackstartController::class, 'show'])->name('blackstart.show');
+    Route::post('/blackstart', [BlackstartController::class, 'store'])->name('blackstart.store');
+    Route::delete('/blackstart/{id}', [BlackstartController::class, 'destroy'])->name('blackstart.destroy');
+    Route::get('/blackstart/{id}/edit', [BlackstartController::class, 'edit'])->name('blackstart.edit');
+    Route::put('/blackstart/{id}', [BlackstartController::class, 'update'])->name('blackstart.update');
+    Route::get('/blackstart/export-excel', [BlackstartController::class, 'exportExcel'])->name('blackstart.export-excel');
+    Route::get('/blackstart/export-pdf', [BlackstartController::class, 'exportPdf'])->name('blackstart.export-pdf');
 });
 
 // ... existing code ...

@@ -7,7 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "barryvdh/laravel-dompdf": "^3.0",
+        "barryvdh/laravel-dompdf": "^3.1",
         "doctrine/dbal": "^4.2",
         "endroid/qr-code": "^6.0",
         "firebase/php-jwt": "^6.10",

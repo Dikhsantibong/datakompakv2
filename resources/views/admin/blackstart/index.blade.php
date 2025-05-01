@@ -57,16 +57,39 @@
         <!-- Main Content -->
         <div class="p-6">
             <div class="bg-white rounded-lg shadow-md p-6">
-                <form action="#" method="POST" class="space-y-6">
+                <form action="{{ route('admin.blackstart.store') }}" method="POST" class="space-y-6">
                     @csrf
                     
                     <!-- Tanggal -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
-                            <input type="date" name="tanggal" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            <input type="date" name="tanggal" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
                         </div>
                     </div>
+
+                    <!-- Flash Messages -->
+                    @if(session('success'))
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                            <span class="block sm:inline">{{ session('success') }}</span>
+                        </div>
+                    @endif
+
+                    @if(session('error'))
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                            <span class="block sm:inline">{{ session('error') }}</span>
+                        </div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                            <ul>
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     <!-- Action Buttons -->
                     <div class="flex justify-end items-center mb-4">
@@ -143,7 +166,7 @@
                                 <span class="row-number"></span>
                             </td>
                             <td class="px-3 py-4 whitespace-nowrap">
-                                <select name="unit[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                <select name="unit_id[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
                                     <option value="">Pilih Unit</option>
                                     @foreach($powerPlants as $powerPlant)
                                         <option value="{{ $powerPlant->id }}">{{ $powerPlant->name }}</option>
@@ -151,52 +174,52 @@
                                 </select>
                             </td>
                             <td class="px-3 py-4 whitespace-nowrap">
-                                <select name="pembangkit[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                <select name="pembangkit_status[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
                                     <option value="">Pilih Status</option>
                                     <option value="tersedia">Tersedia</option>
                                     <option value="tidak_tersedia">Tidak Tersedia</option>
                                 </select>
                             </td>
                             <td class="px-3 py-4 whitespace-nowrap">
-                                <select name="black_start[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                <select name="black_start_status[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
                                     <option value="">Pilih Status</option>
                                     <option value="tersedia">Tersedia</option>
                                     <option value="tidak_tersedia">Tidak Tersedia</option>
                                 </select>
                             </td>
                             <td class="px-3 py-4 whitespace-nowrap">
-                                <select name="sop[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                <select name="sop_status[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
                                     <option value="">Pilih Status</option>
                                     <option value="tersedia">Tersedia</option>
                                     <option value="tidak_tersedia">Tidak Tersedia</option>
                                 </select>
                             </td>
                             <td class="px-3 py-4 whitespace-nowrap">
-                                <select name="load_set[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                <select name="load_set_status[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
                                     <option value="">Pilih Status</option>
                                     <option value="tersedia">Tersedia</option>
                                     <option value="tidak_tersedia">Tidak Tersedia</option>
                                 </select>
                             </td>
                             <td class="px-3 py-4 whitespace-nowrap">
-                                <select name="line_energize[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                <select name="line_energize_status[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
                                     <option value="">Pilih Status</option>
                                     <option value="tersedia">Tersedia</option>
                                     <option value="tidak_tersedia">Tidak Tersedia</option>
                                 </select>
                             </td>
                             <td class="px-3 py-4 whitespace-nowrap">
-                                <select name="status_jaringan[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                <select name="status_jaringan[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
                                     <option value="">Pilih Status</option>
                                     <option value="normal">Normal</option>
                                     <option value="tidak_normal">Tidak Normal</option>
                                 </select>
                             </td>
                             <td class="px-3 py-4 whitespace-nowrap">
-                                <input type="text" name="pic[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" placeholder="Nama PIC">
+                                <input type="text" name="pic[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" placeholder="Nama PIC" required>
                             </td>
                             <td class="px-3 py-4 whitespace-nowrap">
-                                <select name="status[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                <select name="status[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
                                     <option value="">Pilih Status</option>
                                     <option value="open">OPEN</option>
                                     <option value="close">CLOSE</option>
@@ -260,7 +283,7 @@
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Mulai</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Selesai</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Deadline</th>

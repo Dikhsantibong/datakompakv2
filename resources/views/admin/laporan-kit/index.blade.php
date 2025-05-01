@@ -176,8 +176,7 @@
                                     <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">Total Stok Tangki</th>
                                     <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">Terima BBM</th>
                                     <th colspan="7" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center bg-gray-100">Flowmeter</th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">aksi </th>
-                                    
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-l border-gray-300 text-center" rowspan="3">aksi</th>
                                 </tr>
                                 <tr class="bg-gray-50">
                                     <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">1</th>
@@ -207,7 +206,6 @@
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">awal</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">akhir</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">pakai 2</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center">liter</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center"></th>
                                 </tr>
                             </thead>
@@ -306,7 +304,7 @@
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center">text</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center">Aksi</th>
+                                    <td class="px-4 py-2 text-xs font-medium text-gray-500 border-l border-gray-300 text-center">aksi</td>
                                 </tr>
                             </thead>
                             <tbody id="pelumas-tbody" class="bg-white divide-y divide-gray-200">
@@ -444,6 +442,26 @@
     .delete-row:hover {
         color: #991b1b;
     }
+
+    /* Tambahan untuk tombol aksi */
+    .table-action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 9999px;
+        transition: background 0.2s;
+    }
+    .table-action-btn:hover {
+        background: #fee2e2;
+    }
+
+    /* Tambahan untuk kolom aksi */
+    th.border-l, td.border-l {
+        border-left-width: 1px !important;
+        border-left-color: #d1d5db !important; /* gray-300 */
+    }
 </style>
 @endpush
 
@@ -514,9 +532,15 @@
             <td class="px-4 py-2">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][total_pakai]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
             </td>
-            <td class="px-4 py-2">
-                <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
-                    <i class="fas fa-trash"></i>
+            <td class="px-4 py-2 border-l border-gray-300 text-center">
+                <button type="button"
+                    onclick="this.closest('tr').remove()"
+                    class="group flex items-center justify-center mx-auto bg-transparent border-none focus:outline-none"
+                    aria-label="Hapus Baris"
+                    title="Hapus Baris">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full group-hover:bg-red-100 transition">
+                        <i class="fas fa-trash text-red-600 group-hover:text-red-800 text-lg"></i>
+                    </span>
                 </button>
             </td>
         `;

@@ -56,6 +56,7 @@ use App\Http\Controllers\Admin\OperasiUpkd\ProgramKerjaController;
 use App\Http\Controllers\Admin\OperasiUpkd\RjppDprController;
 use App\Http\Controllers\Admin\LaporanKitController;
 use App\Http\Controllers\Admin\PatrolCheckController;
+use App\Http\Controllers\Admin\BlackstartController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -1322,6 +1323,16 @@ Route::prefix('admin/patrol-check')->name('admin.patrol-check.')->group(function
     Route::delete('/{id}', [PatrolCheckController::class, 'destroy'])->name('destroy');
     Route::get('/{id}/export-excel', [PatrolCheckController::class, 'exportExcel'])->name('export-excel');
     Route::get('/{id}/export-pdf', [PatrolCheckController::class, 'exportPdf'])->name('export-pdf');
+});
+
+// ... existing code ...
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    // ... existing routes ...
+    
+    // Blackstart routes
+    Route::get('/blackstart', [BlackstartController::class, 'index'])->name('blackstart.index');
+    Route::get('/blackstart/show', [BlackstartController::class, 'show'])->name('blackstart.show');
 });
 
 // ... existing code ...

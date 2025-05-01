@@ -1080,6 +1080,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/data-engine', [DataEngineController::class, 'index'])
         ->name('admin.data-engine.index');
+        
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -1114,6 +1115,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
 Route::get('/admin/data-engine/{date}/edit', [DataEngineController::class, 'edit'])->name('admin.data-engine.edit');
 Route::post('/admin/data-engine/update', [DataEngineController::class, 'update'])->name('admin.data-engine.update');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {

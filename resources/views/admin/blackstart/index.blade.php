@@ -211,6 +211,244 @@
                             </td>
                         </tr>
                     </template>
+
+                    <!-- Tabel Peralatan Blackstart -->
+                    <div class="mt-8">
+                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Peralatan Blackstart</h2>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">No</th>
+                                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Unit Layanan / sentral</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Kompresor diesel</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">tabung udara</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="2">UPS</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="2">lampu emergency</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">battery catudaya</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">battery black start</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="2">radio komunikasi</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">kondisi radio kompresor</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">panel</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">simulasi black start</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">start kondisi black out</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">TARGET WAKTU</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">PIC</th>
+                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase">STATUS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="px-3 py-2"></th>
+                                        <th class="px-3 py-2"></th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Mulai</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Selesai</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Deadline</th>
+                                        <th class="px-3 py-2"></th>
+                                        <th class="px-3 py-2"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="peralatan-tbody" class="bg-white divide-y divide-gray-200">
+                                    <!-- Template row will be added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Row Template for Peralatan -->
+                    <template id="peralatan-row-template">
+                        <tr>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <span class="row-number"></span>
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="unit_layanan[]" class="p-2 w-[150px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih Unit</option>
+                                    @foreach($powerPlants as $powerPlant)
+                                        <option value="{{ $powerPlant->id }}">{{ $powerPlant->name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <!-- Kompresor diesel -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="number" name="kompresor_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="text" name="kompresor_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" value="bh" readonly>
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="kompresor_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="tidak_normal">Tidak Normal</option>
+                                </select>
+                            </td>
+                            <!-- Tabung udara -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="number" name="tabung_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="text" name="tabung_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" value="bh" readonly>
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="tabung_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="tidak_normal">Tidak Normal</option>
+                                </select>
+                            </td>
+                            <!-- UPS -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="ups_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="tidak_normal">Tidak Normal</option>
+                                </select>
+                            </td>
+                            <!-- Lampu Emergency -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="number" name="lampu_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="lampu_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="tidak_normal">Tidak Normal</option>
+                                </select>
+                            </td>
+                            <!-- Battery Catudaya -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="number" name="battery_catudaya_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="text" name="battery_catudaya_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" value="bh" readonly>
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="battery_catudaya_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="tidak_normal">Tidak Normal</option>
+                                </select>
+                            </td>
+                            <!-- Battery Black Start -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="number" name="battery_blackstart_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="text" name="battery_blackstart_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" value="bh" readonly>
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="battery_blackstart_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="tidak_normal">Tidak Normal</option>
+                                </select>
+                            </td>
+                            <!-- Radio Komunikasi -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="number" name="radio_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="radio_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="tidak_normal">Tidak Normal</option>
+                                </select>
+                            </td>
+                            <!-- Kondisi Radio Kompresor -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="radio_kompresor_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="tidak_normal">Tidak Normal</option>
+                                </select>
+                            </td>
+                            <!-- Panel -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="panel_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="tidak_normal">Tidak Normal</option>
+                                </select>
+                            </td>
+                            <!-- Simulasi Black Start -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="simulasi_blackstart[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih</option>
+                                    <option value="pernah">Pernah</option>
+                                    <option value="belum_pernah">Belum Pernah</option>
+                                </select>
+                            </td>
+                            <!-- Start Kondisi Black Out -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="start_kondisi_blackout[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih</option>
+                                    <option value="pernah">Pernah</option>
+                                    <option value="belum_pernah">Belum Pernah</option>
+                                </select>
+                            </td>
+                            <!-- Target Waktu -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="time" name="waktu_mulai[]" class="p-2 w-[120px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="time" name="waktu_selesai[]" class="p-2 w-[120px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="time" name="waktu_deadline[]" class="p-2 w-[120px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            </td>
+                            <!-- PIC -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <input type="text" name="pic[]" class="p-2 w-[120px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" placeholder="Nama PIC">
+                            </td>
+                            <!-- Status -->
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <select name="status[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="">Pilih</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="tidak_normal">Tidak Normal</option>
+                                </select>
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap">
+                                <button type="button" class="delete-row text-red-500 hover:text-red-700">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </template>
+
+                    <!-- Add Row Button for Peralatan -->
+                    <div class="mt-4">
+                        <button type="button" id="add-peralatan-row" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                            Tambah Peralatan
+                        </button>
+                    </div>
+
                 </form>
             </div>
         </div>
@@ -220,12 +458,18 @@
 <script src="{{ asset('js/toggle.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Existing table functionality
     const tbody = document.getElementById('blackstart-tbody');
     const addRowButton = document.getElementById('add-row');
     const rowTemplate = document.getElementById('row-template');
 
-    function updateRowNumbers() {
-        const rows = tbody.getElementsByTagName('tr');
+    // New peralatan table functionality
+    const peralatanTbody = document.getElementById('peralatan-tbody');
+    const addPeralatanRowButton = document.getElementById('add-peralatan-row');
+    const peralatanRowTemplate = document.getElementById('peralatan-row-template');
+
+    function updateRowNumbers(tableBody) {
+        const rows = tableBody.getElementsByTagName('tr');
         for (let i = 0; i < rows.length; i++) {
             const numberCell = rows[i].querySelector('.row-number');
             if (numberCell) {
@@ -234,21 +478,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function addRow() {
-        const clone = document.importNode(rowTemplate.content, true);
+    function addRow(tbody, template) {
+        const clone = document.importNode(template.content, true);
         
         // Add delete functionality to the new row
         const deleteButton = clone.querySelector('.delete-row');
         deleteButton.addEventListener('click', function() {
             this.closest('tr').remove();
-            updateRowNumbers();
+            updateRowNumbers(tbody);
         });
 
         tbody.appendChild(clone);
-        updateRowNumbers();
+        updateRowNumbers(tbody);
     }
 
-    addRowButton.addEventListener('click', addRow);
+    if (addRowButton && rowTemplate) {
+        addRowButton.addEventListener('click', () => addRow(tbody, rowTemplate));
+    }
+
+    if (addPeralatanRowButton && peralatanRowTemplate) {
+        addPeralatanRowButton.addEventListener('click', () => addRow(peralatanTbody, peralatanRowTemplate));
+    }
 });
 </script>
 @endsection 

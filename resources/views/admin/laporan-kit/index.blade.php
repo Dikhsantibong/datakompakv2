@@ -176,6 +176,8 @@
                                     <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">Total Stok Tangki</th>
                                     <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">Terima BBM</th>
                                     <th colspan="7" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center bg-gray-100">Flowmeter</th>
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">aksi </th>
+                                    
                                 </tr>
                                 <tr class="bg-gray-50">
                                     <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">1</th>
@@ -206,6 +208,7 @@
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">akhir</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">pakai 2</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center">liter</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center"></th>
                                 </tr>
                             </thead>
                             <tbody id="bbm-tbody" class="bg-white divide-y divide-gray-200">
@@ -229,28 +232,28 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead>
                                 <tr class="bg-gray-50">
-                                    <th colspan="10" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">KWH PRODUKSI</th>
-                                    <th colspan="10" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center bg-gray-100">KWH pemakaian sendiri (PS)</th>
+                                    <th colspan="5" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center">KWH PRODUKSI</th>
+                                    <th colspan="5" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center">KWH pemakaian sendiri (PS)</th>
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">aksi </th>
                                 </tr>
                                 <tr class="bg-gray-50">
-                                    <th colspan="4" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">NAMA PANEL 1</th>
-                                    <th colspan="4" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">NAMA PANEL 2</th>
-                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">total prod.</th>
-                                    <th colspan="4" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">NAMA PANEL 1</th>
-                                    <th colspan="4" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">NAMA PANEL 2</th>
-                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 text-center">total prod.</th>
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">NAMA PANEL 1</th>
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">NAMA PANEL 2</th>
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center align-middle">total prod.<br>kWH</th>
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">NAMA PANEL 1</th>
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">NAMA PANEL 2</th>
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 text-center align-middle">total prod.<br>kWH</th>
                                 </tr>
                                 <tr class="bg-gray-50">
-                                    <th colspan="2" class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AWAL</th>
-                                    <th colspan="2" class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AKHIR</th>
-                                    <th colspan="2" class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AWAL</th>
-                                    <th colspan="2" class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AKHIR</th>
-                                    <th colspan="2" class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">kWH</th>
-                                    <th colspan="2" class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AWAL</th>
-                                    <th colspan="2" class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AKHIR</th>
-                                    <th colspan="2" class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AWAL</th>
-                                    <th colspan="2" class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AKHIR</th>
-                                    <th colspan="2" class="px-4 py-2 text-xs font-medium text-gray-500 text-center">kWH</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AWAL</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AKHIR</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AWAL</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AKHIR</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AWAL</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AKHIR</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AWAL</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AKHIR</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center"></th>
                                 </tr>
                             </thead>
                             <tbody id="kwh-tbody" class="bg-white divide-y divide-gray-200">
@@ -274,12 +277,13 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead>
                                 <tr class="bg-gray-50">
-                                    <th colspan="5" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">Storage Tank</th>
-                                    <th colspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">drum pelumas</th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">Total Stok Tangki</th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">Terima pelumas</th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">total pakai pelumas</th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center align-middle bg-gray-100">jenis pelumas</th>
+                                    <th colspan="5" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center">Storage Tank</th>
+                                    <th colspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center">drum pelumas</th>
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Total Stok Tangki</th>
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Terima pelumas</th>
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">total pakai pelumas</th>
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center align-middle">jenis pelumas</th>
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center align-middle">aksi</th>
                                 </tr>
                                 <tr class="bg-gray-50">
                                     <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">1</th>
@@ -302,6 +306,7 @@
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center">text</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="pelumas-tbody" class="bg-white divide-y divide-gray-200">
@@ -325,10 +330,11 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead>
                                 <tr class="bg-gray-50">
-                                    <th class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center bg-gray-100">jenis bahan kimia</th>
-                                    <th class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center bg-gray-100">stok awal</th>
-                                    <th class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center bg-gray-100">terim bahan kimia</th>
-                                    <th class="px-4 py-3 text-sm font-semibold text-gray-900 text-center bg-gray-100">total pakai</th>
+                                    <th class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">jenis bahan kimia</th>
+                                    <th class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">stok awal</th>
+                                    <th class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">terim bahan kimia</th>
+                                    <th class="px-4 py-3 text-sm font-semibold text-gray-900 text-center">total pakai</th>
+                                    <th class="px-4 py-3 text-sm font-semibold text-gray-900 text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="bahan-kimia-tbody" class="bg-white divide-y divide-gray-200">
@@ -524,28 +530,20 @@
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.innerHTML = `
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="kwh[${rowIndex}][panel1_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="kwh[${rowIndex}][panel1_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="kwh[${rowIndex}][panel2_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="kwh[${rowIndex}][panel2_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="kwh[${rowIndex}][total_prod]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
-            </td>
-            <td class="px-4 py-2">
-                <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel1_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel1_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel2_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel2_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_total]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel1_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel1_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel2_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel2_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_total]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="px-4 py-2"><button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button></td>
         `;
         tbody.appendChild(row);
+        setupKWHCalculations(row);
     }
 
     function addPelumasRow() {
@@ -554,37 +552,22 @@
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.innerHTML = `
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][storage_tank_1_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][storage_tank_1_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][storage_tank_2_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][storage_tank_2_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][total_stok]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][area_1]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][area_2]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][total_stok]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
-            </td>
-            <td class="px-4 py-2">
-                <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank1_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank1_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank2_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank2_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank_total_stok]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][drum_area1]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][drum_area2]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][drum_total_stok]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][total_stok_tangki]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][terima_pelumas]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][total_pakai]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="px-4 py-2 border-r"><input type="text" name="pelumas[${rowIndex}][jenis]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2"><button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button></td>
         `;
         tbody.appendChild(row);
+        setupPelumasCalculations(row);
     }
 
     function addBahanKimiaRow() {
@@ -593,22 +576,14 @@
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.innerHTML = `
-            <td class="px-4 py-2 border-r">
-                <input type="text" name="bahan_kimia[${rowIndex}][jenis]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" name="bahan_kimia[${rowIndex}][stok_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" name="bahan_kimia[${rowIndex}][terima]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2">
-                <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
+            <td class="px-4 py-2 border-r"><input type="text" name="bahan_kimia[${rowIndex}][jenis]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" name="bahan_kimia[${rowIndex}][stok_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" name="bahan_kimia[${rowIndex}][terima]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="px-4 py-2 border-r"><input type="number" name="bahan_kimia[${rowIndex}][total_pakai]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="px-4 py-2"><button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button></td>
         `;
         tbody.appendChild(row);
+        setupBahanKimiaCalculations(row);
     }
 
     function setupBBMCalculations(row) {
@@ -619,42 +594,100 @@
         });
     }
 
+    function setupKWHCalculations(row) {
+        // Add calculations for KWH totals
+        const inputs = row.querySelectorAll('input[type="number"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => calculateKWHTotals(row));
+        });
+    }
+
+    function setupPelumasCalculations(row) {
+        // Add calculations for Pelumas totals
+        const inputs = row.querySelectorAll('input[type="number"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => calculatePelumasTotals(row));
+        });
+    }
+
+    function setupBahanKimiaCalculations(row) {
+        // Add calculations for Bahan Kimia totals
+        const inputs = row.querySelectorAll('input[type="number"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => calculateBahanKimiaTotals(row));
+        });
+    }
+
+    function calculateBBMTotals() {
+        // Storage Tank total
+        const st1Liter = parseFloat(document.querySelector('input[name="bbm[storage_tank_1_liter]"]').value) || 0;
+        const st2Liter = parseFloat(document.querySelector('input[name="bbm[storage_tank_2_liter]"]').value) || 0;
+        document.querySelector('input[name="bbm[total_stok]"]').value = (st1Liter + st2Liter).toFixed(1);
+
+        // Flowmeter usage calculations
+        const fm1Awal = parseFloat(document.querySelector('input[name="bbm[flowmeter_1_awal]"]').value) || 0;
+        const fm1Akhir = parseFloat(document.querySelector('input[name="bbm[flowmeter_1_akhir]"]').value) || 0;
+        const fm2Awal = parseFloat(document.querySelector('input[name="bbm[flowmeter_2_awal]"]').value) || 0;
+        const fm2Akhir = parseFloat(document.querySelector('input[name="bbm[flowmeter_2_akhir]"]').value) || 0;
+
+        const pakai1 = fm1Akhir - fm1Awal;
+        const pakai2 = fm2Akhir - fm2Awal;
+
+        document.querySelector('input[name="bbm[flowmeter_1_pakai]"]').value = pakai1.toFixed(1);
+        document.querySelector('input[name="bbm[flowmeter_2_pakai]"]').value = pakai2.toFixed(1);
+        document.querySelector('input[name="bbm[total_pakai]"]').value = (pakai1 + pakai2).toFixed(1);
+    }
+
+    function calculateKWHTotals(row) {
+        // Calculate KWH Production total
+        const prodPanel1Awal = parseFloat(row.querySelector('input[name$="[prod_panel1_awal]"]').value) || 0;
+        const prodPanel1Akhir = parseFloat(row.querySelector('input[name$="[prod_panel1_akhir]"]').value) || 0;
+        const prodPanel2Awal = parseFloat(row.querySelector('input[name$="[prod_panel2_awal]"]').value) || 0;
+        const prodPanel2Akhir = parseFloat(row.querySelector('input[name$="[prod_panel2_akhir]"]').value) || 0;
+        
+        const prodTotal = (prodPanel1Akhir - prodPanel1Awal) + (prodPanel2Akhir - prodPanel2Awal);
+        row.querySelector('input[name$="[prod_total]"]').value = prodTotal.toFixed(1);
+
+        // Calculate KWH PS total
+        const psPanel1Awal = parseFloat(row.querySelector('input[name$="[ps_panel1_awal]"]').value) || 0;
+        const psPanel1Akhir = parseFloat(row.querySelector('input[name$="[ps_panel1_akhir]"]').value) || 0;
+        const psPanel2Awal = parseFloat(row.querySelector('input[name$="[ps_panel2_awal]"]').value) || 0;
+        const psPanel2Akhir = parseFloat(row.querySelector('input[name$="[ps_panel2_akhir]"]').value) || 0;
+        
+        const psTotal = (psPanel1Akhir - psPanel1Awal) + (psPanel2Akhir - psPanel2Awal);
+        row.querySelector('input[name$="[ps_total]"]').value = psTotal.toFixed(1);
+    }
+
+    function calculatePelumasTotals(row) {
+        // Calculate Storage Tank total
+        const tank1Liter = parseFloat(row.querySelector('input[name$="[tank1_liter]"]').value) || 0;
+        const tank2Liter = parseFloat(row.querySelector('input[name$="[tank2_liter]"]').value) || 0;
+        row.querySelector('input[name$="[tank_total_stok]"]').value = (tank1Liter + tank2Liter).toFixed(1);
+
+        // Calculate Drum total
+        const drumArea1 = parseFloat(row.querySelector('input[name$="[drum_area1]"]').value) || 0;
+        const drumArea2 = parseFloat(row.querySelector('input[name$="[drum_area2]"]').value) || 0;
+        row.querySelector('input[name$="[drum_total_stok]"]').value = (drumArea1 + drumArea2).toFixed(1);
+
+        // Calculate total stok tangki
+        const tankTotal = tank1Liter + tank2Liter;
+        const drumTotal = drumArea1 + drumArea2;
+        row.querySelector('input[name$="[total_stok_tangki]"]').value = (tankTotal + drumTotal).toFixed(1);
+    }
+
+    function calculateBahanKimiaTotals(row) {
+        // Calculate total pakai
+        const stokAwal = parseFloat(row.querySelector('input[name$="[stok_awal]"]').value) || 0;
+        const terima = parseFloat(row.querySelector('input[name$="[terima]"]').value) || 0;
+        row.querySelector('input[name$="[total_pakai]"]').value = (stokAwal + terima).toFixed(1);
+    }
+
     // Initialize with one row for each table when the page loads
     document.addEventListener('DOMContentLoaded', function() {
         addBBMRow();
         addKWHRow();
         addPelumasRow();
         addBahanKimiaRow();
-    });
-
-    // Add JavaScript for automatic calculations
-    document.addEventListener('DOMContentLoaded', function() {
-        // BBM calculations
-        function calculateBBMTotals() {
-            // Storage Tank total
-            const st1Liter = parseFloat(document.querySelector('input[name="bbm[storage_tank_1_liter]"]').value) || 0;
-            const st2Liter = parseFloat(document.querySelector('input[name="bbm[storage_tank_2_liter]"]').value) || 0;
-            document.querySelector('input[name="bbm[total_stok]"]').value = (st1Liter + st2Liter).toFixed(1);
-
-            // Flowmeter usage calculations
-            const fm1Awal = parseFloat(document.querySelector('input[name="bbm[flowmeter_1_awal]"]').value) || 0;
-            const fm1Akhir = parseFloat(document.querySelector('input[name="bbm[flowmeter_1_akhir]"]').value) || 0;
-            const fm2Awal = parseFloat(document.querySelector('input[name="bbm[flowmeter_2_awal]"]').value) || 0;
-            const fm2Akhir = parseFloat(document.querySelector('input[name="bbm[flowmeter_2_akhir]"]').value) || 0;
-
-            const pakai1 = fm1Akhir - fm1Awal;
-            const pakai2 = fm2Akhir - fm2Awal;
-
-            document.querySelector('input[name="bbm[flowmeter_1_pakai]"]').value = pakai1.toFixed(1);
-            document.querySelector('input[name="bbm[flowmeter_2_pakai]"]').value = pakai2.toFixed(1);
-            document.querySelector('input[name="bbm[total_pakai]"]').value = (pakai1 + pakai2).toFixed(1);
-        }
-
-        // Add event listeners to BBM input fields
-        const bbmInputs = document.querySelectorAll('input[name^="bbm["]');
-        bbmInputs.forEach(input => {
-            input.addEventListener('input', calculateBBMTotals);
-        });
     });
 </script>
 @endpush

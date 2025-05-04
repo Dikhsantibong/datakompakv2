@@ -55,46 +55,114 @@
         <!-- Main Content -->
         <div class="py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Date Picker and Actions -->
-                <div class="mb-6 flex flex-wrap gap-4">
-                    <form id="dateFilterForm" action="{{ route('admin.data-engine.index') }}" method="GET" class="flex-grow flex gap-4">
-                        <input type="date" 
-                               id="datePicker"
-                               name="date" 
-                               value="{{ request('date', now()->format('Y-m-d')) }}"
-                               class="rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                        <button type="submit" 
-                                id="submitBtn"
-                                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                            <span class="inline-flex items-center">
-                                <svg id="loadingIcon" class="hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                <i class="fas fa-eye mr-2"></i>Tampilkan Data
-                            </span>
-                        </button>
-                        <a href="{{ route('admin.data-engine.edit', ['date' => request('date', now()->format('Y-m-d'))]) }}"
-                           class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                            <i class="fas fa-edit mr-2"></i>Update Data
-                        </a>
-                    </form>
-
-                    <!-- Export Buttons -->
-                    <div class="flex gap-2">
-                        <a href="{{ route('admin.data-engine.export-excel', ['date' => request('date', now()->format('Y-m-d'))]) }}"
-                           class="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 inline-flex items-center">
-                            <i class="fas fa-file-excel mr-2"></i>Export Excel
-                        </a>
-                        <a href="{{ route('admin.data-engine.export-pdf', ['date' => request('date', now()->format('Y-m-d'))]) }}"
-                           class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 inline-flex items-center">
-                            <i class="fas fa-file-pdf mr-2"></i>Export PDF
-                        </a>
+                <!-- Welcome Card -->
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
+                    <div class="max-w-3xl">
+                        <h2 class="text-2xl font-bold mb-2">Data Engine Management</h2>
+                        <p class="text-blue-100 mb-4">Monitor dan kelola data operasional mesin pembangkit listrik secara efisien.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="{{ route('admin.data-engine.export-excel', request()->query()) }}" 
+                               class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                                <i class="fas fa-file-excel mr-2"></i> Export Excel
+                            </a>
+                            <a href="{{ route('admin.data-engine.export-pdf', request()->query()) }}" 
+                               class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                                <i class="fas fa-file-pdf mr-2"></i> Export PDF
+                            </a>
+                            <a href="{{ route('admin.data-engine.edit', ['date' => request('date', now()->format('Y-m-d'))]) }}" 
+                               class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
+                                <i class="fas fa-plus mr-2"></i> Update Data
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <div id="tableContainer">
-                    @include('admin.data-engine._table')
+                <!-- Data Table -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="p-6">
+                        <!-- Table Header with Filters -->
+                        <div class="mb-4" id="table-controls">
+                            <div class="flex flex-wrap items-center justify-between gap-4">
+                                <div class="flex items-center gap-2">
+                                    <h2 class="text-lg font-semibold text-gray-900">Data Engine</h2>
+                                    <button id="toggleFullTable" 
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
+                                            onclick="toggleFullTableView()">
+                                        <i class="fas fa-expand mr-1"></i> Full Table
+                                    </button>
+                                    @if(request()->has('power_plant_id') || request()->has('date'))
+                                        <div class="flex flex-wrap gap-2" id="active-filters">
+                                            @if(request('power_plant_id'))
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Unit: {{ $allPowerPlants->find(request('power_plant_id'))->name }}
+                                                    <button onclick="removeFilter('power_plant_id')" class="ml-1 text-blue-600 hover:text-blue-800">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </span>
+                                            @endif
+                                            @if(request('date'))
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Tanggal: {{ \Carbon\Carbon::parse(request('date'))->format('d/m/Y') }}
+                                                    <button onclick="removeFilter('date')" class="ml-1 text-blue-600 hover:text-blue-800">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Horizontal Filters -->
+                            <div class="mt-2 border-b border-gray-200 pb-4" id="filters-section">
+                                <form id="dateFilterForm" action="{{ route('admin.data-engine.index') }}" method="GET" 
+                                      class="flex flex-wrap items-end gap-4">
+                                    <div class="w-40">
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
+                                        <select name="power_plant_id" 
+                                                class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                            <option value="">Semua Unit</option>
+                                            @foreach($allPowerPlants as $powerPlant)
+                                                <option value="{{ $powerPlant->id }}" {{ request('power_plant_id') == $powerPlant->id ? 'selected' : '' }}>
+                                                    {{ $powerPlant->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="w-40">
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal</label>
+                                        <input type="date" 
+                                               name="date" 
+                                               value="{{ request('date', now()->format('Y-m-d')) }}"
+                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <button type="submit"
+                                                id="submitBtn"
+                                                class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                                            <span class="inline-flex items-center">
+                                                <svg id="loadingIcon" class="hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                <i class="fas fa-search mr-2"></i> Tampilkan Data
+                                            </span>
+                                        </button>
+                                        <a href="{{ route('admin.data-engine.index') }}" 
+                                           class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                                            <i class="fas fa-undo mr-2"></i> Reset
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div id="tableContainer">
+                            @include('admin.data-engine._table')
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -104,7 +172,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('dateFilterForm');
-    const datePicker = document.getElementById('datePicker');
+    const filterInputs = form.querySelectorAll('select, input[type="date"]');
     const submitBtn = document.getElementById('submitBtn');
     const loadingIcon = document.getElementById('loadingIcon');
     const tableContainer = document.getElementById('tableContainer');
@@ -123,10 +191,12 @@ document.addEventListener('DOMContentLoaded', function() {
         tableContainer.classList.remove('opacity-50');
     }
 
-    // Handle date change
-    datePicker.addEventListener('change', function() {
-        showLoading();
-        form.submit();
+    // Auto-submit form when changing filters
+    filterInputs.forEach(input => {
+        input.addEventListener('change', () => {
+            showLoading();
+            form.submit();
+        });
     });
 
     // Handle form submission
@@ -134,6 +204,50 @@ document.addEventListener('DOMContentLoaded', function() {
         showLoading();
     });
 });
+
+function removeFilter(filterName) {
+    const form = document.getElementById('dateFilterForm');
+    const input = form.querySelector(`[name="${filterName}"]`);
+    if (input) {
+        input.value = '';
+        form.submit();
+    }
+}
+
+// Add full table view toggle functionality
+function toggleFullTableView() {
+    const button = document.getElementById('toggleFullTable');
+    const filtersSection = document.getElementById('filters-section');
+    const activeFilters = document.getElementById('active-filters');
+    const welcomeCard = document.querySelector('.welcome-card')?.parentElement;
+    const mainContent = document.querySelector('main');
+    
+    // Toggle full table mode
+    const isFullTable = button.classList.contains('bg-blue-600');
+    
+    if (isFullTable) {
+        // Restore normal view
+        button.classList.remove('bg-blue-600', 'text-white');
+        button.classList.add('bg-blue-50', 'text-blue-600');
+        button.innerHTML = '<i class="fas fa-expand mr-1"></i> Full Table';
+        
+        if (filtersSection) filtersSection.style.display = '';
+        if (activeFilters) activeFilters.style.display = '';
+        if (welcomeCard) welcomeCard.style.display = '';
+        if (mainContent) mainContent.classList.remove('pt-0');
+        
+    } else {
+        // Enable full table view
+        button.classList.remove('bg-blue-50', 'text-blue-600');
+        button.classList.add('bg-blue-600', 'text-white');
+        button.innerHTML = '<i class="fas fa-compress mr-1"></i> Normal View';
+        
+        if (filtersSection) filtersSection.style.display = 'none';
+        if (activeFilters) activeFilters.style.display = 'none';
+        if (welcomeCard) welcomeCard.style.display = 'none';
+        if (mainContent) mainContent.classList.add('pt-0');
+    }
+}
 </script>
 
 <script src="{{ asset('js/toggle.js') }}"></script>

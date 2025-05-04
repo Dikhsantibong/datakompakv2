@@ -19,9 +19,20 @@ class DataEngineController extends Controller
     {
         $date = $request->date ?? now()->format('Y-m-d');
         
-        $powerPlants = PowerPlant::with(['machines' => function ($query) {
+        // Get all power plants for the filter dropdown
+        $allPowerPlants = PowerPlant::orderBy('name')->get();
+        
+        // Build query for filtered power plants
+        $powerPlantsQuery = PowerPlant::with(['machines' => function ($query) {
             $query->orderBy('name');
-        }])->get();
+        }]);
+
+        // Apply power plant filter if specified
+        if ($request->filled('power_plant_id')) {
+            $powerPlantsQuery->where('id', $request->power_plant_id);
+        }
+
+        $powerPlants = $powerPlantsQuery->get();
 
         // Load the latest logs for each power plant and machine on the selected date
         $powerPlants->each(function ($powerPlant) use ($date) {
@@ -52,7 +63,7 @@ class DataEngineController extends Controller
             return view('admin.data-engine._table', compact('powerPlants', 'date'))->render();
         }
 
-        return view('admin.data-engine.index', compact('powerPlants', 'date'));
+        return view('admin.data-engine.index', compact('powerPlants', 'allPowerPlants', 'date'));
     }
     
     public function edit($date)

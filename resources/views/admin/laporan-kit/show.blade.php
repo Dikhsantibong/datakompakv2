@@ -79,6 +79,11 @@
                             <h3 class="text-lg font-semibold text-gray-900">Jenis Gangguan Mesin</h3>
                         </div>
                         <div class="overflow-x-auto">
+                            @php
+                            $filteredGangguan = $laporan->gangguan->filter(function($g) {
+                                return !is_null($g->mekanik) || !is_null($g->elektrik);
+                            });
+                            @endphp
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -88,7 +93,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @forelse($laporan->gangguan as $row)
+                                    @forelse($filteredGangguan as $row)
                                     <tr>
                                         <td class="px-6 py-4">{{ $row->machine->name ?? '-' }}</td>
                                         <td class="px-6 py-4">{{ $row->mekanik }}</td>

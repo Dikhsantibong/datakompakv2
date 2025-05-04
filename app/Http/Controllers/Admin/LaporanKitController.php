@@ -51,10 +51,55 @@ class LaporanKitController extends Controller
             'created_by' => auth()->id(),
         ]);
 
-        // Simpan detail lain (jam operasi, gangguan, dst) jika ada
+        // Simpan BBM
+        if ($request->has('bbm')) {
+            foreach ($request->bbm as $bbm) {
+                $laporanKit->bbm()->create($bbm);
+            }
+        }
+        // Simpan KWH
+        if ($request->has('kwh')) {
+            foreach ($request->kwh as $kwh) {
+                $laporanKit->kwh()->create($kwh);
+            }
+        }
+        // Simpan Pelumas
+        if ($request->has('pelumas')) {
+            foreach ($request->pelumas as $pelumas) {
+                $laporanKit->pelumas()->create($pelumas);
+            }
+        }
+        // Simpan Bahan Kimia
+        if ($request->has('bahan_kimia')) {
+            foreach ($request->bahan_kimia as $bahan_kimia) {
+                $laporanKit->bahanKimia()->create($bahan_kimia);
+            }
+        }
+        // Simpan Jam Operasi
+        if ($request->has('mesin')) {
+            foreach ($request->mesin as $machineId => $mesin) {
+                $mesin['machine_id'] = $machineId;
+                $laporanKit->jamOperasi()->create($mesin);
+            }
+        }
+        // Simpan Beban Tertinggi
+        if ($request->has('beban')) {
+            foreach ($request->beban as $machineId => $beban) {
+                $beban['machine_id'] = $machineId;
+                $laporanKit->bebanTertinggi()->create($beban);
+            }
+        }
+        // Simpan Gangguan
+        if ($request->has('gangguan')) {
+            foreach ($request->gangguan as $machineId => $gangguan) {
+                if (!empty($gangguan['mekanik']) || !empty($gangguan['elektrik'])) {
+                    $gangguan['machine_id'] = $machineId;
+                    $laporanKit->gangguan()->create($gangguan);
+                }
+            }
+        }
 
-        return redirect()->route('admin.laporan-kit.index')
-            ->with('success', 'Data berhasil disimpan');
+        return redirect()->route('admin.laporan-kit.index')->with('success', 'Data berhasil disimpan');
     }
 
     public function list(Request $request)

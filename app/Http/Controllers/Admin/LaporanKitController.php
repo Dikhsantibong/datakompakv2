@@ -91,4 +91,29 @@ class LaporanKitController extends Controller
     {
         return Excel::download(new LaporanKitExport, 'laporan_kit.xlsx');
     }
+
+    public function edit($id)
+    {
+        $laporan = LaporanKit::with([
+            'jamOperasi', 'gangguan', 'bbm', 'kwh', 'pelumas', 'bahanKimia', 'bebanTertinggi', 'creator', 'powerPlant'
+        ])->findOrFail($id);
+
+        $powerPlants = \App\Models\PowerPlant::orderBy('name')->get();
+        $machines = \App\Models\Machine::orderBy('name')->get();
+
+        return view('admin.laporan-kit.edit', compact('laporan', 'powerPlants', 'machines'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $laporan = LaporanKit::findOrFail($id);
+
+        // Validasi dan update data utama
+        $laporan->update($request->all());
+
+        // Update relasi detail jika perlu (jamOperasi, gangguan, dst)
+        // ... (tambahkan logic sesuai kebutuhan)
+
+        return redirect()->route('admin.laporan-kit.list')->with('success', 'Laporan berhasil diupdate!');
+    }
 } 

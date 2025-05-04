@@ -69,7 +69,7 @@
                                                     title="Lihat Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="#"
+                                                <a href="{{ route('admin.laporan-kit.edit', $laporan->id) }}"
                                                     class="text-yellow-600 hover:text-yellow-900"
                                                     title="Edit">
                                                     <i class="fas fa-edit"></i>

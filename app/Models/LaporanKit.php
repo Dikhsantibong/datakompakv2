@@ -23,4 +23,8 @@ class LaporanKit extends Model
     public function bahanKimia()    { return $this->hasMany(LaporanKitBahanKimia::class); }
     public function bebanTertinggi(){ return $this->hasMany(LaporanKitBebanTertinggi::class); }
     public function creator()       { return $this->belongsTo(User::class, 'created_by'); }
+    public function powerPlant()
+    {
+        return $this->belongsTo(\App\Models\PowerPlant::class, 'unit_source', 'unit_source');
+    }
 }

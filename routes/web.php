@@ -1362,3 +1362,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
 Route::get('/export-pdf/{id}', [LaporanKitController::class, 'exportPdf'])->name('laporan-kit.export-pdf');
 Route::get('/admin/laporan-kit/export-pdf/{id}', [LaporanKitController::class, 'exportPdf'])->name('admin.laporan-kit.export-pdf');
+
+Route::get('/admin/laporan-kit/{laporanKit}', [LaporanKitController::class, 'show'])->name('admin.laporan-kit.show');
+Route::get('/admin/laporan-kit/{laporanKit}/edit', [LaporanKitController::class, 'edit'])->name('admin.laporan-kit.edit');
+Route::put('/admin/laporan-kit/{laporanKit}', [LaporanKitController::class, 'update'])->name('admin.laporan-kit.update');

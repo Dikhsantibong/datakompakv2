@@ -49,21 +49,36 @@
         .status-operasi { background-color: #e3f2fd; color: #1976d2; }
         .status-standby { background-color: #f3e5f5; color: #7b1fa2; }
         .status-gangguan { background-color: #ffebee; color: #c62828; }
+        table thead tr th {
+            background-color: #009BB9 !important;
+            color: #fff !important;
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Meeting Shift Report</h1>
-        <p>Tanggal: {{ $meetingShift->tanggal->format('d F Y') }}</p>
-        <p>Shift: {{ $meetingShift->current_shift }}</p>
-        <p>Dibuat oleh: {{ $meetingShift->creator->name }}</p>
+    <!-- Header container -->
+    <div style="position: relative; width: 100%; min-height: 80px;">
+        <!-- Logo kiri atas -->
+        <img src="{{ public_path('logo/navlog1.png') }}" alt="Logo" style="position: absolute; top: 0; left: 0; height: 55px;">
+        <!-- Logo kanan atas dan username overlap -->
+        <div style="position: absolute; top: 0; right: 0; width: 170px; height: 70px;">
+            <img src="{{ public_path('logo/PLN-bg.png') }}" alt="PLN Logo" style="height: 55px; display: block; margin: 0 auto;">
+            <span style="position: absolute; left: 52px; right: 0; top: 22px; font-size: 16px; color: #406a7d; font-family: Arial, sans-serif; text-align: center; font-weight: normal; white-space: nowrap;">{{ Auth::user()->name }}</span>
+        </div>
+    </div>
+    <!-- Judul dan detail di tengah, tanpa margin atas besar -->
+    <div style="text-align: center; margin-bottom: 30px; margin-top: 0;">
+        <h1 style="margin: 0; color: #333; font-size: 28px;">Meeting Shift Report</h1>
+        <p style="margin: 5px 0; color: #666;">Tanggal: {{ $meetingShift->tanggal->format('d F Y') }}</p>
+        <p style="margin: 5px 0; color: #666;">Shift: {{ $meetingShift->current_shift }}</p>
+        <p style="margin: 5px 0; color: #666;">Dibuat oleh: {{ $meetingShift->creator->name }}</p>
     </div>
 
     <!-- Machine Statuses -->
     <div class="section-title">Status Mesin</div>
     <table>
         <thead>
-            <tr>
+            <tr style="background-color: #009BB9; color: #fff;">
                 <th>Mesin</th>
                 <th>Status</th>
                 <th>Keterangan</th>
@@ -91,7 +106,7 @@
     <div class="section-title">Peralatan Bantu</div>
     <table>
         <thead>
-            <tr>
+            <tr style="background-color: #009BB9; color: #fff;">
                 <th>Nama</th>
                 <th>Status</th>
                 <th>Keterangan</th>
@@ -119,7 +134,7 @@
     <div class="section-title">Resources</div>
     <table>
         <thead>
-            <tr>
+            <tr style="background-color: #009BB9; color: #fff;">
                 <th>Nama</th>
                 <th>Kategori</th>
                 <th>Status</th>
@@ -142,7 +157,7 @@
     <div class="section-title">K3L</div>
     <table>
         <thead>
-            <tr>
+            <tr style="background-color: #009BB9; color: #fff;">
                 <th>Tipe</th>
                 <th>Uraian</th>
                 <th>Saran</th>
@@ -163,7 +178,7 @@
     <div class="section-title">Catatan</div>
     <table>
         <thead>
-            <tr>
+            <tr style="background-color: #009BB9; color: #fff;">
                 <th>Tipe</th>
                 <th>Konten</th>
             </tr>
@@ -188,7 +203,7 @@
     <div class="section-title">Kehadiran</div>
     <table>
         <thead>
-            <tr>
+            <tr style="background-color: #009BB9; color: #fff;">
                 <th>Nama</th>
                 <th>Shift</th>
                 <th>Status</th>

@@ -27,13 +27,24 @@
                 </div>
                 @endif
 
+                <!-- Welcome Card -->
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
+                    <div class="max-w-3xl">
+                        <h2 class="text-2xl font-bold mb-2">Patrol Check KIT</h2>
+                        <p class="text-blue-100 mb-4">Pantau dan kelola data patrol check untuk memastikan kondisi peralatan bantu selalu optimal.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="{{ route('admin.patrol-check.index') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
+                                <i class="fas fa-plus mr-2"></i> Tambah Patrol Check Baru
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="bg-white rounded-lg shadow overflow-hidden">
                     <div class="p-6">
-                        <div class="flex justify-between mb-4">
-                            <a href="{{ route('admin.patrol-check.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#009BB9] hover:bg-[#009BB9]/80">
-                                <i class="fas fa-plus mr-2"></i>
-                                Tambah Patrol Check Baru
-                            </a>
+                        <!-- Table Header -->
+                        <div class="mb-4 flex items-center justify-between">
+                            <h2 class="text-lg font-semibold text-gray-900">Data Patrol Check</h2>
                             <div class="flex space-x-2">
                                 <button class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
                                     <i class="fas fa-file-excel mr-2"></i>

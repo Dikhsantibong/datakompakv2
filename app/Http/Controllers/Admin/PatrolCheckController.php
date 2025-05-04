@@ -6,6 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Models\PatrolCheck;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PatrolCheckController extends Controller
 {
@@ -16,67 +22,131 @@ class PatrolCheckController extends Controller
 
     public function list()
     {
-        // Create empty collection and paginate it
-        $collection = new Collection();
-        $page = request()->get('page', 1);
-        $perPage = 10;
-        
-        $patrols = new LengthAwarePaginator(
-            $collection->forPage($page, $perPage),
-            $collection->count(),
-            $perPage,
-            $page,
-            ['path' => request()->url()]
-        );
-
+        $patrols = PatrolCheck::with('creator')->orderByDesc('created_at')->paginate(10);
         return view('admin.patrol-check.list', compact('patrols'));
     }
 
     public function show($id)
     {
-        // For now, we'll create a dummy patrol object
-        $patrol = (object)[
-            'creator' => (object)['name' => 'User Test'],
-            'created_at' => now(),
-            'conditions' => new Collection(),
-            'abnormalConditions' => new Collection()
-        ];
+        $patrol = PatrolCheck::with('creator')->findOrFail($id);
         return view('admin.patrol-check.show', compact('patrol'));
     }
 
     public function store(Request $request)
     {
-        // Will implement later
+        $request->validate([
+            'condition' => 'required|array',
+            'notes' => 'required|array',
+            'abnormal' => 'nullable|array',
+        ]);
+
+        $condition_systems = collect($request->input('condition'))->map(function($val, $idx) use ($request) {
+            $systems = ['Exhaust', 'Pelumas', 'BBM', 'JCW/HT', 'CW/LT'];
+            return [
+                'system' => $systems[$idx] ?? '',
+                'condition' => $val,
+                'notes' => $request->input('notes')[$idx] ?? null,
+            ];
+        });
+
+        $abnormal_equipments = collect($request->input('abnormal', []))->map(function($row) {
+            return [
+                'equipment' => $row['equipment'] ?? '',
+                'condition' => $row['condition'] ?? '',
+                'flm' => !empty($row['flm']),
+                'sr' => !empty($row['sr']),
+                'other' => !empty($row['other']),
+                'notes' => $row['notes'] ?? '',
+            ];
+        });
+
+        $status = $condition_systems->contains(fn($item) => $item['condition'] === 'abnormal') ? 'abnormal' : 'normal';
+
+        $patrol = PatrolCheck::create([
+            'created_by' => Auth::id(),
+            'condition_systems' => $condition_systems,
+            'abnormal_equipments' => $abnormal_equipments,
+            'status' => $status,
+        ]);
+
         return redirect()->route('admin.patrol-check.list')->with('success', 'Data berhasil disimpan');
     }
 
     public function edit($id)
     {
-        // Will implement later
-        return view('admin.patrol-check.index');
+        $patrol = PatrolCheck::findOrFail($id);
+        return view('admin.patrol-check.index', compact('patrol'));
     }
 
     public function update(Request $request, $id)
     {
-        // Will implement later
+        $patrol = PatrolCheck::findOrFail($id);
+        $request->validate([
+            'condition' => 'required|array',
+            'notes' => 'required|array',
+            'abnormal' => 'nullable|array',
+        ]);
+        $condition_systems = collect($request->input('condition'))->map(function($val, $idx) use ($request) {
+            $systems = ['Exhaust', 'Pelumas', 'BBM', 'JCW/HT', 'CW/LT'];
+            return [
+                'system' => $systems[$idx] ?? '',
+                'condition' => $val,
+                'notes' => $request->input('notes')[$idx] ?? null,
+            ];
+        });
+        $abnormal_equipments = collect($request->input('abnormal', []))->map(function($row) {
+            return [
+                'equipment' => $row['equipment'] ?? '',
+                'condition' => $row['condition'] ?? '',
+                'flm' => !empty($row['flm']),
+                'sr' => !empty($row['sr']),
+                'other' => !empty($row['other']),
+                'notes' => $row['notes'] ?? '',
+            ];
+        });
+        $status = $condition_systems->contains(fn($item) => $item['condition'] === 'abnormal') ? 'abnormal' : 'normal';
+        $patrol->update([
+            'condition_systems' => $condition_systems,
+            'abnormal_equipments' => $abnormal_equipments,
+            'status' => $status,
+        ]);
         return redirect()->route('admin.patrol-check.list')->with('success', 'Data berhasil diperbarui');
     }
 
     public function destroy($id)
     {
-        // Will implement later
+        $patrol = PatrolCheck::findOrFail($id);
+        $patrol->delete();
         return redirect()->route('admin.patrol-check.list')->with('success', 'Data berhasil dihapus');
     }
 
     public function exportExcel($id)
     {
-        // Will implement later
-        return redirect()->back()->with('success', 'Data berhasil diekspor ke Excel');
+        $patrol = PatrolCheck::with('creator')->findOrFail($id);
+        // Jika belum ada export class, buatkan array sederhana
+        $data = [
+            ['Sistem', 'Kondisi', 'Keterangan'],
+        ];
+        foreach ($patrol->condition_systems as $row) {
+            $data[] = [$row['system'], $row['condition'], $row['notes'] ?? ''];
+        }
+        $filename = 'patrol-check-' . $patrol->id . '.csv';
+        $handle = fopen('php://temp', 'r+');
+        foreach ($data as $line) {
+            fputcsv($handle, $line);
+        }
+        rewind($handle);
+        $csv = stream_get_contents($handle);
+        fclose($handle);
+        return response($csv)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
     }
 
     public function exportPdf($id)
     {
-        // Will implement later
-        return redirect()->back()->with('success', 'Data berhasil diekspor ke PDF');
+        $patrol = PatrolCheck::with('creator')->findOrFail($id);
+        $pdf = Pdf::loadView('admin.patrol-check.pdf', compact('patrol'));
+        return $pdf->download('patrol-check-' . $patrol->id . '.pdf');
     }
 } 

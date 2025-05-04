@@ -68,21 +68,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($patrol->conditions as $index => $condition)
+                                        @foreach(($patrol->condition_systems ?? []) as $index => $condition)
                                         <tr>
                                             <td class="border px-4 py-2 text-center">{{ $index + 1 }}</td>
-                                            <td class="border px-4 py-2">{{ $condition->system }}</td>
+                                            <td class="border px-4 py-2">{{ $condition['system'] ?? '' }}</td>
                                             <td class="border px-4 py-2 text-center">
-                                                @if($condition->status === 'normal')
+                                                @if(($condition['condition'] ?? '') === 'normal')
                                                     <i class="fas fa-check text-green-500"></i>
                                                 @endif
                                             </td>
                                             <td class="border px-4 py-2 text-center">
-                                                @if($condition->status === 'abnormal')
+                                                @if(($condition['condition'] ?? '') === 'abnormal')
                                                     <i class="fas fa-check text-red-500"></i>
                                                 @endif
                                             </td>
-                                            <td class="border px-4 py-2">{{ $condition->notes }}</td>
+                                            <td class="border px-4 py-2">{{ $condition['notes'] ?? '' }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -118,27 +118,27 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($patrol->abnormalConditions as $index => $abnormal)
+                                        @forelse(($patrol->abnormal_equipments ?? []) as $index => $abnormal)
                                         <tr>
                                             <td class="border px-4 py-2 text-center">{{ $index + 1 }}</td>
-                                            <td class="border px-4 py-2">{{ $abnormal->equipment }}</td>
-                                            <td class="border px-4 py-2">{{ $abnormal->condition }}</td>
+                                            <td class="border px-4 py-2">{{ $abnormal['equipment'] ?? '' }}</td>
+                                            <td class="border px-4 py-2">{{ $abnormal['condition'] ?? '' }}</td>
                                             <td class="border px-4 py-2 text-center">
-                                                @if($abnormal->flm)
+                                                @if(!empty($abnormal['flm']))
                                                     <i class="fas fa-check text-green-500"></i>
                                                 @endif
                                             </td>
                                             <td class="border px-4 py-2 text-center">
-                                                @if($abnormal->sr)
+                                                @if(!empty($abnormal['sr']))
                                                     <i class="fas fa-check text-green-500"></i>
                                                 @endif
                                             </td>
                                             <td class="border px-4 py-2 text-center">
-                                                @if($abnormal->other)
+                                                @if(!empty($abnormal['other']))
                                                     <i class="fas fa-check text-green-500"></i>
                                                 @endif
                                             </td>
-                                            <td class="border px-4 py-2">{{ $abnormal->notes }}</td>
+                                            <td class="border px-4 py-2">{{ $abnormal['notes'] ?? '' }}</td>
                                         </tr>
                                         @empty
                                         <tr>

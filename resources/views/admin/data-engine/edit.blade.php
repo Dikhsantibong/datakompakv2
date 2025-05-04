@@ -87,7 +87,54 @@
                         @foreach($powerPlants as $powerPlant)
                             <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
                                 <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
-                                    <h2 class="text-lg font-semibold text-gray-900">{{ $powerPlant->name }}</h2>
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h2 class="text-lg font-semibold text-gray-900">{{ $powerPlant->name }}</h2>
+                                        </div>
+                                        
+                                        <!-- Input fields based on power plant type -->
+                                        <div class="flex items-center gap-4">
+                                            @if(str_starts_with(strtoupper($powerPlant->name), 'PLTM'))
+                                                <div class="flex items-center gap-2">
+                                                    <label for="inflow_{{ $powerPlant->id }}" class="text-sm font-medium text-gray-700">
+                                                        Inflow:
+                                                    </label>
+                                                    <input type="number" 
+                                                           name="power_plants[{{ $powerPlant->id }}][inflow]" 
+                                                           step="0.01"
+                                                           class="w-24 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                           placeholder="Inflow"
+                                                           min="0">
+                                                    <span class="text-sm text-gray-600">liter/detik</span>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <label for="tma_{{ $powerPlant->id }}" class="text-sm font-medium text-gray-700">
+                                                        TMA:
+                                                    </label>
+                                                    <input type="number" 
+                                                           name="power_plants[{{ $powerPlant->id }}][tma]" 
+                                                           step="0.01"
+                                                           class="w-24 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                           placeholder="TMA"
+                                                           min="0">
+                                                    <span class="text-sm text-gray-600">mdpl</span>
+                                                </div>
+                                            @else
+                                                <div class="flex items-center gap-2">
+                                                    <label for="hop_{{ $powerPlant->id }}" class="text-sm font-medium text-gray-700">
+                                                        HOP:
+                                                    </label>
+                                                    <input type="number" 
+                                                           name="power_plants[{{ $powerPlant->id }}][hop]" 
+                                                           step="0.01"
+                                                           class="w-24 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                           placeholder="HOP"
+                                                           min="0">
+                                                    <span class="text-sm text-gray-600">hari</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="overflow-x-auto">

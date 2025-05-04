@@ -21,45 +21,23 @@
                             </p>
                         </div>
                         
-                        <!-- Input fields based on power plant type -->
+                        <!-- Display power plant logs -->
                         <div class="flex items-center gap-4">
                             @if(str_starts_with(strtoupper($powerPlant->name), 'PLTM'))
                                 <div class="flex items-center gap-2">
-                                    <label for="inflow_{{ $powerPlant->id }}" class="text-sm font-medium text-gray-700">
-                                        Inflow:
-                                    </label>
-                                    <input type="number" 
-                                           id="inflow_{{ $powerPlant->id }}" 
-                                           name="inflow_{{ $powerPlant->id }}"
-                                           class="w-24 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                           placeholder="Inflow"
-                                           min="0">
+                                    <span class="text-sm font-medium text-gray-700">Inflow:</span>
+                                    <span class="text-sm text-gray-900">{{ $powerPlant->inflow ?? '-' }}</span>
                                     <span class="text-sm text-gray-600">liter/detik</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <label for="tma_{{ $powerPlant->id }}" class="text-sm font-medium text-gray-700">
-                                        TMA:
-                                    </label>
-                                    <input type="number" 
-                                           id="tma_{{ $powerPlant->id }}" 
-                                           name="tma_{{ $powerPlant->id }}"
-                                           class="w-24 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                           placeholder="TMA"
-                                           min="0"
-                                           step="0.01">
+                                    <span class="text-sm font-medium text-gray-700">TMA:</span>
+                                    <span class="text-sm text-gray-900">{{ $powerPlant->tma ?? '-' }}</span>
                                     <span class="text-sm text-gray-600">mdpl</span>
                                 </div>
                             @else
                                 <div class="flex items-center gap-2">
-                                    <label for="hop_{{ $powerPlant->id }}" class="text-sm font-medium text-gray-700">
-                                        HOP:
-                                    </label>
-                                    <input type="number" 
-                                           id="hop_{{ $powerPlant->id }}" 
-                                           name="hop_{{ $powerPlant->id }}"
-                                           class="w-24 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                           placeholder="HOP"
-                                           min="0">
+                                    <span class="text-sm font-medium text-gray-700">HOP:</span>
+                                    <span class="text-sm text-gray-900">{{ $powerPlant->hop ?? '-' }}</span>
                                     <span class="text-sm text-gray-600">hari</span>
                                 </div>
                             @endif

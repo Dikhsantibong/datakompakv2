@@ -23,8 +23,20 @@ class DataEngineController extends Controller
             $query->orderBy('name');
         }])->get();
 
-        // Load the latest logs for each machine on the selected date
+        // Load the latest logs for each power plant and machine on the selected date
         $powerPlants->each(function ($powerPlant) use ($date) {
+            // Get power plant logs
+            $latestLog = DB::table('power_plant_logs')
+                ->where('power_plant_id', $powerPlant->id)
+                ->where('date', $date)
+                ->orderBy('time', 'desc')
+                ->first();
+
+            $powerPlant->hop = $latestLog?->hop;
+            $powerPlant->tma = $latestLog?->tma;
+            $powerPlant->inflow = $latestLog?->inflow;
+
+            // Get machine logs
             $powerPlant->machines->each(function ($machine) use ($date) {
                 $latestLog = $machine->getLatestLog($date);
                 $machine->kw = $latestLog?->kw;
@@ -72,7 +84,25 @@ class DataEngineController extends Controller
 
             $date = $request->date;
             $machines = $request->input('machines', []);
+            $powerPlants = $request->input('power_plants', []);
 
+            // Save power plant logs
+            foreach ($powerPlants as $powerPlantId => $data) {
+                $time = now()->format('H:i:s'); // Use current time for power plant logs
+                
+                DB::table('power_plant_logs')->insert([
+                    'power_plant_id' => $powerPlantId,
+                    'date' => $date,
+                    'time' => $time,
+                    'hop' => $data['hop'] ?? null,
+                    'tma' => $data['tma'] ?? null,
+                    'inflow' => $data['inflow'] ?? null,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+
+            // Save machine logs
             foreach ($machines as $machineId => $data) {
                 // Validate required fields
                 if (empty($data['time'])) {

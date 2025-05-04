@@ -504,58 +504,58 @@
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.innerHTML = `
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_1_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_1_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_2_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_2_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][total_stok]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_1_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_1_percentage]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_2_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_2_percentage]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][total_stok_tangki]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][terima_bbm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_pakai]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class="px-4 py-2 border-r">
+            <td class="w-40 px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_pakai]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
             </td>
-            <td class="px-4 py-2">
+            <td class="w-40 px-4 py-2">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][total_pakai]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
             </td>
             <td class="px-4 py-2 border-l border-gray-300 text-center">
@@ -580,16 +580,16 @@
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.innerHTML = `
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel1_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel1_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel2_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel2_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_total]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel1_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel1_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel2_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel2_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_total]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel1_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel1_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel2_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel2_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_total]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel1_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel1_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel2_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel2_akhir]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_total]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
             <td class="px-4 py-2"><button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button></td>
         `;
         tbody.appendChild(row);
@@ -602,18 +602,18 @@
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.innerHTML = `
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank1_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank1_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank2_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank2_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank_total_stok]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][drum_area1]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][drum_area2]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][drum_total_stok]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][total_stok_tangki]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][terima_pelumas]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][total_pakai]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
-            <td class="px-4 py-2 border-r"><input type="text" name="pelumas[${rowIndex}][jenis]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank1_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank1_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank2_cm]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank2_liter]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank_total_stok]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][drum_area1]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][drum_area2]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][drum_total_stok]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][total_stok_tangki]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][terima_pelumas]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
+            <td class="w-40px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][total_pakai]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
+            <td class="w-40px-4 py-2 border-r"><input type="text" name="pelumas[${rowIndex}][jenis]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
             <td class="px-4 py-2"><button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button></td>
         `;
         tbody.appendChild(row);

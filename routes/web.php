@@ -256,6 +256,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/', [LaporanKitController::class, 'index'])->name('index');
         Route::get('/create', [LaporanKitController::class, 'create'])->name('create');
         Route::post('/store', [LaporanKitController::class, 'store'])->name('store');
+        Route::get('/admin/laporan-kit/list', [LaporanKitController::class, 'list'])->name('admin.laporan-kit.list');
     });
 
     // Abnormal Report routes
@@ -1345,3 +1346,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 });
 
 // ... existing code ...
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    // ...
+    Route::prefix('laporan-kit')->name('laporan-kit.')->group(function () {
+        Route::get('/list', [LaporanKitController::class, 'list'])->name('list');
+        // ... route lain ...
+        Route::get('/{laporanKit}', [LaporanKitController::class, 'show'])->name('show');
+    });
+});

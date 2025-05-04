@@ -55,8 +55,8 @@
                     <h2 class="text-2xl font-bold mb-2">Laporan KIT 00.00</h2>
                     <p class="text-blue-100 mb-4">Selamat datang di halaman Laporan KIT 00.00. Halaman ini digunakan untuk mengelola dan memonitor laporan KIT pada pukul 00.00.</p>
                     <div class="flex flex-wrap gap-3">
-                        <a href="{{ route('admin.laporan-kit.create') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150">
-                            <i class="fas fa-plus mr-2"></i> Tambah Data
+                        <a href="{{ route('admin.laporan-kit.list') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150">
+                            <i class="fas fa-eye mr-2"></i> Lihat Data
                         </a>
                         <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50 transition-colors duration-150">
                             <i class="fas fa-file-excel mr-2"></i> Export Excel
@@ -71,8 +71,31 @@
                 </div>
             </div>
 
+            <!-- Filter Unit & Tanggal -->
+            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-medium text-gray-800">
+                        <i class="fas fa-filter mr-2 text-blue-600"></i>
+                        Filter Unit & Tanggal
+                    </h3>
+                    <form method="GET" action="" class="flex items-center space-x-3">
+                        <select id="unitFilter" name="unit_source" onchange="this.form.submit()" class="form-select rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                            <option value="">Semua Unit</option>
+                            @foreach($powerPlants as $powerPlant)
+                                <option value="{{ $powerPlant->unit_source }}" {{ (request('unit_source', $unitSource ?? '') == $powerPlant->unit_source) ? 'selected' : '' }}>
+                                    {{ $powerPlant->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <input type="date" name="tanggal" value="{{ request('tanggal') }}" class="form-input rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500" onchange="this.form.submit()">
+                    </form>
+                </div>
+            </div>
+
             <form action="{{ route('admin.laporan-kit.store') }}" method="POST" class="space-y-6">
                 @csrf
+                <input type="hidden" name="unit_source" value="{{ $unitSource }}">
+                <input type="hidden" name="tanggal" value="{{ request('tanggal') }}">
                 
                 <!-- JAM OPERASI MESIN -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2">
@@ -386,10 +409,13 @@
                 </div>
 
                 <div class="flex justify-end space-x-4 p-6">
-                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" @if(!request('tanggal')) disabled style="background:#ccc;cursor:not-allowed;" @endif>
                         Simpan Data
                     </button>
                 </div>
+                @if(!request('tanggal'))
+                    <div class="text-red-600 text-sm text-right pr-6 pb-2">Silakan pilih tanggal terlebih dahulu sebelum mengisi dan menyimpan data.</div>
+                @endif
             </form>
         </div>
     </div>

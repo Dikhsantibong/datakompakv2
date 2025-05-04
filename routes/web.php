@@ -257,6 +257,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/create', [LaporanKitController::class, 'create'])->name('create');
         Route::post('/store', [LaporanKitController::class, 'store'])->name('store');
         Route::get('/admin/laporan-kit/list', [LaporanKitController::class, 'list'])->name('admin.laporan-kit.list');
+        Route::get('/export-pdf', [LaporanKitController::class, 'exportPdf'])->name('laporan-kit.export-pdf');
+        Route::get('/export-excel', [LaporanKitController::class, 'exportExcel'])->name('laporan-kit.export-excel');
     });
 
     // Abnormal Report routes
@@ -1353,5 +1355,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         Route::get('/list', [LaporanKitController::class, 'list'])->name('list');
         // ... route lain ...
         Route::get('/{laporanKit}', [LaporanKitController::class, 'show'])->name('show');
+        Route::get('/export-pdf', [LaporanKitController::class, 'exportPdf'])->name('export-pdf');
+        Route::get('/export-excel', [LaporanKitController::class, 'exportExcel'])->name('export-excel');
     });
 });
+
+Route::get('/export-pdf/{id}', [LaporanKitController::class, 'exportPdf'])->name('laporan-kit.export-pdf');
+Route::get('/admin/laporan-kit/export-pdf/{id}', [LaporanKitController::class, 'exportPdf'])->name('admin.laporan-kit.export-pdf');

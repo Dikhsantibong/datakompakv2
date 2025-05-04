@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\PowerPlant;
 use App\Models\Machine;
 use App\Models\LaporanKit;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\LaporanKitExport;
 
 class LaporanKitController extends Controller
 {
@@ -70,5 +73,22 @@ class LaporanKitController extends Controller
         ])->findOrFail($id);
 
         return view('admin.laporan-kit.show', compact('laporan'));
+    }
+
+    public function exportPdf($id)
+    {
+        $laporan = LaporanKit::with([
+            'jamOperasi', 'gangguan', 'bbm', 'kwh', 'pelumas', 'bahanKimia', 'bebanTertinggi', 'creator'
+        ])->findOrFail($id);
+
+        $powerPlants = \App\Models\PowerPlant::orderBy('name')->get();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.laporan-kit.pdf', compact('laporan', 'powerPlants'));
+        return $pdf->download('laporan_kit_'.$laporan->id.'.pdf');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        return Excel::download(new LaporanKitExport, 'laporan_kit.xlsx');
     }
 } 

@@ -86,10 +86,10 @@
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
-                                                <a href="#" class="text-red-600 hover:text-red-900" title="Download PDF">
+                                                <a href="{{ route('admin.laporan-kit.export-pdf', $laporan->id) }}" class="text-red-600 hover:text-red-900" title="Download PDF">
                                                     <i class="fas fa-file-pdf"></i>
                                                 </a>
-                                                <a href="#" class="text-green-600 hover:text-green-900" title="Download Excel">
+                                                <a href="{{ route('admin.laporan-kit.export-excel') }}" class="text-green-600 hover:text-green-900" title="Download Excel">
                                                     <i class="fas fa-file-excel"></i>
                                                 </a>
                                             </div>

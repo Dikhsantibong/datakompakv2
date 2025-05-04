@@ -1,6 +1,41 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .evidence-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        width: 100%;
+    }
+    .evidence-image {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 0.375rem;
+        display: block;
+    }
+    .evidence-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 0.375rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .zoom-button {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+    .evidence-container:hover .zoom-button {
+        opacity: 1;
+    }
+</style>
+
 <div class="flex h-screen bg-gray-100">
     @include('components.sidebar')
     
@@ -22,10 +57,14 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-500">{{ $flmDetail->tanggal }}</span>
-                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                        Shift {{ $flmDetail->shift }}
-                    </span>
+                    <div class="flex items-center space-x-2">
+                        <span class="px-3 py-1 text-sm font-medium rounded-full bg-blue-100 text-blue-800">
+                            {{ $flmDetail->tanggal }}
+                        </span>
+                        <span class="px-3 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800">
+                            Shift {{ $flmDetail->shift }}
+                        </span>
+                    </div>
                 </div>
             </div>
         </header>
@@ -39,157 +78,184 @@
 
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto px-4 sm:px-6 py-8">
-                <div class="space-y-6">
-                    <!-- Informasi Umum -->
-                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-200">
-                            <h2 class="text-lg font-medium text-gray-900">
-                                <i class="fas fa-info-circle mr-2 text-gray-400"></i>
-                                Informasi Umum
-                            </h2>
+            <div class="container mx-auto px-4 sm:px-6 py-4">
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="p-6">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Mesin/peralatan</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Sistem pembangkit</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Masalah yang ditemukan</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Kondisi awal</th>
+                                        <th colspan="5" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Tindakan FLM</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Kondisi akhir</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Catatan FLM</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Eviden</th>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <th class="border px-4 py-2"></th>
+                                        <th class="border px-4 py-2"></th>
+                                        <th class="border px-4 py-2"></th>
+                                        <th class="border px-4 py-2"></th>
+                                        <th class="border px-4 py-2 text-xs font-medium text-gray-500">bersihkan</th>
+                                        <th class="border px-4 py-2 text-xs font-medium text-gray-500">lumasi</th>
+                                        <th class="border px-4 py-2 text-xs font-medium text-gray-500">kencangkan</th>
+                                        <th class="border px-4 py-2 text-xs font-medium text-gray-500">perbaikan koneksi</th>
+                                        <th class="border px-4 py-2 text-xs font-medium text-gray-500">lainnya</th>
+                                        <th class="border px-4 py-2"></th>
+                                        <th class="border px-4 py-2"></th>
+                                        <th class="border px-4 py-2"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="border px-4 py-2">
+                                            <div class="text-sm text-gray-900 w-[200px]">{{ $flmDetail->mesin }}</div>
+                                        </td>
+                                        <td class="border px-4 py-2">
+                                            <div class="text-sm text-gray-900 w-[200px]">{{ $flmDetail->sistem }}</div>
+                                        </td>
+                                        <td class="border px-4 py-2">
+                                            <div class="text-sm text-gray-900 w-[200px]">{{ $flmDetail->masalah }}</div>
+                                        </td>
+                                        <td class="border px-4 py-2">
+                                            <div class="text-sm text-gray-900 w-[200px]">{{ $flmDetail->kondisi_awal }}</div>
+                                        </td>
+                                        <td class="border px-4 py-2 text-center">
+                                            <span class="inline-flex items-center justify-center">
+                                                <i class="fas fa-{{ $flmDetail->tindakan_bersihkan ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
+                                            </span>
+                                        </td>
+                                        <td class="border px-4 py-2 text-center">
+                                            <span class="inline-flex items-center justify-center">
+                                                <i class="fas fa-{{ $flmDetail->tindakan_lumasi ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
+                                            </span>
+                                        </td>
+                                        <td class="border px-4 py-2 text-center">
+                                            <span class="inline-flex items-center justify-center">
+                                                <i class="fas fa-{{ $flmDetail->tindakan_kencangkan ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
+                                            </span>
+                                        </td>
+                                        <td class="border px-4 py-2 text-center">
+                                            <span class="inline-flex items-center justify-center">
+                                                <i class="fas fa-{{ $flmDetail->tindakan_perbaikan_koneksi ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
+                                            </span>
+                                        </td>
+                                        <td class="border px-4 py-2 text-center">
+                                            <span class="inline-flex items-center justify-center">
+                                                <i class="fas fa-{{ $flmDetail->tindakan_lainnya ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
+                                            </span>
+                                        </td>
+                                        <td class="border px-4 py-2">
+                                            <div class="text-sm text-gray-900 w-[200px]">{{ $flmDetail->kondisi_akhir }}</div>
+                                        </td>
+                                        <td class="border px-4 py-2">
+                                            <div class="text-sm text-gray-900 w-[200px]">{{ $flmDetail->catatan ?: '-' }}</div>
+                                        </td>
+                                        <td class="border px-4 py-2">
+                                            <div class="space-y-4 w-[300px]">
+                                                @if($flmDetail->eviden_sebelum || $flmDetail->eviden_sesudah)
+                                                <div class="evidence-grid">
+                                                    @if($flmDetail->eviden_sebelum)
+                                                    <div class="evidence-container">
+                                                        <p class="text-sm font-medium text-gray-500 mb-2">Foto Sebelum:</p>
+                                                        <img src="{{ asset('storage/'.$flmDetail->eviden_sebelum) }}" 
+                                                             alt="Foto Sebelum"
+                                                             class="evidence-image"
+                                                             onerror="this.src='{{ asset('images/no-image.png') }}'; this.onerror=null;">
+                                                        <button type="button" 
+                                                                onclick="openLightbox('{{ asset('storage/'.$flmDetail->eviden_sebelum) }}', 'Foto Sebelum')"
+                                                                class="zoom-button">
+                                                            <span class="bg-black bg-opacity-50 text-white px-4 py-2 rounded-full text-sm">
+                                                                <i class="fas fa-search-plus mr-2"></i>Perbesar
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                    @endif
+
+                                                    @if($flmDetail->eviden_sesudah)
+                                                    <div class="evidence-container">
+                                                        <p class="text-sm font-medium text-gray-500 mb-2">Foto Sesudah:</p>
+                                                        <img src="{{ asset('storage/'.$flmDetail->eviden_sesudah) }}" 
+                                                             alt="Foto Sesudah"
+                                                             class="evidence-image"
+                                                             onerror="this.src='{{ asset('images/no-image.png') }}'; this.onerror=null;">
+                                                        <button type="button" 
+                                                                onclick="openLightbox('{{ asset('storage/'.$flmDetail->eviden_sesudah) }}', 'Foto Sesudah')"
+                                                                class="zoom-button">
+                                                            <span class="bg-black bg-opacity-50 text-white px-4 py-2 rounded-full text-sm">
+                                                                <i class="fas fa-search-plus mr-2"></i>Perbesar
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                                @else
+                                                <div class="text-center py-4">
+                                                    <p class="text-sm text-gray-500">Tidak ada eviden</p>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="p-6">
-                            <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500">Operator</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->operator }}</dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500">Tanggal & Waktu</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->created_at }}</dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500">Mesin/Peralatan</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->mesin }}</dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500">Sistem Pembangkit</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->sistem }}</dd>
-                                </div>
-                            </dl>
+
+                        <!-- Action Buttons -->
+                        <div class="mt-6 flex justify-end space-x-3">
+                            <a href="{{ route('admin.flm.list') }}" 
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] transition duration-150">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Kembali
+                            </a>
+                            <a href="{{ route('admin.flm.edit', $flmDetail->id) }}" 
+                                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] transition duration-150">
+                                <i class="fas fa-edit mr-2"></i>
+                                Edit
+                            </a>
+                            <button type="button"
+                                onclick="printFLM()"
+                                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150">
+                                <i class="fas fa-print mr-2"></i>
+                                Cetak
+                            </button>
                         </div>
                     </div>
-
-                    <!-- Detail Pemeriksaan -->
-                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-200">
-                            <h2 class="text-lg font-medium text-gray-900">
-                                <i class="fas fa-clipboard-check mr-2 text-gray-400"></i>
-                                Detail Pemeriksaan
-                            </h2>
-                        </div>
-                        <div class="p-6">
-                            <dl class="space-y-6">
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500">Masalah yang Ditemukan</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->masalah }}</dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500">Kondisi Awal</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->kondisi_awal }}</dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500">Tindakan yang Dilakukan</dt>
-                                    <dd class="mt-1">
-                                        <ul class="grid grid-cols-2 gap-2">
-                                            <li class="flex items-center text-sm">
-                                                <span class="inline-flex items-center justify-center size-5 mr-2 {{ $flmDetail->tindakan_bersihkan ? 'text-green-500' : 'text-gray-300' }}">
-                                                    <i class="fas {{ $flmDetail->tindakan_bersihkan ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                                                </span>
-                                                Bersihkan
-                                            </li>
-                                            <li class="flex items-center text-sm">
-                                                <span class="inline-flex items-center justify-center size-5 mr-2 {{ $flmDetail->tindakan_lumasi ? 'text-green-500' : 'text-gray-300' }}">
-                                                    <i class="fas {{ $flmDetail->tindakan_lumasi ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                                                </span>
-                                                Lumasi
-                                            </li>
-                                            <li class="flex items-center text-sm">
-                                                <span class="inline-flex items-center justify-center size-5 mr-2 {{ $flmDetail->tindakan_kencangkan ? 'text-green-500' : 'text-gray-300' }}">
-                                                    <i class="fas {{ $flmDetail->tindakan_kencangkan ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                                                </span>
-                                                Kencangkan
-                                            </li>
-                                            <li class="flex items-center text-sm">
-                                                <span class="inline-flex items-center justify-center size-5 mr-2 {{ $flmDetail->tindakan_setting ? 'text-green-500' : 'text-gray-300' }}">
-                                                    <i class="fas {{ $flmDetail->tindakan_setting ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                                                </span>
-                                                Setting
-                                            </li>
-                                            <li class="flex items-center text-sm">
-                                                <span class="inline-flex items-center justify-center size-5 mr-2 {{ $flmDetail->tindakan_ganti ? 'text-green-500' : 'text-gray-300' }}">
-                                                    <i class="fas {{ $flmDetail->tindakan_ganti ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                                                </span>
-                                                Ganti
-                                            </li>
-                                        </ul>
-                                    </dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500">Kondisi Akhir</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->kondisi_akhir }}</dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500">Catatan</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $flmDetail->catatan }}</dd>
-                                </div>
-                            </dl>
-                        </div>
-                    </div>
-
-                    <!-- Eviden -->
-                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-200">
-                            <h2 class="text-lg font-medium text-gray-900">
-                                <i class="fas fa-images mr-2 text-gray-400"></i>
-                                Eviden
-                            </h2>
-                        </div>
-                        <div class="p-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500 mb-2">Foto Sebelum</h3>
-                                    <div class="border rounded-lg overflow-hidden">
-                                        <img src="{{ asset($flmDetail->eviden_sebelum) }}" 
-                                             alt="Foto Sebelum"
-                                             class="w-full h-48 object-cover">
-                                    </div>
-                                </div>
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500 mb-2">Foto Sesudah</h3>
-                                    <div class="border rounded-lg overflow-hidden">
-                                        <img src="{{ asset($flmDetail->eviden_sesudah) }}" 
-                                             alt="Foto Sesudah"
-                                             class="w-full h-48 object-cover">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="mt-6 flex justify-end space-x-3">
-                    <a href="{{ route('admin.flm.list') }}" 
-                        class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
-                        <i class="fas fa-arrow-left mr-2"></i>
-                        Kembali
-                    </a>
-                    <a href="#" 
-                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
-                        <i class="fas fa-edit mr-2"></i>
-                        Edit
-                    </a>
-                    <button type="button"
-                        onclick="printFLM()"
-                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                        <i class="fas fa-print mr-2"></i>
-                        Cetak
-                    </button>
                 </div>
             </div>
         </main>
+    </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div id="lightboxModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4" id="lightboxTitle"></h3>
+                        <div class="mt-2">
+                            <img id="lightboxImage" src="" alt="" class="w-full max-h-[70vh] object-contain">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button type="button" 
+                        onclick="closeLightbox()"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    Tutup
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -198,6 +264,32 @@
 function printFLM() {
     window.print();
 }
+
+function openLightbox(imageUrl, title) {
+    document.getElementById('lightboxImage').src = imageUrl;
+    document.getElementById('lightboxTitle').textContent = title;
+    document.getElementById('lightboxModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    document.getElementById('lightboxModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+// Close lightbox when clicking outside the image
+document.getElementById('lightboxModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeLightbox();
+    }
+});
+
+// Close lightbox when pressing Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeLightbox();
+    }
+});
 </script>
 @endpush
 

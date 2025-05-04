@@ -88,14 +88,15 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('admin.flm.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                        <form action="{{ route('admin.flm.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="flmForm">
                             @csrf
                             
                             <!-- Form Header -->
                             <div class="mb-6">
                                 <div class="w-full md:w-1/3">
                                     <label class="block text-sm font-medium text-gray-700">Tanggal</label>
-                                    <input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" 
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 </div>
                             </div>
 
@@ -136,47 +137,89 @@
                                         <tr class="flm-row">
                                             <td class="border px-4 py-2 text-center row-number">1</td>
                                             <td class="border px-4 py-2">
-                                                <textarea type="text" class="w-[200px] h-[100px] p-1 border-gray-300 rounded" name="mesin[]" value="{{ old('mesin.0') }}"></textarea>
+                                                <textarea name="mesin[]" class="w-[200px] h-[100px] p-1 border-gray-300 rounded resize-none focus:border-blue-500 focus:ring-blue-500" required>{{ old('mesin.0') }}</textarea>
                                             </td>
                                             <td class="border px-4 py-2">
-                                                <textarea type="text" class="w-[200px] h-[100px] p-1 border-gray-300 rounded" name="sistem[]" value="{{ old('sistem.0') }}"></textarea>
+                                                <textarea name="sistem[]" class="w-[200px] h-[100px] p-1 border-gray-300 rounded resize-none focus:border-blue-500 focus:ring-blue-500" required>{{ old('sistem.0') }}</textarea>
                                             </td>
                                             <td class="border px-4 py-2">
-                                                <textarea type="text" class="w-[200px] h-[100px] p-1 border-gray-300 rounded" name="masalah[]" value="{{ old('masalah.0') }}"></textarea>
+                                                <textarea name="masalah[]" class="w-[200px] h-[100px] p-1 border-gray-300 rounded resize-none focus:border-blue-500 focus:ring-blue-500" required>{{ old('masalah.0') }}</textarea>
                                             </td>
                                             <td class="border px-4 py-2">
-                                                <textarea type="text" class="w-[200px] h-[100px] p-1 border-gray-300 rounded" name="kondisi_awal[]" value="{{ old('kondisi_awal.0') }}"></textarea>
+                                                <textarea name="kondisi_awal[]" class="w-[200px] h-[100px] p-1 border-gray-300 rounded resize-none focus:border-blue-500 focus:ring-blue-500" required>{{ old('kondisi_awal.0') }}</textarea>
                                             </td>
                                             <td class="border px-4 py-2 text-center">
-                                                <input type="checkbox" class="form-checkbox" name="tindakan[0][]" value="bersihkan" {{ in_array('bersihkan', old('tindakan.0', [])) ? 'checked' : '' }}>
+                                                <input type="checkbox" name="tindakan[0][]" value="bersihkan" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500" {{ in_array('bersihkan', old('tindakan.0', [])) ? 'checked' : '' }}>
                                             </td>
                                             <td class="border px-4 py-2 text-center">
-                                                <input type="checkbox" class="form-checkbox" name="tindakan[0][]" value="lumasi" {{ in_array('lumasi', old('tindakan.0', [])) ? 'checked' : '' }}>
+                                                <input type="checkbox" name="tindakan[0][]" value="lumasi" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500" {{ in_array('lumasi', old('tindakan.0', [])) ? 'checked' : '' }}>
                                             </td>
                                             <td class="border px-4 py-2 text-center">
-                                                <input type="checkbox" class="form-checkbox" name="tindakan[0][]" value="kencangkan" {{ in_array('kencangkan', old('tindakan.0', [])) ? 'checked' : '' }}>
+                                                <input type="checkbox" name="tindakan[0][]" value="kencangkan" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500" {{ in_array('kencangkan', old('tindakan.0', [])) ? 'checked' : '' }}>
                                             </td>
                                             <td class="border px-4 py-2 text-center">
-                                                <input type="checkbox" class="form-checkbox" name="tindakan[0][]" value="perbaikan_koneksi" {{ in_array('perbaikan_koneksi', old('tindakan.0', [])) ? 'checked' : '' }}>
+                                                <input type="checkbox" name="tindakan[0][]" value="perbaikan_koneksi" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500" {{ in_array('perbaikan_koneksi', old('tindakan.0', [])) ? 'checked' : '' }}>
                                             </td>
                                             <td class="border px-4 py-2 text-center">
-                                                <input type="checkbox" class="form-checkbox" name="tindakan[0][]" value="lainnya" {{ in_array('lainnya', old('tindakan.0', [])) ? 'checked' : '' }}>
+                                                <input type="checkbox" name="tindakan[0][]" value="lainnya" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500" {{ in_array('lainnya', old('tindakan.0', [])) ? 'checked' : '' }}>
                                             </td>
                                             <td class="border px-4 py-2">
-                                                <textarea type="text" class="w-[200px] h-[100px] p-1 border-gray-300 rounded" name="kondisi_akhir[]" value="{{ old('kondisi_akhir.0') }}"></textarea>
+                                                <textarea name="kondisi_akhir[]" class="w-[200px] h-[100px] p-1 border-gray-300 rounded resize-none focus:border-blue-500 focus:ring-blue-500" required>{{ old('kondisi_akhir.0') }}</textarea>
                                             </td>
                                             <td class="border px-4 py-2">
-                                                <textarea type="text" class="w-[200px] h-[100px] p-1 border-gray-300 rounded" name="catatan[]" value="{{ old('catatan.0') }}"></textarea>
+                                                <textarea name="catatan[]" class="w-[200px] h-[100px] p-1 border-gray-300 rounded resize-none focus:border-blue-500 focus:ring-blue-500">{{ old('catatan.0') }}</textarea>
                                             </td>
-                                            <td class="border px-4 py-2 w-[300px]">
-                                                <div class="space-y-2 w-[100px]">
-                                                    <div>
-                                                        <label class="block text-xs text-gray-600">Sebelum:</label>
-                                                        <input type="file" name="eviden_sebelum[]" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                            <td class="border px-4 py-2">
+                                                <div class="space-y-3 w-[300px] p-2">
+                                                    <div class="eviden-upload">
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Foto Sebelum:</label>
+                                                        <div class="relative">
+                                                            <input type="file" 
+                                                                   name="eviden_sebelum[]" 
+                                                                   accept="image/*"
+                                                                   class="hidden"
+                                                                   onchange="previewImage(this, this.parentElement.querySelector('.preview-image'))"
+                                                                   data-preview="sebelum">
+                                                            <div class="preview-container mb-2 hidden">
+                                                                <img src="#" alt="Preview" class="preview-image w-full h-32 object-cover rounded-lg border border-gray-200">
+                                                                <button type="button" 
+                                                                        class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                                                                        onclick="removeImage(this)">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                            <button type="button"
+                                                                    onclick="this.previousElementSibling.previousElementSibling.click()"
+                                                                    class="upload-btn w-full px-4 py-2 text-sm text-blue-600 bg-blue-50 rounded-lg border-2 border-blue-100 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                                <i class="fas fa-camera mr-2"></i>
+                                                                Pilih Foto Sebelum
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <label class="block text-xs text-gray-600">Sesudah:</label>
-                                                        <input type="file" name="eviden_sesudah[]" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                                    <div class="eviden-upload">
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Foto Sesudah:</label>
+                                                        <div class="relative">
+                                                            <input type="file" 
+                                                                   name="eviden_sesudah[]" 
+                                                                   accept="image/*"
+                                                                   class="hidden"
+                                                                   onchange="previewImage(this, this.parentElement.querySelector('.preview-image'))"
+                                                                   data-preview="sesudah">
+                                                            <div class="preview-container mb-2 hidden">
+                                                                <img src="#" alt="Preview" class="preview-image w-full h-32 object-cover rounded-lg border border-gray-200">
+                                                                <button type="button" 
+                                                                        class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                                                                        onclick="removeImage(this)">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                            <button type="button"
+                                                                    onclick="this.previousElementSibling.previousElementSibling.click()"
+                                                                    class="upload-btn w-full px-4 py-2 text-sm text-blue-600 bg-blue-50 rounded-lg border-2 border-blue-100 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                                <i class="fas fa-camera mr-2"></i>
+                                                                Pilih Foto Sesudah
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
@@ -189,14 +232,16 @@
                                     </tbody>
                                 </table>
                                 <div class="mt-4 flex justify-start">
-                                    <button type="button" onclick="addNewRow()" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
+                                    <button type="button" onclick="addNewRow()" 
+                                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
                                         <i class="fas fa-plus mr-2"></i>
                                         Tambah Baris
                                     </button>
                                 </div>
                             </div>
                             <div class="flex justify-end mt-6">
-                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <button type="submit" 
+                                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     <i class="fas fa-save mr-2"></i>
                                     Simpan
                                 </button>
@@ -219,9 +264,9 @@ function addNewRow() {
     // Update row number
     template.querySelector('.row-number').textContent = rowCount + 1;
     
-    // Update input names and clear values
-    template.querySelectorAll('input[type="text"]').forEach(input => {
-        input.value = '';
+    // Clear all input values
+    template.querySelectorAll('textarea').forEach(textarea => {
+        textarea.value = '';
     });
     
     template.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
@@ -229,8 +274,17 @@ function addNewRow() {
         checkbox.name = checkbox.name.replace('[0]', `[${rowCount}]`);
     });
     
-    template.querySelectorAll('input[type="file"]').forEach(input => {
+    // Reset file inputs and previews
+    template.querySelectorAll('.eviden-upload').forEach(upload => {
+        const input = upload.querySelector('input[type="file"]');
+        const previewContainer = upload.querySelector('.preview-container');
+        const previewImage = upload.querySelector('.preview-image');
+        const uploadBtn = upload.querySelector('.upload-btn');
+        
         input.value = '';
+        previewContainer.classList.add('hidden');
+        previewImage.src = '#';
+        uploadBtn.classList.remove('hidden');
     });
     
     tbody.appendChild(template);
@@ -256,8 +310,51 @@ function updateRowNumbers() {
         row.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
             checkbox.name = checkbox.name.replace(/\[\d+\]/, `[${index}]`);
         });
+        
+        // Update file input names if needed
+        row.querySelectorAll('input[type="file"]').forEach(input => {
+            const currentName = input.getAttribute('name');
+            if (currentName) {
+                input.setAttribute('name', currentName.replace(/\[\d*\]$/, `[${index}]`));
+            }
+        });
     });
 }
+
+function previewImage(input, previewImg) {
+    const previewContainer = input.parentElement.querySelector('.preview-container');
+    const uploadBtn = input.parentElement.querySelector('.upload-btn');
+
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            previewContainer.classList.remove('hidden');
+            uploadBtn.classList.add('hidden');
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function removeImage(button) {
+    const container = button.closest('.relative');
+    const input = container.querySelector('input[type="file"]');
+    const previewContainer = container.querySelector('.preview-container');
+    const uploadBtn = container.querySelector('.upload-btn');
+    
+    input.value = '';
+    previewContainer.classList.add('hidden');
+    uploadBtn.classList.remove('hidden');
+}
+
+// Prevent form submission on enter key
+document.getElementById('flmForm').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+    }
+});
 </script>
 @endpush
 

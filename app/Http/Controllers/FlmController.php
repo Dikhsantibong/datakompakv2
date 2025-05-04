@@ -6,7 +6,7 @@ use App\Models\FlmInspection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\FlmExport;
 
@@ -52,13 +52,17 @@ class FlmController extends Controller
 
             // Handle file uploads
             if ($request->hasFile("eviden_sebelum.{$key}")) {
-                $path = $request->file("eviden_sebelum.{$key}")->store('public/flm/eviden');
-                $data['eviden_sebelum'] = Storage::url($path);
+                $file = $request->file("eviden_sebelum.{$key}");
+                $filename = time() . '_sebelum_' . $file->getClientOriginalName();
+                Storage::putFileAs('public/flm/eviden', $file, $filename);
+                $data['eviden_sebelum'] = 'flm/eviden/' . $filename;
             }
 
             if ($request->hasFile("eviden_sesudah.{$key}")) {
-                $path = $request->file("eviden_sesudah.{$key}")->store('public/flm/eviden');
-                $data['eviden_sesudah'] = Storage::url($path);
+                $file = $request->file("eviden_sesudah.{$key}");
+                $filename = time() . '_sesudah_' . $file->getClientOriginalName();
+                Storage::putFileAs('public/flm/eviden', $file, $filename);
+                $data['eviden_sesudah'] = 'flm/eviden/' . $filename;
             }
 
             FlmInspection::create($data);
@@ -69,9 +73,30 @@ class FlmController extends Controller
 
     public function list()
     {
-        $flmData = FlmInspection::orderBy('tanggal', 'desc')
+        $query = FlmInspection::query();
+
+        // Apply date range filter
+        if (request('start_date')) {
+            $query->whereDate('tanggal', '>=', request('start_date'));
+        }
+        if (request('end_date')) {
+            $query->whereDate('tanggal', '<=', request('end_date'));
+        }
+
+        // Apply mesin filter
+        if (request('mesin')) {
+            $query->where('mesin', 'like', '%' . request('mesin') . '%');
+        }
+
+        // Apply sistem filter
+        if (request('sistem')) {
+            $query->where('sistem', 'like', '%' . request('sistem') . '%');
+        }
+
+        $flmData = $query->orderBy('tanggal', 'desc')
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         return view('admin.flm.list', compact('flmData'));
     }
@@ -110,19 +135,25 @@ class FlmController extends Controller
         if ($request->hasFile('eviden_sebelum')) {
             // Delete old file if exists
             if ($flm->eviden_sebelum) {
-                Storage::delete(str_replace('/storage', 'public', $flm->eviden_sebelum));
+                Storage::delete('public/' . $flm->eviden_sebelum);
             }
-            $path = $request->file('eviden_sebelum')->store('public/flm/eviden');
-            $data['eviden_sebelum'] = Storage::url($path);
+            
+            $file = $request->file('eviden_sebelum');
+            $filename = time() . '_sebelum_' . $file->getClientOriginalName();
+            Storage::putFileAs('public/flm/eviden', $file, $filename);
+            $data['eviden_sebelum'] = 'flm/eviden/' . $filename;
         }
 
         if ($request->hasFile('eviden_sesudah')) {
             // Delete old file if exists
             if ($flm->eviden_sesudah) {
-                Storage::delete(str_replace('/storage', 'public', $flm->eviden_sesudah));
+                Storage::delete('public/' . $flm->eviden_sesudah);
             }
-            $path = $request->file('eviden_sesudah')->store('public/flm/eviden');
-            $data['eviden_sesudah'] = Storage::url($path);
+            
+            $file = $request->file('eviden_sesudah');
+            $filename = time() . '_sesudah_' . $file->getClientOriginalName();
+            Storage::putFileAs('public/flm/eviden', $file, $filename);
+            $data['eviden_sesudah'] = 'flm/eviden/' . $filename;
         }
 
         $flm->update($data);
@@ -136,10 +167,10 @@ class FlmController extends Controller
         
         // Delete associated files
         if ($flm->eviden_sebelum) {
-            Storage::delete(str_replace('/storage', 'public', $flm->eviden_sebelum));
+            Storage::delete($flm->eviden_sebelum);
         }
         if ($flm->eviden_sesudah) {
-            Storage::delete(str_replace('/storage', 'public', $flm->eviden_sesudah));
+            Storage::delete($flm->eviden_sesudah);
         }
         
         $flm->delete();
@@ -151,12 +182,12 @@ class FlmController extends Controller
     {
         if ($id) {
             $flmData = FlmInspection::findOrFail($id);
-            $pdf = PDF::loadView('admin.flm.pdf.single', compact('flmData'));
+            $pdf = Pdf::loadView('admin.flm.pdf.single', compact('flmData'));
             return $pdf->download('flm-inspection-' . $id . '.pdf');
         }
 
         $flmData = FlmInspection::orderBy('tanggal', 'desc')->get();
-        $pdf = PDF::loadView('admin.flm.pdf.list', compact('flmData'));
+        $pdf = Pdf::loadView('admin.flm.pdf.list', compact('flmData'));
         return $pdf->download('flm-inspections.pdf');
     }
 

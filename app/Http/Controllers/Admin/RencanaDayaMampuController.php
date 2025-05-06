@@ -9,7 +9,8 @@ use App\Models\RencanaDayaMampu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use PDF;
+use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\RencanaDayaMampuExport;
 
@@ -78,6 +79,7 @@ class RencanaDayaMampuController extends Controller
 
     public function update(Request $request)
     {
+        $data = $request->isJson() ? $request->json()->all() : $request->all();
         try {
             DB::beginTransaction();
 
@@ -85,17 +87,31 @@ class RencanaDayaMampuController extends Controller
             $currentSession = session('unit');
             $isMainDatabase = $currentSession === 'mysql';
 
-            // Process each machine's data
-            foreach ($request->rencana ?? [] as $machineId => $rencanaValue) {
-                // Simpan ke database sesuai session saat ini
-                $record = $this->saveRecord($machineId, $currentDate, $request, $currentSession);
+            // Kumpulkan data harian dari request
+            $dailyData = [];
+            foreach ($data['rencana'] ?? [] as $machineId => $rencanaArr) {
+                foreach ($rencanaArr as $date => $rencanaValue) {
+                    $dailyData[$machineId][$date]['rencana'] = $rencanaValue;
+                }
+            }
+            foreach ($data['realisasi'] ?? [] as $machineId => $realisasiArr) {
+                foreach ($realisasiArr as $date => $realisasiValue) {
+                    $dailyData[$machineId][$date]['realisasi'] = $realisasiValue;
+                }
+            }
+            foreach ($data['keterangan'] ?? [] as $machineId => $keteranganArr) {
+                foreach ($keteranganArr as $date => $keteranganValue) {
+                    $dailyData[$machineId][$date]['keterangan'] = $keteranganValue;
+                }
+            }
 
-                // Jika ini adalah unit lokal (bukan UP Kendari), sync ke database utama
+            // Process each machine's data
+            foreach ($dailyData as $machineId => $dates) {
+                $record = $this->saveRecord($machineId, $dates, $request, $currentSession);
+
                 if (!$isMainDatabase) {
                     $this->syncToMainDatabase($record);
                 }
-                
-                // Jika ini adalah UP Kendari, sync ke database unit lokal
                 if ($isMainDatabase) {
                     $this->syncToLocalDatabase($record);
                 }
@@ -112,8 +128,7 @@ class RencanaDayaMampuController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('RencanaDayaMampu update error: ' . $e->getMessage());
-            
+            Log::error('RencanaDayaMampu update error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menyimpan data: ' . $e->getMessage(),
@@ -123,30 +138,31 @@ class RencanaDayaMampuController extends Controller
         }
     }
 
-    private function saveRecord($machineId, $currentDate, $request, $unitSource)
+    private function saveRecord($machineId, $dates, $request, $unitSource)
     {
+        $firstDate = array_key_first($dates);
         $record = RencanaDayaMampu::firstOrNew([
             'machine_id' => $machineId,
-            'tanggal' => $currentDate
+            'tanggal' => $firstDate
         ]);
 
-        // Basic data
-        $record->rencana = trim($request->rencana[$machineId]);
-        $record->realisasi = trim($request->realisasi[$machineId] ?? '');
-        $record->daya_pjbtl_silm = floatval($request->daya_pjbtl[$machineId] ?? 0);
-        $record->dmp_existing = floatval($request->dmp_existing[$machineId] ?? 0);
-        
-        // Process daily data
-        if ($request->has('daily_data')) {
-            $dailyData = json_decode($request->daily_data, true);
-            if (isset($dailyData[$machineId])) {
-                $record->daily_data = $dailyData[$machineId];
-            }
+        // Ambil data daily_data lama
+        $oldDailyData = $record->daily_data ?? [];
+
+        // Merge data baru ke data lama (hanya update tanggal yang diinput)
+        foreach ($dates as $date => $values) {
+            $oldDailyData[$date] = array_merge($oldDailyData[$date] ?? [], $values);
         }
 
+        $record->daily_data = $oldDailyData;
+
+        // Update summary (opsional, bisa diambil dari hari terakhir atau di-generate ulang)
+        $record->rencana = $request->rencana[$machineId][$firstDate] ?? $record->rencana;
+        $record->realisasi = $request->realisasi[$machineId][$firstDate] ?? $record->realisasi;
+        $record->daya_pjbtl_silm = floatval($request->daya_pjbtl[$machineId] ?? $record->daya_pjbtl_silm);
+        $record->dmp_existing = floatval($request->dmp_existing[$machineId] ?? $record->dmp_existing);
         $record->unit_source = $unitSource;
         $record->save();
-
         return $record;
     }
 
@@ -169,7 +185,7 @@ class RencanaDayaMampuController extends Controller
             
             $mainRecord->save();
         } catch (\Exception $e) {
-            \Log::error('Sync to main database failed: ' . $e->getMessage());
+            Log::error('Sync to main database failed: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -198,7 +214,7 @@ class RencanaDayaMampuController extends Controller
                 $localRecord->save();
             }
         } catch (\Exception $e) {
-            \Log::error('Sync to local database failed: ' . $e->getMessage());
+            Log::error('Sync to local database failed: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -284,7 +300,7 @@ class RencanaDayaMampuController extends Controller
                 );
             }
         } catch (\Exception $e) {
-            \Log::error('Export error: ' . $e->getMessage());
+            Log::error('Export error: ' . $e->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat mengexport data');
         }
     }

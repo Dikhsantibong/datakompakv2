@@ -109,10 +109,13 @@ class RencanaDayaMampu extends Model
     }
 
     // Helper methods untuk data JSON
-    public function getDailyValue($date, $type = 'rencana')
+    public function getDailyValue($date, $type = null)
     {
         $data = $this->daily_data ?? [];
-        return $data[$date][$type] ?? null;
+        if ($type) {
+            return $data[$date][$type] ?? null;
+        }
+        return $data[$date] ?? [];
     }
 
     public function setDailyValue($date, $type, $value)

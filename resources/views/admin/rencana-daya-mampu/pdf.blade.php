@@ -105,37 +105,42 @@
                 <th rowspan="2">Sistem Kelistrikan</th>
                 <th rowspan="2">Mesin Pembangkit</th>
                 <th rowspan="2">Site Pembangkit</th>
-                <th colspan="2">Rencana Realisasi</th>
                 <th class="medium-column" rowspan="2">Daya PJBTL SILM</th>
                 <th class="medium-column" rowspan="2">DMP Existing</th>
-                @for ($i = 1; $i <= cal_days_in_month(CAL_GREGORIAN, $month, $year); $i++)
-                    <th class="narrow-column">{{ $i }}</th>
+                @for ($i = 1; $i <= min(7, cal_days_in_month(CAL_GREGORIAN, $month, $year)); $i++)
+                    <th colspan="3" class="narrow-column">{{ $i }}</th>
                 @endfor
             </tr>
             <tr>
-                <th class="medium-column">Rencana</th>
-                <th class="medium-column">Realisasi</th>
+                @for ($i = 1; $i <= min(7, cal_days_in_month(CAL_GREGORIAN, $month, $year)); $i++)
+                    <th class="narrow-column">Rencana</th>
+                    <th class="narrow-column">Realisasi</th>
+                    <th class="narrow-column">Keterangan</th>
+                @endfor
             </tr>
         </thead>
         <tbody>
             @php $no = 1; @endphp
             @foreach($powerPlants as $plant)
                 @foreach($plant->machines as $machine)
+                    @php
+                        $record = $machine->rencanaDayaMampu->first();
+                    @endphp
                     <tr>
                         <td class="text-center">{{ $no++ }}</td>
                         <td>{{ $plant->name }}</td>
                         <td>{{ $machine->name }}</td>
                         <td>{{ $plant->name }}</td>
-                        <td class="text-center">{{ $machine->rencana ?? '-' }}</td>
-                        <td class="text-center">{{ $machine->realisasi ?? '-' }}</td>
                         <td class="text-center">{{ $machine->daya_pjbtl_silm ?? '-' }}</td>
                         <td class="text-center">{{ $machine->dmp_existing ?? '-' }}</td>
-                        @for ($i = 1; $i <= cal_days_in_month(CAL_GREGORIAN, $month, $year); $i++)
+                        @for ($i = 1; $i <= min(7, cal_days_in_month(CAL_GREGORIAN, $month, $year)); $i++)
                             @php
                                 $date = sprintf('%s-%s-%02d', $year, $month, $i);
-                                $dailyValue = $machine->rencanaDayaMampu->first()?->getDailyValue($date, 'rencana');
+                                $daily = $record ? $record->getDailyValue($date) : [];
                             @endphp
-                            <td class="text-center">{{ $dailyValue ?? '-' }}</td>
+                            <td class="text-center">{{ $daily['rencana'] ?? '-' }}</td>
+                            <td class="text-center">{{ $daily['realisasi'] ?? '-' }}</td>
+                            <td class="text-center">{{ $daily['keterangan'] ?? '-' }}</td>
                         @endfor
                     </tr>
                 @endforeach

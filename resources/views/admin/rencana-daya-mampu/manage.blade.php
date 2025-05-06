@@ -138,16 +138,17 @@
                                 <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-16 bg-gray-50 text-center border-r-2">Sistem Kelistrikan</th>
                                 <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Mesin Pembangkit</th>
                                 <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Site Pembangkit</th>
-                                <th colspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Rencana Realisasi</th>
                                 <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">Daya PJBTL SILM</th>
                                 <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r-2">DMP Existing</th>
-                                <th colspan="{{ date('t', strtotime($selectedYear.'-'.$selectedMonth.'-01')) }}" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                @for ($i = 1; $i <= date('t', strtotime($selectedYear.'-'.$selectedMonth.'-01')); $i++)
+                                    <th colspan="3" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $i }}</th>
+                                @endfor
                             </tr>
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r">Rencana</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-r">Realisasi</th>
                                 @for ($i = 1; $i <= date('t', strtotime($selectedYear.'-'.$selectedMonth.'-01')); $i++)
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $i }}</th>
+                                    <th class="px-2 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-r">Rencana</th>
+                                    <th class="px-2 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-r">Realisasi</th>
+                                    <th class="px-2 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-r">Keterangan</th>
                                 @endfor
                             </tr>
                         </thead>
@@ -160,16 +161,16 @@
                                         <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $plant->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $machine->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $plant->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center">{{ $machine->rencana ?? '-' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center">{{ $machine->realisasi ?? '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">{{ $machine->daya_pjbtl_silm ?? '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">{{ $machine->dmp_existing ?? '-' }}</td>
                                         @for ($i = 1; $i <= date('t', strtotime($selectedYear.'-'.$selectedMonth.'-01')); $i++)
                                             @php
                                                 $date = $selectedYear . '-' . $selectedMonth . '-' . sprintf('%02d', $i);
-                                                $dailyValue = $machine->rencanaDayaMampu->first()?->getDailyValue($date, 'rencana');
+                                                $data = $machine->rencanaDayaMampu->first()?->getDailyValue($date) ?? [];
                                             @endphp
-                                            <td class="px-6 py-4 whitespace-nowrap text-center border-r">{{ $dailyValue ?? '-' }}</td>
+                                            <td class="px-2 py-2 text-center border-r">{{ $data['rencana'] ?? '-' }}</td>
+                                            <td class="px-2 py-2 text-center border-r">{{ $data['realisasi'] ?? '-' }}</td>
+                                            <td class="px-2 py-2 text-center border-r">{{ $data['keterangan'] ?? '-' }}</td>
                                         @endfor
                                     </tr>
                                 @endforeach

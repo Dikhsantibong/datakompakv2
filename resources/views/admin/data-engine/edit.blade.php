@@ -5,9 +5,10 @@
     @include('components.sidebar')
 
     <div class="flex-1 overflow-x-hidden overflow-y-auto">
-        <header class="bg-white shadow-sm sticky top-0 z-10">
+        <header class="bg-white shadow-sm sticky top-0 z-20
+        ">
             <div class="flex justify-between items-center px-6 py-3">
-                <div class="flex items-center gap-x-3>
+                <div class="flex items-center gap-x-3">
                     <!-- Mobile Menu Toggle -->
                     <button id="mobile-menu-toggle"
                         class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -49,6 +50,7 @@
                 </div>
             </div>
         </header>
+
         
         <div class="py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

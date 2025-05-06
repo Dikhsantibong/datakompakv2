@@ -271,6 +271,7 @@ class MachineMonitorController extends Controller
                 'dmn' => 'required|numeric',
                 'dmp' => 'required|numeric',
                 'load_value' => 'required|numeric',
+                'installed_power' => 'required|numeric',
             ]);
 
             // Get PowerPlant untuk unit_source
@@ -283,7 +284,7 @@ class MachineMonitorController extends Controller
                 'serial_number' => $validated['serial_number'],
                 'power_plant_id' => $validated['power_plant_id'],
                 'status' => 'STOP',
-                'unit_source' => $powerPlant->unit_source // Tambahkan unit_source dari PowerPlant
+                'unit_source' => $powerPlant->unit_source
             ]);
 
             // Then create the machine operation
@@ -293,8 +294,9 @@ class MachineMonitorController extends Controller
                     'dmn' => $validated['dmn'],
                     'dmp' => $validated['dmp'],
                     'load_value' => $validated['load_value'],
+                    'installed_power' => $validated['installed_power'],
                     'recorded_at' => now(),
-                    'unit_source' => $powerPlant->unit_source // Tambahkan unit_source dari PowerPlant
+                    'unit_source' => $powerPlant->unit_source
                 ]);
             }
 
@@ -463,6 +465,7 @@ class MachineMonitorController extends Controller
                 'dmn' => 'required|numeric',
                 'dmp' => 'required|numeric',
                 'load_value' => 'required|numeric',
+                'installed_power' => 'required|numeric',
             ]);
 
             $machine = Machine::findOrFail($id);
@@ -482,6 +485,7 @@ class MachineMonitorController extends Controller
                     'dmn' => $validated['dmn'],
                     'dmp' => $validated['dmp'],
                     'load_value' => $validated['load_value'],
+                    'installed_power' => $validated['installed_power'],
                     'recorded_at' => now(),
                 ]
             );

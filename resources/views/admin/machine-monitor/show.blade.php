@@ -171,9 +171,8 @@
                                         {{ $machine->powerPlant->name ?? 'N/A' }}
                                     </a>
                                 </td>
-
                                 <td class="px-6 py-4 text-center whitespace-nowrap border-r border-gray-200">
-                                    {{ $machine->operations->first()->dmn ?? '0' }}
+                                    {{ $machine->operations->first()->installed_power ?? '0' }} MW
                                 </td>
                                 <td class="px-6 py-4 text-center whitespace-nowrap border-r border-gray-200">
                                     {{ $machine->operations->first()->dmn ?? '0' }}

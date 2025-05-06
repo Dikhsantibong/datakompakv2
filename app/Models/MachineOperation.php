@@ -20,6 +20,7 @@ class MachineOperation extends Model
         'dmn',
         'dmp',
         'load_value',
+        'installed_power',
         'hop',
         'recorded_at',
         'keterangan',
@@ -28,6 +29,7 @@ class MachineOperation extends Model
 
     protected $attributes = [
         'load_value' => null,
+        'installed_power' => 0,
         'keterangan' => null,
         'dmn' => 0,
         'dmp' => 0
@@ -132,6 +134,7 @@ class MachineOperation extends Model
                 'dmn' => $machineOperation->dmn,
                 'dmp' => $machineOperation->dmp,
                 'load_value' => $machineOperation->load_value,
+                'installed_power' => $machineOperation->installed_power,
                 'hop' => $machineOperation->hop,
                 'recorded_at' => $machineOperation->recorded_at,
                 'keterangan' => $machineOperation->keterangan,

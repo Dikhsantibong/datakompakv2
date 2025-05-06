@@ -6,7 +6,8 @@
 
     <div class="flex-1 overflow-x-hidden overflow-y-auto">
         <!-- Header -->
-        <header class="bg-white shadow-sm sticky top-0 z-10">
+        <header class="bg-white shadow-sm sticky top-0 z-20
+        ">
             <div class="flex justify-between items-center px-6 py-3">
                 <div class="flex items-center gap-x-3">
                     <!-- Mobile Menu Toggle -->
@@ -27,7 +28,7 @@
                         </svg>
                     </button>
 
-                    <h1 class="text-xl font-semibold text-gray-800">Dashboard</h1>
+                    <h1 class="text-xl font-semibold text-gray-800">Data Engine</h1>
                 </div>
 
                 <div class="relative">
@@ -50,6 +51,7 @@
                 </div>
             </div>
         </header>
+
         
 
         <!-- Main Content -->

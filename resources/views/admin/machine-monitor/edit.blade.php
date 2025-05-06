@@ -143,6 +143,20 @@
                                    required>
                         </div>
 
+                        <!-- Daya Terpasang -->
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="installed_power">
+                                Daya Terpasang (MW) <span class="text-red-500">*</span>
+                            </label>
+                            <input type="number" 
+                                   name="installed_power" 
+                                   id="installed_power" 
+                                   step="0.01"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                   value="{{ optional($item->operations()->latest('recorded_at')->first())->installed_power ?? 0 }}" 
+                                   required>
+                        </div>
+
                         <!-- Tombol Submit -->
                         <div class="flex items-center justify-end">
                             <a href="{{ route('admin.machine-monitor') }}" 

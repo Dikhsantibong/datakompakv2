@@ -105,10 +105,29 @@ class LaporanKitController extends Controller
 
     public function list(Request $request)
     {
-        $laporanKits = LaporanKit::with([
+        $query = LaporanKit::with([
             'jamOperasi', 'gangguan', 'bbm', 'kwh', 'pelumas', 'bahanKimia', 'bebanTertinggi', 'creator'
-        ])->orderBy('tanggal', 'desc')->paginate(10);
+        ]);
+
+        // Apply unit source filter
+        if ($request->has('unit_source') && $request->unit_source !== '') {
+            $query->where('unit_source', $request->unit_source);
+        }
+
+        // Apply date range filter
+        if ($request->has('start_date') && $request->start_date !== '') {
+            $query->whereDate('tanggal', '>=', $request->start_date);
+        }
+        if ($request->has('end_date') && $request->end_date !== '') {
+            $query->whereDate('tanggal', '<=', $request->end_date);
+        }
+
+        // Order by date descending
+        $query->orderBy('tanggal', 'desc');
+
+        $laporanKits = $query->paginate(10);
         $powerPlants = PowerPlant::orderBy('name')->get();
+
         return view('admin.laporan-kit.list', compact('laporanKits', 'powerPlants'));
     }
 

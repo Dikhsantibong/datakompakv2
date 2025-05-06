@@ -58,7 +58,7 @@
 
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto px-4 sm:px-6 ">
+            <div class="container mx-auto py-6 px-4 sm:px-6 ">
                 <!-- Welcome Card -->
                 <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
                     <div class="max-w-3xl">

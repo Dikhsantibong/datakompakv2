@@ -22,7 +22,27 @@ class PatrolCheckController extends Controller
 
     public function list()
     {
-        $patrols = PatrolCheck::with('creator')->orderByDesc('created_at')->paginate(10);
+        $query = PatrolCheck::with('creator');
+
+        // Filter by status
+        if (request()->has('status')) {
+            $query->where('status', request('status'));
+        }
+
+        // Filter by creator
+        if (request()->has('created_by')) {
+            $query->where('created_by', request('created_by'));
+        }
+
+        // Filter by date range
+        if (request()->has('start_date')) {
+            $query->whereDate('created_at', '>=', request('start_date'));
+        }
+        if (request()->has('end_date')) {
+            $query->whereDate('created_at', '<=', request('end_date'));
+        }
+
+        $patrols = $query->orderByDesc('created_at')->paginate(10);
         return view('admin.patrol-check.list', compact('patrols'));
     }
 

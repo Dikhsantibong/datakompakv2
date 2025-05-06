@@ -58,15 +58,7 @@
                         <a href="{{ route('admin.laporan-kit.list') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150">
                             <i class="fas fa-eye mr-2"></i> Lihat Data
                         </a>
-                        <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50 transition-colors duration-150">
-                            <i class="fas fa-file-excel mr-2"></i> Export Excel
-                        </button>
-                        <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-red-600 bg-white rounded-md hover:bg-red-50 transition-colors duration-150">
-                            <i class="fas fa-file-pdf mr-2"></i> Export PDF
-                        </button>
-                        <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-md hover:bg-gray-50 transition-colors duration-150">
-                            <i class="fas fa-print mr-2"></i> Print
-                        </button>
+                      
                     </div>
                 </div>
             </div>

@@ -10,6 +10,7 @@ use App\Models\LaporanKit;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LaporanKitExport;
+use Illuminate\Support\Facades\Auth;
 
 class LaporanKitController extends Controller
 {
@@ -48,7 +49,7 @@ class LaporanKitController extends Controller
         $laporanKit = LaporanKit::create([
             'tanggal' => $validated['tanggal'],
             'unit_source' => $validated['unit_source'] ?? null,
-            'created_by' => auth()->id(),
+            'created_by' => Auth::id(),
         ]);
 
         // Simpan BBM
@@ -134,7 +135,28 @@ class LaporanKitController extends Controller
 
     public function exportExcel(Request $request)
     {
-        return Excel::download(new LaporanKitExport, 'laporan_kit.xlsx');
+        try {
+            $id = $request->route('id');
+            
+            if ($id) {
+                // Single report export
+                $laporan = LaporanKit::find($id);
+                if (!$laporan) {
+                    return redirect()->back()
+                        ->with('error', 'Laporan tidak ditemukan');
+                }
+                $filename = 'laporan_kit_' . date('Y_m_d', strtotime($laporan->tanggal)) . '.xlsx';
+            } else {
+                // Export current date if no specific report
+                $filename = 'laporan_kit_' . date('Y_m_d') . '.xlsx';
+            }
+
+            return Excel::download(new LaporanKitExport($id), $filename);
+            
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Gagal mengekspor laporan: ' . $e->getMessage());
+        }
     }
 
     public function edit($id)

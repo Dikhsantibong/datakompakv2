@@ -8,8 +8,9 @@ use App\Models\Pemeriksaan5s5r;
 use App\Models\ProgramKerja5r;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use PDF;
-use Excel;
+use Barryvdh\DomPDF\Facade\PDF;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\FiveS5RExport;
 
 class FiveS5RController extends Controller
 {
@@ -97,15 +98,23 @@ class FiveS5RController extends Controller
 
     public function list()
     {
-        // Menggunakan subquery untuk mendapatkan ID terbaru dari setiap tanggal
-        $items = DB::table('tabel_pemeriksaan_5s5r as p1')
+        $query = DB::table('tabel_pemeriksaan_5s5r as p1')
             ->select('p1.id', 'p1.created_at', DB::raw('DATE(p1.created_at) as date'))
             ->whereIn('p1.id', function($query) {
                 $query->select(DB::raw('MAX(p2.id)'))
                     ->from('tabel_pemeriksaan_5s5r as p2')
                     ->groupBy(DB::raw('DATE(p2.created_at)'));
-            })
-            ->orderBy('p1.created_at', 'desc')
+            });
+
+        // Apply date filters if provided
+        if (request('start_date')) {
+            $query->whereDate('p1.created_at', '>=', request('start_date'));
+        }
+        if (request('end_date')) {
+            $query->whereDate('p1.created_at', '<=', request('end_date'));
+        }
+
+        $items = $query->orderBy('p1.created_at', 'desc')
             ->get()
             ->map(function($item) {
                 return [
@@ -226,6 +235,6 @@ class FiveS5RController extends Controller
         $mainRecord = Pemeriksaan5s5r::findOrFail($id);
         $date = date('Y-m-d', strtotime($mainRecord->created_at));
         
-        return Excel::download(new FiveS5RExport($date), '5s5r-report-' . $date . '.xlsx');
+        return Excel::download(new FiveS5RExport($id), '5s5r-report-' . $date . '.xlsx');
     }
 } 

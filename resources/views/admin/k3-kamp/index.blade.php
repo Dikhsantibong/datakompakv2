@@ -28,32 +28,22 @@
                     <h1 class="text-xl font-semibold text-gray-900">Input Data K3 KAMP dan Lingkungan</h1>
                 </div>
 
-                <div class="flex items-center gap-4">
-                    <!-- View Data Button -->
-                    <a href="{{ route('admin.k3-kamp.view') }}" 
-                       class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        <i class="fas fa-table mr-2"></i>
-                        Lihat Data
-                    </a>
-
-                    <!-- User Profile Dropdown -->
-                    <div class="relative">
-                        <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
-                            <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
-                            <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
-                            <i class="fas fa-caret-down ml-2 text-gray-600"></i>
-                        </button>
-                        <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                            <a href="{{ route('logout') }}" 
-                               class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                Logout
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                                @csrf
-                                <input type="hidden" name="redirect" value="{{ route('homepage') }}">
-                            </form>
-                        </div>
+                <div class="relative">
+                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
+                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                    </button>
+                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                        <a href="{{ route('logout') }}" 
+                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
+                        </form>
                     </div>
                 </div>
             </div>
@@ -66,7 +56,18 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-4 sm:px-6">
-              
+                <!-- Welcome Card -->
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
+                    <div class="max-w-3xl">
+                        <h2 class="text-2xl font-bold mb-2">Input Data K3 KAMP dan Lingkungan</h2>
+                        <p class="text-blue-100 mb-4">Kelola dan monitor implementasi K3 KAMP dan Lingkungan untuk meningkatkan keselamatan dan kesehatan kerja.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="{{ route('admin.k3-kamp.view') }}" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-600 bg-white rounded-md hover:bg-gray-50">
+                                <i class="fas fa-list mr-2"></i> Lihat Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Form Content -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">

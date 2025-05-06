@@ -118,11 +118,46 @@ class AbnormalReportController extends Controller
         }
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $reports = AbnormalReport::with(['affectedMachines', 'creator'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $query = AbnormalReport::with(['affectedMachines', 'creator']);
+
+        // Filter by date range
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        // Filter by status (Rusak/Abnormal/Normal)
+        if ($request->filled('status')) {
+            $status = $request->status;
+            $query->whereHas('affectedMachines', function($q) use ($status) {
+                if ($status === 'Rusak') {
+                    $q->where('kondisi_rusak', true);
+                } elseif ($status === 'Abnormal') {
+                    $q->where('kondisi_abnormal', true)
+                      ->where('kondisi_rusak', false);
+                } else {
+                    $q->where('kondisi_rusak', false)
+                      ->where('kondisi_abnormal', false);
+                }
+            });
+        }
+
+        // Search by machine name
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('affectedMachines', function($q) use ($search) {
+                $q->where('nama_mesin', 'like', '%' . $search . '%');
+            });
+        }
+
+        $reports = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        // Append query parameters to pagination links
+        $reports->appends($request->all());
 
         return view('admin.abnormal-report.list', compact('reports'));
     }
@@ -273,7 +308,9 @@ class AbnormalReportController extends Controller
     {
         try {
             $report = AbnormalReport::with([
-                'chronologies',
+                'chronologies' => function($query) {
+                    $query->orderBy('waktu', 'asc');
+                },
                 'affectedMachines',
                 'followUpActions',
                 'recommendations',
@@ -281,7 +318,10 @@ class AbnormalReportController extends Controller
                 'creator'
             ])->findOrFail($id);
 
-            return Excel::download(new AbnormalReportExport($report), 'laporan-abnormal-' . $id . '.xlsx');
+            return Excel::download(
+                new AbnormalReportExport($report), 
+                'laporan-abnormal-' . $report->created_at->format('Y-m-d') . '.xlsx'
+            );
         } catch (\Exception $e) {
             return redirect()
                 ->back()

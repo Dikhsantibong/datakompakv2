@@ -48,7 +48,7 @@
 
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto px-4 sm:px-6 py-6">
+            <div class="container mx-auto  px-4">
                 @if(session('success'))
                 <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
                     <span class="block sm:inline">{{ session('success') }}</span>
@@ -66,14 +66,7 @@
                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
                                     <i class="fas fa-plus mr-2"></i> Tambah Data
                                 </a>
-                                <a href="{{ route('admin.flm.exportExcel') }}" 
-                                   class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
-                                    <i class="fas fa-file-excel mr-2"></i> Export Excel
-                                </a>
-                                <a href="{{ route('admin.flm.exportPdf') }}" 
-                                   class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
-                                    <i class="fas fa-file-pdf mr-2"></i> Export PDF
-                                </a>
+                                
                             </div>
                         </div>
                     </div>

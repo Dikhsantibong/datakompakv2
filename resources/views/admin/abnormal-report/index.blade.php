@@ -90,15 +90,7 @@
                         <a href="{{ route('admin.abnormal-report.list') }}" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-600 bg-white rounded-md hover:bg-gray-50">
                             <i class="fas fa-list mr-2"></i> Lihat Daftar Laporan
                         </a>
-                        <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
-                            <i class="fas fa-file-excel mr-2"></i> Export Excel
-                                    </button>
-                        <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-white rounded-md hover:bg-red-50">
-                            <i class="fas fa-file-pdf mr-2"></i> Export PDF
-                                    </button>
-                        <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
-                            <i class="fas fa-print mr-2"></i> Print
-                                    </button>
+                     
                     </div>
                             </div>
                         </div>

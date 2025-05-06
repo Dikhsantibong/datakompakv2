@@ -1,5 +1,83 @@
 @extends('layouts.app')
 
+@push('styles')
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .welcome-card {
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+            font-family: 'Poppins', sans-serif;
+            min-height: 200px;
+        }
+
+        .typing-animation {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid white;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+            margin: 0;
+            width: 0;
+        }
+
+        @media (max-width: 768px) {
+            .typing-animation {
+                white-space: normal;
+                border-right: none;
+                width: 100%;
+                font-size: 1.5rem;
+                line-height: 1.2;
+                animation: fadeIn 1s ease-in forwards;
+            }
+            
+            .welcome-card {
+                background-position: center;
+                padding: 1.5rem;
+                min-height: 180px;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+            animation-delay: 1s;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: white }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.2),
+                rgba(0, 0, 0, 0.4)
+            );
+            border-radius: 0.5rem;
+            z-index: 1;
+        }
+
+        .welcome-card > div {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+@endpush
+
 @section('content')
 <div class="flex h-screen bg-gray-100">
     @include('components.sidebar')
@@ -27,18 +105,32 @@
                         </svg>
                     </button>
 
-                    <h1 class="text-xl font-semibold text-gray-900">5S5R</h1>
+                    <h1 class="text-xl font-semibold text-gray-900">Form Pemeriksaan 5S5R</h1>
                 </div>
 
-                <div class="flex items-center space-x-4">
-                    <a href="{{ route('admin.5s5r.list') }}" 
-                       class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
-                        <i class="fas fa-list mr-2"></i>
-                        Lihat Daftar
-                    </a>
+                <div class="relative">
+                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
+                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                    </button>
+                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                        <a href="{{ route('logout') }}" 
+                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
+                        </form>
+                    </div>
                 </div>
             </div>
         </header>
+
+        
+
 
         <div class="flex items-center pt-2">
             <x-admin-breadcrumb :breadcrumbs="[['name' => '5S5R', 'url' => null]]" />
@@ -47,6 +139,19 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-4 sm:px-6">
+                <!-- Welcome Card -->
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
+                    <div class="max-w-3xl">
+                        <h2 class="text-2xl font-bold mb-2">Form Pemeriksaan 5S5R</h2>
+                        <p class="text-blue-100 mb-4">Kelola dan monitor pemeriksaan 5S5R untuk memastikan kualitas dan keandalan sistem.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="{{ route('admin.5s5r.list') }}" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-600 bg-white rounded-md hover:bg-gray-50">
+                                <i class="fas fa-list mr-2"></i> Lihat Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <form action="{{ route('admin.5s5r.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
@@ -235,5 +340,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+const backgroundImages = [
+    "{{ asset('images/welcome.webp') }}",
+    "{{ asset('images/welcome2.jpeg') }}",
+    "{{ asset('images/welcome3.jpg') }}",
+    // Tambahkan path gambar lainnya sesuai kebutuhan
+];
+
+let currentImageIndex = 0;
+const welcomeCard = document.querySelector('.welcome-card');
+
+function changeBackground() {
+    welcomeCard.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
+    currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+}
+
+// Set gambar awal
+changeBackground();
+
+// Ganti gambar setiap 5 detik
+setInterval(changeBackground, 5000);
 </script>
 @endsection 

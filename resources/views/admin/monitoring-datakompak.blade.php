@@ -3,12 +3,14 @@
 @push('styles')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         .main-content {
             overflow-y: auto;
             height: calc(100vh - 64px);
         }
         .welcome-card {
+            background-image: url('{{ asset('images/welcome.webp') }}');
             background-size: cover;
             background-position: center;
             transition: background-image 1s ease-in-out;
@@ -93,314 +95,404 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
+        
+        .progress-ring {
+            transition: all 0.3s ease;
+        }
+        
+        .activity-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e5e7eb;
+        }
+        
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: -23px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: currentColor;
+        }
     </style>
 @endpush
 
 @section('content')
-<div class="flex h-screen bg-gray-50 overflow-auto">
+<div class="flex h-screen bg-gray-100">
     @include('components.sidebar')
     
-    <div id="main-content" class="flex-1 main-content">
+    <div id="main-content" class="flex-1 flex flex-col overflow-hidden">
         <!-- Header -->
-        <header class="bg-white shadow-sm sticky top-0 z-20">
-            <div class="flex justify-between items-center px-6 py-3">
-                <div class="flex items-center gap-x-3">
+        <header class="bg-white shadow-sm">
+            <div class="flex items-center justify-between h-16 px-6 sm:px-8">
+                <div class="flex items-center">
+                    <!-- Mobile Menu Toggle -->
                     <button id="mobile-menu-toggle"
-                        class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                        aria-controls="mobile-menu" aria-expanded="false">
                         <span class="sr-only">Open main menu</span>
                         <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                         </svg>
                     </button>
-                    <h1 class="text-xl font-semibold text-gray-800">Monitoring Unit Pembangkit</h1>
+
+                    <button id="desktop-menu-toggle"
+                        class="hidden md:block relative items-center justify-center rounded-md text-gray-400 hover:bg-[#009BB9] p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </button>
+
+                    <h1 class="text-xl font-semibold text-gray-800 ml-2">Monitoring Data Input</h1>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex items-center gap-2">
+                        <span class="text-sm text-gray-500">Last Sync:</span>
+                        <span class="text-sm font-medium text-gray-700">{{ now()->format('H:i:s') }}</span>
+                    </div>
+                    
+                    <div class="relative">
+                        <button id="dropdownToggle" class="flex items-center gap-2 hover:bg-gray-50 px-3 py-2 rounded-lg" onclick="toggleDropdown()">
+                            <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-8 h-8 rounded-full">
+                            <div class="hidden md:block text-left">
+                                <div class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</div>
+                                <div class="text-xs text-gray-500">Administrator</div>
+                            </div>
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        
+                        <div id="dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 py-1">
+                            <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                @csrf
+                                <input type="hidden" name="redirect" value="{{ route('homepage') }}">
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
 
         <div class="flex items-center pt-2">
-            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Monitoring Unit Pembangkit', 'url' => null]]" />
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Monitoring Data Input', 'url' => null]]" />
         </div>
 
-        <!-- Main Content -->
-        <div class="px-6">
-            <!-- Overview Card -->
-            <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
-                <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
-                <div class="relative z-10">
-                    <!-- Text Content -->
-                    <div class="space-y-2 md:space-y-4">
-                        <div style="overflow: hidden;">
-                            <h2 class="text-2xl md:text-3xl font-bold tracking-tight typing-animation">
-                                Status Unit Pembangkit
-                            </h2>
-                        </div>
-                        <p class="text-sm md:text-lg font-medium fade-in">
-                            Monitoring status input data unit pembangkit
-                        </p>
-                        <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 fade-in">
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <div class="text-center">
-                                    <div class="text-2xl font-bold">{{ $stats['total_units'] }}</div>
-                                    <div class="text-sm">Total Unit</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-2xl font-bold">{{ $stats['completed'] }}</div>
-                                    <div class="text-sm">Sudah Input</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-2xl font-bold">{{ $stats['pending'] }}</div>
-                                    <div class="text-sm">Belum Input</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-2xl font-bold">{{ $stats['overdue'] }}</div>
-                                    <div class="text-sm">Terlambat</div>
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto  px-4">
+                <!-- Welcome Card -->
+                <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-800 opacity-75 rounded-lg"></div>
+                    <div class="relative z-10">
+                        <!-- Text Content -->
+                        <div class="space-y-2 md:space-y-4">
+                            <div style="overflow: hidden;">
+                                <h2 class="text-2xl md:text-3xl font-bold tracking-tight typing-animation">
+                                    Monitor Status Input Data
+                                </h2>
+                            </div>
+                            <p class="text-sm md:text-lg font-medium fade-in">
+                                PLN NUSANTARA POWER UNIT PEMBANGKITAN KENDARI
+                            </p>
+                            <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 fade-in">
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold">{{ $stats['total_units'] }}</div>
+                                        <div class="text-sm">Total Unit</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold">{{ $stats['completed'] }}</div>
+                                        <div class="text-sm">Sudah Input</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold">{{ $stats['pending'] }}</div>
+                                        <div class="text-sm">Belum Input</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold">{{ $stats['overdue'] }}</div>
+                                        <div class="text-sm">Terlambat</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Logo - Hidden on mobile -->
-                    <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
-                </div>
-            </div>
-
-            <!-- Unit Type Distribution -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <!-- Chart -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-lg font-medium mb-4">Distribusi Jenis Unit</h3>
-                    <div style="height: 300px;">
-                        <canvas id="unitTypeChart"></canvas>
+                        
+                        <!-- Logo - Hidden on mobile -->
+                        <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
                     </div>
                 </div>
 
-                <!-- System Stats -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-lg font-medium mb-4">Statistik Sistem</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-blue-50 rounded-lg p-4">
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">System Uptime</p>
-                                <p class="text-2xl font-semibold text-blue-600">{{ $systemStats['uptime'] }}</p>
-                            </div>
+                <!-- Content Sections -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Input Status Summary -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-medium text-gray-800">
+                                <i class="fas fa-clipboard-check mr-2 text-blue-600"></i>
+                                Status Input Data
+                            </h3>
+                            <span class="text-sm text-gray-500">Hari Ini</span>
                         </div>
-                        <div class="bg-green-50 rounded-lg p-4">
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Response Time</p>
-                                <p class="text-2xl font-semibold text-green-600">{{ $systemStats['avg_response'] }}</p>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Daily Summary</p>
+                                    <p class="text-xs text-gray-500">Input data harian</p>
+                                </div>
+                                <span class="px-3 py-1 text-xs font-medium rounded-full {{ $stats['completed'] > 0 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                    {{ $stats['completed'] > 0 ? 'Completed' : 'Pending' }}
+                                </span>
                             </div>
-                        </div>
-                        <div class="bg-purple-50 rounded-lg p-4">
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Total Input Hari Ini</p>
-                                <p class="text-2xl font-semibold text-purple-600">{{ $systemStats['total_inputs_today'] }}</p>
+                            <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Machine Status</p>
+                                    <p class="text-xs text-gray-500">Status mesin terkini</p>
+                                </div>
+                                <span class="px-3 py-1 text-xs font-medium rounded-full {{ $stats['completed'] > 0 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                    {{ $stats['completed'] > 0 ? 'Updated' : 'Pending' }}
+                                </span>
                             </div>
-                        </div>
-                        <div class="bg-orange-50 rounded-lg p-4">
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Active Users</p>
-                                <p class="text-2xl font-semibold text-orange-600">{{ $systemStats['active_users'] }}</p>
+                            <div class="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Engine Data</p>
+                                    <p class="text-xs text-gray-500">Data performa mesin</p>
+                                </div>
+                                <span class="px-3 py-1 text-xs font-medium rounded-full {{ $stats['completed'] > 0 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                    {{ $stats['completed'] > 0 ? 'Recorded' : 'Pending' }}
+                                </span>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Unit Status Sections -->
-            <div class="space-y-6">
-                <!-- Pending Units -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium">Unit Yang Belum Input Data</h3>
-                        <span class="text-sm text-gray-500">{{ count($pendingUnits) }} Unit</span>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        @forelse($pendingUnits as $unit)
-                            <div class="bg-yellow-50 rounded-lg p-4 unit-card">
-                                <div class="flex items-start justify-between">
-                                    <div>
-                                        <h4 class="font-medium text-gray-800">{{ $unit['name'] }}</h4>
-                                        <p class="text-sm text-gray-600 mt-1">
-                                            <i class="fas fa-clock mr-1"></i>
-                                            Last Update: {{ $unit['last_update']->diffForHumans() }}
-                                        </p>
-                                        <div class="mt-3 space-y-1">
-                                            <p class="text-sm font-medium text-gray-700">Data yang belum diinput:</p>
-                                            <div class="flex flex-wrap gap-2">
-                                                <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-yellow-100 text-yellow-700">
-                                                    <i class="fas fa-chart-line mr-1"></i> Data Operasi
-                                                </span>
-                                                <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-yellow-100 text-yellow-700">
-                                                    <i class="fas fa-file-alt mr-1"></i> Laporan Harian
-                                                </span>
+                    <!-- Recent Activities -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-medium text-gray-800">
+                                <i class="fas fa-history mr-2 text-blue-600"></i>
+                                Aktivitas Terkini
+                            </h3>
+                            <span class="text-sm text-gray-500">24 Jam Terakhir</span>
+                        </div>
+                        <div class="relative pl-8 space-y-4 activity-timeline">
+                            @foreach($recentActivities->take(5) as $activity)
+                                <div class="relative activity-item pl-4 {{ $activity['type'] === 'Daily Summary' ? 'text-blue-600' : ($activity['type'] === 'Machine Status' ? 'text-green-600' : 'text-purple-600') }}">
+                                    <div class="bg-white rounded-lg border p-3">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-900">{{ $activity['unit'] }}</p>
+                                                <p class="text-sm text-gray-500">{{ $activity['action'] }}</p>
                                             </div>
-                                            <div class="text-xs text-gray-500 mt-2">
-                                                <p><i class="fas fa-exclamation-circle mr-1"></i> Data Operasi: KW, KVAR, Cos Phi</p>
-                                                <p><i class="fas fa-exclamation-circle mr-1"></i> Laporan: Produksi, Jam Operasi, BBM</p>
+                                            <span class="text-xs text-gray-400">{{ Carbon\Carbon::parse($activity['time'])->diffForHumans() }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unit Status Sections -->
+                <div class="space-y-6">
+                    <!-- Overdue Units -->
+                    @if($overdueUnits->isNotEmpty())
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-medium text-red-600">Overdue Units</h3>
+                            <span class="text-sm text-gray-500">{{ $overdueUnits->count() }} Units</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            @foreach($overdueUnits as $unit)
+                                <div class="bg-red-50 rounded-lg p-4 unit-card">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <h4 class="font-medium text-gray-900">{{ $unit['name'] }}</h4>
+                                            <p class="text-sm text-gray-600 mt-1">
+                                                <i class="fas fa-clock mr-1"></i>
+                                                Last Update: {{ $unit['last_update'] ? Carbon\Carbon::parse($unit['last_update'])->diffForHumans() : 'Never' }}
+                                            </p>
+                                            <div class="mt-3">
+                                                <div class="flex flex-wrap gap-2">
+                                                    @if(!$unit['daily_summary'])
+                                                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-red-100 text-red-700">
+                                                            <i class="fas fa-exclamation-circle mr-1"></i> Missing Daily Summary
+                                                        </span>
+                                                    @endif
+                                                    @if(!$unit['machine_status'])
+                                                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-red-100 text-red-700">
+                                                            <i class="fas fa-exclamation-circle mr-1"></i> Missing Machine Status
+                                                        </span>
+                                                    @endif
+                                                    @if(!$unit['engine_data'])
+                                                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-red-100 text-red-700">
+                                                            <i class="fas fa-exclamation-circle mr-1"></i> Missing Engine Data
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ml-4 flex flex-col items-end">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                Overdue
+                                            </span>
+                                            <div class="mt-2 text-sm text-gray-500">
+                                                {{ $unit['completed_inputs'] }}/3 Complete
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                        Pending
-                                    </span>
                                 </div>
-                            </div>
-                        @empty
-                            <div class="col-span-3 text-center py-8">
-                                <i class="fas fa-check-circle text-green-500 text-4xl mb-3"></i>
-                                <p class="text-gray-600">Semua unit sudah melakukan input data hari ini!</p>
-                            </div>
-                        @endforelse
+                            @endforeach
+                        </div>
                     </div>
-                </div>
+                    @endif
 
-                <!-- Overdue Units -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium">Unit Yang Terlambat Input</h3>
-                        <span class="text-sm text-gray-500">{{ count($overdueUnits) }} Unit</span>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        @forelse($overdueUnits as $unit)
-                            <div class="bg-red-50 rounded-lg p-4 unit-card">
-                                <div class="flex items-start justify-between">
-                                    <div>
-                                        <h4 class="font-medium text-gray-800">{{ $unit['name'] }}</h4>
-                                        <p class="text-sm text-gray-600 mt-1">
-                                            <i class="fas fa-clock mr-1"></i>
-                                            Last Update: {{ $unit['last_update']->diffForHumans() }}
-                                        </p>
-                                        <div class="mt-3 space-y-1">
-                                            <p class="text-sm font-medium text-gray-700">Data yang belum diinput:</p>
-                                            <div class="flex flex-wrap gap-2">
-                                                <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-red-100 text-red-700">
-                                                    <i class="fas fa-chart-line mr-1"></i> Data Operasi
-                                                </span>
-                                                <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-red-100 text-red-700">
-                                                    <i class="fas fa-file-alt mr-1"></i> Laporan Harian
-                                                </span>
+                    <!-- Pending Units -->
+                    @if($pendingUnits->isNotEmpty())
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-medium text-yellow-600">Pending Units</h3>
+                            <span class="text-sm text-gray-500">{{ $pendingUnits->count() }} Units</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            @foreach($pendingUnits as $unit)
+                                <div class="bg-yellow-50 rounded-lg p-4 unit-card">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <h4 class="font-medium text-gray-900">{{ $unit['name'] }}</h4>
+                                            <p class="text-sm text-gray-600 mt-1">
+                                                <i class="fas fa-clock mr-1"></i>
+                                                Last Update: {{ $unit['last_update'] ? Carbon\Carbon::parse($unit['last_update'])->diffForHumans() : 'Never' }}
+                                            </p>
+                                            <div class="mt-3">
+                                                <div class="flex flex-wrap gap-2">
+                                                    @if(!$unit['daily_summary'])
+                                                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-yellow-100 text-yellow-700">
+                                                            <i class="fas fa-exclamation-circle mr-1"></i> Missing Daily Summary
+                                                        </span>
+                                                    @endif
+                                                    @if(!$unit['machine_status'])
+                                                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-yellow-100 text-yellow-700">
+                                                            <i class="fas fa-exclamation-circle mr-1"></i> Missing Machine Status
+                                                        </span>
+                                                    @endif
+                                                    @if(!$unit['engine_data'])
+                                                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-yellow-100 text-yellow-700">
+                                                            <i class="fas fa-exclamation-circle mr-1"></i> Missing Engine Data
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             </div>
-                                            <div class="text-xs text-gray-500 mt-2">
-                                                <p><i class="fas fa-exclamation-circle mr-1"></i> Data Operasi: KW, KVAR, Cos Phi</p>
-                                                <p><i class="fas fa-exclamation-circle mr-1"></i> Laporan: Produksi, Jam Operasi, BBM</p>
+                                        </div>
+                                        <div class="ml-4 flex flex-col items-end">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                Pending
+                                            </span>
+                                            <div class="mt-2 text-sm text-gray-500">
+                                                {{ $unit['completed_inputs'] }}/3 Complete
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                        Terlambat
-                                    </span>
                                 </div>
-                            </div>
-                        @empty
-                            <div class="col-span-3 text-center py-8">
-                                <i class="fas fa-check-circle text-green-500 text-4xl mb-3"></i>
-                                <p class="text-gray-600">Tidak ada unit yang terlambat input data!</p>
-                            </div>
-                        @endforelse
+                            @endforeach
+                        </div>
                     </div>
-                </div>
+                    @endif
 
-                <!-- Completed Units -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium">Unit Yang Sudah Input Data</h3>
-                        <span class="text-sm text-gray-500">{{ count($completedUnits) }} Unit</span>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        @forelse($completedUnits as $unit)
-                            <div class="bg-green-50 rounded-lg p-4 unit-card">
-                                <div class="flex items-start justify-between">
-                                    <div>
-                                        <h4 class="font-medium text-gray-800">{{ $unit['name'] }}</h4>
-                                        <p class="text-sm text-gray-600 mt-1">
-                                            <i class="fas fa-clock mr-1"></i>
-                                            Updated: {{ $unit['last_update']->diffForHumans() }}
-                                        </p>
-                                        <div class="mt-3">
-                                            <div class="flex flex-wrap gap-2">
-                                                <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-green-100 text-green-700">
-                                                    <i class="fas fa-check-circle mr-1"></i> Semua Data Lengkap
-                                                </span>
+                    <!-- Completed Units -->
+                    @if($completedUnits->isNotEmpty())
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-medium text-green-600">Completed Units</h3>
+                            <span class="text-sm text-gray-500">{{ $completedUnits->count() }} Units</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            @foreach($completedUnits as $unit)
+                                <div class="bg-green-50 rounded-lg p-4 unit-card">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <h4 class="font-medium text-gray-900">{{ $unit['name'] }}</h4>
+                                            <p class="text-sm text-gray-600 mt-1">
+                                                <i class="fas fa-clock mr-1"></i>
+                                                Updated: {{ Carbon\Carbon::parse($unit['last_update'])->diffForHumans() }}
+                                            </p>
+                                            <div class="mt-3">
+                                                <div class="flex flex-wrap gap-2">
+                                                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-green-100 text-green-700">
+                                                        <i class="fas fa-check-circle mr-1"></i> All Data Complete
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ml-4 flex flex-col items-end">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                Completed
+                                            </span>
+                                            <div class="mt-2 text-sm text-gray-500">
+                                                3/3 Complete
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        Completed
-                                    </span>
                                 </div>
-                            </div>
-                        @empty
-                            <div class="col-span-3 text-center py-8">
-                                <i class="fas fa-exclamation-circle text-yellow-500 text-4xl mb-3"></i>
-                                <p class="text-gray-600">Belum ada unit yang melakukan input data hari ini</p>
-                            </div>
-                        @endforelse
+                            @endforeach
+                        </div>
                     </div>
+                    @endif
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </div>
 
 @push('scripts')
 <script>
-    // Unit Type Distribution Chart
-    const unitTypeCtx = document.getElementById('unitTypeChart').getContext('2d');
-    new Chart(unitTypeCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['PLTD', 'PLTM', 'PLTU', 'PLTMG', 'Other'],
-            datasets: [{
-                data: [
-                    {{ $unitTypes['PLTD'] }},
-                    {{ $unitTypes['PLTM'] }},
-                    {{ $unitTypes['PLTU'] }},
-                    {{ $unitTypes['PLTMG'] }},
-                    {{ $unitTypes['Other'] }}
-                ],
-                backgroundColor: [
-                    'rgba(59, 130, 246, 0.8)',
-                    'rgba(16, 185, 129, 0.8)',
-                    'rgba(245, 158, 11, 0.8)',
-                    'rgba(139, 92, 246, 0.8)',
-                    'rgba(107, 114, 128, 0.8)'
-                ],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
-            },
-            cutout: '70%'
-        }
-    });
+const backgroundImages = [
+    "{{ asset('images/welcome.webp') }}",
+    "{{ asset('images/welcome2.jpeg') }}",
+    "{{ asset('images/welcome3.jpg') }}"
+];
 
-    const backgroundImages = [
-        "{{ asset('images/welcome.webp') }}",
-        "{{ asset('images/welcome2.jpeg') }}",
-        "{{ asset('images/welcome3.jpg') }}"
-    ];
+let currentImageIndex = 0;
+const welcomeCard = document.querySelector('.welcome-card');
 
-    let currentImageIndex = 0;
-    const welcomeCard = document.querySelector('.welcome-card');
+function changeBackground() {
+    welcomeCard.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
+    currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+}
 
-    function changeBackground() {
-        welcomeCard.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
-        currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+// Set gambar awal
+changeBackground();
+
+// Ganti gambar setiap 5 detik
+setInterval(changeBackground, 5000);
+
+// Toggle dropdown
+function toggleDropdown() {
+    const dropdown = document.getElementById('dropdown');
+    dropdown.classList.toggle('hidden');
+}
+
+// Close dropdown when clicking outside
+window.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('dropdown');
+    const dropdownToggle = document.getElementById('dropdownToggle');
+    
+    if (!dropdown.contains(e.target) && !dropdownToggle.contains(e.target)) {
+        dropdown.classList.add('hidden');
     }
-
-    // Set initial background
-    changeBackground();
-
-    // Change background every 5 seconds
-    setInterval(changeBackground, 5000);
+});
 </script>
 @endpush
 
-<script src="{{ asset('js/toggle.js') }}"></script>
 @endsection 

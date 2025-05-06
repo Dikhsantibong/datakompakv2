@@ -71,6 +71,16 @@
                             <a href="{{ route('admin.patrol-check.index') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
                                 <i class="fas fa-plus mr-2"></i> Tambah Patrol Check Baru
                             </a>
+                            @if(isset($patrol))
+                            <a href="{{ route('admin.patrol-check.export-excel', $patrol->id) }}" 
+                               class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                                <i class="fas fa-file-excel mr-2"></i> Export Excel
+                            </a>
+                            <a href="{{ route('admin.patrol-check.export-pdf', $patrol->id) }}" 
+                               class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                                <i class="fas fa-file-pdf mr-2"></i> Export PDF
+                            </a>
+                            @endif
                         </div>
                     </div>
                 </div>

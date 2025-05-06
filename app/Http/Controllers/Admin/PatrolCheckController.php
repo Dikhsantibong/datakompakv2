@@ -142,25 +142,7 @@ class PatrolCheckController extends Controller
 
     public function exportExcel($id)
     {
-        $patrol = PatrolCheck::with('creator')->findOrFail($id);
-        // Jika belum ada export class, buatkan array sederhana
-        $data = [
-            ['Sistem', 'Kondisi', 'Keterangan'],
-        ];
-        foreach ($patrol->condition_systems as $row) {
-            $data[] = [$row['system'], $row['condition'], $row['notes'] ?? ''];
-        }
-        $filename = 'patrol-check-' . $patrol->id . '.csv';
-        $handle = fopen('php://temp', 'r+');
-        foreach ($data as $line) {
-            fputcsv($handle, $line);
-        }
-        rewind($handle);
-        $csv = stream_get_contents($handle);
-        fclose($handle);
-        return response($csv)
-            ->header('Content-Type', 'text/csv')
-            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        return (new \App\Exports\PatrolCheckExport($id))->download('patrol-check-' . $id . '.xlsx');
     }
 
     public function exportPdf($id)

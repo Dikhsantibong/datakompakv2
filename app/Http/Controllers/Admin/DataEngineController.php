@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\PowerPlant;
+use App\Models\EngineData;
+use App\Exports\DataEngineExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
+use PDF;
 use App\Models\Machine;
 use App\Models\MachineLog;
-use App\Exports\DataEngineExport;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use PDF;
-use Maatwebsite\Excel\Facades\Excel;
 
 class DataEngineController extends Controller
 {
@@ -148,27 +149,13 @@ class DataEngineController extends Controller
 
     public function exportExcel(Request $request)
     {
-        $date = $request->date ?? now()->format('Y-m-d');
+        $date = $request->get('date', now()->format('Y-m-d'));
+        $powerPlantId = $request->get('power_plant_id');
         
-        $powerPlants = PowerPlant::with(['machines' => function ($query) {
-            $query->orderBy('name');
-        }])->get();
-
-        // Load the latest logs for each machine
-        $powerPlants->each(function ($powerPlant) use ($date) {
-            $powerPlant->machines->each(function ($machine) use ($date) {
-                $latestLog = $machine->getLatestLog($date);
-                $machine->kw = $latestLog?->kw;
-                $machine->kvar = $latestLog?->kvar;
-                $machine->cos_phi = $latestLog?->cos_phi;
-                $machine->status = $latestLog?->status;
-                $machine->keterangan = $latestLog?->keterangan;
-            });
-        });
-
-        $fileName = 'data_engine_' . Carbon::parse($date)->format('Y_m_d') . '.xlsx';
-        
-        return Excel::download(new DataEngineExport($powerPlants, $date), $fileName);
+        return Excel::download(
+            new DataEngineExport($date, $powerPlantId),
+            'data-engine-report-' . $date . '.xlsx'
+        );
     }
 
     public function exportPdf(Request $request)

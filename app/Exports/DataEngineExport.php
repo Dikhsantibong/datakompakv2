@@ -2,81 +2,257 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use App\Models\PowerPlant;
+use App\Models\Machine;
+use App\Models\MachineLog;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Carbon\Carbon;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 
-class DataEngineExport implements FromCollection, WithHeadings, WithMapping, WithTitle, ShouldAutoSize
+class DataEngineExport implements FromView, WithTitle, WithEvents, WithStyles, WithDrawings
 {
-    protected $powerPlants;
-    protected $date;
+    use Exportable;
 
-    public function __construct($powerPlants, $date)
+    protected $date;
+    protected $powerPlantId;
+    protected $powerPlants;
+
+    public function __construct($date, $powerPlantId = null)
     {
-        $this->powerPlants = $powerPlants;
         $this->date = $date;
+        $this->powerPlantId = $powerPlantId;
+        $this->powerPlants = $this->getPowerPlants();
     }
 
-    public function collection()
+    protected function getPowerPlants()
     {
-        $data = collect();
-        
-        foreach ($this->powerPlants as $powerPlant) {
-            foreach ($powerPlant->machines as $index => $machine) {
-                $latestLog = $machine->getLatestLog($this->date);
-                
-                $data->push([
-                    'power_plant' => $powerPlant->name,
-                    'no' => $index + 1,
-                    'machine' => $machine->name,
-                    'time' => $latestLog ? Carbon::parse($latestLog->time)->format('H:i') : '-',
-                    'kw' => $machine->kw ?? '-',
-                    'kvar' => $machine->kvar ?? '-',
-                    'cos_phi' => $machine->cos_phi ?? '-',
-                    'status' => $machine->status ?? '-',
-                    'keterangan' => $machine->keterangan ?? '-',
-                ]);
-            }
+        // Build query for power plants
+        $query = PowerPlant::with(['machines' => function ($query) {
+            $query->orderBy('name');
+        }]);
+
+        // Apply power plant filter if specified
+        if ($this->powerPlantId) {
+            $query->where('id', $this->powerPlantId);
         }
 
-        return $data;
+        $powerPlants = $query->get();
+
+        // Load the latest logs for each power plant and machine
+        $powerPlants->each(function ($powerPlant) {
+            // Get power plant logs
+            $latestLog = DB::table('power_plant_logs')
+                ->where('power_plant_id', $powerPlant->id)
+                ->where('date', $this->date)
+                ->orderBy('time', 'desc')
+                ->first();
+
+            $powerPlant->hop = $latestLog?->hop;
+            $powerPlant->tma = $latestLog?->tma;
+            $powerPlant->inflow = $latestLog?->inflow;
+
+            // Get machine logs
+            $powerPlant->machines->each(function ($machine) {
+                $latestLog = $machine->getLatestLog($this->date);
+                $machine->kw = $latestLog?->kw;
+                $machine->kvar = $latestLog?->kvar;
+                $machine->cos_phi = $latestLog?->cos_phi;
+                $machine->status = $latestLog?->status;
+                $machine->keterangan = $latestLog?->keterangan;
+                $machine->log_time = $latestLog?->time;
+            });
+        });
+
+        return $powerPlants;
     }
 
-    public function headings(): array
+    public function view(): View
     {
-        return [
-            'Unit',
-            'No',
-            'Mesin',
-            'Jam',
-            'Beban (kW)',
-            'kVAR',
-            'Cos φ',
-            'Status',
-            'Keterangan'
-        ];
+        return view('admin.data-engine.excel', [
+            'date' => $this->date,
+            'powerPlants' => $this->powerPlants
+        ]);
     }
 
-    public function map($row): array
+    public function drawings()
     {
-        return [
-            $row['power_plant'],
-            $row['no'],
-            $row['machine'],
-            $row['time'],
-            $row['kw'],
-            $row['kvar'],
-            $row['cos_phi'],
-            $row['status'],
-            $row['keterangan']
-        ];
+        // PLN Logo
+        $plnDrawing = new Drawing();
+        $plnDrawing->setName('PLN Logo');
+        $plnDrawing->setDescription('PLN Logo');
+        $plnDrawing->setPath(public_path('logo/navlog1.png'));
+        $plnDrawing->setHeight(60);
+        $plnDrawing->setCoordinates('B2');
+        $plnDrawing->setOffsetX(30);
+        $plnDrawing->setOffsetY(5);
+
+        // Engine Logo
+        $engineDrawing = new Drawing();
+        $engineDrawing->setName('Engine Logo');
+        $engineDrawing->setDescription('Engine Logo');
+        $engineDrawing->setPath(public_path('logo/k3_logo.png'));
+        $engineDrawing->setHeight(60);
+        $engineDrawing->setCoordinates('E2');
+        $engineDrawing->setOffsetX(30);
+        $engineDrawing->setOffsetY(5);
+
+        return [$plnDrawing, $engineDrawing];
     }
 
     public function title(): string
     {
-        return 'Data Engine - ' . Carbon::parse($this->date)->format('d F Y');
+        return 'Data Engine ' . date('d/m/Y', strtotime($this->date));
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        // Set default styles
+        $sheet->getDefaultRowDimension()->setRowHeight(15);
+        $sheet->getDefaultColumnDimension()->setWidth(12);
+        
+        // Set specific column widths
+        $sheet->getColumnDimension('A')->setWidth(5);    // No
+        $sheet->getColumnDimension('B')->setWidth(20);   // Unit
+        $sheet->getColumnDimension('C')->setWidth(15);   // Status
+        $sheet->getColumnDimension('D')->setWidth(15);   // KW
+        $sheet->getColumnDimension('E')->setWidth(15);   // KVAR
+        $sheet->getColumnDimension('F')->setWidth(15);   // Cos Phi
+        $sheet->getColumnDimension('G')->setWidth(30);   // Keterangan
+
+        // Set row height for logo row
+        $sheet->getRowDimension(2)->setRowHeight(50);
+
+        // Default style for all cells
+        $sheet->getParent()->getDefaultStyle()->applyFromArray([
+            'font' => [
+                'name' => 'Calibri',
+                'size' => 11
+            ],
+            'alignment' => [
+                'vertical' => Alignment::VERTICAL_CENTER
+            ]
+        ]);
+
+        // Style array for section headers
+        $sectionHeaderStyle = [
+            'font' => [
+                'bold' => true,
+                'size' => 12,
+                'color' => ['rgb' => '000000']
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'E2E8F0']
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_LEFT,
+                'vertical' => Alignment::VERTICAL_CENTER
+            ],
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM,
+                    'color' => ['rgb' => '000000']
+                ]
+            ]
+        ];
+
+        // Style array for table headers
+        $tableHeaderStyle = [
+            'font' => [
+                'bold' => true,
+                'size' => 11
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'F8FAFC']
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+                'wrapText' => true
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000']
+                ]
+            ]
+        ];
+
+        // Apply styles to section headers
+        $sheet->getStyle('A4:G4')->applyFromArray($sectionHeaderStyle);  // Power Plants Section
+
+        // Apply styles to table headers
+        $sheet->getStyle('A5:G5')->applyFromArray($tableHeaderStyle);  // Power Plants Headers
+
+        // Main title styling
+        return [
+            1 => [
+                'font' => [
+                    'bold' => true,
+                    'size' => 14
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => 'D1D5DB']
+                ]
+            ]
+        ];
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function(AfterSheet $event) {
+                $sheet = $event->sheet;
+                $lastRow = $sheet->getHighestRow();
+                $lastColumn = $sheet->getHighestColumn();
+
+                // Set page orientation to landscape
+                $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+                
+                // Enable text wrapping for all cells
+                $sheet->getStyle('A1:' . $lastColumn . $lastRow)->getAlignment()->setWrapText(true);
+
+                // Add borders to all cells
+                $sheet->getStyle('A1:' . $lastColumn . $lastRow)->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                            'color' => ['rgb' => '000000']
+                        ]
+                    ]
+                ]);
+
+                // Set print area
+                $sheet->getPageSetup()->setPrintArea('A1:' . $lastColumn . $lastRow);
+
+                // Fit to page
+                $sheet->getPageSetup()->setFitToWidth(1);
+                $sheet->getPageSetup()->setFitToHeight(0);
+
+                // Set zoom level
+                $sheet->getSheetView()->setZoomScale(85);
+
+                // Freeze first row
+                $sheet->freezePane('A6');
+            }
+        ];
     }
 } 

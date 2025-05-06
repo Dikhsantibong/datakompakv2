@@ -507,7 +507,12 @@ class MeetingShiftController extends Controller
         }
     }
 
-    public function downloadExcel(MeetingShift $meetingShift)
+    public function export(MeetingShift $meetingShift)
+    {
+        return view('admin.meeting-shift.export', compact('meetingShift'));
+    }
+
+    public function downloadExcel(Request $request, MeetingShift $meetingShift)
     {
         try {
             $meetingShift->load([
@@ -515,19 +520,220 @@ class MeetingShiftController extends Controller
                 'auxiliaryEquipments',
                 'resources',
                 'k3ls',
-                'notes',
+                'systemNote',
+                'generalNote',
                 'resume',
                 'attendances',
                 'creator'
             ]);
 
+            $filename = 'meeting-shift-' . $meetingShift->tanggal->format('Y-m-d') . '-shift-' . $meetingShift->current_shift;
+            
             return Excel::download(
                 new MeetingShiftExport($meetingShift),
-                'meeting-shift-' . $meetingShift->tanggal->format('Y-m-d') . '-shift-' . $meetingShift->current_shift . '.xlsx'
+                $filename . '.xlsx'
             );
         } catch (\Exception $e) {
             Log::error('Error generating Excel: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengunduh Excel');
+        }
+    }
+
+    public function edit($id)
+    {
+        $meetingShift = MeetingShift::with([
+            'machineStatuses.machine',
+            'auxiliaryEquipments',
+            'resources',
+            'k3ls',
+            'systemNote',
+            'generalNote',
+            'resume',
+            'attendances',
+            'creator'
+        ])->findOrFail($id);
+
+        $machines = Machine::select('id', 'name')->orderBy('name')->get();
+
+        return view('admin.meeting-shift.edit', compact('meetingShift', 'machines'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            // Validate all form inputs
+            $validated = $request->validate([
+                'current_shift' => 'required|in:A,B,C,D',
+                'tanggal' => 'required|date',
+                
+                // Machine Statuses
+                'machine_statuses' => 'required|array',
+                'machine_statuses.*.machine_id' => 'required|exists:machines,id',
+                'machine_statuses.*.status' => 'required|array|min:1',
+                'machine_statuses.*.keterangan' => 'nullable|string',
+                
+                // Auxiliary Equipment
+                'auxiliary_equipment' => 'required|array',
+                'auxiliary_equipment.*.name' => 'required|string',
+                'auxiliary_equipment.*.status' => 'required|array|min:1',
+                'auxiliary_equipment.*.keterangan' => 'nullable|string',
+                
+                // Resources
+                'resources' => 'required|array',
+                'resources.*.name' => 'required|string',
+                'resources.*.category' => 'required|in:PELUMAS,BBM,AIR PENDINGIN,UDARA START',
+                'resources.*.status' => 'required|in:0-20,21-40,41-61,61-80,up-80',
+                'resources.*.keterangan' => 'nullable|string',
+                
+                // K3L
+                'k3l' => 'required|array',
+                'k3l.*.type' => 'required|in:unsafe_action,unsafe_condition',
+                'k3l.*.uraian' => 'required|string',
+                'k3l.*.saran' => 'required|string',
+                'k3l.*.eviden' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
+                
+                // Notes
+                'catatan_sistem' => 'required|string',
+                'catatan_umum' => 'required|string',
+                
+                // Resume
+                'resume' => 'required|string',
+                
+                // Attendance
+                'absensi' => 'required|array',
+                'absensi.*.nama' => 'required|string',
+                'absensi.*.shift' => 'required|in:A,B,C,D,staf ops,TL OP,TL HAR,TL OPHAR,MUL',
+                'absensi.*.status' => 'required|in:hadir,izin,sakit,cuti,alpha,terlambat,ganti shift',
+                'absensi.*.keterangan' => 'nullable|string',
+            ]);
+
+            DB::beginTransaction();
+
+            $meetingShift = MeetingShift::findOrFail($id);
+            
+            // Update main meeting shift record
+            $meetingShift->update([
+                'tanggal' => $validated['tanggal'],
+                'current_shift' => $validated['current_shift']
+            ]);
+
+            // Update machine statuses
+            $meetingShift->machineStatuses()->delete();
+            foreach ($validated['machine_statuses'] as $machineStatus) {
+                if (!empty($machineStatus['status'])) {
+                    MeetingShiftMachineStatus::create([
+                        'meeting_shift_id' => $meetingShift->id,
+                        'machine_id' => $machineStatus['machine_id'],
+                        'status' => json_encode($machineStatus['status']),
+                        'keterangan' => $machineStatus['keterangan'] ?? null
+                    ]);
+                }
+            }
+
+            // Update auxiliary equipment
+            $meetingShift->auxiliaryEquipments()->delete();
+            if (!empty($validated['auxiliary_equipment'])) {
+                foreach ($validated['auxiliary_equipment'] as $equipment) {
+                    if (!empty($equipment['status'])) {
+                        MeetingShiftAuxiliaryEquipment::create([
+                            'meeting_shift_id' => $meetingShift->id,
+                            'name' => $equipment['name'],
+                            'status' => json_encode($equipment['status']),
+                            'keterangan' => $equipment['keterangan'] ?? null
+                        ]);
+                    }
+                }
+            }
+
+            // Update resources
+            $meetingShift->resources()->delete();
+            if (!empty($validated['resources'])) {
+                foreach ($validated['resources'] as $resource) {
+                    MeetingShiftResource::create([
+                        'meeting_shift_id' => $meetingShift->id,
+                        'name' => $resource['name'],
+                        'category' => $resource['category'],
+                        'status' => (string) $resource['status'],
+                        'keterangan' => $resource['keterangan'] ?? null
+                    ]);
+                }
+            }
+
+            // Update K3L records
+            $meetingShift->k3ls()->delete();
+            if (!empty($validated['k3l'])) {
+                foreach ($validated['k3l'] as $index => $k3l) {
+                    $evidenPath = null;
+                    if ($request->hasFile("k3l.{$index}.eviden")) {
+                        $file = $request->file("k3l.{$index}.eviden");
+                        $evidenPath = $file->store('eviden/k3l', 'public');
+                    }
+
+                    MeetingShiftK3l::create([
+                        'meeting_shift_id' => $meetingShift->id,
+                        'type' => (string) $k3l['type'],
+                        'uraian' => $k3l['uraian'],
+                        'saran' => $k3l['saran'],
+                        'eviden_path' => $evidenPath
+                    ]);
+                }
+            }
+
+            // Update notes
+            $meetingShift->notes()->delete();
+            MeetingShiftNote::create([
+                'meeting_shift_id' => $meetingShift->id,
+                'type' => 'sistem',
+                'content' => $validated['catatan_sistem']
+            ]);
+
+            MeetingShiftNote::create([
+                'meeting_shift_id' => $meetingShift->id,
+                'type' => 'umum',
+                'content' => $validated['catatan_umum']
+            ]);
+
+            // Update resume
+            $meetingShift->resume()->delete();
+            if (!empty($validated['resume'])) {
+                MeetingShiftResume::create([
+                    'meeting_shift_id' => $meetingShift->id,
+                    'content' => trim($validated['resume'])
+                ]);
+            }
+
+            // Update attendance records
+            $meetingShift->attendances()->delete();
+            if (!empty($validated['absensi'])) {
+                foreach ($validated['absensi'] as $attendance) {
+                    MeetingShiftAttendance::create([
+                        'meeting_shift_id' => $meetingShift->id,
+                        'nama' => trim($attendance['nama']),
+                        'shift' => (string) $attendance['shift'],
+                        'status' => (string) $attendance['status'],
+                        'keterangan' => !empty($attendance['keterangan']) ? trim($attendance['keterangan']) : null
+                    ]);
+                }
+            }
+
+            DB::commit();
+            
+            Log::info('Meeting shift updated successfully', ['meeting_shift_id' => $meetingShift->id]);
+            
+            return redirect()->route('admin.meeting-shift.show', $meetingShift->id)
+                           ->with('success', 'Data meeting shift berhasil diperbarui');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error updating meeting shift: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return redirect()->back()
+                           ->with('error', 'Terjadi kesalahan saat memperbarui data meeting shift: ' . $e->getMessage())
+                           ->withInput();
         }
     }
 } 

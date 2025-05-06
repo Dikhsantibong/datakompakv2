@@ -35,7 +35,7 @@
                         <h2 class="text-2xl font-bold mb-2">Meeting dan Mutasi Shift Operator</h2>
                         <p class="text-blue-100 mb-4">Kelola dan monitor aktivitas meeting dan mutasi shift operator untuk memastikan operasional yang optimal.</p>
                         <div class="flex flex-wrap gap-3">
-                            <a href="{{ route('admin.meeting-shift.create') }}" 
+                            <a href="{{ route('admin.meeting-shift.index') }}" 
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
                                 <i class="fas fa-plus mr-2"></i> Tambah Data
                             </a>
@@ -215,15 +215,10 @@
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
-                                                <a href="{{ route('admin.meeting-shift.download-pdf', $meetingShift) }}"
-                                                    class="text-red-600 hover:text-red-900"
-                                                    title="Download PDF">
-                                                    <i class="fas fa-file-pdf"></i>
-                                                </a>
-                                                <a href="{{ route('admin.meeting-shift.download-excel', $meetingShift) }}"
+                                                <a href="{{ route('admin.meeting-shift.export', $meetingShift) }}"
                                                     class="text-green-600 hover:text-green-900"
-                                                    title="Download Excel">
-                                                    <i class="fas fa-file-excel"></i>
+                                                    title="Export">
+                                                    <i class="fas fa-file-export"></i>
                                                 </a>
                                             </div>
                                         </td>

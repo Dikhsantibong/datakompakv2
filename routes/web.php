@@ -187,6 +187,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/{meetingShift}', [MeetingShiftController::class, 'show'])->name('meeting-shift.show');
         Route::get('/{meetingShift}/download-pdf', [MeetingShiftController::class, 'downloadPdf'])->name('meeting-shift.download-pdf');
         Route::get('/{meetingShift}/download-excel', [MeetingShiftController::class, 'downloadExcel'])->name('meeting-shift.download-excel');
+        Route::get('/meeting-shift/{meetingShift}/export', [MeetingShiftController::class, 'export'])->name('meeting-shift.export');
     });
 
     Route::prefix('users')->group(function () {

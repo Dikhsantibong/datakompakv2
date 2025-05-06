@@ -3,294 +3,238 @@
 namespace App\Exports;
 
 use App\Models\MeetingShift;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use Illuminate\Contracts\View\View;
 
-class MeetingShiftExport implements FromCollection, WithHeadings, WithMapping, WithTitle, WithMultipleSheets
+class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles, WithDrawings
 {
     use Exportable;
 
     protected $meetingShift;
+    protected $sectionRows;
 
     public function __construct(MeetingShift $meetingShift)
     {
         $this->meetingShift = $meetingShift;
+        // Define section header rows (will be populated after view rendering)
+        $this->sectionRows = [];
     }
 
-    public function sheets(): array
+    public function view(): View
     {
-        return [
-            'Machine Statuses' => new MeetingShiftMachineStatusSheet($this->meetingShift),
-            'Auxiliary Equipment' => new MeetingShiftAuxiliarySheet($this->meetingShift),
-            'Resources' => new MeetingShiftResourceSheet($this->meetingShift),
-            'K3L' => new MeetingShiftK3LSheet($this->meetingShift),
-            'Notes' => new MeetingShiftNoteSheet($this->meetingShift),
-            'Attendance' => new MeetingShiftAttendanceSheet($this->meetingShift),
-        ];
+        return view('admin.meeting-shift.excel', [
+            'meetingShift' => $this->meetingShift
+        ]);
     }
 
-    public function collection()
+    public function drawings()
     {
-        return new Collection([$this->meetingShift]);
-    }
+        // PLN Logo
+        $plnDrawing = new Drawing();
+        $plnDrawing->setName('PLN Logo');
+        $plnDrawing->setDescription('PLN Logo');
+        $plnDrawing->setPath(public_path('logo/navlog1.png'));
+        $plnDrawing->setHeight(60);
+        $plnDrawing->setCoordinates('B2');
+        $plnDrawing->setOffsetX(30);
+        $plnDrawing->setOffsetY(5);
 
-    public function headings(): array
-    {
-        return [
-            'Tanggal',
-            'Shift',
-            'Dibuat Oleh',
-            'Resume'
-        ];
-    }
+        // K3 Logo
+        $k3Drawing = new Drawing();
+        $k3Drawing->setName('K3 Logo');
+        $k3Drawing->setDescription('K3 Logo');
+        $k3Drawing->setPath(public_path('logo/k3_logo.png'));
+        $k3Drawing->setHeight(60);
+        $k3Drawing->setCoordinates('D2');
+        $k3Drawing->setOffsetX(30);
+        $k3Drawing->setOffsetY(5);
 
-    public function map($row): array
-    {
-        return [
-            $row->tanggal->format('d/m/Y'),
-            $row->current_shift,
-            $row->creator->name,
-            $row->resume ? $row->resume->content : ''
-        ];
+        return [$plnDrawing, $k3Drawing];
     }
 
     public function title(): string
     {
-        return 'Info';
-    }
-}
-
-class MeetingShiftMachineStatusSheet implements FromCollection, WithHeadings, WithMapping, WithTitle
-{
-    protected $meetingShift;
-
-    public function __construct(MeetingShift $meetingShift)
-    {
-        $this->meetingShift = $meetingShift;
+        return 'Meeting Shift ' . $this->meetingShift->tanggal->format('d/m/Y');
     }
 
-    public function collection()
+    public function styles(Worksheet $sheet)
     {
-        return $this->meetingShift->machineStatuses;
-    }
+        // Set default styles
+        $sheet->getDefaultRowDimension()->setRowHeight(15);
+        $sheet->getDefaultColumnDimension()->setWidth(12);
+        
+        // Set specific column widths
+        $sheet->getColumnDimension('A')->setWidth(5);  // No
+        $sheet->getColumnDimension('B')->setWidth(25); // Names
+        $sheet->getColumnDimension('C')->setWidth(20); // Status
+        $sheet->getColumnDimension('D')->setWidth(30); // Description 1
+        $sheet->getColumnDimension('E')->setWidth(30); // Description 2
 
-    public function headings(): array
-    {
+        // Set row height for logo row
+        $sheet->getRowDimension(2)->setRowHeight(50);
+
+        // Default style for all cells
+        $sheet->getParent()->getDefaultStyle()->applyFromArray([
+            'font' => [
+                'name' => 'Calibri',
+                'size' => 11
+            ],
+            'alignment' => [
+                'vertical' => Alignment::VERTICAL_CENTER
+            ]
+        ]);
+
+        // Find section header rows
+        $this->sectionRows = $this->findSectionHeaderRows($sheet);
+
+        // Style array for section headers
+        $sectionHeaderStyle = [
+            'font' => [
+                'bold' => true,
+                'size' => 12,
+                'color' => ['rgb' => '000000']
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'E2E8F0']
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_LEFT,
+                'vertical' => Alignment::VERTICAL_CENTER
+            ],
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM,
+                    'color' => ['rgb' => '000000']
+                ]
+            ]
+        ];
+
+        // Style array for table headers
+        $tableHeaderStyle = [
+            'font' => [
+                'bold' => true,
+                'size' => 11
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'F8FAFC']
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+                'wrapText' => true
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000']
+                ]
+            ]
+        ];
+
+        // Apply styles to all section headers
+        foreach ($this->sectionRows as $row) {
+            $sheet->getStyle("A{$row}:E{$row}")->applyFromArray($sectionHeaderStyle);
+            $sheet->getRowDimension($row)->setRowHeight(25);
+        }
+
+        // Apply styles to table headers (rows after section headers)
+        foreach ($this->sectionRows as $row) {
+            $tableHeaderRow = $row + 1;
+            $sheet->getStyle("A{$tableHeaderRow}:E{$tableHeaderRow}")->applyFromArray($tableHeaderStyle);
+            $sheet->getRowDimension($tableHeaderRow)->setRowHeight(20);
+        }
+
+        // Main title styling
         return [
-            'Mesin',
-            'Status',
-            'Keterangan'
+            1 => [ // Header row
+                'font' => [
+                    'bold' => true,
+                    'size' => 14
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => 'D1D5DB']
+                ]
+            ]
         ];
     }
 
-    public function map($row): array
+    protected function findSectionHeaderRows(Worksheet $sheet): array
+    {
+        $rows = [];
+        $lastRow = $sheet->getHighestRow();
+        
+        for ($row = 1; $row <= $lastRow; $row++) {
+            $cellValue = $sheet->getCell("A{$row}")->getValue();
+            if (in_array($cellValue, ['Status Mesin', 'Alat Bantu', 'Resources', 'K3L', 'Catatan', 'Absensi'])) {
+                $rows[] = $row;
+            }
+        }
+        
+        return $rows;
+    }
+
+    public function registerEvents(): array
     {
         return [
-            $row->machine->name,
-            implode(', ', json_decode($row->status)),
-            $row->keterangan ?? ''
+            AfterSheet::class => function(AfterSheet $event) {
+                $sheet = $event->sheet;
+                $lastRow = $sheet->getHighestRow();
+                $lastColumn = $sheet->getHighestColumn();
+
+                // Set page orientation to landscape
+                $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+                
+                // Enable text wrapping for all cells
+                $sheet->getStyle('A1:' . $lastColumn . $lastRow)->getAlignment()->setWrapText(true);
+
+                // Add borders to all cells
+                $sheet->getStyle('A1:' . $lastColumn . $lastRow)->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                            'color' => ['rgb' => '000000']
+                        ]
+                    ]
+                ]);
+
+                // Set print area
+                $sheet->getPageSetup()->setPrintArea('A1:' . $lastColumn . $lastRow);
+
+                // Fit to page
+                $sheet->getPageSetup()->setFitToWidth(1);
+                $sheet->getPageSetup()->setFitToHeight(0);
+
+                // Set zoom level
+                $sheet->getSheetView()->setZoomScale(85);
+
+                // Freeze first row
+                $sheet->freezePane('A4'); // Changed to A4 to account for logo row
+
+                // Auto-size rows for better content fit
+                foreach ($this->sectionRows as $row) {
+                    $sheet->getRowDimension($row)->setRowHeight(25);
+                    $sheet->getRowDimension($row + 1)->setRowHeight(20);
+                }
+            }
         ];
-    }
-
-    public function title(): string
-    {
-        return 'Machine Statuses';
-    }
-}
-
-class MeetingShiftAuxiliarySheet implements FromCollection, WithHeadings, WithMapping, WithTitle
-{
-    protected $meetingShift;
-
-    public function __construct(MeetingShift $meetingShift)
-    {
-        $this->meetingShift = $meetingShift;
-    }
-
-    public function collection()
-    {
-        return $this->meetingShift->auxiliaryEquipments;
-    }
-
-    public function headings(): array
-    {
-        return [
-            'Nama',
-            'Status',
-            'Keterangan'
-        ];
-    }
-
-    public function map($row): array
-    {
-        return [
-            $row->name,
-            implode(', ', json_decode($row->status)),
-            $row->keterangan ?? ''
-        ];
-    }
-
-    public function title(): string
-    {
-        return 'Auxiliary Equipment';
-    }
-}
-
-class MeetingShiftResourceSheet implements FromCollection, WithHeadings, WithMapping, WithTitle
-{
-    protected $meetingShift;
-
-    public function __construct(MeetingShift $meetingShift)
-    {
-        $this->meetingShift = $meetingShift;
-    }
-
-    public function collection()
-    {
-        return $this->meetingShift->resources;
-    }
-
-    public function headings(): array
-    {
-        return [
-            'Nama',
-            'Kategori',
-            'Status',
-            'Keterangan'
-        ];
-    }
-
-    public function map($row): array
-    {
-        return [
-            $row->name,
-            $row->category,
-            $row->status,
-            $row->keterangan ?? ''
-        ];
-    }
-
-    public function title(): string
-    {
-        return 'Resources';
-    }
-}
-
-class MeetingShiftK3LSheet implements FromCollection, WithHeadings, WithMapping, WithTitle
-{
-    protected $meetingShift;
-
-    public function __construct(MeetingShift $meetingShift)
-    {
-        $this->meetingShift = $meetingShift;
-    }
-
-    public function collection()
-    {
-        return $this->meetingShift->k3ls;
-    }
-
-    public function headings(): array
-    {
-        return [
-            'Tipe',
-            'Uraian',
-            'Saran'
-        ];
-    }
-
-    public function map($row): array
-    {
-        return [
-            $row->type,
-            $row->uraian,
-            $row->saran
-        ];
-    }
-
-    public function title(): string
-    {
-        return 'K3L';
-    }
-}
-
-class MeetingShiftNoteSheet implements FromCollection, WithHeadings, WithMapping, WithTitle
-{
-    protected $meetingShift;
-
-    public function __construct(MeetingShift $meetingShift)
-    {
-        $this->meetingShift = $meetingShift;
-    }
-
-    public function collection()
-    {
-        return $this->meetingShift->notes;
-    }
-
-    public function headings(): array
-    {
-        return [
-            'Tipe',
-            'Konten'
-        ];
-    }
-
-    public function map($row): array
-    {
-        return [
-            ucfirst($row->type),
-            $row->content
-        ];
-    }
-
-    public function title(): string
-    {
-        return 'Notes';
-    }
-}
-
-class MeetingShiftAttendanceSheet implements FromCollection, WithHeadings, WithMapping, WithTitle
-{
-    protected $meetingShift;
-
-    public function __construct(MeetingShift $meetingShift)
-    {
-        $this->meetingShift = $meetingShift;
-    }
-
-    public function collection()
-    {
-        return $this->meetingShift->attendances;
-    }
-
-    public function headings(): array
-    {
-        return [
-            'Nama',
-            'Shift',
-            'Status',
-            'Keterangan'
-        ];
-    }
-
-    public function map($row): array
-    {
-        return [
-            $row->nama,
-            $row->shift,
-            $row->status,
-            $row->keterangan ?? ''
-        ];
-    }
-
-    public function title(): string
-    {
-        return 'Attendance';
     }
 } 

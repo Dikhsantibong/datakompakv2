@@ -142,9 +142,9 @@
                                             @endif
                                             @if(request('start_date'))
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                    Periode: {{ \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') }}
+                                                    Periode: {{ \Carbon\Carbon::parse(request('start_date'))->format('M Y') }}
                                                     @if(request('end_date'))
-                                                        - {{ \Carbon\Carbon::parse(request('end_date'))->format('d/m/Y') }}
+                                                        - {{ \Carbon\Carbon::parse(request('end_date'))->format('M Y') }}
                                                     @endif
                                                     <button onclick="removeFilter('start_date'); removeFilter('end_date')" class="ml-1 text-blue-600 hover:text-blue-800">
                                                         <i class="fas fa-times"></i>
@@ -212,15 +212,15 @@
                                     </div>
 
                                     <div class="w-40">
-                                        <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                        <input type="date" name="start_date" 
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Periode Awal</label>
+                                        <input type="month" name="start_date" 
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('start_date') }}">
                                     </div>
 
                                     <div class="w-40">
-                                        <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Akhir</label>
-                                        <input type="date" name="end_date" 
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Periode Akhir</label>
+                                        <input type="month" name="end_date" 
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('end_date') }}">
                                     </div>

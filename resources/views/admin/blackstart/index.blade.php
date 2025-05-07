@@ -68,68 +68,70 @@
                         <p class="text-sm text-gray-600">Silakan isi form berikut untuk menambahkan data blackstart baru.</p>
                     </div>
 
-                    <form action="{{ route('admin.blackstart.store') }}" method="POST" class="space-y-6">
+                    <form id="blackstartForm" action="{{ route('admin.blackstart.store') }}" method="POST" class="space-y-6">
                         @csrf
                         
                         <!-- Tanggal -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
-                                <input type="date" name="tanggal" 
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Periode Bulan</label>
+                                <input type="month" name="tanggal" 
                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200" 
                                        required>
                             </div>
                         </div>
 
                         <!-- Flash Messages -->
-                        @if(session('success'))
-                            <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-lg mb-6" role="alert">
-                                <div class="flex">
-                                    <div class="flex-shrink-0">
-                                        <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-sm text-green-700">{{ session('success') }}</p>
+                        <div id="alertMessages">
+                            @if(session('success'))
+                                <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-lg mb-6" role="alert">
+                                    <div class="flex">
+                                        <div class="flex-shrink-0">
+                                            <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm text-green-700">{{ session('success') }}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
 
-                        @if(session('error'))
-                            <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg mb-6" role="alert">
-                                <div class="flex">
-                                    <div class="flex-shrink-0">
-                                        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-sm text-red-700">{{ session('error') }}</p>
+                            @if(session('error'))
+                                <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg mb-6" role="alert">
+                                    <div class="flex">
+                                        <div class="flex-shrink-0">
+                                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm text-red-700">{{ session('error') }}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
 
-                        @if($errors->any())
-                            <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg mb-6" role="alert">
-                                <div class="flex">
-                                    <div class="flex-shrink-0">
-                                        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-3">
-                                        <ul class="list-disc list-inside text-sm text-red-700">
-                                            @foreach($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
+                            @if($errors->any())
+                                <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg mb-6" role="alert">
+                                    <div class="flex">
+                                        <div class="flex-shrink-0">
+                                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div class="ml-3">
+                                            <ul class="list-disc list-inside text-sm text-red-700">
+                                                @foreach($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
 
                         <!-- Action Buttons -->
                         <div class="flex justify-end items-center gap-4 mb-6">
@@ -141,7 +143,7 @@
                                 </svg>
                                 Lihat Data
                             </a>
-                            <button type="submit" 
+                            <button type="submit" id="submitForm"
                                     class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors duration-150">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -208,8 +210,8 @@
                                                 <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Unit Layanan / sentral</th>
                                                 <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Kompresor diesel</th>
                                                 <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">tabung udara</th>
-                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="2">UPS</th>
-                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="2">lampu emergency</th>
+                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">UPS</th>
+                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">lampu emergency</th>
                                                 <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">battery catudaya</th>
                                                 <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">battery black start</th>
                                                 <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="2">radio komunikasi</th>
@@ -230,9 +232,6 @@
                                                 <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
                                                 <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
                                                 <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase  "></th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase  "></th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
                                                 <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
                                                 <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
                                                 <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
@@ -240,12 +239,15 @@
                                                 <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
                                                 <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
                                                 <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase "></th>
+                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
+                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
+                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
+                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">status</th>
+                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">status</th>
                                                 <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Mulai</th>
                                                 <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Selesai</th>
                                                 <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Deadline</th>
@@ -372,7 +374,7 @@
             <input type="number" name="kompresor_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
-            <input type="text" name="kompresor_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" value="bh" readonly>
+            <input type="text" name="kompresor_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" >
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
             <select name="kompresor_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
@@ -386,7 +388,7 @@
             <input type="number" name="tabung_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
-            <input type="text" name="tabung_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" value="bh" readonly>
+            <input type="text" name="tabung_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" >
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
             <select name="tabung_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
@@ -408,6 +410,9 @@
             <input type="number" name="lampu_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
+            <input type="text" name="lampu_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </td>
+        <td class="px-3 py-4 whitespace-nowrap">
             <select name="lampu_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
                 <option value="">Pilih</option>
                 <option value="normal">Normal</option>
@@ -419,7 +424,7 @@
             <input type="number" name="battery_catudaya_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
-            <input type="text" name="battery_catudaya_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" value="bh" readonly>
+            <input type="text" name="battery_catudaya_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" >
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
             <select name="battery_catudaya_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
@@ -433,7 +438,7 @@
             <input type="number" name="battery_blackstart_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
-            <input type="text" name="battery_blackstart_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" value="bh" readonly>
+            <input type="text" name="battery_blackstart_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" >
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
             <select name="battery_blackstart_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
@@ -503,8 +508,8 @@
         <td class="px-3 py-4 whitespace-nowrap">
             <select name="status[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
                 <option value="">Pilih</option>
-                <option value="normal">Normal</option>
-                <option value="tidak_normal">Tidak Normal</option>
+                <option value="open">OPEN</option>
+                <option value="close">CLOSE</option>
             </select>
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
@@ -556,11 +561,135 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (addRowButton && rowTemplate) {
         addRowButton.addEventListener('click', () => addRow(tbody, rowTemplate));
+        // Add initial row if tbody is empty
+        if (tbody.children.length === 0) {
+            addRow(tbody, rowTemplate);
+        }
     }
 
     if (addPeralatanRowButton && peralatanRowTemplate) {
         addPeralatanRowButton.addEventListener('click', () => addRow(peralatanTbody, peralatanRowTemplate));
+        // Add initial row if peralatanTbody is empty
+        if (peralatanTbody.children.length === 0) {
+            addRow(peralatanTbody, peralatanRowTemplate);
+        }
     }
+
+    // Form submission handling
+    const form = document.getElementById('blackstartForm');
+    const submitButton = document.getElementById('submitForm');
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Menyimpan...
+        `;
+
+        try {
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'bg-green-50 border-l-4 border-green-400 p-4 rounded-lg mb-6';
+                alertDiv.innerHTML = `
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-green-700">${result.message || 'Data berhasil disimpan'}</p>
+                        </div>
+                    </div>
+                `;
+
+                const alertMessages = document.getElementById('alertMessages');
+                alertMessages.innerHTML = '';
+                alertMessages.appendChild(alertDiv);
+
+                // Redirect after success
+                setTimeout(() => {
+                    window.location.href = "{{ route('admin.blackstart.show') }}";
+                }, 1500);
+            } else {
+                // Show error message
+                const errors = result.errors || {'error': [result.message || 'Terjadi kesalahan saat menyimpan data']};
+                let errorHtml = '';
+                
+                for (const field in errors) {
+                    errors[field].forEach(error => {
+                        errorHtml += `<li>${error}</li>`;
+                    });
+                }
+
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'bg-red-50 border-l-4 border-red-400 p-4 rounded-lg mb-6';
+                alertDiv.innerHTML = `
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <ul class="list-disc list-inside text-sm text-red-700">
+                                ${errorHtml}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+                const alertMessages = document.getElementById('alertMessages');
+                alertMessages.innerHTML = '';
+                alertMessages.appendChild(alertDiv);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            // Show error message
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'bg-red-50 border-l-4 border-red-400 p-4 rounded-lg mb-6';
+            alertDiv.innerHTML = `
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-red-700">Terjadi kesalahan saat menyimpan data</p>
+                    </div>
+                </div>
+            `;
+
+            const alertMessages = document.getElementById('alertMessages');
+            alertMessages.innerHTML = '';
+            alertMessages.appendChild(alertDiv);
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML = `
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Simpan Data
+            `;
+        }
+    });
 });
 </script>
 @endsection 

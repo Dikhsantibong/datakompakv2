@@ -36,13 +36,13 @@
             </tr>
         @endif
         <tr>
-            <th style="font-weight: bold; background-color: #f2f2f2;">Tanggal</th>
-            <th style="font-weight: bold; background-color: #f2f2f2;">Unit</th>
-            <th style="font-weight: bold; background-color: #f2f2f2;">Jenis Pelumas</th>
-            <th style="font-weight: bold; background-color: #f2f2f2;">Saldo Awal</th>
-            <th style="font-weight: bold; background-color: #f2f2f2;">Penerimaan</th>
-            <th style="font-weight: bold; background-color: #f2f2f2;">Pemakaian</th>
-            <th style="font-weight: bold; background-color: #f2f2f2;">Saldo Akhir</th>
+            <th style="font-weight: bold; background-color: #f2f2f2; width: 100px;">Tanggal</th>
+            <th style="font-weight: bold; background-color: #f2f2f2; width: 150px;">Unit</th>
+            <th style="font-weight: bold; background-color: #f2f2f2; width: 150px;">Jenis Pelumas</th>
+            <th style="font-weight: bold; background-color: #f2f2f2; width: 120px;">Saldo Awal</th>
+            <th style="font-weight: bold; background-color: #f2f2f2; width: 120px;">Penerimaan</th>
+            <th style="font-weight: bold; background-color: #f2f2f2; width: 120px;">Pemakaian</th>
+            <th style="font-weight: bold; background-color: #f2f2f2; width: 120px;">Saldo Akhir</th>
         </tr>
     </thead>
     <tbody>

@@ -22,6 +22,7 @@ class PeralatanBlackstart extends Model
         'tabung_udara_kondisi',
         'ups_kondisi',
         'lampu_emergency_jumlah',
+        'lampu_emergency_satuan',
         'lampu_emergency_kondisi',
         'battery_catudaya_jumlah',
         'battery_catudaya_satuan',
@@ -48,6 +49,19 @@ class PeralatanBlackstart extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    // Status constants
+    const STATUS_OPEN = 'open';
+    const STATUS_CLOSE = 'close';
+
+    // Get available status options
+    public static function getStatusOptions()
+    {
+        return [
+            self::STATUS_OPEN => 'Open',
+            self::STATUS_CLOSE => 'Close'
+        ];
+    }
 
     // Relationship with Blackstart
     public function blackstart()

@@ -1367,3 +1367,15 @@ Route::get('/admin/laporan-kit/export-pdf/{id}', [LaporanKitController::class, '
 Route::get('/admin/laporan-kit/{laporanKit}', [LaporanKitController::class, 'show'])->name('admin.laporan-kit.show');
 Route::get('/admin/laporan-kit/{laporanKit}/edit', [LaporanKitController::class, 'edit'])->name('admin.laporan-kit.edit');
 Route::put('/admin/laporan-kit/{laporanKit}', [LaporanKitController::class, 'update'])->name('admin.laporan-kit.update');
+
+// ... existing code ...
+Route::prefix('admin/operasi-upkd/pengadaan')->group(function () {
+    Route::get('/', [PengadaanController::class, 'index'])->name('admin.operasi-upkd.pengadaan.index');
+    Route::get('/export', [PengadaanController::class, 'export'])->name('admin.operasi-upkd.pengadaan.export');
+    Route::get('/create', [PengadaanController::class, 'create'])->name('admin.operasi-upkd.pengadaan.create');
+    Route::post('/', [PengadaanController::class, 'store'])->name('admin.operasi-upkd.pengadaan.store');
+    Route::get('/{id}/edit', [PengadaanController::class, 'edit'])->name('admin.operasi-upkd.pengadaan.edit');
+    Route::put('/{id}', [PengadaanController::class, 'update'])->name('admin.operasi-upkd.pengadaan.update');
+    Route::delete('/{id}', [PengadaanController::class, 'destroy'])->name('admin.operasi-upkd.pengadaan.destroy');
+});
+// ... existing code ...

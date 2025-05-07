@@ -50,9 +50,13 @@
                 </div>
             </div>
         </header>
+
+        <div class="flex items-center pt-2">
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Status Mesin', 'url' => null]]" />
+        </div>
         
         <!-- Loading Overlay -->
-        <div id="loading" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
+        <div id="loading" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300 hidden">
             <div class="bg-white rounded-lg p-8 flex flex-col items-center">
                 <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
                 <p class="mt-4 text-gray-600 font-medium">Memuat data...</p>
@@ -60,94 +64,110 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+            <!-- Welcome Card -->
+            <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
+                <div class="max-w-3xl">
+                    <h2 class="text-2xl font-bold mb-2">Laporan Kesiapan Pembangkit</h2>
+                    <p class="text-blue-100 mb-4">Monitor dan kelola status operasional mesin pembangkit listrik secara real-time.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <button id="copyFormattedData" 
+                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                            </svg>
+                            Salin Laporan
+                        </button>
+
+                        <a href="{{ route('admin.machine-status.export-pdf') }}?date={{ request('date', date('Y-m-d')) }}&input_time={{ request('input_time') }}" 
+                           class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                            </svg>
+                            Export PDF
+                        </a>
+
+                        <a href="{{ route('admin.machine-status.export-excel') }}?date={{ request('date', date('Y-m-d')) }}&input_time={{ request('input_time') }}" 
+                           class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Export Excel
+                        </a>
+
+                        <a href="{{ route('admin.pembangkit.ready') }}" 
+                           class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            Update Mesin
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <!-- Header Actions -->
+                <!-- Filter Section -->
                 <div class="p-6">
                     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
                         <h2 class="text-xl font-semibold text-gray-800">Laporan Kesiapan Pembangkit</h2>
-                        
                         <div class="flex items-center space-x-4">
-                            <button id="copyFormattedData" 
-                                class="inline-flex items-center px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
-                                </svg>
-                                Salin Laporan
+                            <button id="toggleFullTable" 
+                                class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
+                                onclick="toggleFullTableView()">
+                                <i class="fas fa-expand mr-1"></i> Full Table
                             </button>
-
-                            <a href="{{ route('admin.machine-status.export-pdf') }}?date={{ request('date', date('Y-m-d')) }}&input_time={{ request('input_time') }}" 
-                               class="inline-flex items-center px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                                </svg>
-                                Export PDF
-                            </a>
-
-                            <a href="{{ route('admin.machine-status.export-excel') }}?date={{ request('date', date('Y-m-d')) }}&input_time={{ request('input_time') }}" 
-                               class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                </svg>
-                                Export Excel
-                            </a>
-                            
-                            <a href="{{ route('admin.pembangkit.ready') }}" 
-                               class="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                                </svg>
-                                Update Mesin
-                            </a>
                         </div>
                     </div>
 
-                    <!-- Filters -->
-                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        @if(session('unit') === 'mysql')
-                        <div class="relative">
-                            <label for="unit-source" class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
-                            <select id="unit-source" 
-                                class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg"
-                                onchange="updateTable()">
-                                <option value="">Semua Unit</option>
-                                <option value="mysql">UP Kendari</option>
-                                <option value="mysql_wua_wua">Wua Wua</option>
-                                <option value="mysql_poasia">Poasia</option>
-                                <option value="mysql_kolaka">Kolaka</option>
-                                <option value="mysql_bau_bau">Bau Bau</option>
-                            </select>
-                        </div>
-                        @endif
+                    <!-- Horizontal Filters -->
+                    <div class="mt-4 border-b border-gray-200 pb-4" id="filters-section">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            @if(session('unit') === 'mysql')
+                            <div class="relative">
+                                <label for="unit-source" class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+                                <select id="unit-source" 
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg"
+                                    onchange="updateTable()">
+                                    <option value="">Semua Unit</option>
+                                    <option value="mysql">UP Kendari</option>
+                                    <option value="mysql_wua_wua">Wua Wua</option>
+                                    <option value="mysql_poasia">Poasia</option>
+                                    <option value="mysql_kolaka">Kolaka</option>
+                                    <option value="mysql_bau_bau">Bau Bau</option>
+                                </select>
+                            </div>
+                            @endif
 
-                        <div class="relative">
-                            <label for="date-picker" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                            <input type="date" id="date-picker" 
-                                class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg"
-                                value="{{ $date }}"
-                                onchange="updateTable()">
-                        </div>
+                            <div class="relative">
+                                <label for="date-picker" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                                <input type="date" id="date-picker" 
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg"
+                                    value="{{ $date }}"
+                                    onchange="updateTable()">
+                            </div>
 
-                        <div class="relative">
-                            <label for="input-time" class="block text-sm font-medium text-gray-700 mb-1">Waktu</label>
-                            <select id="input-time" 
-                                class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg"
-                                onchange="updateTable()">
-                                <option value="">Semua Waktu</option>
-                                <option value="06:00">06:00 (Pagi)</option>
-                                <option value="11:00">11:00 (Siang)</option>
-                                <option value="14:00">14:00 (Siang)</option>
-                                <option value="18:00">18:00 (Malam)</option>
-                                <option value="19:00">19:00 (Malam)</option>
-                            </select>
-                        </div>
+                            <div class="relative">
+                                <label for="input-time" class="block text-sm font-medium text-gray-700 mb-1">Waktu</label>
+                                <select id="input-time" 
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg"
+                                    onchange="updateTable()">
+                                    <option value="">Semua Waktu</option>
+                                    <option value="06:00">06:00 (Pagi)</option>
+                                    <option value="11:00">11:00 (Siang)</option>
+                                    <option value="14:00">14:00 (Siang)</option>
+                                    <option value="18:00">18:00 (Malam)</option>
+                                    <option value="19:00">19:00 (Malam)</option>
+                                </select>
+                            </div>
 
-                        <div class="relative">
-                            <label for="searchInput" class="block text-sm font-medium text-gray-700 mb-1">Pencarian</label>
-                            <input type="text" id="searchInput" 
-                                placeholder="Cari unit/mesin/status..." 
-                                class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg"
-                                value="{{ request('search') }}">
+                            <div class="relative">
+                                <label for="searchInput" class="block text-sm font-medium text-gray-700 mb-1">Pencarian</label>
+                                <input type="text" id="searchInput" 
+                                    placeholder="Cari unit/mesin/status..." 
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg"
+                                    value="{{ request('search') }}">
+                            </div>
                         </div>
                     </div>
                 </div>

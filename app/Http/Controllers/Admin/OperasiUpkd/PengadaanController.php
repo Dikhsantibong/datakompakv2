@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin\OperasiUpkd;
 
 use App\Http\Controllers\Controller;
 use App\Models\PengadaanBarang;
+use App\Exports\PengadaanExport;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PengadaanController extends Controller
 {
@@ -42,6 +45,12 @@ class PengadaanController extends Controller
 
         $pengadaan = $query->orderBy('id', 'desc')->get();
         return view('admin.operasi-upkd.pengadaan.index', compact('pengadaan'));
+    }
+
+    public function export(Request $request): BinaryFileResponse
+    {
+        $filename = 'pengadaan_barang_' . now()->format('dmY_His') . '.xlsx';
+        return Excel::download(new PengadaanExport($request), $filename);
     }
 
     public function create(): View

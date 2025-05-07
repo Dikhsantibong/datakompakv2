@@ -53,9 +53,10 @@
                         <h2 class="text-2xl font-bold mb-2">Pengadaan Barang dan Jasa</h2>
                         <p class="text-blue-100 mb-4">Kelola proses pengadaan barang dan jasa dengan efisien dan transparan untuk mendukung operasional UPKD.</p>
                         <div class="flex flex-wrap gap-3">
-                            <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                            <a href="{{ route('admin.operasi-upkd.pengadaan.export') }}" 
+                               class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <i class="fas fa-file-excel mr-2"></i> Export Excel
-                            </button>
+                            </a>
                             <button type="button" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-white rounded-md hover:bg-red-50">
                                 <i class="fas fa-file-pdf mr-2"></i> Export PDF
                             </button>

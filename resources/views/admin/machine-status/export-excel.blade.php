@@ -1,13 +1,31 @@
+<!-- Header with Logos -->
 <table>
     <thead>
         <tr>
-            <th colspan="8">Laporan Status Mesin Pembangkit</th>
+            <th colspan="2" style="text-align: left; width: 15%;">
+                <img src="{{ $navlog_path }}" alt="PLN Logo" width="60" height="20">
+            </th>
+            <th colspan="4" style="text-align: center; font-size: 14px; font-weight: bold; width: 70%;">
+                Laporan Status Mesin Pembangkit
+            </th>
+            <th colspan="2" style="text-align: right; width: 15%;">
+                <img src="{{ $k3_path }}" alt="K3 Logo" width="60" height="20">
+            </th>
         </tr>
         <tr>
-            <th colspan="8">Tanggal: {{ \Carbon\Carbon::parse($date)->format('d F Y') }}</th>
+            <th colspan="8" style="text-align: center;">
+                PT PLN Nusantara Power Unit Pembangkitan Kendari
+            </th>
         </tr>
         <tr>
-            <th colspan="8">Waktu Input: {{ $selectedInputTime ?? 'Semua Waktu' }}</th>
+            <th colspan="8" style="text-align: center;">
+                Tanggal: {{ \Carbon\Carbon::parse($date)->format('d F Y') }}
+            </th>
+        </tr>
+        <tr>
+            <th colspan="8" style="text-align: center;">
+                Waktu Input: {{ $selectedInputTime ?? 'Semua Waktu' }}
+            </th>
         </tr>
     </thead>
 </table>
@@ -17,7 +35,9 @@
         <table>
             <thead>
                 <tr>
-                    <th colspan="8">{{ $powerPlant->name }}</th>
+                    <th colspan="8" style="text-align: center; font-size: 12px; font-weight: bold;">
+                        {{ $powerPlant->name }}
+                    </th>
                 </tr>
                 @php
                     $filteredLogs = $logs->filter(function($log) use ($date) {
@@ -41,28 +61,28 @@
                     $hopValue = $hops->where('power_plant_id', $powerPlant->id)->first()?->hop_value ?? 0;
                 @endphp
                 <tr>
-                    <th>DMN Total</th>
-                    <th>DMP Total</th>
-                    <th>Total Beban</th>
-                    <th>Derating</th>
-                    <th>HOP</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 80px;">DMN Total</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 80px;">DMP Total</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 80px;">Total Beban</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 80px;">Derating</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 80px;">HOP</th>
                 </tr>
                 <tr>
-                    <td>{{ number_format($totalDMN, 2) }} MW</td>
-                    <td>{{ number_format($totalDMP, 2) }} MW</td>
-                    <td>{{ number_format($totalBeban, 2) }} MW</td>
-                    <td>{{ number_format($totalDMN - $totalDMP, 2) }} MW</td>
-                    <td>{{ number_format($hopValue, 1) }} Hari</td>
+                    <td style="text-align: center;">{{ number_format($totalDMN, 2) }} MW</td>
+                    <td style="text-align: center;">{{ number_format($totalDMP, 2) }} MW</td>
+                    <td style="text-align: center;">{{ number_format($totalBeban, 2) }} MW</td>
+                    <td style="text-align: center;">{{ number_format($totalDMN - $totalDMP, 2) }} MW</td>
+                    <td style="text-align: center;">{{ number_format($hopValue, 1) }} Hari</td>
                 </tr>
                 <tr>
-                    <th>No</th>
-                    <th>Mesin</th>
-                    <th>DMN (MW)</th>
-                    <th>DMP (MW)</th>
-                    <th>Beban (MW)</th>
-                    <th>Status</th>
-                    <th>Deskripsi</th>
-                    <th>Waktu Input</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 40px;">No</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 100px;">Mesin</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 80px;">DMN (MW)</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 80px;">DMP (MW)</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 80px;">Beban (MW)</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 80px;">Status</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 200px;">Deskripsi</th>
+                    <th style="font-weight: bold; background-color: #f2f2f2; width: 80px;">Waktu Input</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,18 +92,18 @@
                         $status = $log?->status ?? '-';
                     @endphp
                     <tr>
-                        <td>{{ $index + 1 }}</td>
+                        <td style="text-align: center;">{{ $index + 1 }}</td>
                         <td>{{ $machine->name }}</td>
-                        <td>{{ $log?->dmn ?? '-' }}</td>
-                        <td>{{ $log?->dmp ?? '-' }}</td>
-                        <td>{{ $log?->load_value ?? '-' }}</td>
-                        <td>{{ $status }}</td>
+                        <td style="text-align: center;">{{ $log?->dmn ?? '-' }}</td>
+                        <td style="text-align: center;">{{ $log?->dmp ?? '-' }}</td>
+                        <td style="text-align: center;">{{ $log?->load_value ?? '-' }}</td>
+                        <td style="text-align: center;">{{ $status }}</td>
                         <td>{{ $log?->deskripsi ?? '-' }}</td>
-                        <td>{{ $log?->input_time ? \Carbon\Carbon::parse($log->input_time)->format('H:i:s') : '-' }}</td>
+                        <td style="text-align: center;">{{ $log?->input_time ? \Carbon\Carbon::parse($log->input_time)->format('H:i:s') : '-' }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8">Tidak ada data mesin untuk unit ini</td>
+                        <td colspan="8" style="text-align: center;">Tidak ada data mesin untuk unit ini</td>
                     </tr>
                 @endforelse
             </tbody>

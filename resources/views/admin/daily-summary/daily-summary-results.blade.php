@@ -57,26 +57,59 @@
         </header>
        <!-- main content -->
        <main class="flex-1 p-4">
-        <div class="bg-white rounded-lg shadow-md p-2">
-            <h1 class="text-xl font-semibold text-gray-800"> Kelola Data Ikhtisar Harian</h1>
+            <div class="max-w-7xl mx-auto">
+                <!-- Welcome Card -->
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
+                    <div class="max-w-3xl">
+                        <h2 class="text-2xl font-bold mb-2">Data Ikhtisar Harian</h2>
+                        <p class="text-blue-100 mb-4">Monitor dan kelola data operasional pembangkit listrik secara harian.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="{{ route('admin.daily-summary.export-pdf', ['date' => $date]) }}" 
+                               class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                                <i class="fas fa-file-pdf mr-2 text-sm"></i>Export PDF
+                            </a>
+                            <a href="{{ route('admin.daily-summary.export-excel', ['date' => $date]) }}" 
+                               class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                                <i class="fas fa-file-excel mr-2 text-sm"></i>Export Excel
+                            </a>
+                            <button 
+                                onclick="window.location.href='{{ route('admin.daily-summary') }}'" 
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
+                                <i class="fas fa-arrow-left mr-2 text-sm"></i>Kembali
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Card -->
+                <div class="bg-white rounded-lg shadow-md">
         <div class="p-6" id="content-wrapper">
-            <!-- Add Date Filter -->
-            <div class="mb-6 flex items-center justify-between gap-4">
-                <div class="flex items-center gap-4">
+                        <!-- Filter Section -->
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 mb-6">
+                            <h2 class="text-xl font-semibold text-gray-800">Kelola Data Ikhtisar Harian</h2>
+                        </div>
+
+                        <!-- Horizontal Filters -->
+                        <div class="mt-4 border-b border-gray-200 pb-4" id="filters-section">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="relative">
+                                    <label for="dateFilter" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
                     <input 
                         type="date" 
                         id="dateFilter"
                         value="{{ $date }}"
-                        class="rounded-md border-gray-300 shadow-sm focus:border-[#009BB9] focus:ring focus:ring-[#009BB9] focus:ring-opacity-50"
+                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#009BB9] focus:ring focus:ring-[#009BB9] focus:ring-opacity-50"
                     >
-                    <!-- Add search input -->
+                                </div>
+                                <div class="relative">
+                                    <label for="searchInput" class="block text-sm font-medium text-gray-700 mb-1">Pencarian</label>
                     <div class="relative">
                         <input 
                             type="text" 
                             id="searchInput"
                             placeholder="Cari unit atau mesin..."
                             value="{{ $search ?? '' }}"
-                            class="rounded-md border-gray-300 shadow-sm focus:border-[#009BB9] focus:ring focus:ring-[#009BB9] focus:ring-opacity-50 pl-10 pr-4 py-2 w-64"
+                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#009BB9] focus:ring focus:ring-[#009BB9] focus:ring-opacity-50 pl-10"
                         >
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,32 +117,19 @@
                             </svg>
                         </div>
                     </div>
-                    <div id="loading" class="hidden">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loading Indicator -->
+                        <div id="loading" class="hidden flex justify-center items-center py-4">
                         <svg class="animate-spin h-5 w-5 text-[#009BB9]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                    </div>
                 </div>
                 
-                <div class="flex flex-col md:flex-row items-center gap-2">
-                    <a href="{{ route('admin.daily-summary.export-pdf', ['date' => $date]) }}" 
-                       class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center shadow-sm w-full md:w-auto">
-                        <i class="fas fa-file-pdf mr-2 text-sm"></i>PDF
-                    </a>
-                    <a href="{{ route('admin.daily-summary.export-excel', ['date' => $date]) }}" 
-                       class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center shadow-sm w-full md:w-auto">
-                        <i class="fas fa-file-excel mr-2 text-sm"></i>Excel
-                    </a>
-                    <button 
-                        onclick="window.location.href='{{ route('admin.daily-summary') }}'" 
-                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center shadow-sm w-full md:w-auto">
-                        <i class="fas fa-arrow-left mr-2 text-sm"></i>Kembali
-                    </button>
-                </div>
-            </div>
-
-            <!-- Add Loading Overlay -->
+                        <!-- Content Loading Overlay -->
             <div id="content-loading" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
                 <div class="bg-white p-4 rounded-lg shadow-lg flex items-center gap-3">
                     <svg class="animate-spin h-5 w-5 text-[#009BB9]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -121,294 +141,15 @@
             </div>
 
             @foreach($units as $unit)
-            
-            <div class="bg-white rounded shadow-md p-4 mb-6">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-4">{{ $unit->name }}</h2>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 border table-fixed" style="min-width: 3800px;">
-                            <thead class="bg-gray-50">
-                                <tr class="text-center border-b">
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-mesin">Mesin</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-daya">Daya (MW)</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-beban">Beban Puncak (kW)</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-beban">Ratio Daya Kit (%)</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-produksi">Produksi (kWh)</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-pemakaian-sendiri">Pemakaian Sendiri</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-jam-operasi">Jam Periode</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-jam-operasi">Jam Operasi</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-trip">Trip Non OMC</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-derating">Derating</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-kinerja">Kinerja Pembangkit</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-capability">Capability Factor (%)</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-nof">Nett Operating Factor (%)</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-jsi">JSI</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-bahan-bakar">Pemakaian Bahan Bakar/Baku</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-pelumas">Pemakaian Pelumas</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-efisiensi">Effisiensi</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r w-keterangan">Ket.</th>
-                                </tr>
-                                <tr class="bg-gray-100 text-xs">
-                                    <th class="border-r"></th>
-                                    <th class="px-4 py-2 border-r">
-                                        <div class="grid grid-cols-3 gap-0">
-                                            <span class="subcol-border px-2 mr-4">Terpasang</span>
-                                            <span class="subcol-border px-2 mr-4" style="margin-left: 10px;">DMN</span>
-                                            <span class="px-2" style="margin-left: 10px;">Mampu</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2 border-r">
-                                        <div class="grid grid-cols-2 gap-0">
-                                            <span class="subcol-border px-2">Siang</span>
-                                            <span class="px-2">Malam</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2 border-r">
-                                        <div class="text-center px-2">
-                                            <span>Kit</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2 border-r">
-                                        <div class="grid grid-cols-2 gap-0">
-                                            <span class="subcol-border px-2">Bruto</span>
-                                            <span class="px-2">Netto</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2 border-r">
-                                        <div class="grid grid-cols-3 gap-0">
-                                            <span class="subcol-border px-2">Aux (kWh)</span>
-                                            <span class="subcol-border px-2">Susut Trafo (kWh)</span>
-                                            <span class="px-2">Persentase (%)</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2 border-r">
-                                        <div class="text-center px-2">
-                                            <span>Jam</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2">
-                                        <div class="grid grid-cols-5 gap-0">
-                                            <span class="subcol-border px-2">OPR</span>
-                                            <span class="subcol-border px-2">STANDBY</span>
-                                            <span class="subcol-border px-2">PO</span>
-                                            <span class="subcol-border px-2">MO</span>
-                                            <span class="px-2">FO</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2 border-r">
-                                        <div class="grid grid-cols-2 gap-0">
-                                            <span class="subcol-border px-2">Mesin (kali)</span>
-                                            <span class="px-2">Listrik (kali)</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2">
-                                        <div class="grid grid-cols-4 gap-0">
-                                            <span class="subcol-border px-2">EFDH</span>
-                                            <span class="subcol-border px-2">EPDH</span>
-                                            <span class="subcol-border px-2">EUDH</span>
-                                            <span class="px-2">ESDH</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2 border-r">
-                                        <div class="grid grid-cols-4 gap-0">
-                                            <span class="subcol-border px-2">EAF (%)</span>
-                                            <span class="subcol-border px-2">SOF (%)</span>
-                                            <span class="subcol-border px-2">EFOR (%)</span>
-                                            <span class="px-2">SdOF (Kali)</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2">
-                                        <div class="text-center">
-                                            <span class="px-2">NCF</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2 border-r">
-                                        <div class="text-center">
-                                            <span class="px-2">NOF</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2 border-r">
-                                        <div class="text-center">
-                                            <span class="px-2">Jam</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2 border border-gray-300">
-                                        <div class="grid grid-cols-5 gap-1">
-                                            <span class="px-2 text-center border-r border-gray-300">HSD (Liter)</span>
-                                            <span class="px-2 text-center border-r border-gray-300">B35 (Liter)</span>
-                                            <span class="px-2 text-center border-r border-gray-300">MFO (Liter)</span>
-                                            <span class="px-2 text-center border-r border-gray-300">Total BBM (Liter)</span>
-                                            <span class="px-2 text-center">Air (M³)</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2 border border-gray-300">
-                                        <div class="grid grid-cols-7 gap-0">
-                                            <span class="px-1 text-center border-r border-gray-300 text-pelumas">Meditran SX 15W/40 CH-4 (LITER)</span>
-                                            <span class="px-1 text-center border-r border-gray-300 text-pelumas">Salyx 420 (LITER)</span>
-                                            <span class="px-1 text-center border-r border-gray-300 text-pelumas">Salyx 430 (LITER)</span>
-                                            <span class="px-1 text-center border-r border-gray-300 text-pelumas">TravoLube A (LITER)</span>
-                                            <span class="px-1 text-center border-r border-gray-300 text-pelumas">Turbolube 46 (LITER)</span>
-                                            <span class="px-1 text-center border-r border-gray-300 text-pelumas">Turbolube 68 (LITER)</span>
-                                            <span class="px-1 text-center text-pelumas">TOTAL (LITER)</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2 border border-gray-300">
-                                        <div class="grid grid-cols-3 gap-0">
-                                            <span class="px-1 text-center border-r border-gray-300 text-pelumas">SFC/SCC (LITER/KWH)</span>
-                                            <span class="px-1 text-center border-r border-gray-300 text-pelumas">TARA KALOR/NPHR (KCAL/KWH)</span>
-                                            <span class="px-1 text-center text-pelumas">SLC (CC/KWH)</span>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-2">
-                                        <div class="text-center">
-                                            <span class="px-2">Keterangan</span>
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($unit->machines as $machine)
-                                    <tr>
-                                        <td class="px-4 py-3 border-r">{{ $machine->name }}</td>
-                                        
-                                        @php
-                                            $summary = $unit->dailySummaries->where('machine_name', $machine->name)->first();
-                                        @endphp
-                                        
-                                        <!-- Daya (MW) -->
-                                        <td class="px-4 py-3 border-r">
-                                            <div class="grid grid-cols-3 gap-0">
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->installed_power, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->dmn_power, 2) : '-' }}</div>
-                                                <div class="text-center">{{ $summary ? number_format($summary->capable_power, 2) : '-' }}</div>
-                                            </div>
-                                        </td>
-
-                                        <!-- Beban Puncak -->
-                                        <td class="px-4 py-3 border-r">
-                                            <div class="grid grid-cols-2 gap-0">
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->peak_load_day, 2) : '-' }}</div>
-                                                <div class="text-center">{{ $summary ? number_format($summary->peak_load_night, 2) : '-' }}</div>
-                                            </div>
-                                        </td>
-
-                                        <!-- Ratio Daya Kit -->
-                                        <td class="px-4 py-3 border-r text-center">{{ $summary ? number_format($summary->kit_ratio, 2) : '-' }}</td>
-
-                                        <!-- Produksi -->
-                                        <td class="px-4 py-3 border-r">
-                                            <div class="grid grid-cols-2 gap-0">
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->gross_production, 2) : '-' }}</div>
-                                                <div class="text-center">{{ $summary ? number_format($summary->net_production, 2) : '-' }}</div>
-                                            </div>
-                                        </td>
-
-                                        <!-- Pemakaian Sendiri -->
-                                        <td class="px-4 py-3 border-r">
-                                            <div class="grid grid-cols-3 gap-0">
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->aux_power, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->transformer_losses, 2) : '-' }}</div>
-                                                <div class="text-center">{{ $summary ? number_format($summary->usage_percentage, 2) : '-' }}</div>
-                                            </div>
-                                        </td>
-
-                                        <!-- Jam Periode -->
-                                        <td class="px-4 py-3 border-r text-center">{{ $summary ? number_format($summary->period_hours, 2) : '-' }}</td>
-
-                                        <!-- Jam Operasi -->
-                                        <td class="px-4 py-3 border-r">
-                                            <div class="grid grid-cols-5 gap-0">
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->operating_hours, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->standby_hours, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->planned_outage, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->maintenance_outage, 2) : '-' }}</div>
-                                                <div class="text-center">{{ $summary ? number_format($summary->forced_outage, 2) : '-' }}</div>
-                                            </div>
-                                        </td>
-
-                                        <!-- Trip Non OMC -->
-                                        <td class="px-4 py-3 border-r">
-                                            <div class="grid grid-cols-2 gap-0">
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->trip_machine, 0) : '-' }}</div>
-                                                <div class="text-center">{{ $summary ? number_format($summary->trip_electrical, 0) : '-' }}</div>
-                                            </div>
-                                        </td>
-
-                                        <!-- Derating -->
-                                        <td class="px-4 py-3 border-r">
-                                            <div class="grid grid-cols-4 gap-0">
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->efdh, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->epdh, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->eudh, 2) : '-' }}</div>
-                                                <div class="text-center">{{ $summary ? number_format($summary->esdh, 2) : '-' }}</div>
-                                            </div>
-                                        </td>
-
-                                        <!-- Kinerja Pembangkit -->
-                                        <td class="px-4 py-3 border-r">
-                                            <div class="grid grid-cols-4 gap-0">
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->eaf, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->sof, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->efor, 2) : '-' }}</div>
-                                                <div class="text-center">{{ $summary ? number_format($summary->sdof, 0) : '-' }}</div>
-                                            </div>
-                                        </td>
-
-                                        <!-- Capability Factor -->
-                                        <td class="px-4 py-3 border-r text-center">{{ $summary ? number_format($summary->ncf, 2) : '-' }}</td>
-
-                                        <!-- Nett Operating Factor -->
-                                        <td class="px-4 py-3 border-r text-center">{{ $summary ? number_format($summary->nof, 2) : '-' }}</td>
-
-                                        <!-- JSI -->
-                                        <td class="px-4 py-3 border-r text-center">{{ $summary ? number_format($summary->jsi, 2) : '-' }}</td>
-
-                                        <!-- Pemakaian Bahan Bakar -->
-                                        <td class="px-4 py-3 border-r">
-                                            <div class="grid grid-cols-5 gap-0">
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->hsd_fuel, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->b35_fuel, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->mfo_fuel, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->total_fuel, 2) : '-' }}</div>
-                                                <div class="text-center">{{ $summary ? number_format($summary->water_usage, 2) : '-' }}</div>
-                                            </div>
-                                        </td>
-
-                                        <!-- Pemakaian Pelumas -->
-                                        <td class="px-4 py-3 border-r">
-                                            <div class="grid grid-cols-7 gap-0">
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->meditran_oil, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->salyx_420, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->salyx_430, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->travolube_a, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->turbolube_46, 2) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->turbolube_68, 2) : '-' }}</div>
-                                                <div class="text-center">{{ $summary ? number_format($summary->total_oil, 2) : '-' }}</div>
-                                            </div>
-                                        </td>
-
-                                        <!-- Effisiensi -->
-                                        <td class="px-4 py-3 border-r">
-                                            <div class="grid grid-cols-3 gap-0">
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->sfc_scc, 3) : '-' }}</div>
-                                                <div class="text-center border-r">{{ $summary ? number_format($summary->nphr, 3) : '-' }}</div>
-                                                <div class="text-center">{{ $summary ? number_format($summary->slc, 3) : '-' }}</div>
-                                            </div>
-                                        </td>
-
-                                        <!-- Keterangan -->
-                                        <td class="px-4 py-3 text-center">{{ $summary ? $summary->notes : '-' }}</td>
-                                    </tr>
+                            @include('admin.daily-summary._table')
                                 @endforeach
-                            </tbody>
-                        </table>
                     </div>
                 </div>
-            @endforeach
         </div>
+        </main>
     </div>
 </div>
-</div>
-</main>
+
 <script src="{{ asset('js/toggle.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -453,6 +194,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 <style>
 .w-mesin {
     min-width: 100px !important;

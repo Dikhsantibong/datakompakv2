@@ -1,8 +1,14 @@
 <table>
     <thead>
         <tr>
-            <th colspan="7" style="text-align: center; font-size: 16px; font-weight: bold;">
+            <th colspan="2" style="text-align: left;">
+                <img src="{{ $navlog_path }}" alt="PLN Logo" style="height: 30px; width: auto;">
+            </th>
+            <th colspan="3" style="text-align: center; font-size: 16px; font-weight: bold;">
                 Data Pelumas
+            </th>
+            <th colspan="2" style="text-align: right;">
+                <img src="{{ $k3_path }}" alt="K3 Logo" style="height: 30px; width: auto;">
             </th>
         </tr>
         <tr>

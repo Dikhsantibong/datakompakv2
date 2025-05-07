@@ -1,8 +1,14 @@
 <table>
     <thead>
         <tr>
-            <th colspan="7" style="text-align: center; font-size: 16px; font-weight: bold;">
+            <th colspan="2" style="text-align: left; width: 15%;">
+                <img src="{{ $navlog_path }}" alt="PLN Logo" width="60" height="20">
+            </th>
+            <th colspan="3" style="text-align: center; font-size: 14px; font-weight: bold; width: 70%;">
                 Data Bahan Kimia
+            </th>
+            <th colspan="2" style="text-align: right; width: 15%;">
+                <img src="{{ $k3_path }}" alt="K3 Logo" width="60" height="20">
             </th>
         </tr>
         <tr>

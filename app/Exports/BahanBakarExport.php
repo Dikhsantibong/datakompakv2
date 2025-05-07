@@ -40,7 +40,9 @@ class BahanBakarExport implements FromView
 
         return view('admin.energiprimer.exports.bahan-bakar-excel', [
             'bahanBakar' => $bahanBakar,
-            'units' => $units
+            'units' => $units,
+            'navlog_path' => public_path('logo/navlog1.png'),
+            'k3_path' => public_path('logo/k3_logo.png')
         ]);
     }
 } 

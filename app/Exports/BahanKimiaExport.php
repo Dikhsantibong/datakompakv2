@@ -40,7 +40,9 @@ class BahanKimiaExport implements FromView
 
         return view('admin.energiprimer.exports.bahan-kimia-excel', [
             'bahanKimia' => $bahanKimia,
-            'units' => $units
+            'units' => $units,
+            'navlog_path' => public_path('logo/navlog1.png'),
+            'k3_path' => public_path('logo/k3_logo.png')
         ]);
     }
 } 

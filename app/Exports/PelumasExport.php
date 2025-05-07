@@ -40,7 +40,9 @@ class PelumasExport implements FromView
 
         return view('admin.energiprimer.exports.pelumas-excel', [
             'pelumas' => $pelumas,
-            'units' => $units
+            'units' => $units,
+            'navlog_path' => public_path('images/navlog1.png'),
+            'k3_path' => public_path('images/k3_logo.png')
         ]);
     }
 } 

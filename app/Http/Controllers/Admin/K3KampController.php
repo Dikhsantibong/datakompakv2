@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class K3KampController extends Controller
 {
@@ -166,10 +167,25 @@ class K3KampController extends Controller
             $report = K3KampReport::with(['items.media', 'creator'])
                 ->findOrFail($id);
 
-            return Excel::download(new K3KampExport($report), 'laporan-k3-kamp-' . $id . '.xlsx');
+            // Ensure date is a Carbon instance
+            if (!$report->date instanceof Carbon) {
+                $report->date = Carbon::parse($report->date);
+            }
+
+            // Ensure created_at is a Carbon instance
+            if (!$report->created_at instanceof Carbon) {
+                $report->created_at = Carbon::parse($report->created_at);
+            }
+            
+            return Excel::download(
+                new K3KampExport($report), 
+                'laporan-k3-kamp-' . $report->date->format('dmY') . '.xlsx'
+            );
         } catch (\Exception $e) {
+            report($e); // Log error using Laravel's error reporting
+            
             return redirect()->back()
-                ->with('error', 'Terjadi kesalahan saat mengekspor Excel');
+                ->with('error', 'Terjadi kesalahan saat mengekspor Excel. Silakan coba lagi.');
         }
     }
 

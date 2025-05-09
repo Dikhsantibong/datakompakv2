@@ -193,7 +193,7 @@
                                     <tbody class="bg-white divide-y divide-gray-200">
                                         <!-- I. RUTIN Section -->
                                         <tr class="bg-gray-50">
-                                            <td colspan="21" class="px-3 py-2 text-sm font-semibold text-gray-900 bg-gray-100">I. RUTIN</td>
+                                            <td colspan="21" class="px-3 py-2 text-sm font-semibold text-gray-900 bg-gray-100 w-[500px]">I. RUTIN</td>
                                         </tr>
                                         @php
                                         $rutinItems = [
@@ -221,19 +221,19 @@
 
                                         @foreach($rutinItems as $item)
                                         <tr class="hover:bg-gray-50 transition-colors">
-                                            <td class="px-3 py-2 text-sm text-gray-500 border">{{ $item[0] }}</td>
+                                            <td class="px-3 py-2 text-sm text-gray-500 border w-[600px] ">{{ $item[0] }}</td>
                                             <td class="px-3 py-2 text-sm text-gray-500 border {{ isset($item[2]) ? 'pl-6' : '' }}">{{ $item[1] }}</td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][goal]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <textarea name="rutin[{{ str_replace('.', '_', $item[0]) }}][goal]" class="w-full min-w-[300px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" rows="2"></textarea>
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][no_prk]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][no_prk]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][satuan]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][satuan]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][volume]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][volume]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 text-center border">
                                                 <input type="checkbox" name="rutin[{{ str_replace('.', '_', $item[0]) }}][sifat_rutin]" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
@@ -242,31 +242,31 @@
                                                 <input type="checkbox" name="rutin[{{ str_replace('.', '_', $item[0]) }}][sifat_non_rutin]" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][bentuk_prj]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][bentuk_prj]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][bentuk_kegiatan]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][bentuk_kegiatan]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][tahap_1]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][tahap_1]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][tahap_2]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][tahap_2]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][tahap_3]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][tahap_3]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][tahap_4]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][tahap_4]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][tahap_5]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][tahap_5]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][harga]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][harga]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][pic]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][pic]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
                                                 <input type="date" name="rutin[{{ str_replace('.', '_', $item[0]) }}][waktu_mulai]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
@@ -286,13 +286,13 @@
                                                 </select>
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][keterangan]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <textarea name="rutin[{{ str_replace('.', '_', $item[0]) }}][keterangan]" class="w-full min-w-[300px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" rows="2"></textarea>
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][tindak_lanjut]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <textarea name="rutin[{{ str_replace('.', '_', $item[0]) }}][tindak_lanjut]" class="w-full min-w-[300px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" rows="2"></textarea>
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][monitoring]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="rutin[{{ str_replace('.', '_', $item[0]) }}][monitoring]" class="w-full min-w-[250px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                         </tr>
                                         @endforeach
@@ -322,16 +322,16 @@
                                             <td class="px-3 py-2 text-sm text-gray-500 border">{{ $item[0] }}</td>
                                             <td class="px-3 py-2 text-sm text-gray-500 border {{ isset($item[2]) ? 'pl-6' : '' }}">{{ $item[1] }}</td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][goal]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <textarea name="bertahap[{{ str_replace('.', '_', $item[0]) }}][goal]" class="w-full min-w-[300px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" rows="2"></textarea>
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][no_prk]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][no_prk]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][satuan]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][satuan]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][volume]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][volume]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 text-center border">
                                                 <input type="checkbox" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][sifat_rutin]" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
@@ -340,31 +340,31 @@
                                                 <input type="checkbox" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][sifat_non_rutin]" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][bentuk_prj]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][bentuk_prj]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][bentuk_kegiatan]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][bentuk_kegiatan]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][tahap_1]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][tahap_1]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][tahap_2]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][tahap_2]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][tahap_3]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][tahap_3]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][tahap_4]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][tahap_4]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][tahap_5]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][tahap_5]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][harga]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][harga]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][pic]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][pic]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
                                                 <input type="date" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][waktu_mulai]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
@@ -384,13 +384,13 @@
                                                 </select>
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][keterangan]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <textarea name="bertahap[{{ str_replace('.', '_', $item[0]) }}][keterangan]" class="w-full min-w-[300px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" rows="2"></textarea>
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][tindak_lanjut]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <textarea name="bertahap[{{ str_replace('.', '_', $item[0]) }}][tindak_lanjut]" class="w-full min-w-[300px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" rows="2"></textarea>
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][monitoring]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="bertahap[{{ str_replace('.', '_', $item[0]) }}][monitoring]" class="w-full min-w-[250px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                         </tr>
                                         @endforeach
@@ -411,16 +411,16 @@
                                             <td class="px-3 py-2 text-sm text-gray-500 border">{{ $item[0] }}</td>
                                             <td class="px-3 py-2 text-sm text-gray-500 border">{{ $item[1] }}</td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][goal]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <textarea name="tentative[{{ str_replace('.', '_', $item[0]) }}][goal]" class="w-full min-w-[300px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" rows="2"></textarea>
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][no_prk]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][no_prk]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][satuan]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][satuan]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][volume]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][volume]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 text-center border">
                                                 <input type="checkbox" name="tentative[{{ str_replace('.', '_', $item[0]) }}][sifat_rutin]" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
@@ -429,31 +429,31 @@
                                                 <input type="checkbox" name="tentative[{{ str_replace('.', '_', $item[0]) }}][sifat_non_rutin]" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][bentuk_prj]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][bentuk_prj]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][bentuk_kegiatan]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][bentuk_kegiatan]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][tahap_1]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][tahap_1]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][tahap_2]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][tahap_2]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][tahap_3]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][tahap_3]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][tahap_4]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][tahap_4]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][tahap_5]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][tahap_5]" class="w-full min-w-[150px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][harga]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][harga]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][pic]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][pic]" class="w-full min-w-[200px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                             <td class="px-3 py-2 border">
                                                 <input type="date" name="tentative[{{ str_replace('.', '_', $item[0]) }}][waktu_mulai]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
@@ -473,13 +473,13 @@
                                                 </select>
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][keterangan]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <textarea name="tentative[{{ str_replace('.', '_', $item[0]) }}][keterangan]" class="w-full min-w-[300px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" rows="2"></textarea>
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][tindak_lanjut]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <textarea name="tentative[{{ str_replace('.', '_', $item[0]) }}][tindak_lanjut]" class="w-full min-w-[300px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" rows="2"></textarea>
                                             </td>
                                             <td class="px-3 py-2 border">
-                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][monitoring]" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                <input type="text" name="tentative[{{ str_replace('.', '_', $item[0]) }}][monitoring]" class="w-full min-w-[250px] text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                             </td>
                                         </tr>
                                         @endforeach

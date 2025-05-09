@@ -9,18 +9,9 @@
         <header class="bg-white shadow-sm">
             <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center">
-                    <!-- Mobile Menu Toggle -->
                     <button id="mobile-menu-toggle"
                         class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#0A749B] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                         aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Buka menu utama</span>
-                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-                    </button>
-
-                    <button id="desktop-menu-toggle"
-                        class="hidden md:block relative items-center justify-center rounded-md text-gray-400 hover:bg-[#0A749B] p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span class="sr-only">Buka menu utama</span>
                         <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -123,16 +114,11 @@
                                         <select name="section" 
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Bagian</option>
-                                            <option value="A" {{ request('section') == 'A' ? 'selected' : '' }}>A. PEKERJAAN TENTATIF</option>
-                                            <option value="B1" {{ request('section') == 'B1' ? 'selected' : '' }}>B1. OPERATION MANAGEMENT</option>
-                                            <option value="B2" {{ request('section') == 'B2' ? 'selected' : '' }}>B2. EFISIENSI MANAGEMENT</option>
-                                            <option value="C" {{ request('section') == 'C' ? 'selected' : '' }}>C. PROGRAM KERJA</option>
-                                            <option value="D" {{ request('section') == 'D' ? 'selected' : '' }}>D. MONITORING PENGADAAN BARANG DAN JASA</option>
-                                            <option value="E" {{ request('section') == 'E' ? 'selected' : '' }}>E. MONITORING PENGAWASAN APLIKASI</option>
-                                            <option value="F" {{ request('section') == 'F' ? 'selected' : '' }}>F. HSE</option>
-                                            <option value="G1" {{ request('section') == 'G1' ? 'selected' : '' }}>G1. LAPORAN PEMBANGKIT</option>
-                                            <option value="G2" {{ request('section') == 'G2' ? 'selected' : '' }}>G2. LAPORAN TRANSAKSI ENERGI</option>
-                                            <option value="H" {{ request('section') == 'H' ? 'selected' : '' }}>H. RAPAT</option>
+                                            @foreach($sections as $section)
+                                                <option value="{{ $section->code }}" {{ request('section') == $section->code ? 'selected' : '' }}>
+                                                    {{ $section->code }}. {{ $section->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
 
@@ -152,348 +138,21 @@
 
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
-                                <!-- A. PEKERJAAN TENTATIF -->
+                                @foreach($sections as $section)
+                                    <!-- Section Header -->
                                 <thead>
                                     <tr class="bg-gray-50">
                                         <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-100">
-                                            A. PEKERJAAN TENTATIF
+                                                <div class="flex justify-between items-center">
+                                                    <span>{{ $section->code }}. {{ $section->name }}</span>
+                                                    <a href="{{ route('admin.operasi-upkd.rapat.create', ['section_id' => $section->id]) }}" 
+                                                       class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-600 bg-green-100 rounded hover:bg-green-200">
+                                                        <i class="fas fa-plus mr-1"></i> Tambah Item
+                                                    </a>
+                                                </div>
                                         </th>
                                     </tr>
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Uraian</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Detail</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">PIC</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kondisi Eksisting</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tindak Lanjut</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kondisi Akhir</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Goal</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Keterangan</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4">1</td>
-                                        <td class="px-6 py-4">Pekerjaan A</td>
-                                        <td class="px-6 py-4">Detail pekerjaan A</td>
-                                        <td class="px-6 py-4">Tim A</td>
-                                        <td class="px-6 py-4">Kondisi awal A</td>
-                                        <td class="px-6 py-4">Tindak lanjut A</td>
-                                        <td class="px-6 py-4">Kondisi akhir A</td>
-                                        <td class="px-6 py-4">Target A</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-                                                Completed
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Selesai tepat waktu</td>
-                                    </tr>
-                                </tbody>
-
-                                <!-- B. ISU MATURITY LEVEL -->
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-100">
-                                            B. ISU MATURITY LEVEL
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <!-- B1. Operation Management -->
-                                <thead>
-                                    <tr>
-                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider pl-12 bg-gray-50">
-                                            B1. Operation Management
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4">1</td>
-                                        <td class="px-6 py-4">Isu B1.1</td>
-                                        <td class="px-6 py-4">Detail isu B1.1</td>
-                                        <td class="px-6 py-4">Tim B1</td>
-                                        <td class="px-6 py-4">Kondisi awal B1.1</td>
-                                        <td class="px-6 py-4">Tindak lanjut B1.1</td>
-                                        <td class="px-6 py-4">Kondisi akhir B1.1</td>
-                                        <td class="px-6 py-4">Target B1.1</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-                                                In Progress
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Sedang berjalan</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4">2</td>
-                                        <td class="px-6 py-4">Isu B1.2</td>
-                                        <td class="px-6 py-4">Detail isu B1.2</td>
-                                        <td class="px-6 py-4">Tim B1</td>
-                                        <td class="px-6 py-4">Kondisi awal B1.2</td>
-                                        <td class="px-6 py-4">Tindak lanjut B1.2</td>
-                                        <td class="px-6 py-4">Kondisi akhir B1.2</td>
-                                        <td class="px-6 py-4">Target B1.2</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-                                                Completed
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Selesai</td>
-                                    </tr>
-                                </tbody>
-
-                                <!-- B2. Efisiensi Management -->
-                                <thead>
-                                    <tr>
-                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider pl-12 bg-gray-50">
-                                            B2. Efisiensi Management
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4">1</td>
-                                        <td class="px-6 py-4">Isu B2.1</td>
-                                        <td class="px-6 py-4">Detail isu B2.1</td>
-                                        <td class="px-6 py-4">Tim B2</td>
-                                        <td class="px-6 py-4">Kondisi awal B2.1</td>
-                                        <td class="px-6 py-4">Tindak lanjut B2.1</td>
-                                        <td class="px-6 py-4">Kondisi akhir B2.1</td>
-                                        <td class="px-6 py-4">Target B2.1</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                                                On Track
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Berjalan lancar</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4">2</td>
-                                        <td class="px-6 py-4">Isu B2.2</td>
-                                        <td class="px-6 py-4">Detail isu B2.2</td>
-                                        <td class="px-6 py-4">Tim B2</td>
-                                        <td class="px-6 py-4">Kondisi awal B2.2</td>
-                                        <td class="px-6 py-4">Tindak lanjut B2.2</td>
-                                        <td class="px-6 py-4">Kondisi akhir B2.2</td>
-                                        <td class="px-6 py-4">Target B2.2</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-                                                In Progress
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Sedang berjalan</td>
-                                    </tr>
-                                </tbody>
-
-                                <!-- C. OPERASI -->
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-100">
-                                            C. PROGRAM KERJA
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4">1</td>
-                                        <td class="px-6 py-4">Operasi C</td>
-                                        <td class="px-6 py-4">Detail operasi C</td>
-                                        <td class="px-6 py-4">Tim C</td>
-                                        <td class="px-6 py-4">Kondisi awal C</td>
-                                        <td class="px-6 py-4">Tindak lanjut C</td>
-                                        <td class="px-6 py-4">Kondisi akhir C</td>
-                                        <td class="px-6 py-4">Target C</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                                                On Track
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Berjalan lancar</td>
-                                    </tr>
-                                </tbody>
-
-                                <!-- D. PEMELIHARAAN -->
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-100">
-                                            D. MONITORING PENGADAAN BARANG DAN JASA 
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4">1</td>
-                                        <td class="px-6 py-4">Pemeliharaan D</td>
-                                        <td class="px-6 py-4">Detail pemeliharaan D</td>
-                                        <td class="px-6 py-4">Tim D</td>
-                                        <td class="px-6 py-4">Kondisi awal D</td>
-                                        <td class="px-6 py-4">Tindak lanjut D</td>
-                                        <td class="px-6 py-4">Kondisi akhir D</td>
-                                        <td class="px-6 py-4">Target D</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-                                                Done
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Selesai</td>
-                                    </tr>
-                                </tbody>
-
-                                <!-- E. ENGINEERING -->
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-100">
-                                            E. MONITORING PENGAWASAN APLIKASI
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4">1</td>
-                                        <td class="px-6 py-4">Engineering E</td>
-                                        <td class="px-6 py-4">Detail engineering E</td>
-                                        <td class="px-6 py-4">Tim E</td>
-                                        <td class="px-6 py-4">Kondisi awal E</td>
-                                        <td class="px-6 py-4">Tindak lanjut E</td>
-                                        <td class="px-6 py-4">Kondisi akhir E</td>
-                                        <td class="px-6 py-4">Target E</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-                                                Ongoing
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Dalam proses</td>
-                                    </tr>
-                                </tbody>
-
-                                <!-- F. HSE -->
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-100">
-                                            F. PENGAWASAN KONTRAK 
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4">1</td>
-                                        <td class="px-6 py-4">HSE F</td>
-                                        <td class="px-6 py-4">Detail HSE F</td>
-                                        <td class="px-6 py-4">Tim F</td>
-                                        <td class="px-6 py-4">Kondisi awal F</td>
-                                        <td class="px-6 py-4">Tindak lanjut F</td>
-                                        <td class="px-6 py-4">Kondisi akhir F</td>
-                                        <td class="px-6 py-4">Target F</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-                                                Active
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Aktif</td>
-                                    </tr>
-                                </tbody>
-
-                                <!-- G. ADMINISTRASI -->
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-100">
-                                            G. LAPORAN PEMBANGKIT DAN TRANSAKSI ENERGI
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <!-- G1. Laporan Pembangkit -->
-                                <thead>
-                                    <tr>
-                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider pl-12 bg-gray-50">
-                                            G1. Laporan Pembangkit
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4">1</td>
-                                        <td class="px-6 py-4">Laporan G1.1</td>
-                                        <td class="px-6 py-4">Detail laporan G1.1</td>
-                                        <td class="px-6 py-4">Tim G1</td>
-                                        <td class="px-6 py-4">Kondisi awal G1.1</td>
-                                        <td class="px-6 py-4">Tindak lanjut G1.1</td>
-                                        <td class="px-6 py-4">Kondisi akhir G1.1</td>
-                                        <td class="px-6 py-4">Target G1.1</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                                                Running
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Berjalan</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4">2</td>
-                                        <td class="px-6 py-4">Laporan G1.2</td>
-                                        <td class="px-6 py-4">Detail laporan G1.2</td>
-                                        <td class="px-6 py-4">Tim G1</td>
-                                        <td class="px-6 py-4">Kondisi awal G1.2</td>
-                                        <td class="px-6 py-4">Tindak lanjut G1.2</td>
-                                        <td class="px-6 py-4">Kondisi akhir G1.2</td>
-                                        <td class="px-6 py-4">Target G1.2</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-                                                Done
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Selesai</td>
-                                    </tr>
-                                </tbody>
-
-                                <!-- G2. Laporan Transaksi Energi -->
-                                <thead>
-                                    <tr>
-                                        <th colspan="10" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider pl-12 bg-gray-50">
-                                            G2. Laporan Transaksi Energi
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4">1</td>
-                                        <td class="px-6 py-4">Laporan G2.1</td>
-                                        <td class="px-6 py-4">Detail laporan G2.1</td>
-                                        <td class="px-6 py-4">Tim G2</td>
-                                        <td class="px-6 py-4">Kondisi awal G2.1</td>
-                                        <td class="px-6 py-4">Tindak lanjut G2.1</td>
-                                        <td class="px-6 py-4">Kondisi akhir G2.1</td>
-                                        <td class="px-6 py-4">Target G2.1</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-                                                In Progress
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Sedang berjalan</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4">2</td>
-                                        <td class="px-6 py-4">Laporan G2.2</td>
-                                        <td class="px-6 py-4">Detail laporan G2.2</td>
-                                        <td class="px-6 py-4">Tim G2</td>
-                                        <td class="px-6 py-4">Kondisi awal G2.2</td>
-                                        <td class="px-6 py-4">Tindak lanjut G2.2</td>
-                                        <td class="px-6 py-4">Kondisi akhir G2.2</td>
-                                        <td class="px-6 py-4">Target G2.2</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                                                Running
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">Berjalan</td>
-                                    </tr>
-                                </tbody>
-
-                                <!-- H. RAPAT -->
-                                <thead class=" mt-10">
-                                    <tr class="bg-gray-50">
-                                        <th colspan="7" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-100">
-                                            H. RAPAT
-                                        </th>
-                                    </tr>
+                                        @if($section->code === 'H')
                                     <tr>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rapat</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Uraian</th>
@@ -502,32 +161,47 @@
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Resume</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Notulen</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Eviden</th>
+                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                            </tr>
+                                        @else
+                                            <tr>
+                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
+                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Uraian</th>
+                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Detail</th>
+                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">PIC</th>
+                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Keterangan</th>
+                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                                     </tr>
+                                        @endif
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4">INTERNAL RON</td>
-                                        <td class="px-6 py-4">Rapat koordinasi internal</td>
-                                        <td class="px-6 py-4">10 Jan 2024 09:00</td>
-                                        <td class="px-6 py-4">Online</td>
-                                        <td class="px-6 py-4">Pembahasan progress Q1</td>
-                                        <td class="px-6 py-4">Tersedia</td>
-                                        <td class="px-6 py-4">
-                                            <a href="#" class="text-blue-600 hover:text-blue-800">Lihat</a>
+                                        @if($section->subsections->isNotEmpty())
+                                            @foreach($section->subsections as $subsection)
+                                                <!-- Subsection Header -->
+                                                <tr>
+                                                    <td colspan="10" class="px-6 py-3 bg-gray-50">
+                                                        <div class="flex justify-between items-center">
+                                                            <span class="font-medium text-gray-900">{{ $subsection->code }}. {{ $subsection->name }}</span>
+                                                            <a href="{{ route('admin.operasi-upkd.rapat.create', ['section_id' => $section->id, 'subsection_id' => $subsection->id]) }}" 
+                                                               class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-600 bg-green-100 rounded hover:bg-green-200">
+                                                                <i class="fas fa-plus mr-1"></i> Tambah Sub Item
+                                                            </a>
+                                                        </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="px-6 py-4">INTERNAL UPKD</td>
-                                        <td class="px-6 py-4">Evaluasi kinerja</td>
-                                        <td class="px-6 py-4">15 Jan 2024 13:00</td>
-                                        <td class="px-6 py-4">Hybrid</td>
-                                        <td class="px-6 py-4">Evaluasi target</td>
-                                        <td class="px-6 py-4">Tersedia</td>
-                                        <td class="px-6 py-4">
-                                            <a href="#" class="text-blue-600 hover:text-blue-800">Lihat</a>
-                                        </td>
-                                    </tr>
+                                                <!-- Subsection Items -->
+                                                @foreach($items->where('subsection_id', $subsection->id) as $item)
+                                                    @include('admin.operasi-upkd.rapat._item_row', ['item' => $item, 'isSection' => false])
+                                                @endforeach
+                                            @endforeach
+                                        @endif
+                                        <!-- Section Items (without subsection) -->
+                                        @foreach($items->where('section_id', $section->id)->whereNull('subsection_id') as $item)
+                                            @include('admin.operasi-upkd.rapat._item_row', ['item' => $item, 'isSection' => true])
+                                        @endforeach
                                 </tbody>
+                                @endforeach
                             </table>
                         </div>
                     </div>

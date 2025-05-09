@@ -11,20 +11,28 @@ class Section extends Model
     use HasFactory;
 
     protected $fillable = [
-        'department_id',
-        'name'
+        'code',
+        'name',
+        'order'
     ];
 
-    protected $with = ['pics']; // Eager load pics by default
+     // Eager load pics by default
 
     public function department()
     {
         return $this->belongsTo(Department::class);
     }
 
-    public function pics()
+    
+
+    public function subsections()
     {
-        return $this->hasMany(Pic::class)->orderBy('name');
+        return $this->hasMany(Subsection::class);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(Item::class);
     }
 
     protected static function boot()

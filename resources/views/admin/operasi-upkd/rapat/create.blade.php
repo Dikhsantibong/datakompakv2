@@ -36,34 +36,36 @@
                 <form action="{{ route('admin.operasi-upkd.rapat.store') }}" method="POST" class="space-y-8" enctype="multipart/form-data">
                     @csrf
 
-                    <!-- Section Selector -->
+                    <!-- Section and Subsection Selector -->
                     <div class="bg-white rounded-lg shadow p-6">
-                        <div class="grid grid-cols-1 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label for="section" class="block text-sm font-medium text-gray-700">Pilih Bagian</label>
-                                <select id="section" name="section" class=" p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <label for="section_id" class="block text-sm font-medium text-gray-700">Pilih Bagian</label>
+                                <select id="section_id" name="section_id" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" onchange="updateSubsections()">
                                     <option value="">Pilih Bagian</option>
-                                    <option value="A">A. PEKERJAAN TENTATIF</option>
-                                    <option value="B1">B1. OPERATION MANAGEMENT</option>
-                                    <option value="B2">B2. EFISIENSI MANAGEMENT</option>
-                                    <option value="C">C. PROGRAM KERJA</option>
-                                    <option value="D">D. MONITORING PENGADAAN BARANG DAN JASA</option>
-                                    <option value="E">E. MONITORING PENGAWASAN APLIKASI</option>
-                                    <option value="F">F. PENGAWASAN KONTRAK</option>
-                                    <option value="G1">G1. LAPORAN PEMBANGKIT</option>
-                                    <option value="G2">G2. LAPORAN TRANSAKSI ENERGI</option>
-                                    <option value="H">H. RAPAT</option>
+                                    @foreach($sections as $section)
+                                        <option value="{{ $section->id }}" data-code="{{ $section->code }}">
+                                            {{ $section->code }}. {{ $section->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div id="subsection_container" class="hidden">
+                                <label for="subsection_id" class="block text-sm font-medium text-gray-700">Pilih Sub Bagian</label>
+                                <select id="subsection_id" name="subsection_id" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="">Pilih Sub Bagian</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Main Form (Default) -->
+                    <!-- Main Form -->
                     <div id="defaultForm" class="bg-white rounded-lg shadow p-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="uraian" class="block text-sm font-medium text-gray-700">Uraian</label>
-                                <input type="text" name="uraian" id="uraian" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <input type="text" name="uraian" id="uraian" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             </div>
 
                             <div>
@@ -73,7 +75,7 @@
 
                             <div>
                                 <label for="pic" class="block text-sm font-medium text-gray-700">PIC</label>
-                                <select name="pic" id="pic" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <select name="pic" id="pic" required class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     <option value="">-- Pilih PIC --</option>
                                     <option value="asman operasi">Asman Operasi</option>
                                     <option value="TL RON">TL RON</option>
@@ -83,7 +85,6 @@
                                     <option value="AMINAH">AMINAH</option>
                                 </select>
                             </div>
-                            
 
                             <div>
                                 <label for="kondisi_eksisting" class="block text-sm font-medium text-gray-700">Kondisi Eksisting</label>
@@ -107,12 +108,11 @@
 
                             <div>
                                 <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                                <select name="status" id="status" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <select name="status" id="status" required class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     <option value="">Pilih Status</option>
                                     <option value="completed">Completed</option>
                                     <option value="in_progress">In Progress</option>
-                                    <option value="pending">pending</option>
-                                    
+                                    <option value="pending">Pending</option>
                                 </select>
                             </div>
 
@@ -127,11 +127,6 @@
                     <div id="monitoringAplikasiForm" class="hidden bg-white rounded-lg shadow p-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Form Monitoring Aplikasi</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="no" class="block text-sm font-medium text-gray-700">No</label>
-                                <input type="number" name="no" id="no" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            </div>
-
                             <div>
                                 <label for="aplikasi" class="block text-sm font-medium text-gray-700">Aplikasi</label>
                                 <select name="aplikasi" id="aplikasi" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
@@ -164,21 +159,11 @@
                                     <option value="AMINAH">AMINAH</option>
                                 </select>
                             </div>
-
-                            <div>
-                                <label for="keterangan" class="block text-sm font-medium text-gray-700">Keterangan</label>
-                                <textarea name="keterangan" id="keterangan" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
-                            </div>
-
-                            <div>
-                                <label for="tindak_lanjut" class="block text-sm font-medium text-gray-700">Tindak Lanjut</label>
-                                <textarea name="tindak_lanjut" id="tindak_lanjut" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
-                            </div>
                         </div>
                     </div>
 
-                    <!-- Additional Fields for Section H (Rapat) -->
-                    <div id="rapatFields" class="hidden mt-6 border-t pt-6">
+                    <!-- Rapat Form (Section H) -->
+                    <div id="rapatFields" class="hidden bg-white rounded-lg shadow p-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Informasi Tambahan Rapat</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -231,31 +216,46 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const sectionSelect = document.getElementById('section');
+    const sections = @json($sections);
+    const sectionSelect = document.getElementById('section_id');
+    const subsectionContainer = document.getElementById('subsection_container');
+    const subsectionSelect = document.getElementById('subsection_id');
     const rapatFields = document.getElementById('rapatFields');
     const defaultForm = document.getElementById('defaultForm');
     const monitoringAplikasiForm = document.getElementById('monitoringAplikasiForm');
 
-    sectionSelect.addEventListener('change', function() {
-        // Hide all forms first
-        rapatFields.classList.add('hidden');
-        defaultForm.classList.add('hidden');
-        monitoringAplikasiForm.classList.add('hidden');
+    function updateSubsections() {
+        const selectedSection = sections.find(s => s.id === parseInt(sectionSelect.value));
+        const selectedOption = sectionSelect.options[sectionSelect.selectedIndex];
+        const sectionCode = selectedOption.dataset.code;
 
-        // Show appropriate form based on selection
-        switch(this.value) {
-            case 'H':
-                rapatFields.classList.remove('hidden');
-                defaultForm.classList.remove('hidden');
-                break;
-            case 'E':
-                monitoringAplikasiForm.classList.remove('hidden');
-                break;
-            default:
-                defaultForm.classList.remove('hidden');
-                break;
+        // Reset and hide all special forms
+        rapatFields.classList.add('hidden');
+        monitoringAplikasiForm.classList.add('hidden');
+        defaultForm.classList.remove('hidden');
+
+        // Clear subsection options
+        subsectionSelect.innerHTML = '<option value="">Pilih Sub Bagian</option>';
+
+        if (selectedSection && selectedSection.subsections && selectedSection.subsections.length > 0) {
+            subsectionContainer.classList.remove('hidden');
+            selectedSection.subsections.forEach(subsection => {
+                const option = new Option(`${subsection.code}. ${subsection.name}`, subsection.id);
+                subsectionSelect.add(option);
+            });
+        } else {
+            subsectionContainer.classList.add('hidden');
         }
-    });
+
+        // Show special forms based on section
+        if (sectionCode === 'H') {
+            rapatFields.classList.remove('hidden');
+        } else if (sectionCode === 'E') {
+            monitoringAplikasiForm.classList.remove('hidden');
+        }
+    }
+
+    sectionSelect.addEventListener('change', updateSubsections);
 });
 </script>
 @endpush

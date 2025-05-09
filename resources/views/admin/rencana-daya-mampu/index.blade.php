@@ -177,21 +177,20 @@
                                     <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">DMN SLO</th>
                                     <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">DMP PT</th>
                                     @for ($i = 1; $i <= date('t'); $i++)
-                                        <th colspan="3" class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider bg-gray-50 border-b">{{ $i }}</th>
+                                        <th colspan="2" class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider bg-gray-50 border-b">{{ $i }}</th>
                                     @endfor
                                 </tr>
                                 <tr>
                                     @for ($i = 1; $i <= date('t'); $i++)
-                                        <th class="px-2 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-r">Rencana</th>
-                                        <th class="px-2 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-r">Realisasi</th>
-                                        <th class="px-2 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-r">Keterangan</th>
+                                        <th class="px-2 py-2 text-center text-xs font-semibold text-blue-700 uppercase tracking-wider border-r">Rencana</th>
+                                        <th class="px-2 py-2 text-center text-xs font-semibold text-green-700 uppercase tracking-wider border-r">Realisasi</th>
                                     @endfor
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @php $no = 1; @endphp
                                 @foreach($powerPlants as $plant)
-                                    @foreach($plant->machines as $machine)
+                                    @foreach($plant->machines->take(3) as $machine)
                                         <tr class="hover:bg-gray-50 transition-colors duration-150">
                                             <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white border-r-2 text-center">{{ $no++ }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white border-r-2">
@@ -204,29 +203,71 @@
                                                 @php
                                                     $date = now()->format('Y-m-') . sprintf('%02d', $i);
                                                     $data = $machine->rencanaDayaMampu->first()?->getDailyValue($date) ?? [];
+                                                    $rencanaRows = $data['rencana'] ?? array_fill(0, 5, ['beban'=>'','durasi'=>'','keterangan'=>'']);
+                                                    $realisasi = $data['realisasi'] ?? ['beban'=>'','keterangan'=>''];
+                                                    $onArr = [0,12,15,19,21];
+                                                    $offArr = [8,13,18,21,0];
                                                 @endphp
-                                                <td class="px-2 py-2 text-center border-r">
-                                                    <span class="data-display">{{ $data['rencana'] ?? '-' }}</span>
-                                                    <input type="number" 
-                                                           name="rencana[{{ $machine->id }}][{{ $date }}]"
-                                                           class="data-input hidden w-20 text-center border rounded"
-                                                           value="{{ $data['rencana'] ?? '' }}"
-                                                           step="0.01">
+                                                <td class="px-2 py-2 align-top border-r min-w-[180px]">
+                                                    <div class="border rounded-lg bg-blue-50 shadow-sm p-2">
+                                                        <div class="text-xs font-bold text-blue-800 py-1 border-b border-blue-200 text-center tracking-wide uppercase">Rencana</div>
+                                                        <table class="w-full text-xs border-separate border-spacing-0">
+                                                            <thead>
+                                                                <tr class="bg-blue-100 text-blue-900 font-semibold">
+                                                                    <th class="border px-2 py-1">Beban</th>
+                                                                    <th class="border px-2 py-1">On</th>
+                                                                    <th class="border px-2 py-1">Off</th>
+                                                                    <th class="border px-2 py-1">Durasi</th>
+                                                                    <th class="border px-2 py-1">Keterangan</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @for ($j = 0; $j < 5; $j++)
+                                                                <tr class="transition-colors duration-150 hover:bg-blue-200">
+                                                                    <td class="border px-2 py-1">
+                                                                        <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $j }}][beban]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[$j]['beban'] ?? '' }}" step="0.01">
+                                                                        <span class="data-display">{{ $rencanaRows[$j]['beban'] ?? '-' }}</span>
+                                                                    </td>
+                                                                    <td class="border px-2 py-1 bg-gray-50">{{ $onArr[$j] }}</td>
+                                                                    <td class="border px-2 py-1 bg-gray-50">{{ $offArr[$j] }}</td>
+                                                                    <td class="border px-2 py-1">
+                                                                        <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $j }}][durasi]" class="data-input hidden w-20 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[$j]['durasi'] ?? '' }}" step="0.01">
+                                                                        <span class="data-display">{{ $rencanaRows[$j]['durasi'] ?? '-' }}</span>
+                                                                    </td>
+                                                                    <td class="border px-2 py-1">
+                                                                        <input type="text" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $j }}][keterangan]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[$j]['keterangan'] ?? '' }}">
+                                                                        <span class="data-display">{{ $rencanaRows[$j]['keterangan'] ?? '-' }}</span>
+                                                                    </td>
+                                                                </tr>
+                                                                @endfor
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </td>
-                                                <td class="px-2 py-2 text-center border-r">
-                                                    <span class="data-display">{{ $data['realisasi'] ?? '-' }}</span>
-                                                    <input type="number" 
-                                                           name="realisasi[{{ $machine->id }}][{{ $date }}]"
-                                                           class="data-input hidden w-20 text-center border rounded"
-                                                           value="{{ $data['realisasi'] ?? '' }}"
-                                                           step="0.01">
-                                                </td>
-                                                <td class="px-2 py-2 text-center border-r">
-                                                    <span class="data-display">{{ $data['keterangan'] ?? '-' }}</span>
-                                                    <input type="text" 
-                                                           name="keterangan[{{ $machine->id }}][{{ $date }}]"
-                                                           class="data-input hidden w-24 text-center border rounded"
-                                                           value="{{ $data['keterangan'] ?? '' }}">
+                                                <td class="px-2 py-2 align-top border-r min-w-[120px]">
+                                                    <div class="border rounded-lg bg-green-50 shadow-sm p-2">
+                                                        <div class="text-xs font-bold text-green-800 py-1 border-b border-green-200 text-center tracking-wide uppercase">Realisasi</div>
+                                                        <table class="w-full text-xs border-separate border-spacing-0">
+                                                            <thead>
+                                                                <tr class="bg-green-100 text-green-900 font-semibold">
+                                                                    <th class="border px-2 py-1">Beban</th>
+                                                                    <th class="border px-2 py-1">Keterangan</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr class="transition-colors duration-150 hover:bg-green-200">
+                                                                    <td class="border px-2 py-1">
+                                                                        <input type="number" name="realisasi[{{ $machine->id }}][{{ $date }}][beban]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-green-400 focus:border-green-500 transition-all duration-150" value="{{ $realisasi['beban'] ?? '' }}" step="0.01">
+                                                                        <span class="data-display">{{ $realisasi['beban'] ?? '-' }}</span>
+                                                                    </td>
+                                                                    <td class="border px-2 py-1">
+                                                                        <input type="text" name="realisasi[{{ $machine->id }}][{{ $date }}][keterangan]" class="data-input hidden w-32 text-center border rounded focus:ring-2 focus:ring-green-400 focus:border-green-500 transition-all duration-150" value="{{ $realisasi['keterangan'] ?? '' }}">
+                                                                        <span class="data-display">{{ $realisasi['keterangan'] ?? '-' }}</span>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </td>
                                             @endfor
                                         </tr>

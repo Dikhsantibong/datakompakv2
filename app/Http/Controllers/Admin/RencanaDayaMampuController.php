@@ -31,10 +31,16 @@ class RencanaDayaMampuController extends Controller
             return $query->where('unit_source', $unitSource);
         })->with(['machines' => function($query) use ($currentMonth) {
             $query->orderBy('name')
+                ->limit(3) // hapus nanti
                 ->with(['rencanaDayaMampu' => function($query) use ($currentMonth) {
                     $query->whereRaw("DATE_FORMAT(tanggal, '%Y-%m') = ?", [$currentMonth]);
                 }]);
         }])->orderBy('name')->get();
+
+        // Batasi hanya 3 mesin per plant untuk testing ringan
+        $powerPlants->each(function($plant) {
+            $plant->setRelation('machines', $plant->machines->take(3));
+        });
 
         // Calculate totals for highlight cards
         $totalDayaPJBTL = 0;
@@ -90,18 +96,13 @@ class RencanaDayaMampuController extends Controller
             // Kumpulkan data harian dari request
             $dailyData = [];
             foreach ($data['rencana'] ?? [] as $machineId => $rencanaArr) {
-                foreach ($rencanaArr as $date => $rencanaValue) {
-                    $dailyData[$machineId][$date]['rencana'] = $rencanaValue;
+                foreach ($rencanaArr as $date => $rencanaRows) {
+                    $dailyData[$machineId][$date]['rencana'] = $rencanaRows; // array 5 baris
                 }
             }
             foreach ($data['realisasi'] ?? [] as $machineId => $realisasiArr) {
                 foreach ($realisasiArr as $date => $realisasiValue) {
-                    $dailyData[$machineId][$date]['realisasi'] = $realisasiValue;
-                }
-            }
-            foreach ($data['keterangan'] ?? [] as $machineId => $keteranganArr) {
-                foreach ($keteranganArr as $date => $keteranganValue) {
-                    $dailyData[$machineId][$date]['keterangan'] = $keteranganValue;
+                    $dailyData[$machineId][$date]['realisasi'] = $realisasiValue; // 1 baris
                 }
             }
 
@@ -155,12 +156,6 @@ class RencanaDayaMampuController extends Controller
         }
 
         $record->daily_data = $oldDailyData;
-
-        // Update summary (opsional, bisa diambil dari hari terakhir atau di-generate ulang)
-        $record->rencana = $request->rencana[$machineId][$firstDate] ?? $record->rencana;
-        $record->realisasi = $request->realisasi[$machineId][$firstDate] ?? $record->realisasi;
-        $record->daya_pjbtl_silm = floatval($request->daya_pjbtl[$machineId] ?? $record->daya_pjbtl_silm);
-        $record->dmp_existing = floatval($request->dmp_existing[$machineId] ?? $record->dmp_existing);
         $record->unit_source = $unitSource;
         $record->save();
         return $record;

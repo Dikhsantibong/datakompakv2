@@ -113,9 +113,12 @@ class RencanaDayaMampu extends Model
     {
         $data = $this->daily_data ?? [];
         if ($type) {
-            return $data[$date][$type] ?? null;
+            return $data[$date][$type] ?? ($type === 'rencana' ? array_fill(0, 5, ['beban'=>'','durasi'=>'','keterangan'=>'']) : ['beban'=>'','keterangan'=>'']);
         }
-        return $data[$date] ?? [];
+        return $data[$date] ?? [
+            'rencana' => array_fill(0, 5, ['beban'=>'','durasi'=>'','keterangan'=>'']),
+            'realisasi' => ['beban'=>'','keterangan'=>'']
+        ];
     }
 
     public function setDailyValue($date, $type, $value)
@@ -126,8 +129,6 @@ class RencanaDayaMampu extends Model
         }
         $data[$date][$type] = $value;
         $this->daily_data = $data;
-        
-        // Update tanggal jika belum diset
         if (!$this->tanggal) {
             $this->tanggal = $date;
         }

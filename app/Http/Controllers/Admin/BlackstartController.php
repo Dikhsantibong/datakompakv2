@@ -81,8 +81,12 @@ class BlackstartController extends Controller
                 'pembangkit_status.*' => 'required|in:tersedia,tidak_tersedia',
                 'black_start_status' => 'required|array',
                 'black_start_status.*' => 'required|in:tersedia,tidak_tersedia',
+                'diagram_evidence' => 'nullable|array',
+                'diagram_evidence.*' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
                 'sop_status' => 'required|array',
                 'sop_status.*' => 'required|in:tersedia,tidak_tersedia',
+                'sop_evidence' => 'nullable|array',
+                'sop_evidence.*' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
                 'load_set_status' => 'required|array',
                 'load_set_status.*' => 'required|in:tersedia,tidak_tersedia',
                 'line_energize_status' => 'required|array',
@@ -129,8 +133,8 @@ class BlackstartController extends Controller
                 'battery_blackstart_satuan.*' => 'nullable|string',
                 'battery_blackstart_kondisi' => 'nullable|array',
                 'battery_blackstart_kondisi.*' => 'nullable|in:normal,tidak_normal',
-                'radio_kondisi' => 'nullable|array',
-                'radio_kondisi.*' => 'nullable|in:normal,tidak_normal',
+                'radio_komunikasi_kondisi' => 'nullable|array',
+                'radio_komunikasi_kondisi.*' => 'nullable|in:normal,tidak_normal',
                 'radio_kompresor_kondisi' => 'nullable|array',
                 'radio_kompresor_kondisi.*' => 'nullable|in:normal,tidak_normal',
                 'panel_kondisi' => 'nullable|array',
@@ -161,9 +165,19 @@ class BlackstartController extends Controller
                 'black_start_status.required' => 'Status black start harus diisi',
                 'black_start_status.*.required' => 'Status black start harus diisi',
                 'black_start_status.*.in' => 'Status black start tidak valid',
+                'diagram_evidence.required' => 'Diagram evidence harus diisi',
+                'diagram_evidence.*.required' => 'Diagram evidence harus diisi',
+                'diagram_evidence.*.file' => 'Diagram evidence harus berupa file',
+                'diagram_evidence.*.mimes' => 'Format file diagram evidence tidak valid',
+                'diagram_evidence.*.max' => 'Ukuran file diagram evidence tidak boleh lebih dari 2MB',
                 'sop_status.required' => 'Status SOP harus diisi',
                 'sop_status.*.required' => 'Status SOP harus diisi',
                 'sop_status.*.in' => 'Status SOP tidak valid',
+                'sop_evidence.required' => 'SOP evidence harus diisi',
+                'sop_evidence.*.required' => 'SOP evidence harus diisi',
+                'sop_evidence.*.file' => 'SOP evidence harus berupa file',
+                'sop_evidence.*.mimes' => 'Format file SOP evidence tidak valid',
+                'sop_evidence.*.max' => 'Ukuran file SOP evidence tidak boleh lebih dari 2MB',
                 'load_set_status.required' => 'Status load set harus diisi',
                 'load_set_status.*.required' => 'Status load set harus diisi',
                 'load_set_status.*.in' => 'Status load set tidak valid',
@@ -211,12 +225,28 @@ class BlackstartController extends Controller
 
             // Store multiple blackstart entries
             foreach ($request->unit_id as $key => $unit_id) {
+                // Handle file uploads
+                $diagramEvidencePath = null;
+                $sopEvidencePath = null;
+
+                if ($request->hasFile('diagram_evidence') && isset($request->file('diagram_evidence')[$key])) {
+                    $diagramFile = $request->file('diagram_evidence')[$key];
+                    $diagramEvidencePath = $diagramFile->store('blackstart/diagrams', 'public');
+                }
+
+                if ($request->hasFile('sop_evidence') && isset($request->file('sop_evidence')[$key])) {
+                    $sopFile = $request->file('sop_evidence')[$key];
+                    $sopEvidencePath = $sopFile->store('blackstart/sops', 'public');
+                }
+
                 $blackstart = Blackstart::create([
                     'tanggal' => $tanggal,
                     'unit_id' => $unit_id,
                     'pembangkit_status' => $request->pembangkit_status[$key],
                     'black_start_status' => $request->black_start_status[$key],
+                    'diagram_evidence' => $diagramEvidencePath,
                     'sop_status' => $request->sop_status[$key],
+                    'sop_evidence' => $sopEvidencePath,
                     'load_set_status' => $request->load_set_status[$key],
                     'line_energize_status' => $request->line_energize_status[$key],
                     'status_jaringan' => $request->status_jaringan[$key],
@@ -226,35 +256,68 @@ class BlackstartController extends Controller
 
                 // Store peralatan blackstart data if exists
                 if (isset($request->unit_layanan) && isset($request->unit_layanan[$key])) {
+                    // Handle peralatan eviden uploads
+                    $kompresorEvidenPath = null;
+                    $tabungEvidenPath = null;
+                    $lampuEvidenPath = null;
+                    $catudayaEvidenPath = null;
+                    $blackstartEvidenPath = null;
+                    $radioEvidenPath = null;
+
+                    if ($request->hasFile('kompresor_eviden') && isset($request->file('kompresor_eviden')[$key])) {
+                        $file = $request->file('kompresor_eviden')[$key];
+                        $kompresorEvidenPath = $file->store('blackstart/peralatan/kompresor', 'public');
+                    }
+                    if ($request->hasFile('tabung_eviden') && isset($request->file('tabung_eviden')[$key])) {
+                        $file = $request->file('tabung_eviden')[$key];
+                        $tabungEvidenPath = $file->store('blackstart/peralatan/tabung', 'public');
+                    }
+                    if ($request->hasFile('lampu_eviden') && isset($request->file('lampu_eviden')[$key])) {
+                        $file = $request->file('lampu_eviden')[$key];
+                        $lampuEvidenPath = $file->store('blackstart/peralatan/lampu', 'public');
+                    }
+                    if ($request->hasFile('catudaya_eviden') && isset($request->file('catudaya_eviden')[$key])) {
+                        $file = $request->file('catudaya_eviden')[$key];
+                        $catudayaEvidenPath = $file->store('blackstart/peralatan/catudaya', 'public');
+                    }
+                    if ($request->hasFile('blackstart_eviden') && isset($request->file('blackstart_eviden')[$key])) {
+                        $file = $request->file('blackstart_eviden')[$key];
+                        $blackstartEvidenPath = $file->store('blackstart/peralatan/blackstart', 'public');
+                    }
+                    if ($request->hasFile('radio_eviden') && isset($request->file('radio_eviden')[$key])) {
+                        $file = $request->file('radio_eviden')[$key];
+                        $radioEvidenPath = $file->store('blackstart/peralatan/radio', 'public');
+                    }
+
                     PeralatanBlackstart::create([
                         'blackstart_id' => $blackstart->id,
                         'unit_id' => $unit_id,
                         'kompresor_diesel_jumlah' => $request->kompresor_jumlah[$key] ?? null,
-                        'kompresor_diesel_satuan' => $request->kompresor_satuan[$key] ?? 'bh',
                         'kompresor_diesel_kondisi' => $request->kompresor_kondisi[$key] ?? null,
+                        'kompresor_eviden' => $kompresorEvidenPath,
                         'tabung_udara_jumlah' => $request->tabung_jumlah[$key] ?? null,
-                        'tabung_udara_satuan' => $request->tabung_satuan[$key] ?? 'bh',
                         'tabung_udara_kondisi' => $request->tabung_kondisi[$key] ?? null,
+                        'tabung_eviden' => $tabungEvidenPath,
                         'ups_kondisi' => $request->ups_kondisi[$key] ?? null,
                         'lampu_emergency_jumlah' => $request->lampu_jumlah[$key] ?? null,
-                        'lampu_emergency_satuan' => $request->lampu_satuan[$key] ?? 'bh',
                         'lampu_emergency_kondisi' => $request->lampu_kondisi[$key] ?? null,
+                        'lampu_eviden' => $lampuEvidenPath,
                         'battery_catudaya_jumlah' => $request->battery_catudaya_jumlah[$key] ?? null,
-                        'battery_catudaya_satuan' => $request->battery_catudaya_satuan[$key] ?? 'bh',
                         'battery_catudaya_kondisi' => $request->battery_catudaya_kondisi[$key] ?? null,
+                        'catudaya_eviden' => $catudayaEvidenPath,
                         'battery_blackstart_jumlah' => $request->battery_blackstart_jumlah[$key] ?? null,
-                        'battery_blackstart_satuan' => $request->battery_blackstart_satuan[$key] ?? 'bh',
                         'battery_blackstart_kondisi' => $request->battery_blackstart_kondisi[$key] ?? null,
-                        'radio_komunikasi_kondisi' => $request->radio_kondisi[$key] ?? null,
-                        'radio_kompresor_kondisi' => $request->radio_kompresor_kondisi[$key] ?? null,
-                        'panel_kondisi' => $request->panel_kondisi[$key] ?? null,
+                        'blackstart_eviden' => $blackstartEvidenPath,
+                        'radio_jumlah' => $request->radio_jumlah[$key] ?? null,
+                        'radio_komunikasi_kondisi' => $request->radio_komunikasi_kondisi[$key] ?? null,
+                        'radio_eviden' => $radioEvidenPath,
                         'simulasi_blackstart' => $request->simulasi_blackstart[$key] ?? null,
                         'start_kondisi_blackout' => $request->start_kondisi_blackout[$key] ?? null,
                         'waktu_mulai' => $request->waktu_mulai[$key] ?? null,
                         'waktu_selesai' => $request->waktu_selesai[$key] ?? null,
                         'waktu_deadline' => $request->waktu_deadline[$key] ?? null,
                         'pic' => $request->pic[$key] ?? null,
-                        'status' => strtolower($request->peralatan_status[$key] ?? 'open')
+                        'status' => $request->peralatan_status[$key] ?? 'open'
                     ]);
                 }
             }

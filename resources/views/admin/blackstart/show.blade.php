@@ -255,72 +255,60 @@
                         <!-- Main Blackstart Table -->
                         <div class="overflow-x-auto mb-8">
                             <h2 class="text-xl font-semibold text-gray-800 mb-4">Komitmen dan Pembahasan</h2>
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
+                            <table class="min-w-full text-xs border border-gray-200 rounded-lg overflow-hidden">
+                                <thead class="bg-gray-100">
                                     <tr>
-                                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">No</th>
-                                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Unit Layanan / sentral</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="2">collect single line diagram</th>
-                                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">SOP Black start</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">status ketersediaan</th>
-                                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">PIC</th>
-                                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">STATUS</th>
-                                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="px-3 py-2"></th>
-                                        <th class="px-3 py-2"></th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">pembangkit</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">black start</th>
-                                        <th class="px-3 py-2"></th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">load set</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">line energize</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">status jaringan</th>
-                                        <th class="px-3 py-2"></th>
-                                        <th class="px-3 py-2"></th>
-                                        <th class="px-3 py-2"></th>
+                                        <th class="px-3 py-2">No</th>
+                                        <th class="px-3 py-2">Unit Layanan / Sentral</th>
+                                        <th class="px-3 py-2">Pembangkit</th>
+                                        <th class="px-3 py-2">Black Start</th>
+                                        <th class="px-3 py-2">Diagram Evidence</th>
+                                        <th class="px-3 py-2">SOP</th>
+                                        <th class="px-3 py-2">SOP Evidence</th>
+                                        <th class="px-3 py-2">Load Set</th>
+                                        <th class="px-3 py-2">Line Energize</th>
+                                        <th class="px-3 py-2">Status Jaringan</th>
+                                        <th class="px-3 py-2">PIC</th>
+                                        <th class="px-3 py-2">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
+                                <tbody>
                                     @foreach($blackstarts as $blackstart)
-                                    <tr>
-                                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
-                                            {{ $loop->iteration }}
+                                    <tr class="hover:bg-gray-50 border-b border-gray-200">
+                                        <td class="px-3 py-2">{{ $loop->iteration }}</td>
+                                        <td class="px-3 py-2">{{ $blackstart->powerPlant->name }}</td>
+                                        <td class="px-3 py-2">{{ ucfirst($blackstart->pembangkit_status) }}</td>
+                                        <td class="px-3 py-2">{{ ucfirst($blackstart->black_start_status) }}</td>
+                                        <td class="px-3 py-2">
+                                            @if($blackstart->diagram_evidence)
+                                                <a href="{{ asset('storage/'.$blackstart->diagram_evidence) }}" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1">
+                                                    <i class="fas fa-file-alt"></i> Lihat
+                                                </a>
+                                            @else
+                                                <span class="text-gray-400">-</span>
+                                            @endif
                                         </td>
-                                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
-                                            {{ $blackstart->powerPlant->name }}
+                                        <td class="px-3 py-2">{{ ucfirst($blackstart->sop_status) }}</td>
+                                        <td class="px-3 py-2">
+                                            @if($blackstart->sop_evidence)
+                                                <a href="{{ asset('storage/'.$blackstart->sop_evidence) }}" target="_blank" class="text-green-600 hover:underline flex items-center gap-1">
+                                                    <i class="fas fa-file-alt"></i> Lihat
+                                                </a>
+                                            @else
+                                                <span class="text-gray-400">-</span>
+                                            @endif
                                         </td>
-                                        <td class="px-3 py-4 whitespace-nowrap border-r border-gray-200">
-                                            <span class="text-sm text-gray-900">{{ ucfirst($blackstart->pembangkit_status) }}</span>
-                                        </td>
-                                        <td class="px-3 py-4 whitespace-nowrap border-r border-gray-200">
-                                            <span class="text-sm text-gray-900">{{ ucfirst($blackstart->black_start_status) }}</span>
-                                        </td>
-                                        <td class="px-3 py-4 whitespace-nowrap border-r border-gray-200">
-                                            <span class="text-sm text-gray-900">{{ ucfirst($blackstart->sop_status) }}</span>
-                                        </td>
-                                        <td class="px-3 py-4 whitespace-nowrap border-r border-gray-200">
-                                            <span class="text-sm text-gray-900">{{ ucfirst($blackstart->load_set_status) }}</span>
-                                        </td>
-                                        <td class="px-3 py-4 whitespace-nowrap border-r border-gray-200">
-                                            <span class="text-sm text-gray-900">{{ ucfirst($blackstart->line_energize_status) }}</span>
-                                        </td>
-                                        <td class="px-3 py-4 whitespace-nowrap border-r border-gray-200">
-                                            <span class="text-sm text-gray-900">{{ ucfirst($blackstart->status_jaringan) }}</span>
-                                        </td>
-                                        <td class="px-3 py-4 whitespace-nowrap border-r border-gray-200">
-                                            <span class="text-sm text-gray-900">{{ $blackstart->pic }}</span>
-                                        </td>
-                                        <td class="px-3 py-4 whitespace-nowrap border-r border-gray-200">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $blackstart->status === 'open' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                {{ strtoupper($blackstart->status) }}
-                                            </span>
-                                        </td>
-                                        <td class="px-3 py-4 whitespace-nowrap text-sm">
+                                        <td class="px-3 py-2">{{ ucfirst($blackstart->load_set_status) }}</td>
+                                        <td class="px-3 py-2">{{ ucfirst($blackstart->line_energize_status) }}</td>
+                                        <td class="px-3 py-2">{{ ucfirst($blackstart->status_jaringan) }}</td>
+                                        <td class="px-3 py-2">{{ $blackstart->pic }}</td>
+                                        <td class="px-3 py-2">
                                             <form action="{{ route('admin.blackstart.destroy', $blackstart->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
+                                                <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                                    <i class="fas fa-trash"></i> Hapus
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
@@ -332,52 +320,58 @@
                         <!-- Peralatan Blackstart Table -->
                         <div class="overflow-x-auto mt-8 border-t border-gray-200 pt-8">
                             <h2 class="text-xl font-semibold text-gray-800 mb-4">Data Peralatan Blackstart</h2>
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
+                            <table class="min-w-full text-xs border border-gray-200 rounded-lg overflow-hidden">
+                                <thead class="bg-gray-100">
                                     <tr>
-                                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">No</th>
-                                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Unit Layanan / sentral</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Kompresor diesel</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">tabung udara</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">UPS</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="2">lampu emergency</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">battery catudaya</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">battery black start</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">radio komunikasi</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">kondisi radio kompresor</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">panel</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">simulasi black start</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">start kondisi black out</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">TARGET WAKTU</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">PIC</th>
-                                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">STATUS</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">No</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Unit Layanan / sentral</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Kompresor diesel</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Tabung udara</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">UPS</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Lampu emergency</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Battery catudaya</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Battery black start</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Radio komunikasi</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Simulasi black start</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Start kondisi black out</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">TARGET WAKTU Mulai</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Selesai</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Deadline</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">PIC</th>
+                                        <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">STATUS</th>
                                     </tr>
                                     <tr>
                                         <th class="px-3 py-2"></th>
                                         <th class="px-3 py-2"></th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <!-- Kompresor diesel -->
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">eviden</th>
+                                        <!-- Tabung udara -->
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">eviden</th>
+                                        <!-- UPS -->
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <!-- Lampu Emergency -->
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">eviden</th>
+                                        <!-- Battery Catudaya -->
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">eviden</th>
+                                        <!-- Battery Black Start -->
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">eviden</th>
+                                        <!-- Radio Komunikasi -->
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
                                         <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Mulai</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Selesai</th>
-                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Deadline</th>
+                                        <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">eviden</th>
+                                        <th class="px-3 py-2"></th>
+                                        <th class="px-3 py-2"></th>
+                                        <th class="px-3 py-2"></th>
                                         <th class="px-3 py-2"></th>
                                         <th class="px-3 py-2"></th>
                                     </tr>
@@ -394,31 +388,126 @@
                                             </td>
                                             <!-- Kompresor diesel -->
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ $peralatan->kompresor_diesel_jumlah }}</td>
-                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ $peralatan->kompresor_diesel_satuan }}</td>
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ ucfirst($peralatan->kompresor_diesel_kondisi) }}</td>
+                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
+                                                @if($peralatan->kompresor_eviden)
+                                                    <a href="{{ asset('storage/'.$peralatan->kompresor_eviden) }}" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline">
+                                                        @php $ext = pathinfo($peralatan->kompresor_eviden, PATHINFO_EXTENSION); @endphp
+                                                        @if(in_array(strtolower($ext), ['jpg','jpeg','png','gif','bmp','webp']))
+                                                            <img src="{{ asset('storage/'.$peralatan->kompresor_eviden) }}" alt="Eviden" class="w-8 h-8 object-cover rounded border" />
+                                                        @elseif(strtolower($ext) == 'pdf')
+                                                            <i class="fas fa-file-pdf text-red-600"></i>
+                                                        @else
+                                                            <i class="fas fa-file-alt"></i>
+                                                        @endif
+                                                        <span class="truncate max-w-[100px]">{{ basename($peralatan->kompresor_eviden) }}</span>
+                                                    </a>
+                                                @else
+                                                    <span class="text-gray-400">-</span>
+                                                @endif
+                                            </td>
                                             <!-- Tabung udara -->
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ $peralatan->tabung_udara_jumlah }}</td>
-                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ $peralatan->tabung_udara_satuan }}</td>
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ ucfirst($peralatan->tabung_udara_kondisi) }}</td>
+                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
+                                                @if($peralatan->tabung_eviden)
+                                                    <a href="{{ asset('storage/'.$peralatan->tabung_eviden) }}" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline">
+                                                        @php $ext = pathinfo($peralatan->tabung_eviden, PATHINFO_EXTENSION); @endphp
+                                                        @if(in_array(strtolower($ext), ['jpg','jpeg','png','gif','bmp','webp']))
+                                                            <img src="{{ asset('storage/'.$peralatan->tabung_eviden) }}" alt="Eviden" class="w-8 h-8 object-cover rounded border" />
+                                                        @elseif(strtolower($ext) == 'pdf')
+                                                            <i class="fas fa-file-pdf text-red-600"></i>
+                                                        @else
+                                                            <i class="fas fa-file-alt"></i>
+                                                        @endif
+                                                        <span class="truncate max-w-[100px]">{{ basename($peralatan->tabung_eviden) }}</span>
+                                                    </a>
+                                                @else
+                                                    <span class="text-gray-400">-</span>
+                                                @endif
+                                            </td>
                                             <!-- UPS -->
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ ucfirst($peralatan->ups_kondisi) }}</td>
                                             <!-- Lampu Emergency -->
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ $peralatan->lampu_emergency_jumlah }}</td>
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ ucfirst($peralatan->lampu_emergency_kondisi) }}</td>
+                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
+                                                @if($peralatan->lampu_eviden)
+                                                    <a href="{{ asset('storage/'.$peralatan->lampu_eviden) }}" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline">
+                                                        @php $ext = pathinfo($peralatan->lampu_eviden, PATHINFO_EXTENSION); @endphp
+                                                        @if(in_array(strtolower($ext), ['jpg','jpeg','png','gif','bmp','webp']))
+                                                            <img src="{{ asset('storage/'.$peralatan->lampu_eviden) }}" alt="Eviden" class="w-8 h-8 object-cover rounded border" />
+                                                        @elseif(strtolower($ext) == 'pdf')
+                                                            <i class="fas fa-file-pdf text-red-600"></i>
+                                                        @else
+                                                            <i class="fas fa-file-alt"></i>
+                                                        @endif
+                                                        <span class="truncate max-w-[100px]">{{ basename($peralatan->lampu_eviden) }}</span>
+                                                    </a>
+                                                @else
+                                                    <span class="text-gray-400">-</span>
+                                                @endif
+                                            </td>
                                             <!-- Battery Catudaya -->
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ $peralatan->battery_catudaya_jumlah }}</td>
-                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ $peralatan->battery_catudaya_satuan }}</td>
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ ucfirst($peralatan->battery_catudaya_kondisi) }}</td>
+                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
+                                                @if($peralatan->catudaya_eviden)
+                                                    <a href="{{ asset('storage/'.$peralatan->catudaya_eviden) }}" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline">
+                                                        @php $ext = pathinfo($peralatan->catudaya_eviden, PATHINFO_EXTENSION); @endphp
+                                                        @if(in_array(strtolower($ext), ['jpg','jpeg','png','gif','bmp','webp']))
+                                                            <img src="{{ asset('storage/'.$peralatan->catudaya_eviden) }}" alt="Eviden" class="w-8 h-8 object-cover rounded border" />
+                                                        @elseif(strtolower($ext) == 'pdf')
+                                                            <i class="fas fa-file-pdf text-red-600"></i>
+                                                        @else
+                                                            <i class="fas fa-file-alt"></i>
+                                                        @endif
+                                                        <span class="truncate max-w-[100px]">{{ basename($peralatan->catudaya_eviden) }}</span>
+                                                    </a>
+                                                @else
+                                                    <span class="text-gray-400">-</span>
+                                                @endif
+                                            </td>
                                             <!-- Battery Black Start -->
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ $peralatan->battery_blackstart_jumlah }}</td>
-                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ $peralatan->battery_blackstart_satuan }}</td>
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ ucfirst($peralatan->battery_blackstart_kondisi) }}</td>
+                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
+                                                @if($peralatan->blackstart_eviden)
+                                                    <a href="{{ asset('storage/'.$peralatan->blackstart_eviden) }}" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline">
+                                                        @php $ext = pathinfo($peralatan->blackstart_eviden, PATHINFO_EXTENSION); @endphp
+                                                        @if(in_array(strtolower($ext), ['jpg','jpeg','png','gif','bmp','webp']))
+                                                            <img src="{{ asset('storage/'.$peralatan->blackstart_eviden) }}" alt="Eviden" class="w-8 h-8 object-cover rounded border" />
+                                                        @elseif(strtolower($ext) == 'pdf')
+                                                            <i class="fas fa-file-pdf text-red-600"></i>
+                                                        @else
+                                                            <i class="fas fa-file-alt"></i>
+                                                        @endif
+                                                        <span class="truncate max-w-[100px]">{{ basename($peralatan->blackstart_eviden) }}</span>
+                                                    </a>
+                                                @else
+                                                    <span class="text-gray-400">-</span>
+                                                @endif
+                                            </td>
                                             <!-- Radio Komunikasi -->
+                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ $peralatan->radio_jumlah }}</td>
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ ucfirst($peralatan->radio_komunikasi_kondisi) }}</td>
-                                            <!-- Kondisi Radio Kompresor -->
-                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ ucfirst($peralatan->radio_kompresor_kondisi) }}</td>
-                                            <!-- Panel -->
-                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ ucfirst($peralatan->panel_kondisi) }}</td>
+                                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
+                                                @if($peralatan->radio_eviden)
+                                                    <a href="{{ asset('storage/'.$peralatan->radio_eviden) }}" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline">
+                                                        @php $ext = pathinfo($peralatan->radio_eviden, PATHINFO_EXTENSION); @endphp
+                                                        @if(in_array(strtolower($ext), ['jpg','jpeg','png','gif','bmp','webp']))
+                                                            <img src="{{ asset('storage/'.$peralatan->radio_eviden) }}" alt="Eviden" class="w-8 h-8 object-cover rounded border" />
+                                                        @elseif(strtolower($ext) == 'pdf')
+                                                            <i class="fas fa-file-pdf text-red-600"></i>
+                                                        @else
+                                                            <i class="fas fa-file-alt"></i>
+                                                        @endif
+                                                        <span class="truncate max-w-[100px]">{{ basename($peralatan->radio_eviden) }}</span>
+                                                    </a>
+                                                @else
+                                                    <span class="text-gray-400">-</span>
+                                                @endif
+                                            </td>
                                             <!-- Simulasi Black Start -->
                                             <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">{{ ucfirst($peralatan->simulasi_blackstart) }}</td>
                                             <!-- Start Kondisi Black Out -->

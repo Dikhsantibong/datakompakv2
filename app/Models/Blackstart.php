@@ -16,12 +16,13 @@ class Blackstart extends Model
         'unit_id',
         'pembangkit_status',
         'black_start_status',
+        'diagram_evidence',
         'sop_status',
+        'sop_evidence',
         'load_set_status',
         'line_energize_status',
         'status_jaringan',
-        'pic',
-        'status'
+        'pic'
     ];
 
     protected $casts = [
@@ -40,5 +41,16 @@ class Blackstart extends Model
     public function peralatanBlackstarts()
     {
         return $this->hasMany(PeralatanBlackstart::class);
+    }
+
+    // Helper method to get full evidence path
+    public function getDiagramEvidencePathAttribute()
+    {
+        return $this->diagram_evidence ? asset('storage/' . $this->diagram_evidence) : null;
+    }
+
+    public function getSopEvidencePathAttribute()
+    {
+        return $this->sop_evidence ? asset('storage/' . $this->sop_evidence) : null;
     }
 } 

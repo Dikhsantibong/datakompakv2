@@ -162,10 +162,11 @@
                                             <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">No</th>
                                             <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Unit Layanan / sentral</th>
                                             <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200" colspan="2">collect single line diagram</th>
+                                            <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Evidence Diagram</th>
                                             <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">SOP Black start</th>
+                                            <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Evidence SOP</th>
                                             <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200" colspan="3">status ketersediaan</th>
                                             <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">PIC</th>
-                                            <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">STATUS</th>
                                             <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                         </tr>
                                         <tr>
@@ -174,10 +175,11 @@
                                             <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">pembangkit</th>
                                             <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">black start</th>
                                             <th class="px-3 py-2"></th>
+                                            <th class="px-3 py-2"></th>
+                                            <th class="px-3 py-2"></th>
                                             <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">load set</th>
                                             <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">line energize</th>
                                             <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">status jaringan</th>
-                                            <th class="px-3 py-2"></th>
                                             <th class="px-3 py-2"></th>
                                             <th class="px-3 py-2"></th>
                                         </tr>
@@ -209,48 +211,52 @@
                                                 <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">No</th>
                                                 <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Unit Layanan / sentral</th>
                                                 <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Kompresor diesel</th>
-                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">tabung udara</th>
+                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Tabung udara</th>
                                                 <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">UPS</th>
-                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">lampu emergency</th>
-                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">battery catudaya</th>
-                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">battery black start</th>
-                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="2">radio komunikasi</th>
-                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">kondisi radio kompresor</th>
-                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">panel</th>
-                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">simulasi black start</th>
-                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">start kondisi black out</th>
-                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">TARGET WAKTU</th>
+                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Lampu emergency</th>
+                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Battery catudaya</th>
+                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Battery black start</th>
+                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200" colspan="3">Radio komunikasi</th>
+                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Simulasi black start</th>
+                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Start kondisi black out</th>
+                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">TARGET WAKTU Mulai</th>
+                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Selesai</th>
+                                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Deadline</th>
                                                 <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase border-r border-gray-200">PIC</th>
                                                 <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase">STATUS</th>
                                             </tr>
                                             <tr>
                                                 <th class="px-3 py-2"></th>
                                                 <th class="px-3 py-2"></th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">satuan</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">jumlah</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">kondisi</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">status</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">status</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Mulai</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Selesai</th>
-                                                <th class="px-3 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Deadline</th>
+                                                <!-- Kompresor diesel -->
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Jumlah</th>
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Kondisi</th>
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Eviden</th>
+                                                <!-- Tabung udara -->
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Jumlah</th>
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Kondisi</th>
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Eviden</th>
+                                                <!-- UPS -->
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Kondisi</th>
+                                                <!-- Lampu emergency -->
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Jumlah</th>
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Kondisi</th>
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Eviden</th>
+                                                <!-- Battery catudaya -->
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Jumlah</th>
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Kondisi</th>
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Eviden</th>
+                                                <!-- Battery black start -->
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Jumlah</th>
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Kondisi</th>
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Eviden</th>
+                                                <!-- Radio komunikasi -->
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Jumlah</th>
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Kondisi</th>
+                                                <th class="px-1 py-2 text-xs font-medium text-gray-500 uppercase border border-gray-200">Eviden</th>
+                                                <th class="px-3 py-2"></th>
+                                                <th class="px-3 py-2"></th>
+                                                <th class="px-3 py-2"></th>
                                                 <th class="px-3 py-2"></th>
                                                 <th class="px-3 py-2"></th>
                                             </tr>
@@ -309,11 +315,21 @@
             </select>
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
+            <input type="file" name="diagram_evidence[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 evidence-input" data-preview="diagram-preview">
+            <div class="diagram-preview mt-1 text-xs text-gray-600"></div>
+            <div class="diagram-filename mt-1 text-xs text-gray-600"></div>
+        </td>
+        <td class="px-3 py-4 whitespace-nowrap">
             <select name="sop_status[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
                 <option value="">Pilih Status</option>
                 <option value="tersedia">Tersedia</option>
                 <option value="tidak_tersedia">Tidak Tersedia</option>
             </select>
+        </td>
+        <td class="px-3 py-4 whitespace-nowrap">
+            <input type="file" name="sop_evidence[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 evidence-input" data-preview="sop-preview">
+            <div class="sop-preview mt-1 text-xs text-gray-600"></div>
+            <div class="sop-filename mt-1 text-xs text-gray-600"></div>
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
             <select name="load_set_status[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
@@ -338,13 +354,6 @@
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
             <input type="text" name="pic[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" placeholder="Nama PIC" required>
-        </td>
-        <td class="px-3 py-4 whitespace-nowrap">
-            <select name="status[]" class="p-2 w-[115px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
-                <option value="">Pilih Status</option>
-                <option value="open">OPEN</option>
-                <option value="close">CLOSE</option>
-            </select>
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
             <button type="button" class="delete-row text-red-500 hover:text-red-700">
@@ -374,21 +383,20 @@
             <input type="number" name="kompresor_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
-            <input type="text" name="kompresor_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" >
-        </td>
-        <td class="px-3 py-4 whitespace-nowrap">
             <select name="kompresor_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
                 <option value="">Pilih</option>
                 <option value="normal">Normal</option>
                 <option value="tidak_normal">Tidak Normal</option>
             </select>
         </td>
+        <td class="px-3 py-4 whitespace-nowrap">
+            <input type="file" name="kompresor_eviden[]" class="evidence-input p-2 w-[120px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" data-preview="kompresor-preview">
+            <div class="kompresor-preview mt-1 text-xs text-gray-600"></div>
+            <div class="kompresor-filename mt-1 text-xs text-gray-600"></div>
+        </td>
         <!-- Tabung udara -->
         <td class="px-3 py-4 whitespace-nowrap">
             <input type="number" name="tabung_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-        </td>
-        <td class="px-3 py-4 whitespace-nowrap">
-            <input type="text" name="tabung_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" >
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
             <select name="tabung_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
@@ -396,6 +404,11 @@
                 <option value="normal">Normal</option>
                 <option value="tidak_normal">Tidak Normal</option>
             </select>
+        </td>
+        <td class="px-3 py-4 whitespace-nowrap">
+            <input type="file" name="tabung_eviden[]" class="evidence-input p-2 w-[120px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" data-preview="tabung-preview">
+            <div class="tabung-preview mt-1 text-xs text-gray-600"></div>
+            <div class="tabung-filename mt-1 text-xs text-gray-600"></div>
         </td>
         <!-- UPS -->
         <td class="px-3 py-4 whitespace-nowrap">
@@ -410,21 +423,20 @@
             <input type="number" name="lampu_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
-            <input type="text" name="lampu_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-        </td>
-        <td class="px-3 py-4 whitespace-nowrap">
             <select name="lampu_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
                 <option value="">Pilih</option>
                 <option value="normal">Normal</option>
                 <option value="tidak_normal">Tidak Normal</option>
             </select>
         </td>
+        <td class="px-3 py-4 whitespace-nowrap">
+            <input type="file" name="lampu_eviden[]" class="evidence-input p-2 w-[120px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" data-preview="lampu-preview">
+            <div class="lampu-preview mt-1 text-xs text-gray-600"></div>
+            <div class="lampu-filename mt-1 text-xs text-gray-600"></div>
+        </td>
         <!-- Battery Catudaya -->
         <td class="px-3 py-4 whitespace-nowrap">
             <input type="number" name="battery_catudaya_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-        </td>
-        <td class="px-3 py-4 whitespace-nowrap">
-            <input type="text" name="battery_catudaya_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" >
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
             <select name="battery_catudaya_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
@@ -433,12 +445,14 @@
                 <option value="tidak_normal">Tidak Normal</option>
             </select>
         </td>
+        <td class="px-3 py-4 whitespace-nowrap">
+            <input type="file" name="catudaya_eviden[]" class="evidence-input p-2 w-[120px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" data-preview="catudaya-preview">
+            <div class="catudaya-preview mt-1 text-xs text-gray-600"></div>
+            <div class="catudaya-filename mt-1 text-xs text-gray-600"></div>
+        </td>
         <!-- Battery Black Start -->
         <td class="px-3 py-4 whitespace-nowrap">
             <input type="number" name="battery_blackstart_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-        </td>
-        <td class="px-3 py-4 whitespace-nowrap">
-            <input type="text" name="battery_blackstart_satuan[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" >
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
             <select name="battery_blackstart_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
@@ -447,32 +461,26 @@
                 <option value="tidak_normal">Tidak Normal</option>
             </select>
         </td>
+        <td class="px-3 py-4 whitespace-nowrap">
+            <input type="file" name="blackstart_eviden[]" class="evidence-input p-2 w-[120px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" data-preview="blackstart-preview">
+            <div class="blackstart-preview mt-1 text-xs text-gray-600"></div>
+            <div class="blackstart-filename mt-1 text-xs text-gray-600"></div>
+        </td>
         <!-- Radio Komunikasi -->
         <td class="px-3 py-4 whitespace-nowrap">
             <input type="number" name="radio_jumlah[]" class="p-2 w-[80px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
         </td>
         <td class="px-3 py-4 whitespace-nowrap">
-            <select name="radio_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+            <select name="radio_komunikasi_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
                 <option value="">Pilih</option>
                 <option value="normal">Normal</option>
                 <option value="tidak_normal">Tidak Normal</option>
             </select>
         </td>
-        <!-- Kondisi Radio Kompresor -->
         <td class="px-3 py-4 whitespace-nowrap">
-            <select name="radio_kompresor_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                <option value="">Pilih</option>
-                <option value="normal">Normal</option>
-                <option value="tidak_normal">Tidak Normal</option>
-            </select>
-        </td>
-        <!-- Panel -->
-        <td class="px-3 py-4 whitespace-nowrap">
-            <select name="panel_kondisi[]" class="p-2 w-[100px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                <option value="">Pilih</option>
-                <option value="normal">Normal</option>
-                <option value="tidak_normal">Tidak Normal</option>
-            </select>
+            <input type="file" name="radio_eviden[]" class="evidence-input p-2 w-[120px] rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" data-preview="radio-preview">
+            <div class="radio-preview mt-1 text-xs text-gray-600"></div>
+            <div class="radio-filename mt-1 text-xs text-gray-600"></div>
         </td>
         <!-- Simulasi Black Start -->
         <td class="px-3 py-4 whitespace-nowrap">
@@ -690,6 +698,49 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         }
     });
+
+    // File input handling (bahasa Indonesia)
+    function handleEvidenceInputChange(e) {
+        if (e.target.classList.contains('evidence-input')) {
+            const file = e.target.files[0];
+            const previewDiv = e.target.parentElement.querySelector('.' + e.target.dataset.preview);
+            const filenameDiv = e.target.parentElement.querySelector('.' + e.target.dataset.preview.replace('preview', 'filename'));
+            
+            if (file) {
+                // Tampilkan nama file
+                filenameDiv.textContent = `Berkas: ${file.name}`;
+                // Preview untuk gambar
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        previewDiv.innerHTML = `
+                            <img src="${ev.target.result}" class="max-w-[100px] max-h-[100px] object-contain mt-1 rounded" alt="Pratinjau Gambar">
+                        `;
+                    }
+                    reader.readAsDataURL(file);
+                } else if (file.type === 'application/pdf') {
+                    previewDiv.innerHTML = `
+                        <div class="flex items-center text-blue-600 mt-1">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                            </svg>
+                            <span>Berkas PDF</span>
+                        </div>
+                    `;
+                } else {
+                    previewDiv.innerHTML = '';
+                }
+            } else {
+                previewDiv.innerHTML = '';
+                filenameDiv.textContent = '';
+            }
+        }
+    }
+
+    // Event listener untuk file input, termasuk baris dinamis
+    document.addEventListener('change', handleEvidenceInputChange);
+
+    // Jika baris baru ditambahkan, pastikan event tetap berjalan (delegasi sudah cukup)
 });
 </script>
 @endsection 

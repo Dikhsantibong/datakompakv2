@@ -1,9 +1,4 @@
 <table>
-    <!-- Header -->
-    <tr class="main-header">
-        <td colspan="7">Laporan KIT 00.00 - {{ date('d F Y', strtotime($laporan->tanggal)) }}</td>
-    </tr>
-    
     <!-- Logo spacing row -->
     <tr>
         <td colspan="3"></td>
@@ -12,189 +7,192 @@
     </tr>
     <tr><td colspan="7"></td></tr>
 
+    <!-- Header -->
+    <tr class="main-header">
+        <td colspan="7">Laporan KIT 00.00 - {{ date('d F Y', strtotime($laporan->tanggal)) }}</td>
+    </tr>
+    <tr><td colspan="7"></td></tr>
+
     <!-- BBM Section -->
     <tr class="section-header">
         <td colspan="7">Data BBM</td>
     </tr>
     <tr class="table-header">
-        <th>No</th>
-        <th>Jenis BBM</th>
-        <th>Stock Awal</th>
-        <th>Penerimaan</th>
-        <th>Pemakaian</th>
-        <th>Stock Akhir</th>
-        <th>Keterangan</th>
+        <th colspan="5">Storage Tank</th>
+        <th colspan="3">Service Tank</th>
+        <th rowspan="2">Total Stok Tangki</th>
+        <th rowspan="2">Terima BBM</th>
+        <th colspan="7">Flowmeter</th>
     </tr>
-    @php $no = 1; @endphp
+    <tr class="table-header">
+        <th colspan="2">Tank 1</th>
+        <th colspan="2">Tank 2</th>
+        <th>Total Stok</th>
+        <th colspan="2">Tank 1</th>
+        <th>Tank 2</th>
+        <th colspan="3">Flowmeter 1</th>
+        <th colspan="3">Flowmeter 2</th>
+        <th>Total Pakai</th>
+    </tr>
+    <tr class="table-header">
+        <th>cm</th>
+        <th>liter</th>
+        <th>cm</th>
+        <th>liter</th>
+        <th>liter</th>
+        <th>liter</th>
+        <th>%</th>
+        <th>liter</th>
+        <th>%</th>
+        <th>liter</th>
+        <th>liter</th>
+        <th>Awal</th>
+        <th>Akhir</th>
+        <th>Pakai 1</th>
+        <th>Awal</th>
+        <th>Akhir</th>
+        <th>Pakai 2</th>
+    </tr>
     @foreach($laporan->bbm as $bbm)
     <tr>
-        <td>{{ $no++ }}</td>
-        <td>{{ $bbm->jenis_bbm }}</td>
-        <td>{{ $bbm->stock_awal }}</td>
-        <td>{{ $bbm->penerimaan }}</td>
-        <td>{{ $bbm->pemakaian }}</td>
-        <td>{{ $bbm->stock_akhir }}</td>
-        <td>{{ $bbm->keterangan ?? '-' }}</td>
+        <td>{{ $bbm->storage_tank_1_cm }}</td>
+        <td>{{ $bbm->storage_tank_1_liter }}</td>
+        <td>{{ $bbm->storage_tank_2_cm }}</td>
+        <td>{{ $bbm->storage_tank_2_liter }}</td>
+        <td>{{ $bbm->total_stok }}</td>
+        <td>{{ $bbm->service_tank_1_liter }}</td>
+        <td>{{ $bbm->service_tank_1_percentage }}</td>
+        <td>{{ $bbm->service_tank_2_liter }}</td>
+        <td>{{ $bbm->service_tank_2_percentage }}</td>
+        <td>{{ $bbm->total_stok_tangki }}</td>
+        <td>{{ $bbm->terima_bbm }}</td>
+        <td>{{ $bbm->flowmeter_1_awal }}</td>
+        <td>{{ $bbm->flowmeter_1_akhir }}</td>
+        <td>{{ $bbm->flowmeter_1_pakai }}</td>
+        <td>{{ $bbm->flowmeter_2_awal }}</td>
+        <td>{{ $bbm->flowmeter_2_akhir }}</td>
+        <td>{{ $bbm->flowmeter_2_pakai }}</td>
     </tr>
     @endforeach
-    <tr><td colspan="7"></td></tr>
+    <tr><td colspan="17"></td></tr>
 
     <!-- KWH Section -->
     <tr class="section-header">
-        <td colspan="7">Data KWH</td>
+        <td colspan="17">Data KWH</td>
     </tr>
     <tr class="table-header">
-        <th>No</th>
-        <th>Stand Awal</th>
-        <th>Stand Akhir</th>
-        <th>Selisih</th>
-        <th>Faktor Kali</th>
-        <th>Total KWH</th>
-        <th>Keterangan</th>
+        <th colspan="5">KWH Produksi</th>
+        <th colspan="5">KWH Pemakaian Sendiri (PS)</th>
     </tr>
-    @php $no = 1; @endphp
+    <tr class="table-header">
+        <th colspan="2">Panel 1</th>
+        <th colspan="2">Panel 2</th>
+        <th rowspan="2">Total Prod. kWH</th>
+        <th colspan="2">Panel 1</th>
+        <th colspan="2">Panel 2</th>
+        <th rowspan="2">Total Prod. kWH</th>
+    </tr>
+    <tr class="table-header">
+        <th>Awal</th>
+        <th>Akhir</th>
+        <th>Awal</th>
+        <th>Akhir</th>
+        <th>Awal</th>
+        <th>Akhir</th>
+        <th>Awal</th>
+        <th>Akhir</th>
+    </tr>
     @foreach($laporan->kwh as $kwh)
     <tr>
-        <td>{{ $no++ }}</td>
-        <td>{{ $kwh->stand_awal }}</td>
-        <td>{{ $kwh->stand_akhir }}</td>
-        <td>{{ $kwh->selisih }}</td>
-        <td>{{ $kwh->faktor_kali }}</td>
-        <td>{{ $kwh->total_kwh }}</td>
-        <td>{{ $kwh->keterangan ?? '-' }}</td>
+        <td>{{ $kwh->prod_panel1_awal }}</td>
+        <td>{{ $kwh->prod_panel1_akhir }}</td>
+        <td>{{ $kwh->prod_panel2_awal }}</td>
+        <td>{{ $kwh->prod_panel2_akhir }}</td>
+        <td>{{ $kwh->prod_total }}</td>
+        <td>{{ $kwh->ps_panel1_awal }}</td>
+        <td>{{ $kwh->ps_panel1_akhir }}</td>
+        <td>{{ $kwh->ps_panel2_awal }}</td>
+        <td>{{ $kwh->ps_panel2_akhir }}</td>
+        <td>{{ $kwh->ps_total }}</td>
     </tr>
     @endforeach
-    <tr><td colspan="7"></td></tr>
+    <tr><td colspan="10"></td></tr>
 
     <!-- Pelumas Section -->
     <tr class="section-header">
-        <td colspan="7">Data Pelumas</td>
+        <td colspan="12">Data Pelumas</td>
     </tr>
     <tr class="table-header">
-        <th>No</th>
-        <th>Jenis Pelumas</th>
-        <th>Stock Awal</th>
-        <th>Penerimaan</th>
-        <th>Pemakaian</th>
-        <th>Stock Akhir</th>
-        <th>Keterangan</th>
+        <th colspan="5">Storage Tank</th>
+        <th colspan="3">Drum Pelumas</th>
+        <th rowspan="2">Total Stok Tangki</th>
+        <th rowspan="2">Terima Pelumas</th>
+        <th rowspan="2">Total Pakai Pelumas</th>
+        <th rowspan="2">Jenis Pelumas</th>
     </tr>
-    @php $no = 1; @endphp
+    <tr class="table-header">
+        <th colspan="2">Tank 1</th>
+        <th colspan="2">Tank 2</th>
+        <th>Total Stok</th>
+        <th>Area 1</th>
+        <th>Area 2</th>
+        <th>Total Stok</th>
+    </tr>
+    <tr class="table-header">
+        <th>cm</th>
+        <th>liter</th>
+        <th>cm</th>
+        <th>liter</th>
+        <th>liter</th>
+        <th>liter</th>
+        <th>liter</th>
+        <th>liter</th>
+        <th>liter</th>
+        <th>liter</th>
+        <th>liter</th>
+        <th>text</th>
+    </tr>
     @foreach($laporan->pelumas as $pelumas)
     <tr>
-        <td>{{ $no++ }}</td>
-        <td>{{ $pelumas->jenis_pelumas }}</td>
-        <td>{{ $pelumas->stock_awal }}</td>
-        <td>{{ $pelumas->penerimaan }}</td>
-        <td>{{ $pelumas->pemakaian }}</td>
-        <td>{{ $pelumas->stock_akhir }}</td>
-        <td>{{ $pelumas->keterangan ?? '-' }}</td>
+        <td>{{ $pelumas->tank1_cm }}</td>
+        <td>{{ $pelumas->tank1_liter }}</td>
+        <td>{{ $pelumas->tank2_cm }}</td>
+        <td>{{ $pelumas->tank2_liter }}</td>
+        <td>{{ $pelumas->tank_total_stok }}</td>
+        <td>{{ $pelumas->drum_area1 }}</td>
+        <td>{{ $pelumas->drum_area2 }}</td>
+        <td>{{ $pelumas->drum_total_stok }}</td>
+        <td>{{ $pelumas->total_stok_tangki }}</td>
+        <td>{{ $pelumas->terima_pelumas }}</td>
+        <td>{{ $pelumas->total_pakai }}</td>
+        <td>{{ $pelumas->jenis }}</td>
     </tr>
     @endforeach
-    <tr><td colspan="7"></td></tr>
+    <tr><td colspan="12"></td></tr>
 
     <!-- Bahan Kimia Section -->
     <tr class="section-header">
-        <td colspan="7">Data Bahan Kimia</td>
+        <td colspan="4">Data Bahan Kimia</td>
     </tr>
     <tr class="table-header">
-        <th>No</th>
-        <th>Jenis Bahan</th>
-        <th>Stock Awal</th>
-        <th>Penerimaan</th>
-        <th>Pemakaian</th>
-        <th>Stock Akhir</th>
-        <th>Keterangan</th>
+        <th>Jenis Bahan Kimia</th>
+        <th>Stok Awal</th>
+        <th>Terima Bahan Kimia</th>
+        <th>Total Pakai</th>
     </tr>
-    @php $no = 1; @endphp
     @foreach($laporan->bahanKimia as $bahan)
     <tr>
-        <td>{{ $no++ }}</td>
-        <td>{{ $bahan->jenis_bahan }}</td>
-        <td>{{ $bahan->stock_awal }}</td>
-        <td>{{ $bahan->penerimaan }}</td>
-        <td>{{ $bahan->pemakaian }}</td>
-        <td>{{ $bahan->stock_akhir }}</td>
-        <td>{{ $bahan->keterangan ?? '-' }}</td>
+        <td>{{ $bahan->jenis }}</td>
+        <td>{{ $bahan->stok_awal }}</td>
+        <td>{{ $bahan->terima }}</td>
+        <td>{{ $bahan->total_pakai }}</td>
     </tr>
     @endforeach
-    <tr><td colspan="7"></td></tr>
-
-    <!-- Jam Operasi Section -->
-    <tr class="section-header">
-        <td colspan="7">Jam Operasi Mesin</td>
-    </tr>
-    <tr class="table-header">
-        <th>No</th>
-        <th>Mesin</th>
-        <th>Jam Start</th>
-        <th>Jam Stop</th>
-        <th>Total Jam</th>
-        <th colspan="2">Keterangan</th>
-    </tr>
-    @php $no = 1; @endphp
-    @foreach($laporan->jamOperasi as $operasi)
-    <tr>
-        <td>{{ $no++ }}</td>
-        <td>{{ $operasi->machine->name }}</td>
-        <td>{{ $operasi->jam_start }}</td>
-        <td>{{ $operasi->jam_stop }}</td>
-        <td>{{ $operasi->total_jam }}</td>
-        <td colspan="2">{{ $operasi->keterangan ?? '-' }}</td>
-    </tr>
-    @endforeach
-    <tr><td colspan="7"></td></tr>
-
-    <!-- Beban Tertinggi Section -->
-    <tr class="section-header">
-        <td colspan="7">Beban Tertinggi</td>
-    </tr>
-    <tr class="table-header">
-        <th>No</th>
-        <th>Mesin</th>
-        <th>Beban (KW)</th>
-        <th>Arus (A)</th>
-        <th>Tegangan (V)</th>
-        <th>Cos φ</th>
-        <th>Keterangan</th>
-    </tr>
-    @php $no = 1; @endphp
-    @foreach($laporan->bebanTertinggi as $beban)
-    <tr>
-        <td>{{ $no++ }}</td>
-        <td>{{ $beban->machine->name }}</td>
-        <td>{{ $beban->beban_kw }}</td>
-        <td>{{ $beban->arus }}</td>
-        <td>{{ $beban->tegangan }}</td>
-        <td>{{ $beban->cos_phi }}</td>
-        <td>{{ $beban->keterangan ?? '-' }}</td>
-    </tr>
-    @endforeach
-    <tr><td colspan="7"></td></tr>
-
-    <!-- Gangguan Section -->
-    <tr class="section-header">
-        <td colspan="7">Gangguan</td>
-    </tr>
-    <tr class="table-header">
-        <th>No</th>
-        <th>Mesin</th>
-        <th colspan="2">Gangguan Mekanik</th>
-        <th colspan="3">Gangguan Elektrik</th>
-    </tr>
-    @php $no = 1; @endphp
-    @foreach($laporan->gangguan as $gangguan)
-    <tr>
-        <td>{{ $no++ }}</td>
-        <td>{{ $gangguan->machine->name }}</td>
-        <td colspan="2">{{ $gangguan->mekanik ?? '-' }}</td>
-        <td colspan="3">{{ $gangguan->elektrik ?? '-' }}</td>
-    </tr>
-    @endforeach
+    <tr><td colspan="4"></td></tr>
 
     <!-- Footer -->
-    <tr><td colspan="7"></td></tr>
+    <tr><td colspan="17"></td></tr>
     <tr class="footer">
-        <td colspan="7">Dibuat oleh: {{ $laporan->creator->name ?? 'System' }} | Tanggal: {{ date('d/m/Y H:i', strtotime($laporan->created_at)) }}</td>
+        <td colspan="17">Dibuat oleh: {{ $laporan->creator->name ?? 'System' }} | Tanggal: {{ date('d/m/Y H:i', strtotime($laporan->created_at)) }}</td>
     </tr>
 </table> 

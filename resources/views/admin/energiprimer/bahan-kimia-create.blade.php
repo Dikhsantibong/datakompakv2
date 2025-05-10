@@ -135,7 +135,7 @@
                                                   hover:file:bg-blue-100
                                                   @error('evidence') border-red-500 @enderror">
                                     <p class="mt-1 text-sm text-gray-500">
-                                        Format yang diizinkan: JPG, JPEG, PNG, PDF. Maksimal 2MB
+                                        Format yang diizinkan: PDF, DOC, DOCX, XLS, XLSX, JPG, JPEG, PNG. Maksimal 2MB
                                     </p>
                                     @error('evidence')
                                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>

@@ -124,7 +124,7 @@
                                                   file:bg-blue-50 file:text-blue-700
                                                   hover:file:bg-blue-100">
                                     <p class="mt-1 text-sm text-gray-500">
-                                        Format yang diizinkan: JPG, JPEG, PNG, PDF. Maksimal 2MB
+                                        Format yang diizinkan: PDF, DOC, DOCX, XLS, XLSX, JPG, JPEG, PNG. Maksimal 2MB
                                     </p>
                                 </div>
                             </div>

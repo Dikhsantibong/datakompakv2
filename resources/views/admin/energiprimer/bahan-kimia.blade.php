@@ -228,11 +228,11 @@
                                             @if($item->evidence)
                                                 <a href="{{ Storage::url($item->evidence) }}" 
                                                    target="_blank"
-                                                   class="text-blue-600 hover:text-blue-800">
-                                                    <i class="fas fa-download mr-1"></i> Download
+                                                   class="text-blue-600 hover:text-blue-900">
+                                                    <i class="fas fa-file-download mr-1"></i> Download
                                                 </a>
                                             @else
-                                                <span class="text-gray-400">Tidak ada file</span>
+                                                <span class="text-gray-400">Tidak ada dokumen</span>
                                             @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">

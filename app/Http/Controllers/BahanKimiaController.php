@@ -59,7 +59,8 @@ class BahanKimiaController extends Controller
             'jenis_bahan' => 'required|string',
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
-            'evidence' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048'
+            'catatan_transaksi' => 'nullable|string|max:1000',
+            'evidence' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048'
         ]);
 
         // Cek apakah ini data pertama untuk unit dan jenis bahan tersebut
@@ -93,7 +94,8 @@ class BahanKimiaController extends Controller
             if ($request->hasFile('evidence')) {
                 $file = $request->file('evidence');
                 $fileName = time() . '_' . $file->getClientOriginalName();
-                $evidencePath = $file->storeAs('public/bahan-kimia/evidence', $fileName);
+                $file->storeAs('public/bahan-kimia/evidence', $fileName);
+                $evidencePath = 'bahan-kimia/evidence/' . $fileName;
             }
 
             BahanKimia::create([
@@ -116,7 +118,7 @@ class BahanKimiaController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             if (isset($evidencePath)) {
-                Storage::delete($evidencePath);
+                Storage::delete('public/' . $evidencePath);
             }
             return redirect()->back()
                            ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
@@ -140,7 +142,8 @@ class BahanKimiaController extends Controller
             'jenis_bahan' => 'required|string',
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
-            'evidence' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048'
+            'catatan_transaksi' => 'nullable|string|max:1000',
+            'evidence' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048'
         ]);
 
         $bahanKimia = BahanKimia::findOrFail($id);
@@ -156,12 +159,13 @@ class BahanKimiaController extends Controller
             if ($request->hasFile('evidence')) {
                 // Delete old file if exists
                 if ($bahanKimia->evidence) {
-                    Storage::delete($bahanKimia->evidence);
+                    Storage::delete('public/' . $bahanKimia->evidence);
                 }
                 
                 $file = $request->file('evidence');
                 $fileName = time() . '_' . $file->getClientOriginalName();
-                $evidencePath = $file->storeAs('public/bahan-kimia/evidence', $fileName);
+                $file->storeAs('public/bahan-kimia/evidence', $fileName);
+                $evidencePath = 'bahan-kimia/evidence/' . $fileName;
             }
 
             $bahanKimia->update([
@@ -196,7 +200,7 @@ class BahanKimiaController extends Controller
             
             // Delete evidence file if exists
             if ($bahanKimia->evidence) {
-                Storage::delete($bahanKimia->evidence);
+                Storage::delete('public/' . $bahanKimia->evidence);
             }
             
             $bahanKimia->delete();

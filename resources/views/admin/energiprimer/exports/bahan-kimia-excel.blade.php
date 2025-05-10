@@ -68,7 +68,7 @@
 </div>
 
 {{-- Sheet Eviden Bahan Kimia --}}
-<div class="sheet">
+{{-- <div class="sheet">
     <table>
         <thead>
             <tr>
@@ -98,4 +98,4 @@
             @endforeach
         </tbody>
     </table>
-</div> 
+</div>  --}}

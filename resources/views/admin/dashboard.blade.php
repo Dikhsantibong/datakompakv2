@@ -80,6 +80,21 @@
             position: relative;
             z-index: 2;
         }
+
+        .animate-fade-in-down {
+            animation: fadeInDown 0.3s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 @endpush
 
@@ -134,10 +149,42 @@
                 </div>
             </div>
         </header>
-
         <div class="flex items-center pt-2">
             <x-admin-breadcrumb :breadcrumbs="[['name' => 'Dashboard', 'url' => null]]" />
         </div>
+
+        <!-- Koordinasi Data Menu Button -->
+        <div class="px-6 mb-4 justify-end flex">
+            <div class="relative group">
+                <button id="koordinasiDataBtn" class="w-full md:w-auto flex items-center justify-between px-4 py-2.5 text-sm font-medium text-white bg-[#009BB9] rounded-lg hover:bg-[#007A94] focus:ring-4 focus:ring-[#009BB9]/50 transition-all duration-300 shadow-md hover:shadow-lg">
+                    <div class="flex items-center">
+                        <i class="fas fa-database mr-2"></i>
+                        <span>Koordinasi Data UPB/UP3 - KIT</span>
+                    </div>
+                    <i class="fas fa-chevron-down ml-2 transition-transform duration-300 group-hover:rotate-180"></i>
+                </button>
+                <!-- Dropdown menu -->
+                <div id="koordinasiDataDropdown" class="hidden absolute left-0 mt-2 w-full md:w-64 bg-white rounded-lg shadow-xl z-50 animate-fade-in-down">
+                    <div class="p-2 space-y-1">
+                        <div class="font-medium text-sm text-gray-500 px-3 py-2">Menu Koordinasi Data</div>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                            <i class="fas fa-server mr-2 text-[#009BB9]"></i>
+                            Data Subsistem Bau-Bau
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                            <i class="fas fa-industry mr-2 text-[#009BB9]"></i>
+                            Data Subsistem Kendari
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                            <i class="fas fa-bolt mr-2 text-[#009BB9]"></i>
+                            Data KIT UP Kendari
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
         
         <!-- Main Content -->
         
@@ -655,5 +702,23 @@
 
     // Ganti gambar setiap 5 detik
     setInterval(changeBackground, 5000);
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const koordinasiDataBtn = document.getElementById('koordinasiDataBtn');
+        const koordinasiDataDropdown = document.getElementById('koordinasiDataDropdown');
+        
+        koordinasiDataBtn.addEventListener('click', function() {
+            koordinasiDataDropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!koordinasiDataBtn.contains(event.target) && !koordinasiDataDropdown.contains(event.target)) {
+                koordinasiDataDropdown.classList.add('hidden');
+            }
+        });
+    });
 </script>
 @endpush

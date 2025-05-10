@@ -14,6 +14,7 @@
         <td>Status</td>
         <td>Kondisi</td>
         <td>Keterangan</td>
+        
     </tr>
     @foreach($report->items->where('item_type', 'k3_keamanan') as $index => $item)
     <tr>

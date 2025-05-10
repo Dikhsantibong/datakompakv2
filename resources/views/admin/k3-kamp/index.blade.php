@@ -25,7 +25,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                         </svg>
                     </button>
-                    <h1 class="text-xl font-semibold text-gray-900">Input Data K3 KAMP dan Lingkungan</h1>
+                    <h1 class="text-xl font-semibold text-gray-900">Input Data K3 Keamanan dan Lingkungan</h1>
                 </div>
 
                 <div class="relative">
@@ -50,7 +50,7 @@
         </header>
 
         <div class="flex items-center pt-2">
-            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Input Data K3 KAMP dan Lingkungan', 'url' => null]]" />
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Input Data K3 Keamanan dan Lingkungan', 'url' => null]]" />
         </div>
 
         <!-- Main Content Area -->
@@ -59,8 +59,8 @@
                 <!-- Welcome Card -->
                 <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
                     <div class="max-w-3xl">
-                        <h2 class="text-2xl font-bold mb-2">Input Data K3 KAMP dan Lingkungan</h2>
-                        <p class="text-blue-100 mb-4">Kelola dan monitor implementasi K3 KAMP dan Lingkungan untuk meningkatkan keselamatan dan kesehatan kerja.</p>
+                        <h2 class="text-2xl font-bold mb-2">Input Data K3 Keamanan dan Lingkungan</h2>
+                        <p class="text-blue-100 mb-4">Kelola dan monitor implementasi K3 Keamanan dan Lingkungan untuk meningkatkan keselamatan dan kesehatan kerja.</p>
                         <div class="flex flex-wrap gap-3">
                             <a href="{{ route('admin.k3-kamp.view') }}" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-600 bg-white rounded-md hover:bg-gray-50">
                                 <i class="fas fa-list mr-2"></i> Lihat Data

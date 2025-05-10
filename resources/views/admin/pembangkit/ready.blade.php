@@ -203,15 +203,20 @@
                                                 <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">
                                                     Mesin
                                                 </th>
-                                                <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">
-                                                    Daya Mampu Slim (MW)
+                                                <th class="px-2 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">
+                                                    DAYA TERPASANG (MW)
                                                 </th>
                                                 <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">
-                                                    Daya Mampu Pasok (MW)
+                                                    DMN SILM/SLO (MW)
+                                                </th>
+                                                <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">
+                                                    DMP PERMORMANCE TEST (MW)
                                                 </th>
                                                 <th class="px-2 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center border-r border-[#0A749B]">
-                                                    Beban (MW)
+                                                    BEBAN AKTUAL (MW)
                                                 </th>
+                                                
+
                                                 <th class="px-3 py-2.5 bg-[#0A749B] text-white text-sm font-medium tracking-wider text-center">
                                                     Status
                                                 </th>
@@ -229,7 +234,18 @@
                                                     </td>
                                                     <td class="px-3 py-2 border-r border-gray-200 text-gray-800" data-id="{{ $machine->id }}">
                                                         {{ $machine->name }}
-                                                    </td>   
+                                                    </td> 
+                                                    <td class="px-3 py-2 border-r border-gray-200 text-center text-gray-800 w-12">
+                                                        <input type="number"
+                                                               name="dmn[{{ $machine->id }}]"
+                                                               class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-400 text-gray-800"
+                                                               style="width: 100px;"
+                                                               value="{{ $operations->where('machine_id', $machine->id)->first()->installed_power ?? '0' }}"
+                                                               step="0.01"
+                                                               min="0"
+                                                               placeholder="Masukkan DMN...">
+                                                    </td>
+
                                                     <td class="px-3 py-2 border-r border-gray-200 text-center text-gray-800 w-12">
                                                         <input type="number"
                                                                name="dmn[{{ $machine->id }}]"

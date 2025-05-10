@@ -1,14 +1,15 @@
 <table>
-    <!-- Header -->
-    <tr class="main-header">
-        <td colspan="5">Meeting dan Mutasi Shift Operator - {{ $meetingShift->tanggal->format('d F Y') }} - Shift {{ $meetingShift->current_shift }}</td>
-    </tr>
-    
     <!-- Logo spacing row -->
     <tr>
         <td colspan="2"></td>
         <td></td>
         <td colspan="2"></td>
+    </tr>
+    <tr><td colspan="5"></td></tr>
+
+    <!-- Header -->
+    <tr class="main-header">
+        <td colspan="5">Meeting dan Mutasi Shift Operator - {{ $meetingShift->tanggal->format('d F Y') }} - Shift {{ $meetingShift->current_shift }}</td>
     </tr>
     <tr><td colspan="5"></td></tr>
 

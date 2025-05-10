@@ -10,12 +10,13 @@
 @else
     <div class="space-y-8">
         @foreach($powerPlants as $powerPlant)
+            @if(!str_contains(strtolower($powerPlant->name), 'moramo') && !str_contains(strtolower($powerPlant->name), 'baruta'))
             <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
                 <!-- Power Plant Header -->
                 <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
                     <div class="flex justify-between items-center">
                         <div>
-                            <h2 class="text-lg font-semibold text-gray-900">{{ $powerPlant->name }}</h2>
+                            <h2 class="text-lg font-semibold text-gray-90   0">{{ $powerPlant->name }}</h2>
                             <p class="text-sm text-gray-500 mt-1">
                                 Data untuk tanggal: {{ \Carbon\Carbon::parse($date)->format('d F Y') }}
                             </p>
@@ -50,14 +51,18 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr class="bg-gray-50">
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Beban (kW)</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">kVAR</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cos φ</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider ">No</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Jam</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Daya Terpasang (kW)</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">SILM/SLO</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">DMP Performance Test</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Beban Aktual (kW)</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">kVAR</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cos φ</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                               
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -66,12 +71,22 @@
                                     $latestLog = $machine->getLatestLog($date);
                                 @endphp
                                 <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">{{ $index + 1 }}</td>
-                                    <td class="px-4 py-3 border border-gray-200">
+                                    <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">{{ $index + 1 }}</td>
+                                    <td class="px-4 py-3 border border-gray-200 text-center">
                                         <div class="text-sm font-medium text-gray-900">{{ $machine->name }}</div>
                                     </td>
-                                    <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">
+                                    <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
                                         {{ $latestLog ? \Carbon\Carbon::parse($latestLog->time)->format('H:i') : '-' }}
+                                    </td>
+                                  
+                                    <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
+                                        {{ $machine->daya_terpasang ?? '-' }}
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
+                                        {{ $machine->silm_slo ?? '-' }}
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
+                                        {{ $machine->dmp_performance ?? '-' }}
                                     </td>
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
                                         {{ $machine->kw ?? '-' }}
@@ -82,16 +97,17 @@
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
                                         {{ $machine->cos_phi ?? '-' }}
                                     </td>
-                                    <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">
+                                    <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
                                         {{ $machine->status ?? '-' }}
                                     </td>
+                                    
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">
                                         {{ $machine->keterangan ?? '-' }}
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="px-4 py-8 text-center text-sm text-gray-500 border border-gray-200">
+                                    <td colspan="11" class="px-4 py-8 text-center text-sm text-gray-500 border border-gray-200">
                                         Tidak ada data mesin untuk unit ini
                                     </td>
                                 </tr>
@@ -100,6 +116,7 @@
                     </table>
                 </div>
             </div>
+            @endif
         @endforeach
     </div>
 @endif 

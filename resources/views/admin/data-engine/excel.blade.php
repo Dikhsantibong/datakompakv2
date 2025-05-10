@@ -1,14 +1,15 @@
 <table>
-    <!-- Header -->
-    <tr class="main-header">
-        <td colspan="7">Data Engine Report - {{ date('d F Y', strtotime($date)) }}</td>
-    </tr>
-    
     <!-- Logo spacing row -->
     <tr>
         <td colspan="3"></td>
         <td></td>
         <td colspan="3"></td>
+    </tr>
+    <tr><td colspan="7"></td></tr>
+
+    <!-- Header -->
+    <tr class="main-header">
+        <td colspan="7">Data Engine Report - {{ date('d F Y', strtotime($date)) }}</td>
     </tr>
     <tr><td colspan="7"></td></tr>
 
@@ -18,6 +19,7 @@
     </tr>
 
     @foreach($powerPlants as $powerPlant)
+    @if(!str_contains(strtolower($powerPlant->name), 'moramo') && !str_contains(strtolower($powerPlant->name), 'baruta'))
     <!-- Power Plant Header -->
     <tr class="table-header">
         <th colspan="7">{{ $powerPlant->name }}</th>
@@ -49,6 +51,7 @@
         <td colspan="2"><strong>HOP:</strong></td>
         <td colspan="5">{{ $powerPlant->hop ?? '-' }}</td>
     </tr>
+    @if(str_contains(strtolower($powerPlant->name), 'pltm'))
     <tr>
         <td colspan="2"><strong>TMA:</strong></td>
         <td colspan="5">{{ $powerPlant->tma ?? '-' }}</td>
@@ -57,7 +60,9 @@
         <td colspan="2"><strong>Inflow:</strong></td>
         <td colspan="5">{{ $powerPlant->inflow ?? '-' }}</td>
     </tr>
+    @endif
     <tr><td colspan="7"></td></tr>
+    @endif
     @endforeach
 
     <!-- Summary Section -->

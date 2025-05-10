@@ -94,7 +94,7 @@ class DataEngineExport implements FromView, WithTitle, WithEvents, WithStyles, W
         $plnDrawing->setDescription('PLN Logo');
         $plnDrawing->setPath(public_path('logo/navlog1.png'));
         $plnDrawing->setHeight(60);
-        $plnDrawing->setCoordinates('B2');
+        $plnDrawing->setCoordinates('B1');
         $plnDrawing->setOffsetX(30);
         $plnDrawing->setOffsetY(5);
 
@@ -104,7 +104,7 @@ class DataEngineExport implements FromView, WithTitle, WithEvents, WithStyles, W
         $engineDrawing->setDescription('Engine Logo');
         $engineDrawing->setPath(public_path('logo/k3_logo.png'));
         $engineDrawing->setHeight(60);
-        $engineDrawing->setCoordinates('E2');
+        $engineDrawing->setCoordinates('E1');
         $engineDrawing->setOffsetX(30);
         $engineDrawing->setOffsetY(5);
 
@@ -132,7 +132,7 @@ class DataEngineExport implements FromView, WithTitle, WithEvents, WithStyles, W
         $sheet->getColumnDimension('G')->setWidth(30);   // Keterangan
 
         // Set row height for logo row
-        $sheet->getRowDimension(2)->setRowHeight(50);
+        $sheet->getRowDimension(1)->setRowHeight(50);
 
         // Default style for all cells
         $sheet->getParent()->getDefaultStyle()->applyFromArray([
@@ -192,14 +192,14 @@ class DataEngineExport implements FromView, WithTitle, WithEvents, WithStyles, W
         ];
 
         // Apply styles to section headers
-        $sheet->getStyle('A4:G4')->applyFromArray($sectionHeaderStyle);  // Power Plants Section
+        $sheet->getStyle('A5:G5')->applyFromArray($sectionHeaderStyle);  // Power Plants Section
 
         // Apply styles to table headers
-        $sheet->getStyle('A5:G5')->applyFromArray($tableHeaderStyle);  // Power Plants Headers
+        $sheet->getStyle('A6:G6')->applyFromArray($tableHeaderStyle);  // Power Plants Headers
 
-        // Main title styling
+        // Main title styling (now on row 3)
         return [
-            1 => [
+            3 => [
                 'font' => [
                     'bold' => true,
                     'size' => 14
@@ -250,8 +250,8 @@ class DataEngineExport implements FromView, WithTitle, WithEvents, WithStyles, W
                 // Set zoom level
                 $sheet->getSheetView()->setZoomScale(85);
 
-                // Freeze first row
-                $sheet->freezePane('A6');
+                // Freeze first row after title and logos
+                $sheet->freezePane('A7');
             }
         ];
     }

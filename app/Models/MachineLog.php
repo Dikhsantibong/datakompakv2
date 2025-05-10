@@ -14,7 +14,10 @@ class MachineLog extends Model
         'kvar',
         'cos_phi',
         'status',
-        'keterangan'
+        'keterangan',
+        'daya_terpasang',
+        'silm_slo',
+        'dmp_performance'
     ];
 
     protected $casts = [
@@ -22,7 +25,8 @@ class MachineLog extends Model
         'time' => 'datetime',
         'kw' => 'decimal:2',
         'kvar' => 'decimal:2',
-        'cos_phi' => 'decimal:2'
+        'cos_phi' => 'decimal:2',
+        'daya_terpasang' => 'decimal:2'
     ];
 
     public function machine()

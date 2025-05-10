@@ -47,7 +47,7 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
         $plnDrawing->setDescription('PLN Logo');
         $plnDrawing->setPath(public_path('logo/navlog1.png'));
         $plnDrawing->setHeight(60);
-        $plnDrawing->setCoordinates('B2');
+        $plnDrawing->setCoordinates('B1');
         $plnDrawing->setOffsetX(30);
         $plnDrawing->setOffsetY(5);
 
@@ -57,7 +57,7 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
         $k3Drawing->setDescription('K3 Logo');
         $k3Drawing->setPath(public_path('logo/k3_logo.png'));
         $k3Drawing->setHeight(60);
-        $k3Drawing->setCoordinates('D2');
+        $k3Drawing->setCoordinates('D1');
         $k3Drawing->setOffsetX(30);
         $k3Drawing->setOffsetY(5);
 
@@ -83,7 +83,7 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
         $sheet->getColumnDimension('E')->setWidth(30); // Description 2
 
         // Set row height for logo row
-        $sheet->getRowDimension(2)->setRowHeight(50);
+        $sheet->getRowDimension(1)->setRowHeight(50);
 
         // Default style for all cells
         $sheet->getParent()->getDefaultStyle()->applyFromArray([
@@ -158,9 +158,9 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
             $sheet->getRowDimension($tableHeaderRow)->setRowHeight(20);
         }
 
-        // Main title styling
+        // Main title styling (now on row 3)
         return [
-            1 => [ // Header row
+            3 => [ // Header row moved to row 3
                 'font' => [
                     'bold' => true,
                     'size' => 14
@@ -226,8 +226,8 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
                 // Set zoom level
                 $sheet->getSheetView()->setZoomScale(85);
 
-                // Freeze first row
-                $sheet->freezePane('A4'); // Changed to A4 to account for logo row
+                // Freeze first row after title
+                $sheet->freezePane('A5');
 
                 // Auto-size rows for better content fit
                 foreach ($this->sectionRows as $row) {

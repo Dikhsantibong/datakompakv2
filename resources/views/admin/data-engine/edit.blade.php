@@ -87,6 +87,7 @@
 
                     <div class="space-y-8">
                         @foreach($powerPlants as $powerPlant)
+                            @if(!str_contains(strtolower($powerPlant->name), 'moramo') && !str_contains(strtolower($powerPlant->name), 'baruta'))
                             <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
                                 <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
                                     <div class="flex justify-between items-center">
@@ -147,9 +148,12 @@
                                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
                                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam</th>
                                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Beban (kW)</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Daya Terpasang (kW)</th>
                                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">kVAR</th>
                                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cos φ</th>
                                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SILM/SLO</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DMP Performance Test</th>
                                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
                                             </tr>
                                         </thead>
@@ -157,35 +161,57 @@
                                             @forelse($powerPlant->machines as $index => $machine)
                                                 <tr class="hover:bg-gray-50">
                                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">{{ $index + 1 }}</td>
-                                                    <td class="px-4 py-3 border border-gray-200">
+                                                    <td class="px-4 py-3 border border-gray-200 min-w-[150px]">
                                                         <div class="text-sm font-medium text-gray-900">{{ $machine->name }}</div>
                                                         <input type="hidden" name="machines[{{ $machine->id }}][machine_id]" value="{{ $machine->id }}">
                                                     </td>
-                                                    <td class="px-4 py-3 border border-gray-200">
+                                                    <td class="px-4 py-3 border border-gray-200 min-w-[120px]">
                                                         <input type="time" 
                                                                name="machines[{{ $machine->id }}][time]" 
                                                                value="{{ now()->format('H:i') }}"
                                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                                                     </td>
-                                                    <td class="px-4 py-3 border border-gray-200">
+                                                    <td class="px-4 py-3 border border-gray-200 min-w-[150px]">
+                                                        <input type="number" 
+                                                               name="machines[{{ $machine->id }}][daya_terpasang]" 
+                                                               step="0.01"
+                                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                                               placeholder="Masukkan daya">
+                                                    </td>
+                                                    <td class="px-4 py-3 border border-gray-200 min-w-[180px]">
+                                                        <input type="text" 
+                                                               name="machines[{{ $machine->id }}][silm_slo]" 
+                                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                                               placeholder="Masukkan SILM/SLO">
+                                                    </td>
+                                                    <td class="px-4 py-3 border border-gray-200 min-w-[180px]">
+                                                        <input type="text" 
+                                                               name="machines[{{ $machine->id }}][dmp_performance]" 
+                                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                                               placeholder="Masukkan DMP Performance">
+                                                    </td>
+                                                    <td class="px-4 py-3 border border-gray-200 min-w-[150px]">
                                                         <input type="number" 
                                                                name="machines[{{ $machine->id }}][kw]" 
                                                                step="0.01"
-                                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                                               placeholder="Masukkan beban">
                                                     </td>
-                                                    <td class="px-4 py-3 border border-gray-200">
+                                                    <td class="px-4 py-3 border border-gray-200 min-w-[150px]">
                                                         <input type="number" 
                                                                name="machines[{{ $machine->id }}][kvar]" 
                                                                step="0.01"
-                                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                                               placeholder="Masukkan kVAR">
                                                     </td>
-                                                    <td class="px-4 py-3 border border-gray-200">
+                                                    <td class="px-4 py-3 border border-gray-200 min-w-[150px]">
                                                         <input type="number" 
                                                                name="machines[{{ $machine->id }}][cos_phi]" 
                                                                step="0.01"
-                                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                                               placeholder="Masukkan Cos φ">
                                                     </td>
-                                                    <td class="px-4 py-3 border border-gray-200">
+                                                    <td class="px-4 py-3 border border-gray-200 min-w-[150px]">
                                                         <select name="machines[{{ $machine->id }}][status]" 
                                                                 class="p-2 w-[120px] rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                                                             <option value="">Pilih Status</option>
@@ -197,16 +223,16 @@
                                                             <option value="OPS">OPS</option>
                                                         </select>
                                                     </td>
-                                                    <td class="px-4 py-3 border border-gray-200">
-                                                        <textarea type="text" 
-                                                               name="machines[{{ $machine->id }}][keterangan]" 
-                                                               class="w-[200px] rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                                               placeholder="Masukkan keterangan"></textarea>
+                                                    <td class="px-4 py-3 border border-gray-200 min-w-[250px]">
+                                                        <textarea name="machines[{{ $machine->id }}][keterangan]" 
+                                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                                               placeholder="Masukkan keterangan"
+                                                               rows="2"></textarea>
                                                     </td>
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="8" class="px-4 py-8 text-center text-sm text-gray-500 border border-gray-200">
+                                                    <td colspan="11" class="px-4 py-8 text-center text-sm text-gray-500 border border-gray-200">
                                                         Tidak ada data mesin untuk unit ini
                                                     </td>
                                                 </tr>
@@ -215,6 +241,7 @@
                                     </table>
                                 </div>
                             </div>
+                            @endif
                         @endforeach
                     </div>
                 </form>

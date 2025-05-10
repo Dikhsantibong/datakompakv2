@@ -56,6 +56,9 @@ class DataEngineController extends Controller
                 $machine->cos_phi = $latestLog?->cos_phi;
                 $machine->status = $latestLog?->status;
                 $machine->keterangan = $latestLog?->keterangan;
+                $machine->daya_terpasang = $latestLog?->daya_terpasang;
+                $machine->silm_slo = $latestLog?->silm_slo;
+                $machine->dmp_performance = $latestLog?->dmp_performance;
                 $machine->log_time = $latestLog?->time;
             });
         });
@@ -82,6 +85,9 @@ class DataEngineController extends Controller
                 $machine->cos_phi = $latestLog?->cos_phi;
                 $machine->status = $latestLog?->status;
                 $machine->keterangan = $latestLog?->keterangan;
+                $machine->daya_terpasang = $latestLog?->daya_terpasang;
+                $machine->silm_slo = $latestLog?->silm_slo;
+                $machine->dmp_performance = $latestLog?->dmp_performance;
                 $machine->log_time = $latestLog?->time;
             });
         });
@@ -129,7 +135,10 @@ class DataEngineController extends Controller
                     'kvar' => $data['kvar'],
                     'cos_phi' => $data['cos_phi'],
                     'status' => $data['status'],
-                    'keterangan' => $data['keterangan']
+                    'keterangan' => $data['keterangan'],
+                    'daya_terpasang' => $data['daya_terpasang'],
+                    'silm_slo' => $data['silm_slo'],
+                    'dmp_performance' => $data['dmp_performance']
                 ]);
             }
 

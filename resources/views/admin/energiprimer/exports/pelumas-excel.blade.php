@@ -60,7 +60,7 @@
                     <td>{{ number_format($item->pemakaian, 2) }}</td>
                     <td>{{ number_format($item->saldo_akhir, 2) }}</td>
                     <td>{{ $item->catatan_transaksi }}</td>
-                    <td>{{ $item->evidence ? 'Ada' : 'Tidak ada' }}</td>
+                    <td>{{ $item->document ? 'Ada' : 'Tidak ada' }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -68,7 +68,7 @@
 </div>
 
 {{-- Sheet Eviden Pelumas --}}
-<div class="sheet">
+{{-- <div class="sheet">
     <table>
         <thead>
             <tr>
@@ -85,17 +85,17 @@
         </thead>
         <tbody>
             @foreach($pelumas->sortBy('tanggal') as $item)
-                @if($item->evidence)
+                @if($item->document)
                 <tr>
                     <td>{{ $item->tanggal->format('Y-m-d') }}</td>
                     <td>{{ $item->unit->name }}</td>
                     <td>{{ $item->jenis_pelumas }}</td>
                     <td>
-                        <img src="{{ Storage::url($item->evidence) }}" alt="Eviden {{ $item->tanggal->format('Y-m-d') }}" width="300">
+                        <img src="{{ Storage::url($item->document) }}" alt="Eviden {{ $item->tanggal->format('Y-m-d') }}" width="300">
                     </td>
                 </tr>
                 @endif
             @endforeach
         </tbody>
     </table>
-</div> 
+</div>  --}}

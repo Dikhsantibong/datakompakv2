@@ -18,7 +18,7 @@ class Pelumas extends Model
         'saldo_akhir',
         'is_opening_balance',
         'catatan_transaksi',
-        'evidence'
+        'document'
     ];
 
     protected $casts = [

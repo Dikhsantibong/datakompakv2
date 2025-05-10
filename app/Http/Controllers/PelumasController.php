@@ -64,7 +64,7 @@ class PelumasController extends Controller
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
             'catatan_transaksi' => 'nullable|string|max:1000',
-            'evidence' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048'
+            'document' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:2048'
         ]);
 
         // Cek apakah ini data pertama untuk unit dan jenis pelumas tersebut
@@ -91,11 +91,11 @@ class PelumasController extends Controller
             DB::beginTransaction();
 
             // Handle file upload
-            $evidencePath = null;
-            if ($request->hasFile('evidence')) {
-                $file = $request->file('evidence');
+            if ($request->hasFile('document')) {
+                $file = $request->file('document');
                 $fileName = time() . '_' . $file->getClientOriginalName();
-                $evidencePath = $file->storeAs('public/pelumas/evidence', $fileName);
+                $file->storeAs('public/documents/pelumas', $fileName);
+                $data['document'] = $fileName;
             }
 
             Pelumas::create([
@@ -108,7 +108,7 @@ class PelumasController extends Controller
                 'saldo_akhir' => $saldoAkhir,
                 'is_opening_balance' => $isOpeningBalance,
                 'catatan_transaksi' => $request->catatan_transaksi,
-                'evidence' => $evidencePath
+                'document' => isset($data['document']) ? $data['document'] : null
             ]);
 
             DB::commit();
@@ -117,8 +117,8 @@ class PelumasController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            if (isset($evidencePath)) {
-                Storage::delete($evidencePath);
+            if (isset($data['document'])) {
+                Storage::delete('public/documents/pelumas/' . $data['document']);
             }
             return redirect()->back()
                            ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
@@ -143,7 +143,7 @@ class PelumasController extends Controller
             'penerimaan' => 'required|numeric|min:0',
             'pemakaian' => 'required|numeric|min:0',
             'catatan_transaksi' => 'nullable|string|max:1000',
-            'evidence' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048'
+            'document' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:2048'
         ]);
 
         $pelumas = Pelumas::findOrFail($id);
@@ -154,16 +154,16 @@ class PelumasController extends Controller
             $saldoAkhir = $pelumas->saldo_awal + $request->penerimaan - $request->pemakaian;
 
             // Handle file upload
-            $evidencePath = $pelumas->evidence;
-            if ($request->hasFile('evidence')) {
+            if ($request->hasFile('document')) {
                 // Delete old file if exists
-                if ($pelumas->evidence) {
-                    Storage::delete($pelumas->evidence);
+                if ($pelumas->document) {
+                    Storage::delete('public/documents/pelumas/' . $pelumas->document);
                 }
                 
-                $file = $request->file('evidence');
+                $file = $request->file('document');
                 $fileName = time() . '_' . $file->getClientOriginalName();
-                $evidencePath = $file->storeAs('public/pelumas/evidence', $fileName);
+                $file->storeAs('public/documents/pelumas', $fileName);
+                $data['document'] = $fileName;
             }
 
             $pelumas->update([
@@ -174,7 +174,7 @@ class PelumasController extends Controller
                 'pemakaian' => $request->pemakaian,
                 'saldo_akhir' => $saldoAkhir,
                 'catatan_transaksi' => $request->catatan_transaksi,
-                'evidence' => $evidencePath
+                'document' => isset($data['document']) ? $data['document'] : null
             ]);
 
             DB::commit();
@@ -183,6 +183,9 @@ class PelumasController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            if (isset($data['document'])) {
+                Storage::delete('public/documents/pelumas/' . $data['document']);
+            }
             return redirect()->back()
                            ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
                            ->withInput();
@@ -196,9 +199,9 @@ class PelumasController extends Controller
             
             $pelumas = Pelumas::findOrFail($id);
             
-            // Delete evidence file if exists
-            if ($pelumas->evidence) {
-                Storage::delete($pelumas->evidence);
+            // Delete document file if exists
+            if ($pelumas->document) {
+                Storage::delete('public/documents/pelumas/' . $pelumas->document);
             }
             
             $pelumas->delete();

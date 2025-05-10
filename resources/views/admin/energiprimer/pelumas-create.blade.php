@@ -142,18 +142,18 @@
 
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700">Upload Eviden</label>
-                                    <input type="file" name="evidence" 
+                                    <input type="file" name="document" 
                                            class="mt-1 block w-full text-sm text-gray-500
                                                   file:mr-4 file:py-2 file:px-4
                                                   file:rounded-md file:border-0
                                                   file:text-sm file:font-semibold
                                                   file:bg-blue-50 file:text-blue-700
                                                   hover:file:bg-blue-100
-                                                  @error('evidence') border-red-500 @enderror">
+                                                  @error('document') border-red-500 @enderror">
                                     <p class="mt-1 text-sm text-gray-500">
                                         Format yang diizinkan: JPG, JPEG, PNG, PDF. Maksimal 2MB
                                     </p>
-                                    @error('evidence')
+                                    @error('document')
                                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                                     @enderror
                                 </div>

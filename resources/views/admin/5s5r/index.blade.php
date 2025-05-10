@@ -75,6 +75,58 @@
             position: relative;
             z-index: 2;
         }
+
+        .file-upload-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .file-preview {
+            max-width: 150px;
+            max-height: 150px;
+            margin-top: 8px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .file-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .remove-file {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ff4444;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            font-size: 12px;
+        }
+
+        .upload-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            background-color: #009BB9;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-btn:hover {
+            background-color: #008ca8;
+        }
+
+        .upload-btn i {
+            margin-right: 4px;
+        }
     </style>
 @endpush
 
@@ -230,10 +282,24 @@
                                                 <td class="border px-4 py-2 text-center"><input type="checkbox" name="lainnya_{{ $item }}" class="form-checkbox"></td>
                                                 <td class="border px-4 py-2"><textarea type="text" name="kondisi_akhir_pemeriksaan_{{ $item }}" class="w-[200px] h-[100px] p-1 border-gray-300 rounded"></textarea></td>
                                                 <td class="border px-4 py-2">
-                                                    <input type="file" name="eviden_pemeriksaan_{{ $item }}" class="hidden" id="eviden-{{ $index }}">
-                                                    <label for="eviden-{{ $index }}" class="cursor-pointer bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
-                                                        Upload
-                                                    </label>
+                                                    <div class="file-upload-wrapper">
+                                                        <input type="file" 
+                                                               name="eviden_pemeriksaan_{{ $item }}" 
+                                                               class="hidden eviden-input" 
+                                                               id="eviden-{{ $index }}"
+                                                               accept="image/*"
+                                                               onchange="previewFile(this, 'preview-{{ $index }}', 'info-{{ $index }}', 'remove-{{ $index }}')">
+                                                        <label for="eviden-{{ $index }}" class="upload-btn">
+                                                            <i class="fas fa-upload"></i> Upload Foto
+                                                        </label>
+                                                        <img id="preview-{{ $index }}" class="file-preview">
+                                                        <div id="info-{{ $index }}" class="file-info"></div>
+                                                        <span id="remove-{{ $index }}" 
+                                                              class="remove-file" 
+                                                              onclick="removeFile('eviden-{{ $index }}', 'preview-{{ $index }}', 'info-{{ $index }}', 'remove-{{ $index }}')">
+                                                            ×
+                                                        </span>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -288,10 +354,24 @@
                                                 <td class="border px-4 py-2"><textarea name="kondisi_akhir_program_{{ $index + 1 }}" class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
                                                 <td class="border px-4 py-2"><textarea name="catatan_{{ $index + 1 }}" class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
                                                 <td class="border px-4 py-2">
-                                                    <input type="file" name="eviden_program_{{ $index + 1 }}" class="hidden" id="eviden2-{{ $index }}">
-                                                    <label for="eviden2-{{ $index }}" class="cursor-pointer bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
-                                                        Upload
-                                                    </label>
+                                                    <div class="file-upload-wrapper">
+                                                        <input type="file" 
+                                                               name="eviden_program_{{ $index + 1 }}" 
+                                                               class="hidden eviden-input" 
+                                                               id="eviden2-{{ $index }}"
+                                                               accept="image/*"
+                                                               onchange="previewFile(this, 'preview2-{{ $index }}', 'info2-{{ $index }}', 'remove2-{{ $index }}')">
+                                                        <label for="eviden2-{{ $index }}" class="upload-btn">
+                                                            <i class="fas fa-upload"></i> Upload Foto
+                                                        </label>
+                                                        <img id="preview2-{{ $index }}" class="file-preview">
+                                                        <div id="info2-{{ $index }}" class="file-info"></div>
+                                                        <span id="remove2-{{ $index }}" 
+                                                              class="remove-file" 
+                                                              onclick="removeFile('eviden2-{{ $index }}', 'preview2-{{ $index }}', 'info2-{{ $index }}', 'remove2-{{ $index }}')">
+                                                            ×
+                                                        </span>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -361,5 +441,74 @@ changeBackground();
 
 // Ganti gambar setiap 5 detik
 setInterval(changeBackground, 5000);
+
+function previewFile(input, previewId, infoId, removeId) {
+    const preview = document.getElementById(previewId);
+    const info = document.getElementById(infoId);
+    const remove = document.getElementById(removeId);
+    const file = input.files[0];
+
+    if (file) {
+        // Show preview image
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+
+        // Show file info
+        const fileSize = (file.size / 1024).toFixed(2);
+        info.textContent = `${file.name} (${fileSize} KB)`;
+        info.style.display = 'block';
+
+        // Show remove button
+        remove.style.display = 'block';
+    }
+}
+
+function removeFile(inputId, previewId, infoId, removeId) {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    const info = document.getElementById(infoId);
+    const remove = document.getElementById(removeId);
+
+    // Clear input
+    input.value = '';
+
+    // Hide preview
+    preview.src = '';
+    preview.style.display = 'none';
+
+    // Hide info
+    info.textContent = '';
+    info.style.display = 'none';
+
+    // Hide remove button
+    remove.style.display = 'none';
+}
+
+// Validate file size and type before upload
+document.querySelectorAll('.eviden-input').forEach(input => {
+    input.addEventListener('change', function() {
+        const file = this.files[0];
+        const maxSize = 2 * 1024 * 1024; // 2MB
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+
+        if (file) {
+            if (file.size > maxSize) {
+                alert('Ukuran file terlalu besar. Maksimal 2MB');
+                this.value = '';
+                return;
+            }
+
+            if (!allowedTypes.includes(file.type)) {
+                alert('Tipe file tidak didukung. Gunakan format JPG, PNG, atau WEBP');
+                this.value = '';
+                return;
+            }
+        }
+    });
+});
 </script>
 @endsection 

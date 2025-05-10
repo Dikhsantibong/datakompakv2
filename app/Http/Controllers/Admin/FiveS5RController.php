@@ -25,7 +25,10 @@ class FiveS5RController extends Controller
         foreach(['Ringkas', 'Rapi', 'Resik', 'Rawat', 'Rajin'] as $kategori) {
             $evidenPath = null;
             if ($request->hasFile("eviden_pemeriksaan_$kategori")) {
-                $evidenPath = $request->file("eviden_pemeriksaan_$kategori")->store('public/5s5r/pemeriksaan');
+                $file = $request->file("eviden_pemeriksaan_$kategori");
+                $filename = time() . '_' . $kategori . '_' . $file->getClientOriginalName();
+                Storage::putFileAs('public/5s5r/pemeriksaan', $file, $filename);
+                $evidenPath = '5s5r/pemeriksaan/' . $filename;
             }
 
             Pemeriksaan5s5r::create([
@@ -49,7 +52,10 @@ class FiveS5RController extends Controller
         for($i = 1; $i <= 4; $i++) {
             $evidenPath = null;
             if ($request->hasFile("eviden_program_$i")) {
-                $evidenPath = $request->file("eviden_program_$i")->store('public/5s5r/program');
+                $file = $request->file("eviden_program_$i");
+                $filename = time() . '_program_' . $i . '_' . $file->getClientOriginalName();
+                Storage::putFileAs('public/5s5r/program', $file, $filename);
+                $evidenPath = '5s5r/program/' . $filename;
             }
 
             ProgramKerja5r::create([
@@ -173,10 +179,15 @@ class FiveS5RController extends Controller
                     ];
 
                     if ($request->hasFile("eviden_pemeriksaan_$kategori")) {
+                        // Delete old file if exists
                         if ($record->eviden) {
-                            Storage::delete($record->eviden);
+                            Storage::delete('public/' . $record->eviden);
                         }
-                        $updateData['eviden'] = $request->file("eviden_pemeriksaan_$kategori")->store('public/5s5r/pemeriksaan');
+                        
+                        $file = $request->file("eviden_pemeriksaan_$kategori");
+                        $filename = time() . '_' . $kategori . '_' . $file->getClientOriginalName();
+                        Storage::putFileAs('public/5s5r/pemeriksaan', $file, $filename);
+                        $updateData['eviden'] = '5s5r/pemeriksaan/' . $filename;
                     }
 
                     $record->update($updateData);
@@ -199,10 +210,15 @@ class FiveS5RController extends Controller
                     ];
 
                     if ($request->hasFile("eviden_program_$i")) {
+                        // Delete old file if exists
                         if ($record->eviden) {
-                            Storage::delete($record->eviden);
+                            Storage::delete('public/' . $record->eviden);
                         }
-                        $updateData['eviden'] = $request->file("eviden_program_$i")->store('public/5s5r/program');
+                        
+                        $file = $request->file("eviden_program_$i");
+                        $filename = time() . '_program_' . $i . '_' . $file->getClientOriginalName();
+                        Storage::putFileAs('public/5s5r/program', $file, $filename);
+                        $updateData['eviden'] = '5s5r/program/' . $filename;
                     }
 
                     $record->update($updateData);

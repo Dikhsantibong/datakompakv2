@@ -10,7 +10,9 @@ class FlmInspection extends Model
     use HasFactory;
 
     protected $fillable = [
+        'flm_id',
         'tanggal',
+        'operator',
         'mesin',
         'sistem',
         'masalah',

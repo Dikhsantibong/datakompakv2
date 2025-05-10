@@ -173,72 +173,94 @@
                                     <tr>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">No</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Tanggal</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Mesin/Peralatan</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Sistem Pembangkit</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Masalah</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Tindakan</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Operator</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Detail Pemeriksaan</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Status</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach($flmData as $index => $data)
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
-                                            {{ $index + 1 }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
-                                            {{ $data->tanggal }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
-                                            {{ $data->mesin }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
-                                            {{ $data->sistem }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
-                                            {{ $data->masalah }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
-                                            @php
-                                                $tindakan = [];
-                                                if ($data->tindakan_bersihkan) $tindakan[] = 'Bersihkan';
-                                                if ($data->tindakan_lumasi) $tindakan[] = 'Lumasi';
-                                                if ($data->tindakan_kencangkan) $tindakan[] = 'Kencangkan';
-                                                if ($data->tindakan_setting) $tindakan[] = 'Setting';
-                                                if ($data->tindakan_ganti) $tindakan[] = 'Ganti';
-                                            @endphp
-                                            {{ implode(', ', $tindakan) }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-center border border-gray-200">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                Selesai
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center border border-gray-200">
-                                            <div class="flex justify-center space-x-2">
-                                                <a href="{{ route('admin.flm.show', $data->id) }}" class="text-indigo-600 hover:text-indigo-900" title="Lihat Detail">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="{{ route('admin.flm.edit', $data->id) }}" class="text-blue-600 hover:text-blue-900" title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <form action="{{ route('admin.flm.destroy', $data->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="text-red-600 hover:text-red-900" title="Hapus">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                                <a href="{{ route('admin.flm.exportExcel', $data->id) }}" class="text-green-600 hover:text-green-900" title="Export Excel">
-                                                    <i class="fas fa-file-excel"></i>
-                                                </a>
-                                                <a href="{{ route('admin.flm.exportPdf', $data->id) }}" class="text-red-600 hover:text-red-900" title="Export PDF">
-                                                    <i class="fas fa-file-pdf"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    @php
+                                        $currentFlmId = null;
+                                        $rowNumber = 1;
+                                        $groupedData = $flmData->groupBy('flm_id');
+                                    @endphp
+
+                                    @foreach($groupedData as $flmId => $group)
+                                        @php
+                                            $firstItem = $group->first();
+                                        @endphp
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
+                                                {{ $rowNumber++ }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
+                                                {{ $firstItem->tanggal->format('d/m/Y') }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
+                                                {{ $firstItem->operator }}
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-500 border border-gray-200">
+                                                <div class="space-y-1">
+                                                @foreach($group as $data)
+                                                    <div class="p-2 {{ !$loop->last ? 'border-b' : '' }}">
+                                                        <div class="flex items-center justify-between">
+                                                            <span class="font-medium text-gray-700">{{ $data->sistem }} - {{ $data->mesin }}</span>
+                                                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                                                                @php
+                                                                    $tindakan = [];
+                                                                    if ($data->tindakan_bersihkan) $tindakan[] = 'B';
+                                                                    if ($data->tindakan_lumasi) $tindakan[] = 'L';
+                                                                    if ($data->tindakan_kencangkan) $tindakan[] = 'K';
+                                                                    if ($data->tindakan_perbaikan_koneksi) $tindakan[] = 'PK';
+                                                                    if ($data->tindakan_lainnya) $tindakan[] = 'LL';
+                                                                @endphp
+                                                                {{ implode('/', $tindakan) }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="text-xs text-gray-500 mt-1 line-clamp-1" title="{{ $data->masalah }}">
+                                                            {{ $data->masalah }}
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center border border-gray-200">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                    {{ $firstItem->status }}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center border border-gray-200">
+                                                <div class="flex flex-col space-y-2">
+                                                    <a href="{{ route('admin.flm.show', $firstItem->id) }}" 
+                                                       class="text-indigo-600 hover:text-indigo-900 flex items-center justify-center" 
+                                                       title="Lihat Detail">
+                                                        <i class="fas fa-eye mr-1"></i> Detail
+                                                    </a>
+                                                    <a href="{{ route('admin.flm.exportExcel', $firstItem->id) }}" 
+                                                       class="text-green-600 hover:text-green-900 flex items-center justify-center" 
+                                                       title="Export Excel">
+                                                        <i class="fas fa-file-excel mr-1"></i> Excel
+                                                    </a>
+                                                    <a href="{{ route('admin.flm.exportPdf', $firstItem->id) }}" 
+                                                       class="text-red-600 hover:text-red-900 flex items-center justify-center" 
+                                                       title="Export PDF">
+                                                        <i class="fas fa-file-pdf mr-1"></i> PDF
+                                                    </a>
+                                                    <form action="{{ route('admin.flm.destroy', $firstItem->id) }}" method="POST" 
+                                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');"
+                                                          class="inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" 
+                                                                class="text-red-600 hover:text-red-900 flex items-center justify-center w-full" 
+                                                                title="Hapus">
+                                                            <i class="fas fa-trash-alt mr-1"></i> Hapus
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>

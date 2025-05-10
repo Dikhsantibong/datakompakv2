@@ -29,7 +29,14 @@ class FlmExport implements FromView, WithTitle, WithEvents, WithStyles, WithDraw
     public function __construct($id = null)
     {
         $this->id = $id;
-        $this->flmData = $id ? FlmInspection::findOrFail($id) : null;
+        if ($id) {
+            $mainRecord = FlmInspection::findOrFail($id);
+            $this->flmData = FlmInspection::where('flm_id', $mainRecord->flm_id)
+                                        ->orderBy('created_at')
+                                        ->get();
+        } else {
+            $this->flmData = null;
+        }
         $this->sectionRows = [];
     }
 
@@ -67,7 +74,11 @@ class FlmExport implements FromView, WithTitle, WithEvents, WithStyles, WithDraw
 
     public function title(): string
     {
-        return 'FLM ' . ($this->flmData ? $this->flmData->tanggal->format('d/m/Y') : 'Report');
+        if ($this->flmData && $this->flmData->count() > 0) {
+            $firstRecord = $this->flmData->first();
+            return 'FLM ' . $firstRecord->tanggal->format('d/m/Y') . ' - ' . $firstRecord->flm_id;
+        }
+        return 'FLM Report';
     }
 
     public function styles(Worksheet $sheet)
@@ -79,11 +90,12 @@ class FlmExport implements FromView, WithTitle, WithEvents, WithStyles, WithDraw
         // Set specific column widths
         $sheet->getColumnDimension('A')->setWidth(5);   // No
         $sheet->getColumnDimension('B')->setWidth(15);  // Tanggal
-        $sheet->getColumnDimension('C')->setWidth(25);  // Mesin/Peralatan
-        $sheet->getColumnDimension('D')->setWidth(25);  // Sistem Pembangkit
-        $sheet->getColumnDimension('E')->setWidth(30);  // Masalah
-        $sheet->getColumnDimension('F')->setWidth(25);  // Tindakan
-        $sheet->getColumnDimension('G')->setWidth(15);  // Status
+        $sheet->getColumnDimension('C')->setWidth(20);  // Operator
+        $sheet->getColumnDimension('D')->setWidth(25);  // Mesin/Peralatan
+        $sheet->getColumnDimension('E')->setWidth(25);  // Sistem Pembangkit
+        $sheet->getColumnDimension('F')->setWidth(30);  // Masalah
+        $sheet->getColumnDimension('G')->setWidth(25);  // Tindakan
+        $sheet->getColumnDimension('H')->setWidth(15);  // Status
 
         // Set row height for logo row
         $sheet->getRowDimension(2)->setRowHeight(50);
@@ -150,14 +162,14 @@ class FlmExport implements FromView, WithTitle, WithEvents, WithStyles, WithDraw
 
         // Apply styles to all section headers
         foreach ($this->sectionRows as $row) {
-            $sheet->getStyle("A{$row}:G{$row}")->applyFromArray($sectionHeaderStyle);
+            $sheet->getStyle("A{$row}:H{$row}")->applyFromArray($sectionHeaderStyle);
             $sheet->getRowDimension($row)->setRowHeight(25);
         }
 
         // Apply styles to table headers (rows after section headers)
         foreach ($this->sectionRows as $row) {
             $tableHeaderRow = $row + 1;
-            $sheet->getStyle("A{$tableHeaderRow}:G{$tableHeaderRow}")->applyFromArray($tableHeaderStyle);
+            $sheet->getStyle("A{$tableHeaderRow}:H{$tableHeaderRow}")->applyFromArray($tableHeaderStyle);
             $sheet->getRowDimension($tableHeaderRow)->setRowHeight(20);
         }
 
@@ -187,7 +199,7 @@ class FlmExport implements FromView, WithTitle, WithEvents, WithStyles, WithDraw
         
         for ($row = 1; $row <= $lastRow; $row++) {
             $cellValue = $sheet->getCell("A{$row}")->getValue();
-            if (in_array($cellValue, ['Data Pemeriksaan FLM', 'Catatan'])) {
+            if (in_array($cellValue, ['Data Pemeriksaan FLM', 'Detail Pemeriksaan'])) {
                 $rows[] = $row;
             }
         }
@@ -201,7 +213,7 @@ class FlmExport implements FromView, WithTitle, WithEvents, WithStyles, WithDraw
             AfterSheet::class => function(AfterSheet $event) {
                 $sheet = $event->sheet;
                 $lastRow = $sheet->getHighestRow();
-                $lastColumn = $sheet->getHighestColumn();
+                $lastColumn = 'H';
 
                 // Set page orientation to landscape
                 $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);

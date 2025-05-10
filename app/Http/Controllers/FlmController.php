@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\FlmExport;
+use Illuminate\Support\Str;
 
 class FlmController extends Controller
 {
@@ -21,6 +22,7 @@ class FlmController extends Controller
     {
         $request->validate([
             'tanggal' => 'required|date',
+            'operator' => 'required|string|max:100',
             'mesin.*' => 'required|string|max:100',
             'sistem.*' => 'required|string|max:100',
             'masalah.*' => 'required|string',
@@ -31,11 +33,16 @@ class FlmController extends Controller
             'eviden_sesudah.*' => 'nullable|image|max:2048',
         ]);
 
+        // Generate unique flm_id untuk satu batch input
+        $flm_id = 'FLM-' . date('Ymd') . '-' . Str::random(5);
+
         foreach ($request->mesin as $key => $mesin) {
             if (empty($mesin)) continue;
 
             $data = [
+                'flm_id' => $flm_id,
                 'tanggal' => $request->tanggal,
+                'operator' => $request->operator,
                 'mesin' => $mesin,
                 'sistem' => $request->sistem[$key],
                 'masalah' => $request->masalah[$key],
@@ -93,18 +100,21 @@ class FlmController extends Controller
             $query->where('sistem', 'like', '%' . request('sistem') . '%');
         }
 
-        $flmData = $query->orderBy('tanggal', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10)
-            ->withQueryString();
+        // Group by flm_id to show related entries together
+        $query->orderBy('flm_id')
+              ->orderBy('tanggal', 'desc')
+              ->orderBy('created_at', 'desc');
+
+        $flmData = $query->paginate(10)->withQueryString();
 
         return view('admin.flm.list', compact('flmData'));
     }
 
     public function show($id)
     {
-        $flmDetail = FlmInspection::findOrFail($id);
-        return view('admin.flm.show', compact('flmDetail'));
+        $mainData = FlmInspection::findOrFail($id);
+        $flmDetails = FlmInspection::where('flm_id', $mainData->flm_id)->get();
+        return view('admin.flm.show', compact('mainData', 'flmDetails'));
     }
 
     public function edit($id)
@@ -117,6 +127,7 @@ class FlmController extends Controller
     {
         $request->validate([
             'tanggal' => 'required|date',
+            'operator' => 'required|string|max:100',
             'mesin' => 'required|string|max:100',
             'sistem' => 'required|string|max:100',
             'masalah' => 'required|string',
@@ -181,9 +192,10 @@ class FlmController extends Controller
     public function exportPdf($id = null)
     {
         if ($id) {
-            $flmData = FlmInspection::findOrFail($id);
+            $mainData = FlmInspection::findOrFail($id);
+            $flmData = FlmInspection::where('flm_id', $mainData->flm_id)->get();
             $pdf = Pdf::loadView('admin.flm.pdf.single', compact('flmData'));
-            return $pdf->download('flm-inspection-' . $id . '.pdf');
+            return $pdf->download('flm-inspection-' . $mainData->flm_id . '.pdf');
         }
 
         $flmData = FlmInspection::orderBy('tanggal', 'desc')->get();

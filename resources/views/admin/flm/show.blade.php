@@ -59,10 +59,13 @@
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center space-x-2">
                         <span class="px-3 py-1 text-sm font-medium rounded-full bg-blue-100 text-blue-800">
-                            {{ $flmDetail->tanggal }}
+                            {{ $mainData->tanggal->format('d/m/Y') }}
                         </span>
                         <span class="px-3 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800">
-                            Shift {{ $flmDetail->shift }}
+                            {{ $mainData->operator }}
+                        </span>
+                        <span class="px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-purple-800">
+                            ID: {{ $mainData->flm_id }}
                         </span>
                     </div>
                 </div>
@@ -79,12 +82,32 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-4 sm:px-6 py-4">
+                <!-- Info Card -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-4">
+                    <div class="p-4 border-b">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">ID Pemeriksaan</p>
+                                <p class="mt-1 text-sm text-gray-900">{{ $mainData->flm_id }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Operator</p>
+                                <p class="mt-1 text-sm text-gray-900">{{ $mainData->operator }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Tanggal</p>
+                                <p class="mt-1 text-sm text-gray-900">{{ $mainData->tanggal->format('d/m/Y') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <div class="p-6">
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead>
                                     <tr class="bg-gray-50">
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">No</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Mesin/peralatan</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Sistem pembangkit</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Masalah yang ditemukan</th>
@@ -95,6 +118,7 @@
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Eviden</th>
                                     </tr>
                                     <tr class="bg-gray-50">
+                                        <th class="border px-4 py-2"></th>
                                         <th class="border px-4 py-2"></th>
                                         <th class="border px-4 py-2"></th>
                                         <th class="border px-4 py-2"></th>
@@ -110,63 +134,67 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
+                                    @foreach($flmDetails as $index => $detail)
                                     <tr>
-                                        <td class="border px-4 py-2">
-                                            <div class="text-sm text-gray-900 w-[200px]">{{ $flmDetail->mesin }}</div>
+                                        <td class="border px-4 py-2 text-center">
+                                            {{ $index + 1 }}
                                         </td>
                                         <td class="border px-4 py-2">
-                                            <div class="text-sm text-gray-900 w-[200px]">{{ $flmDetail->sistem }}</div>
+                                            <div class="text-sm text-gray-900 w-[200px]">{{ $detail->mesin }}</div>
                                         </td>
                                         <td class="border px-4 py-2">
-                                            <div class="text-sm text-gray-900 w-[200px]">{{ $flmDetail->masalah }}</div>
+                                            <div class="text-sm text-gray-900 w-[200px]">{{ $detail->sistem }}</div>
                                         </td>
                                         <td class="border px-4 py-2">
-                                            <div class="text-sm text-gray-900 w-[200px]">{{ $flmDetail->kondisi_awal }}</div>
+                                            <div class="text-sm text-gray-900 w-[200px]">{{ $detail->masalah }}</div>
+                                        </td>
+                                        <td class="border px-4 py-2">
+                                            <div class="text-sm text-gray-900 w-[200px]">{{ $detail->kondisi_awal }}</div>
                                         </td>
                                         <td class="border px-4 py-2 text-center">
                                             <span class="inline-flex items-center justify-center">
-                                                <i class="fas fa-{{ $flmDetail->tindakan_bersihkan ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
+                                                <i class="fas fa-{{ $detail->tindakan_bersihkan ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
                                             </span>
                                         </td>
                                         <td class="border px-4 py-2 text-center">
                                             <span class="inline-flex items-center justify-center">
-                                                <i class="fas fa-{{ $flmDetail->tindakan_lumasi ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
+                                                <i class="fas fa-{{ $detail->tindakan_lumasi ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
                                             </span>
                                         </td>
                                         <td class="border px-4 py-2 text-center">
                                             <span class="inline-flex items-center justify-center">
-                                                <i class="fas fa-{{ $flmDetail->tindakan_kencangkan ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
+                                                <i class="fas fa-{{ $detail->tindakan_kencangkan ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
                                             </span>
                                         </td>
                                         <td class="border px-4 py-2 text-center">
                                             <span class="inline-flex items-center justify-center">
-                                                <i class="fas fa-{{ $flmDetail->tindakan_perbaikan_koneksi ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
+                                                <i class="fas fa-{{ $detail->tindakan_perbaikan_koneksi ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
                                             </span>
                                         </td>
                                         <td class="border px-4 py-2 text-center">
                                             <span class="inline-flex items-center justify-center">
-                                                <i class="fas fa-{{ $flmDetail->tindakan_lainnya ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
+                                                <i class="fas fa-{{ $detail->tindakan_lainnya ? 'check text-green-500' : 'times text-red-500' }} text-lg"></i>
                                             </span>
                                         </td>
                                         <td class="border px-4 py-2">
-                                            <div class="text-sm text-gray-900 w-[200px]">{{ $flmDetail->kondisi_akhir }}</div>
+                                            <div class="text-sm text-gray-900 w-[200px]">{{ $detail->kondisi_akhir }}</div>
                                         </td>
                                         <td class="border px-4 py-2">
-                                            <div class="text-sm text-gray-900 w-[200px]">{{ $flmDetail->catatan ?: '-' }}</div>
+                                            <div class="text-sm text-gray-900 w-[200px]">{{ $detail->catatan ?: '-' }}</div>
                                         </td>
                                         <td class="border px-4 py-2">
                                             <div class="space-y-4 w-[300px]">
-                                                @if($flmDetail->eviden_sebelum || $flmDetail->eviden_sesudah)
+                                                @if($detail->eviden_sebelum || $detail->eviden_sesudah)
                                                 <div class="evidence-grid">
-                                                    @if($flmDetail->eviden_sebelum)
+                                                    @if($detail->eviden_sebelum)
                                                     <div class="evidence-container">
                                                         <p class="text-sm font-medium text-gray-500 mb-2">Foto Sebelum:</p>
-                                                        <img src="{{ asset('storage/'.$flmDetail->eviden_sebelum) }}" 
+                                                        <img src="{{ asset('storage/'.$detail->eviden_sebelum) }}" 
                                                              alt="Foto Sebelum"
                                                              class="evidence-image"
                                                              onerror="this.src='{{ asset('images/no-image.png') }}'; this.onerror=null;">
                                                         <button type="button" 
-                                                                onclick="openLightbox('{{ asset('storage/'.$flmDetail->eviden_sebelum) }}', 'Foto Sebelum')"
+                                                                onclick="openLightbox('{{ asset('storage/'.$detail->eviden_sebelum) }}', 'Foto Sebelum')"
                                                                 class="zoom-button">
                                                             <span class="bg-black bg-opacity-50 text-white px-4 py-2 rounded-full text-sm">
                                                                 <i class="fas fa-search-plus mr-2"></i>Perbesar
@@ -175,15 +203,15 @@
                                                     </div>
                                                     @endif
 
-                                                    @if($flmDetail->eviden_sesudah)
+                                                    @if($detail->eviden_sesudah)
                                                     <div class="evidence-container">
                                                         <p class="text-sm font-medium text-gray-500 mb-2">Foto Sesudah:</p>
-                                                        <img src="{{ asset('storage/'.$flmDetail->eviden_sesudah) }}" 
+                                                        <img src="{{ asset('storage/'.$detail->eviden_sesudah) }}" 
                                                              alt="Foto Sesudah"
                                                              class="evidence-image"
                                                              onerror="this.src='{{ asset('images/no-image.png') }}'; this.onerror=null;">
                                                         <button type="button" 
-                                                                onclick="openLightbox('{{ asset('storage/'.$flmDetail->eviden_sesudah) }}', 'Foto Sesudah')"
+                                                                onclick="openLightbox('{{ asset('storage/'.$detail->eviden_sesudah) }}', 'Foto Sesudah')"
                                                                 class="zoom-button">
                                                             <span class="bg-black bg-opacity-50 text-white px-4 py-2 rounded-full text-sm">
                                                                 <i class="fas fa-search-plus mr-2"></i>Perbesar
@@ -200,6 +228,7 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -210,11 +239,6 @@
                                 class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] transition duration-150">
                                 <i class="fas fa-arrow-left mr-2"></i>
                                 Kembali
-                            </a>
-                            <a href="{{ route('admin.flm.edit', $flmDetail->id) }}" 
-                                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] transition duration-150">
-                                <i class="fas fa-edit mr-2"></i>
-                                Edit
                             </a>
                             <button type="button"
                                 onclick="printFLM()"

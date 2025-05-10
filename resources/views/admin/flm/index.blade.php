@@ -96,11 +96,19 @@
                             @csrf
                             
                             <!-- Form Header -->
-                            <div class="mb-6">
+                            <div class="mb-6 flex flex-wrap gap-4">
                                 <div class="w-full md:w-1/3">
                                     <label class="block text-sm font-medium text-gray-700">Tanggal</label>
                                     <input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" 
                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+                                
+                                <div class="w-full md:w-1/3">
+                                    <label class="block text-sm font-medium text-gray-700">Operator</label>
+                                    <input type="text" name="operator" value="{{ old('operator') }}" 
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                           placeholder="Masukkan nama operator"
+                                           required>
                                 </div>
                             </div>
 
@@ -109,8 +117,8 @@
                                     <thead>
                                         <tr class="bg-gray-100">
                                             <th class="border px-4 py-2 text-sm">No.</th>
-                                            <th class="border px-4 py-2 text-sm">Mesin/peralatan</th>
                                             <th class="border px-4 py-2 text-sm">Sistem pembangkit</th>
+                                            <th class="border px-4 py-2 text-sm">Mesin/peralatan</th>
                                             <th class="border px-4 py-2 text-sm">Masalah awal yang ditemukan</th>
                                             <th class="border px-4 py-2 text-sm">kondisi awal</th>
                                             <th colspan="5" class="border px-4 py-2 text-sm text-center">Tindakan FLM</th>
@@ -141,11 +149,12 @@
                                         <tr class="flm-row">
                                             <td class="border px-4 py-2 text-center row-number">1</td>
                                             <td class="border px-4 py-2">
-                                                <textarea name="mesin[]" class="w-[200px] h-[100px] p-1 border-gray-300 rounded resize-none focus:border-blue-500 focus:ring-blue-500" required>{{ old('mesin.0') }}</textarea>
-                                            </td>
-                                            <td class="border px-4 py-2">
                                                 <textarea name="sistem[]" class="w-[200px] h-[100px] p-1 border-gray-300 rounded resize-none focus:border-blue-500 focus:ring-blue-500" required>{{ old('sistem.0') }}</textarea>
                                             </td>
+                                            <td class="border px-4 py-2">
+                                                <textarea name="mesin[]" class="w-[200px] h-[100px] p-1 border-gray-300 rounded resize-none focus:border-blue-500 focus:ring-blue-500" required>{{ old('mesin.0') }}</textarea>
+                                            </td>
+                                            
                                             <td class="border px-4 py-2">
                                                 <textarea name="masalah[]" class="w-[200px] h-[100px] p-1 border-gray-300 rounded resize-none focus:border-blue-500 focus:ring-blue-500" required>{{ old('masalah.0') }}</textarea>
                                             </td>

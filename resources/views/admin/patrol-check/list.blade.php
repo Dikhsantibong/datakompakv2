@@ -211,7 +211,7 @@
                                             {{ optional($patrol->creator)->name ?? 'N/A' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
-                                            @if(optional($patrol->conditions)->contains('status', 'abnormal'))
+                                            @if($patrol->status === 'abnormal')
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
                                                     Ada Abnormal
                                                 </span>

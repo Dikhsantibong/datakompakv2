@@ -94,27 +94,24 @@
                     <!-- Abnormal Equipment Data -->
                     <div class="bg-white rounded-lg shadow overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200">
-                            <h2 class="text-lg font-medium text-gray-900">Data Kondisi Abnormal Alat Bantu</h2>
+                            <h2 class="text-lg font-medium text-gray-900">Data Kondisi Alat Bantu</h2>
                         </div>
                         <div class="p-6">
                             <div class="overflow-x-auto">
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead>
                                         <tr>
-                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">NO</th>
-                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">ALAT BANTU</th>
-                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Kondisi Abnormal</th>
-                                            <th colspan="3" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Tindak Lanjut</th>
-                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Keterangan</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border" rowspan="2">NO</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border" rowspan="2">ALAT BANTU</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border" rowspan="2">Kondisi Awal</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border" colspan="3">Tindak Lanjut</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border" rowspan="2">Kondisi Akhir</th>
+                                            <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border" rowspan="2">Keterangan</th>
                                         </tr>
                                         <tr>
-                                            <th class="border px-4 py-2"></th>
-                                            <th class="border px-4 py-2"></th>
-                                            <th class="border px-4 py-2"></th>
-                                            <th class="border px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">FLM</th>
-                                            <th class="border px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">SR</th>
-                                            <th class="border px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Lainnya</th>
-                                            <th class="border px-4 py-2"></th>
+                                            <th class="border px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase bg-gray-50">FLM</th>
+                                            <th class="border px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase bg-gray-50">SR</th>
+                                            <th class="border px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase bg-gray-50">Lainnya</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -138,12 +135,17 @@
                                                     <i class="fas fa-check text-green-500"></i>
                                                 @endif
                                             </td>
-                                            <td class="border px-4 py-2">{{ $abnormal['notes'] ?? '' }}</td>
+                                            <td class="border px-4 py-2">
+                                                {{ $patrol->condition_after[$index]['condition'] ?? '' }}
+                                            </td>
+                                            <td class="border px-4 py-2">
+                                                {{ $patrol->condition_after[$index]['notes'] ?? '' }}
+                                            </td>
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="7" class="border px-4 py-2 text-center text-gray-500">
-                                                Tidak ada data kondisi abnormal
+                                            <td colspan="8" class="border px-4 py-2 text-center text-gray-500">
+                                                Tidak ada data kondisi alat bantu
                                             </td>
                                         </tr>
                                         @endforelse

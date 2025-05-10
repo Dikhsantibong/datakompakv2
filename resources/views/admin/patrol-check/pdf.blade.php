@@ -16,6 +16,7 @@
         .header h1 {
             margin: 0;
             color: #333;
+            font-size: 24px;
         }
         .header p {
             margin: 5px 0;
@@ -25,6 +26,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            font-size: 12px;
         }
         th, td {
             border: 1px solid #ddd;
@@ -34,12 +36,32 @@
         th {
             background-color: #009BB9 !important;
             color: #fff !important;
+            font-weight: bold;
         }
         .section-title {
             margin-top: 20px;
             margin-bottom: 10px;
             color: #333;
-            font-size: 18px;
+            font-size: 16px;
+            font-weight: bold;
+            border-bottom: 2px solid #009BB9;
+            padding-bottom: 5px;
+        }
+        .sub-header {
+            background-color: #f8f9fa !important;
+            color: #333 !important;
+            font-weight: bold;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .status-normal {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .status-abnormal {
+            color: #dc3545;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -54,11 +76,16 @@
             <span style="position: absolute; left: 52px; right: 0; top: 22px; font-size: 16px; color: #406a7d; font-family: Arial, sans-serif; text-align: center; font-weight: normal; white-space: nowrap;">{{ optional($patrol->creator)->name }}</span>
         </div>
     </div>
+
     <!-- Judul dan detail di tengah -->
-    <div style="text-align: center; margin-bottom: 30px; margin-top: 0;">
+    <div style="text-align: center; margin-bottom: 30px; margin-top: 20px;">
         <h1 style="margin: 0; color: #333; font-size: 28px;">Patrol Check KIT</h1>
         <p style="margin: 5px 0; color: #666;">Tanggal: {{ optional($patrol->created_at)->format('d F Y H:i') }}</p>
-        <p style="margin: 5px 0; color: #666;">Status: {{ ucfirst($patrol->status) }}</p>
+        <p style="margin: 5px 0; color: #666;">Status: 
+            <span class="{{ $patrol->status === 'normal' ? 'status-normal' : 'status-abnormal' }}">
+                {{ ucfirst($patrol->status) }}
+            </span>
+        </p>
         <p style="margin: 5px 0; color: #666;">Dibuat oleh: {{ optional($patrol->creator)->name }}</p>
     </div>
 
@@ -75,39 +102,46 @@
         <tbody>
             @foreach($patrol->condition_systems as $i => $row)
             <tr>
-                <td>{{ $i+1 }}</td>
+                <td class="text-center">{{ $i+1 }}</td>
                 <td>{{ $row['system'] }}</td>
-                <td>{{ ucfirst($row['condition']) }}</td>
-                <td>{{ $row['notes'] ?? '' }}</td>
+                <td class="text-center {{ $row['condition'] === 'normal' ? 'status-normal' : 'status-abnormal' }}">
+                    {{ ucfirst($row['condition']) }}
+                </td>
+                <td>{{ $row['notes'] ?? '-' }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
 
     @if(!empty($patrol->abnormal_equipments))
-    <div class="section-title">Data Kondisi Abnormal Alat Bantu</div>
+    <div class="section-title">Data Kondisi Alat Bantu</div>
     <table>
         <thead>
             <tr>
-                <th>No</th>
-                <th>Alat Bantu</th>
-                <th>Kondisi Abnormal</th>
-                <th>FLM</th>
-                <th>SR</th>
-                <th>Lainnya</th>
-                <th>Keterangan</th>
+                <th rowspan="2" class="text-center">No</th>
+                <th rowspan="2">Alat Bantu</th>
+                <th rowspan="2">Kondisi Awal</th>
+                <th colspan="3" class="text-center">Tindak Lanjut</th>
+                <th rowspan="2">Kondisi Akhir</th>
+                <th rowspan="2">Keterangan</th>
+            </tr>
+            <tr class="sub-header">
+                <th class="text-center">FLM</th>
+                <th class="text-center">SR</th>
+                <th class="text-center">Lainnya</th>
             </tr>
         </thead>
         <tbody>
             @foreach($patrol->abnormal_equipments as $i => $row)
             <tr>
-                <td>{{ $i+1 }}</td>
+                <td class="text-center">{{ $i+1 }}</td>
                 <td>{{ $row['equipment'] }}</td>
                 <td>{{ $row['condition'] }}</td>
-                <td>{{ $row['flm'] ? 'Ya' : '-' }}</td>
-                <td>{{ $row['sr'] ? 'Ya' : '-' }}</td>
-                <td>{{ $row['other'] ? 'Ya' : '-' }}</td>
-                <td>{{ $row['notes'] ?? '' }}</td>
+                <td class="text-center">{{ $row['flm'] ? 'Ya' : '-' }}</td>
+                <td class="text-center">{{ $row['sr'] ? 'Ya' : '-' }}</td>
+                <td class="text-center">{{ $row['other'] ? 'Ya' : '-' }}</td>
+                <td>{{ $patrol->condition_after[$i]['condition'] ?? '-' }}</td>
+                <td>{{ $patrol->condition_after[$i]['notes'] ?? '-' }}</td>
             </tr>
             @endforeach
         </tbody>

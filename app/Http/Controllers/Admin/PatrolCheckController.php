@@ -58,6 +58,7 @@ class PatrolCheckController extends Controller
             'condition' => 'required|array',
             'notes' => 'required|array',
             'abnormal' => 'nullable|array',
+            'condition_after' => 'nullable|array',
         ]);
 
         $condition_systems = collect($request->input('condition'))->map(function($val, $idx) use ($request) {
@@ -80,12 +81,21 @@ class PatrolCheckController extends Controller
             ];
         });
 
+        $condition_after = collect($request->input('condition_after', []))->map(function($row) {
+            return [
+                'equipment' => $row['equipment'] ?? '',
+                'condition' => $row['condition'] ?? '',
+                'notes' => $row['notes'] ?? '',
+            ];
+        });
+
         $status = $condition_systems->contains(fn($item) => $item['condition'] === 'abnormal') ? 'abnormal' : 'normal';
 
         $patrol = PatrolCheck::create([
             'created_by' => Auth::id(),
             'condition_systems' => $condition_systems,
             'abnormal_equipments' => $abnormal_equipments,
+            'condition_after' => $condition_after,
             'status' => $status,
         ]);
 
@@ -105,7 +115,9 @@ class PatrolCheckController extends Controller
             'condition' => 'required|array',
             'notes' => 'required|array',
             'abnormal' => 'nullable|array',
+            'condition_after' => 'nullable|array',
         ]);
+
         $condition_systems = collect($request->input('condition'))->map(function($val, $idx) use ($request) {
             $systems = ['Exhaust', 'Pelumas', 'BBM', 'JCW/HT', 'CW/LT'];
             return [
@@ -114,6 +126,7 @@ class PatrolCheckController extends Controller
                 'notes' => $request->input('notes')[$idx] ?? null,
             ];
         });
+
         $abnormal_equipments = collect($request->input('abnormal', []))->map(function($row) {
             return [
                 'equipment' => $row['equipment'] ?? '',
@@ -124,12 +137,24 @@ class PatrolCheckController extends Controller
                 'notes' => $row['notes'] ?? '',
             ];
         });
+
+        $condition_after = collect($request->input('condition_after', []))->map(function($row) {
+            return [
+                'equipment' => $row['equipment'] ?? '',
+                'condition' => $row['condition'] ?? '',
+                'notes' => $row['notes'] ?? '',
+            ];
+        });
+
         $status = $condition_systems->contains(fn($item) => $item['condition'] === 'abnormal') ? 'abnormal' : 'normal';
+
         $patrol->update([
             'condition_systems' => $condition_systems,
             'abnormal_equipments' => $abnormal_equipments,
+            'condition_after' => $condition_after,
             'status' => $status,
         ]);
+
         return redirect()->route('admin.patrol-check.list')->with('success', 'Data berhasil diperbarui');
     }
 

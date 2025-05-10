@@ -132,15 +132,16 @@
 
                             <!-- Abnormal Equipment Data -->
                             <div class="mb-6">
-                                <h3 class="text-lg font-medium text-gray-900 mb-4">Data Kondisi Abnormal Alat Bantu</h3>
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Data Kondisi Alat Bantu</h3>
                                 <div class="overflow-x-auto">
                                     <table class="min-w-full divide-y divide-gray-200" id="abnormalTable">
                                         <thead>
                                             <tr>
                                                 <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">NO</th>
                                                 <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">ALAT BANTU</th>
-                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Kondisi Abnormal</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Kondisi Awal</th>
                                                 <th colspan="3" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Tindak Lanjut</th>
+                                                <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Kondisi Akhir</th>
                                                 <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Keterangan</th>
                                                 <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Aksi</th>
                                             </tr>
@@ -153,6 +154,7 @@
                                                 <th class="border px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Lainnya</th>
                                                 <th class="border px-4 py-2"></th>
                                                 <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -162,19 +164,43 @@
                                                     <input type="text" name="abnormal[0][equipment]" class="form-input w-full rounded-md">
                                                 </td>
                                                 <td class="border px-4 py-2">
-                                                    <input type="text" name="abnormal[0][condition]" class="form-input w-full rounded-md">
+                                                    <textarea 
+                                                        name="abnormal[0][condition]" 
+                                                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        rows="3"
+                                                        placeholder="Masukkan kondisi awal">{{ $abnormal['condition'] ?? '' }}</textarea>
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
-                                                    <input type="checkbox" name="abnormal[0][flm]" class="form-checkbox h-4 w-4">
+                                                    <input type="checkbox" 
+                                                           name="abnormal[0][flm]" 
+                                                           class="form-checkbox h-5 w-5 text-blue-600"
+                                                           {{ !empty($abnormal['flm']) ? 'checked' : '' }}>
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
-                                                    <input type="checkbox" name="abnormal[0][sr]" class="form-checkbox h-4 w-4">
+                                                    <input type="checkbox" 
+                                                           name="abnormal[0][sr]" 
+                                                           class="form-checkbox h-5 w-5 text-blue-600"
+                                                           {{ !empty($abnormal['sr']) ? 'checked' : '' }}>
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
-                                                    <input type="checkbox" name="abnormal[0][other]" class="form-checkbox h-4 w-4">
+                                                    <input type="checkbox" 
+                                                           name="abnormal[0][other]" 
+                                                           class="form-checkbox h-5 w-5 text-blue-600"
+                                                           {{ !empty($abnormal['other']) ? 'checked' : '' }}>
                                                 </td>
                                                 <td class="border px-4 py-2">
-                                                    <input type="text" name="abnormal[0][notes]" class="form-input w-full rounded-md">
+                                                    <textarea 
+                                                        name="condition_after[0][condition]" 
+                                                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        rows="3"
+                                                        placeholder="Masukkan kondisi akhir">{{ $patrol->condition_after[$index]['condition'] ?? '' }}</textarea>
+                                                </td>
+                                                <td class="border px-4 py-2">
+                                                    <textarea 
+                                                        name="condition_after[0][notes]" 
+                                                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        rows="3"
+                                                        placeholder="Masukkan keterangan">{{ $patrol->condition_after[$index]['notes'] ?? '' }}</textarea>
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
                                                     <button type="button" onclick="deleteRow(this)" class="text-red-600 hover:text-red-900">
@@ -219,19 +245,40 @@
                 <input type="text" name="abnormal[${rowCount}][equipment]" class="form-input w-full rounded-md">
             </td>
             <td class="border px-4 py-2">
-                <input type="text" name="abnormal[${rowCount}][condition]" class="form-input w-full rounded-md">
+                <textarea 
+                    name="abnormal[${rowCount}][condition]" 
+                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    rows="3"
+                    placeholder="Masukkan kondisi awal"></textarea>
             </td>
             <td class="border px-4 py-2 text-center">
-                <input type="checkbox" name="abnormal[${rowCount}][flm]" class="form-checkbox h-4 w-4">
+                <input type="checkbox" 
+                       name="abnormal[${rowCount}][flm]" 
+                       class="form-checkbox h-5 w-5 text-blue-600">
             </td>
             <td class="border px-4 py-2 text-center">
-                <input type="checkbox" name="abnormal[${rowCount}][sr]" class="form-checkbox h-4 w-4">
+                <input type="checkbox" 
+                       name="abnormal[${rowCount}][sr]" 
+                       class="form-checkbox h-5 w-5 text-blue-600">
             </td>
             <td class="border px-4 py-2 text-center">
-                <input type="checkbox" name="abnormal[${rowCount}][other]" class="form-checkbox h-4 w-4">
+                <input type="checkbox" 
+                       name="abnormal[${rowCount}][other]" 
+                       class="form-checkbox h-5 w-5 text-blue-600">
             </td>
             <td class="border px-4 py-2">
-                <input type="text" name="abnormal[${rowCount}][notes]" class="form-input w-full rounded-md">
+                <textarea 
+                    name="condition_after[${rowCount}][condition]" 
+                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    rows="3"
+                    placeholder="Masukkan kondisi akhir"></textarea>
+            </td>
+            <td class="border px-4 py-2">
+                <textarea 
+                    name="condition_after[${rowCount}][notes]" 
+                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    rows="3"
+                    placeholder="Masukkan keterangan"></textarea>
             </td>
             <td class="border px-4 py-2 text-center">
                 <button type="button" onclick="deleteRow(this)" class="text-red-600 hover:text-red-900">

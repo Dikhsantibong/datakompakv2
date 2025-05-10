@@ -15,6 +15,7 @@ class PatrolCheck extends Model
         'created_by',
         'condition_systems',
         'abnormal_equipments',
+        'condition_after',
         'notes',
         'status',
     ];
@@ -22,6 +23,7 @@ class PatrolCheck extends Model
     protected $casts = [
         'condition_systems' => 'array',
         'abnormal_equipments' => 'array',
+        'condition_after' => 'array',
     ];
 
     public function creator()

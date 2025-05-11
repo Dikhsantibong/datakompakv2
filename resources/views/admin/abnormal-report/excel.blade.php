@@ -1,25 +1,38 @@
 <table>
+    <!-- Logo row -->
+    <tr>
+        <td colspan="5" style="text-align: center;">
+            {{-- <img src="{{ public_path('logo/navlog1.png') }}" width="200"> --}}
+        </td>
+        <td></td>
+        <td colspan="5"></td>
+    </tr>
+
+    <!-- Spacing row -->
+    <tr><td colspan="11"></td></tr>
+
     <!-- Header -->
     <tr class="main-header">
-        <td colspan="10">Laporan Abnormal/Gangguan - {{ $report->created_at->format('d F Y') }}</td>
+        <td colspan="11">Laporan Abnormal/Gangguan - {{ $report->created_at->format('d F Y') }}</td>
     </tr>
-    
-    <!-- Spacing rows -->
-    <tr><td colspan="10"></td></tr>
-    <tr><td colspan="10"></td></tr>
+
+    <!-- Spacing row -->
+    <tr><td colspan="11"></td></tr>
 
     <!-- Kronologi Kejadian Section -->
     <tr class="section-header">
-        <td colspan="10">Kronologi Kejadian</td>
+        <td colspan="11">Kronologi Kejadian</td>
     </tr>
     <tr class="table-header">
         <th rowspan="2">Pukul (WIB)</th>
         <th rowspan="2">Uraian kejadian</th>
-        <th rowspan="2">Visual parameter terkait</th>
+        <th colspan="2">Pengamatan</th>
         <th colspan="3">Tindakan Isolasi</th>
         <th colspan="4">Koordinasi</th>
     </tr>
     <tr class="table-header">
+        <th>Visual</th>
+        <th>Parameter</th>
         <th>Turun beban</th>
         <th>CBG OFF</th>
         <th>Stop</th>
@@ -33,7 +46,8 @@
     <tr>
         <td>{{ $chronology->waktu->format('H:i') }}</td>
         <td>{{ $chronology->uraian_kejadian }}</td>
-        <td>{{ $chronology->visual_parameter }}</td>
+        <td>{{ $chronology->visual }}</td>
+        <td>{{ $chronology->parameter }}</td>
         <td>{{ $chronology->turun_beban ? '✓' : '-' }}</td>
         <td>{{ $chronology->off_cbg ? '✓' : '-' }}</td>
         <td>{{ $chronology->stop ? '✓' : '-' }}</td>
@@ -45,11 +59,11 @@
     @endforeach
 
     <!-- Spacing row -->
-    <tr><td colspan="10"></td></tr>
+    <tr><td colspan="11"></td></tr>
 
     <!-- Mesin/Peralatan Terdampak Section -->
     <tr class="section-header">
-        <td colspan="10">Mesin/Peralatan Terdampak</td>
+        <td colspan="11">Mesin/Peralatan Terdampak</td>
     </tr>
     <tr class="table-header">
         <th>No</th>
@@ -69,11 +83,11 @@
     @endforeach
 
     <!-- Spacing row -->
-    <tr><td colspan="10"></td></tr>
+    <tr><td colspan="11"></td></tr>
 
     <!-- Tindak Lanjut Section -->
     <tr class="section-header">
-        <td colspan="10">Tindak Lanjut Tindakan</td>
+        <td colspan="11">Tindak Lanjut Tindakan</td>
     </tr>
     <tr class="table-header">
         <th>No</th>
@@ -93,11 +107,11 @@
     @endforeach
 
     <!-- Spacing row -->
-    <tr><td colspan="10"></td></tr>
+    <tr><td colspan="11"></td></tr>
 
     <!-- Rekomendasi Section -->
     <tr class="section-header">
-        <td colspan="10">Rekomendasi</td>
+        <td colspan="11">Rekomendasi</td>
     </tr>
     <tr class="table-header">
         <th>No</th>
@@ -111,11 +125,11 @@
     @endforeach
 
     <!-- Spacing row -->
-    <tr><td colspan="10"></td></tr>
+    <tr><td colspan="11"></td></tr>
 
     <!-- ADM Section -->
     <tr class="section-header">
-        <td colspan="10">Tindak Lanjut Administrasi</td>
+        <td colspan="11">Tindak Lanjut Administrasi</td>
     </tr>
     <tr class="table-header">
         <th>No</th>
@@ -139,8 +153,8 @@
     @endforeach
 
     <!-- Footer -->
-    <tr><td colspan="10"></td></tr>
+    <tr><td colspan="11"></td></tr>
     <tr class="footer">
-        <td colspan="10">Diekspor pada: {{ now()->format('d/m/Y H:i') }}</td>
+        <td colspan="11">Diekspor pada: {{ now()->format('d/m/Y H:i') }}</td>
     </tr>
 </table> 

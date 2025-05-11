@@ -44,4 +44,9 @@ class AbnormalReport extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function evidences(): HasMany
+    {
+        return $this->hasMany(AbnormalEvidence::class);
+    }
 } 

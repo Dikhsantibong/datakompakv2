@@ -82,7 +82,7 @@
             @endif
 
             <!-- Form Content -->
-            <form action="{{ route('admin.abnormal-report.update', $report->id) }}" method="POST" class="space-y-6" id="abnormalReportForm">
+            <form action="{{ route('admin.abnormal-report.update', $report->id) }}" method="POST" class="space-y-6" id="abnormalReportForm" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -96,11 +96,13 @@
                                     <tr>
                                         <th rowspan="2" class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Pukul (WIB)</th>
                                         <th rowspan="2" class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Uraian kejadian</th>
-                                        <th rowspan="2" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Visual parameter terkait</th>
+                                        <th colspan="2" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Pengamatan</th>
                                         <th colspan="3" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Tindakan Isolasi</th>
                                         <th rowspan="2" class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Aksi</th>
                                     </tr>
                                     <tr>
+                                        <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Visual</th>
+                                        <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Parameter</th>
                                         <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Turun beban</th>
                                         <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">CBG OFF</th>
                                         <th class="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Stop</th>
@@ -119,7 +121,11 @@
                                         </td>
                                         <td class="border px-4 py-2">
                                             <textarea class="p-2 w-[200px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
-                                                name="visual_parameter[]">{{ $kronologi->visual_parameter }}</textarea>
+                                                name="visual[]">{{ $kronologi->visual }}</textarea>
+                                        </td>
+                                        <td class="border px-4 py-2">
+                                            <textarea class="p-2 w-[200px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                                                name="parameter[]">{{ $kronologi->parameter }}</textarea>
                                         </td>
                                         <td class="border px-4 py-2 text-center">
                                             <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" 
@@ -460,6 +466,66 @@
                     </div>
                 </div>
 
+                <!-- Evidence Upload Section -->
+                <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Upload Evident</h3>
+                        <div class="space-y-4" id="evidence-container">
+                            @forelse($report->evidences as $evidence)
+                            <div class="evidence-row flex items-start space-x-4">
+                                <div class="flex-1">
+                                    <label class="block text-sm font-medium text-gray-700">File Saat Ini</label>
+                                    <div class="mt-1">
+                                        <a href="{{ Storage::url($evidence->file_path) }}" target="_blank" class="text-blue-600 hover:text-blue-800">
+                                            {{ basename($evidence->file_path) }}
+                                        </a>
+                                    </div>
+                                    <label class="block text-sm font-medium text-gray-700 mt-2">Ganti File (Opsional)</label>
+                                    <input type="file" name="evidence_files[]" class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                </div>
+                                <div class="flex-1">
+                                    <label class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                                    <input type="text" name="evidence_descriptions[]" value="{{ $evidence->description }}" class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Masukkan deskripsi...">
+                                </div>
+                                <div class="pt-6">
+                                    <button type="button" class="remove-evidence text-red-600 hover:text-red-800">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            @empty
+                            <div class="evidence-row flex items-start space-x-4">
+                                <div class="flex-1">
+                                    <label class="block text-sm font-medium text-gray-700">File</label>
+                                    <input type="file" name="evidence_files[]" class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                </div>
+                                <div class="flex-1">
+                                    <label class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                                    <input type="text" name="evidence_descriptions[]" class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Masukkan deskripsi...">
+                                </div>
+                                <div class="pt-6">
+                                    <button type="button" class="remove-evidence text-red-600 hover:text-red-800">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            @endforelse
+                        </div>
+                        <div class="mt-4">
+                            <button type="button" id="add-evidence" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
+                                <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Tambah Evidence
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Submit Button -->
                 <div class="flex justify-end mt-6">
                     <button type="submit" 
@@ -550,8 +616,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 </td>
                 <td class="border px-4 py-2">
                     <textarea class="p-2 w-[200px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
-                        name="visual_parameter[]" 
-                        placeholder="Masukkan parameter visual..."></textarea>
+                        name="visual[]" 
+                        placeholder="Masukkan visual..."></textarea>
+                </td>
+                <td class="border px-4 py-2">
+                    <textarea class="p-2 w-[200px] h-[100px] border-gray-300 rounded-md shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] resize-none" 
+                        name="parameter[]" 
+                        placeholder="Masukkan parameter..."></textarea>
                 </td>
                 <td class="border px-4 py-2 text-center">
                     <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="turun_beban[]" value="1">
@@ -720,6 +791,41 @@ document.addEventListener('DOMContentLoaded', function() {
                     rows[i].getElementsByTagName('td')[0].textContent = i + 1;
                 }
             }
+        }
+    });
+
+    // Evidence Upload Handling
+    const addEvidenceBtn = document.getElementById('add-evidence');
+    const evidenceContainer = document.getElementById('evidence-container');
+
+    addEvidenceBtn.addEventListener('click', function() {
+        const newRow = document.createElement('div');
+        newRow.className = 'evidence-row flex items-start space-x-4';
+        newRow.innerHTML = `
+            <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">File</label>
+                <input type="file" name="evidence_files[]" class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+            </div>
+            <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                <input type="text" name="evidence_descriptions[]" class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Masukkan deskripsi...">
+            </div>
+            <div class="pt-6">
+                <button type="button" class="remove-evidence text-red-600 hover:text-red-800">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </button>
+            </div>
+        `;
+        evidenceContainer.appendChild(newRow);
+    });
+
+    // Handle evidence row deletion
+    evidenceContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-evidence')) {
+            const row = e.target.closest('.evidence-row');
+            row.remove();
         }
     });
 });

@@ -22,6 +22,21 @@ class AbnormalChronology extends Model
         'updated_at' => 'datetime',
     ];
 
+    protected $fillable = [
+        'abnormal_report_id',
+        'waktu',
+        'uraian_kejadian',
+        'visual',
+        'parameter',
+        'turun_beban',
+        'off_cbg',
+        'stop',
+        'tl_ophar',
+        'tl_op',
+        'tl_har',
+        'mul'
+    ];
+
     public function abnormalReport(): BelongsTo
     {
         return $this->belongsTo(AbnormalReport::class);

@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\AbnormalEvidence;
+use Illuminate\Support\Facades\Storage;
 
 class AbnormalReportController extends Controller
 {
@@ -32,6 +34,17 @@ class AbnormalReportController extends Controller
                 'created_by' => Auth::id()
             ]);
 
+            // Store evidences
+            if ($request->hasFile('evidence_files')) {
+                foreach ($request->file('evidence_files') as $key => $file) {
+                    $path = $file->store('abnormalreport', 'public');
+                    $report->evidences()->create([
+                        'file_path' => $path,
+                        'description' => $request->evidence_descriptions[$key] ?? null
+                    ]);
+                }
+            }
+
             // Store chronologies
             if ($request->has('waktu')) {
                 foreach ($request->waktu as $key => $waktu) {
@@ -39,7 +52,8 @@ class AbnormalReportController extends Controller
                         $report->chronologies()->create([
                             'waktu' => $waktu,
                             'uraian_kejadian' => $request->uraian_kejadian[$key] ?? null,
-                            'visual_parameter' => $request->visual_parameter[$key] ?? null,
+                            'visual' => $request->visual[$key] ?? null,
+                            'parameter' => $request->parameter[$key] ?? null,
                             'turun_beban' => isset($request->turun_beban) && is_array($request->turun_beban) && in_array($key, array_keys($request->turun_beban)) ? 1 : 0,
                             'off_cbg' => isset($request->off_cbg) && is_array($request->off_cbg) && in_array($key, array_keys($request->off_cbg)) ? 1 : 0,
                             'stop' => isset($request->stop) && is_array($request->stop) && in_array($key, array_keys($request->stop)) ? 1 : 0,
@@ -217,6 +231,26 @@ class AbnormalReportController extends Controller
             $report->followUpActions()->delete();
             $report->recommendations()->delete();
             $report->admActions()->delete();
+            
+            // Handle evidence updates
+            if ($request->hasFile('evidence_files')) {
+                // Delete old evidence files
+                foreach ($report->evidences as $evidence) {
+                    if ($evidence->file_path) {
+                        Storage::disk('public')->delete($evidence->file_path);
+                    }
+                }
+                $report->evidences()->delete();
+                
+                // Store new evidence files
+                foreach ($request->file('evidence_files') as $key => $file) {
+                    $path = $file->store('abnormalreport', 'public');
+                    $report->evidences()->create([
+                        'file_path' => $path,
+                        'description' => $request->evidence_descriptions[$key] ?? null
+                    ]);
+                }
+            }
 
             // Store chronologies
             if ($request->has('waktu')) {
@@ -225,7 +259,8 @@ class AbnormalReportController extends Controller
                         $report->chronologies()->create([
                             'waktu' => $waktu,
                             'uraian_kejadian' => $request->uraian_kejadian[$key] ?? null,
-                            'visual_parameter' => $request->visual_parameter[$key] ?? null,
+                            'visual' => $request->visual[$key] ?? null,
+                            'parameter' => $request->parameter[$key] ?? null,
                             'turun_beban' => isset($request->turun_beban) && is_array($request->turun_beban) && in_array($key, array_keys($request->turun_beban)) ? 1 : 0,
                             'off_cbg' => isset($request->off_cbg) && is_array($request->off_cbg) && in_array($key, array_keys($request->off_cbg)) ? 1 : 0,
                             'stop' => isset($request->stop) && is_array($request->stop) && in_array($key, array_keys($request->stop)) ? 1 : 0,

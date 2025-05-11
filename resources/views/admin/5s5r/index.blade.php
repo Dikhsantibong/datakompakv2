@@ -79,53 +79,94 @@
         .file-upload-wrapper {
             position: relative;
             width: 100%;
+            min-width: 400px;
+            max-width: 500px;
+            background: #f8fafc;
+            border: 2px dashed #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin: 0 auto;
+        }
+
+        .file-upload-wrapper:hover {
+            border-color: #009BB9;
+            background: #f0f9ff;
         }
 
         .file-preview {
-            max-width: 150px;
-            max-height: 150px;
-            margin-top: 8px;
-            border-radius: 4px;
+            max-width: 400px;
+            max-height: 300px;
+            margin: 12px auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             display: none;
+            object-fit: cover;
         }
 
         .file-info {
-            font-size: 12px;
-            color: #666;
-            margin-top: 4px;
+            font-size: 13px;
+            color: #64748b;
+            margin: 8px 0;
+            padding: 4px 8px;
+            background: #fff;
+            border-radius: 4px;
             display: none;
         }
 
         .remove-file {
             position: absolute;
-            top: 0;
-            right: 0;
-            background: #ff4444;
+            top: 8px;
+            right: 8px;
+            background: #ef4444;
             color: white;
-            padding: 2px 6px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            cursor: pointer;
             display: none;
-            font-size: 12px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .remove-file:hover {
+            background: #dc2626;
+            transform: scale(1.1);
         }
 
         .upload-btn {
             display: inline-flex;
             align-items: center;
-            padding: 6px 12px;
+            padding: 8px 16px;
             background-color: #009BB9;
             color: white;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .upload-btn:hover {
-            background-color: #008ca8;
+            background-color: #0089a3;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .upload-btn i {
-            margin-right: 4px;
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .upload-placeholder {
+            color: #94a3b8;
+            margin-top: 8px;
+            font-size: 13px;
         }
     </style>
 @endpush
@@ -281,7 +322,7 @@
                                                 <td class="border px-4 py-2 text-center"><input type="checkbox" name="mengecat_{{ $item }}" class="form-checkbox"></td>
                                                 <td class="border px-4 py-2 text-center"><input type="checkbox" name="lainnya_{{ $item }}" class="form-checkbox"></td>
                                                 <td class="border px-4 py-2"><textarea type="text" name="kondisi_akhir_pemeriksaan_{{ $item }}" class="w-[200px] h-[100px] p-1 border-gray-300 rounded"></textarea></td>
-                                                <td class="border px-4 py-2">
+                                                <td class="border px-4 py-2" style="min-width: 500px;">
                                                     <div class="file-upload-wrapper">
                                                         <input type="file" 
                                                                name="eviden_pemeriksaan_{{ $item }}" 
@@ -292,6 +333,7 @@
                                                         <label for="eviden-{{ $index }}" class="upload-btn">
                                                             <i class="fas fa-upload"></i> Upload Foto
                                                         </label>
+                                                        <div class="upload-placeholder">Klik untuk upload atau drag & drop file disini</div>
                                                         <img id="preview-{{ $index }}" class="file-preview">
                                                         <div id="info-{{ $index }}" class="file-info"></div>
                                                         <span id="remove-{{ $index }}" 
@@ -353,7 +395,7 @@
                                                 <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $index + 1 }}" value="76-100"></td>
                                                 <td class="border px-4 py-2"><textarea name="kondisi_akhir_program_{{ $index + 1 }}" class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
                                                 <td class="border px-4 py-2"><textarea name="catatan_{{ $index + 1 }}" class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
-                                                <td class="border px-4 py-2">
+                                                <td class="border px-4 py-2" style="min-width: 500px;">
                                                     <div class="file-upload-wrapper">
                                                         <input type="file" 
                                                                name="eviden_program_{{ $index + 1 }}" 
@@ -364,6 +406,7 @@
                                                         <label for="eviden2-{{ $index }}" class="upload-btn">
                                                             <i class="fas fa-upload"></i> Upload Foto
                                                         </label>
+                                                        <div class="upload-placeholder">Klik untuk upload atau drag & drop file disini</div>
                                                         <img id="preview2-{{ $index }}" class="file-preview">
                                                         <div id="info2-{{ $index }}" class="file-info"></div>
                                                         <span id="remove2-{{ $index }}" 

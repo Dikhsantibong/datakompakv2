@@ -131,40 +131,23 @@ class DailySummaryExport implements FromView, ShouldAutoSize, WithStyles, WithDr
 
             // Data rows style - center align all data cells
             $dataRowCount = count($this->units[$i]->machines);
-            for ($row = 1; $row <= $dataRowCount; $row++) {
+            for ($row = 1; $row <= $dataRowCount + 4; $row++) { // +4 for total, average, min, max rows
                 $styles["A" . ($currentRow + 2 + $row) . ":R" . ($currentRow + 2 + $row)] = [
                     'alignment' => [
                         'horizontal' => Alignment::HORIZONTAL_CENTER,
                         'vertical' => Alignment::VERTICAL_CENTER
+                    ],
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                        ]
                     ]
                 ];
             }
-            
-            // Total row style
-            $styles["A" . ($currentRow + 2 + $dataRowCount + 1) . ":R" . ($currentRow + 2 + $dataRowCount + 1)] = [
-                'font' => ['bold' => true],
-                'fill' => [
-                    'fillType' => Fill::FILL_SOLID,
-                    'startColor' => ['rgb' => 'F8F9FA']
-                ],
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                    'vertical' => Alignment::VERTICAL_CENTER
-                ]
-            ];
 
             // Move to next unit position
-            $currentRow += (3 + $dataRowCount + 1); // headers (3) + data rows + total row
+            $currentRow += (3 + $dataRowCount + 4); // headers (3) + data rows + summary rows (4)
         }
-
-        // Add general borders for all data
-        $styles["A3:R" . ($currentRow + 50)] = [
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
-                ]
-            ]
-        ];
 
         // Set specific column alignments if needed
         $sheet->getStyle('A:R')->getAlignment()->setWrapText(true);

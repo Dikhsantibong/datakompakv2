@@ -200,7 +200,7 @@
                 @endforeach
                 
                 <!-- Totals Row -->
-                <tr style="font-weight: bold; background-color: #f8f9fa;">
+                <tr style="font-weight: bold;">
                     <td>TOTAL PLTD</td>
                     <td>
                         {{ number_format($unit->machines->sum('installed_power'), 2) }} | 
@@ -268,6 +268,152 @@
                         {{ number_format($unit->dailySummaries->avg('sfc_scc'), 3) }} | 
                         {{ number_format($unit->dailySummaries->avg('nphr'), 3) }} | 
                         {{ number_format($unit->dailySummaries->avg('slc'), 3) }}
+                    </td>
+                    <td>-</td>
+                </tr>
+
+                <!-- Minimum Row -->
+                <tr>
+                    <td style="color: #009933;">MINIMUM</td>
+                    <td>
+                        {{ number_format($unit->machines->min('installed_power'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('dmn_power'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('capable_power'), 2) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->min('peak_load_day'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('peak_load_night'), 2) }}
+                    </td>
+                    <td>{{ number_format($unit->dailySummaries->min('kit_ratio'), 2) }}</td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->min('gross_production'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('net_production'), 2) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->min('aux_power'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('transformer_losses'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('usage_percentage'), 2) }}
+                    </td>
+                    <td>{{ number_format($unit->dailySummaries->min('period_hours'), 2) }}</td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->min('operating_hours'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('standby_hours'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('planned_outage'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('maintenance_outage'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('forced_outage'), 2) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->min('trip_machine'), 0) }} | 
+                        {{ number_format($unit->dailySummaries->min('trip_electrical'), 0) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->min('efdh'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('epdh'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('eudh'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('esdh'), 2) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->min('eaf'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('sof'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('efor'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('sdof'), 2) }}
+                    </td>
+                    <td>{{ number_format($unit->dailySummaries->min('ncf'), 2) }}</td>
+                    <td>{{ number_format($unit->dailySummaries->min('nof'), 2) }}</td>
+                    <td>{{ number_format($unit->dailySummaries->min('jsi'), 2) }}</td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->min('hsd_fuel'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('b35_fuel'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('mfo_fuel'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('total_fuel'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('water_usage'), 2) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->min('meditran_oil'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('salyx_420'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('salyx_430'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('travolube_a'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('turbolube_46'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('turbolube_68'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->min('total_oil'), 2) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->min('sfc_scc'), 3) }} | 
+                        {{ number_format($unit->dailySummaries->min('nphr'), 3) }} | 
+                        {{ number_format($unit->dailySummaries->min('slc'), 3) }}
+                    </td>
+                    <td>-</td>
+                </tr>
+
+                <!-- Maximum Row -->
+                <tr>
+                    <td style="color: #cc3300;">MAXIMUM</td>
+                    <td>
+                        {{ number_format($unit->machines->max('installed_power'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('dmn_power'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('capable_power'), 2) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->max('peak_load_day'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('peak_load_night'), 2) }}
+                    </td>
+                    <td>{{ number_format($unit->dailySummaries->max('kit_ratio'), 2) }}</td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->max('gross_production'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('net_production'), 2) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->max('aux_power'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('transformer_losses'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('usage_percentage'), 2) }}
+                    </td>
+                    <td>{{ number_format($unit->dailySummaries->max('period_hours'), 2) }}</td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->max('operating_hours'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('standby_hours'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('planned_outage'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('maintenance_outage'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('forced_outage'), 2) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->max('trip_machine'), 0) }} | 
+                        {{ number_format($unit->dailySummaries->max('trip_electrical'), 0) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->max('efdh'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('epdh'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('eudh'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('esdh'), 2) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->max('eaf'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('sof'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('efor'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('sdof'), 2) }}
+                    </td>
+                    <td>{{ number_format($unit->dailySummaries->max('ncf'), 2) }}</td>
+                    <td>{{ number_format($unit->dailySummaries->max('nof'), 2) }}</td>
+                    <td>{{ number_format($unit->dailySummaries->max('jsi'), 2) }}</td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->max('hsd_fuel'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('b35_fuel'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('mfo_fuel'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('total_fuel'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('water_usage'), 2) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->max('meditran_oil'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('salyx_420'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('salyx_430'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('travolube_a'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('turbolube_46'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('turbolube_68'), 2) }} | 
+                        {{ number_format($unit->dailySummaries->max('total_oil'), 2) }}
+                    </td>
+                    <td>
+                        {{ number_format($unit->dailySummaries->max('sfc_scc'), 3) }} | 
+                        {{ number_format($unit->dailySummaries->max('nphr'), 3) }} | 
+                        {{ number_format($unit->dailySummaries->max('slc'), 3) }}
                     </td>
                     <td>-</td>
                 </tr>

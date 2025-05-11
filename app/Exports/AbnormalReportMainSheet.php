@@ -253,6 +253,23 @@ class AbnormalReportMainSheet implements FromView, WithTitle, WithEvents, WithSt
                     $sheet->mergeCells("H{$kronologiHeaderRow}:K{$kronologiHeaderRow}"); // Koordinasi
                 }
 
+                // Style validation section
+                $validationRow = $lastRow - 1; // Row before footer
+                $sheet->getStyle("A{$validationRow}:K{$validationRow}")->applyFromArray([
+                    'font' => [
+                        'bold' => true,
+                        'size' => 11
+                    ],
+                    'alignment' => [
+                        'horizontal' => Alignment::HORIZONTAL_CENTER,
+                        'vertical' => Alignment::VERTICAL_CENTER,
+                        'wrapText' => true
+                    ]
+                ]);
+                
+                // Set row height for signature space
+                $sheet->getRowDimension($validationRow)->setRowHeight(120);
+
                 // Add drawing for logo
                 $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
                 $drawing->setName('Logo');

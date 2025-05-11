@@ -167,29 +167,52 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <!-- Tambahkan input HOP di sini -->
+                                    <!-- Tambahkan input HOP di sini -->    
                                     <div class="flex items-center gap-x-2">
-                                        <label for="hop_{{ $unit->id }}" class="text-sm font-medium text-gray-700">
-                                            @if(str_starts_with(trim(strtoupper($unit->name)), 'PLTM '))
-                                                Inflow:
-                                            @else
+                                        @if(str_starts_with(trim(strtoupper($unit->name)), 'PLTM '))
+                                            <div class="flex flex-col gap-y-2">
+                                                <div class="flex items-center gap-x-2">
+                                                    <label for="inflow_{{ $unit->id }}" class="text-sm font-medium text-gray-700">
+                                                        Inflow:
+                                                    </label>
+                                                    <input type="number" 
+                                                           id="inflow_{{ $unit->id }}" 
+                                                           name="inflow_{{ $unit->id }}"
+                                                           class="w-24 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                           placeholder="Masukkan Inflow"
+                                                           min="0"
+                                                           step="0.01"
+                                                           value="{{ old('inflow_' . $unit->id) }}">
+                                                    <span class="text-sm text-gray-600">liter/detik</span>
+                                                </div>
+                                                <div class="flex items-center gap-x-2">
+                                                    <label for="tma_{{ $unit->id }}" class="text-sm font-medium text-gray-700">
+                                                        TMA:
+                                                    </label>
+                                                    <input type="number" 
+                                                           id="tma_{{ $unit->id }}" 
+                                                           name="tma_{{ $unit->id }}"
+                                                           class="w-24 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                           placeholder="Masukkan TMA"
+                                                           min="0"
+                                                           step="0.01"
+                                                           value="{{ old('tma_' . $unit->id) }}">
+                                                    <span class="text-sm text-gray-600">mdpl</span>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <label for="hop_{{ $unit->id }}" class="text-sm font-medium text-gray-700">
                                                 HOP:
-                                            @endif
-                                        </label>
-                                        <input type="number" 
-                                               id="hop_{{ $unit->id }}" 
-                                               name="hop_{{ $unit->id }}"
-                                               class="w-24 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                               placeholder="@if(str_starts_with(trim(strtoupper($unit->name)), 'PLTM '))Masukkan Inflow @else Masukkan HOP @endif"
-                                               min="0"
-                                               value="{{ old('hop_' . $unit->id) }}">
-                                        <span class="text-sm text-gray-600">
-                                            @if(str_starts_with(trim(strtoupper($unit->name)), 'PLTM '))
-                                                liter/detik
-                                            @else
-                                                hari
-                                            @endif
-                                        </span> 
+                                            </label>
+                                            <input type="number" 
+                                                   id="hop_{{ $unit->id }}" 
+                                                   name="hop_{{ $unit->id }}"
+                                                   class="w-24 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                   placeholder="Masukkan HOP"
+                                                   min="0"
+                                                   value="{{ old('hop_' . $unit->id) }}">
+                                            <span class="text-sm text-gray-600">hari</span>
+                                        @endif
                                     </div>
                                 </div>
                                 <!-- Tabel Status Pembangkit -->
@@ -237,13 +260,13 @@
                                                     </td> 
                                                     <td class="px-3 py-2 border-r border-gray-200 text-center text-gray-800 w-12">
                                                         <input type="number"
-                                                               name="dmn[{{ $machine->id }}]"
+                                                               name="installed_power[{{ $machine->id }}]"
                                                                class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-400 text-gray-800"
                                                                style="width: 100px;"
                                                                value="{{ $operations->where('machine_id', $machine->id)->first()->installed_power ?? '0' }}"
                                                                step="0.01"
                                                                min="0"
-                                                               placeholder="Masukkan DMN...">
+                                                               placeholder="Masukkan Daya Terpasang...">
                                                     </td>
 
                                                     <td class="px-3 py-2 border-r border-gray-200 text-center text-gray-800 w-12">
@@ -476,16 +499,32 @@
 
         tables.forEach(table => {
             const unitTable = table.closest('.unit-table');
-            const powerPlantId = unitTable.querySelector('input[id^="hop_"]').id.split('_')[1];
-            const hopValue = unitTable.querySelector(`input[id="hop_${powerPlantId}"]`).value;
+            const powerPlantId = unitTable.querySelector('input[id^="hop_"], input[id^="inflow_"]').id.split('_')[1];
+            const unitName = unitTable.querySelector('h2').textContent.trim().toUpperCase();
+            const isPLTM = unitName.startsWith('PLTM');
 
-            // Tambahkan data HOP
-            if (hopValue) {
-                data.hops.push({
-                    power_plant_id: powerPlantId,
-                    tanggal: tanggal,
-                    hop_value: hopValue
-                });
+            if (isPLTM) {
+                const inflowValue = unitTable.querySelector(`input[id="inflow_${powerPlantId}"]`)?.value;
+                const tmaValue = unitTable.querySelector(`input[id="tma_${powerPlantId}"]`)?.value;
+                
+                if (inflowValue || tmaValue) {
+                    data.hops.push({
+                        power_plant_id: powerPlantId,
+                        tanggal: tanggal,
+                        inflow: inflowValue || null,
+                        tma: tmaValue || null
+                    });
+                }
+            } else {
+                const hopValue = unitTable.querySelector(`input[id="hop_${powerPlantId}"]`)?.value;
+                
+                if (hopValue) {
+                    data.hops.push({
+                        power_plant_id: powerPlantId,
+                        tanggal: tanggal,
+                        hop_value: hopValue
+                    });
+                }
             }
 
             // Tambahkan data status mesin
@@ -716,6 +755,27 @@
             return;
         }
 
+        // Update data HOP/Inflow/TMA
+        if (data.hops) {
+            data.hops.forEach(hop => {
+                const powerPlantId = hop.power_plant_id;
+                const isPLTM = hop.is_pltm;
+
+                if (isPLTM) {
+                    // Update Inflow dan TMA untuk PLTM
+                    const inflowInput = document.querySelector(`input[id="inflow_${powerPlantId}"]`);
+                    const tmaInput = document.querySelector(`input[id="tma_${powerPlantId}"]`);
+                    
+                    if (inflowInput) inflowInput.value = hop.inflow || '';
+                    if (tmaInput) tmaInput.value = hop.tma || '';
+                } else {
+                    // Update HOP untuk unit non-PLTM
+                    const hopInput = document.querySelector(`input[id="hop_${powerPlantId}"]`);
+                    if (hopInput) hopInput.value = hop.hop_value || '';
+                }
+            });
+        }
+
         // Update data mesin
         if (data.logs) {
             // Kelompokkan log berdasarkan unit_id
@@ -748,36 +808,13 @@
                 }
             });
 
-            // Update data mesin seperti sebelumnya
             data.logs.forEach(log => {
                 const row = document.querySelector(`tr[data-machine-id="${log.machine_id}"]`);
                 if (row) {
-                    // Debug untuk melihat data yang akan diupdate
-                    console.log('Updating machine:', log.machine_id, log);
-
-                    // Update Status dan warnanya
+                    // Update Status
                     const statusSelect = row.querySelector(`select[name="status[${log.machine_id}]"]`);
                     if (statusSelect) {
                         statusSelect.value = log.status || '';
-                        statusSelect.style.backgroundColor = getStatusColor(log.status);
-                        statusSelect.style.color = ['Operasi', 'Standby'].includes(log.status) ? 'black' : 'white';
-                        console.log('Status updated:', log.status);
-                    }
-
-                    // Update Component
-                    const componentSelect = row.querySelector(`select[name="system[${log.machine_id}]"]`);
-                    if (componentSelect) {
-                        componentSelect.value = log.component || '';
-                        componentSelect.dispatchEvent(new Event('change'));
-                        console.log('Component updated:', log.component);
-                    }
-
-                    // Update Equipment
-                    const equipmentInput = row.querySelector(`textarea[name="equipment[${log.machine_id}]"]`);
-                    if (equipmentInput) {
-                        equipmentInput.value = log.equipment || '';
-                        autoResize(equipmentInput);
-                        console.log('Equipment updated:', log.equipment);
                     }
 
                     // Update DMN dan DMP
@@ -797,46 +834,12 @@
                         loadInput.value = log.load_value || '0';
                     }
 
-                    // Update Tanggal
-                    const tanggalMulaiInput = row.querySelector(`input[name="tanggal_mulai[${log.machine_id}]"]`);
-                    if (tanggalMulaiInput && log.tanggal_mulai) {
-                        tanggalMulaiInput.value = log.tanggal_mulai;
-                        console.log('Tanggal Mulai updated:', log.tanggal_mulai);
+                    // Update Deskripsi
+                    const deskripsiInput = row.querySelector(`textarea[name="deskripsi[${log.machine_id}]"]`);
+                    if (deskripsiInput) {
+                        deskripsiInput.value = log.deskripsi || '';
+                        autoResize(deskripsiInput);
                     }
-
-                    const targetSelesaiInput = row.querySelector(`input[name="target_selesai[${log.machine_id}]"]`);
-                    if (targetSelesaiInput && log.target_selesai) {
-                        targetSelesaiInput.value = log.target_selesai;
-                        console.log('Target Selesai updated:', log.target_selesai);
-                    }
-
-                    // Update textarea fields
-                    const textareaFields = {
-                        'deskripsi': log.deskripsi,
-                        'kronologi': log.kronologi,
-                        'action_plan': log.action_plan,
-                        'progres': log.progres
-                    };
-
-                    for (const [field, value] of Object.entries(textareaFields)) {
-                        const textarea = row.querySelector(`textarea[name="${field}[${log.machine_id}]"]`);
-                        if (textarea) {
-                            textarea.value = value || '';
-                            autoResize(textarea);
-                            console.log(`${field} updated:`, value);
-                        }
-                    }
-                }
-            });
-        }
-
-        // Update data HOP
-        if (data.hops) {
-            data.hops.forEach(hop => {
-                const hopInput = document.getElementById(`hop_${hop.power_plant_id}`);
-                if (hopInput) {
-                    hopInput.value = hop.hop_value || '';
-                    console.log('HOP updated for unit:', hop.power_plant_id, hop.hop_value);
                 }
             });
         }

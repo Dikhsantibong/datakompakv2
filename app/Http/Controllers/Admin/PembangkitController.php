@@ -80,12 +80,15 @@ class PembangkitController extends Controller
                 }
             }
             
-            // Simpan data HOP
+            // Simpan data HOP/Inflow/TMA
             foreach ($request->hops as $hopData) {
                 $powerPlant = PowerPlant::find($hopData['power_plant_id']);
                 if (!$powerPlant) {
                     throw new \Exception("Power Plant not found for id: {$hopData['power_plant_id']}");
                 }
+
+                // Cek apakah unit adalah PLTM
+                $isPLTM = Str::startsWith(strtoupper($powerPlant->name), 'PLTM');
 
                 // Cek apakah data sudah ada
                 $existingHop = UnitOperationHour::where([
@@ -94,19 +97,29 @@ class PembangkitController extends Controller
                     'input_time' => $inputTime
                 ])->first();
 
-                if ($existingHop) {
-                    $existingHop->update([
-                        'hop_value' => $hopData['hop_value'],
-                        'unit_source' => session('unit', 'mysql')
-                    ]);
+                // Prepare data berdasarkan tipe unit
+                $updateData = [
+                    'unit_source' => session('unit', 'mysql'),
+                    'input_time' => $inputTime
+                ];
+
+                if ($isPLTM) {
+                    $updateData['inflow'] = $hopData['inflow'] ?? 0;
+                    $updateData['tma'] = $hopData['tma'] ?? 0;
+                    $updateData['hop_value'] = 0; // Set default value 0 untuk PLTM
                 } else {
-                    UnitOperationHour::create([
+                    $updateData['hop_value'] = $hopData['hop_value'] ?? 0; // Set default value 0 jika tidak ada
+                    $updateData['inflow'] = 0;
+                    $updateData['tma'] = 0;
+                }
+
+                if ($existingHop) {
+                    $existingHop->update($updateData);
+                } else {
+                    UnitOperationHour::create(array_merge($updateData, [
                         'power_plant_id' => $hopData['power_plant_id'],
-                        'tanggal' => $hopData['tanggal'],
-                        'hop_value' => $hopData['hop_value'],
-                        'unit_source' => session('unit', 'mysql'),
-                        'input_time' => $inputTime
-                    ]);
+                        'tanggal' => $hopData['tanggal']
+                    ]));
                 }
             }
 
@@ -271,11 +284,15 @@ class PembangkitController extends Controller
                         ];
                     }),
                     'hops' => $hops->map(function($hop) {
+                        $isPLTM = Str::startsWith(strtoupper($hop->powerPlant->name), 'PLTM');
                         return [
                             'power_plant_id' => $hop->power_plant_id,
                             'tanggal' => $hop->tanggal,
-                            'hop_value' => $hop->hop_value,
-                            'unit_source' => $hop->unit_source
+                            'hop_value' => $isPLTM ? null : $hop->hop_value,
+                            'inflow' => $isPLTM ? $hop->inflow : null,
+                            'tma' => $isPLTM ? $hop->tma : null,
+                            'unit_source' => $hop->unit_source,
+                            'is_pltm' => $isPLTM
                         ];
                     })
                 ]

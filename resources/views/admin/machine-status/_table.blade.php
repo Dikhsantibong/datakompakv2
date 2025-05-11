@@ -136,38 +136,68 @@
                                 </div>
                             </div>
 
-                            <!-- HOP Card -->
-                            <div class="bg-white rounded-lg border p-4 hover:shadow-md transition-shadow">
-                                <div class="flex items-center justify-between">
-                                    <p class="text-sm font-medium text-gray-500">
-                                        @if(str_starts_with(trim(strtoupper($powerPlant->name)), 'PLTM '))
-                                            Total Inflow
-                                        @else
-                                            Total HOP
-                                        @endif
-                                    </p>
-                                    <div class="bg-orange-100 rounded-full p-2">
-                                        <svg class="w-4 h-4 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
+                            <!-- HOP/Inflow/TMA Cards -->
+                            @if(str_starts_with(trim(strtoupper($powerPlant->name)), 'PLTM '))
+                                @php
+                                    $inflowValue = \App\Models\UnitOperationHour::where('power_plant_id', $powerPlant->id)
+                                        ->whereDate('tanggal', $date)
+                                        ->value('inflow') ?? 0;
+                                    
+                                    $tmaValue = \App\Models\UnitOperationHour::where('power_plant_id', $powerPlant->id)
+                                        ->whereDate('tanggal', $date)
+                                        ->value('tma') ?? 0;
+                                @endphp
+                                <!-- Inflow Card -->
+                                <div class="bg-white rounded-lg border p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-medium text-gray-500">Inflow</p>
+                                        <div class="bg-blue-100 rounded-full p-2">
+                                            <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                        </div>
                                     </div>
+                                    <p class="mt-2 text-2xl font-semibold text-gray-900">
+                                        {{ number_format($inflowValue, 1) }}
+                                        <span class="text-sm font-normal text-gray-500">l/s</span>
+                                    </p>
                                 </div>
-                                <p class="mt-2 text-2xl font-semibold text-gray-900">
-                                    {{ number_format($hopValue, 1) }}
-                                    <span class="text-sm font-normal text-gray-500">
-                                        @if(str_starts_with(trim(strtoupper($powerPlant->name)), 'PLTM '))
-                                            l/s
-                                        @else
-                                            Hari
-                                        @endif
-                                    </span>
-                                </p>
-                                @unless(str_starts_with(trim(strtoupper($powerPlant->name)), 'PLTM '))
+
+                                <!-- TMA Card -->
+                                <div class="bg-white rounded-lg border p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-medium text-gray-500">TMA</p>
+                                        <div class="bg-green-100 rounded-full p-2">
+                                            <svg class="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <p class="mt-2 text-2xl font-semibold text-gray-900">
+                                        {{ number_format($tmaValue, 1) }}
+                                        <span class="text-sm font-normal text-gray-500">mdpl</span>
+                                    </p>
+                                </div>
+                            @else
+                                <!-- HOP Card -->
+                                <div class="bg-white rounded-lg border p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-medium text-gray-500">Total HOP</p>
+                                        <div class="bg-orange-100 rounded-full p-2">
+                                            <svg class="w-4 h-4 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <p class="mt-2 text-2xl font-semibold text-gray-900">
+                                        {{ number_format($hopValue, 1) }}
+                                        <span class="text-sm font-normal text-gray-500">Hari</span>
+                                    </p>
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $hopStatus === 'aman' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }} mt-2">
                                         {{ ucfirst($hopStatus) }}
                                     </span>
-                                @endunless
-                            </div>
+                                </div>
+                            @endif
                         </div>
 
                         <!-- Machine Status Summary -->

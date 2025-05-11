@@ -18,6 +18,8 @@ class UnitOperationHour extends Model
         'power_plant_id',
         'tanggal',
         'hop_value',
+        'inflow',
+        'tma',
         'keterangan',
         'unit_source'
     ];
@@ -260,6 +262,8 @@ class UnitOperationHour extends Model
                     'power_plant_id' => $hop->power_plant_id,
                     'tanggal' => $hop->tanggal,
                     'hop_value' => $hop->hop_value,
+                    'inflow' => $hop->inflow,
+                    'tma' => $hop->tma,
                     'keterangan' => $hop->keterangan,
                     'unit_source' => $currentSession === 'mysql' ? $powerPlant->unit_source : $currentSession,
                     'created_at' => now(),
@@ -310,6 +314,3 @@ class UnitOperationHour extends Model
         return $this->belongsTo(PowerPlant::class);
     }
 }
-
-
-

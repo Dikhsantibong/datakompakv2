@@ -3,14 +3,14 @@
     <thead>
         <tr>
             <th colspan="2" style="text-align: left; width: 15%;">
-                <img src="{{ $navlog_path }}" alt="PLN Logo" width="60" height="20">
+                <img src="{{ $navlog_path }}" alt="PLN Logo" width="80" height="30">
             </th>
             <th colspan="4" style="text-align: center; font-size: 14px; font-weight: bold; width: 70%;">
                 Laporan Status Mesin Pembangkit
             </th>
-            <th colspan="2" style="text-align: right; width: 15%;">
+            {{-- <th colspan="2" style="text-align: right; width: 15%;">
                 <img src="{{ $k3_path }}" alt="K3 Logo" width="60" height="20">
-            </th>
+            </th> --}}
         </tr>
         <tr>
             <th colspan="8" style="text-align: center;">

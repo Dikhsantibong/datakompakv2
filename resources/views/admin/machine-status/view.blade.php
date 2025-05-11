@@ -447,7 +447,7 @@ function getFormattedReport() {
                 const status = cells[5].querySelector('span').textContent.trim();
                 const description = cells[6].textContent.trim();
                 
-                report += `- ${name} : ${dmn}/${dmp}/${load} MW ${status} (${description})`;
+                report += `- ${name} : ${dmn}/${dmp}/${load} MW /${status} (${description})`;
                 if (load && load !== '-') {
                     report += ` `;
                 }

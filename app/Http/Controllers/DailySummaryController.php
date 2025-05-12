@@ -18,8 +18,8 @@ class DailySummaryController extends Controller
 {
     public function index()
     {
-        // Get unit source from session, request, or default to 'mysql'
-        $unitSource = session('unit_source', request('unit_source', 'mysql'));
+        // Get unit source from session
+        $unitSource = session('unit', 'mysql');
 
         // Get input date from request or default to today
         $inputDate = request('input_date', now()->format('Y-m-d'));
@@ -27,8 +27,15 @@ class DailySummaryController extends Controller
         // Base query for PowerPlant
         $query = PowerPlant::query();
 
-        // Apply unit source filter if not viewing all units
-        if ($unitSource !== 'all') {
+        // If logged in as UP KENDARI (mysql session)
+        if ($unitSource === 'mysql') {
+            // Allow filtering by unit source from request
+            $selectedUnitSource = request('unit_source', 'all');
+            if ($selectedUnitSource !== 'all') {
+                $query->where('unit_source', $selectedUnitSource);
+            }
+        } else {
+            // For other units, only show their own data
             $query->where('unit_source', $unitSource);
         }
 
@@ -47,11 +54,14 @@ class DailySummaryController extends Controller
                 return $item->power_plant_id . '_' . $item->machine_name;
             });
 
-        // Get unique unit sources for dropdown
-        $unitSources = PowerPlant::select('unit_source')
-            ->distinct()
-            ->pluck('unit_source')
-            ->filter(); // Remove any null/empty values
+        // Get unique unit sources for dropdown only if logged in as UP KENDARI
+        $unitSources = [];
+        if ($unitSource === 'mysql') {
+            $unitSources = PowerPlant::select('unit_source')
+                ->distinct()
+                ->pluck('unit_source')
+                ->filter(); // Remove any null/empty values
+        }
 
         return view('admin.daily-summary.daily-summary', compact('units', 'unitSources', 'unitSource', 'inputDate', 'existingData'));
     }

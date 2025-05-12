@@ -90,58 +90,58 @@
                                         UP Kendari
                                     </option>
                                     <option value="mysql_bau_bau" {{ $selectedUnit == 'mysql_bau_bau' ? 'selected' : '' }}>
-                                        UNIT Bau-Bau
+                                        PLTD BAU-BAU
                                     </option>
                                     <option value="mysql_kolaka" {{ $selectedUnit == 'mysql_kolaka' ? 'selected' : '' }}>
-                                        UNIT Kolaka
+                                        UNIT PLTD KOLAKA
                                     </option>
                                     <option value="mysql_poasia" {{ $selectedUnit == 'mysql_poasia' ? 'selected' : '' }}>
-                                        UNIT Poasia
+                                        UNIT PLTD POASIA
                                     </option>
                                     <option value="mysql_wua_wua" {{ $selectedUnit == 'mysql_wua_wua' ? 'selected' : '' }}>
-                                        UNIT Wua-Wua
+                                        UNIT PLTD WUA-WUA
                                     </option>
                                     <option value="mysql_moramo" {{ $selectedUnit == 'mysql_moramo' ? 'selected' : '' }}>
-                                        UNIT Moramo
+                                        UNIT PLTU MORAMO
                                     </option>
                                     <option value="mysql_baruta" {{ $selectedUnit == 'mysql_baruta' ? 'selected' : '' }}>
-                                        UNIT Baruta
+                                        UNIT PLTU BARUTA
                                     </option>
                                     <option value="mysql_pltmg_bau_bau" {{ $selectedUnit == 'mysql_pltmg_bau_bau' ? 'selected' : '' }}>
-                                        UNIT PLTMG Bau-Bau
+                                        UNIT PLTMG BAU-BAU
                                     </option>
                                     <option value="mysql_winning" {{ $selectedUnit == 'mysql_winning' ? 'selected' : '' }}>
-                                        UNIT Winning
+                                        UNIT PLTM WINNING
                                     </option>
                                     <option value="mysql_sabilambo" {{ $selectedUnit == 'mysql_sabilambo' ? 'selected' : '' }}>
-                                        UNIT Sabilambo
+                                        UNIT PLTM SABILAMBO
                                     </option>
                                     <option value="mysql_rongi" {{ $selectedUnit == 'mysql_rongi' ? 'selected' : '' }}>
-                                        UNIT Rongi
+                                        UNIT PLTM RONGI
                                     </option>
                                     <option value="mysql_mikuasi" {{ $selectedUnit == 'mysql_mikuasi' ? 'selected' : '' }}>
-                                        UNIT Mikuasi
+                                        UNIT PLTM MIKUASI
                                     </option>
                                     <option value="mysql_ladumpi" {{ $selectedUnit == 'mysql_ladumpi' ? 'selected' : '' }}>
-                                        UNIT Ladumpi
+                                        UNIT PLTD LADUMPI  
                                     </option>
                                     <option value="mysql_langara" {{ $selectedUnit == 'mysql_langara' ? 'selected' : '' }}>
-                                        UNIT Langara
+                                        UNIT PLTD LANGARA
                                     </option>
                                     <option value="mysql_lanipa_nipa" {{ $selectedUnit == 'mysql_lanipa_nipa' ? 'selected' : '' }}>
-                                        UNIT Lanipa Nipa
+                                        UNIT PLTD LANIPA NIPA
                                     </option>
                                     <option value="mysql_pasarwajo" {{ $selectedUnit == 'mysql_pasarwajo' ? 'selected' : '' }}>
-                                        UNIT Pasarwajo
+                                        UNIT PLTD PASARWAJO
                                     </option>
                                     <option value="mysql_raha" {{ $selectedUnit == 'mysql_raha' ? 'selected' : '' }}>
-                                        UNIT Raha
+                                        UNIT PLTD RAHA
                                     </option>
                                     <option value="mysql_wangi_wangi" {{ $selectedUnit == 'mysql_wangi_wangi' ? 'selected' : '' }}>
-                                        UNIT Wangi Wangi
+                                        UNIT PLTD WANGI WANGI
                                     </option>
                                     <option value="mysql_ereke" {{ $selectedUnit == 'mysql_ereke' ? 'selected' : '' }}>
-                                        UNIT Ereke
+                                        UNIT PLTD EREKE
                                     </option>
                                 </select>
                             </div>

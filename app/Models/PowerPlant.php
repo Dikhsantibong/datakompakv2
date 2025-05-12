@@ -200,5 +200,12 @@ class PowerPlant extends Model
     {
         return $this->hasMany(DailySummary::class);
     }
+
+    public static function getAllPowerPlants()
+    {
+        return self::select('id', 'name', 'unit_source')
+                   ->orderBy('name')
+                   ->get();
+    }
 }
 

@@ -66,221 +66,178 @@
         </div>
           
         <main class="bg-white px-6">
-            <!-- Highlight Cards -->
-            <div class=" bg-white shadow-md rounded-md grid grid-cols-1 md:grid-cols-4 gap-6 p-6">
-                <!-- Card 1: Total Daya PJBTL -->
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                    <div class="p-4">
-                        <div class="text-3xl text-blue-600 mb-2">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-1">Total Daya PJBTL</h3>
-                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalDayaPJBTL, 2) }} MW</p>
-                        <span class="text-blue-600 text-sm font-medium">
-                            Seluruh Unit
-                        </span>
-                    </div>
-                </div>
+            @if(session('unit') === 'mysql')
+            <div class="bg-gray-50 p-4 rounded-lg mb-4 border border-gray-200">
+                <label for="unit-source" class="text-sm font-medium text-gray-700 mr-2">Pilih Unit:</label>
+                <select id="unit-source" 
+                        class="p-2 border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+                        style="width: 300px;"
+                        onchange="updateTable()">
+                    <option value="">-- Pilih Unit --</option>
+                    @foreach($allPowerPlants as $plant)
+                        <option value="{{ $plant->unit_source }}" {{ $unitSource == $plant->unit_source ? 'selected' : '' }}>
+                            {{ $plant->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            @endif
 
-                <!-- Card 2: Total DMP Existing -->
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                    <div class="p-4">
-                        <div class="text-3xl text-green-600 mb-2">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-1">Total DMP Existing</h3>
-                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalDMPExisting, 2) }} MW</p>
-                        <span class="text-green-600 text-sm font-medium">
-                            Kapasitas Terkini
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Card 3: Total Rencana -->
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                    <div class="p-4">
-                        <div class="text-3xl text-purple-600 mb-2">
-                            <i class="fas fa-clipboard-list"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-1">Total Rencana</h3>
-                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalRencana, 2) }} MW</p>
-                        <span class="text-purple-600 text-sm font-medium">
-                            Target Bulanan
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Card 4: Total Realisasi -->
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                    <div class="p-4">
-                        <div class="text-3xl text-yellow-600 mb-2">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-1">Total Realisasi</h3>
-                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalRealisasi, 2) }} MW</p>
-                        <span class="text-yellow-600 text-sm font-medium">
-                            Pencapaian Aktual
-                        </span>
-                    </div>
+            @if(!$unitSource)
+            <div class="flex items-center justify-center h-64">
+                <div class="text-center">
+                    <i class="fas fa-building text-gray-400 text-5xl mb-4"></i>
+                    <h2 class="text-xl font-semibold text-gray-600">Silakan Pilih Unit</h2>
+                    <p class="text-gray-500 mt-2">Pilih unit untuk melihat data Rencana Daya Mampu</p>
                 </div>
             </div>
-
-           
-
-                   
-                    
-                <div class="overflow-x-auto bg-white rounded-lg shadow-lg p-6 mb-4 mt-4" style="max-width: 100%;">
-                    <div class="flex justify-between items-center mb-6">
-                        <div>
-                            <h1 class="text-2xl text-gray-800 font-bold">Rencana Operasi Bulanan (ROB)</h1>
-                            <p class="text-sm text-gray-600 mt-1">{{ now()->format('F Y') }}</p>
-                        </div>
-                        <div class="flex gap-2">
-                            <a href="{{ route('admin.rencana-daya-mampu.manage') }}" 
-                               class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors duration-200 flex items-center">
-                                <i class="fas fa-cogs mr-2"></i> Kelola Data
-                            </a>
-                            <button id="editModeButton" 
-                                    onclick="toggleEditMode()"
-                                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200 flex items-center">
-                                <i class="fas fa-edit mr-2"></i> Mode Edit
-                            </button>
-                            <button id="saveButton" type="button" onclick="saveData()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors duration-200 flex items-center hidden">
-                                <i class="fas fa-save mr-2"></i> Simpan Perubahan
-                            </button>
-                        </div>
+            @else
+            @if($powerPlants->isNotEmpty())
+            <div class="overflow-x-auto bg-white rounded-lg shadow-lg p-6 mb-4 mt-4" style="max-width: 100%;">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 class="text-2xl text-gray-800 font-bold">Rencana Operasi Bulanan (ROB)</h1>
+                        <p class="text-sm text-gray-600 mt-1">{{ now()->format('F Y') }}</p>
                     </div>
-
-                    @if(session('unit') === 'mysql')
-                    <div class="bg-gray-50 p-4 rounded-lg mb-4 border border-gray-200">
-                        <label for="unit-source" class="text-sm font-medium text-gray-700 mr-2">Pilih Sumber Unit:</label>
-                        <select id="unit-source" 
-                                class="p-2 border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
-                                style="width: 120px;"
-                                onchange="updateTable()">
-                            <option value="mysql" {{ $unitSource == 'mysql' ? 'selected' : '' }}>UP Kendari</option>
-                            <option value="mysql_wua_wua" {{ $unitSource == 'mysql_wua_wua' ? 'selected' : '' }}>Wua Wua</option>
-                            <option value="mysql_poasia" {{ $unitSource == 'mysql_poasia' ? 'selected' : '' }}>Poasia</option>
-                            <option value="mysql_kolaka" {{ $unitSource == 'mysql_kolaka' ? 'selected' : '' }}>Kolaka</option>
-                            <option value="mysql_bau_bau" {{ $unitSource == 'mysql_bau_bau' ? 'selected' : '' }}>Bau Bau</option>
-                        </select>
-                    </div>
-                    @endif
-
-                    <div class="overflow-x-auto border border-gray-200 rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead>
-                                <tr>
-                                    <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky left-0 bg-gray-50 border-r-2 border-b z-20">No</th>
-                                    <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky left-16 bg-gray-50 border-r-2 border-b z-20">Sistem Kelistrikan</th>
-                                    <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">Mesin Pembangkit</th>
-                                    <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">DMN SLO</th>
-                                    <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">DMP PT</th>
-                                    @for ($i = 1; $i <= date('t'); $i++)
-                                        <th colspan="2" class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider bg-gray-50 border-b">{{ $i }}</th>
-                                    @endfor
-                                </tr>
-                                <tr>
-                                    @for ($i = 1; $i <= date('t'); $i++)
-                                        <th class="px-2 py-2 text-center text-xs font-semibold text-blue-700 uppercase tracking-wider border-r">Rencana</th>
-                                        <th class="px-2 py-2 text-center text-xs font-semibold text-green-700 uppercase tracking-wider border-r">Realisasi</th>
-                                    @endfor
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @php $no = 1; @endphp
-                                @foreach($powerPlants as $plant)
-                                    @foreach($plant->machines->take(3) as $machine)
-                                        <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                            <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white border-r-2 text-center">{{ $no++ }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white border-r-2">
-                                                <div class="truncate max-w-[150px]">{{ $plant->name }}</div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap border-r-2">{{ $machine->name }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap border-r-2 text-center">{{ $machine->dmn_slo ?? '-' }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap border-r-2 text-center">{{ $machine->dmp_pt ?? '-' }}</td>
-                                            @for ($i = 1; $i <= date('t'); $i++)
-                                                @php
-                                                    $date = now()->format('Y-m-') . sprintf('%02d', $i);
-                                                    $data = $machine->rencanaDayaMampu->first()?->getDailyValue($date) ?? [];
-                                                    $rencanaRows = $data['rencana'] ?? array_fill(0, 5, ['beban'=>'','durasi'=>'','keterangan'=>'']);
-                                                    $realisasi = $data['realisasi'] ?? ['beban'=>'','keterangan'=>''];
-                                                    $onArr = [0,12,15,19,21];
-                                                    $offArr = [8,13,18,21,0];
-                                                @endphp
-                                                <td class="px-2 py-2 align-top border-r min-w-[180px]">
-                                                    <div class="border rounded-lg bg-blue-50 shadow-sm p-2">
-                                                        <div class="text-xs font-bold text-blue-800 py-1 border-b border-blue-200 text-center tracking-wide uppercase">Rencana</div>
-                                                        <table class="w-full text-xs border-separate border-spacing-0">
-                                                            <thead>
-                                                                <tr class="bg-blue-100 text-blue-900 font-semibold">
-                                                                    <th class="border px-2 py-1">Beban</th>
-                                                                    <th class="border px-2 py-1">On</th>
-                                                                    <th class="border px-2 py-1">Off</th>
-                                                                    <th class="border px-2 py-1">Durasi</th>
-                                                                    <th class="border px-2 py-1">Keterangan</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @for ($j = 0; $j < 5; $j++)
-                                                                <tr class="transition-colors duration-150 hover:bg-blue-200">
-                                                                    <td class="border px-2 py-1">
-                                                                        <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $j }}][beban]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[$j]['beban'] ?? '' }}" step="0.01">
-                                                                        <span class="data-display">{{ $rencanaRows[$j]['beban'] ?? '-' }}</span>
-                                                                    </td>
-                                                                    <td class="border px-2 py-1 bg-gray-50">{{ $onArr[$j] }}</td>
-                                                                    <td class="border px-2 py-1 bg-gray-50">{{ $offArr[$j] }}</td>
-                                                                    <td class="border px-2 py-1">
-                                                                        <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $j }}][durasi]" class="data-input hidden w-20 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[$j]['durasi'] ?? '' }}" step="0.01">
-                                                                        <span class="data-display">{{ $rencanaRows[$j]['durasi'] ?? '-' }}</span>
-                                                                    </td>
-                                                                    <td class="border px-2 py-1">
-                                                                        <input type="text" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $j }}][keterangan]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[$j]['keterangan'] ?? '' }}">
-                                                                        <span class="data-display">{{ $rencanaRows[$j]['keterangan'] ?? '-' }}</span>
-                                                                    </td>
-                                                                </tr>
-                                                                @endfor
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </td>
-                                                <td class="px-2 py-2 align-top border-r min-w-[120px]">
-                                                    <div class="border rounded-lg bg-green-50 shadow-sm p-2">
-                                                        <div class="text-xs font-bold text-green-800 py-1 border-b border-green-200 text-center tracking-wide uppercase">Realisasi</div>
-                                                        <table class="w-full text-xs border-separate border-spacing-0">
-                                                            <thead>
-                                                                <tr class="bg-green-100 text-green-900 font-semibold">
-                                                                    <th class="border px-2 py-1">Beban</th>
-                                                                    <th class="border px-2 py-1">Keterangan</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr class="transition-colors duration-150 hover:bg-green-200">
-                                                                    <td class="border px-2 py-1">
-                                                                        <input type="number" name="realisasi[{{ $machine->id }}][{{ $date }}][beban]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-green-400 focus:border-green-500 transition-all duration-150" value="{{ $realisasi['beban'] ?? '' }}" step="0.01">
-                                                                        <span class="data-display">{{ $realisasi['beban'] ?? '-' }}</span>
-                                                                    </td>
-                                                                    <td class="border px-2 py-1">
-                                                                        <input type="text" name="realisasi[{{ $machine->id }}][{{ $date }}][keterangan]" class="data-input hidden w-32 text-center border rounded focus:ring-2 focus:ring-green-400 focus:border-green-500 transition-all duration-150" value="{{ $realisasi['keterangan'] ?? '' }}">
-                                                                        <span class="data-display">{{ $realisasi['keterangan'] ?? '-' }}</span>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </td>
-                                            @endfor
-                                        </tr>
-                                    @endforeach
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div class="flex gap-2">
+                        <a href="{{ route('admin.rencana-daya-mampu.manage') }}" 
+                           class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors duration-200 flex items-center">
+                            <i class="fas fa-cogs mr-2"></i> Kelola Data
+                        </a>
+                        <button id="editModeButton" 
+                                onclick="toggleEditMode()"
+                                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200 flex items-center">
+                            <i class="fas fa-edit mr-2"></i> Mode Edit
+                        </button>
+                        <button id="saveButton" type="button" onclick="saveData()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors duration-200 flex items-center hidden">
+                            <i class="fas fa-save mr-2"></i> Simpan Perubahan
+                        </button>
                     </div>
                 </div>
-            </main>
-        </div>
+
+                <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky left-0 bg-gray-50 border-r-2 border-b z-20">No</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky left-16 bg-gray-50 border-r-2 border-b z-20">Sistem Kelistrikan</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">Mesin Pembangkit</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">DMN SLO</th>
+                                <th rowspan="2" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r-2 border-b">DMP PT</th>
+                                @for ($i = 1; $i <= date('t'); $i++)
+                                    <th colspan="2" class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider bg-gray-50 border-b">{{ $i }}</th>
+                                @endfor
+                            </tr>
+                            <tr>
+                                @for ($i = 1; $i <= date('t'); $i++)
+                                    <th class="px-2 py-2 text-center text-xs font-semibold text-blue-700 uppercase tracking-wider border-r">Rencana</th>
+                                    <th class="px-2 py-2 text-center text-xs font-semibold text-green-700 uppercase tracking-wider border-r">Realisasi</th>
+                                @endfor
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @php $no = 1; @endphp
+                            @foreach($powerPlants as $plant)
+                                @foreach($plant->machines->take(3) as $machine)
+                                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                        <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white border-r-2 text-center">{{ $no++ }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white border-r-2">
+                                            <div class="truncate max-w-[150px]">{{ $plant->name }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap border-r-2">{{ $machine->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap border-r-2 text-center">{{ $machine->dmn_slo ?? '-' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap border-r-2 text-center">{{ $machine->dmp_pt ?? '-' }}</td>
+                                        @for ($i = 1; $i <= date('t'); $i++)
+                                            @php
+                                                $date = now()->format('Y-m-') . sprintf('%02d', $i);
+                                                $data = $machine->rencanaDayaMampu->first()?->getDailyValue($date) ?? [];
+                                                $rencanaRows = $data['rencana'] ?? array_fill(0, 5, ['beban'=>'','durasi'=>'','keterangan'=>'']);
+                                                $realisasi = $data['realisasi'] ?? ['beban'=>'','keterangan'=>''];
+                                                $onArr = [0,12,15,19,21];
+                                                $offArr = [8,13,18,21,0];
+                                            @endphp
+                                            <td class="px-2 py-2 align-top border-r min-w-[180px]">
+                                                <div class="border rounded-lg bg-blue-50 shadow-sm p-2">
+                                                    <div class="text-xs font-bold text-blue-800 py-1 border-b border-blue-200 text-center tracking-wide uppercase">Rencana</div>
+                                                    <table class="w-full text-xs border-separate border-spacing-0">
+                                                        <thead>
+                                                            <tr class="bg-blue-100 text-blue-900 font-semibold">
+                                                                <th class="border px-2 py-1">Beban</th>
+                                                                <th class="border px-2 py-1">On</th>
+                                                                <th class="border px-2 py-1">Off</th>
+                                                                <th class="border px-2 py-1">Durasi</th>
+                                                                <th class="border px-2 py-1">Keterangan</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @for ($j = 0; $j < 5; $j++)
+                                                            <tr class="transition-colors duration-150 hover:bg-blue-200">
+                                                                <td class="border px-2 py-1">
+                                                                    <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $j }}][beban]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[$j]['beban'] ?? '' }}" step="0.01">
+                                                                    <span class="data-display">{{ $rencanaRows[$j]['beban'] ?? '-' }}</span>
+                                                                </td>
+                                                                <td class="border px-2 py-1 bg-gray-50">{{ $onArr[$j] }}</td>
+                                                                <td class="border px-2 py-1 bg-gray-50">{{ $offArr[$j] }}</td>
+                                                                <td class="border px-2 py-1">
+                                                                    <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $j }}][durasi]" class="data-input hidden w-20 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[$j]['durasi'] ?? '' }}" step="0.01">
+                                                                    <span class="data-display">{{ $rencanaRows[$j]['durasi'] ?? '-' }}</span>
+                                                                </td>
+                                                                <td class="border px-2 py-1">
+                                                                    <input type="text" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $j }}][keterangan]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[$j]['keterangan'] ?? '' }}">
+                                                                    <span class="data-display">{{ $rencanaRows[$j]['keterangan'] ?? '-' }}</span>
+                                                                </td>
+                                                            </tr>
+                                                            @endfor
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                            <td class="px-2 py-2 align-top border-r min-w-[120px]">
+                                                <div class="border rounded-lg bg-green-50 shadow-sm p-2">
+                                                    <div class="text-xs font-bold text-green-800 py-1 border-b border-green-200 text-center tracking-wide uppercase">Realisasi</div>
+                                                    <table class="w-full text-xs border-separate border-spacing-0">
+                                                        <thead>
+                                                            <tr class="bg-green-100 text-green-900 font-semibold">
+                                                                <th class="border px-2 py-1">Beban</th>
+                                                                <th class="border px-2 py-1">Keterangan</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="transition-colors duration-150 hover:bg-green-200">
+                                                                <td class="border px-2 py-1">
+                                                                    <input type="number" name="realisasi[{{ $machine->id }}][{{ $date }}][beban]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-green-400 focus:border-green-500 transition-all duration-150" value="{{ $realisasi['beban'] ?? '' }}" step="0.01">
+                                                                    <span class="data-display">{{ $realisasi['beban'] ?? '-' }}</span>
+                                                                </td>
+                                                                <td class="border px-2 py-1">
+                                                                    <input type="text" name="realisasi[{{ $machine->id }}][{{ $date }}][keterangan]" class="data-input hidden w-32 text-center border rounded focus:ring-2 focus:ring-green-400 focus:border-green-500 transition-all duration-150" value="{{ $realisasi['keterangan'] ?? '' }}">
+                                                                    <span class="data-display">{{ $realisasi['keterangan'] ?? '-' }}</span>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        @endfor
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @else
+            <div class="flex items-center justify-center h-64 mt-4">
+                <div class="text-center">
+                    <i class="fas fa-database text-gray-400 text-5xl mb-4"></i>
+                    <h2 class="text-xl font-semibold text-gray-600">Tidak Ada Data</h2>
+                    <p class="text-gray-500 mt-2">Tidak ada data Rencana Daya Mampu untuk unit yang dipilih</p>
+                </div>
+            </div>
+            @endif
+            @endif
+        </main>
     </div>
-</main>
+</div>
 
 
 <!-- Add this script at the bottom of your file -->
@@ -297,7 +254,11 @@
 
     function updateTable() {
         const unitSource = document.getElementById('unit-source').value;
-        window.location.href = `{{ route('admin.rencana-daya-mampu') }}?unit_source=${unitSource}`;
+        if (!unitSource) {
+            window.location.href = '{{ route('admin.rencana-daya-mampu') }}';
+        } else {
+            window.location.href = `{{ route('admin.rencana-daya-mampu') }}?unit_source=${unitSource}`;
+        }
     }
 
     let isEditMode = false;

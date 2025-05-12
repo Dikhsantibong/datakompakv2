@@ -18,60 +18,65 @@ class RencanaDayaMampuController extends Controller
 {
     public function index(Request $request)
     {
-        // Get unit source from session or request
-        $unitSource = session('unit') === 'mysql' ? 
-            $request->get('unit_source', 'mysql') : 
-            session('unit');
+        // Get all power plants for dropdown
+        $allPowerPlants = PowerPlant::getAllPowerPlants();
 
-        // Get current month's data
-        $currentMonth = now()->format('Y-m');
-        
-        // Get power plants with their machines and rencana daya mampu data
-        $powerPlants = PowerPlant::when($unitSource !== 'mysql', function($query) use ($unitSource) {
-            return $query->where('unit_source', $unitSource);
-        })->with(['machines' => function($query) use ($currentMonth) {
-            $query->orderBy('name')
-                ->limit(3) // hapus nanti
-                ->with(['rencanaDayaMampu' => function($query) use ($currentMonth) {
-                    $query->whereRaw("DATE_FORMAT(tanggal, '%Y-%m') = ?", [$currentMonth]);
-                }]);
-        }])->orderBy('name')->get();
-
-        // Batasi hanya 3 mesin per plant untuk testing ringan
-        $powerPlants->each(function($plant) {
-            $plant->setRelation('machines', $plant->machines->take(3));
-        });
-
-        // Calculate totals for highlight cards
+        // Initialize variables
+        $powerPlants = collect();
         $totalDayaPJBTL = 0;
         $totalDMPExisting = 0;
         $totalRencana = 0;
         $totalRealisasi = 0;
+        
+        // Get unit source from request or session
+        $unitSource = null;
+        if ($request->has('unit_source')) {
+            $unitSource = $request->get('unit_source');
+        } elseif (session('unit') !== 'mysql') {
+            $unitSource = session('unit');
+        }
 
-        $powerPlants->each(function($plant) use ($currentMonth, &$totalDayaPJBTL, &$totalDMPExisting, &$totalRencana, &$totalRealisasi) {
-            $plant->machines->each(function($machine) use ($currentMonth, &$totalDayaPJBTL, &$totalDMPExisting, &$totalRencana, &$totalRealisasi) {
-                // Get the latest record for the month
-                $record = $machine->rencanaDayaMampu->first();
+        // Only fetch data if a unit is selected
+        if ($unitSource) {
+            // Get current month's data
+            $currentMonth = now()->format('Y-m');
+            
+            // Get power plants with their machines and rencana daya mampu data
+            $powerPlants = PowerPlant::when($unitSource !== 'mysql', function($query) use ($unitSource) {
+                return $query->where('unit_source', $unitSource);
+            })->with(['machines' => function($query) use ($currentMonth) {
+                $query->orderBy('name')
+                    ->with(['rencanaDayaMampu' => function($query) use ($currentMonth) {
+                        $query->whereRaw("DATE_FORMAT(tanggal, '%Y-%m') = ?", [$currentMonth]);
+                    }]);
+            }])->orderBy('name')->get();
 
-                if ($record) {
-                    // Set summary values as text
-                    $machine->rencana = $record->rencana;
-                    $machine->realisasi = $record->realisasi;
-                    // Set numeric values
-                    $machine->daya_pjbtl_silm = $record->daya_pjbtl_silm;
-                    $machine->dmp_existing = $record->dmp_existing;
+            // Calculate totals for highlight cards
+            $powerPlants->each(function($plant) use ($currentMonth, &$totalDayaPJBTL, &$totalDMPExisting, &$totalRencana, &$totalRealisasi) {
+                $plant->machines->each(function($machine) use ($currentMonth, &$totalDayaPJBTL, &$totalDMPExisting, &$totalRencana, &$totalRealisasi) {
+                    // Get the latest record for the month
+                    $record = $machine->rencanaDayaMampu->first();
 
-                    // Add to totals
-                    $totalDayaPJBTL += floatval($record->daya_pjbtl_silm);
-                    $totalDMPExisting += floatval($record->dmp_existing);
-                    $totalRencana += is_numeric($record->rencana) ? floatval($record->rencana) : 0;
-                    $totalRealisasi += is_numeric($record->realisasi) ? floatval($record->realisasi) : 0;
+                    if ($record) {
+                        // Set summary values as text
+                        $machine->rencana = $record->rencana;
+                        $machine->realisasi = $record->realisasi;
+                        // Set numeric values
+                        $machine->daya_pjbtl_silm = $record->daya_pjbtl_silm;
+                        $machine->dmp_existing = $record->dmp_existing;
 
-                    // Set daily values from JSON
-                    $machine->daily_values = $record->getDailyData($currentMonth);
-                }
+                        // Add to totals
+                        $totalDayaPJBTL += floatval($record->daya_pjbtl_silm);
+                        $totalDMPExisting += floatval($record->dmp_existing);
+                        $totalRencana += is_numeric($record->rencana) ? floatval($record->rencana) : 0;
+                        $totalRealisasi += is_numeric($record->realisasi) ? floatval($record->realisasi) : 0;
+
+                        // Set daily values from JSON
+                        $machine->daily_values = $record->getDailyData($currentMonth);
+                    }
+                });
             });
-        });
+        }
 
         return view('admin.rencana-daya-mampu.index', compact(
             'powerPlants',
@@ -79,7 +84,8 @@ class RencanaDayaMampuController extends Controller
             'totalDayaPJBTL',
             'totalDMPExisting',
             'totalRencana',
-            'totalRealisasi'
+            'totalRealisasi',
+            'allPowerPlants'
         ));
     }
 
@@ -225,8 +231,11 @@ class RencanaDayaMampuController extends Controller
 
     public function manage(Request $request)
     {
+        // Get all power plants for dropdown
+        $allPowerPlants = PowerPlant::getAllPowerPlants();
+
         $unitSource = session('unit') === 'mysql' ? 
-            $request->get('unit_source', 'mysql') : 
+            $request->get('unit_source', '') : 
             session('unit');
 
         // Get selected month and year (default to current)
@@ -248,7 +257,8 @@ class RencanaDayaMampuController extends Controller
             'powerPlants', 
             'unitSource', 
             'selectedMonth', 
-            'selectedYear'
+            'selectedYear',
+            'allPowerPlants'
         ));
     }
 

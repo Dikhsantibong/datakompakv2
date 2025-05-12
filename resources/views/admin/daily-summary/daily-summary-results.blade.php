@@ -83,10 +83,15 @@
 
                 <!-- Content Card -->
                 <div class="bg-white rounded-lg shadow-md">
-        <div class="p-6" id="content-wrapper">
+                    <div class="p-6" id="content-wrapper">
                         <!-- Filter Section -->
                         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 mb-6">
                             <h2 class="text-xl font-semibold text-gray-800">Kelola Data Ikhtisar Harian</h2>
+                            <a href="{{ route('admin.monitor-kinerja') }}" 
+                               class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <i class="fas fa-chart-line mr-2"></i>
+                                Monitor Kinerja
+                            </a>
                         </div>
 
                         <!-- Horizontal Filters -->
@@ -120,6 +125,20 @@
                                 </div>
                             </div>
                         </div>
+
+                        @if($unitSource === 'mysql')
+                            <div class="mb-4">
+                                <label for="unit_source" class="block text-sm font-medium text-gray-700">Filter Unit:</label>
+                                <select id="unit_source" name="unit_source" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <option value="all">Semua Unit</option>
+                                    @foreach($unitSources as $source)
+                                        <option value="{{ $source }}" {{ request('unit_source') === $source ? 'selected' : '' }}>
+                                            {{ $source }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
 
                         <!-- Loading Indicator -->
                         <div id="loading" class="hidden flex justify-center items-center py-4">
@@ -192,6 +211,21 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(updateContent, 500); // 500ms delay
     });
+
+    // Add event listener for unit source filter
+    const unitSourceSelect = document.getElementById('unit_source');
+    if (unitSourceSelect) {
+        unitSourceSelect.addEventListener('change', function() {
+            // Get current URL
+            let url = new URL(window.location.href);
+            
+            // Update or add unit_source parameter
+            url.searchParams.set('unit_source', this.value);
+            
+            // Reload page with new filter
+            window.location.href = url.toString();
+        });
+    }
 });
 </script>
 

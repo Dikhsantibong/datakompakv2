@@ -266,12 +266,13 @@
                                             </div>
                                         </th>
                                         <th class="px-4 py-2 border border-gray-300">
-                                            <div class="grid grid-cols-5 gap-1">
+                                            <div class="grid grid-cols-6 gap-1">
                                                 <span class="px-2 text-center border-r border-gray-300">HSD (Liter)</span>
                                                 <span class="px-2 text-center border-r border-gray-300">B35 (Liter)</span>
+                                                <span class="px-2 text-center border-r border-gray-300">B40 (Liter)</span>
                                                 <span class="px-2 text-center border-r border-gray-300">MFO (Liter)</span>
                                                 <span class="px-2 text-center border-r border-gray-300">Total BBM (Liter)</span>
-                                                <span class="px-2 text-center">Air (M³)</span>
+                                                <span class="px-2 text-center border-r border-gray-300">Air (M³)</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2 border border-gray-300 w-pelumas">
@@ -514,13 +515,17 @@
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border border-gray-300">
-                                            <div class="grid grid-cols-5 gap-1">
+                                            <div class="grid grid-cols-6 gap-1">
                                                 <div class="input-group border-r border-gray-300">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][hsd_fuel]"
                                                            class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group border-r border-gray-300">
                                                     <input type="number" step="0.01" name="data[{{ $machine->id }}][b35_fuel]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                </div>
+                                                <div class="input-group border-r border-gray-300">
+                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][b40_fuel]"
                                                            class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
                                                 </div>
                                                 <div class="input-group border-r border-gray-300">

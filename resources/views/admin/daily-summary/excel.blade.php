@@ -49,7 +49,7 @@
             <th>NCF</th>
             <th>NOF</th>
             <th>Jam</th>
-            <th>HSD | B35 | MFO | Total | Air</th>
+            <th>HSD | B35 | B40 | MFO | Total | Air</th>
             <th>Med | S420 | S430 | TrvA | T46 | T68 | Tot</th>
             <th>SFC | NPHR | SLC</th>
             <th></th>
@@ -93,6 +93,7 @@
                 <td>{{ $summary ? number_format($summary->jsi, 2) : '-' }}</td>
                 <td>{{ $summary ? number_format($summary->hsd_fuel, 2) : '-' }} | 
                     {{ $summary ? number_format($summary->b35_fuel, 2) : '-' }} | 
+                    {{ $summary ? number_format($summary->b40_fuel, 2) : '-' }} | 
                     {{ $summary ? number_format($summary->mfo_fuel, 2) : '-' }} | 
                     {{ $summary ? number_format($summary->total_fuel, 2) : '-' }} | 
                     {{ $summary ? number_format($summary->water_usage, 2) : '-' }}</td>
@@ -162,6 +163,7 @@
             <td>
                 {{ number_format($unit->dailySummaries->sum('hsd_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->sum('b35_fuel'), 2) }} | 
+                {{ number_format($unit->dailySummaries->sum('b40_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->sum('mfo_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->sum('total_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->sum('water_usage'), 2) }}
@@ -235,6 +237,7 @@
             <td>
                 {{ number_format($unit->dailySummaries->avg('hsd_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->avg('b35_fuel'), 2) }} | 
+                {{ number_format($unit->dailySummaries->avg('b40_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->avg('mfo_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->avg('total_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->avg('water_usage'), 2) }}
@@ -308,6 +311,7 @@
             <td>
                 {{ number_format($unit->dailySummaries->min('hsd_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->min('b35_fuel'), 2) }} | 
+                {{ number_format($unit->dailySummaries->min('b40_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->min('mfo_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->min('total_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->min('water_usage'), 2) }}
@@ -381,6 +385,7 @@
             <td>
                 {{ number_format($unit->dailySummaries->max('hsd_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->max('b35_fuel'), 2) }} | 
+                {{ number_format($unit->dailySummaries->max('b40_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->max('mfo_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->max('total_fuel'), 2) }} | 
                 {{ number_format($unit->dailySummaries->max('water_usage'), 2) }}

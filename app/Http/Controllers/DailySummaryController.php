@@ -266,16 +266,54 @@ class DailySummaryController extends Controller
     {
         try {
             $date = $request->input('date', now()->format('Y-m-d'));
+            $search = $request->input('search');
 
-            $units = PowerPlant::with(['dailySummaries' => function($query) use ($date) {
+            // Get unit source from session
+            $unitSource = session('unit', 'mysql');
+
+            // Base query for PowerPlant
+            $query = PowerPlant::query();
+
+            // If logged in as UP KENDARI (mysql session)
+            if ($unitSource === 'mysql') {
+                // Allow filtering by unit source from request
+                $selectedUnitSource = request('unit_source', 'all');
+                if ($selectedUnitSource !== 'all') {
+                    $query->where('unit_source', $selectedUnitSource);
+                }
+            } else {
+                // For other units, only show their own data
+                $query->where('unit_source', $unitSource);
+            }
+
+            // Get unique unit sources for dropdown only if logged in as UP KENDARI
+            $unitSources = [];
+            if ($unitSource === 'mysql') {
+                $unitSources = PowerPlant::select('unit_source')
+                    ->distinct()
+                    ->pluck('unit_source')
+                    ->filter();
+            }
+
+            // Add search functionality if search parameter is provided
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                      ->orWhereHas('machines', function($q) use ($search) {
+                          $q->where('name', 'like', '%' . $search . '%');
+                      });
+                });
+            }
+
+            $units = $query->with(['dailySummaries' => function($query) use ($date) {
                 $query->whereDate('date', $date);
             }])->get();
 
             if ($request->ajax()) {
-                return view('admin.daily-summary.daily-summary-results', compact('units', 'date'))->render();
+                return view('admin.daily-summary.daily-summary-results', compact('units', 'date', 'unitSources', 'unitSource'))->render();
             }
 
-            return view('admin.daily-summary.daily-summary-results', compact('units', 'date'));
+            return view('admin.daily-summary.daily-summary-results', compact('units', 'date', 'unitSources', 'unitSource'));
 
         } catch (\Exception $e) {
             Log::error('Error in results method:', [

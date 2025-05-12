@@ -245,6 +245,10 @@
                                 <span class="font-semibold text-gray-800">{{ $fuelUsage['b35'] }}</span>
                             </div>
                             <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">B40</span>
+                                <span class="font-semibold text-gray-800">{{ $fuelUsage['b40'] }}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-600">MFO</span>
                                 <span class="font-semibold text-gray-800">{{ $fuelUsage['mfo'] }}</span>
                             </div>
@@ -714,6 +718,12 @@ new Chart(fuelCtx, {
             data: {!! json_encode($chartData['fuel']['b35']) !!},
             backgroundColor: 'rgba(59, 130, 246, 0.5)',
             borderColor: 'rgb(59, 130, 246)',
+            borderWidth: 1
+        }, {
+            label: 'B40',
+            data: {!! json_encode($chartData['fuel']['b40']) !!},
+            backgroundColor: 'rgba(147, 51, 234, 0.5)',
+            borderColor: 'rgb(147, 51, 234)',
             borderWidth: 1
         }]
     },

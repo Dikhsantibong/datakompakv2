@@ -55,6 +55,7 @@ class DailySummary extends Model
         'nof',               // NOF
         'hsd_fuel',          // HSD (Liter)
         'b35_fuel',          // B35 (Liter)
+        'b40_fuel',          // B40 (Liter)
         'mfo_fuel',          // MFO (Liter)
         'total_fuel',        // Total BBM (Liter)
         'water_usage',       // Air (M³)
@@ -107,6 +108,7 @@ class DailySummary extends Model
         'jsi' => 'decimal:2',
         'hsd_fuel' => 'decimal:3',
         'b35_fuel' => 'decimal:3',
+        'b40_fuel' => 'decimal:3',
         'mfo_fuel' => 'decimal:3',
         'total_fuel' => 'decimal:3',
         'water_usage' => 'decimal:3',

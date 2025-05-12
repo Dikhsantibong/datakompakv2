@@ -39,7 +39,8 @@ class MonitorKinerjaController extends Controller
             'fuel' => [
                 'hsd' => [],
                 'mfo' => [],
-                'b35' => []
+                'b35' => [],
+                'b40' => []
             ]
         ];
 
@@ -47,7 +48,7 @@ class MonitorKinerjaController extends Controller
         $dailyData = $query->select(
             'eaf', 'sof', 'efor', 'ncf', 
             'net_production', 'hsd_fuel', 
-            'mfo_fuel', 'b35_fuel', 
+            'mfo_fuel', 'b35_fuel', 'b40_fuel',
             'created_at'
         )
         ->orderBy('created_at', 'desc')
@@ -65,6 +66,7 @@ class MonitorKinerjaController extends Controller
             $chartData['fuel']['hsd'][] = $data->hsd_fuel;
             $chartData['fuel']['mfo'][] = $data->mfo_fuel;
             $chartData['fuel']['b35'][] = $data->b35_fuel;
+            $chartData['fuel']['b40'][] = $data->b40_fuel;
         }
 
         // Prepare data for the view
@@ -91,6 +93,7 @@ class MonitorKinerjaController extends Controller
             'fuelUsage' => [
                 'hsd' => $latestSummary->hsd_fuel ?? 0,
                 'b35' => $latestSummary->b35_fuel ?? 0,
+                'b40' => $latestSummary->b40_fuel ?? 0,
                 'mfo' => $latestSummary->mfo_fuel ?? 0,
                 'total' => $latestSummary->total_fuel ?? 0,
             ],

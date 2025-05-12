@@ -108,9 +108,10 @@
                         </div>
                     </th>
                     <th class="px-4 py-2 border border-gray-300">
-                        <div class="grid grid-cols-5 gap-1">
+                        <div class="grid grid-cols-6 gap-1">
                             <span class="px-2 text-center border-r border-gray-300">HSD (Liter)</span>
                             <span class="px-2 text-center border-r border-gray-300">B35 (Liter)</span>
+                            <span class="px-2 text-center border-r border-gray-300">B40 (Liter)</span>
                             <span class="px-2 text-center border-r border-gray-300">MFO (Liter)</span>
                             <span class="px-2 text-center border-r border-gray-300">Total BBM (Liter)</span>
                             <span class="px-2 text-center">Air (M³)</span>
@@ -240,9 +241,10 @@
 
                         <!-- Pemakaian Bahan Bakar -->
                         <td class="px-4 py-3 border-r">
-                            <div class="grid grid-cols-5 gap-0">
+                            <div class="grid grid-cols-6 gap-0">
                                 <div class="text-center border-r">{{ $summary ? number_format($summary->hsd_fuel, 2) : '-' }}</div>
                                 <div class="text-center border-r">{{ $summary ? number_format($summary->b35_fuel, 2) : '-' }}</div>
+                                <div class="text-center border-r">{{ $summary ? number_format($summary->b40_fuel, 2) : '-' }}</div>
                                 <div class="text-center border-r">{{ $summary ? number_format($summary->mfo_fuel, 2) : '-' }}</div>
                                 <div class="text-center border-r">{{ $summary ? number_format($summary->total_fuel, 2) : '-' }}</div>
                                 <div class="text-center">{{ $summary ? number_format($summary->water_usage, 2) : '-' }}</div>

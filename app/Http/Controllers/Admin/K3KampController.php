@@ -164,17 +164,32 @@ class K3KampController extends Controller
     public function exportExcel($id)
     {
         try {
-            $report = K3KampReport::with(['items.media', 'creator'])
-                ->findOrFail($id);
+            // Load report with all necessary relationships
+            $report = K3KampReport::with([
+                'items' => function($query) {
+                    $query->with(['media' => function($query) {
+                        $query->orderBy('created_at', 'desc');
+                    }]);
+                },
+                'creator'
+            ])->findOrFail($id);
 
-            // Ensure date is a Carbon instance
+            // Pastikan date dan created_at adalah instance Carbon
             if (!$report->date instanceof Carbon) {
                 $report->date = Carbon::parse($report->date);
             }
 
-            // Ensure created_at is a Carbon instance
             if (!$report->created_at instanceof Carbon) {
                 $report->created_at = Carbon::parse($report->created_at);
+            }
+
+            // Pastikan semua relasi media sudah di-load
+            foreach ($report->items as $item) {
+                if (!$item->relationLoaded('media')) {
+                    $item->load(['media' => function($query) {
+                        $query->orderBy('created_at', 'desc');
+                    }]);
+                }
             }
             
             return Excel::download(
@@ -182,10 +197,10 @@ class K3KampController extends Controller
                 'laporan-k3-kamp-' . $report->date->format('dmY') . '.xlsx'
             );
         } catch (\Exception $e) {
-            report($e); // Log error using Laravel's error reporting
+            report($e); // Log error menggunakan Laravel error reporting
             
             return redirect()->back()
-                ->with('error', 'Terjadi kesalahan saat mengekspor Excel. Silakan coba lagi.');
+                ->with('error', 'Terjadi kesalahan saat mengekspor Excel: ' . $e->getMessage());
         }
     }
 
@@ -217,8 +232,9 @@ class K3KampController extends Controller
             
             // Store file
             $path = $file->storeAs(
-                'public/k3-kamp-media',
-                $fileName
+                'k3-kamp-media',
+                $fileName,
+                'public'
             );
 
             // Create media record
@@ -239,7 +255,7 @@ class K3KampController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal mengupload media'
+                'message' => 'Gagal mengupload media: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -248,7 +264,7 @@ class K3KampController extends Controller
     {
         try {
             $media = K3KampMedia::findOrFail($id);
-            Storage::delete($media->file_path);
+            Storage::disk('public')->delete($media->file_path);
             $media->delete();
 
             return response()->json([
@@ -259,7 +275,7 @@ class K3KampController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menghapus media'
+                'message' => 'Gagal menghapus media: ' . $e->getMessage()
             ], 500);
         }
     }

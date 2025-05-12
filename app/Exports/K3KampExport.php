@@ -4,16 +4,26 @@ namespace App\Exports;
 
 use App\Models\K3KampReport;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
-class K3KampExport implements FromCollection, WithHeadings, WithMapping, WithTitle, WithStyles, ShouldAutoSize
+class K3KampExport implements FromCollection, WithTitle, WithEvents, WithStyles, WithDrawings, WithColumnWidths, WithHeadings
 {
+    use Exportable;
+
     protected $report;
 
     public function __construct(K3KampReport $report)
@@ -23,90 +33,256 @@ class K3KampExport implements FromCollection, WithHeadings, WithMapping, WithTit
 
     public function collection()
     {
-        return $this->report->items;
+        $data = collect();
+        
+        // Add empty rows for logos
+        $data->push(['', '', '', '', '', '', '']);
+        $data->push(['', '', '', '', '', '', '']);
+        
+        // Add header
+        $data->push([
+            'LAPORAN K3 KAMP DAN LINGKUNGAN',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ]);
+        
+        // Add date
+        $data->push([
+            'Tanggal: ' . $this->report->date->format('d/m/Y'),
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ]);
+        
+        // Add creator
+        $data->push([
+            'Dibuat oleh: ' . $this->report->creator->name,
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ]);
+        
+        // Add empty row
+        $data->push(['', '', '', '', '', '', '']);
+        
+        // Add K3 & Keamanan section
+        $data->push(['K3 & Keamanan', '', '', '', '', '', '']);
+        
+        // Add K3 & Keamanan headers
+        $data->push(['No', 'Kategori', 'Item', 'Status', 'Kondisi', 'Keterangan', 'Eviden']);
+        
+        // Add K3 & Keamanan items
+        $no = 1;
+        foreach ($this->report->items->where('item_type', 'k3_keamanan') as $item) {
+            $data->push([
+                $no++,
+                'K3 & Keamanan',
+                $item->item_name,
+                ucfirst($item->status),
+                ucfirst($item->kondisi),
+                $item->keterangan,
+                $item->media->isNotEmpty() ? 'Ada' : '-'
+            ]);
+        }
+        
+        // Add empty row
+        $data->push(['', '', '', '', '', '', '']);
+        
+        // Add Lingkungan section
+        $data->push(['Lingkungan', '', '', '', '', '', '']);
+        
+        // Add Lingkungan headers
+        $data->push(['No', 'Kategori', 'Item', 'Status', 'Kondisi', 'Keterangan', 'Eviden']);
+        
+        // Add Lingkungan items
+        $no = 1;
+        foreach ($this->report->items->where('item_type', 'lingkungan') as $item) {
+            $data->push([
+                $no++,
+                'Lingkungan',
+                $item->item_name,
+                ucfirst($item->status),
+                ucfirst($item->kondisi),
+                $item->keterangan,
+                $item->media->isNotEmpty() ? 'Ada' : '-'
+            ]);
+        }
+        
+        return $data;
     }
 
     public function headings(): array
     {
+        return [];
+    }
+
+    public function columnWidths(): array
+    {
         return [
-            'No',
-            'Kategori',
-            'Item',
-            'Status',
-            'Kondisi',
-            'Keterangan'
+            'A' => 5,    // No
+            'B' => 15,   // Kategori
+            'C' => 20,   // Item
+            'D' => 15,   // Status
+            'E' => 15,   // Kondisi
+            'F' => 30,   // Keterangan
+            'G' => 20,   // Eviden
         ];
     }
 
-    public function map($item): array
+    public function drawings()
     {
-        static $no = 1;
-        return [
-            $no++,
-            ucfirst($item->item_type),
-            $item->item_name,
-            ucfirst($item->status),
-            ucfirst($item->kondisi),
-            $item->keterangan ?? '-'
-        ];
+        $drawings = [];
+
+        // Add logos
+        if (file_exists(public_path('logo/navlog1.png'))) {
+            $plnDrawing = new Drawing();
+            $plnDrawing->setName('PLN Logo');
+            $plnDrawing->setDescription('PLN Logo');
+            $plnDrawing->setPath(public_path('logo/navlog1.png'));
+            $plnDrawing->setHeight(60);
+            $plnDrawing->setCoordinates('B2');
+            $drawings[] = $plnDrawing;
+        }
+
+        if (file_exists(public_path('logo/k3_logo.png'))) {
+            $k3Drawing = new Drawing();
+            $k3Drawing->setName('K3 Logo');
+            $k3Drawing->setDescription('K3 Logo');
+            $k3Drawing->setPath(public_path('logo/k3_logo.png'));
+            $k3Drawing->setHeight(60);
+            $k3Drawing->setCoordinates('E2');
+            $drawings[] = $k3Drawing;
+        }
+
+        // Add K3 & Keamanan items
+        $row = 9; // Start after headers and logos
+        foreach ($this->report->items->where('item_type', 'k3_keamanan') as $item) {
+            if ($item->media->isNotEmpty()) {
+                $media = $item->media->first();
+                $filePath = Storage::disk('public')->path($media->file_path);
+                
+                if (file_exists($filePath)) {
+                    $drawing = new Drawing();
+                    $drawing->setName('K3 Image');
+                    $drawing->setDescription('K3 Image');
+                    $drawing->setPath($filePath);
+                    $drawing->setHeight(100);
+                    $drawing->setCoordinates('G' . $row);
+                    $drawings[] = $drawing;
+                }
+            }
+            $row++;
+        }
+
+        // Add Lingkungan items
+        $row = $row + 2; // Skip empty row and section header
+        foreach ($this->report->items->where('item_type', 'lingkungan') as $item) {
+            if ($item->media->isNotEmpty()) {
+                $media = $item->media->first();
+                $filePath = Storage::disk('public')->path($media->file_path);
+                
+                if (file_exists($filePath)) {
+                    $drawing = new Drawing();
+                    $drawing->setName('Lingkungan Image');
+                    $drawing->setDescription('Lingkungan Image');
+                    $drawing->setPath($filePath);
+                    $drawing->setHeight(100);
+                    $drawing->setCoordinates('G' . $row);
+                    $drawings[] = $drawing;
+                }
+            }
+            $row++;
+        }
+
+        return $drawings;
     }
 
     public function title(): string
     {
-        return 'K3 KAMP Report';
+        return 'K3 KAMP Report ' . $this->report->date->format('d/m/Y');
     }
 
     public function styles(Worksheet $sheet)
     {
-        // Style untuk header
-        $sheet->getStyle('A1:F1')->applyFromArray([
+        // Default style
+        $sheet->getDefaultRowDimension()->setRowHeight(15);
+        
+        // Header style
+        $headerStyle = [
             'font' => [
                 'bold' => true,
+                'size' => 11
             ],
             'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => [
-                    'rgb' => 'E2E8F0',
-                ],
-            ],
-        ]);
-
-        // Menambahkan judul laporan
-        $sheet->insertNewRowBefore(1, 2);
-        $sheet->mergeCells('A1:F1');
-        $sheet->setCellValue('A1', 'Laporan K3 KAMP dan Lingkungan - ' . $this->report->date->format('d F Y'));
-        $sheet->getStyle('A1')->applyFromArray([
-            'font' => [
-                'bold' => true,
-                'size' => 14,
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'E2E8F0']
             ],
             'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+                'wrapText' => true
             ],
-        ]);
-
-        // Menambahkan footer
-        $lastRow = $sheet->getHighestRow() + 1;
-        $sheet->mergeCells('A' . $lastRow . ':F' . $lastRow);
-        $sheet->setCellValue('A' . $lastRow, 'Dibuat oleh: ' . ($this->report->creator->name ?? 'System') . 
-            ' | Tanggal: ' . $this->report->created_at->format('d/m/Y H:i'));
-        
-        // Border untuk seluruh cell yang berisi data
-        $sheet->getStyle('A1:F' . $lastRow)->applyFromArray([
             'borders' => [
                 'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ],
+                    'borderStyle' => Border::BORDER_THIN
+                ]
+            ]
+        ];
+
+        // Apply styles
+        $lastRow = $sheet->getHighestRow();
+        $sheet->getStyle('A1:G' . $lastRow)->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN
+                ]
             ],
+            'alignment' => [
+                'vertical' => Alignment::VERTICAL_CENTER,
+                'wrapText' => true
+            ]
         ]);
 
-        // Auto-size columns
-        foreach(range('A','F') as $column) {
-            $sheet->getColumnDimension($column)->setAutoSize(true);
-        }
+        // Apply header style
+        $sheet->getStyle('A3:G3')->applyFromArray($headerStyle); // Main header
+        $sheet->getStyle('A8:G8')->applyFromArray($headerStyle); // K3 & Keamanan headers
+        $sheet->getStyle('A' . ($lastRow - 2) . ':G' . ($lastRow - 2))->applyFromArray($headerStyle); // Lingkungan headers
 
+        // Center align main header
+        $sheet->getStyle('A3:G3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A3:G3')->getFont()->setSize(14);
+
+        return $sheet;
+    }
+
+    public function registerEvents(): array
+    {
         return [
-            3 => ['font' => ['bold' => true]], // Header row (setelah judul)
+            AfterSheet::class => function(AfterSheet $event) {
+                $sheet = $event->sheet;
+                
+                // Set page orientation to landscape
+                $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+                
+                // Set print area
+                $sheet->getPageSetup()->setPrintArea('A1:G' . $sheet->getHighestRow());
+                
+                // Set zoom level
+                $sheet->getSheetView()->setZoomScale(85);
+                
+                // Freeze first row
+                $sheet->freezePane('A2');
+            }
         ];
     }
 } 

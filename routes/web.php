@@ -57,6 +57,8 @@ use App\Http\Controllers\Admin\OperasiUpkd\RjppDprController;
 use App\Http\Controllers\Admin\LaporanKitController;
 use App\Http\Controllers\Admin\PatrolCheckController;
 use App\Http\Controllers\Admin\BlackstartController;
+use App\Http\Controllers\KitUpKendariController;
+use App\Http\Controllers\SubsistemController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -1379,3 +1381,8 @@ Route::prefix('admin/operasi-upkd/pengadaan')->group(function () {
     Route::delete('/{id}', [PengadaanController::class, 'destroy'])->name('admin.operasi-upkd.pengadaan.destroy');
 });
 // ... existing code ...
+
+Route::get('/kit-up-kendari', [App\Http\Controllers\KitUpKendariController::class, 'index'])->name('admin.kit-up-kendari');
+
+Route::get('/subsistem/kendari', [SubsistemController::class, 'kendari'])->name('admin.subsistem.kendari');
+Route::get('/subsistem/bau-bau', [SubsistemController::class, 'bauBau'])->name('admin.subsistem.bau-bau');

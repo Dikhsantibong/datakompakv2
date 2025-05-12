@@ -167,15 +167,15 @@
                 <div id="koordinasiDataDropdown" class="hidden absolute left-0 mt-2 w-full md:w-64 bg-white rounded-lg shadow-xl z-50 animate-fade-in-down">
                     <div class="p-2 space-y-1">
                         <div class="font-medium text-sm text-gray-500 px-3 py-2">Menu Koordinasi Data</div>
-                        <a href="#" class="flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                        <a href="{{ route('admin.subsistem.bau-bau') }}" class="flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
                             <i class="fas fa-server mr-2 text-[#009BB9]"></i>
                             Data Subsistem Bau-Bau
                         </a>
-                        <a href="#" class="flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                        <a href="{{ route('admin.subsistem.kendari') }}" class="flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
                             <i class="fas fa-industry mr-2 text-[#009BB9]"></i>
                             Data Subsistem Kendari
                         </a>
-                        <a href="#" class="flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                        <a href="{{ route('admin.kit-up-kendari') }}" class="flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
                             <i class="fas fa-bolt mr-2 text-[#009BB9]"></i>
                             Data KIT UP Kendari
                         </a>

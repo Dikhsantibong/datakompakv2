@@ -72,7 +72,7 @@
             </div>
 
             <!-- Form Content -->
-            <form id="meetingShiftForm" action="{{ route('admin.meeting-shift.store') }}" method="POST" enctype="multipart/form-data" class="mt-8">
+            <form id="meetingShiftForm" action="{{ route('admin.meeting-shift.store') }}" method="POST" class="mt-8">
                 @csrf
                 <!-- Add error alert -->
                 @if ($errors->any())
@@ -366,7 +366,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Eviden</label>
-                                            <input type="file" name="k3l[0][eviden]" accept=".jpeg,.jpg,.png,.gif,.doc,.docx,.pdf"
+                                            <input type="file" name="k3l[0][eviden]" accept="image/*"
                                                 class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300">
                                         </div>
                                     </div>
@@ -543,40 +543,15 @@ function addResource() {
 
 function addK3L() {
     const container = document.getElementById('k3l-container');
-    const newIndex = k3lCount;
+    const template = document.querySelector('.k3l-item').cloneNode(true);
     
-    const template = `
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-4 k3l-item">
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Tipe</label>
-                <select name="k3l[${newIndex}][type]" required
-                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm rounded-md">
-                    <option value="">Pilih Tipe</option>
-                    <option value="unsafe_action">Unsafe Action</option>
-                    <option value="unsafe_condition">Unsafe Condition</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Uraian</label>
-                <textarea name="k3l[${newIndex}][uraian]" required rows="3"
-                    class="p-2 mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
-                    placeholder="Masukkan uraian..."></textarea>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Saran</label>
-                <textarea name="k3l[${newIndex}][saran]" required rows="3"
-                    class="p-2 mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
-                    placeholder="Masukkan saran..."></textarea>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Eviden</label>
-                <input type="file" name="k3l[${newIndex}][eviden]" accept=".jpeg,.jpg,.png,.gif,.doc,.docx,.pdf"
-                    class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300">
-            </div>
-        </div>
-    `;
+    // Update input names
+    template.querySelectorAll('input, select, textarea').forEach(input => {
+        input.name = input.name.replace('[0]', `[${k3lCount}]`);
+        input.value = '';
+    });
     
-    container.insertAdjacentHTML('beforeend', template);
+    container.appendChild(template);
     k3lCount++;
 }
 

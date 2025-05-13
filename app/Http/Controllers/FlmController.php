@@ -23,6 +23,8 @@ class FlmController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'operator' => 'required|string|max:100',
+            'shift' => 'required|in:A,B,C,D',
+            'time' => 'required|date_format:H:i',
             'mesin.*' => 'required|string|max:100',
             'sistem.*' => 'required|string|max:100',
             'masalah.*' => 'required|string',
@@ -43,6 +45,8 @@ class FlmController extends Controller
                 'flm_id' => $flm_id,
                 'tanggal' => $request->tanggal,
                 'operator' => $request->operator,
+                'shift' => $request->shift,
+                'time' => $request->time,
                 'mesin' => $mesin,
                 'sistem' => $request->sistem[$key],
                 'masalah' => $request->masalah[$key],
@@ -128,6 +132,8 @@ class FlmController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'operator' => 'required|string|max:100',
+            'shift' => 'required|in:A,B,C,D',
+            'time' => 'required|date_format:H:i',
             'mesin' => 'required|string|max:100',
             'sistem' => 'required|string|max:100',
             'masalah' => 'required|string',

@@ -75,10 +75,30 @@
                             @method('PUT')
 
                             <!-- Form Header -->
-                            <div class="mb-6">
-                                <div class="w-full md:w-1/3">
+                            <div class="mb-6 flex flex-wrap gap-4">
+                                <div class="w-full md:w-1/4">
                                     <label class="block text-sm font-medium text-gray-700">Tanggal</label>
                                     <input type="date" name="tanggal" value="{{ $flm->tanggal }}" required
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+                                <div class="w-full md:w-1/4">
+                                    <label class="block text-sm font-medium text-gray-700">Shift</label>
+                                    <select name="shift" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                        <option value="">Pilih Shift</option>
+                                        <option value="A" {{ $flm->shift == 'A' ? 'selected' : '' }}>Shift A</option>
+                                        <option value="B" {{ $flm->shift == 'B' ? 'selected' : '' }}>Shift B</option>
+                                        <option value="C" {{ $flm->shift == 'C' ? 'selected' : '' }}>Shift C</option>
+                                        <option value="D" {{ $flm->shift == 'D' ? 'selected' : '' }}>Shift D</option>
+                                    </select>
+                                </div>
+                                <div class="w-full md:w-1/4">
+                                    <label class="block text-sm font-medium text-gray-700">Waktu</label>
+                                    <input type="time" name="time" value="{{ $flm->time->format('H:i') }}" required
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+                                <div class="w-full md:w-1/4">
+                                    <label class="block text-sm font-medium text-gray-700">Operator</label>
+                                    <input type="text" name="operator" value="{{ $flm->operator }}" required
                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 </div>
                             </div>

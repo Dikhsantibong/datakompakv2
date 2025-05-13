@@ -97,13 +97,34 @@
                             
                             <!-- Form Header -->
                             <div class="mb-6 flex flex-wrap gap-4">
-                                <div class="w-full md:w-1/3">
+                                <div class="w-full md:w-1/4">
                                     <label class="block text-sm font-medium text-gray-700">Tanggal</label>
                                     <input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" 
                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 </div>
                                 
-                                <div class="w-full md:w-1/3">
+                                <div class="w-full md:w-1/4">
+                                    <label class="block text-sm font-medium text-gray-700">Shift</label>
+                                    <select name="shift" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                        <option value="">Pilih Shift</option>
+                                        <option value="A" {{ old('shift') == 'A' ? 'selected' : '' }}>Shift A</option>
+                                        <option value="B" {{ old('shift') == 'B' ? 'selected' : '' }}>Shift B</option>
+                                        <option value="C" {{ old('shift') == 'C' ? 'selected' : '' }}>Shift C</option>
+                                        <option value="D" {{ old('shift') == 'D' ? 'selected' : '' }}>Shift D</option>
+                                    </select>
+                                </div>
+
+                                <div class="w-full md:w-1/4">
+                                    <label class="block text-sm font-medium text-gray-700">Waktu</label>
+                                    <select name="time" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                        <option value="">Pilih Waktu</option>
+                                        <option value="08:00" {{ old('time') == '08:00' ? 'selected' : '' }}>08.00</option>
+                                        <option value="16:00" {{ old('time') == '16:00' ? 'selected' : '' }}>16.00</option>
+                                        <option value="20:00" {{ old('time') == '20:00' ? 'selected' : '' }}>20.00</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="w-full md:w-1/4">
                                     <label class="block text-sm font-medium text-gray-700">Operator</label>
                                     <input type="text" name="operator" value="{{ old('operator') }}" 
                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"

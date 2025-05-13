@@ -98,6 +98,14 @@
                                 <p class="text-sm font-medium text-gray-500">Tanggal</p>
                                 <p class="mt-1 text-sm text-gray-900">{{ $mainData->tanggal->format('d/m/Y') }}</p>
                             </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Shift</p>
+                                <p class="mt-1 text-sm text-gray-900">{{ $mainData->shift }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Waktu</p>
+                                <p class="mt-1 text-sm text-gray-900">{{ $mainData->time->format('H:i') }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

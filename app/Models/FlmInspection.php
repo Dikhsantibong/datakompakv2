@@ -13,6 +13,8 @@ class FlmInspection extends Model
         'flm_id',
         'tanggal',
         'operator',
+        'shift',
+        'time',
         'mesin',
         'sistem',
         'masalah',
@@ -31,6 +33,7 @@ class FlmInspection extends Model
 
     protected $casts = [
         'tanggal' => 'date',
+        'time' => 'datetime',
         'tindakan_bersihkan' => 'boolean',
         'tindakan_lumasi' => 'boolean',
         'tindakan_kencangkan' => 'boolean',

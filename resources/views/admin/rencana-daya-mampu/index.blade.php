@@ -167,28 +167,47 @@
                                                                 <th class="border px-2 py-1">Off</th>
                                                                 <th class="border px-2 py-1">Durasi</th>
                                                                 <th class="border px-2 py-1">Keterangan</th>
+                                                                <th class="border px-2 py-1 action-column hidden">Aksi</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-                                                            @for ($j = 0; $j < 5; $j++)
+                                                        <tbody class="rencana-rows">
                                                             <tr class="transition-colors duration-150 hover:bg-blue-200">
                                                                 <td class="border px-2 py-1">
-                                                                    <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $j }}][beban]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[$j]['beban'] ?? '' }}" step="0.01">
-                                                                    <span class="data-display">{{ $rencanaRows[$j]['beban'] ?? '-' }}</span>
-                                                                </td>
-                                                                <td class="border px-2 py-1 bg-gray-50">{{ $onArr[$j] }}</td>
-                                                                <td class="border px-2 py-1 bg-gray-50">{{ $offArr[$j] }}</td>
-                                                                <td class="border px-2 py-1">
-                                                                    <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $j }}][durasi]" class="data-input hidden w-20 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[$j]['durasi'] ?? '' }}" step="0.01">
-                                                                    <span class="data-display">{{ $rencanaRows[$j]['durasi'] ?? '-' }}</span>
+                                                                    <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][0][beban]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[0]['beban'] ?? '' }}" step="0.01">
+                                                                    <span class="data-display">{{ $rencanaRows[0]['beban'] ?? '-' }}</span>
                                                                 </td>
                                                                 <td class="border px-2 py-1">
-                                                                    <input type="text" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $j }}][keterangan]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[$j]['keterangan'] ?? '' }}">
-                                                                    <span class="data-display">{{ $rencanaRows[$j]['keterangan'] ?? '-' }}</span>
+                                                                    <input type="time" name="rencana[{{ $machine->id }}][{{ $date }}][0][on]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[0]['on'] ?? '' }}">
+                                                                    <span class="data-display">{{ $rencanaRows[0]['on'] ?? '-' }}</span>
+                                                                </td>
+                                                                <td class="border px-2 py-1">
+                                                                    <input type="time" name="rencana[{{ $machine->id }}][{{ $date }}][0][off]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[0]['off'] ?? '' }}">
+                                                                    <span class="data-display">{{ $rencanaRows[0]['off'] ?? '-' }}</span>
+                                                                </td>
+                                                                <td class="border px-2 py-1">
+                                                                    <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][0][durasi]" class="data-input hidden w-20 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[0]['durasi'] ?? '' }}" step="0.01">
+                                                                    <span class="data-display">{{ $rencanaRows[0]['durasi'] ?? '-' }}</span>
+                                                                </td>
+                                                                <td class="border px-2 py-1">
+                                                                    <input type="text" name="rencana[{{ $machine->id }}][{{ $date }}][0][keterangan]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[0]['keterangan'] ?? '' }}">
+                                                                    <span class="data-display">{{ $rencanaRows[0]['keterangan'] ?? '-' }}</span>
+                                                                </td>
+                                                                <td class="border px-2 py-1 action-column hidden">
+                                                                    <button type="button" class="delete-row text-red-500 hover:text-red-700" onclick="deleteRow(this)">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </button>
                                                                 </td>
                                                             </tr>
-                                                            @endfor
                                                         </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td colspan="6" class="text-center py-2">
+                                                                    <button type="button" class="add-row-btn hidden bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600" onclick="addNewRow(this)">
+                                                                        <i class="fas fa-plus mr-1"></i> Tambah Baris
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        </tfoot>
                                                     </table>
                                                 </div>
                                             </td>
@@ -269,67 +288,153 @@
         const saveButton = document.getElementById('saveButton');
         const displays = document.querySelectorAll('.data-display');
         const inputs = document.querySelectorAll('.data-input');
+        const addRowBtns = document.querySelectorAll('.add-row-btn');
+        const actionColumns = document.querySelectorAll('.action-column');
+        const deleteButtons = document.querySelectorAll('.delete-row');
 
         if (isEditMode) {
             editButton.classList.add('bg-gray-500');
             editButton.classList.remove('bg-blue-500');
-            editButton.textContent = 'Batal';
+            editButton.innerHTML = '<i class="fas fa-times mr-2"></i>Batal';
             saveButton.classList.remove('hidden');
             displays.forEach(el => el.style.display = 'none');
             inputs.forEach(el => {
                 el.style.display = 'inline-block';
                 el.classList.remove('hidden');
             });
+            addRowBtns.forEach(btn => btn.classList.remove('hidden'));
+            actionColumns.forEach(col => col.classList.remove('hidden'));
+            deleteButtons.forEach(btn => btn.classList.remove('hidden'));
         } else {
             editButton.classList.remove('bg-gray-500');
             editButton.classList.add('bg-blue-500');
-            editButton.textContent = 'Mode Edit';
+            editButton.innerHTML = '<i class="fas fa-edit mr-2"></i>Mode Edit';
             saveButton.classList.add('hidden');
             displays.forEach(el => el.style.display = 'inline-block');
             inputs.forEach(el => {
                 el.style.display = 'none';
                 el.classList.add('hidden');
             });
+            addRowBtns.forEach(btn => btn.classList.add('hidden'));
+            actionColumns.forEach(col => col.classList.add('hidden'));
+            deleteButtons.forEach(btn => btn.classList.add('hidden'));
         }
     }
+
+    function addNewRow(button) {
+        const tbody = button.closest('table').querySelector('.rencana-rows');
+        const lastRow = tbody.lastElementChild;
+        const newRow = lastRow.cloneNode(true);
+        const inputs = newRow.querySelectorAll('input');
+        const rowIndex = tbody.children.length;
+        
+        // Update input names and clear values
+        inputs.forEach(input => {
+            const nameParts = input.name.split('[');
+            const newName = `${nameParts[0]}[${nameParts[1]}[${nameParts[2]}[${rowIndex}]${nameParts[3].substring(nameParts[3].indexOf(']'))}`;
+            input.name = newName;
+            input.value = '';
+        });
+
+        // Clear display spans
+        newRow.querySelectorAll('.data-display').forEach(span => {
+            span.textContent = '-';
+        });
+
+        tbody.appendChild(newRow);
+    }
+
+    function deleteRow(button) {
+        const tbody = button.closest('tbody');
+        if (tbody.children.length > 1) {
+            button.closest('tr').remove();
+            reindexRows(tbody);
+        } else {
+            Swal.fire({
+                title: 'Perhatian!',
+                text: 'Minimal harus ada satu baris data!',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+        }
+    }
+
+    function reindexRows(tbody) {
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach((row, index) => {
+            row.querySelectorAll('input').forEach(input => {
+                const nameParts = input.name.split('[');
+                input.name = `${nameParts[0]}[${nameParts[1]}[${nameParts[2]}[${index}]${nameParts[3].substring(nameParts[3].indexOf(']'))}`;
+            });
+        });
+    }
+
+    function calculateDuration(row) {
+        const onInput = row.querySelector('input[name*="[on]"]');
+        const offInput = row.querySelector('input[name*="[off]"]');
+        const durasiInput = row.querySelector('input[name*="[durasi]"]');
+        
+        if (onInput.value && offInput.value) {
+            const onTime = new Date(`2000-01-01 ${onInput.value}`);
+            let offTime = new Date(`2000-01-01 ${offInput.value}`);
+            
+            // Jika waktu off lebih kecil dari waktu on, berarti melewati tengah malam
+            if (offTime < onTime) {
+                offTime = new Date(`2000-01-02 ${offInput.value}`);
+            }
+            
+            const diffHours = (offTime - onTime) / (1000 * 60 * 60);
+            durasiInput.value = diffHours.toFixed(2);
+        }
+    }
+
+    // Attach event listeners for time inputs
+    document.addEventListener('input', function(e) {
+        if (e.target.matches('input[type="time"]')) {
+            calculateDuration(e.target.closest('tr'));
+        }
+    });
 
     function saveData() {
         const saveButton = document.getElementById('saveButton');
         saveButton.disabled = true;
-        saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+        saveButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
 
-        // Kumpulkan data input ke dalam satu objek
         const data = {
             rencana: {},
-            realisasi: {},
-            keterangan: {}
+            realisasi: {}
         };
 
-        document.querySelectorAll('input[name^="rencana["]').forEach(input => {
-            const matches = input.name.match(/rencana\[(\d+)\]\[(\d{4}-\d{2}-\d{2})\]/);
-            if (matches) {
-                const machineId = matches[1];
-                const date = matches[2];
-                if (!data.rencana[machineId]) data.rencana[machineId] = {};
-                data.rencana[machineId][date] = input.value;
-            }
+        // Collect rencana data
+        document.querySelectorAll('.rencana-rows').forEach(tbody => {
+            const machineId = tbody.closest('tr').dataset.machineId;
+            const date = tbody.closest('tr').dataset.date;
+            
+            if (!data.rencana[machineId]) data.rencana[machineId] = {};
+            if (!data.rencana[machineId][date]) data.rencana[machineId][date] = [];
+
+            tbody.querySelectorAll('tr').forEach((row, index) => {
+                const rowData = {
+                    beban: row.querySelector('input[name*="[beban]"]').value,
+                    durasi: row.querySelector('input[name*="[durasi]"]').value,
+                    keterangan: row.querySelector('input[name*="[keterangan]"]').value,
+                    on: row.querySelector('input[name*="[on]"]').value,
+                    off: row.querySelector('input[name*="[off]"]').value
+                };
+                data.rencana[machineId][date].push(rowData);
+            });
         });
+
+        // Collect realisasi data
         document.querySelectorAll('input[name^="realisasi["]').forEach(input => {
             const matches = input.name.match(/realisasi\[(\d+)\]\[(\d{4}-\d{2}-\d{2})\]/);
             if (matches) {
-                const machineId = matches[1];
-                const date = matches[2];
+                const [_, machineId, date] = matches;
                 if (!data.realisasi[machineId]) data.realisasi[machineId] = {};
-                data.realisasi[machineId][date] = input.value;
-            }
-        });
-        document.querySelectorAll('input[name^="keterangan["]').forEach(input => {
-            const matches = input.name.match(/keterangan\[(\d+)\]\[(\d{4}-\d{2}-\d{2})\]/);
-            if (matches) {
-                const machineId = matches[1];
-                const date = matches[2];
-                if (!data.keterangan[machineId]) data.keterangan[machineId] = {};
-                data.keterangan[machineId][date] = input.value;
+                if (!data.realisasi[machineId][date]) data.realisasi[machineId][date] = {};
+                
+                const fieldName = input.name.includes('[beban]') ? 'beban' : 'keterangan';
+                data.realisasi[machineId][date][fieldName] = input.value;
             }
         });
 
@@ -343,11 +448,11 @@
             body: JSON.stringify(data)
         })
         .then(response => response.json())
-        .then(data => {
+        .then(result => {
             Swal.fire({
-                title: data.title,
-                text: data.message,
-                icon: data.icon,
+                title: result.title,
+                text: result.message,
+                icon: result.icon,
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -356,21 +461,18 @@
             });
         })
         .catch(error => {
+            console.error('Error:', error);
             Swal.fire({
                 title: 'Error!',
                 text: 'Terjadi kesalahan saat menyimpan data',
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
-            console.error('Error:', error);
         })
         .finally(() => {
             saveButton.disabled = false;
-            saveButton.innerHTML = 'Simpan';
+            saveButton.innerHTML = '<i class="fas fa-save mr-2"></i>Simpan';
         });
     }
-
-    // Attach the save function to the button
-    document.getElementById('saveButton').addEventListener('click', saveData);
 </script>
 @endsection 

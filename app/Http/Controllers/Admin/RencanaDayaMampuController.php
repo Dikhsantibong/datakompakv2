@@ -103,12 +103,45 @@ class RencanaDayaMampuController extends Controller
             $dailyData = [];
             foreach ($data['rencana'] ?? [] as $machineId => $rencanaArr) {
                 foreach ($rencanaArr as $date => $rencanaRows) {
-                    $dailyData[$machineId][$date]['rencana'] = $rencanaRows; // array 5 baris
+                    if (!isset($dailyData[$machineId])) {
+                        $dailyData[$machineId] = [];
+                    }
+                    if (!isset($dailyData[$machineId][$date])) {
+                        $dailyData[$machineId][$date] = RencanaDayaMampu::getEmptyDayTemplate();
+                    }
+                    
+                    // Format data rencana
+                    $formattedRencana = [];
+                    foreach ($rencanaRows as $row) {
+                        if (!empty($row['beban']) || !empty($row['on']) || !empty($row['off'])) {
+                            $formattedRencana[] = [
+                                'beban' => $row['beban'] ?? '',
+                                'durasi' => $row['durasi'] ?? '',
+                                'keterangan' => $row['keterangan'] ?? '',
+                                'on' => $row['on'] ?? '',
+                                'off' => $row['off'] ?? ''
+                            ];
+                        }
+                    }
+                    
+                    if (!empty($formattedRencana)) {
+                        $dailyData[$machineId][$date]['rencana'] = $formattedRencana;
+                    }
                 }
             }
+
             foreach ($data['realisasi'] ?? [] as $machineId => $realisasiArr) {
                 foreach ($realisasiArr as $date => $realisasiValue) {
-                    $dailyData[$machineId][$date]['realisasi'] = $realisasiValue; // 1 baris
+                    if (!isset($dailyData[$machineId])) {
+                        $dailyData[$machineId] = [];
+                    }
+                    if (!isset($dailyData[$machineId][$date])) {
+                        $dailyData[$machineId][$date] = RencanaDayaMampu::getEmptyDayTemplate();
+                    }
+                    $dailyData[$machineId][$date]['realisasi'] = [
+                        'beban' => $realisasiValue['beban'] ?? '',
+                        'keterangan' => $realisasiValue['keterangan'] ?? ''
+                    ];
                 }
             }
 
@@ -153,17 +186,28 @@ class RencanaDayaMampuController extends Controller
             'tanggal' => $firstDate
         ]);
 
-        // Ambil data daily_data lama
+        // Merge data baru dengan data yang sudah ada
         $oldDailyData = $record->daily_data ?? [];
-
-        // Merge data baru ke data lama (hanya update tanggal yang diinput)
         foreach ($dates as $date => $values) {
-            $oldDailyData[$date] = array_merge($oldDailyData[$date] ?? [], $values);
+            if (!isset($oldDailyData[$date])) {
+                $oldDailyData[$date] = RencanaDayaMampu::getEmptyDayTemplate();
+            }
+            
+            // Merge rencana data
+            if (isset($values['rencana'])) {
+                $oldDailyData[$date]['rencana'] = $values['rencana'];
+            }
+            
+            // Merge realisasi data
+            if (isset($values['realisasi'])) {
+                $oldDailyData[$date]['realisasi'] = $values['realisasi'];
+            }
         }
 
         $record->daily_data = $oldDailyData;
         $record->unit_source = $unitSource;
         $record->save();
+
         return $record;
     }
 

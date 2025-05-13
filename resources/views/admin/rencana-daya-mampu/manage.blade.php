@@ -202,19 +202,23 @@
                                                         </thead>
                                                         <tbody>
                                                             @php
-                                                                $rencanaRows = $data['rencana'] ?? array_fill(0, 5, ['beban'=>'','durasi'=>'','keterangan'=>'']);
-                                                                $onArr = [0,12,15,19,21];
-                                                                $offArr = [8,13,18,21,0];
+                                                                $rencanaRows = $data['rencana'] ?? [];
                                                             @endphp
-                                                            @for ($j = 0; $j < 5; $j++)
+                                                            @forelse($rencanaRows as $row)
                                                             <tr class="transition-colors duration-150 hover:bg-blue-200">
-                                                                <td class="border px-2 py-1 text-center">{{ $rencanaRows[$j]['beban'] ?? '-' }}</td>
-                                                                <td class="border px-2 py-1 bg-gray-50 text-center">{{ $onArr[$j] }}</td>
-                                                                <td class="border px-2 py-1 bg-gray-50 text-center">{{ $offArr[$j] }}</td>
-                                                                <td class="border px-2 py-1 text-center">{{ $rencanaRows[$j]['durasi'] ?? '-' }}</td>
-                                                                <td class="border px-2 py-1 text-center">{{ $rencanaRows[$j]['keterangan'] ?? '-' }}</td>
+                                                                <td class="border px-2 py-1 text-center">{{ $row['beban'] ?? '-' }}</td>
+                                                                <td class="border px-2 py-1 text-center">{{ $row['on'] ?? '-' }}</td>
+                                                                <td class="border px-2 py-1 text-center">{{ $row['off'] ?? '-' }}</td>
+                                                                <td class="border px-2 py-1 text-center">{{ $row['durasi'] ?? '-' }}</td>
+                                                                <td class="border px-2 py-1 text-center">{{ $row['keterangan'] ?? '-' }}</td>
                                                             </tr>
-                                                            @endfor
+                                                            @empty
+                                                            <tr class="transition-colors duration-150">
+                                                                <td colspan="5" class="border px-2 py-2 text-center text-gray-500">
+                                                                    <i class="fas fa-info-circle mr-1"></i> Belum ada data
+                                                                </td>
+                                                            </tr>
+                                                            @endforelse
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -231,11 +235,27 @@
                                                         </thead>
                                                         <tbody>
                                                             @php
-                                                                $realisasi = $data['realisasi'] ?? ['beban'=>'','keterangan'=>''];
+                                                                $realisasi = $data['realisasi'] ?? ['beban' => '', 'keterangan' => ''];
                                                             @endphp
                                                             <tr class="transition-colors duration-150 hover:bg-green-200">
-                                                                <td class="border px-2 py-1 text-center">{{ $realisasi['beban'] ?? '-' }}</td>
-                                                                <td class="border px-2 py-1 text-center">{{ $realisasi['keterangan'] ?? '-' }}</td>
+                                                                <td class="border px-2 py-1 text-center">
+                                                                    @if(!empty($realisasi['beban']))
+                                                                        <span class="px-2 py-1 bg-green-100 rounded-full text-green-800">
+                                                                            {{ $realisasi['beban'] }}
+                                                                        </span>
+                                                                    @else
+                                                                        <span class="text-gray-400">-</span>
+                                                                    @endif
+                                                                </td>
+                                                                <td class="border px-2 py-1 text-center">
+                                                                    @if(!empty($realisasi['keterangan']))
+                                                                        <span class="text-gray-600">
+                                                                            {{ $realisasi['keterangan'] }}
+                                                                        </span>
+                                                                    @else
+                                                                        <span class="text-gray-400">-</span>
+                                                                    @endif
+                                                                </td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -278,8 +298,34 @@ function exportData(format) {
     window.location.href = `{{ route('admin.rencana-daya-mampu.export') }}?format=${format}&month=${month}&year=${year}&unit_source=${unitSource}`;
 }
 
+function formatTime(timeString) {
+    if (!timeString) return '-';
+    return timeString.substring(0, 5); // Format HH:mm
+}
+
+function formatDurasi(durasi) {
+    if (!durasi) return '-';
+    return parseFloat(durasi).toFixed(2);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Add any additional JavaScript functionality here
+    // Format waktu yang ditampilkan
+    document.querySelectorAll('td[data-time]').forEach(td => {
+        td.textContent = formatTime(td.dataset.time);
+    });
+
+    // Format durasi yang ditampilkan
+    document.querySelectorAll('td[data-durasi]').forEach(td => {
+        td.textContent = formatDurasi(td.dataset.durasi);
+    });
+
+    // Tambahkan tooltip untuk keterangan yang panjang
+    document.querySelectorAll('td[data-keterangan]').forEach(td => {
+        if (td.textContent.length > 20) {
+            td.title = td.textContent;
+            td.textContent = td.textContent.substring(0, 20) + '...';
+        }
+    });
 });
 </script>
 @endsection 

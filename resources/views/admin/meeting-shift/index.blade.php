@@ -543,15 +543,40 @@ function addResource() {
 
 function addK3L() {
     const container = document.getElementById('k3l-container');
-    const template = document.querySelector('.k3l-item').cloneNode(true);
+    const newIndex = k3lCount;
     
-    // Update input names
-    template.querySelectorAll('input, select, textarea').forEach(input => {
-        input.name = input.name.replace('[0]', `[${k3lCount}]`);
-        input.value = '';
-    });
+    const template = `
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-4 k3l-item">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Tipe</label>
+                <select name="k3l[${newIndex}][type]" required
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm rounded-md">
+                    <option value="">Pilih Tipe</option>
+                    <option value="unsafe_action">Unsafe Action</option>
+                    <option value="unsafe_condition">Unsafe Condition</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Uraian</label>
+                <textarea name="k3l[${newIndex}][uraian]" required rows="3"
+                    class="p-2 mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
+                    placeholder="Masukkan uraian..."></textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Saran</label>
+                <textarea name="k3l[${newIndex}][saran]" required rows="3"
+                    class="p-2 mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
+                    placeholder="Masukkan saran..."></textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Eviden</label>
+                <input type="file" name="k3l[${newIndex}][eviden]" accept=".jpeg,.jpg,.png,.gif,.doc,.docx,.pdf"
+                    class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300">
+            </div>
+        </div>
+    `;
     
-    container.appendChild(template);
+    container.insertAdjacentHTML('beforeend', template);
     k3lCount++;
 }
 
@@ -632,11 +657,11 @@ document.querySelectorAll('input[name$="[eviden]"]').forEach(input => {
         }
 
         if (file) {
-            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf'];
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
             if (!validTypes.includes(file.type)) {
                 const error = document.createElement('p');
                 error.className = 'text-red-500 text-xs mt-1 file-error';
-                error.textContent = 'File harus berupa gambar (JPG, PNG, GIF) atau dokumen (DOC, DOCX, PDF)';
+                error.textContent = 'File harus berupa gambar (JPG, PNG, atau GIF)';
                 this.parentElement.appendChild(error);
                 this.value = ''; // Clear the file input
             } else if (file.size > 2 * 1024 * 1024) { // 2MB

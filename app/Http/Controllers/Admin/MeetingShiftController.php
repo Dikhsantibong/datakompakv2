@@ -561,7 +561,7 @@ class MeetingShiftController extends Controller
             'creator'
         ])->findOrFail($id);
 
-        $machines = Machine::select('id', 'name')->orderBy('name')->get();
+        $machines = Machine::select('id', 'name')->orderBy('name')->take(2)->get();
 
         return view('admin.meeting-shift.edit', compact('meetingShift', 'machines'));
     }

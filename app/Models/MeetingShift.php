@@ -70,4 +70,9 @@ class MeetingShift extends Model
     {
         return $this->hasMany(MeetingShiftAttendance::class);
     }
+    public function getConnectionName()
+    
+    {
+        return session('unit', 'mysql');
+    }
 }

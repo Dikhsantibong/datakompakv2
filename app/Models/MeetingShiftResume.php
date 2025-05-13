@@ -35,4 +35,10 @@ class MeetingShiftResume extends Model
     {
         return $this->belongsTo(MeetingShift::class);
     }
+
+    public function getConnectionName()
+    
+    {
+        return session('unit', 'mysql');
+    }
 } 

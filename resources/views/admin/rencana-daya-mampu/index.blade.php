@@ -157,9 +157,7 @@
                                                 $date = now()->format('Y-m-') . sprintf('%02d', $i);
                                                 $data = $machine->rencanaDayaMampu->first()?->getDailyValue($date) ?? [];
                                                 $rencanaRows = $data['rencana'] ?? [];
-                                                $realisasi = $data['realisasi'] ?? ['beban'=>'','keterangan'=>''];
-                                                $onArr = [0,12,15,19,21];
-                                                $offArr = [8,13,18,21,0];
+                                                $realisasiRows = $data['realisasi'] ?? [];
                                             @endphp
                                             <td class="px-2 py-2 align-top border-r min-w-[180px]">
                                                 <div class="border rounded-lg bg-blue-50 shadow-sm p-2">
@@ -176,26 +174,27 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody class="rencana-rows" data-date="{{ $date }}">
+                                                            @foreach($rencanaRows as $index => $row)
                                                             <tr class="transition-colors duration-150 hover:bg-blue-200">
                                                                 <td class="border px-2 py-1">
-                                                                    <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][0][beban]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[0]['beban'] ?? '' }}" step="0.01">
-                                                                    <span class="data-display">{{ $rencanaRows[0]['beban'] ?? '-' }}</span>
+                                                                    <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $index }}][beban]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $row['beban'] ?? '' }}" step="0.01">
+                                                                    <span class="data-display">{{ $row['beban'] ?? '-' }}</span>
                                                                 </td>
                                                                 <td class="border px-2 py-1">
-                                                                    <input type="time" name="rencana[{{ $machine->id }}][{{ $date }}][0][on]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[0]['on'] ?? '' }}">
-                                                                    <span class="data-display">{{ $rencanaRows[0]['on'] ?? '-' }}</span>
+                                                                    <input type="time" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $index }}][on]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $row['on'] ?? '' }}">
+                                                                    <span class="data-display">{{ $row['on'] ?? '-' }}</span>
                                                                 </td>
                                                                 <td class="border px-2 py-1">
-                                                                    <input type="time" name="rencana[{{ $machine->id }}][{{ $date }}][0][off]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[0]['off'] ?? '' }}">
-                                                                    <span class="data-display">{{ $rencanaRows[0]['off'] ?? '-' }}</span>
+                                                                    <input type="time" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $index }}][off]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $row['off'] ?? '' }}">
+                                                                    <span class="data-display">{{ $row['off'] ?? '-' }}</span>
                                                                 </td>
                                                                 <td class="border px-2 py-1">
-                                                                    <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][0][durasi]" class="data-input hidden w-20 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[0]['durasi'] ?? '' }}" step="0.01">
-                                                                    <span class="data-display">{{ $rencanaRows[0]['durasi'] ?? '-' }}</span>
+                                                                    <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $index }}][durasi]" class="data-input hidden w-20 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $row['durasi'] ?? '' }}" step="0.01">
+                                                                    <span class="data-display">{{ $row['durasi'] ?? '-' }}</span>
                                                                 </td>
                                                                 <td class="border px-2 py-1">
-                                                                    <input type="text" name="rencana[{{ $machine->id }}][{{ $date }}][0][keterangan]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[0]['keterangan'] ?? '' }}">
-                                                                    <span class="data-display">{{ $rencanaRows[0]['keterangan'] ?? '-' }}</span>
+                                                                    <input type="text" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $index }}][keterangan]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $row['keterangan'] ?? '' }}">
+                                                                    <span class="data-display">{{ $row['keterangan'] ?? '-' }}</span>
                                                                 </td>
                                                                 <td class="border px-2 py-1 action-column hidden">
                                                                     <button type="button" class="delete-row text-red-500 hover:text-red-700" onclick="deleteRow(this)">
@@ -203,11 +202,12 @@
                                                                     </button>
                                                                 </td>
                                                             </tr>
+                                                            @endforeach
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
                                                                 <td colspan="6" class="text-center py-2">
-                                                                    <button type="button" class="add-row-btn hidden bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600" onclick="addNewRow(this)">
+                                                                    <button type="button" class="add-row-btn hidden bg-blue-500 text-white px-3 py-2 rounded text-xs hover:bg-blue-600" onclick="addNewRowBoth(this)">
                                                                         <i class="fas fa-plus mr-1"></i> Tambah Baris
                                                                     </button>
                                                                 </td>
@@ -224,19 +224,45 @@
                                                             <tr class="bg-green-100 text-green-900 font-semibold">
                                                                 <th class="border px-2 py-1">Beban</th>
                                                                 <th class="border px-2 py-1">Keterangan</th>
+                                                                <th class="border px-2 py-1 action-column hidden">Aksi</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-                                                            <tr class="transition-colors duration-150 hover:bg-green-200">
-                                                                <td class="border px-2 py-1">
-                                                                    <input type="number" name="realisasi[{{ $machine->id }}][{{ $date }}][beban]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-green-400 focus:border-green-500 transition-all duration-150" value="{{ $realisasi['beban'] ?? '' }}" step="0.01">
-                                                                    <span class="data-display">{{ $realisasi['beban'] ?? '-' }}</span>
-                                                                </td>
-                                                                <td class="border px-2 py-1">
-                                                                    <input type="text" name="realisasi[{{ $machine->id }}][{{ $date }}][keterangan]" class="data-input hidden w-32 text-center border rounded focus:ring-2 focus:ring-green-400 focus:border-green-500 transition-all duration-150" value="{{ $realisasi['keterangan'] ?? '' }}">
-                                                                    <span class="data-display">{{ $realisasi['keterangan'] ?? '-' }}</span>
-                                                                </td>
-                                                            </tr>
+                                                        <tbody class="realisasi-rows" data-date="{{ $date }}">
+                                                            @if(is_array($realisasiRows))
+                                                                @foreach($realisasiRows as $index => $row)
+                                                                <tr class="transition-colors duration-150 hover:bg-green-200">
+                                                                    <td class="border px-2 py-1">
+                                                                        <input type="number" name="realisasi[{{ $machine->id }}][{{ $date }}][{{ $index }}][beban]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-green-400 focus:border-green-500 transition-all duration-150" value="{{ $row['beban'] ?? '' }}" step="0.01">
+                                                                        <span class="data-display">{{ $row['beban'] ?? '-' }}</span>
+                                                                    </td>
+                                                                    <td class="border px-2 py-1">
+                                                                        <input type="text" name="realisasi[{{ $machine->id }}][{{ $date }}][{{ $index }}][keterangan]" class="data-input hidden w-32 text-center border rounded focus:ring-2 focus:ring-green-400 focus:border-green-500 transition-all duration-150" value="{{ $row['keterangan'] ?? '' }}">
+                                                                        <span class="data-display">{{ $row['keterangan'] ?? '-' }}</span>
+                                                                    </td>
+                                                                    <td class="border px-2 py-1 action-column hidden">
+                                                                        <button type="button" class="delete-row text-red-500 hover:text-red-700" onclick="deleteRow(this)">
+                                                                            <i class="fas fa-trash"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                @endforeach
+                                                            @else
+                                                                <tr class="transition-colors duration-150 hover:bg-green-200">
+                                                                    <td class="border px-2 py-1">
+                                                                        <input type="number" name="realisasi[{{ $machine->id }}][{{ $date }}][0][beban]" class="data-input hidden w-28 text-center border rounded focus:ring-2 focus:ring-green-400 focus:border-green-500 transition-all duration-150" value="{{ $realisasiRows['beban'] ?? '' }}" step="0.01">
+                                                                        <span class="data-display">{{ $realisasiRows['beban'] ?? '-' }}</span>
+                                                                    </td>
+                                                                    <td class="border px-2 py-1">
+                                                                        <input type="text" name="realisasi[{{ $machine->id }}][{{ $date }}][0][keterangan]" class="data-input hidden w-32 text-center border rounded focus:ring-2 focus:ring-green-400 focus:border-green-500 transition-all duration-150" value="{{ $realisasiRows['keterangan'] ?? '' }}">
+                                                                        <span class="data-display">{{ $realisasiRows['keterangan'] ?? '-' }}</span>
+                                                                    </td>
+                                                                    <td class="border px-2 py-1 action-column hidden">
+                                                                        <button type="button" class="delete-row text-red-500 hover:text-red-700" onclick="deleteRow(this)">
+                                                                            <i class="fas fa-trash"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -326,34 +352,74 @@
         }
     }
 
-    function addNewRow(button) {
-        const tbody = button.closest('table').querySelector('.rencana-rows');
-        const lastRow = tbody.lastElementChild;
-        const newRow = lastRow.cloneNode(true);
-        const inputs = newRow.querySelectorAll('input');
-        const rowIndex = tbody.children.length;
+    function addNewRowBoth(button) {
+        const mainRow = button.closest('tr[data-machine-id]');
+        const rencanaTable = mainRow.querySelector('.rencana-rows');
+        const realisasiTable = mainRow.querySelector('.realisasi-rows');
         
-        // Update input names and clear values
-        inputs.forEach(input => {
+        // Add row to Rencana
+        const lastRencanaRow = rencanaTable.lastElementChild;
+        const newRencanaRow = lastRencanaRow.cloneNode(true);
+        const rencanaInputs = newRencanaRow.querySelectorAll('input');
+        const rencanaRowIndex = rencanaTable.children.length;
+        
+        rencanaInputs.forEach(input => {
             const nameParts = input.name.split('[');
-            const newName = `${nameParts[0]}[${nameParts[1]}[${nameParts[2]}[${rowIndex}]${nameParts[3].substring(nameParts[3].indexOf(']'))}`;
+            const newName = `${nameParts[0]}[${nameParts[1]}[${nameParts[2]}[${rencanaRowIndex}]${nameParts[3].substring(nameParts[3].indexOf(']'))}`;
             input.name = newName;
             input.value = '';
         });
-
-        // Clear display spans
-        newRow.querySelectorAll('.data-display').forEach(span => {
+        
+        newRencanaRow.querySelectorAll('.data-display').forEach(span => {
             span.textContent = '-';
         });
-
-        tbody.appendChild(newRow);
+        
+        rencanaTable.appendChild(newRencanaRow);
+        
+        // Add row to Realisasi
+        const lastRealisasiRow = realisasiTable.lastElementChild;
+        const newRealisasiRow = lastRealisasiRow.cloneNode(true);
+        const realisasiInputs = newRealisasiRow.querySelectorAll('input');
+        const realisasiRowIndex = realisasiTable.children.length;
+        
+        realisasiInputs.forEach(input => {
+            const nameParts = input.name.split('[');
+            const newName = `${nameParts[0]}[${nameParts[1]}[${nameParts[2]}[${realisasiRowIndex}]${nameParts[3].substring(nameParts[3].indexOf(']'))}`;
+            input.name = newName;
+            input.value = '';
+        });
+        
+        newRealisasiRow.querySelectorAll('.data-display').forEach(span => {
+            span.textContent = '-';
+        });
+        
+        realisasiTable.appendChild(newRealisasiRow);
     }
 
     function deleteRow(button) {
-        const tbody = button.closest('tbody');
-        if (tbody.children.length > 1) {
-            button.closest('tr').remove();
-            reindexRows(tbody);
+        const row = button.closest('tr');
+        const tbody = row.closest('tbody');
+        const isRencana = tbody.classList.contains('rencana-rows');
+        const mainRow = button.closest('tr[data-machine-id]');
+        
+        const rencanaRows = mainRow.querySelector('.rencana-rows').children;
+        const realisasiRows = mainRow.querySelector('.realisasi-rows').children;
+        
+        if (rencanaRows.length > 1 && realisasiRows.length > 1) {
+            const rencanaIndex = Array.from(rencanaRows).indexOf(row);
+            const realisasiIndex = Array.from(realisasiRows).indexOf(row);
+            
+            if (isRencana) {
+                rencanaRows[rencanaIndex].remove();
+                realisasiRows[rencanaIndex]?.remove();
+                reindexRows(mainRow.querySelector('.rencana-rows'));
+                reindexRealisasiRows(mainRow.querySelector('.realisasi-rows'));
+            } else {
+                realisasiRows[realisasiIndex].remove();
+                rencanaRows[realisasiIndex]?.remove();
+                reindexRows(mainRow.querySelector('.rencana-rows'));
+                reindexRealisasiRows(mainRow.querySelector('.realisasi-rows'));
+            }
         } else {
             Swal.fire({
                 title: 'Perhatian!',
@@ -400,6 +466,16 @@
         }
     });
 
+    function reindexRealisasiRows(tbody) {
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach((row, index) => {
+            row.querySelectorAll('input').forEach(input => {
+                const nameParts = input.name.split('[');
+                input.name = `${nameParts[0]}[${nameParts[1]}[${nameParts[2]}[${index}]${nameParts[3].substring(nameParts[3].indexOf(']'))}`;
+            });
+        });
+    }
+
     function saveData() {
         const saveButton = document.getElementById('saveButton');
         saveButton.disabled = true;
@@ -410,119 +486,128 @@
             realisasi: {}
         };
 
-        // Collect rencana data
-        document.querySelectorAll('.rencana-rows').forEach(tbody => {
-            const machineId = tbody.closest('tr[data-machine-id]')?.dataset.machineId;
-            const date = tbody.dataset.date;
-            
-            if (!machineId || !date) {
-                console.error('Missing machine ID or date:', { machineId, date });
-                return;
-            }
+        try {
+            // Collect rencana data
+            document.querySelectorAll('tr[data-machine-id]').forEach(tr => {
+                const machineId = tr.dataset.machineId;
+                const date = tr.querySelector('.rencana-rows')?.dataset.date;
+                
+                if (!machineId || !date) {
+                    console.error('Missing machine ID or date:', { machineId, date });
+                    return;
+                }
 
-            if (!data.rencana[machineId]) {
-                data.rencana[machineId] = {};
-            }
-            if (!data.rencana[machineId][date]) {
-                data.rencana[machineId][date] = [];
-            }
+                if (!data.rencana[machineId]) {
+                    data.rencana[machineId] = {};
+                }
+                if (!data.rencana[machineId][date]) {
+                    data.rencana[machineId][date] = [];
+                }
 
-            tbody.querySelectorAll('tr').forEach(row => {
-                const beban = row.querySelector('input[name*="[beban]"]')?.value?.trim() || '';
-                const durasi = row.querySelector('input[name*="[durasi]"]')?.value?.trim() || '';
-                const keterangan = row.querySelector('input[name*="[keterangan]"]')?.value?.trim() || '';
-                const on = row.querySelector('input[name*="[on]"]')?.value?.trim() || '';
-                const off = row.querySelector('input[name*="[off]"]')?.value?.trim() || '';
+                tr.querySelectorAll('.rencana-rows tr').forEach((row, index) => {
+                    const beban = row.querySelector('input[name*="[beban]"]')?.value?.trim() || '';
+                    const durasi = row.querySelector('input[name*="[durasi]"]')?.value?.trim() || '';
+                    const keterangan = row.querySelector('input[name*="[keterangan]"]')?.value?.trim() || '';
+                    const on = row.querySelector('input[name*="[on]"]')?.value?.trim() || '';
+                    const off = row.querySelector('input[name*="[off]"]')?.value?.trim() || '';
 
-                // Hanya tambahkan jika ada data
-                if (beban || durasi || keterangan || on || off) {
                     data.rencana[machineId][date].push({
                         beban, durasi, keterangan, on, off
                     });
-                }
+                });
             });
-        });
 
-        // Collect realisasi data
-        document.querySelectorAll('tr[data-machine-id]').forEach(tr => {
-            const machineId = tr.dataset.machineId;
-            const date = tr.querySelector('.rencana-rows')?.dataset.date;
-            
-            if (!machineId || !date) {
-                console.error('Missing machine ID or date for realisasi:', { machineId, date });
-                return;
-            }
+            // Collect realisasi data
+            document.querySelectorAll('tr[data-machine-id]').forEach(tr => {
+                const machineId = tr.dataset.machineId;
+                const date = tr.querySelector('.realisasi-rows')?.dataset.date;
+                
+                if (!machineId || !date) {
+                    console.error('Missing machine ID or date for realisasi:', { machineId, date });
+                    return;
+                }
 
-            const realisasiBeban = tr.querySelector('input[name*="realisasi"][name*="[beban]"]')?.value?.trim();
-            const realisasiKeterangan = tr.querySelector('input[name*="realisasi"][name*="[keterangan]"]')?.value?.trim();
-
-            if (realisasiBeban || realisasiKeterangan) {
                 if (!data.realisasi[machineId]) {
                     data.realisasi[machineId] = {};
                 }
-                data.realisasi[machineId][date] = {
-                    beban: realisasiBeban || '',
-                    keterangan: realisasiKeterangan || ''
-                };
-            }
-        });
-
-        // Validasi data sebelum dikirim
-        if (Object.keys(data.rencana).length === 0 && Object.keys(data.realisasi).length === 0) {
-            Swal.fire({
-                title: 'Peringatan',
-                text: 'Tidak ada data yang akan disimpan',
-                icon: 'warning',
-                confirmButtonText: 'OK'
-            });
-            saveButton.disabled = false;
-            saveButton.innerHTML = '<i class="fas fa-save mr-2"></i>Simpan';
-            return;
-        }
-
-        // Log data before sending
-        console.log('Sending data:', data);
-
-        fetch('{{ route("admin.rencana-daya-mampu.update") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(result => {
-            Swal.fire({
-                title: result.title,
-                text: result.message,
-                icon: result.icon,
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.reload();
+                if (!data.realisasi[machineId][date]) {
+                    data.realisasi[machineId][date] = [];
                 }
+
+                tr.querySelectorAll('.realisasi-rows tr').forEach((row, index) => {
+                    const beban = row.querySelector('input[name*="realisasi"][name*="[beban]"]')?.value?.trim() || '';
+                    const keterangan = row.querySelector('input[name*="realisasi"][name*="[keterangan]"]')?.value?.trim() || '';
+
+                    data.realisasi[machineId][date].push({
+                        beban, keterangan
+                    });
+                });
             });
-        })
-        .catch(error => {
-            console.error('Error:', error);
+
+            // Log data before sending
+            console.log('Data to be sent:', data);
+
+            // Validasi data sebelum dikirim
+            if (Object.keys(data.rencana).length === 0 && Object.keys(data.realisasi).length === 0) {
+                throw new Error('Tidak ada data yang akan disimpan');
+            }
+
+            // Send data to server
+            fetch('{{ route("admin.rencana-daya-mampu.update") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(err.message || 'Terjadi kesalahan pada server');
+                    });
+                }
+                return response.json();
+            })
+            .then(result => {
+                Swal.fire({
+                    title: result.title || 'Berhasil!',
+                    text: result.message || 'Data berhasil disimpan',
+                    icon: result.icon || 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error details:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: error.message || 'Terjadi kesalahan saat menyimpan data',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            })
+            .finally(() => {
+                saveButton.disabled = false;
+                saveButton.innerHTML = '<i class="fas fa-save mr-2"></i>Simpan';
+            });
+
+        } catch (error) {
+            console.error('Error in data collection:', error);
             Swal.fire({
                 title: 'Error!',
-                text: 'Terjadi kesalahan saat menyimpan data: ' + error.message,
+                text: error.message || 'Terjadi kesalahan saat mengumpulkan data',
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
-        })
-        .finally(() => {
             saveButton.disabled = false;
             saveButton.innerHTML = '<i class="fas fa-save mr-2"></i>Simpan';
-        });
+        }
     }
 </script>
 @endsection 

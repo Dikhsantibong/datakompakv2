@@ -159,8 +159,8 @@ class RencanaDayaMampuController extends Controller
                                 'on' => $row['on'] ?? '',
                                 'off' => $row['off'] ?? ''
                             ];
-                        }
-                    }
+                }
+            }
                     
                     if (!empty($formattedRencana)) {
                         $dailyData[$machineId][$date]['rencana'] = $formattedRencana;
@@ -226,11 +226,11 @@ class RencanaDayaMampuController extends Controller
                     $record->save();
 
                     // Sync data
-                    if (!$isMainDatabase) {
-                        $this->syncToMainDatabase($record);
-                    }
-                    if ($isMainDatabase) {
-                        $this->syncToLocalDatabase($record);
+                if (!$isMainDatabase) {
+                    $this->syncToMainDatabase($record);
+                }
+                if ($isMainDatabase) {
+                    $this->syncToLocalDatabase($record);
                     }
                 }
             }

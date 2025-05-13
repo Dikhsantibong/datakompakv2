@@ -95,14 +95,43 @@ class RencanaDayaMampuController extends Controller
         try {
             DB::beginTransaction();
 
+            // Tambahkan logging untuk debug
+            Log::info('Received data:', ['data' => $data]);
+
             $currentDate = now()->format('Y-m-d');
             $currentSession = session('unit');
             $isMainDatabase = $currentSession === 'mysql';
 
+            // Validasi data input
+            if (empty($data['rencana']) && empty($data['realisasi'])) {
+                throw new \Exception('Data rencana atau realisasi harus diisi');
+            }
+
             // Kumpulkan data harian dari request
             $dailyData = [];
+            
+            // Process rencana data
             foreach ($data['rencana'] ?? [] as $machineId => $rencanaArr) {
+                // Convert machineId to integer if it's a valid numeric string
+                $machineId = is_numeric($machineId) ? intval($machineId) : null;
+                
+                if ($machineId === null) {
+                    Log::error('Invalid machine_id received:', ['machine_id' => $machineId]);
+                    throw new \Exception('ID mesin tidak valid: ' . $machineId);
+                }
+
+                // Verify machine exists
+                $machine = Machine::find($machineId);
+                if (!$machine) {
+                    throw new \Exception('Mesin dengan ID ' . $machineId . ' tidak ditemukan');
+                }
+
                 foreach ($rencanaArr as $date => $rencanaRows) {
+                    // Validasi format tanggal
+                    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+                        throw new \Exception('Format tanggal tidak valid: ' . $date);
+                    }
+
                     if (!isset($dailyData[$machineId])) {
                         $dailyData[$machineId] = [];
                     }
@@ -113,7 +142,16 @@ class RencanaDayaMampuController extends Controller
                     // Format data rencana
                     $formattedRencana = [];
                     foreach ($rencanaRows as $row) {
+                        // Validasi data row
                         if (!empty($row['beban']) || !empty($row['on']) || !empty($row['off'])) {
+                            // Validasi format waktu
+                            if (!empty($row['on']) && !preg_match('/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', $row['on'])) {
+                                throw new \Exception('Format waktu ON tidak valid');
+                            }
+                            if (!empty($row['off']) && !preg_match('/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', $row['off'])) {
+                                throw new \Exception('Format waktu OFF tidak valid');
+                            }
+
                             $formattedRencana[] = [
                                 'beban' => $row['beban'] ?? '',
                                 'durasi' => $row['durasi'] ?? '',
@@ -130,8 +168,27 @@ class RencanaDayaMampuController extends Controller
                 }
             }
 
+            // Process realisasi data dengan validasi yang sama
             foreach ($data['realisasi'] ?? [] as $machineId => $realisasiArr) {
+                $machineId = is_numeric($machineId) ? intval($machineId) : null;
+                
+                if ($machineId === null) {
+                    Log::error('Invalid machine_id received in realisasi:', ['machine_id' => $machineId]);
+                    throw new \Exception('ID mesin tidak valid pada realisasi: ' . $machineId);
+                }
+
+                // Verify machine exists
+                $machine = Machine::find($machineId);
+                if (!$machine) {
+                    throw new \Exception('Mesin dengan ID ' . $machineId . ' tidak ditemukan pada realisasi');
+                }
+
                 foreach ($realisasiArr as $date => $realisasiValue) {
+                    // Validasi format tanggal
+                    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+                        throw new \Exception('Format tanggal tidak valid pada realisasi: ' . $date);
+                    }
+
                     if (!isset($dailyData[$machineId])) {
                         $dailyData[$machineId] = [];
                     }
@@ -145,15 +202,36 @@ class RencanaDayaMampuController extends Controller
                 }
             }
 
+            // Log processed data
+            Log::info('Processed daily data:', ['dailyData' => $dailyData]);
+
             // Process each machine's data
             foreach ($dailyData as $machineId => $dates) {
-                $record = $this->saveRecord($machineId, $dates, $request, $currentSession);
+                foreach ($dates as $date => $values) {
+                    $record = RencanaDayaMampu::firstOrNew([
+                        'machine_id' => $machineId,
+                        'tanggal' => $date
+                    ]);
 
-                if (!$isMainDatabase) {
-                    $this->syncToMainDatabase($record);
-                }
-                if ($isMainDatabase) {
-                    $this->syncToLocalDatabase($record);
+                    // Merge dengan data yang sudah ada
+                    $oldDailyData = $record->daily_data ?? [];
+                    if (!isset($oldDailyData[$date])) {
+                        $oldDailyData[$date] = RencanaDayaMampu::getEmptyDayTemplate();
+                    }
+                    
+                    // Update data
+                    $oldDailyData[$date] = array_merge($oldDailyData[$date], $values);
+                    $record->daily_data = $oldDailyData;
+                    $record->unit_source = $currentSession;
+                    $record->save();
+
+                    // Sync data
+                    if (!$isMainDatabase) {
+                        $this->syncToMainDatabase($record);
+                    }
+                    if ($isMainDatabase) {
+                        $this->syncToLocalDatabase($record);
+                    }
                 }
             }
 
@@ -169,6 +247,7 @@ class RencanaDayaMampuController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('RencanaDayaMampu update error: ' . $e->getMessage());
+            Log::error('Error details:', ['exception' => $e]);
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menyimpan data: ' . $e->getMessage(),
@@ -176,39 +255,6 @@ class RencanaDayaMampuController extends Controller
                 'title' => 'Error!'
             ], 500);
         }
-    }
-
-    private function saveRecord($machineId, $dates, $request, $unitSource)
-    {
-        $firstDate = array_key_first($dates);
-        $record = RencanaDayaMampu::firstOrNew([
-            'machine_id' => $machineId,
-            'tanggal' => $firstDate
-        ]);
-
-        // Merge data baru dengan data yang sudah ada
-        $oldDailyData = $record->daily_data ?? [];
-        foreach ($dates as $date => $values) {
-            if (!isset($oldDailyData[$date])) {
-                $oldDailyData[$date] = RencanaDayaMampu::getEmptyDayTemplate();
-            }
-            
-            // Merge rencana data
-            if (isset($values['rencana'])) {
-                $oldDailyData[$date]['rencana'] = $values['rencana'];
-            }
-            
-            // Merge realisasi data
-            if (isset($values['realisasi'])) {
-                $oldDailyData[$date]['realisasi'] = $values['realisasi'];
-            }
-        }
-
-        $record->daily_data = $oldDailyData;
-        $record->unit_source = $unitSource;
-        $record->save();
-
-        return $record;
     }
 
     private function syncToMainDatabase($record)
@@ -221,11 +267,9 @@ class RencanaDayaMampuController extends Controller
             ]);
 
             // Copy data
-            $mainRecord->rencana = $record->rencana;
-            $mainRecord->realisasi = $record->realisasi;
+            $mainRecord->daily_data = $record->daily_data;
             $mainRecord->daya_pjbtl_silm = $record->daya_pjbtl_silm;
             $mainRecord->dmp_existing = $record->dmp_existing;
-            $mainRecord->daily_data = $record->daily_data;
             $mainRecord->unit_source = $record->unit_source;
             
             $mainRecord->save();
@@ -249,11 +293,9 @@ class RencanaDayaMampuController extends Controller
                 ]);
 
                 // Copy data
-                $localRecord->rencana = $record->rencana;
-                $localRecord->realisasi = $record->realisasi;
+                $localRecord->daily_data = $record->daily_data;
                 $localRecord->daya_pjbtl_silm = $record->daya_pjbtl_silm;
                 $localRecord->dmp_existing = $record->dmp_existing;
-                $localRecord->daily_data = $record->daily_data;
                 $localRecord->unit_source = $powerPlant->unit_source;
                 
                 $localRecord->save();

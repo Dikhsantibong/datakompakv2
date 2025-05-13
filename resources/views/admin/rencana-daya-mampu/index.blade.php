@@ -138,8 +138,13 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @php $no = 1; @endphp
                             @foreach($powerPlants as $plant)
-                                @foreach($plant->machines->take(3) as $machine)
-                                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                @foreach($plant->machines as $machine)
+                                    @php
+                                        $currentDate = now()->format('Y-m-d');
+                                    @endphp
+                                    <tr class="hover:bg-gray-50 transition-colors duration-150" 
+                                        data-machine-id="{{ $machine->id }}" 
+                                        data-date="{{ $currentDate }}">
                                         <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white border-r-2 text-center">{{ $no++ }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap sticky left-16 bg-white border-r-2">
                                             <div class="truncate max-w-[150px]">{{ $plant->name }}</div>
@@ -151,7 +156,7 @@
                                             @php
                                                 $date = now()->format('Y-m-') . sprintf('%02d', $i);
                                                 $data = $machine->rencanaDayaMampu->first()?->getDailyValue($date) ?? [];
-                                                $rencanaRows = $data['rencana'] ?? array_fill(0, 5, ['beban'=>'','durasi'=>'','keterangan'=>'']);
+                                                $rencanaRows = $data['rencana'] ?? [];
                                                 $realisasi = $data['realisasi'] ?? ['beban'=>'','keterangan'=>''];
                                                 $onArr = [0,12,15,19,21];
                                                 $offArr = [8,13,18,21,0];
@@ -170,7 +175,7 @@
                                                                 <th class="border px-2 py-1 action-column hidden">Aksi</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="rencana-rows">
+                                                        <tbody class="rencana-rows" data-date="{{ $date }}">
                                                             <tr class="transition-colors duration-150 hover:bg-blue-200">
                                                                 <td class="border px-2 py-1">
                                                                     <input type="number" name="rencana[{{ $machine->id }}][{{ $date }}][0][beban]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $rencanaRows[0]['beban'] ?? '' }}" step="0.01">
@@ -407,36 +412,76 @@
 
         // Collect rencana data
         document.querySelectorAll('.rencana-rows').forEach(tbody => {
-            const machineId = tbody.closest('tr').dataset.machineId;
-            const date = tbody.closest('tr').dataset.date;
+            const machineId = tbody.closest('tr[data-machine-id]')?.dataset.machineId;
+            const date = tbody.dataset.date;
             
-            if (!data.rencana[machineId]) data.rencana[machineId] = {};
-            if (!data.rencana[machineId][date]) data.rencana[machineId][date] = [];
+            if (!machineId || !date) {
+                console.error('Missing machine ID or date:', { machineId, date });
+                return;
+            }
 
-            tbody.querySelectorAll('tr').forEach((row, index) => {
-                const rowData = {
-                    beban: row.querySelector('input[name*="[beban]"]').value,
-                    durasi: row.querySelector('input[name*="[durasi]"]').value,
-                    keterangan: row.querySelector('input[name*="[keterangan]"]').value,
-                    on: row.querySelector('input[name*="[on]"]').value,
-                    off: row.querySelector('input[name*="[off]"]').value
-                };
-                data.rencana[machineId][date].push(rowData);
+            if (!data.rencana[machineId]) {
+                data.rencana[machineId] = {};
+            }
+            if (!data.rencana[machineId][date]) {
+                data.rencana[machineId][date] = [];
+            }
+
+            tbody.querySelectorAll('tr').forEach(row => {
+                const beban = row.querySelector('input[name*="[beban]"]')?.value?.trim() || '';
+                const durasi = row.querySelector('input[name*="[durasi]"]')?.value?.trim() || '';
+                const keterangan = row.querySelector('input[name*="[keterangan]"]')?.value?.trim() || '';
+                const on = row.querySelector('input[name*="[on]"]')?.value?.trim() || '';
+                const off = row.querySelector('input[name*="[off]"]')?.value?.trim() || '';
+
+                // Hanya tambahkan jika ada data
+                if (beban || durasi || keterangan || on || off) {
+                    data.rencana[machineId][date].push({
+                        beban, durasi, keterangan, on, off
+                    });
+                }
             });
         });
 
         // Collect realisasi data
-        document.querySelectorAll('input[name^="realisasi["]').forEach(input => {
-            const matches = input.name.match(/realisasi\[(\d+)\]\[(\d{4}-\d{2}-\d{2})\]/);
-            if (matches) {
-                const [_, machineId, date] = matches;
-                if (!data.realisasi[machineId]) data.realisasi[machineId] = {};
-                if (!data.realisasi[machineId][date]) data.realisasi[machineId][date] = {};
-                
-                const fieldName = input.name.includes('[beban]') ? 'beban' : 'keterangan';
-                data.realisasi[machineId][date][fieldName] = input.value;
+        document.querySelectorAll('tr[data-machine-id]').forEach(tr => {
+            const machineId = tr.dataset.machineId;
+            const date = tr.querySelector('.rencana-rows')?.dataset.date;
+            
+            if (!machineId || !date) {
+                console.error('Missing machine ID or date for realisasi:', { machineId, date });
+                return;
+            }
+
+            const realisasiBeban = tr.querySelector('input[name*="realisasi"][name*="[beban]"]')?.value?.trim();
+            const realisasiKeterangan = tr.querySelector('input[name*="realisasi"][name*="[keterangan]"]')?.value?.trim();
+
+            if (realisasiBeban || realisasiKeterangan) {
+                if (!data.realisasi[machineId]) {
+                    data.realisasi[machineId] = {};
+                }
+                data.realisasi[machineId][date] = {
+                    beban: realisasiBeban || '',
+                    keterangan: realisasiKeterangan || ''
+                };
             }
         });
+
+        // Validasi data sebelum dikirim
+        if (Object.keys(data.rencana).length === 0 && Object.keys(data.realisasi).length === 0) {
+            Swal.fire({
+                title: 'Peringatan',
+                text: 'Tidak ada data yang akan disimpan',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            saveButton.disabled = false;
+            saveButton.innerHTML = '<i class="fas fa-save mr-2"></i>Simpan';
+            return;
+        }
+
+        // Log data before sending
+        console.log('Sending data:', data);
 
         fetch('{{ route("admin.rencana-daya-mampu.update") }}', {
             method: 'POST',
@@ -447,7 +492,12 @@
             },
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(result => {
             Swal.fire({
                 title: result.title,
@@ -464,7 +514,7 @@
             console.error('Error:', error);
             Swal.fire({
                 title: 'Error!',
-                text: 'Terjadi kesalahan saat menyimpan data',
+                text: 'Terjadi kesalahan saat menyimpan data: ' + error.message,
                 icon: 'error',
                 confirmButtonText: 'OK'
             });

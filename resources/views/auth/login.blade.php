@@ -51,7 +51,7 @@
             <div class="right-section">
                 <div class="card-body">
                     <h5 class="card-title text-center mb-4">Login Now</h5>
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('login') }}" id="loginForm">
                         @csrf
 
                         <!-- Username -->
@@ -157,8 +157,11 @@
 
                         <!-- Login Button -->
                         <div class="d-grid">
-                            <button type="submit" class="modern-button">
-                                LOGIN
+                            <button type="submit" class="modern-button" id="loginButton">
+                                <span class="button-text">LOGIN</span>
+                                <div class="loading-spinner d-none">
+                                    <div class="spinner"></div>
+                                </div>
                             </button>
                         </div>
                     </form>
@@ -643,6 +646,82 @@
         height: 100%;
         z-index: 0;
     }
+
+    /* Loading Animation Styles */
+    .loading-spinner {
+        display: inline-block;
+        position: relative;
+        width: 24px;
+        height: 24px;
+    }
+
+    .spinner {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .modern-button {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    .modern-button.loading .button-text {
+        visibility: hidden;
+    }
+
+    .modern-button.loading .loading-spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .d-none {
+        display: none !important;
+    }
+
+    /* Disable button styles */
+    .modern-button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    /* Electric loading effect */
+    .modern-button.loading::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+        );
+        animation: loading-shimmer 1.5s infinite;
+    }
+
+    @keyframes loading-shimmer {
+        100% {
+            left: 100%;
+        }
+    }
 </style>
 @endsection
 
@@ -726,6 +805,23 @@
                 timerProgressBar: true
             });
         @endif
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('loginForm');
+        const loginButton = document.getElementById('loginButton');
+        const loadingSpinner = loginButton.querySelector('.loading-spinner');
+        const buttonText = loginButton.querySelector('.button-text');
+
+        loginForm.addEventListener('submit', function(e) {
+            // Disable the button and show loading state
+            loginButton.disabled = true;
+            loginButton.classList.add('loading');
+            loadingSpinner.classList.remove('d-none');
+            
+            // Optional: Add electric effect class
+            loginButton.classList.add('electric-effect');
+        });
     });
 </script>
 @endsection

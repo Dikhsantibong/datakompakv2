@@ -130,9 +130,10 @@
     
     <div id="main-content" class="flex-1 flex flex-col overflow-hidden">
         <!-- Header -->
-        <header class="bg-white shadow-sm">
-            <div class="flex items-center justify-between h-16 px-6 sm:px-8">
-                <div class="flex items-center">
+        <header class="bg-white shadow-sm sticky top-0 z-20
+        ">
+            <div class="flex justify-between items-center px-6 py-3">
+                <div class="flex items-center gap-x-3">
                     <!-- Mobile Menu Toggle -->
                     <button id="mobile-menu-toggle"
                         class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -151,37 +152,25 @@
                         </svg>
                     </button>
 
-                    <h1 class="text-xl font-semibold text-gray-800 ml-2">Monitoring Data Input</h1>
+                    <h1 class="text-xl font-semibold text-gray-800">Monitoring Data Input</h1>
                 </div>
 
-                <div class="flex items-center gap-4">
-                    <div class="hidden md:flex items-center gap-2">
-                        <span class="text-sm text-gray-500">Last Sync:</span>
-                        <span class="text-sm font-medium text-gray-700">{{ now()->format('H:i:s') }}</span>
-                    </div>
-                    
-                    <div class="relative">
-                        <button id="dropdownToggle" class="flex items-center gap-2 hover:bg-gray-50 px-3 py-2 rounded-lg" onclick="toggleDropdown()">
-                            <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-8 h-8 rounded-full">
-                            <div class="hidden md:block text-left">
-                                <div class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</div>
-                                <div class="text-xs text-gray-500">Administrator</div>
-                            </div>
-                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        
-                        <div id="dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 py-1">
-                            <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                Logout
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                                @csrf
-                                <input type="hidden" name="redirect" value="{{ route('homepage') }}">
-                            </form>
-                        </div>
+                <div class="relative">
+                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
+                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                    </button>
+                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                        <a href="{{ route('logout') }}" 
+                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
+                        </form>
                     </div>
                 </div>
             </div>

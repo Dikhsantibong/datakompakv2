@@ -354,8 +354,10 @@
 
     function addNewRowBoth(button) {
         const mainRow = button.closest('tr[data-machine-id]');
+        const machineId = mainRow.dataset.machineId;
         const rencanaTable = mainRow.querySelector('.rencana-rows');
         const realisasiTable = mainRow.querySelector('.realisasi-rows');
+        const date = rencanaTable.dataset.date;
         
         // Add row to Rencana
         const lastRencanaRow = rencanaTable.lastElementChild;
@@ -364,14 +366,14 @@
         const rencanaRowIndex = rencanaTable.children.length;
         
         rencanaInputs.forEach(input => {
-            const nameParts = input.name.split('[');
-            const newName = `${nameParts[0]}[${nameParts[1]}[${nameParts[2]}[${rencanaRowIndex}]${nameParts[3].substring(nameParts[3].indexOf(']'))}`;
-            input.name = newName;
+            const fieldName = input.name.match(/\[([^\]]*)\]$/)[1]; // Get the last field name (beban, durasi, etc.)
+            input.name = `rencana[${machineId}][${date}][${rencanaRowIndex}][${fieldName}]`;
             input.value = '';
-        });
-        
-        newRencanaRow.querySelectorAll('.data-display').forEach(span => {
-            span.textContent = '-';
+            // Also update the display span
+            const displaySpan = input.parentElement.querySelector('.data-display');
+            if (displaySpan) {
+                displaySpan.textContent = '-';
+            }
         });
         
         rencanaTable.appendChild(newRencanaRow);
@@ -383,17 +385,35 @@
         const realisasiRowIndex = realisasiTable.children.length;
         
         realisasiInputs.forEach(input => {
-            const nameParts = input.name.split('[');
-            const newName = `${nameParts[0]}[${nameParts[1]}[${nameParts[2]}[${realisasiRowIndex}]${nameParts[3].substring(nameParts[3].indexOf(']'))}`;
-            input.name = newName;
+            const fieldName = input.name.match(/\[([^\]]*)\]$/)[1]; // Get the last field name (beban, keterangan)
+            input.name = `realisasi[${machineId}][${date}][${realisasiRowIndex}][${fieldName}]`;
             input.value = '';
-        });
-        
-        newRealisasiRow.querySelectorAll('.data-display').forEach(span => {
-            span.textContent = '-';
+            // Also update the display span
+            const displaySpan = input.parentElement.querySelector('.data-display');
+            if (displaySpan) {
+                displaySpan.textContent = '-';
+            }
         });
         
         realisasiTable.appendChild(newRealisasiRow);
+
+        // Make sure the new inputs are visible if in edit mode
+        if (isEditMode) {
+            newRencanaRow.querySelectorAll('.data-input').forEach(input => {
+                input.style.display = 'inline-block';
+                input.classList.remove('hidden');
+            });
+            newRencanaRow.querySelectorAll('.data-display').forEach(span => {
+                span.style.display = 'none';
+            });
+            newRealisasiRow.querySelectorAll('.data-input').forEach(input => {
+                input.style.display = 'inline-block';
+                input.classList.remove('hidden');
+            });
+            newRealisasiRow.querySelectorAll('.data-display').forEach(span => {
+                span.style.display = 'none';
+            });
+        }
     }
 
     function deleteRow(button) {
@@ -507,11 +527,15 @@
                 // Get all rows in the rencana table
                 const rows = rencanaRows.querySelectorAll('tr');
                 rows.forEach((row, index) => {
+                    console.log(`Processing rencana row ${index + 1}`); // Debug log
+
                     const beban = row.querySelector('input[name*="[beban]"]')?.value?.trim();
                     const durasi = row.querySelector('input[name*="[durasi]"]')?.value?.trim();
                     const keterangan = row.querySelector('input[name*="[keterangan]"]')?.value?.trim();
                     const on = row.querySelector('input[name*="[on]"]')?.value?.trim();
                     const off = row.querySelector('input[name*="[off]"]')?.value?.trim();
+
+                    console.log('Row data:', { beban, durasi, keterangan, on, off }); // Debug log
 
                     // Skip completely empty rows
                     if (!beban && !durasi && !keterangan && !on && !off) {
@@ -529,7 +553,23 @@
                         }
                     }
 
-                    // Add row data only if it's not empty
+                    // Validate time format if provided
+                    if (on && !on.match(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)) {
+                        throw new Error(`Format waktu ON tidak valid pada baris ${index + 1}`);
+                    }
+                    if (off && !off.match(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)) {
+                        throw new Error(`Format waktu OFF tidak valid pada baris ${index + 1}`);
+                    }
+
+                    // Validate numeric values
+                    if (beban && isNaN(beban)) {
+                        throw new Error(`Beban harus berupa angka pada baris ${index + 1}`);
+                    }
+                    if (durasi && isNaN(durasi)) {
+                        throw new Error(`Durasi harus berupa angka pada baris ${index + 1}`);
+                    }
+
+                    // Add row data
                     data.rencana[machineId][date].push({
                         beban: beban || '',
                         durasi: durasi || '',
@@ -565,8 +605,12 @@
                 // Get all rows in the realisasi table
                 const rows = realisasiRows.querySelectorAll('tr');
                 rows.forEach((row, index) => {
+                    console.log(`Processing realisasi row ${index + 1}`); // Debug log
+
                     const beban = row.querySelector('input[name*="realisasi"][name*="[beban]"]')?.value?.trim();
                     const keterangan = row.querySelector('input[name*="realisasi"][name*="[keterangan]"]')?.value?.trim();
+
+                    console.log('Realisasi row data:', { beban, keterangan }); // Debug log
 
                     // Skip completely empty rows
                     if (!beban && !keterangan) {
@@ -581,7 +625,12 @@
                         }
                     }
 
-                    // Add row data only if it's not empty
+                    // Validate numeric values
+                    if (beban && isNaN(beban)) {
+                        throw new Error(`Beban realisasi harus berupa angka pada baris ${index + 1}`);
+                    }
+
+                    // Add row data
                     data.realisasi[machineId][date].push({
                         beban: beban || '',
                         keterangan: keterangan || ''
@@ -594,13 +643,8 @@
                 }
             });
 
-            // Log data before sending
-            console.log('Data to be sent:', data);
-
-            // Validasi data sebelum dikirim
-            if (Object.keys(data.rencana).length === 0 && Object.keys(data.realisasi).length === 0) {
-                throw new Error('Tidak ada data yang akan disimpan');
-            }
+            // Log the final data structure before sending
+            console.log('Data to be sent:', JSON.stringify(data, null, 2));
 
             // Send data to server
             fetch('{{ route("admin.rencana-daya-mampu.update") }}', {
@@ -622,6 +666,10 @@
                 return response.json();
             })
             .then(result => {
+                if (!result.success) {
+                    throw new Error(result.message || 'Gagal menyimpan data');
+                }
+                
                 Swal.fire({
                     title: result.title || 'Berhasil!',
                     text: result.message || 'Data berhasil disimpan',

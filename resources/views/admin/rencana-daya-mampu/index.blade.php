@@ -507,27 +507,37 @@
         };
 
         try {
-            // Collect rencana data
+            // Collect rencana data and prepare realisasi data
             document.querySelectorAll('tr[data-machine-id]').forEach(tr => {
                 const machineId = tr.dataset.machineId;
                 const rencanaRows = tr.querySelector('.rencana-rows');
+                const realisasiRows = tr.querySelector('.realisasi-rows');
                 const date = rencanaRows?.dataset.date;
                 
                 if (!machineId || !date) {
                     throw new Error('Data mesin atau tanggal tidak valid');
                 }
 
+                // Initialize data structures
                 if (!data.rencana[machineId]) {
                     data.rencana[machineId] = {};
                 }
                 if (!data.rencana[machineId][date]) {
                     data.rencana[machineId][date] = [];
                 }
+                if (!data.realisasi[machineId]) {
+                    data.realisasi[machineId] = {};
+                }
+                if (!data.realisasi[machineId][date]) {
+                    data.realisasi[machineId][date] = [];
+                }
 
                 // Get all rows in the rencana table
-                const rows = rencanaRows.querySelectorAll('tr');
-                rows.forEach((row, index) => {
-                    console.log(`Processing rencana row ${index + 1}`); // Debug log
+                const rencanaRowElements = rencanaRows.querySelectorAll('tr');
+                let hasValidRencanaData = false;
+
+                rencanaRowElements.forEach((row, index) => {
+                    console.log(`Processing rencana row ${index + 1}`);
 
                     const beban = row.querySelector('input[name*="[beban]"]')?.value?.trim();
                     const durasi = row.querySelector('input[name*="[durasi]"]')?.value?.trim();
@@ -535,7 +545,7 @@
                     const on = row.querySelector('input[name*="[on]"]')?.value?.trim();
                     const off = row.querySelector('input[name*="[off]"]')?.value?.trim();
 
-                    console.log('Row data:', { beban, durasi, keterangan, on, off }); // Debug log
+                    console.log('Row data:', { beban, durasi, keterangan, on, off });
 
                     // Skip completely empty rows
                     if (!beban && !durasi && !keterangan && !on && !off) {
@@ -577,69 +587,64 @@
                         on: on || '',
                         off: off || ''
                     });
+
+                    hasValidRencanaData = true;
+
+                    // Add corresponding realisasi data with default values
+                    // Make sure we have the same number of realisasi rows as rencana rows
+                    if (data.realisasi[machineId][date].length <= index) {
+                        data.realisasi[machineId][date][index] = {
+                            beban: '0',
+                            keterangan: ''
+                        };
+                    }
                 });
 
-                // Remove the date entry if no valid rows were added
-                if (data.rencana[machineId][date].length === 0) {
-                    delete data.rencana[machineId][date];
-                }
-            });
-
-            // Collect realisasi data
-            document.querySelectorAll('tr[data-machine-id]').forEach(tr => {
-                const machineId = tr.dataset.machineId;
-                const realisasiRows = tr.querySelector('.realisasi-rows');
-                const date = realisasiRows?.dataset.date;
-                
-                if (!machineId || !date) {
-                    throw new Error('Data mesin atau tanggal tidak valid');
+                // If we have valid rencana data but no realisasi data, ensure we have at least one realisasi row
+                if (hasValidRencanaData && data.realisasi[machineId][date].length === 0) {
+                    data.realisasi[machineId][date].push({
+                        beban: '0',
+                        keterangan: ''
+                    });
                 }
 
-                if (!data.realisasi[machineId]) {
-                    data.realisasi[machineId] = {};
-                }
-                if (!data.realisasi[machineId][date]) {
-                    data.realisasi[machineId][date] = [];
-                }
-
-                // Get all rows in the realisasi table
-                const rows = realisasiRows.querySelectorAll('tr');
-                rows.forEach((row, index) => {
-                    console.log(`Processing realisasi row ${index + 1}`); // Debug log
+                // Now collect any existing realisasi data that might have been input
+                const realisasiRowElements = realisasiRows.querySelectorAll('tr');
+                realisasiRowElements.forEach((row, index) => {
+                    console.log(`Processing realisasi row ${index + 1}`);
 
                     const beban = row.querySelector('input[name*="realisasi"][name*="[beban]"]')?.value?.trim();
                     const keterangan = row.querySelector('input[name*="realisasi"][name*="[keterangan]"]')?.value?.trim();
 
-                    console.log('Realisasi row data:', { beban, keterangan }); // Debug log
+                    console.log('Realisasi row data:', { beban, keterangan });
 
-                    // Skip completely empty rows
-                    if (!beban && !keterangan) {
-                        console.log('Skipping empty realisasi row:', index + 1);
-                        return;
-                    }
-
-                    // Validate required fields if any field is filled
-                    if (beban || keterangan) {
-                        if (!beban) {
-                            throw new Error(`Beban realisasi harus diisi pada baris ${index + 1}`);
-                        }
-                    }
-
-                    // Validate numeric values
-                    if (beban && isNaN(beban)) {
+                    // Validate numeric values for beban
+                    if (beban && beban !== '0' && isNaN(beban)) {
                         throw new Error(`Beban realisasi harus berupa angka pada baris ${index + 1}`);
                     }
 
-                    // Add row data
-                    data.realisasi[machineId][date].push({
-                        beban: beban || '',
+                    // Update realisasi data regardless of whether it's empty or not
+                    data.realisasi[machineId][date][index] = {
+                        beban: beban || '0',
                         keterangan: keterangan || ''
-                    });
+                    };
                 });
 
-                // Remove the date entry if no valid rows were added
-                if (data.realisasi[machineId][date].length === 0) {
-                    delete data.realisasi[machineId][date];
+                // Ensure all realisasi rows have data
+                const rencanaLength = data.rencana[machineId][date].length;
+                while (data.realisasi[machineId][date].length < rencanaLength) {
+                    data.realisasi[machineId][date].push({
+                        beban: '0',
+                        keterangan: ''
+                    });
+                }
+
+                // Remove empty data entries
+                if (data.rencana[machineId][date].length === 0) {
+                    delete data.rencana[machineId][date];
+                }
+                if (Object.keys(data.rencana[machineId]).length === 0) {
+                    delete data.rencana[machineId];
                 }
             });
 

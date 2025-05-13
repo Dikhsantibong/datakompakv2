@@ -25,7 +25,7 @@ class MeetingShiftController extends Controller
 {
     public function index()
     {
-        $machines = Machine::select('id', 'name')->orderBy('name')->get();
+        $machines = Machine::select('id', 'name')->orderBy('name')->take(2)->get();
         $latestMeeting = MeetingShift::with([
             'machineStatuses',
             'auxiliaryEquipments',

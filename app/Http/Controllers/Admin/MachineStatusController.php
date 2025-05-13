@@ -297,7 +297,8 @@ class MachineStatusController extends Controller
     public function exportExcel(Request $request)
     {
         try {
-            $date = $request->get('date', now()->toDateString());
+            $startDate = $request->get('start_date', now()->toDateString());
+            $endDate = $request->get('end_date', $startDate);
             $selectedInputTime = $request->get('input_time');
             
             // Query untuk mengambil data pembangkit
@@ -314,15 +315,15 @@ class MachineStatusController extends Controller
             
             $powerPlants = $query->get();
             
-            // Ambil semua log untuk tanggal dan waktu input yang dipilih
-            $logs = MachineStatusLog::whereDate('tanggal', $date)
+            // Ambil semua log untuk rentang tanggal dan waktu input yang dipilih
+            $logs = MachineStatusLog::whereBetween('tanggal', [$startDate, $endDate])
                 ->when($selectedInputTime, function($query) use ($selectedInputTime) {
                     return $query->where('input_time', $selectedInputTime);
                 })
                 ->get();
 
-            // Ambil data HOP
-            $hops = UnitOperationHour::whereDate('tanggal', $date)
+            // Ambil data HOP untuk rentang tanggal
+            $hops = UnitOperationHour::whereBetween('tanggal', [$startDate, $endDate])
                 ->when(session('unit') !== 'mysql', function($query) {
                     $query->whereHas('powerPlant', function($q) {
                         $q->where('unit_source', session('unit'));
@@ -335,10 +336,14 @@ class MachineStatusController extends Controller
                 })
                 ->get();
 
-            $fileName = 'laporan-status-mesin-' . $date . '.xlsx';
+            $fileName = 'laporan-status-mesin-' . $startDate;
+            if ($startDate !== $endDate) {
+                $fileName .= '-sampai-' . $endDate;
+            }
+            $fileName .= '.xlsx';
             
             return Excel::download(
-                new MachineStatusExport($powerPlants, $logs, $hops, $date, $selectedInputTime),
+                new MachineStatusExport($powerPlants, $logs, $hops, [$startDate, $endDate], $selectedInputTime),
                 $fileName
             );
 

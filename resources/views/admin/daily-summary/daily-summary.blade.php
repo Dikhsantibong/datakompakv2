@@ -314,16 +314,15 @@
                                                     <input type="number" 
                                                            step="0.001" 
                                                            name="data[{{ $machine->id }}][installed_power]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
                                                            value="{{ old('data.'.$machine->id.'.installed_power', 
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->installed_power : '') }}"
-                                                           min="0">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->installed_power : '') }}">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" 
                                                            name="data[{{ $machine->id }}][dmn_power]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
                                                            value="{{ old('data.'.$machine->id.'.dmn_power',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
                                                                 $existingData[$machine->power_plant_id.'_'.$machine->name]->dmn_power : '') }}">
@@ -331,54 +330,88 @@
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" 
                                                            name="data[{{ $machine->id }}][capable_power]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
-                                                           value="{{ old('data.'.$machine->id.'.capable_power') }}">
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.capable_power',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->capable_power : '') }}">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-2 gap-0">
                                                 <div class="input-group">
-                                                    <input type="number" step="0.001" name="data[{{ $machine->id }}][peak_load_day]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.001" 
+                                                           name="data[{{ $machine->id }}][peak_load_day]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.peak_load_day',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->peak_load_day : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.001" name="data[{{ $machine->id }}][peak_load_night]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.001" 
+                                                           name="data[{{ $machine->id }}][peak_load_night]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.peak_load_night',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->peak_load_night : '') }}">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="px-2">
-                                                <input type="number" step="0.01" name="data[{{ $machine->id }}][kit_ratio]"
-                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                <input type="number" step="0.01" 
+                                                       name="data[{{ $machine->id }}][kit_ratio]"
+                                                       class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                       value="{{ old('data.'.$machine->id.'.kit_ratio',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->kit_ratio : '') }}">
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-2 gap-0">
                                                 <div class="input-group">
-                                                    <input type="number" step="0.001" name="data[{{ $machine->id }}][gross_production]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.001" 
+                                                           name="data[{{ $machine->id }}][gross_production]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.gross_production',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->gross_production : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.001" name="data[{{ $machine->id }}][net_production]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.001" 
+                                                           name="data[{{ $machine->id }}][net_production]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.net_production',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->net_production : '') }}">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-3 gap-0">
                                                 <div class="input-group">
-                                                    <input type="number" step="0.001" name="data[{{ $machine->id }}][aux_power]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.001" 
+                                                           name="data[{{ $machine->id }}][aux_power]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.aux_power',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->aux_power : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.001" name="data[{{ $machine->id }}][transformer_losses]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.001" 
+                                                           name="data[{{ $machine->id }}][transformer_losses]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.transformer_losses',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->transformer_losses : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][usage_percentage]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][usage_percentage]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.usage_percentage',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->usage_percentage : '') }}">
                                                 </div>
                                             </div>
                                         </td>
@@ -423,170 +456,303 @@
                                         <td class="px-4 py-3">
                                             <div class="grid grid-cols-5 gap-0">
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][operating_hours]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][operating_hours]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.operating_hours',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->operating_hours : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][standby_hours]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][standby_hours]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.standby_hours',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->standby_hours : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][planned_outage]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][planned_outage]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.planned_outage',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->planned_outage : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][maintenance_outage]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][maintenance_outage]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.maintenance_outage',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->maintenance_outage : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][forced_outage]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][forced_outage]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.forced_outage',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->forced_outage : '') }}">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-2 gap-0">
                                                 <div class="input-group">
-                                                    <input type="number" step="1" name="data[{{ $machine->id }}][trip_machine]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="1" 
+                                                           name="data[{{ $machine->id }}][trip_machine]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.trip_machine',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->trip_machine : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="1" name="data[{{ $machine->id }}][trip_electrical]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="1" 
+                                                           name="data[{{ $machine->id }}][trip_electrical]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.trip_electrical',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->trip_electrical : '') }}">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3">
                                             <div class="grid grid-cols-4 gap-0">
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][efdh]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][efdh]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.efdh',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->efdh : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][epdh]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][epdh]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.epdh',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->epdh : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][eudh]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][eudh]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.eudh',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->eudh : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][esdh]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][esdh]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.esdh',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->esdh : '') }}">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="grid grid-cols-4 gap-0">
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][eaf]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][eaf]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.eaf',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->eaf : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][sof]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][sof]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.sof',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->sof : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][efor]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][efor]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.efor',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->efor : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="1" name="data[{{ $machine->id }}][sdof]"
-                                                           class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="1" 
+                                                           name="data[{{ $machine->id }}][sdof]"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.sdof',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->sdof : '') }}">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3">
                                             <div class="px-2">
                                                 <input type="number" step="0.01" name="data[{{ $machine->id }}][ncf]"
-                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                       value="{{ old('data.'.$machine->id.'.ncf',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->ncf : '') }}">
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="px-2">
                                                 <input type="number" step="0.01" name="data[{{ $machine->id }}][nof]"
-                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                       value="{{ old('data.'.$machine->id.'.nof',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->nof : '') }}">
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="px-2">
                                                 <input type="number" step="0.01" name="data[{{ $machine->id }}][jsi]"
-                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                       value="{{ old('data.'.$machine->id.'.jsi',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->jsi : '') }}">
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border border-gray-300">
                                             <div class="grid grid-cols-6 gap-1">
                                                 <div class="input-group border-r border-gray-300">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][hsd_fuel]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][hsd_fuel]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.hsd_fuel',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->hsd_fuel : '') }}">
                                                 </div>
                                                 <div class="input-group border-r border-gray-300">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][b35_fuel]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][b35_fuel]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.b35_fuel',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->b35_fuel : '') }}">
                                                 </div>
                                                 <div class="input-group border-r border-gray-300">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][b40_fuel]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][b40_fuel]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.b40_fuel',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->b40_fuel : '') }}">
                                                 </div>
                                                 <div class="input-group border-r border-gray-300">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][mfo_fuel]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][mfo_fuel]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.mfo_fuel',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->mfo_fuel : '') }}">
                                                 </div>
                                                 <div class="input-group border-r border-gray-300">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][total_fuel]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][total_fuel]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.total_fuel',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->total_fuel : '') }}">
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][water_usage]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][water_usage]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.water_usage',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->water_usage : '') }}">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border border-gray-300">
                                             <div class="grid grid-cols-7 gap-0">
                                                 <div class="input-group border-r border-gray-300 px-0.5">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][meditran_oil]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][meditran_oil]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.meditran_oil',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->meditran_oil : '') }}">
                                                 </div>
                                                 <div class="input-group border-r border-gray-300 px-0.5">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][salyx_420]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][salyx_420]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.salyx_420',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->salyx_420 : '') }}">
                                                 </div>
                                                 <div class="input-group border-r border-gray-300 px-0.5">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][salyx_430]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][salyx_430]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.salyx_430',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->salyx_430 : '') }}">
                                                 </div>
                                                 <div class="input-group border-r border-gray-300 px-0.5">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][travolube_a]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][travolube_a]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.travolube_a',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->travolube_a : '') }}">
                                                 </div>
                                                 <div class="input-group border-r border-gray-300 px-0.5">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][turbolube_46]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][turbolube_46]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.turbolube_46',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->turbolube_46 : '') }}">
                                                 </div>
                                                 <div class="input-group border-r border-gray-300 px-0.5">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][turbolube_68]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][turbolube_68]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.turbolube_68',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->turbolube_68 : '') }}">
                                                 </div>
                                                 <div class="input-group px-0.5">
-                                                    <input type="number" step="0.01" name="data[{{ $machine->id }}][total_oil]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][total_oil]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.total_oil',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->total_oil : '') }}">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border border-gray-300">
                                             <div class="grid grid-cols-3 gap-0">
                                                 <div class="input-group border-r border-gray-300 px-0.5">
-                                                    <input type="number" step="0.001" name="data[{{ $machine->id }}][sfc_scc]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.001" 
+                                                           name="data[{{ $machine->id }}][sfc_scc]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.sfc_scc',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->sfc_scc : '') }}">
                                                 </div>
                                                 <div class="input-group border-r border-gray-300 px-0.5">
-                                                    <input type="number" step="0.001" name="data[{{ $machine->id }}][nphr]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.001" 
+                                                           name="data[{{ $machine->id }}][nphr]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.nphr',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->nphr : '') }}">
                                                 </div>
                                                 <div class="input-group px-0.5">
-                                                    <input type="number" step="0.001" name="data[{{ $machine->id }}][slc]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center">
+                                                    <input type="number" step="0.001" 
+                                                           name="data[{{ $machine->id }}][slc]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.slc',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->slc : '') }}">
                                                 </div>
                                             </div>
                                         </td>
@@ -594,8 +760,9 @@
                                             <div class="px-2">
                                                 <textarea name="data[{{ $machine->id }}][notes]"
                                                        style="width: 200px;"
-                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                                                </textarea>
+                                                       class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('data.'.$machine->id.'.notes',
+                                                        isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                        $existingData[$machine->power_plant_id.'_'.$machine->name]->notes : '') }}</textarea>
                                             </div>
                                         </td>
                                     </tr>
@@ -616,59 +783,76 @@ document.addEventListener('DOMContentLoaded', function() {
     const unitFilter = document.getElementById('unit-filter');
     const refreshButton = document.getElementById('refreshButton');
 
+    // Handle refresh button click
+    refreshButton.addEventListener('click', function() {
+        // Show loading indicator
+        Swal.fire({
+            title: 'Memuat Data...',
+            text: 'Mohon tunggu sebentar...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Get current date and unit source
+        const currentDate = inputDate.value;
+        const currentUnit = unitFilter ? unitFilter.value : null;
+
+        // Reload the page with current parameters
+        window.location.href = `{{ route('admin.daily-summary') }}?input_date=${currentDate}${currentUnit ? '&unit_source=' + currentUnit : ''}&refresh=true`;
+    });
+
     // Handle date change
     inputDate.addEventListener('change', function() {
-        window.location.href = '{{ route("admin.daily-summary") }}?input_date=' + this.value + '&unit_source=' + unitFilter.value;
+        window.location.href = '{{ route("admin.daily-summary") }}?input_date=' + this.value + '&unit_source=' + (unitFilter ? unitFilter.value : '');
     });
 
     // Handle unit filter change
-    unitFilter.addEventListener('change', function() {
-        const selectedUnit = this.value;
-        
-        // Show loading indicator
-        const loadingOverlay = document.createElement('div');
-        loadingOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-        loadingOverlay.innerHTML = `
-            <div class="bg-white p-4 rounded-lg shadow-lg">
-                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                <p class="mt-2 text-white">Memuat data...</p>
-            </div>
-        `;
-        document.body.appendChild(loadingOverlay);
+    if (unitFilter) {
+        unitFilter.addEventListener('change', function() {
+            const selectedUnit = this.value;
+            
+            // Show loading indicator
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            loadingOverlay.innerHTML = `
+                <div class="bg-white p-4 rounded-lg shadow-lg">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                    <p class="mt-2 text-white">Memuat data...</p>
+                </div>
+            `;
+            document.body.appendChild(loadingOverlay);
 
-        // Send request to update unit source
-        fetch('{{ route("set-unit-source") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ unit_source: selectedUnit })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Reload the page with both date and unit source parameters
-                window.location.href = '{{ route("admin.daily-summary") }}?input_date=' + inputDate.value + '&unit_source=' + selectedUnit;
-            } else {
-                console.error('Failed to update unit source');
-                alert('Gagal mengubah unit. Silakan coba lagi.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Terjadi kesalahan. Silakan coba lagi.');
-        })
-        .finally(() => {
-            // Remove loading overlay
-            loadingOverlay.remove();
+            // Send request to update unit source
+            fetch('{{ route("set-unit-source") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ unit_source: selectedUnit })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Reload the page with both date and unit source parameters
+                    window.location.href = '{{ route("admin.daily-summary") }}?input_date=' + inputDate.value + '&unit_source=' + selectedUnit;
+                } else {
+                    console.error('Failed to update unit source');
+                    alert('Gagal mengubah unit. Silakan coba lagi.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan. Silakan coba lagi.');
+            })
+            .finally(() => {
+                // Remove loading overlay
+                loadingOverlay.remove();
+            });
         });
-    });
-
-    // Handle refresh button click
-    refreshButton.addEventListener('click', function() {
-        window.location.reload();
-    });
+    }
 });
 </script>
 <style>

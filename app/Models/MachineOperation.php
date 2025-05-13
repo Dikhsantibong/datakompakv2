@@ -42,7 +42,7 @@ class MachineOperation extends Model
 
     public function getConnectionName()
     {
-        return session('unit', 'mysql');
+        return session('unit');
     }
 
     protected static function boot()

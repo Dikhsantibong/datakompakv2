@@ -18,52 +18,66 @@ class DailySummaryController extends Controller
 {
     public function index()
     {
-        // Get unit source from session
-        $unitSource = session('unit', 'mysql');
+        try {
+            // Get unit source from session
+            $unitSource = session('unit', 'mysql');
 
-        // Get input date from request or default to today
-        $inputDate = request('input_date', now()->format('Y-m-d'));
+            // Get input date from request or default to today
+            $inputDate = request('input_date', now()->format('Y-m-d'));
 
-        // Base query for PowerPlant
-        $query = PowerPlant::query();
+            // Base query for PowerPlant
+            $query = PowerPlant::query();
 
-        // If logged in as UP KENDARI (mysql session)
-        if ($unitSource === 'mysql') {
-            // Allow filtering by unit source from request
-            $selectedUnitSource = request('unit_source', 'all');
-            if ($selectedUnitSource !== 'all') {
-                $query->where('unit_source', $selectedUnitSource);
+            // If logged in as UP KENDARI (mysql session)
+            if ($unitSource === 'mysql') {
+                // Allow filtering by unit source from request
+                $selectedUnitSource = request('unit_source', 'all');
+                if ($selectedUnitSource !== 'all') {
+                    $query->where('unit_source', $selectedUnitSource);
+                }
+            } else {
+                // For other units, only show their own data
+                $query->where('unit_source', $unitSource);
             }
-        } else {
-            // For other units, only show their own data
-            $query->where('unit_source', $unitSource);
+
+            // Get units ordered by source and name
+            $units = $query->orderBy('unit_source')
+                ->orderBy('name')
+                ->with(['machines' => function($query) {
+                    $query->orderBy('name');
+                }])
+                ->get();
+
+            // Get existing data for the selected date
+            $existingData = DailySummary::whereDate('date', $inputDate)
+                ->get()
+                ->keyBy(function($item) {
+                    return $item->power_plant_id . '_' . $item->machine_name;
+                });
+
+            // Get unique unit sources for dropdown only if logged in as UP KENDARI
+            $unitSources = [];
+            if ($unitSource === 'mysql') {
+                $unitSources = PowerPlant::select('unit_source')
+                    ->distinct()
+                    ->pluck('unit_source')
+                    ->filter(); // Remove any null/empty values
+            }
+
+            // If this is a refresh request, show success message
+            if (request('refresh')) {
+                session()->flash('success', 'Data berhasil diperbarui!');
+            }
+
+            return view('admin.daily-summary.daily-summary', compact('units', 'unitSources', 'unitSource', 'inputDate', 'existingData'));
+        } catch (\Exception $e) {
+            Log::error('Error in index method:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data.');
         }
-
-        // Get units ordered by source and name
-        $units = $query->orderBy('unit_source')
-            ->orderBy('name')
-            ->with(['machines' => function($query) {
-                $query->orderBy('name');
-            }])
-            ->get();
-
-        // Get existing data for the selected date
-        $existingData = DailySummary::whereDate('date', $inputDate)
-            ->get()
-            ->keyBy(function($item) {
-                return $item->power_plant_id . '_' . $item->machine_name;
-            });
-
-        // Get unique unit sources for dropdown only if logged in as UP KENDARI
-        $unitSources = [];
-        if ($unitSource === 'mysql') {
-            $unitSources = PowerPlant::select('unit_source')
-                ->distinct()
-                ->pluck('unit_source')
-                ->filter(); // Remove any null/empty values
-        }
-
-        return view('admin.daily-summary.daily-summary', compact('units', 'unitSources', 'unitSource', 'inputDate', 'existingData'));
     }
 
     public function store(Request $request)

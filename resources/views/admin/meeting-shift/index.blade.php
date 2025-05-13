@@ -72,7 +72,7 @@
             </div>
 
             <!-- Form Content -->
-            <form id="meetingShiftForm" action="{{ route('admin.meeting-shift.store') }}" method="POST" class="mt-8">
+            <form id="meetingShiftForm" action="{{ route('admin.meeting-shift.store') }}" method="POST" enctype="multipart/form-data" class="mt-8">
                 @csrf
                 <!-- Add error alert -->
                 @if ($errors->any())

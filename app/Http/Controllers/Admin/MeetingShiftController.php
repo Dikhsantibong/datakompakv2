@@ -74,52 +74,52 @@ class MeetingShiftController extends Controller
     {
         try {
             // Validate all form inputs
-        $validated = $request->validate([
-                'current_shift' => 'required|in:A,B,C,D',
-                'tanggal' => 'required|date',
-                
-                // Machine Statuses
-                'machine_statuses' => 'required|array',
-                'machine_statuses.*.machine_id' => 'required|exists:machines,id',
-                'machine_statuses.*.status' => 'required|array|min:1',
-                'machine_statuses.*.keterangan' => 'nullable|string',
-                
-                // Auxiliary Equipment
-                'auxiliary_equipment' => 'required|array',
-                'auxiliary_equipment.*.name' => 'required|string',
-                'auxiliary_equipment.*.status' => 'required|array|min:1',
-                'auxiliary_equipment.*.keterangan' => 'nullable|string',
-                
-                // Resources
-                'resources' => 'required|array',
-                'resources.*.name' => 'required|string',
-                'resources.*.category' => 'required|in:PELUMAS,BBM,AIR PENDINGIN,UDARA START',
-                'resources.*.status' => 'required|in:0-20,21-40,41-61,61-80,up-80',
-                'resources.*.keterangan' => 'nullable|string',
-                
-                // K3L
-                'k3l' => 'required|array',
-                'k3l.*.type' => 'required|in:unsafe_action,unsafe_condition',
-                'k3l.*.uraian' => 'required|string',
-                'k3l.*.saran' => 'required|string',
-                'k3l.*.eviden' => 'nullable|file|mimes:jpeg,png,jpg,gif,doc,docx,pdf|max:2048',
-                
-                // Notes
-                'catatan_sistem' => 'required|string',
-                'catatan_umum' => 'required|string',
-                
-                // Resume
-                'resume' => 'required|string',
-                
-                // Attendance
-                'absensi' => 'required|array',
-                'absensi.*.nama' => 'required|string',
-                'absensi.*.shift' => 'required|in:A,B,C,D,staf ops,TL OP,TL HAR,TL OPHAR,MUL',
-                'absensi.*.status' => 'required|in:hadir,izin,sakit,cuti,alpha,terlambat,ganti shift',
-                'absensi.*.keterangan' => 'nullable|string',
-        ]);
+            $validated = $request->validate([
+                    'current_shift' => 'required|in:A,B,C,D',
+                    'tanggal' => 'required|date',
+                    
+                    // Machine Statuses
+                    'machine_statuses' => 'required|array',
+                    'machine_statuses.*.machine_id' => 'required|exists:machines,id',
+                    'machine_statuses.*.status' => 'required|array|min:1',
+                    'machine_statuses.*.keterangan' => 'nullable|string',
+                    
+                    // Auxiliary Equipment
+                    'auxiliary_equipment' => 'required|array',
+                    'auxiliary_equipment.*.name' => 'required|string',
+                    'auxiliary_equipment.*.status' => 'required|array|min:1',
+                    'auxiliary_equipment.*.keterangan' => 'nullable|string',
+                    
+                    // Resources
+                    'resources' => 'required|array',
+                    'resources.*.name' => 'required|string',
+                    'resources.*.category' => 'required|in:PELUMAS,BBM,AIR PENDINGIN,UDARA START',
+                    'resources.*.status' => 'required|in:0-20,21-40,41-61,61-80,up-80',
+                    'resources.*.keterangan' => 'nullable|string',
+                    
+                    // K3L
+                    'k3l' => 'required|array',
+                    'k3l.*.type' => 'required|in:unsafe_action,unsafe_condition',
+                    'k3l.*.uraian' => 'required|string',
+                    'k3l.*.saran' => 'required|string',
+                    'k3l.*.eviden' => 'nullable|file|mimes:jpeg,png,jpg,gif,doc,docx,pdf|max:2048',
+                    
+                    // Notes
+                    'catatan_sistem' => 'required|string',
+                    'catatan_umum' => 'required|string',
+                    
+                    // Resume
+                    'resume' => 'required|string',
+                    
+                    // Attendance
+                    'absensi' => 'required|array',
+                    'absensi.*.nama' => 'required|string',
+                    'absensi.*.shift' => 'required|in:A,B,C,D,staf ops,TL OP,TL HAR,TL OPHAR,MUL',
+                    'absensi.*.status' => 'required|in:hadir,izin,sakit,cuti,alpha,terlambat,ganti shift',
+                    'absensi.*.keterangan' => 'nullable|string',
+            ]);
 
-        DB::beginTransaction();
+            DB::beginTransaction();
 
             // Create main meeting shift record
             $meetingShift = MeetingShift::create([
@@ -131,8 +131,8 @@ class MeetingShiftController extends Controller
             // Store machine statuses
             foreach ($validated['machine_statuses'] as $machineStatus) {
                 if (!empty($machineStatus['status'])) {
-                MeetingShiftMachineStatus::create([
-                    'meeting_shift_id' => $meetingShift->id,
+                    MeetingShiftMachineStatus::create([
+                        'meeting_shift_id' => $meetingShift->id,
                         'machine_id' => $machineStatus['machine_id'],
                         'status' => json_encode($machineStatus['status']),
                         'keterangan' => $machineStatus['keterangan'] ?? null
@@ -173,7 +173,9 @@ class MeetingShiftController extends Controller
                     $evidenPath = null;
                     if ($request->hasFile("k3l.{$index}.eviden")) {
                         $file = $request->file("k3l.{$index}.eviden");
-                        $evidenPath = $file->store('eviden/k3l', 'public');
+                        if ($file->isValid()) {
+                            $evidenPath = $file->store('eviden/k3l', 'public');
+                        }
                     }
 
                     MeetingShiftK3l::create([
@@ -204,7 +206,7 @@ class MeetingShiftController extends Controller
             if (!empty($validated['resume'])) {
                 MeetingShiftResume::create([
                     'meeting_shift_id' => $meetingShift->id,
-                    'content' => trim($validated['resume']) // Ensure content is properly trimmed
+                    'content' => trim($validated['resume'])
                 ]);
             }
 
@@ -666,7 +668,9 @@ class MeetingShiftController extends Controller
                     $evidenPath = null;
                     if ($request->hasFile("k3l.{$index}.eviden")) {
                         $file = $request->file("k3l.{$index}.eviden");
-                        $evidenPath = $file->store('eviden/k3l', 'public');
+                        if ($file->isValid()) {
+                            $evidenPath = $file->store('eviden/k3l', 'public');
+                        }
                     }
 
                     MeetingShiftK3l::create([

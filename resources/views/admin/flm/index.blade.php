@@ -105,7 +105,7 @@
                                 
                                 <div class="w-full md:w-1/4">
                                     <label class="block text-sm font-medium text-gray-700">Shift</label>
-                                    <select name="shift" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                    <select name="shift" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
                                         <option value="">Pilih Shift</option>
                                         <option value="A" {{ old('shift') == 'A' ? 'selected' : '' }}>Shift A</option>
                                         <option value="B" {{ old('shift') == 'B' ? 'selected' : '' }}>Shift B</option>
@@ -116,7 +116,7 @@
 
                                 <div class="w-full md:w-1/4">
                                     <label class="block text-sm font-medium text-gray-700">Waktu</label>
-                                    <select name="time" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                    <select name="time" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
                                         <option value="">Pilih Waktu</option>
                                         <option value="08:00" {{ old('time') == '08:00' ? 'selected' : '' }}>08.00</option>
                                         <option value="16:00" {{ old('time') == '16:00' ? 'selected' : '' }}>16.00</option>

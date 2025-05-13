@@ -15,13 +15,26 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 z-10 border-r">
+                            <th rowspan="3" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 z-10 border-r">
                                 PEMBANGKIT IPP
                             </th>
                             @foreach($dates as $date)
-                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
+                                <th colspan="3" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px] border">
                                     {{ str_pad($date, 2, '0', STR_PAD_LEFT) }}
                                 </th>
+                            @endforeach
+                        </tr>
+                        <tr>
+                            @foreach($dates as $date)
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">DMP</th>
+                                <th colspan="2" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">BEBAN</th>
+                            @endforeach
+                        </tr>
+                        <tr>
+                            @foreach($dates as $date)
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 tracking-wider border"></th>
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 tracking-wider border">11:00</th>
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 tracking-wider border">19:00</th>
                             @endforeach
                         </tr>
                     </thead>
@@ -29,7 +42,7 @@
                         @foreach($powerPlants as $system => $plants)
                             <!-- System Header -->
                             <tr class="bg-gray-50">
-                                <td colspan="{{ count($dates) + 1 }}" class="px-6 py-2 text-sm font-medium text-gray-900">
+                                <td colspan="{{ count($dates) * 3 + 1 }}" class="px-6 py-2 text-sm font-medium text-gray-900">
                                     {{ $system }}
                                 </td>
                             </tr>
@@ -41,7 +54,13 @@
                                     </td>
                                     @foreach($dates as $date)
                                         <td class="px-4 py-2 text-sm text-center border">
-                                            <!-- Empty cell for now -->
+                                            <!-- DMP cell -->
+                                        </td>
+                                        <td class="px-4 py-2 text-sm text-center border">
+                                            <!-- Beban 11:00 cell -->
+                                        </td>
+                                        <td class="px-4 py-2 text-sm text-center border">
+                                            <!-- Beban 19:00 cell -->
                                         </td>
                                     @endforeach
                                 </tr>
@@ -52,6 +71,12 @@
                                     TOTAL
                                 </td>
                                 @foreach($dates as $date)
+                                    <td class="px-4 py-2 text-sm text-center font-medium border">
+                                        -
+                                    </td>
+                                    <td class="px-4 py-2 text-sm text-center font-medium border">
+                                        -
+                                    </td>
                                     <td class="px-4 py-2 text-sm text-center font-medium border">
                                         -
                                     </td>
@@ -66,6 +91,12 @@
                                 TOTAL KESELURUHAN
                             </td>
                             @foreach($dates as $date)
+                                <td class="px-4 py-2 text-sm text-center font-medium border">
+                                    -
+                                </td>
+                                <td class="px-4 py-2 text-sm text-center font-medium border">
+                                    -
+                                </td>
                                 <td class="px-4 py-2 text-sm text-center font-medium border">
                                     -
                                 </td>

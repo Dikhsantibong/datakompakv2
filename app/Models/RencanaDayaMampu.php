@@ -106,7 +106,6 @@ class RencanaDayaMampu extends Model
         return session('unit');
     }
 
-    // Tambahkan validasi format data
     public function validateDailyData($data)
     {
         if (!is_array($data)) {
@@ -114,36 +113,71 @@ class RencanaDayaMampu extends Model
         }
 
         foreach ($data as $date => $dateData) {
-            if (!isset($dateData['rencana']) || !isset($dateData['realisasi'])) {
-                throw new \InvalidArgumentException("Data untuk tanggal $date harus memiliki rencana dan realisasi");
+            // Validate date format
+            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+                throw new \InvalidArgumentException("Format tanggal tidak valid: $date");
             }
 
-            // Validasi rencana
+            // Initialize with empty template if not set
+            if (!isset($dateData['rencana'])) {
+                $dateData['rencana'] = [];
+            }
+            if (!isset($dateData['realisasi'])) {
+                $dateData['realisasi'] = [];
+            }
+
+            // Validate rencana
             foreach ($dateData['rencana'] as $idx => $row) {
-                if (!isset($row['beban']) || !isset($row['durasi']) || !isset($row['keterangan']) || 
-                    !isset($row['on']) || !isset($row['off'])) {
-                    throw new \InvalidArgumentException("Data rencana index $idx tidak lengkap");
+                // Skip empty rows
+                if (empty($row['beban']) && empty($row['on']) && empty($row['off'])) {
+                    continue;
                 }
 
-                // Validasi format waktu
-                if ($row['on'] && !preg_match('/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', $row['on'])) {
-                    throw new \InvalidArgumentException("Format waktu ON tidak valid pada index $idx");
+                // Validate required fields
+                if (!isset($row['beban'])) $row['beban'] = '';
+                if (!isset($row['durasi'])) $row['durasi'] = '';
+                if (!isset($row['keterangan'])) $row['keterangan'] = '';
+                if (!isset($row['on'])) $row['on'] = '';
+                if (!isset($row['off'])) $row['off'] = '';
+
+                // Validate numeric values
+                if (!empty($row['beban']) && !is_numeric($row['beban'])) {
+                    throw new \InvalidArgumentException("Beban harus berupa angka pada rencana index $idx");
                 }
-                if ($row['off'] && !preg_match('/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', $row['off'])) {
-                    throw new \InvalidArgumentException("Format waktu OFF tidak valid pada index $idx");
+                if (!empty($row['durasi']) && !is_numeric($row['durasi'])) {
+                    throw new \InvalidArgumentException("Durasi harus berupa angka pada rencana index $idx");
+                }
+
+                // Validate time format
+                if (!empty($row['on']) && !preg_match('/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', $row['on'])) {
+                    throw new \InvalidArgumentException("Format waktu ON tidak valid pada rencana index $idx");
+                }
+                if (!empty($row['off']) && !preg_match('/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', $row['off'])) {
+                    throw new \InvalidArgumentException("Format waktu OFF tidak valid pada rencana index $idx");
                 }
             }
 
-            // Validasi realisasi
-            if (!isset($dateData['realisasi']['beban']) || !isset($dateData['realisasi']['keterangan'])) {
-                throw new \InvalidArgumentException("Data realisasi untuk tanggal $date tidak lengkap");
+            // Validate realisasi
+            foreach ($dateData['realisasi'] as $idx => $row) {
+                // Skip empty rows
+                if (empty($row['beban']) && empty($row['keterangan'])) {
+                    continue;
+                }
+
+                // Validate required fields
+                if (!isset($row['beban'])) $row['beban'] = '';
+                if (!isset($row['keterangan'])) $row['keterangan'] = '';
+
+                // Validate numeric values
+                if (!empty($row['beban']) && !is_numeric($row['beban'])) {
+                    throw new \InvalidArgumentException("Beban harus berupa angka pada realisasi index $idx");
+                }
             }
         }
 
         return true;
     }
 
-    // Override setter untuk daily_data
     public function setDailyDataAttribute($value)
     {
         if ($value) {
@@ -152,7 +186,6 @@ class RencanaDayaMampu extends Model
         $this->attributes['daily_data'] = json_encode($value);
     }
 
-    // Helper method untuk mendapatkan template data kosong
     public static function getEmptyDayTemplate()
     {
         return [
@@ -166,25 +199,30 @@ class RencanaDayaMampu extends Model
                 ]
             ],
             'realisasi' => [
-                'beban' => '',
-                'keterangan' => ''
+                [
+                    'beban' => '',
+                    'keterangan' => ''
+                ]
             ]
         ];
     }
 
-    // Update method getDailyValue untuk mendukung format baru
-    public function getDailyValue($date, $type = null)
+    public function getDailyValue($date)
     {
         $data = $this->daily_data ?? [];
-        $emptyTemplate = self::getEmptyDayTemplate();
-        
-        if ($type) {
-            return $data[$date][$type] ?? $emptyTemplate[$type];
-        }
-        return $data[$date] ?? $emptyTemplate;
+        return $data[$date] ?? self::getEmptyDayTemplate();
     }
 
-    // Method untuk menambah row rencana
+    public function setDailyValue($date, $type, $value)
+    {
+        $data = $this->daily_data ?? [];
+        if (!isset($data[$date])) {
+            $data[$date] = self::getEmptyDayTemplate();
+        }
+        $data[$date][$type] = $value;
+        $this->daily_data = $data;
+    }
+
     public function addRencanaRow($date)
     {
         $data = $this->daily_data ?? [];
@@ -203,7 +241,6 @@ class RencanaDayaMampu extends Model
         $this->daily_data = $data;
     }
 
-    // Method untuk menghapus row rencana
     public function deleteRencanaRow($date, $index)
     {
         $data = $this->daily_data ?? [];
@@ -214,7 +251,6 @@ class RencanaDayaMampu extends Model
         }
     }
 
-    // Method untuk mengupdate nilai summary
     public function updateSummary()
     {
         $data = $this->daily_data ?? [];
@@ -241,7 +277,6 @@ class RencanaDayaMampu extends Model
         $this->realisasi = !empty($realisasiValues) ? implode(', ', $realisasiValues) : null;
     }
 
-    // Method untuk mendapatkan data harian dalam format yang mudah dibaca
     public function getDailyData($month = null)
     {
         $data = $this->daily_data ?? [];

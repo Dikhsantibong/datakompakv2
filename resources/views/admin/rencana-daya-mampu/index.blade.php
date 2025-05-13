@@ -490,11 +490,11 @@
             // Collect rencana data
             document.querySelectorAll('tr[data-machine-id]').forEach(tr => {
                 const machineId = tr.dataset.machineId;
-                const date = tr.querySelector('.rencana-rows')?.dataset.date;
+                const rencanaRows = tr.querySelector('.rencana-rows');
+                const date = rencanaRows?.dataset.date;
                 
                 if (!machineId || !date) {
-                    console.error('Missing machine ID or date:', { machineId, date });
-                    return;
+                    throw new Error('Data mesin atau tanggal tidak valid');
                 }
 
                 if (!data.rencana[machineId]) {
@@ -504,27 +504,55 @@
                     data.rencana[machineId][date] = [];
                 }
 
-                tr.querySelectorAll('.rencana-rows tr').forEach((row, index) => {
-                    const beban = row.querySelector('input[name*="[beban]"]')?.value?.trim() || '';
-                    const durasi = row.querySelector('input[name*="[durasi]"]')?.value?.trim() || '';
-                    const keterangan = row.querySelector('input[name*="[keterangan]"]')?.value?.trim() || '';
-                    const on = row.querySelector('input[name*="[on]"]')?.value?.trim() || '';
-                    const off = row.querySelector('input[name*="[off]"]')?.value?.trim() || '';
+                // Get all rows in the rencana table
+                const rows = rencanaRows.querySelectorAll('tr');
+                rows.forEach((row, index) => {
+                    const beban = row.querySelector('input[name*="[beban]"]')?.value?.trim();
+                    const durasi = row.querySelector('input[name*="[durasi]"]')?.value?.trim();
+                    const keterangan = row.querySelector('input[name*="[keterangan]"]')?.value?.trim();
+                    const on = row.querySelector('input[name*="[on]"]')?.value?.trim();
+                    const off = row.querySelector('input[name*="[off]"]')?.value?.trim();
 
+                    // Skip completely empty rows
+                    if (!beban && !durasi && !keterangan && !on && !off) {
+                        console.log('Skipping empty row:', index + 1);
+                        return;
+                    }
+
+                    // Validate required fields if any field is filled
+                    if (beban || durasi || keterangan || on || off) {
+                        if (!beban) {
+                            throw new Error(`Beban harus diisi pada baris ${index + 1}`);
+                        }
+                        if (!on || !off) {
+                            throw new Error(`Waktu ON dan OFF harus diisi pada baris ${index + 1}`);
+                        }
+                    }
+
+                    // Add row data only if it's not empty
                     data.rencana[machineId][date].push({
-                        beban, durasi, keterangan, on, off
+                        beban: beban || '',
+                        durasi: durasi || '',
+                        keterangan: keterangan || '',
+                        on: on || '',
+                        off: off || ''
                     });
                 });
+
+                // Remove the date entry if no valid rows were added
+                if (data.rencana[machineId][date].length === 0) {
+                    delete data.rencana[machineId][date];
+                }
             });
 
             // Collect realisasi data
             document.querySelectorAll('tr[data-machine-id]').forEach(tr => {
                 const machineId = tr.dataset.machineId;
-                const date = tr.querySelector('.realisasi-rows')?.dataset.date;
+                const realisasiRows = tr.querySelector('.realisasi-rows');
+                const date = realisasiRows?.dataset.date;
                 
                 if (!machineId || !date) {
-                    console.error('Missing machine ID or date for realisasi:', { machineId, date });
-                    return;
+                    throw new Error('Data mesin atau tanggal tidak valid');
                 }
 
                 if (!data.realisasi[machineId]) {
@@ -534,14 +562,36 @@
                     data.realisasi[machineId][date] = [];
                 }
 
-                tr.querySelectorAll('.realisasi-rows tr').forEach((row, index) => {
-                    const beban = row.querySelector('input[name*="realisasi"][name*="[beban]"]')?.value?.trim() || '';
-                    const keterangan = row.querySelector('input[name*="realisasi"][name*="[keterangan]"]')?.value?.trim() || '';
+                // Get all rows in the realisasi table
+                const rows = realisasiRows.querySelectorAll('tr');
+                rows.forEach((row, index) => {
+                    const beban = row.querySelector('input[name*="realisasi"][name*="[beban]"]')?.value?.trim();
+                    const keterangan = row.querySelector('input[name*="realisasi"][name*="[keterangan]"]')?.value?.trim();
 
+                    // Skip completely empty rows
+                    if (!beban && !keterangan) {
+                        console.log('Skipping empty realisasi row:', index + 1);
+                        return;
+                    }
+
+                    // Validate required fields if any field is filled
+                    if (beban || keterangan) {
+                        if (!beban) {
+                            throw new Error(`Beban realisasi harus diisi pada baris ${index + 1}`);
+                        }
+                    }
+
+                    // Add row data only if it's not empty
                     data.realisasi[machineId][date].push({
-                        beban, keterangan
+                        beban: beban || '',
+                        keterangan: keterangan || ''
                     });
                 });
+
+                // Remove the date entry if no valid rows were added
+                if (data.realisasi[machineId][date].length === 0) {
+                    delete data.realisasi[machineId][date];
+                }
             });
 
             // Log data before sending

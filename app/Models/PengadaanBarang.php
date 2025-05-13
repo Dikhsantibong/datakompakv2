@@ -28,4 +28,9 @@ class PengadaanBarang extends Model
         'tahun' => 'integer',
         'nilai_kontrak' => 'decimal:2'
     ];
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

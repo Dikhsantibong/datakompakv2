@@ -37,4 +37,9 @@ class FlmInspection extends Model
         'tindakan_perbaikan_koneksi' => 'boolean',
         'tindakan_lainnya' => 'boolean',
     ];
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

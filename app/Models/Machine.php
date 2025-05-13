@@ -67,7 +67,7 @@ class Machine extends Model
 
     public function getConnectionName()
     {
-        return session('unit');
+        return session('unit', 'mysql');
     }
 
     protected static function boot()

@@ -15,4 +15,9 @@ class LaporanKitBahanKimia extends Model
         'terima', 
         'total_pakai'
     ];
+    
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 }

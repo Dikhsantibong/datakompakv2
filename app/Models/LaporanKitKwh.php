@@ -21,4 +21,9 @@ class LaporanKitKwh extends Model
         'ps_panel2_akhir',
         'ps_total'
     ];
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 }

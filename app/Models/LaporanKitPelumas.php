@@ -23,4 +23,10 @@ class LaporanKitPelumas extends Model
         'total_pakai',
         'jenis'
     ];
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
+    
 }

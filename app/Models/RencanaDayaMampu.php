@@ -103,7 +103,7 @@ class RencanaDayaMampu extends Model
 
     public function getConnectionName()
     {
-        return session('unit');
+        return session('unit', 'mysql');
     }
 
     public function validateDailyData($data)
@@ -251,6 +251,8 @@ class RencanaDayaMampu extends Model
         }
     }
 
+    
+
     public function updateSummary()
     {
         $data = $this->daily_data ?? [];
@@ -287,4 +289,6 @@ class RencanaDayaMampu extends Model
         }
         return $data;
     }
+
+    
 } 

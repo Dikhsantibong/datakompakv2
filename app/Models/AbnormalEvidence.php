@@ -17,9 +17,4 @@ class AbnormalEvidence extends Model
     {
         return $this->belongsTo(AbnormalReport::class);
     }
-
-    public function getConnectionName()
-    {
-        return session('unit', 'mysql');
-    }
 } 

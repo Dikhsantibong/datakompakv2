@@ -29,4 +29,9 @@ class LaporanKitBbm extends Model
         'flowmeter_2_pakai',
         'total_pakai'
     ];
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 }

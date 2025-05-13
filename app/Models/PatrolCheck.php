@@ -32,9 +32,4 @@ class PatrolCheck extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-
-    public function getConnectionName()
-    {
-        return session('unit', 'mysql');
-    }
 } 

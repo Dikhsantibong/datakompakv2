@@ -31,4 +31,9 @@ class Pemeriksaan5s5r extends Model
         'mengecat' => 'boolean',
         'lainnya' => 'boolean',
     ];
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

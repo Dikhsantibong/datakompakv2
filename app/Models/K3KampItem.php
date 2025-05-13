@@ -26,4 +26,8 @@ class K3KampItem extends Model
     {
         return $this->hasMany(K3KampMedia::class, 'item_id');
     }
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

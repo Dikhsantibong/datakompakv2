@@ -26,4 +26,9 @@ class RapatDetail extends Model
     {
         return $this->belongsTo(Item::class);
     }
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

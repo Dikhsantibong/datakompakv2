@@ -43,4 +43,8 @@ class Item extends Model
     {
         return $this->hasOne(MonitoringAplikasi::class);
     }
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

@@ -33,4 +33,8 @@ class BahanKimia extends Model
     {
         return $this->belongsTo(PowerPlant::class, 'unit_id');
     }
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

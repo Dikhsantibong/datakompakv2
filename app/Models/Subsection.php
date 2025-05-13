@@ -25,4 +25,9 @@ class Subsection extends Model
     {
         return $this->hasMany(Item::class);
     }
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

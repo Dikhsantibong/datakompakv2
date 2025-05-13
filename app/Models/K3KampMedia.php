@@ -19,4 +19,8 @@ class K3KampMedia extends Model
     {
         return $this->belongsTo(K3KampItem::class, 'item_id');
     }
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

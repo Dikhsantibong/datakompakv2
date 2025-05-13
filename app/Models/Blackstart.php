@@ -53,4 +53,8 @@ class Blackstart extends Model
     {
         return $this->sop_evidence ? asset('storage/' . $this->sop_evidence) : null;
     }
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

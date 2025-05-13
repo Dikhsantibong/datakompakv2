@@ -49,4 +49,8 @@ class AbnormalReport extends Model
     {
         return $this->hasMany(AbnormalEvidence::class);
     }
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

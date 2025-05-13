@@ -22,4 +22,9 @@ class LaporanKitJamOperasi extends Model
     {
         return $this->belongsTo(Machine::class, 'machine_id');
     }
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 }

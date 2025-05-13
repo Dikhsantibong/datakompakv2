@@ -17,4 +17,9 @@ class ProgramKerja5r extends Model
         'catatan',
         'eviden'
     ];
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

@@ -24,4 +24,8 @@ class EngineData extends Model
     {
         return $this->belongsTo(Machine::class);
     }
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 } 

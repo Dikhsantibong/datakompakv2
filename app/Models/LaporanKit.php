@@ -27,4 +27,8 @@ class LaporanKit extends Model
     {
         return $this->belongsTo(\App\Models\PowerPlant::class, 'unit_source', 'unit_source');
     }
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
 }

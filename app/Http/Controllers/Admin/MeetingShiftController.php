@@ -102,7 +102,7 @@ class MeetingShiftController extends Controller
                 'k3l.*.type' => 'required|in:unsafe_action,unsafe_condition',
                 'k3l.*.uraian' => 'required|string',
                 'k3l.*.saran' => 'required|string',
-                'k3l.*.eviden' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
+                'k3l.*.eviden' => 'nullable|file|mimes:jpeg,png,jpg,gif,doc,docx,pdf|max:2048',
                 
                 // Notes
                 'catatan_sistem' => 'required|string',

@@ -159,16 +159,6 @@
     <!-- Validation Section -->
     <tr>
         <td colspan="5" style="text-align: center;">
-            <strong>Dibuat oleh:</strong>
-            <br><br><br><br>
-            <strong>{{ $report->creator->name }}</strong>
-            <br>
-            <strong>{{ $report->creator->position ?? 'Staff' }}</strong>
-            <br>
-            <strong>Tanggal: {{ $report->created_at->format('d/m/Y') }}</strong>
-        </td>
-        <td colspan="1"></td>
-        <td colspan="5" style="text-align: center;">
             <strong>Diperiksa oleh:</strong>
             <br><br><br><br>
             <strong>.................................</strong>
@@ -176,6 +166,16 @@
             <strong>Supervisor</strong>
             <br>
             <strong>Tanggal: ....../....../......</strong>
+        </td>
+        <td colspan="1"></td>
+        <td colspan="5" style="text-align: center;">
+            <strong>Dibuat oleh:</strong>
+            <br><br><br><br>
+            <strong>{{ $report->creator->name }}</strong>
+            <br>
+            <strong>{{ $report->creator->position ?? 'Staff' }}</strong>
+            <br>
+            <strong>Tanggal: {{ $report->created_at->format('d/m/Y') }}</strong>
         </td>
     </tr>
 

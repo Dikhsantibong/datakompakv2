@@ -207,13 +207,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="mt-4">
-                                <button type="button" id="add-koordinasi" 
-                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
-                                    <i class="fas fa-plus mr-2"></i>
-                                    Tambah Koordinasi
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -412,13 +405,6 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                            <div class="mt-4">
-                                <button type="button" id="add-adm" 
-                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9]">
-                                    <i class="fas fa-plus mr-2"></i>
-                                    Tambah ADM
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -575,34 +561,6 @@ document.addEventListener('DOMContentLoaded', function() {
         kronologiTable.appendChild(newRow);
     });
 
-    // Koordinasi
-    const addKoordinasiBtn = document.getElementById('add-koordinasi');
-    const koordinasiTable = document.getElementById('koordinasi-table').getElementsByTagName('tbody')[0];
-
-    addKoordinasiBtn.addEventListener('click', function() {
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-            <td class="border px-4 py-2 text-center">
-                <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="tl_ophar[]" value="1">
-            </td>
-            <td class="border px-4 py-2 text-center">
-                <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="tl_op[]" value="1">
-            </td>
-            <td class="border px-4 py-2 text-center">
-                <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="tl_har[]" value="1">
-            </td>
-            <td class="border px-4 py-2 text-center">
-                <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="mul[]" value="1">
-            </td>
-            <td class="border px-4 py-2 text-center">
-                <button type="button" class="delete-row text-red-600 hover:text-red-800">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
-        `;
-        koordinasiTable.appendChild(newRow);
-    });
-
     // Mesin/Peralatan Terdampak
     const addMesinBtn = document.getElementById('add-mesin');
     const mesinTable = document.getElementById('mesin-table').getElementsByTagName('tbody')[0];
@@ -690,39 +648,6 @@ document.addEventListener('DOMContentLoaded', function() {
             </td>
         `;
         rekomendasiTable.appendChild(newRow);
-    });
-
-    // ADM
-    const addAdmBtn = document.getElementById('add-adm');
-    const admTable = document.getElementById('adm-table').getElementsByTagName('tbody')[0];
-
-    addAdmBtn.addEventListener('click', function() {
-        const rowCount = admTable.getElementsByTagName('tr').length + 1;
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-            <td class="border px-4 py-2">${rowCount}</td>
-            <td class="border px-4 py-2 text-center">
-                <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_flm[]" value="1">
-            </td>
-            <td class="border px-4 py-2 text-center">
-                <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_pm[]" value="1">
-            </td>
-            <td class="border px-4 py-2 text-center">
-                <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_em[]" value="1">
-            </td>
-            <td class="border px-4 py-2 text-center">
-                <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_ptw[]" value="1">
-            </td>
-            <td class="border px-4 py-2 text-center">
-                <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_sr[]" value="1">
-            </td>
-            <td class="border px-4 py-2 text-center">
-                <button type="button" class="delete-row text-red-600 hover:text-red-800">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
-        `;
-        admTable.appendChild(newRow);
     });
 
     // Handle row deletion for all tables

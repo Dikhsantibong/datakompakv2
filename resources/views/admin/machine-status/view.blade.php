@@ -87,13 +87,13 @@
                             Export PDF
                         </a>
 
-                        <button id="exportExcelBtn"
+                        <a href="{{ route('admin.machine-status.export-excel') }}?date={{ request('date', date('Y-m-d')) }}&input_time={{ request('input_time') }}" 
                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
                             Export Excel
-                        </button>
+                        </a>
 
                         <a href="{{ route('admin.pembangkit.ready') }}" 
                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
@@ -178,61 +178,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Export Excel Modal -->
-<div id="exportExcelModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
-    <div class="relative top-20 mx-auto p-8 border w-[480px] shadow-xl rounded-lg bg-white">
-        <div class="absolute top-4 right-4">
-            <button id="closeExcelModal" class="text-gray-400 hover:text-gray-600">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
-        </div>
-
-        <h3 class="text-xl font-semibold text-gray-900 mb-6">Export Excel</h3>
-
-        <form id="exportExcelForm" action="{{ route('admin.machine-status.export-excel') }}" method="GET">
-            <div class="space-y-6">
-                <div>
-                    <label for="start_date" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
-                    <input type="date" id="start_date" name="start_date" 
-                           class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                </div>
-
-                <div>
-                    <label for="end_date" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Akhir</label>
-                    <input type="date" id="end_date" name="end_date" 
-                           class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                </div>
-
-                <div>
-                    <label for="export_input_time" class="block text-sm font-medium text-gray-700 mb-2">Waktu Input</label>
-                    <select id="export_input_time" name="input_time" 
-                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Semua Waktu</option>
-                        <option value="06:00">06:00 (Pagi)</option>
-                        <option value="11:00">11:00 (Siang)</option>
-                        <option value="14:00">14:00 (Siang)</option>
-                        <option value="18:00">18:00 (Malam)</option>
-                        <option value="19:00">19:00 (Malam)</option>
-                    </select>
-                </div>
-
-                <div class="flex justify-end space-x-3">
-                    <button type="button" id="cancelExcelExport"
-                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
-                        Batal
-                    </button>
-                    <button type="submit" id="confirmExcelExport"
-                            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
-                        Export Excel
-                    </button>
-                </div>
-            </div>
-        </form>
     </div>
 </div>
 
@@ -537,46 +482,6 @@ document.getElementById('copyFormattedData').addEventListener('click', function(
             text: 'Gagal menyalin laporan ke clipboard'
         });
     });
-});
-
-// Excel Export Modal Functions
-document.getElementById('exportExcelBtn').addEventListener('click', function() {
-    document.getElementById('exportExcelModal').classList.remove('hidden');
-    
-    // Set default dates
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('start_date').value = today;
-    document.getElementById('end_date').value = today;
-});
-
-document.getElementById('closeExcelModal').addEventListener('click', function() {
-    document.getElementById('exportExcelModal').classList.add('hidden');
-});
-
-document.getElementById('cancelExcelExport').addEventListener('click', function() {
-    document.getElementById('exportExcelModal').classList.add('hidden');
-});
-
-document.getElementById('exportExcelForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const startDate = document.getElementById('start_date').value;
-    const endDate = document.getElementById('end_date').value;
-    const inputTime = document.getElementById('export_input_time').value;
-    
-    showLoading();
-    
-    const params = new URLSearchParams({
-        start_date: startDate,
-        end_date: endDate,
-        input_time: inputTime
-    });
-
-    window.location.href = `{{ route('admin.machine-status.export-excel') }}?${params.toString()}`;
-    
-    setTimeout(() => {
-        document.getElementById('exportExcelModal').classList.add('hidden');
-        hideLoading();
-    }, 2000);
 });
 </script>
 @endsection 

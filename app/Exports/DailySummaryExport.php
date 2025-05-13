@@ -7,35 +7,12 @@ use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
-use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use Carbon\Carbon;
 
-class DailySummaryExport implements WithMultipleSheets
-{
-    protected $allData;
-
-    public function __construct($allData)
-    {
-        $this->allData = $allData;
-    }
-
-    public function sheets(): array
-    {
-        $sheets = [];
-
-        foreach ($this->allData as $data) {
-            $sheets[] = new DailySummarySheet($data['date'], $data['units']);
-        }
-
-        return $sheets;
-    }
-}
-
-class DailySummarySheet implements FromView, ShouldAutoSize, WithStyles, WithDrawings
+class DailySummaryExport implements FromView, ShouldAutoSize, WithStyles, WithDrawings
 {
     protected $date;
     protected $units;
@@ -73,37 +50,37 @@ class DailySummarySheet implements FromView, ShouldAutoSize, WithStyles, WithDra
         return [$pln_logo, $k3_logo];
     }
 
-    public function styles(Worksheet $sheet)
+    public function styles($sheet)
     {
         $styles = [
-            // Default style for all cells
-            'A1:R1000' => [
-                'font' => ['size' => 10],
-                'alignment' => [
-                    'vertical' => Alignment::VERTICAL_CENTER
-                ]
+            // Logo and title row
+            1 => [
+                'font' => ['bold' => true, 'size' => 14],
+                'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]
             ],
-            
-            // Header style
-            'A1:R4' => [
-                'font' => ['bold' => true, 'size' => 12],
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                    'vertical' => Alignment::VERTICAL_CENTER
-                ]
-            ]
+            'A1:R1' => ['height' => 50],
         ];
 
-        $currentRow = 6; // Start after header
+        // Get the number of units to calculate the header positions
+        $unitCount = count($this->units);
+        $currentRow = 3;
 
-        // For each unit section
-        for ($i = 0; $i < count($this->units); $i++) {
-            // Unit header row
-            $styles["A" . ($currentRow) . ":R" . ($currentRow)] = [
+        // Apply styles for each unit's headers
+        for ($i = 0; $i < $unitCount; $i++) {
+            // Add gap before each unit (except the first one)
+            if ($i > 0) {
+                $styles["A" . ($currentRow) . ":R" . ($currentRow)] = [
+                    'height' => 20 // Menambahkan tinggi baris untuk gap
+                ];
+                $currentRow++; // Move to next row after gap
+            }
+
+            // Unit name row
+            $styles["A{$currentRow}:R{$currentRow}"] = [
                 'font' => ['bold' => true, 'size' => 11],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'startColor' => ['rgb' => 'DCE6F1']
+                    'startColor' => ['rgb' => 'B8CCE4']
                 ],
                 'alignment' => [
                     'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -116,7 +93,7 @@ class DailySummarySheet implements FromView, ShouldAutoSize, WithStyles, WithDra
                 ]
             ];
 
-            // Column headers row
+            // Main headers row
             $styles["A" . ($currentRow + 1) . ":R" . ($currentRow + 1)] = [
                 'font' => ['bold' => true, 'size' => 10],
                 'fill' => [
@@ -152,9 +129,9 @@ class DailySummarySheet implements FromView, ShouldAutoSize, WithStyles, WithDra
                 ]
             ];
 
-            // Data rows style
+            // Data rows style - center align all data cells
             $dataRowCount = count($this->units[$i]->machines);
-            for ($row = 1; $row <= $dataRowCount + 4; $row++) {
+            for ($row = 1; $row <= $dataRowCount + 4; $row++) { // +4 for total, average, min, max rows
                 $styles["A" . ($currentRow + 2 + $row) . ":R" . ($currentRow + 2 + $row)] = [
                     'alignment' => [
                         'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -169,14 +146,11 @@ class DailySummarySheet implements FromView, ShouldAutoSize, WithStyles, WithDra
             }
 
             // Move to next unit position
-            $currentRow += (3 + $dataRowCount + 4);
+            $currentRow += (3 + $dataRowCount + 4); // headers (3) + data rows + summary rows (4)
         }
 
         // Set specific column alignments if needed
         $sheet->getStyle('A:R')->getAlignment()->setWrapText(true);
-
-        // Set sheet name to the date
-        $sheet->setTitle(Carbon::parse($this->date)->format('d M Y'));
 
         return $styles;
     }

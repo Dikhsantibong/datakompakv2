@@ -13,7 +13,6 @@ use Barryvdh\DomPDF\Facade\Pdf; // Add this for PDF export
 use Maatwebsite\Excel\Facades\Excel; // Add this for Excel export
 use App\Exports\DailySummaryExport; // We'll create this class next
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 
 class DailySummaryController extends Controller
 {
@@ -333,34 +332,18 @@ class DailySummaryController extends Controller
     public function exportPdf(Request $request)
     {
         try {
-            $startDate = $request->get('start_date', $request->get('date'));
-            $endDate = $request->get('end_date', $request->get('date'));
+            $date = $request->date;
+            // Format tanggal untuk nama file
+            $formattedDate = Carbon::parse($date)->format('d F Y');
+            $fileName = "Ikhtisar Harian ({$formattedDate}).pdf";
 
-            // Format dates for file name
-            $fileNameDate = $startDate === $endDate 
-                ? Carbon::parse($startDate)->format('d F Y')
-                : Carbon::parse($startDate)->format('d F Y') . ' - ' . Carbon::parse($endDate)->format('d F Y');
-            
-            $fileName = "Ikhtisar Harian ({$fileNameDate}).pdf";
+            $units = PowerPlant::with(['machines', 'dailySummaries' => function($query) use ($date) {
+                $query->whereDate('date', $date);
+            }])->get();
 
-            // Get all dates in the range
-            $dates = collect(CarbonPeriod::create($startDate, $endDate)->toArray())
-                    ->map(fn($date) => $date->format('Y-m-d'));
-
-            $allData = [];
-            foreach ($dates as $date) {
-                $units = PowerPlant::with(['machines', 'dailySummaries' => function($query) use ($date) {
-                    $query->whereDate('date', $date);
-                }])->get();
-
-                $allData[] = [
-                    'date' => $date,
-                    'units' => $units
-                ];
-            }
-
-            $pdf = Pdf::loadView('admin.daily-summary.pdf-period', [
-                'allData' => $allData
+            $pdf = Pdf::loadView('admin.daily-summary.pdf', [
+                'date' => $date,
+                'units' => $units
             ]);
 
             return $pdf->download($fileName);
@@ -377,33 +360,16 @@ class DailySummaryController extends Controller
     public function exportExcel(Request $request)
     {
         try {
-            $startDate = $request->get('start_date', $request->get('date'));
-            $endDate = $request->get('end_date', $request->get('date'));
+            $date = $request->date;
+            // Format tanggal untuk nama file
+            $formattedDate = Carbon::parse($date)->format('d F Y');
+            $fileName = "Ikhtisar Harian ({$formattedDate}).xlsx";
 
-            // Format dates for file name
-            $fileNameDate = $startDate === $endDate 
-                ? Carbon::parse($startDate)->format('d F Y')
-                : Carbon::parse($startDate)->format('d F Y') . ' - ' . Carbon::parse($endDate)->format('d F Y');
-            
-            $fileName = "Ikhtisar Harian ({$fileNameDate}).xlsx";
+            $units = PowerPlant::with(['machines', 'dailySummaries' => function($query) use ($date) {
+                $query->whereDate('date', $date);
+            }])->get();
 
-            // Get all dates in the range
-            $dates = collect(CarbonPeriod::create($startDate, $endDate)->toArray())
-                    ->map(fn($date) => $date->format('Y-m-d'));
-
-            $allData = [];
-            foreach ($dates as $date) {
-                $units = PowerPlant::with(['machines', 'dailySummaries' => function($query) use ($date) {
-                    $query->whereDate('date', $date);
-                }])->get();
-
-                $allData[] = [
-                    'date' => $date,
-                    'units' => $units
-                ];
-            }
-
-            return Excel::download(new DailySummaryExport($allData), $fileName);
+            return Excel::download(new DailySummaryExport($date, $units), $fileName);
         } catch (\Exception $e) {
             Log::error('Error in Excel export:', [
                 'message' => $e->getMessage(),

@@ -49,7 +49,7 @@
             <th>NCF</th>
             <th>NOF</th>
             <th>Jam</th>
-            <th>HSD | B35 | B40 | MFO | Total | Air</th>
+            <th>HSD | B30 | B40 | MFO | Total | Air</th>
             <th>Med | S420 | S430 | TrvA | T46 | T68 | Tot</th>
             <th>SFC | NPHR | SLC</th>
             <th></th>

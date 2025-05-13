@@ -25,7 +25,7 @@ class MeetingShiftController extends Controller
 {
     public function index()
     {
-        $machines = Machine::select('id', 'name')->orderBy('name')->take(2)->get();
+        $machines = Machine::select('id', 'name')->orderBy('name')->get();
         $latestMeeting = MeetingShift::with([
             'machineStatuses',
             'auxiliaryEquipments',
@@ -272,7 +272,7 @@ class MeetingShiftController extends Controller
     {
         /** @var \App\Models\MeetingShift $meetingShift */
         $meetingShift = MeetingShift::with([
-            'machineStatuses.machine',
+            'machineStatuses.machine.powerPlant',
             'auxiliaryEquipments',
             'resources',
             'k3ls',
@@ -304,7 +304,7 @@ class MeetingShiftController extends Controller
                     'current_shift' => $request->input('current_shift', 'A')
                 ],
                 [
-                    'created_by' => auth()->id()
+                    'created_by' => Auth::id()
                 ]
             );
 
@@ -542,7 +542,7 @@ class MeetingShiftController extends Controller
     {
         try {
             $meetingShift->load([
-                'machineStatuses.machine',
+                'machineStatuses.machine.powerPlant',
                 'auxiliaryEquipments',
                 'resources',
                 'k3ls',
@@ -759,6 +759,49 @@ class MeetingShiftController extends Controller
             return redirect()->back()
                            ->with('error', 'Terjadi kesalahan saat memperbarui data meeting shift: ' . $e->getMessage())
                            ->withInput();
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            DB::beginTransaction();
+            
+            $meetingShift = MeetingShift::findOrFail($id);
+            
+            // Delete related records first
+            $meetingShift->machineStatuses()->delete();
+            $meetingShift->auxiliaryEquipments()->delete();
+            $meetingShift->resources()->delete();
+            
+            // Delete K3L records and their evidence files
+            foreach ($meetingShift->k3ls as $k3l) {
+                if ($k3l->eviden_path) {
+                    Storage::disk('public')->delete($k3l->eviden_path);
+                }
+                $k3l->delete();
+            }
+            
+            $meetingShift->notes()->delete();
+            $meetingShift->resume()->delete();
+            $meetingShift->attendances()->delete();
+            
+            // Finally delete the main record
+            $meetingShift->delete();
+            
+            DB::commit();
+            
+            return redirect()
+                ->route('admin.meeting-shift.list')
+                ->with('success', 'Data meeting shift berhasil dihapus');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error deleting meeting shift: ' . $e->getMessage());
+            
+            return redirect()
+                ->back()
+                ->with('error', 'Terjadi kesalahan saat menghapus data meeting shift: ' . $e->getMessage());
         }
     }
 } 

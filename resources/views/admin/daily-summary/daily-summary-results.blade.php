@@ -64,19 +64,76 @@
                         <h2 class="text-2xl font-bold mb-2">Data Ikhtisar Harian</h2>
                         <p class="text-blue-100 mb-4">Monitor dan kelola data operasional pembangkit listrik secara harian.</p>
                         <div class="flex flex-wrap gap-3">
-                            <a href="{{ route('admin.daily-summary.export-pdf', ['date' => $date]) }}" 
-                               class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
-                                <i class="fas fa-file-pdf mr-2 text-sm"></i>Export PDF
-                            </a>
-                            <a href="{{ route('admin.daily-summary.export-excel', ['date' => $date]) }}" 
-                               class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
-                                <i class="fas fa-file-excel mr-2 text-sm"></i>Export Excel
-                            </a>
+                            <!-- Export Modal Trigger -->
+                            <button id="exportModalTrigger" 
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                                <i class="fas fa-file-export mr-2 text-sm"></i>Export Data
+                            </button>
                             <button 
                                 onclick="window.location.href='{{ route('admin.daily-summary') }}'" 
                                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
                                 <i class="fas fa-arrow-left mr-2 text-sm"></i>Kembali
                             </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Modal -->
+                <div id="exportModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+                    <div class="relative top-20 mx-auto p-8 border w-[480px] shadow-xl rounded-lg bg-white">
+                        <div class="absolute top-4 right-4">
+                            <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Export Data Ikhtisar Harian</h3>
+                            <p class="text-sm text-gray-600">Pilih rentang tanggal untuk mengekspor data</p>
+                        </div>
+
+                        <form id="exportForm" class="space-y-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Awal</label>
+                                    <input type="date" id="start_date" name="start_date" 
+                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                </div>
+                                <div>
+                                    <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Akhir</label>
+                                    <input type="date" id="end_date" name="end_date" 
+                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Export Buttons -->
+                            <div class="space-y-3">
+                                <button type="button" onclick="exportData('excel')"
+                                        class="w-full inline-flex justify-center items-center px-4 py-2.5 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    <i class="fas fa-file-excel mr-2"></i>Export Excel
+                                </button>
+                                <button type="button" onclick="exportData('pdf')"
+                                        class="w-full inline-flex justify-center items-center px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    <i class="fas fa-file-pdf mr-2"></i>Export PDF
+                                </button>
+                                <button type="button" id="closeModalBtn"
+                                        class="w-full inline-flex justify-center items-center px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                                    Batal
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Loading Overlay -->
+                <div id="loadingOverlay" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
+                    <div class="bg-white p-5 rounded-lg shadow-xl flex items-center space-x-4">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        <div class="text-gray-700">
+                            <p class="font-semibold">Memproses Export Data</p>
+                            <p class="text-sm">Mohon tunggu sebentar...</p>
                         </div>
                     </div>
                 </div>
@@ -176,6 +233,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     const contentLoading = document.getElementById('content-loading');
     const contentWrapper = document.getElementById('content-wrapper');
+    const modal = document.getElementById('exportModal');
+    const modalTrigger = document.getElementById('exportModalTrigger');
+    const closeModal = document.getElementById('closeModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const loadingOverlay = document.getElementById('loadingOverlay');
     let searchTimeout;
 
     function updateContent() {
@@ -225,6 +287,81 @@ document.addEventListener('DOMContentLoaded', function() {
             // Reload page with new filter
             window.location.href = url.toString();
         });
+    }
+
+    // Set default dates when modal opens
+    modalTrigger.addEventListener('click', () => {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('start_date').value = today;
+        document.getElementById('end_date').value = today;
+        modal.classList.remove('hidden');
+    });
+
+    // Close modal handlers
+    [closeModal, closeModalBtn].forEach(btn => {
+        btn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+    });
+
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+
+    // Export functionality
+    window.exportData = function(type) {
+        const startDate = document.getElementById('start_date').value;
+        const endDate = document.getElementById('end_date').value;
+
+        if (!startDate || !endDate) {
+            alert('Silakan pilih tanggal awal dan akhir');
+            return;
+        }
+
+        if (new Date(startDate) > new Date(endDate)) {
+            alert('Tanggal awal harus sebelum atau sama dengan tanggal akhir');
+            return;
+        }
+
+        // Show loading overlay
+        loadingOverlay.classList.remove('hidden');
+        loadingOverlay.classList.add('flex');
+        modal.classList.add('hidden');
+
+        const route = type === 'pdf' 
+            ? '{{ route("admin.daily-summary.export-pdf") }}'
+            : '{{ route("admin.daily-summary.export-excel") }}';
+
+        // Create a form to submit
+        const form = document.createElement('form');
+        form.method = 'GET';
+        form.action = route;
+
+        // Add start_date and end_date as hidden inputs
+        const startDateInput = document.createElement('input');
+        startDateInput.type = 'hidden';
+        startDateInput.name = 'start_date';
+        startDateInput.value = startDate;
+        form.appendChild(startDateInput);
+
+        const endDateInput = document.createElement('input');
+        endDateInput.type = 'hidden';
+        endDateInput.name = 'end_date';
+        endDateInput.value = endDate;
+        form.appendChild(endDateInput);
+
+        // Add form to document and submit
+        document.body.appendChild(form);
+        form.submit();
+
+        // Hide loading overlay after a delay
+        setTimeout(() => {
+            loadingOverlay.classList.add('hidden');
+            loadingOverlay.classList.remove('flex');
+        }, 3000);
     }
 });
 </script>

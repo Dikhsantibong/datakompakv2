@@ -1140,14 +1140,22 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Meeting dan Mutasi Shift routes
-Route::get('/meeting-shift', [MeetingShiftController::class, 'index'])->name('admin.meeting-shift.index');
-Route::get('/meeting-shift/{id}', [MeetingShiftController::class, 'show'])->name('admin.meeting-shift.show');
-Route::post('/meeting-shift', [MeetingShiftController::class, 'store'])->name('admin.meeting-shift.store');
-Route::post('/admin/meeting-shift/store-alat-bantu', [MeetingShiftController::class, 'storeAlatBantu'])->name('admin.meeting-shift.store-alat-bantu');
-Route::post('/admin/meeting-shift/store-resource', [MeetingShiftController::class, 'storeResource'])->name('admin.meeting-shift.store-resource');
-Route::post('/admin/meeting-shift/store-k3l', [MeetingShiftController::class, 'storeK3L'])->name('admin.meeting-shift.store-k3l');
-Route::post('/admin/meeting-shift/store-sistem', [MeetingShiftController::class, 'storeSistem'])->name('admin.meeting-shift.store-sistem');
-Route::post('/admin/meeting-shift/store-catatan-umum', [MeetingShiftController::class, 'storeCatatanUmum'])->name('admin.meeting-shift.store-catatan-umum');
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::prefix('meeting-shift')->name('meeting-shift.')->group(function () {
+            Route::get('/', [MeetingShiftController::class, 'index'])->name('index');
+            Route::get('/list', [MeetingShiftController::class, 'list'])->name('list');
+            Route::post('/', [MeetingShiftController::class, 'store'])->name('store');
+            Route::get('/{meetingShift}/edit', [MeetingShiftController::class, 'edit'])->name('edit');
+            Route::put('/{meetingShift}', [MeetingShiftController::class, 'update'])->name('update');
+            Route::delete('/{meetingShift}', [MeetingShiftController::class, 'destroy'])->name('destroy');
+            Route::get('/{meetingShift}', [MeetingShiftController::class, 'show'])->name('show');
+            Route::get('/{meetingShift}/download-pdf', [MeetingShiftController::class, 'downloadPdf'])->name('download-pdf');
+            Route::get('/{meetingShift}/download-excel', [MeetingShiftController::class, 'downloadExcel'])->name('download-excel');
+            Route::get('/{meetingShift}/export', [MeetingShiftController::class, 'export'])->name('export');
+        });
+    });
+});
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     // ... existing routes ...

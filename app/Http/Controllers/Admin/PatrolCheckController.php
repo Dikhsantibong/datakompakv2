@@ -55,6 +55,8 @@ class PatrolCheckController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'shift' => 'required|in:A,B,C,D',
+            'time' => 'required|in:08:00,16:00,20:00',
             'condition' => 'required|array',
             'notes' => 'required|array',
             'abnormal' => 'nullable|array',
@@ -91,15 +93,23 @@ class PatrolCheckController extends Controller
 
         $status = $condition_systems->contains(fn($item) => $item['condition'] === 'abnormal') ? 'abnormal' : 'normal';
 
-        $patrol = PatrolCheck::create([
-            'created_by' => Auth::id(),
-            'condition_systems' => $condition_systems,
-            'abnormal_equipments' => $abnormal_equipments,
-            'condition_after' => $condition_after,
-            'status' => $status,
-        ]);
+        try {
+            $patrol = PatrolCheck::create([
+                'created_by' => Auth::id(),
+                'shift' => $request->input('shift'),
+                'time' => $request->input('time'),
+                'condition_systems' => $condition_systems,
+                'abnormal_equipments' => $abnormal_equipments,
+                'condition_after' => $condition_after,
+                'status' => $status,
+            ]);
 
-        return redirect()->route('admin.patrol-check.list')->with('success', 'Data berhasil disimpan');
+            return redirect()->route('admin.patrol-check.list')->with('success', 'Data berhasil disimpan');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()]);
+        }
     }
 
     public function edit($id)
@@ -112,6 +122,8 @@ class PatrolCheckController extends Controller
     {
         $patrol = PatrolCheck::findOrFail($id);
         $request->validate([
+            'shift' => 'required|in:A,B,C,D',
+            'time' => 'required|in:08:00,16:00,20:00',
             'condition' => 'required|array',
             'notes' => 'required|array',
             'abnormal' => 'nullable|array',
@@ -149,6 +161,8 @@ class PatrolCheckController extends Controller
         $status = $condition_systems->contains(fn($item) => $item['condition'] === 'abnormal') ? 'abnormal' : 'normal';
 
         $patrol->update([
+            'shift' => $request->input('shift'),
+            'time' => $request->input('time'),
             'condition_systems' => $condition_systems,
             'abnormal_equipments' => $abnormal_equipments,
             'condition_after' => $condition_after,

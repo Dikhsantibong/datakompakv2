@@ -72,6 +72,7 @@
                     <div class="max-w-3xl">
                         <h2 class="text-2xl font-bold mb-2">Patrol Check KIT</h2>
                         <p class="text-blue-100 mb-4">Pantau dan catat kondisi peralatan bantu secara berkala untuk memastikan keandalan operasional pembangkit.</p>
+                        
                         <div class="flex flex-wrap gap-3">
                             <a href="{{ route('admin.patrol-check.list') }}" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-600 bg-white rounded-md hover:bg-gray-50">
                                 <i class="fas fa-list mr-2"></i> Lihat Daftar Patrol Check
@@ -82,8 +83,50 @@
 
                 <div class="bg-white rounded-lg shadow overflow-hidden">
                     <div class="p-6">
+                        @if($errors->any())
+                            <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                                <ul>
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <form action="{{ route('admin.patrol-check.store') }}" method="POST">
                             @csrf
+                            
+                            <!-- Shift and Time Selection -->
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Informasi Patrol Check</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="shift" class="block text-sm font-medium text-gray-700 mb-1">Shift</label>
+                                        <select id="shift" name="shift" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                            <option value="">Pilih Shift</option>
+                                            <option value="A" {{ old('shift') == 'A' ? 'selected' : '' }}>Shift A</option>
+                                            <option value="B" {{ old('shift') == 'B' ? 'selected' : '' }}>Shift B</option>
+                                            <option value="C" {{ old('shift') == 'C' ? 'selected' : '' }}>Shift C</option>
+                                            <option value="D" {{ old('shift') == 'D' ? 'selected' : '' }}>Shift D</option>
+                                        </select>
+                                        @error('shift')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div>
+                                        <label for="time" class="block text-sm font-medium text-gray-700 mb-1">Waktu</label>
+                                        <select id="time" name="time" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                            <option value="">Pilih Waktu</option>
+                                            <option value="08:00" {{ old('time') == '08:00' ? 'selected' : '' }}>08.00</option>
+                                            <option value="16:00" {{ old('time') == '16:00' ? 'selected' : '' }}>16.00</option>
+                                            <option value="20:00" {{ old('time') == '20:00' ? 'selected' : '' }}>20.00</option>
+                                        </select>
+                                        @error('time')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
                             
                             <!-- Equipment Conditions Table -->
                             <div class="mb-6">
@@ -306,6 +349,22 @@
             });
         });
     }
+
+    // Add new script for handling dropdown selections
+    document.addEventListener('DOMContentLoaded', function() {
+        const shiftSelect = document.getElementById('shift');
+        const timeSelect = document.getElementById('time');
+        const selectedShift = document.getElementById('selectedShift');
+        const selectedTime = document.getElementById('selectedTime');
+
+        shiftSelect.addEventListener('change', function() {
+            selectedShift.textContent = this.value ? `Shift Terpilih: ${this.value}` : '';
+        });
+
+        timeSelect.addEventListener('change', function() {
+            selectedTime.textContent = this.value ? `Waktu Terpilih: ${this.value}` : '';
+        });
+    });
 </script>
 @endpush
 

@@ -38,7 +38,15 @@
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Tanggal Dibuat</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $patrol->created_at->format('d/m/Y H:i') }}</dd>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $patrol->created_at->format('d/m/Y') }}</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500">Shift</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">Shift {{ $patrol->shift }}</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500">Waktu</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $patrol->time }}</dd>
                                 </div>
                             </dl>
                         </div>

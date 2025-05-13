@@ -80,7 +80,8 @@
     <!-- Judul dan detail di tengah -->
     <div style="text-align: center; margin-bottom: 30px; margin-top: 20px;">
         <h1 style="margin: 0; color: #333; font-size: 28px;">Patrol Check KIT</h1>
-        <p style="margin: 5px 0; color: #666;">Tanggal: {{ optional($patrol->created_at)->format('d F Y H:i') }}</p>
+        <p style="margin: 5px 0; color: #666;">Tanggal: {{ optional($patrol->created_at)->format('d F Y') }}</p>
+        <p style="margin: 5px 0; color: #666;">Shift: {{ $patrol->shift }} | Waktu: {{ $patrol->time }}</p>
         <p style="margin: 5px 0; color: #666;">Status: 
             <span class="{{ $patrol->status === 'normal' ? 'status-normal' : 'status-abnormal' }}">
                 {{ ucfirst($patrol->status) }}

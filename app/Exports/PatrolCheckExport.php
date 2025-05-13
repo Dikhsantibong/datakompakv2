@@ -47,22 +47,13 @@ class PatrolCheckExport implements FromView, WithTitle, WithEvents, WithStyles, 
         $plnDrawing->setName('PLN Logo');
         $plnDrawing->setDescription('PLN Logo');
         $plnDrawing->setPath(public_path('logo/navlog1.png'));
-        $plnDrawing->setHeight(60);
-        $plnDrawing->setCoordinates('B2');
-        $plnDrawing->setOffsetX(30);
+        $plnDrawing->setHeight(55);
+        $plnDrawing->setCoordinates('A1');
+        $plnDrawing->setOffsetX(5);
         $plnDrawing->setOffsetY(5);
 
-        // K3 Logo
-        $k3Drawing = new Drawing();
-        $k3Drawing->setName('K3 Logo');
-        $k3Drawing->setDescription('K3 Logo');
-        $k3Drawing->setPath(public_path('logo/k3_logo.png'));
-        $k3Drawing->setHeight(60);
-        $k3Drawing->setCoordinates('E2');
-        $k3Drawing->setOffsetX(30);
-        $k3Drawing->setOffsetY(5);
-
-        return [$plnDrawing, $k3Drawing];
+        // Hanya logo PLN, tidak ada logo K3
+        return [$plnDrawing];
     }
 
     public function title(): string
@@ -204,40 +195,86 @@ class PatrolCheckExport implements FromView, WithTitle, WithEvents, WithStyles, 
                 $lastRow = $sheet->getHighestRow();
                 $lastColumn = 'H';
 
-                // Set page orientation to landscape
-                $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
-                
-                // Enable text wrapping for all cells
-                $sheet->getStyle('A1:' . $lastColumn . $lastRow)->getAlignment()->setWrapText(true);
+                // Merge cell untuk header sesuai struktur PDF
+                $sheet->mergeCells('A1:A4'); // Logo kiri
+                $sheet->mergeCells('B1:G1'); // Judul
+                $sheet->mergeCells('H1:H4'); // Kolom kanan (user besar)
+                $sheet->mergeCells('B2:G2'); // Nama user
+                $sheet->mergeCells('B3:G3'); // Shift & waktu
+                $sheet->mergeCells('B4:G4'); // Tanggal
 
-                // Add borders to all cells
-                $sheet->getStyle('A1:' . $lastColumn . $lastRow)->applyFromArray([
-                    'borders' => [
-                        'allBorders' => [
-                            'borderStyle' => Border::BORDER_THIN,
-                            'color' => ['rgb' => '000000']
-                        ]
-                    ]
+                // Judul
+                $sheet->getStyle('B1')->applyFromArray([
+                    'font' => [ 'bold' => true, 'size' => 20, 'color' => ['rgb' => '333333'] ],
+                    'alignment' => [ 'horizontal' => Alignment::HORIZONTAL_CENTER ]
+                ]);
+                // Nama user
+                $sheet->getStyle('B2')->applyFromArray([
+                    'font' => [ 'bold' => true, 'size' => 14, 'color' => ['rgb' => '406a7d'] ],
+                    'alignment' => [ 'horizontal' => Alignment::HORIZONTAL_RIGHT ]
+                ]);
+                // Shift & waktu
+                $sheet->getStyle('B3')->applyFromArray([
+                    'font' => [ 'size' => 13 ],
+                    'alignment' => [ 'horizontal' => Alignment::HORIZONTAL_CENTER ]
+                ]);
+                // Tanggal
+                $sheet->getStyle('B4')->applyFromArray([
+                    'font' => [ 'size' => 12, 'color' => ['rgb' => '666666'] ],
+                    'alignment' => [ 'horizontal' => Alignment::HORIZONTAL_CENTER ]
                 ]);
 
-                // Set print area
-                $sheet->getPageSetup()->setPrintArea('A1:' . $lastColumn . $lastRow);
+                // Section title: bold, besar, border bawah biru
+                foreach (range(5, $lastRow) as $row) {
+                    $val = $sheet->getCell('A'.$row)->getValue();
+                    if (stripos($val, 'Kondisi Umum Peralatan Bantu') !== false || stripos($val, 'Data Kondisi Alat Bantu') !== false) {
+                        $sheet->mergeCells('A'.$row.':H'.$row);
+                        $sheet->getStyle('A'.$row)->applyFromArray([
+                            'font' => [ 'bold' => true, 'size' => 16, 'color' => ['rgb' => '333333'] ],
+                            'borders' => [ 'bottom' => [ 'borderStyle' => Border::BORDER_MEDIUM, 'color' => ['rgb' => '009BB9'] ] ],
+                        ]);
+                    }
+                }
 
-                // Fit to page
+                // Header tabel: biru, putih, bold, rata tengah
+                foreach (range(1, $lastRow) as $row) {
+                    $val = $sheet->getCell('A'.$row)->getValue();
+                    if (in_array($val, ['No', 'No'])) {
+                        $sheet->getStyle('A'.$row.':H'.$row)->applyFromArray([
+                            'font' => [ 'bold' => true, 'color' => ['rgb' => 'FFFFFF'] ],
+                            'fill' => [ 'fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '009BB9'] ],
+                            'alignment' => [ 'horizontal' => Alignment::HORIZONTAL_CENTER ]
+                        ]);
+                    }
+                }
+
+                // Border dan font isi tabel
+                $sheet->getStyle('A1:'.$lastColumn.$lastRow)->applyFromArray([
+                    'font' => [ 'name' => 'Arial', 'size' => 11 ],
+                    'borders' => [ 'allBorders' => [ 'borderStyle' => Border::BORDER_THIN, 'color' => ['rgb' => '000000'] ] ],
+                ]);
+
+                // Conditional formatting status (Normal hijau, Abnormal merah)
+                foreach (range(1, $lastRow) as $row) {
+                    $val = $sheet->getCell('C'.$row)->getValue();
+                    if (strtolower($val) === 'normal') {
+                        $sheet->getStyle('C'.$row)->applyFromArray([
+                            'font' => [ 'color' => ['rgb' => '28a745'], 'bold' => true ]
+                        ]);
+                    } elseif (strtolower($val) === 'abnormal') {
+                        $sheet->getStyle('C'.$row)->applyFromArray([
+                            'font' => [ 'color' => ['rgb' => 'dc3545'], 'bold' => true ]
+                        ]);
+                    }
+                }
+
+                // Set page orientation to landscape
+                $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+                $sheet->getPageSetup()->setPrintArea('A1:' . $lastColumn . $lastRow);
                 $sheet->getPageSetup()->setFitToWidth(1);
                 $sheet->getPageSetup()->setFitToHeight(0);
-
-                // Set zoom level
                 $sheet->getSheetView()->setZoomScale(85);
-
-                // Freeze first row
-                $sheet->freezePane('A4');
-
-                // Auto-size rows for better content fit
-                foreach ($this->sectionRows as $row) {
-                    $sheet->getRowDimension($row)->setRowHeight(25);
-                    $sheet->getRowDimension($row + 1)->setRowHeight(20);
-                }
+                $sheet->freezePane('A5');
             }
         ];
     }

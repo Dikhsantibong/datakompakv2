@@ -1,82 +1,87 @@
 <?php
-?><table>
+?><table style="width:100%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:12px;">
     <!-- Header -->
-    <tr class="main-header">
-        <td colspan="9">Form Patrol Check - {{ $patrol->created_at->format('d F Y') }}</td>
-    </tr>
-    
-    <!-- Logo spacing row -->
     <tr>
-        <td colspan="4"></td>
-        <td></td>
-        <td colspan="4"></td>
+        <!-- Logo kiri atas -->
+        <td rowspan="4" style="width:80px; text-align:left; vertical-align:top; border:none;"></td>
+        <!-- Judul di tengah atas -->
+        <td colspan="6" style="text-align:center; font-size:20px; font-weight:bold; color:#333; border:none;">Patrol Check KIT</td>
+        <!-- Logo kanan atas -->
+        <td rowspan="4" style="width:120px; text-align:right; vertical-align:top; border:none;"></td>
     </tr>
-    <tr><td colspan="9"></td></tr>
+    <tr>
+        <!-- Nama user di kanan atas -->
+        <td colspan="6" style="text-align:right; font-size:14px; color:#406a7d; border:none; font-family:Arial, sans-serif; font-weight:normal; white-space:nowrap;">
+            {{ optional($patrol->creator)->name }}
+        </td>
+    </tr>
+    <tr>
+        <!-- Shift dan waktu di tengah -->
+        <td colspan="6" style="text-align:center; font-size:14px; border:none;">
+            Shift: {{ $patrol->shift }} | Waktu: {{ $patrol->time }}
+        </td>
+    </tr>
+    <tr>
+        <!-- Tanggal di tengah -->
+        <td colspan="6" style="text-align:center; font-size:13px; color:#666; border:none;">
+            Tanggal: {{ optional($patrol->created_at)->format('d F Y') }}
+        </td>
+    </tr>
+    <tr><td colspan="8" style="border:none;"></td></tr>
 
-    <!-- Patrol Check Data Section -->
-    <tr class="section-header">
-        <td colspan="9">Data Patrol Check</td>
-    </tr>
-    <tr class="table-header">
-        <th>No</th>
-        <th>Tanggal</th>
-        <th>Sistem</th>
-        <th>Kondisi</th>
-        <th>Catatan</th>
-        <th>Status</th>
-        <th>Dibuat Oleh</th>
-        <th>Waktu Dibuat</th>
-    </tr>
-    @foreach($patrol->condition_systems as $index => $system)
+    <!-- Section Title: Kondisi Umum Peralatan Bantu -->
     <tr>
-        <td>{{ $index + 1 }}</td>
-        <td>{{ $patrol->created_at->format('d/m/Y') }}</td>
-        <td>{{ $system['system'] }}</td>
-        <td>{{ ucfirst($system['condition']) }}</td>
-        <td>{{ $system['notes'] ?? '-' }}</td>
-        <td>{{ ucfirst($patrol->status) }}</td>
-        <td>{{ $patrol->creator->name ?? 'System' }}</td>
-        <td>{{ $patrol->created_at->format('H:i') }}</td>
+        <td colspan="8" style="font-size:16px; font-weight:bold; color:#333; border-bottom:2px solid #009BB9; padding:8px 0 5px 0; background:#fff;">Kondisi Umum Peralatan Bantu</td>
+    </tr>
+    <tr style="background-color:#009BB9; color:#fff; font-weight:bold;">
+        <th style="border:1px solid #ddd; padding:8px;">No</th>
+        <th style="border:1px solid #ddd; padding:8px;">Sistem</th>
+        <th style="border:1px solid #ddd; padding:8px;">Kondisi</th>
+        <th style="border:1px solid #ddd; padding:8px;">Keterangan</th>
+        <th style="border:1px solid #ddd; padding:8px;">Status</th>
+        <th style="border:1px solid #ddd; padding:8px;">Dibuat Oleh</th>
+        <th style="border:1px solid #ddd; padding:8px;">Waktu Dibuat</th>
+        <th style="border:1px solid #ddd; padding:8px;"></th>
+    </tr>
+    @foreach($patrol->condition_systems as $i => $row)
+    <tr>
+        <td style="border:1px solid #ddd; padding:8px; text-align:center;">{{ $i+1 }}</td>
+        <td style="border:1px solid #ddd; padding:8px;">{{ $row['system'] }}</td>
+        <td style="border:1px solid #ddd; padding:8px; text-align:center; color:{{ $row['condition'] === 'normal' ? '#28a745' : '#dc3545' }}; font-weight:bold;">{{ ucfirst($row['condition']) }}</td>
+        <td style="border:1px solid #ddd; padding:8px;">{{ $row['notes'] ?? '-' }}</td>
+        <td style="border:1px solid #ddd; padding:8px; text-align:center;">{{ ucfirst($patrol->status) }}</td>
+        <td style="border:1px solid #ddd; padding:8px; text-align:center;">{{ $patrol->creator->name ?? 'System' }}</td>
+        <td style="border:1px solid #ddd; padding:8px; text-align:center;">{{ $patrol->created_at->format('H:i') }}</td>
+        <td style="border:1px solid #ddd; padding:8px;"></td>
     </tr>
     @endforeach
-    <tr><td colspan="9"></td></tr>
 
+    <!-- Section Title: Data Kondisi Alat Bantu -->
     @if(count($patrol->abnormal_equipments) > 0)
-    <!-- Abnormal Equipment Section -->
-    <tr class="section-header">
-        <td colspan="9">Data Kondisi Alat Bantu</td>
-    </tr>
-    <tr class="table-header">
-        <th rowspan="2">No</th>
-        <th rowspan="2">Peralatan</th>
-        <th rowspan="2">Kondisi Awal</th>
-        <th colspan="3">Tindak Lanjut</th>
-        <th rowspan="2">Kondisi Akhir</th>
-        <th rowspan="2">Catatan</th>
-    </tr>
-    <tr class="sub-header">
-        <th>FLM</th>
-        <th>SR</th>
-        <th>Lainnya</th>
-    </tr>
-    @foreach($patrol->abnormal_equipments as $index => $equipment)
     <tr>
-        <td>{{ $index + 1 }}</td>
-        <td>{{ $equipment['equipment'] }}</td>
-        <td>{{ $equipment['condition'] }}</td>
-        <td>{{ $equipment['flm'] ? 'Ya' : 'Tidak' }}</td>
-        <td>{{ $equipment['sr'] ? 'Ya' : 'Tidak' }}</td>
-        <td>{{ $equipment['other'] ? 'Ya' : 'Tidak' }}</td>
-        <td>{{ $patrol->condition_after[$index]['condition'] ?? '-' }}</td>
-        <td>{{ $patrol->condition_after[$index]['notes'] ?? '-' }}</td>
+        <td colspan="8" style="font-size:16px; font-weight:bold; color:#333; border-bottom:2px solid #009BB9; padding:8px 0 5px 0; background:#fff;">Data Kondisi Alat Bantu</td>
+    </tr>
+    <tr style="background-color:#009BB9; color:#fff; font-weight:bold;">
+        <th style="border:1px solid #ddd; padding:8px;">No</th>
+        <th style="border:1px solid #ddd; padding:8px;">Peralatan</th>
+        <th style="border:1px solid #ddd; padding:8px;">Kondisi Awal</th>
+        <th style="border:1px solid #ddd; padding:8px;">FLM</th>
+        <th style="border:1px solid #ddd; padding:8px;">SR</th>
+        <th style="border:1px solid #ddd; padding:8px;">Lainnya</th>
+        <th style="border:1px solid #ddd; padding:8px;">Kondisi Akhir</th>
+        <th style="border:1px solid #ddd; padding:8px;">Keterangan</th>
+    </tr>
+    @foreach($patrol->abnormal_equipments as $i => $row)
+    <tr>
+        <td style="border:1px solid #ddd; padding:8px; text-align:center;">{{ $i+1 }}</td>
+        <td style="border:1px solid #ddd; padding:8px;">{{ $row['equipment'] }}</td>
+        <td style="border:1px solid #ddd; padding:8px;">{{ $row['condition'] }}</td>
+        <td style="border:1px solid #ddd; padding:8px; text-align:center;">{{ $row['flm'] ? 'Ya' : '-' }}</td>
+        <td style="border:1px solid #ddd; padding:8px; text-align:center;">{{ $row['sr'] ? 'Ya' : '-' }}</td>
+        <td style="border:1px solid #ddd; padding:8px; text-align:center;">{{ $row['other'] ? 'Ya' : '-' }}</td>
+        <td style="border:1px solid #ddd; padding:8px;">{{ $patrol->condition_after[$i]['condition'] ?? '-' }}</td>
+        <td style="border:1px solid #ddd; padding:8px;">{{ $patrol->condition_after[$i]['notes'] ?? '-' }}</td>
     </tr>
     @endforeach
     @endif
-    <tr><td colspan="9"></td></tr>
-
-    <!-- Footer -->
-    <tr><td colspan="9"></td></tr>
-    <tr class="footer">
-        <td colspan="9">Dibuat oleh: {{ $patrol->creator->name ?? 'System' }} | Tanggal: {{ $patrol->created_at->format('d/m/Y H:i') }}</td>
-    </tr>
 </table> 

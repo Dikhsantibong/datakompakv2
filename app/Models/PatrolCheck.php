@@ -13,6 +13,8 @@ class PatrolCheck extends Model
 
     protected $fillable = [
         'created_by',
+        'shift',
+        'time',
         'condition_systems',
         'abnormal_equipments',
         'condition_after',
@@ -29,5 +31,10 @@ class PatrolCheck extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
     }
 } 

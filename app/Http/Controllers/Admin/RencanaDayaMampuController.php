@@ -338,16 +338,25 @@ class RencanaDayaMampuController extends Controller
             $date = Carbon::createFromFormat('Y-m', "$year-$month");
             $formattedDate = $date->format('F Y');
             
-            // Get data
+            // Get data with eager loading
             $powerPlants = PowerPlant::when($unitSource !== 'mysql', function($query) use ($unitSource) {
                 return $query->where('unit_source', $unitSource);
-            })->with(['machines' => function($query) use ($year, $month) {
-                $query->orderBy('name')
-                    ->with(['rencanaDayaMampu' => function($query) use ($year, $month) {
-                        $query->whereYear('tanggal', $year)
-                              ->whereMonth('tanggal', $month);
-                    }]);
+            })->with(['machines' => function($query) {
+                $query->orderBy('name');
             }])->orderBy('name')->get();
+
+            // Get all rencana daya mampu data for the month
+            $rencanaDayaMampu = RencanaDayaMampu::whereYear('tanggal', $year)
+                ->whereMonth('tanggal', $month)
+                ->get()
+                ->keyBy('machine_id');
+
+            // Attach rencana daya mampu data to machines
+            $powerPlants->each(function($plant) use ($rencanaDayaMampu) {
+                $plant->machines->each(function($machine) use ($rencanaDayaMampu) {
+                    $machine->rencanaDayaMampu = collect([$rencanaDayaMampu->get($machine->id)]);
+                });
+            });
 
             if ($format === 'pdf') {
                 $pdf = PDF::loadView('admin.rencana-daya-mampu.pdf', [
@@ -358,9 +367,7 @@ class RencanaDayaMampuController extends Controller
                     'unitSource' => $unitSource
                 ]);
                 
-                // Set paper orientation to landscape and size to A4
                 $pdf->setPaper('A4', 'landscape');
-                
                 return $pdf->download("Rencana Daya Mampu ($formattedDate).pdf");
             } else {
                 return Excel::download(

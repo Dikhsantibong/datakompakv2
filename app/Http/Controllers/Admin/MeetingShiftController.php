@@ -83,7 +83,7 @@ class MeetingShiftController extends Controller
 
         try {
             // Validate all form inputs
-        $validated = $request->validate([
+            $validated = $request->validate([
                 'current_shift' => 'required|in:A,B,C,D',
                 'tanggal' => 'required|date',
                 
@@ -125,26 +125,44 @@ class MeetingShiftController extends Controller
                 'absensi.*.shift' => 'required|in:A,B,C,D,staf ops,TL OP,TL HAR,TL OPHAR,MUL',
                 'absensi.*.status' => 'required|in:hadir,izin,sakit,cuti,alpha,terlambat,ganti shift',
                 'absensi.*.keterangan' => 'nullable|string',
-        ]);
-
-        DB::beginTransaction();
-
-            // Create main meeting shift record
-            $meetingShift = MeetingShift::create([
-                'tanggal' => $validated['tanggal'],
-                'current_shift' => $validated['current_shift'],
-                'created_by' => Auth::user()->getAuthIdentifier()
             ]);
+
+            DB::beginTransaction();
+
+            // Create main meeting shift record first and make sure it's saved
+            $meetingShift = new MeetingShift();
+            $meetingShift->tanggal = $validated['tanggal'];
+            $meetingShift->current_shift = $validated['current_shift'];
+            $meetingShift->created_by = Auth::user()->getAuthIdentifier();
+            $meetingShift->save();
+
+            // Log the created meeting shift
+            Log::info('Created meeting shift', ['id' => $meetingShift->id]);
 
             // Store machine statuses
             foreach ($validated['machine_statuses'] as $machineStatus) {
                 if (!empty($machineStatus['status'])) {
-                MeetingShiftMachineStatus::create([
-                    'meeting_shift_id' => $meetingShift->id,
-                        'machine_id' => $machineStatus['machine_id'],
-                        'status' => json_encode($machineStatus['status']),
-                        'keterangan' => $machineStatus['keterangan'] ?? null
-                    ]);
+                    try {
+                        $status = new MeetingShiftMachineStatus([
+                            'meeting_shift_id' => $meetingShift->id,
+                            'machine_id' => $machineStatus['machine_id'],
+                            'status' => json_encode($machineStatus['status']),
+                            'keterangan' => $machineStatus['keterangan'] ?? null
+                        ]);
+                        $status->save();
+                        
+                        Log::info('Created machine status', [
+                            'meeting_shift_id' => $meetingShift->id,
+                            'machine_id' => $machineStatus['machine_id']
+                        ]);
+                    } catch (\Exception $e) {
+                        Log::error('Failed to create machine status', [
+                            'meeting_shift_id' => $meetingShift->id,
+                            'machine_id' => $machineStatus['machine_id'],
+                            'error' => $e->getMessage()
+                        ]);
+                        throw $e;
+                    }
                 }
             }
 
@@ -212,7 +230,7 @@ class MeetingShiftController extends Controller
             if (!empty($validated['resume'])) {
                 MeetingShiftResume::create([
                     'meeting_shift_id' => $meetingShift->id,
-                    'content' => trim($validated['resume']) // Ensure content is properly trimmed
+                    'content' => trim($validated['resume'])
                 ]);
             }
 

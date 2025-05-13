@@ -9,7 +9,7 @@ class MeetingShiftMachineStatus extends Model
 {
     use HasFactory;
 
-    protected $table = 'machine_statuses';
+    protected $table = 'meeting_shift_machine_statuses';
 
     protected $fillable = [
         'meeting_shift_id',

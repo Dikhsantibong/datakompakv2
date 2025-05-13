@@ -206,14 +206,22 @@
                                                             @endphp
                                                             @forelse($rencanaRows as $row)
                                                             <tr class="transition-colors duration-150 hover:bg-blue-200">
-                                                                <td class="border px-2 py-1 text-center">{{ $row['beban'] ?? '-' }}</td>
-                                                                <td class="border px-2 py-1 text-center">{{ $row['on'] ?? '-' }}</td>
-                                                                <td class="border px-2 py-1 text-center">{{ $row['off'] ?? '-' }}</td>
-                                                                <td class="border px-2 py-1 text-center">{{ $row['durasi'] ?? '-' }}</td>
-                                                                <td class="border px-2 py-1 text-center">{{ $row['keterangan'] ?? '-' }}</td>
+                                                                <td class="border px-2 py-1 text-center">
+                                                                    <span class="px-2 py-1 bg-blue-100 rounded-full text-blue-800">
+                                                                        {{ $row['beban'] ?? '-' }}
+                                                                    </span>
+                                                                </td>
+                                                                <td class="border px-2 py-1 text-center">{{ $row['on'] ? \Carbon\Carbon::parse($row['on'])->format('H:i') : '-' }}</td>
+                                                                <td class="border px-2 py-1 text-center">{{ $row['off'] ? \Carbon\Carbon::parse($row['off'])->format('H:i') : '-' }}</td>
+                                                                <td class="border px-2 py-1 text-center">{{ $row['durasi'] ? number_format($row['durasi'], 2) : '-' }}</td>
+                                                                <td class="border px-2 py-1 text-center">
+                                                                    <span class="inline-block max-w-[120px] truncate" title="{{ $row['keterangan'] ?? '' }}">
+                                                                        {{ $row['keterangan'] ?? '-' }}
+                                                                    </span>
+                                                                </td>
                                                             </tr>
                                                             @empty
-                                                            <tr class="transition-colors duration-150">
+                                                            <tr>
                                                                 <td colspan="5" class="border px-2 py-2 text-center text-gray-500">
                                                                     <i class="fas fa-info-circle mr-1"></i> Belum ada data
                                                                 </td>
@@ -235,28 +243,35 @@
                                                         </thead>
                                                         <tbody>
                                                             @php
-                                                                $realisasi = $data['realisasi'] ?? ['beban' => '', 'keterangan' => ''];
+                                                                $realisasi = $data['realisasi'] ?? [];
+                                                                if (!is_array($realisasi)) {
+                                                                    $realisasi = [$realisasi];
+                                                                }
                                                             @endphp
-                                                            <tr class="transition-colors duration-150 hover:bg-green-200">
-                                                                <td class="border px-2 py-1 text-center">
-                                                                    @if(!empty($realisasi['beban']))
-                                                                        <span class="px-2 py-1 bg-green-100 rounded-full text-green-800">
-                                                                            {{ $realisasi['beban'] }}
+                                                            @forelse($realisasi as $row)
+                                                                <tr class="transition-colors duration-150 hover:bg-green-200">
+                                                                    <td class="border px-2 py-1 text-center">
+                                                                        @if(!empty($row['beban']))
+                                                                            <span class="px-2 py-1 bg-green-100 rounded-full text-green-800">
+                                                                                {{ $row['beban'] }}
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="text-gray-400">-</span>
+                                                                        @endif
+                                                                    </td>
+                                                                    <td class="border px-2 py-1 text-center">
+                                                                        <span class="inline-block max-w-[120px] truncate" title="{{ $row['keterangan'] ?? '' }}">
+                                                                            {{ $row['keterangan'] ?? '-' }}
                                                                         </span>
-                                                                    @else
-                                                                        <span class="text-gray-400">-</span>
-                                                                    @endif
-                                                                </td>
-                                                                <td class="border px-2 py-1 text-center">
-                                                                    @if(!empty($realisasi['keterangan']))
-                                                                        <span class="text-gray-600">
-                                                                            {{ $realisasi['keterangan'] }}
-                                                                        </span>
-                                                                    @else
-                                                                        <span class="text-gray-400">-</span>
-                                                                    @endif
-                                                                </td>
-                                                            </tr>
+                                                                    </td>
+                                                                </tr>
+                                                            @empty
+                                                                <tr>
+                                                                    <td colspan="2" class="border px-2 py-2 text-center text-gray-500">
+                                                                        <i class="fas fa-info-circle mr-1"></i> Belum ada data
+                                                                    </td>
+                                                                </tr>
+                                                            @endforelse
                                                         </tbody>
                                                     </table>
                                                 </div>

@@ -65,60 +65,112 @@ class RencanaDayaMampuExport implements FromView, ShouldAutoSize, WithStyles, Wi
 
     public function styles(Worksheet $sheet)
     {
-        // Set row height for logo
-        $sheet->getRowDimension(1)->setRowHeight(45);
+        // Calculate total columns needed
+        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $this->month, $this->year);
+        $lastColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(5 + ($daysInMonth * 7)); // 5 fixed columns + 7 columns per day
+
+        // Set column widths
+        $sheet->getColumnDimension('A')->setWidth(5);  // No
+        $sheet->getColumnDimension('B')->setWidth(25); // Sistem Kelistrikan
+        $sheet->getColumnDimension('C')->setWidth(25); // Mesin Pembangkit
+        $sheet->getColumnDimension('D')->setWidth(12); // DMN SLO
+        $sheet->getColumnDimension('E')->setWidth(12); // DMP PT
+
+        // Set row height for logo and headers
+        $sheet->getRowDimension(1)->setRowHeight(60);
         $sheet->getRowDimension(2)->setRowHeight(30);
+        $sheet->getRowDimension(3)->setRowHeight(30);
         
-        // Merge cells for company name
-        $sheet->mergeCells('B2:H2');
-        
-        $lastColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(8 + cal_days_in_month(CAL_GREGORIAN, $this->month, $this->year));
-        
-        return [
-            // Company name style
-            'B2:H2' => [
+        // Count total rows
+        $totalRows = 0;
+        foreach ($this->powerPlants as $plant) {
+            foreach ($plant->machines as $machine) {
+                $maxRows = 1; // Minimum 1 row per machine
+                if ($machine->rencanaDayaMampu->isNotEmpty()) {
+                    foreach ($machine->rencanaDayaMampu as $record) {
+                        if ($record) {
+                            foreach (range(1, $daysInMonth) as $day) {
+                                $date = sprintf('%s-%s-%02d', $this->year, $this->month, $day);
+                                $data = $record->getDailyValue($date) ?? [];
+                                $rencanaCount = count($data['rencana'] ?? []);
+                                $realisasiCount = is_array($data['realisasi']) ? count($data['realisasi']) : 1;
+                                $maxRows = max($maxRows, max($rencanaCount, $realisasiCount));
+                            }
+                        }
+                    }
+                }
+                $totalRows += $maxRows;
+            }
+        }
+
+        // Style array
+        $styles = [
+            // Logo and title section
+            'A1:' . $lastColumn . '1' => [
                 'font' => ['bold' => true, 'size' => 14],
                 'alignment' => ['horizontal' => 'center', 'vertical' => 'center']
             ],
-            // Header utama dengan background biru
-            'A4:H4' => [
-                'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
-                'alignment' => ['horizontal' => 'center', 'vertical' => 'center'],
-                'fill' => [
-                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                    'startColor' => ['rgb' => '0A749B']
-                ],
-                'borders' => ['allBorders' => ['borderStyle' => 'thin']]
-            ],
-            // Sub-header tanpa background
-            'A5:' . $lastColumn . '5' => [
+            // Headers
+            'A3:' . $lastColumn . '5' => [
                 'font' => ['bold' => true],
                 'alignment' => ['horizontal' => 'center', 'vertical' => 'center'],
-                'borders' => ['allBorders' => ['borderStyle' => 'thin']]
+                'borders' => [
+                    'allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => 'F3F4F6']
+                ]
             ],
-            // Data rows styling
-            'A6:' . $lastColumn . (count($this->powerPlants) * 2 + 5) => [
-                'borders' => ['allBorders' => ['borderStyle' => 'thin']]
+            // Rencana headers
+            'F4:' . $lastColumn . '4' => [
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => 'DBEAFE']
+                ]
+            ],
+            // Realisasi headers
+            'G4:' . $lastColumn . '4' => [
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => 'DCFCE7']
+                ]
+            ],
+            // Data cells
+            'A6:' . $lastColumn . ($totalRows + 5) => [
+                'borders' => [
+                    'allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+                ],
+                'alignment' => [
+                    'vertical' => 'center'
+                ]
             ],
             // Center alignment for specific columns
-            'A6:A' . (count($this->powerPlants) * 2 + 5) => [
-                'alignment' => ['horizontal' => 'center']
-            ],
-            'E6:' . $lastColumn . (count($this->powerPlants) * 2 + 5) => [
-                'alignment' => ['horizontal' => 'center']
-            ]
+            'A6:A' . ($totalRows + 5) => ['alignment' => ['horizontal' => 'center']],
+            'D6:' . $lastColumn . ($totalRows + 5) => ['alignment' => ['horizontal' => 'center']]
         ];
+
+        // Apply text wrap for all cells
+        $sheet->getStyle('A1:' . $lastColumn . ($totalRows + 5))->getAlignment()->setWrapText(true);
+
+        // Freeze panes
+        $sheet->freezePane('F6');
+
+        return $styles;
     }
 
     public function properties(): array
     {
         return [
             'creator' => 'DataKompak',
-            'title' => 'Rencana Daya Mampu',
+            'lastModifiedBy' => 'DataKompak Export System',
+            'title' => 'Rencana Daya Mampu - ' . date('F Y', mktime(0, 0, 0, $this->month, 1, $this->year)),
             'description' => 'Laporan Rencana Daya Mampu',
             'subject' => 'Rencana Daya Mampu',
-            'keywords' => 'rencana,daya,mampu,report',
+            'keywords' => 'rencana,daya,mampu,report,pln',
             'category' => 'Report',
+            'manager' => 'DataKompak System',
+            'company' => 'PT PLN NUSANTARA POWER',
         ];
     }
 } 

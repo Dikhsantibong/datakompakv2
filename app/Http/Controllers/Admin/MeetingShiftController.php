@@ -72,6 +72,15 @@ class MeetingShiftController extends Controller
 
     public function store(Request $request)
     {
+        // Hapus field k3l.*.eviden yang kosong/null dari request agar validasi tidak error
+        if ($request->has('k3l')) {
+            foreach ($request->k3l as $index => $k3l) {
+                if (empty($request->file("k3l.$index.eviden"))) {
+                    $request->request->remove("k3l.$index.eviden");
+                }
+            }
+        }
+
         try {
             // Validate all form inputs
         $validated = $request->validate([
@@ -102,7 +111,6 @@ class MeetingShiftController extends Controller
                 'k3l.*.type' => 'required|in:unsafe_action,unsafe_condition',
                 'k3l.*.uraian' => 'required|string',
                 'k3l.*.saran' => 'required|string',
-                'k3l.*.eviden' => 'nullable|file|mimes:jpeg,png,jpg,gif,doc,docx,pdf|max:2048',
                 
                 // Notes
                 'catatan_sistem' => 'required|string',
@@ -590,7 +598,6 @@ class MeetingShiftController extends Controller
                 'k3l.*.type' => 'required|in:unsafe_action,unsafe_condition',
                 'k3l.*.uraian' => 'required|string',
                 'k3l.*.saran' => 'required|string',
-                'k3l.*.eviden' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
                 
                 // Notes
                 'catatan_sistem' => 'required|string',

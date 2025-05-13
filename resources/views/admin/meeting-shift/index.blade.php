@@ -366,7 +366,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Eviden</label>
-                                            <input type="file" name="k3l[0][eviden]" accept="image/*"
+                                            <input type="file" name="k3l[0][eviden]"
                                                 class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300">
                                         </div>
                                     </div>
@@ -632,14 +632,7 @@ document.querySelectorAll('input[name$="[eviden]"]').forEach(input => {
         }
 
         if (file) {
-            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-            if (!validTypes.includes(file.type)) {
-                const error = document.createElement('p');
-                error.className = 'text-red-500 text-xs mt-1 file-error';
-                error.textContent = 'File harus berupa gambar (JPG, PNG, atau GIF)';
-                this.parentElement.appendChild(error);
-                this.value = ''; // Clear the file input
-            } else if (file.size > 2 * 1024 * 1024) { // 2MB
+            if (file.size > 2 * 1024 * 1024) { // 2MB
                 const error = document.createElement('p');
                 error.className = 'text-red-500 text-xs mt-1 file-error';
                 error.textContent = 'Ukuran file tidak boleh lebih dari 2MB';

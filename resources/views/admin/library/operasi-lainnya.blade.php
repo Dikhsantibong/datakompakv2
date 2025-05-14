@@ -101,7 +101,7 @@
                                     <td class="px-6 py-4 border border-gray-200">
                                         <span class="text-sm text-gray-500">{{ $file->description }}</span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
                                         <span class="text-sm text-gray-500">{{ $file->created_at->format('d M Y') }}</span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-200">

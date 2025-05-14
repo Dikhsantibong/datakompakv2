@@ -102,7 +102,7 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label for="shift" class="block text-sm font-medium text-gray-700 mb-1">Shift</label>
-                                        <select id="shift" name="shift" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <select id="shift" name="shift" required class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                                             <option value="">Pilih Shift</option>
                                             <option value="A" {{ old('shift') == 'A' ? 'selected' : '' }}>Shift A</option>
                                             <option value="B" {{ old('shift') == 'B' ? 'selected' : '' }}>Shift B</option>
@@ -115,7 +115,7 @@
                                     </div>
                                     <div>
                                         <label for="time" class="block text-sm font-medium text-gray-700 mb-1">Waktu</label>
-                                        <select id="time" name="time" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <select id="time" name="time" required class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                                             <option value="">Pilih Waktu</option>
                                             <option value="08:00" {{ old('time') == '08:00' ? 'selected' : '' }}>08.00</option>
                                             <option value="16:00" {{ old('time') == '16:00' ? 'selected' : '' }}>16.00</option>

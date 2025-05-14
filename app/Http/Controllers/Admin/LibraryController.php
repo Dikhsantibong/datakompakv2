@@ -98,7 +98,7 @@ class LibraryController extends Controller
     {
         $request->validate([
             'document' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:10240',
-            'category' => 'required|in:berita-acara,standarisasi,bacaan-digital,diklat,sop-kit',
+            'category' => 'required|in:berita-acara,standarisasi,bacaan-digital,diklat,sop-kit,ba-transaksi,operasi-lainnya',
             'description' => 'nullable|string'
         ]);
 

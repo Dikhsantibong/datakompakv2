@@ -54,7 +54,7 @@
 
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto px-4 sm:px-6 py-8">
+            <div class="container mx-auto px-4 sm:px-6 ">
                 <!-- Success Message -->
                 @if(session('success'))
                 <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">

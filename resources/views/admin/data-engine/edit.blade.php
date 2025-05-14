@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Add SweetAlert2 CSS and JS in the head section -->
+@push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+@endpush
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@endpush
+
 <div class="flex h-screen bg-gray-100">
     @include('components.sidebar')
 
@@ -245,7 +254,7 @@
                                                     </td>
                                                     <td class="px-4 py-3 min-w-[250px] border-r border-gray-200">
                                                         <textarea name="machines[{{ $machine->id }}][keterangan]" 
-                                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
+                                                               class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
                                                                placeholder="Masukkan keterangan"
                                                                rows="2"></textarea>
                                                     </td>
@@ -287,8 +296,18 @@ document.getElementById('timeSelector').addEventListener('change', function() {
     updateAllTimes();
 });
 
-// Add new JavaScript for loading latest data
+// Updated JavaScript for loading latest data with SweetAlert
 document.getElementById('loadLatestDataBtn').addEventListener('click', function() {
+    // Show loading state
+    Swal.fire({
+        title: 'Memuat Data...',
+        html: 'Mohon tunggu sebentar',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
     fetch(`/admin/data-engine/latest-data?date={{ $date }}`, {
         method: 'GET',
         headers: {
@@ -313,15 +332,31 @@ document.getElementById('loadLatestDataBtn').addEventListener('click', function(
                 });
             });
 
-            // Show success message
-            alert('Data terakhir berhasil dimuat!');
+            // Show success message with SweetAlert2
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Data terakhir berhasil dimuat',
+                timer: 2000,
+                showConfirmButton: false
+            });
         } else {
-            alert('Gagal memuat data terakhir: ' + (data.message || 'Unknown error'));
+            // Show error message with SweetAlert2
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: data.message || 'Terjadi kesalahan saat memuat data',
+            });
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Terjadi kesalahan saat memuat data terakhir');
+        // Show error message with SweetAlert2
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Terjadi kesalahan saat memuat data',
+        });
     });
 });
 </script>

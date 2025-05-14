@@ -490,6 +490,32 @@
     let pelumasRowCount = 0;
     let bahanKimiaRowCount = 0;
 
+    function calculateJamHari(machineId) {
+        const ops = parseFloat(document.querySelector(`input[name="mesin[${machineId}][ops]"]`).value) || 0;
+        const har = parseFloat(document.querySelector(`input[name="mesin[${machineId}][har]"]`).value) || 0;
+        const ggn = parseFloat(document.querySelector(`input[name="mesin[${machineId}][ggn]"]`).value) || 0;
+        const stby = parseFloat(document.querySelector(`input[name="mesin[${machineId}][stby]"]`).value) || 0;
+        
+        const total = ops + har + ggn + stby;
+        document.querySelector(`input[name="mesin[${machineId}][jam_hari]"]`).value = total.toFixed(1);
+    }
+
+    // Add event listeners to all machine operation inputs
+    document.addEventListener('DOMContentLoaded', function() {
+        const machineInputs = document.querySelectorAll('input[name^="mesin["][name$="][ops]"], input[name^="mesin["][name$="][har]"], input[name^="mesin["][name$="][ggn]"], input[name^="mesin["][name$="][stby]"]');
+        machineInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                const machineId = this.name.match(/mesin\[(\d+)\]/)[1];
+                calculateJamHari(machineId);
+            });
+        });
+
+        addBBMRow();
+        addKWHRow();
+        addPelumasRow();
+        addBahanKimiaRow();
+    });
+
     function addBBMRow() {
         const tbody = document.getElementById('bbm-tbody');
         const rowIndex = bbmRowCount++;
@@ -723,14 +749,6 @@
         const terima = parseFloat(row.querySelector('input[name$="[terima]"]').value) || 0;
         row.querySelector('input[name$="[total_pakai]"]').value = (stokAwal + terima).toFixed(1);
     }
-
-    // Initialize with one row for each table when the page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        addBBMRow();
-        addKWHRow();
-        addPelumasRow();
-        addBahanKimiaRow();
-    });
 </script>
 @endpush
 

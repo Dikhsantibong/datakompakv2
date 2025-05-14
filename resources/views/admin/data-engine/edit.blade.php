@@ -72,6 +72,11 @@
                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                                         <i class="fas fa-arrow-left mr-2"></i>Kembali
                                     </a>
+                                    <button type="button"
+                                            id="loadLatestDataBtn"
+                                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                                        <i class="fas fa-sync-alt mr-2"></i>Load Data Terakhir
+                                    </button>
                                 </div>
                                 <div class="flex items-center gap-4">
                                     <div class="relative flex items-center gap-2">
@@ -280,6 +285,44 @@ function updateAllTimes() {
 // Optional: Update times immediately when dropdown changes
 document.getElementById('timeSelector').addEventListener('change', function() {
     updateAllTimes();
+});
+
+// Add new JavaScript for loading latest data
+document.getElementById('loadLatestDataBtn').addEventListener('click', function() {
+    fetch(`/admin/data-engine/latest-data?date={{ $date }}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Object.keys(data.machineLogs).forEach(machineId => {
+                const log = data.machineLogs[machineId];
+                
+                // Update form fields with the latest data
+                const fields = ['kw', 'kvar', 'cos_phi', 'status', 'keterangan'];
+                fields.forEach(field => {
+                    const input = document.querySelector(`[name="machines[${machineId}][${field}]"]`);
+                    if (input && log[field] !== null) {
+                        input.value = log[field];
+                    }
+                });
+            });
+
+            // Show success message
+            alert('Data terakhir berhasil dimuat!');
+        } else {
+            alert('Gagal memuat data terakhir: ' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat memuat data terakhir');
+    });
 });
 </script>
 @endsection

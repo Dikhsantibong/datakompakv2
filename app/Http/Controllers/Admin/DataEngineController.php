@@ -270,4 +270,47 @@ class DataEngineController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengekspor PDF: ' . $e->getMessage());
         }
     }
+
+    public function getLatestData(Request $request)
+    {
+        try {
+            $date = $request->query('date');
+            if (!$date) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Date parameter is required'
+                ], 400);
+            }
+
+            $machines = Machine::with(['logs' => function($query) use ($date) {
+                $query->where('date', $date)
+                      ->latest('time');
+            }])->get();
+
+            $machineLogs = [];
+            foreach ($machines as $machine) {
+                $latestLog = $machine->logs->first();
+                if ($latestLog) {
+                    $machineLogs[$machine->id] = [
+                        'kw' => $latestLog->kw,
+                        'kvar' => $latestLog->kvar,
+                        'cos_phi' => $latestLog->cos_phi,
+                        'status' => $latestLog->status,
+                        'keterangan' => $latestLog->keterangan
+                    ];
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'machineLogs' => $machineLogs
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching latest data: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 } 

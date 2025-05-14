@@ -1394,3 +1394,10 @@ Route::get('/kit-up-kendari', [App\Http\Controllers\KitUpKendariController::clas
 
 Route::get('/subsistem/kendari', [SubsistemController::class, 'kendari'])->name('admin.subsistem.kendari');
 Route::get('/subsistem/bau-bau', [SubsistemController::class, 'bauBau'])->name('admin.subsistem.bau-bau');
+
+// ... existing code ...
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    // ... existing routes ...
+    Route::get('data-engine/latest-data', [DataEngineController::class, 'getLatestData'])->name('data-engine.latest-data');
+    // ... existing code ...
+});

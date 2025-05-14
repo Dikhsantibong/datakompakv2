@@ -120,6 +120,8 @@
                     </div>
                 </div>
 
+                @if(session('db_connection') === 'mysql')
+
                 <!-- Operasi UL/Sentral Dropdown -->
                 <div class="relative" x-data="{ 
                     open: {{ request()->routeIs('admin.daily-summary') || 
@@ -183,6 +185,8 @@
                         </a>
                     </div>
                 </div>
+
+               
 
                 <!-- Operasi UPKD Dropdown -->
                 <div class="relative" x-data="{ 
@@ -282,6 +286,7 @@
                        
                     </div>
                 </div>
+                @endif
 
                 <!-- Library -->
                 <a href="{{ route('admin.library.index') }}"

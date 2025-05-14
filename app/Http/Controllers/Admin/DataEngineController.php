@@ -19,6 +19,7 @@ class DataEngineController extends Controller
     public function index(Request $request)
     {
         $date = $request->date ?? now()->format('Y-m-d');
+        $time = $request->time ?? null;
         
         // Get all power plants for the filter dropdown
         $allPowerPlants = PowerPlant::orderBy('name')->get();
@@ -36,21 +37,25 @@ class DataEngineController extends Controller
         $powerPlants = $powerPlantsQuery->get();
 
         // Load the latest logs for each power plant and machine on the selected date
-        $powerPlants->each(function ($powerPlant) use ($date) {
+        $powerPlants->each(function ($powerPlant) use ($date, $time) {
             // Get power plant logs
-            $latestLog = DB::table('power_plant_logs')
+            $latestLogQuery = DB::table('power_plant_logs')
                 ->where('power_plant_id', $powerPlant->id)
-                ->where('date', $date)
-                ->orderBy('time', 'desc')
-                ->first();
+                ->where('date', $date);
+            
+            if ($time) {
+                $latestLogQuery->where('time', $time);
+            }
+            
+            $latestLog = $latestLogQuery->orderBy('time', 'desc')->first();
 
             $powerPlant->hop = $latestLog?->hop;
             $powerPlant->tma = $latestLog?->tma;
             $powerPlant->inflow = $latestLog?->inflow;
 
             // Get machine logs
-            $powerPlant->machines->each(function ($machine) use ($date) {
-                $latestLog = $machine->getLatestLog($date);
+            $powerPlant->machines->each(function ($machine) use ($date, $time) {
+                $latestLog = $machine->getLatestLog($date, $time);
                 $machine->kw = $latestLog?->kw;
                 $machine->kvar = $latestLog?->kvar;
                 $machine->cos_phi = $latestLog?->cos_phi;
@@ -64,10 +69,10 @@ class DataEngineController extends Controller
         });
 
         if ($request->ajax()) {
-            return view('admin.data-engine._table', compact('powerPlants', 'date'))->render();
+            return view('admin.data-engine._table', compact('powerPlants', 'date', 'time'))->render();
         }
 
-        return view('admin.data-engine.index', compact('powerPlants', 'allPowerPlants', 'date'));
+        return view('admin.data-engine.index', compact('powerPlants', 'allPowerPlants', 'date', 'time'));
     }
     
     public function edit($date)

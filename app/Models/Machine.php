@@ -267,11 +267,15 @@ class Machine extends Model
             ?->rencana;
     }
 
-    public function getLatestLog($date)
+    public function getLatestLog($date, $time = null)
     {
-        return $this->logs()
-            ->where('date', $date)
-            ->latest('time')
-            ->first();
+        $query = $this->logs()
+            ->where('date', $date);
+            
+        if ($time) {
+            $query->where('time', $time);
+        }
+        
+        return $query->orderBy('time', 'desc')->first();
     }
 }

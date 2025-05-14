@@ -76,7 +76,15 @@
                                         <div class="text-sm font-medium text-gray-900">{{ $machine->name }}</div>
                                     </td>
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
-                                        {{ $latestLog ? \Carbon\Carbon::parse($latestLog->time)->format('H:i') : '-' }}
+                                        @if($latestLog)
+                                            @if(isset($time))
+                                                {{ \Carbon\Carbon::parse($time)->format('H:i') }}
+                                            @else
+                                                {{ \Carbon\Carbon::parse($latestLog->time)->format('H:i') }}
+                                            @endif
+                                        @else
+                                            -
+                                        @endif
                                     </td>
                                   
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">

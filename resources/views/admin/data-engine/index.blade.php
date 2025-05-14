@@ -92,6 +92,7 @@
                                             onclick="toggleFullTableView()">
                                         <i class="fas fa-expand mr-1"></i> Full Table
                                     </button>
+                                    
                                     @if(request()->has('power_plant_id') || request()->has('date'))
                                         <div class="flex flex-wrap gap-2" id="active-filters">
                                             @if(request('power_plant_id'))
@@ -138,6 +139,20 @@
                                                name="date" 
                                                value="{{ request('date', now()->format('Y-m-d')) }}"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                    </div>
+
+                                    <div class="w-40">
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Jam</label>
+                                        <select name="time" 
+                                                class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                            <option value="">Semua Jam</option>
+                                            @for ($hour = 0; $hour < 24; $hour++)
+                                                <option value="{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00:00" 
+                                                        {{ request('time') == str_pad($hour, 2, '0', STR_PAD_LEFT) . ':00:00' ? 'selected' : '' }}>
+                                                    {{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00
+                                                </option>
+                                            @endfor
+                                        </select>
                                     </div>
 
                                     <div class="flex items-center gap-2">

@@ -268,10 +268,10 @@ class MachineMonitorController extends Controller
                 'type' => 'required|string|max:50',
                 'serial_number' => 'required|string|max:50',
                 'power_plant_id' => 'required|exists:power_plants,id',
-                'dmn' => 'required|numeric',
-                'dmp' => 'required|numeric',
-                'load_value' => 'required|numeric',
-                'installed_power' => 'required|numeric',
+                'dmn' => 'required|numeric|decimal:0,3',
+                'dmp' => 'required|numeric|decimal:0,3',
+                'load_value' => 'required|numeric|decimal:0,3',
+                'installed_power' => 'required|numeric|decimal:0,3',
             ]);
 
             // Get PowerPlant untuk unit_source
@@ -462,10 +462,10 @@ class MachineMonitorController extends Controller
                 'type' => 'required',
                 'serial_number' => 'required',
                 'power_plant_id' => 'required|exists:power_plants,id',
-                'dmn' => 'required|numeric',
-                'dmp' => 'required|numeric',
-                'load_value' => 'required|numeric',
-                'installed_power' => 'required|numeric',
+                'dmn' => 'required|numeric|decimal:0,3',
+                'dmp' => 'required|numeric|decimal:0,3',
+                'load_value' => 'required|numeric|decimal:0,3',
+                'installed_power' => 'required|numeric|decimal:0,3',
             ]);
 
             $machine = Machine::findOrFail($id);

@@ -24,6 +24,11 @@ class PatrolCheckController extends Controller
     {
         $query = PatrolCheck::with('creator');
 
+        // Filter by shift
+        if (request('shift')) {
+            $query->where('shift', '=', request('shift'));
+        }
+
         // Filter by status
         if (request()->has('status')) {
             $query->where('status', request('status'));

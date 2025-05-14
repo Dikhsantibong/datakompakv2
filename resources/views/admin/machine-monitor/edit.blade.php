@@ -109,7 +109,7 @@
                             <input type="number" 
                                    name="dmn" 
                                    id="dmn" 
-                                   step="0.01"
+                                   step="0.001"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                                    value="{{ optional($item->operations()->latest('recorded_at')->first())->dmn ?? 0 }}" 
                                    required>
@@ -123,7 +123,7 @@
                             <input type="number" 
                                    name="dmp" 
                                    id="dmp" 
-                                   step="0.01"
+                                   step="0.001"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                                    value="{{ optional($item->operations()->latest('recorded_at')->first())->dmp ?? 0 }}" 
                                    required>
@@ -137,7 +137,7 @@
                             <input type="number" 
                                    name="load_value" 
                                    id="load_value" 
-                                   step="0.01"
+                                   step="0.001"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                                    value="{{ optional($item->operations()->latest('recorded_at')->first())->load_value ?? 0 }}" 
                                    required>
@@ -151,7 +151,7 @@
                             <input type="number" 
                                    name="installed_power" 
                                    id="installed_power" 
-                                   step="0.01"
+                                   step="0.001"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                                    value="{{ optional($item->operations()->latest('recorded_at')->first())->installed_power ?? 0 }}" 
                                    required>

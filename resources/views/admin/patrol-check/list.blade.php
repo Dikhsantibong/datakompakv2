@@ -98,8 +98,16 @@
                                             onclick="toggleFullTableView()">
                                         <i class="fas fa-expand mr-1"></i> Full Table
                                     </button>
-                                    @if(request()->has('status') || request()->has('created_by') || request()->has('start_date') || request()->has('end_date'))
+                                    @if(request()->has('status') || request()->has('created_by') || request()->has('start_date') || request()->has('end_date') || request()->has('shift'))
                                         <div class="flex flex-wrap gap-2" id="active-filters">
+                                            @if(request('shift'))
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Shift: {{ request('shift') }}
+                                                    <button onclick="removeFilter('shift')" class="ml-1 text-blue-600 hover:text-blue-800">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </span>
+                                            @endif
                                             @if(request('status'))
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                     Status: {{ request('status') }}
@@ -137,15 +145,18 @@
                                 <form action="{{ route('admin.patrol-check.list') }}" method="GET" 
                                       class="flex flex-wrap items-end gap-4">
                                     <div class="w-40">
-                                        <label class="block text-xs font-medium text-gray-700 mb-1">Status</label>
-                                        <select name="status" 
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Shift</label>
+                                        <select name="shift" 
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                                            <option value="">Semua Status</option>
-                                            <option value="normal" {{ request('status') == 'normal' ? 'selected' : '' }}>Normal</option>
-                                            <option value="abnormal" {{ request('status') == 'abnormal' ? 'selected' : '' }}>Abnormal</option>
+                                            <option value="">Semua Shift</option>
+                                            <option value="A" {{ request('shift') == 'A' ? 'selected' : '' }}>Shift A</option>
+                                            <option value="B" {{ request('shift') == 'B' ? 'selected' : '' }}>Shift B</option>
+                                            <option value="C" {{ request('shift') == 'C' ? 'selected' : '' }}>Shift C</option>
+                                            <option value="D" {{ request('shift') == 'D' ? 'selected' : '' }}>Shift D</option>
                                         </select>
                                     </div>
 
+                                    @if(session('unit') === 'mysql')
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Dibuat Oleh</label>
                                         <select name="created_by" 
@@ -158,6 +169,7 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    @endif
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
@@ -191,13 +203,13 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shift</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Oleh</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">No</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Tanggal</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Shift</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Waktu</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Dibuat Oleh</th>
+                                        {{-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th> --}}
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
@@ -218,7 +230,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
                                             {{ optional($patrol->creator)->name ?? 'N/A' }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
+                                        {{-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
                                             @if($patrol->status === 'abnormal')
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
                                                     Ada Abnormal
@@ -228,7 +240,7 @@
                                                     Normal
                                                 </span>
                                             @endif
-                                        </td>
+                                        </td> --}}
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center border border-gray-200">
                                             <a href="{{ route('admin.patrol-check.show', $patrol->id ?? 0) }}" 
                                                class="text-blue-600 hover:text-blue-900 mr-3" 

@@ -75,44 +75,42 @@
                          x-transition:leave-end="transform opacity-0 scale-95"
                          @click.away="open = false" 
                          class="pl-4 mt-1 space-y-1">
-                        <a href="{{ route('admin.meeting-shift.index') }}" 
+                        <a href="{{ session('unit') === 'mysql' ? route('admin.meeting-shift.list') : route('admin.meeting-shift.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.meeting-shift.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-exchange-alt w-5 h-5"></i>
                             <span class="ml-3 text-sm">Meeting-Mutasi-shift</span>
                         </a>
-                        <a href="{{ route('admin.abnormal-report.index') }}" 
+                        <a href="{{ session('unit') === 'mysql' ? route('admin.abnormal-report.list') : route('admin.abnormal-report.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.laporan-abnormal.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-exclamation-triangle w-5 h-5"></i>
                             <span class="ml-3 text-sm">Laporan Abnormal/Gangguan</span>
                         </a>
-                        <a href="{{ route('admin.flm.index') }}" 
+                        <a href="{{ session('unit') === 'mysql' ? route('admin.flm.list') : route('admin.flm.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.flm.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-tasks w-5 h-5"></i>
                             <span class="ml-3 text-sm">FLM</span>
                         </a>
-                        <a href="{{ route('admin.5s5r.index') }}" 
+                        <a href="{{ session('unit') === 'mysql' ? route('admin.5s5r.list') : route('admin.5s5r.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.5s5r.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-check-double w-5 h-5"></i>
                             <span class="ml-3 text-sm">5S5R</span>
                         </a>
-                        <a href="{{ route('admin.k3-kamp.index') }}" 
+                        <a href="{{ session('unit') === 'mysql' ? route('admin.k3-kamp.view') : route('admin.k3-kamp.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.k3-kamp.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-hard-hat w-5 h-5"></i>
                             <span class="ml-3 text-sm">K3, KAM & Lingkungan</span>
                         </a>
-                    <a href="{{ route('admin.data-engine.index') }}" 
-                    class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.data-engine.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
-                        <i class="fas fa-cogs w-5 h-5"></i> 
-                        <span class="ml-3 text-sm">Data Engine Perjam</span>
+                        <a href="{{ session('unit') === 'mysql' ? route('admin.data-engine.index') : route('admin.data-engine.index') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.data-engine.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                            <i class="fas fa-cogs w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Data Engine Perjam</span>
                         </a>
-
-                        <a href="{{ route('admin.laporan-kit.index') }}" 
+                        <a href="{{ session('unit') === 'mysql' ? route('admin.laporan-kit.list') : route('admin.laporan-kit.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.laporan-kit.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-clock w-5 h-5"></i>
                             <span class="ml-3 text-sm">Laporan KIT 00.00</span>
                         </a>
-
-                        <a href="{{ route('admin.patrol-check.index') }}" 
+                        <a href="{{ session('unit') === 'mysql' ? route('admin.patrol-check.list') : route('admin.patrol-check.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.patrol-check.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-clipboard-check w-5 h-5"></i>
                             <span class="ml-3 text-sm">Patrol Check KIT</span>

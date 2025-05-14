@@ -238,7 +238,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::post('/store-absensi', [MeetingShiftController::class, 'storeAbsensi'])->name('meeting-shift.store-absensi');
         Route::post('/store-resume', [MeetingShiftController::class, 'storeResume'])->name('meeting-shift.store-resume');
         Route::get('/list', [MeetingShiftController::class, 'list'])->name('meeting-shift.list');
-        Route::get('/show', [MeetingShiftController::class, 'show'])->name('meeting-shift.show');
+        
         Route::get('/create', [MeetingShiftController::class, 'create'])->name('meeting-shift.create');
     });
 
@@ -1271,7 +1271,7 @@ Route::get('/admin/operasi-upkd/program-kerja/export-pdf', [ProgramKerjaControll
     // Add program kerja routes
     Route::prefix('operasi-upkd')->name('operasi-upkd.')->group(function () {
         Route::prefix('program-kerja')->name('program-kerja.')->group(function () {
-            Route::get('/', [ProgramKerjaController::class, 'index'])->name('index');
+            Route::get('/', [ProgramKerjaController::class, 'index'])->name('index');http://127.0.0.1:8000/
             Route::post('/store', [ProgramKerjaController::class, 'store'])->name('store');
         });
     });

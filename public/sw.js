@@ -47,6 +47,11 @@ const returnFromCache = function (request) {
 };
 
 self.addEventListener("fetch", function (event) {
+    // Jangan intersep request ke /admin
+    if (event.request.url.includes('/admin')) {
+        return; // biarkan browser handle sendiri
+    }
+
     event.respondWith(checkResponse(event.request).catch(function () {
         return returnFromCache(event.request);
     }));

@@ -250,11 +250,11 @@
                                     <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">aksi </th>
                                 </tr>
                                 <tr class="bg-gray-50">
-                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">NAMA PANEL 1</th>
-                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">NAMA PANEL 2</th>
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center"> PANEL 1</th>
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center"> PANEL 2</th>
                                     <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center align-middle">total prod.<br>kWH</th>
-                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">NAMA PANEL 1</th>
-                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">NAMA PANEL 2</th>
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center"> PANEL 1</th>
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center"> PANEL 2</th>
                                     <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 text-center align-middle">total prod.<br>kWH</th>
                                 </tr>
                                 <tr class="bg-gray-50">
@@ -516,65 +516,97 @@
         addBahanKimiaRow();
     });
 
+    function calculateBBMTotals(row) {
+        // Get the row if not provided (for direct input events)
+        if (!row || !(row instanceof Element)) {
+            row = this.closest('tr');
+        }
+        
+        // Storage Tank calculations
+        const st1Liter = parseFloat(row.querySelector('input[name$="[storage_tank_1_liter]"]').value) || 0;
+        const st2Liter = parseFloat(row.querySelector('input[name$="[storage_tank_2_liter]"]').value) || 0;
+        const totalStok = st1Liter + st2Liter;
+        row.querySelector('input[name$="[total_stok]"]').value = totalStok.toFixed(1);
+
+        // Service Tank calculations
+        const st1ServiceLiter = parseFloat(row.querySelector('input[name$="[service_tank_1_liter]"]').value) || 0;
+        const st2ServiceLiter = parseFloat(row.querySelector('input[name$="[service_tank_2_liter]"]').value) || 0;
+        const totalStokTangki = totalStok + st1ServiceLiter + st2ServiceLiter;
+        row.querySelector('input[name$="[total_stok_tangki]"]').value = totalStokTangki.toFixed(1);
+
+        // Flowmeter calculations
+        const fm1Awal = parseFloat(row.querySelector('input[name$="[flowmeter_1_awal]"]').value) || 0;
+        const fm1Akhir = parseFloat(row.querySelector('input[name$="[flowmeter_1_akhir]"]').value) || 0;
+        const fm2Awal = parseFloat(row.querySelector('input[name$="[flowmeter_2_awal]"]').value) || 0;
+        const fm2Akhir = parseFloat(row.querySelector('input[name$="[flowmeter_2_akhir]"]').value) || 0;
+
+        const pakai1 = Math.max(0, fm1Akhir - fm1Awal);
+        const pakai2 = Math.max(0, fm2Akhir - fm2Awal);
+
+        row.querySelector('input[name$="[flowmeter_1_pakai]"]').value = pakai1.toFixed(1);
+        row.querySelector('input[name$="[flowmeter_2_pakai]"]').value = pakai2.toFixed(1);
+        row.querySelector('input[name$="[total_pakai]"]').value = (pakai1 + pakai2).toFixed(1);
+    }
+
     function addBBMRow() {
         const tbody = document.getElementById('bbm-tbody');
         const rowIndex = bbmRowCount++;
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.innerHTML = `
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_1_cm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_1_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_2_cm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_2_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
-                <input type="number" step="0.1" name="bbm[${rowIndex}][total_stok]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][total_stok]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
             </td>
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_1_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_1_percentage]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_2_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_2_percentage]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
-                <input type="number" step="0.1" name="bbm[${rowIndex}][total_stok_tangki]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][total_stok_tangki]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
             </td>
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][terima_bbm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
-                <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
             </td>
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
+            <td class="px-4 py-2 border-r">
                 <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
-            <td class=" px-4 py-2 border-r">
-                <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
             </td>
-            <td class=" px-4 py-2">
-                <input type="number" step="0.1" name="bbm[${rowIndex}][total_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            <td class="px-4 py-2">
+                <input type="number" step="0.1" name="bbm[${rowIndex}][total_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
             </td>
             <td class="px-4 py-2 border-l border-gray-300 text-center">
                 <button type="button"
@@ -589,7 +621,12 @@
             </td>
         `;
         tbody.appendChild(row);
-        setupBBMCalculations(row);
+
+        // Add event listeners for all number inputs in this row
+        const inputs = row.querySelectorAll('input[type="number"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => calculateBBMTotals(row));
+        });
     }
 
     function addKWHRow() {
@@ -614,28 +651,102 @@
         setupKWHCalculations(row);
     }
 
+    function calculatePelumasTotals(row) {
+        // Get the row if not provided (for direct input events)
+        if (!row || !(row instanceof Element)) {
+            row = this.closest('tr');
+        }
+
+        // Calculate Storage Tank total
+        const tank1Liter = parseFloat(row.querySelector('input[name$="[tank1_liter]"]').value) || 0;
+        const tank2Liter = parseFloat(row.querySelector('input[name$="[tank2_liter]"]').value) || 0;
+        const tankTotalStok = tank1Liter + tank2Liter;
+        row.querySelector('input[name$="[tank_total_stok]"]').value = tankTotalStok.toFixed(1);
+
+        // Calculate Drum total
+        const drumArea1 = parseFloat(row.querySelector('input[name$="[drum_area1]"]').value) || 0;
+        const drumArea2 = parseFloat(row.querySelector('input[name$="[drum_area2]"]').value) || 0;
+        const drumTotalStok = drumArea1 + drumArea2;
+        row.querySelector('input[name$="[drum_total_stok]"]').value = drumTotalStok.toFixed(1);
+
+        // Calculate total stok tangki (total from tanks + drums)
+        const totalStokTangki = tankTotalStok + drumTotalStok;
+        row.querySelector('input[name$="[total_stok_tangki]"]').value = totalStokTangki.toFixed(1);
+
+        // Get terima pelumas value
+        const terimaPelumas = parseFloat(row.querySelector('input[name$="[terima_pelumas]"]').value) || 0;
+
+        // Calculate total pakai (total stok tangki + terima pelumas)
+        const totalPakai = totalStokTangki + terimaPelumas;
+        row.querySelector('input[name$="[total_pakai]"]').value = totalPakai.toFixed(1);
+    }
+
     function addPelumasRow() {
         const tbody = document.getElementById('pelumas-tbody');
         const rowIndex = pelumasRowCount++;
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.innerHTML = `
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank1_cm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank1_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank2_cm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank2_liter]" class="w-[80px]] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][tank_total_stok]" class="w-[80px]] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][drum_area1]" class="w-[80px]] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][drum_area2]" class="w-[80px]] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][drum_total_stok]" class="w-[80px]] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][total_stok_tangki]" class="w-[80px]] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][terima_pelumas]" class="w-[80px]] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2 border-r"><input type="number" step="0.1" name="pelumas[${rowIndex}][total_pakai]" class="w-[80px]] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
-            <td class="px-4 py-2 border-r"><input type="text" name="pelumas[${rowIndex}][jenis]" class="w-[80px]] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="px-4 py-2"><button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button></td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][tank1_cm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][tank1_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][tank2_cm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][tank2_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][tank_total_stok]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][drum_area1]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][drum_area2]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][drum_total_stok]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][total_stok_tangki]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][terima_pelumas]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="number" step="0.1" name="pelumas[${rowIndex}][total_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+            </td>
+            <td class="px-4 py-2 border-r">
+                <input type="text" name="pelumas[${rowIndex}][jenis]" class="w-[180px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </td>
+            <td class="px-4 py-2">
+                <button type="button"
+                    onclick="this.closest('tr').remove()"
+                    class="group flex items-center justify-center mx-auto bg-transparent border-none focus:outline-none"
+                    aria-label="Hapus Baris"
+                    title="Hapus Baris">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-[80px] group-hover:bg-red-100 transition">
+                        <i class="fas fa-trash text-red-600 group-hover:text-red-800 text-lg"></i>
+                    </span>
+                </button>
+            </td>
         `;
         tbody.appendChild(row);
-        setupPelumasCalculations(row);
+
+        // Add event listeners for all number inputs in this row
+        const inputs = row.querySelectorAll('input[type="number"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                calculatePelumasTotals(this.closest('tr'));
+            });
+        });
+
+        // Initial calculation
+        calculatePelumasTotals(row);
     }
 
     function addBahanKimiaRow() {
@@ -671,11 +782,28 @@
     }
 
     function setupPelumasCalculations(row) {
-        // Add calculations for Pelumas totals
-        const inputs = row.querySelectorAll('input[type="number"]');
-        inputs.forEach(input => {
-            input.addEventListener('input', () => calculatePelumasTotals(row));
-        });
+        // Calculate Storage Tank total
+        const tank1Liter = parseFloat(row.querySelector('input[name$="[tank1_liter]"]').value) || 0;
+        const tank2Liter = parseFloat(row.querySelector('input[name$="[tank2_liter]"]').value) || 0;
+        const tankTotalStok = tank1Liter + tank2Liter;
+        row.querySelector('input[name$="[tank_total_stok]"]').value = tankTotalStok.toFixed(1);
+
+        // Calculate Drum total
+        const drumArea1 = parseFloat(row.querySelector('input[name$="[drum_area1]"]').value) || 0;
+        const drumArea2 = parseFloat(row.querySelector('input[name$="[drum_area2]"]').value) || 0;
+        const drumTotalStok = drumArea1 + drumArea2;
+        row.querySelector('input[name$="[drum_total_stok]"]').value = drumTotalStok.toFixed(1);
+
+        // Calculate total stok tangki (total from tanks + drums)
+        const totalStokTangki = tankTotalStok + drumTotalStok;
+        row.querySelector('input[name$="[total_stok_tangki]"]').value = totalStokTangki.toFixed(1);
+
+        // Get terima pelumas value
+        const terimaPelumas = parseFloat(row.querySelector('input[name$="[terima_pelumas]"]').value) || 0;
+
+        // Calculate total pakai (total stok tangki + terima pelumas)
+        const totalPakai = totalStokTangki + terimaPelumas;
+        row.querySelector('input[name$="[total_pakai]"]').value = totalPakai.toFixed(1);
     }
 
     function setupBahanKimiaCalculations(row) {
@@ -684,26 +812,6 @@
         inputs.forEach(input => {
             input.addEventListener('input', () => calculateBahanKimiaTotals(row));
         });
-    }
-
-    function calculateBBMTotals() {
-        // Storage Tank total
-        const st1Liter = parseFloat(document.querySelector('input[name="bbm[storage_tank_1_liter]"]').value) || 0;
-        const st2Liter = parseFloat(document.querySelector('input[name="bbm[storage_tank_2_liter]"]').value) || 0;
-        document.querySelector('input[name="bbm[total_stok]"]').value = (st1Liter + st2Liter).toFixed(1);
-
-        // Flowmeter usage calculations
-        const fm1Awal = parseFloat(document.querySelector('input[name="bbm[flowmeter_1_awal]"]').value) || 0;
-        const fm1Akhir = parseFloat(document.querySelector('input[name="bbm[flowmeter_1_akhir]"]').value) || 0;
-        const fm2Awal = parseFloat(document.querySelector('input[name="bbm[flowmeter_2_awal]"]').value) || 0;
-        const fm2Akhir = parseFloat(document.querySelector('input[name="bbm[flowmeter_2_akhir]"]').value) || 0;
-
-        const pakai1 = fm1Akhir - fm1Awal;
-        const pakai2 = fm2Akhir - fm2Awal;
-
-        document.querySelector('input[name="bbm[flowmeter_1_pakai]"]').value = pakai1.toFixed(1);
-        document.querySelector('input[name="bbm[flowmeter_2_pakai]"]').value = pakai2.toFixed(1);
-        document.querySelector('input[name="bbm[total_pakai]"]').value = (pakai1 + pakai2).toFixed(1);
     }
 
     function calculateKWHTotals(row) {
@@ -724,23 +832,6 @@
         
         const psTotal = (psPanel1Akhir - psPanel1Awal) + (psPanel2Akhir - psPanel2Awal);
         row.querySelector('input[name$="[ps_total]"]').value = psTotal.toFixed(1);
-    }
-
-    function calculatePelumasTotals(row) {
-        // Calculate Storage Tank total
-        const tank1Liter = parseFloat(row.querySelector('input[name$="[tank1_liter]"]').value) || 0;
-        const tank2Liter = parseFloat(row.querySelector('input[name$="[tank2_liter]"]').value) || 0;
-        row.querySelector('input[name$="[tank_total_stok]"]').value = (tank1Liter + tank2Liter).toFixed(1);
-
-        // Calculate Drum total
-        const drumArea1 = parseFloat(row.querySelector('input[name$="[drum_area1]"]').value) || 0;
-        const drumArea2 = parseFloat(row.querySelector('input[name$="[drum_area2]"]').value) || 0;
-        row.querySelector('input[name$="[drum_total_stok]"]').value = (drumArea1 + drumArea2).toFixed(1);
-
-        // Calculate total stok tangki
-        const tankTotal = tank1Liter + tank2Liter;
-        const drumTotal = drumArea1 + drumArea2;
-        row.querySelector('input[name$="[total_stok_tangki]"]').value = (tankTotal + drumTotal).toFixed(1);
     }
 
     function calculateBahanKimiaTotals(row) {

@@ -17,6 +17,10 @@ use App\Events\DailySummaryUpdated;
 use App\Listeners\SyncDailySummaryToUpKendari;
 use App\Events\RencanaDayaMampuUpdated;
 use App\Listeners\SyncRencanaDayaMampuToUpKendari;
+use App\Events\MachineLogUpdated;
+use App\Listeners\SyncMachineLogToUpKendari;
+use App\Events\Registered;
+use App\Listeners\SendEmailVerificationNotification;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -44,6 +48,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         RencanaDayaMampuUpdated::class => [
             SyncRencanaDayaMampuToUpKendari::class,
+        ],
+        MachineLogUpdated::class => [
+            SyncMachineLogToUpKendari::class,
+        ],
+        Registered::class => [
+            SendEmailVerificationNotification::class,
         ],
     ];
 } 

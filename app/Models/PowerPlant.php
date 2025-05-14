@@ -208,4 +208,3 @@ class PowerPlant extends Model
                    ->get();
     }
 }
-

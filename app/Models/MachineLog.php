@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+use App\Events\MachineLogUpdated;
+use Illuminate\Support\Facades\DB;
 
 class MachineLog extends Model
 {
+    public static $isSyncing = false;
+
     protected $fillable = [
         'machine_id',
         'date',
@@ -37,5 +42,83 @@ class MachineLog extends Model
     public function getConnectionName()
     {
         return session('unit', 'mysql');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($machineLog) {
+            try {
+                if (self::$isSyncing) return;
+
+                $powerPlant = $machineLog->machine->powerPlant;
+                
+                if (!$powerPlant) {
+                    Log::warning('Skipping sync - Power Plant not found for machine log:', [
+                        'machine_id' => $machineLog->machine_id
+                    ]);
+                    return;
+                }
+
+                $currentSession = session('unit', 'mysql');
+
+                // Sinkronisasi hanya jika kondisi terpenuhi
+                if ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
+                    event(new MachineLogUpdated($machineLog, 'create'));
+                } elseif ($currentSession !== 'mysql' && $currentSession === $powerPlant->unit_source) {
+                    event(new MachineLogUpdated($machineLog, 'create'));
+                }
+            } catch (\Exception $e) {
+                Log::error('Error in MachineLog sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
+
+        static::updated(function ($machineLog) {
+            try {
+                if (self::$isSyncing) return;
+
+                $powerPlant = $machineLog->machine->powerPlant;
+                if ($powerPlant) {
+                    $currentSession = session('unit', 'mysql');
+
+                    if ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
+                        event(new MachineLogUpdated($machineLog, 'update'));
+                    } elseif ($currentSession !== 'mysql' && $currentSession === $powerPlant->unit_source) {
+                        event(new MachineLogUpdated($machineLog, 'update'));
+                    }
+                }
+            } catch (\Exception $e) {
+                Log::error('Error in MachineLog sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
+
+        static::deleting(function ($machineLog) {
+            try {
+                if (self::$isSyncing) return;
+
+                $powerPlant = $machineLog->machine->powerPlant;
+                if ($powerPlant) {
+                    $currentSession = session('unit', 'mysql');
+
+                    if ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
+                        event(new MachineLogUpdated($machineLog, 'delete'));
+                    } elseif ($currentSession !== 'mysql' && $currentSession === $powerPlant->unit_source) {
+                        event(new MachineLogUpdated($machineLog, 'delete'));
+                    }
+                }
+            } catch (\Exception $e) {
+                Log::error('Error in MachineLog sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
     }
 } 

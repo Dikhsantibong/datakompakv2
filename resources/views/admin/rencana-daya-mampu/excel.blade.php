@@ -54,7 +54,7 @@
 
     <!-- Table Body -->
     @php $no = 1; @endphp
-    @foreach($powerPlants as $plant)
+    @forelse($powerPlants as $plant)
         @foreach($plant->machines as $machine)
             @php
                 $maxRows = 1; // Minimal 1 baris untuk setiap mesin
@@ -65,13 +65,6 @@
                     $date = sprintf('%s-%s-%02d', $year, $month, $day);
                     $record = $machine->rencanaDayaMampu->first();
                     $data = $record ? $record->getDailyValue($date) : null;
-                    
-                    // Jika ada data, hitung jumlah baris maksimum
-                    if ($data) {
-                        $rencanaCount = count($data['rencana'] ?? []);
-                        $realisasiCount = is_array($data['realisasi']) ? count($data['realisasi']) : 1;
-                        $maxRows = max($maxRows, max($rencanaCount, $realisasiCount));
-                    }
                     
                     // Pastikan selalu ada minimal satu baris data
                     if (!$data || empty($data['rencana'])) {
@@ -85,51 +78,54 @@
                 }
             @endphp
 
-            @for($row = 0; $row < $maxRows; $row++)
-                <tr>
-                    @if($row === 0)
-                        <td rowspan="{{ $maxRows }}" style="text-align: center; vertical-align: middle; border: 1px solid #e5e7eb;">{{ $no++ }}</td>
-                        <td rowspan="{{ $maxRows }}" style="vertical-align: middle; border: 1px solid #e5e7eb;">{{ $plant->name }}</td>
-                        <td rowspan="{{ $maxRows }}" style="vertical-align: middle; border: 1px solid #e5e7eb;">{{ $machine->name }}</td>
-                        <td rowspan="{{ $maxRows }}" style="text-align: center; vertical-align: middle; border: 1px solid #e5e7eb;">{{ $machine->dmn_slo ?? '-' }}</td>
-                        <td rowspan="{{ $maxRows }}" style="text-align: center; vertical-align: middle; border: 1px solid #e5e7eb;">{{ $machine->dmp_pt ?? '-' }}</td>
-                    @endif
+            <tr>
+                <td style="text-align: center; vertical-align: middle; border: 1px solid #e5e7eb;">{{ $no++ }}</td>
+                <td style="vertical-align: middle; border: 1px solid #e5e7eb;">{{ $plant->name }}</td>
+                <td style="vertical-align: middle; border: 1px solid #e5e7eb;">{{ $machine->name }}</td>
+                <td style="text-align: center; vertical-align: middle; border: 1px solid #e5e7eb;">{{ $machine->dmn_slo ?? '-' }}</td>
+                <td style="text-align: center; vertical-align: middle; border: 1px solid #e5e7eb;">{{ $machine->dmp_pt ?? '-' }}</td>
 
-                    @for($day = 1; $day <= cal_days_in_month(CAL_GREGORIAN, $month, $year); $day++)
-                        @php
-                            $date = sprintf('%s-%s-%02d', $year, $month, $day);
-                            $data = $dailyData[$date];
-                            $rencana = isset($data['rencana'][$row]) ? $data['rencana'][$row] : ['beban' => '', 'on' => '', 'off' => '', 'durasi' => '', 'keterangan' => ''];
-                            $realisasi = isset($data['realisasi'][$row]) ? $data['realisasi'][$row] : ['beban' => '', 'keterangan' => ''];
-                        @endphp
+                @for($day = 1; $day <= cal_days_in_month(CAL_GREGORIAN, $month, $year); $day++)
+                    @php
+                        $date = sprintf('%s-%s-%02d', $year, $month, $day);
+                        $data = $dailyData[$date];
+                        $rencana = $data['rencana'][0] ?? ['beban' => '', 'on' => '', 'off' => '', 'durasi' => '', 'keterangan' => ''];
+                        $realisasi = $data['realisasi'][0] ?? ['beban' => '', 'keterangan' => ''];
+                    @endphp
 
-                        <!-- Rencana Columns -->
-                        <td style="background-color: #dbeafe; text-align: center; border: 1px solid #e5e7eb;">
-                            {{ !empty($rencana['beban']) ? number_format($rencana['beban'], 2) : '-' }}
-                        </td>
-                        <td style="background-color: #dbeafe; text-align: center; border: 1px solid #e5e7eb;">
-                            {{ !empty($rencana['on']) ? \Carbon\Carbon::parse($rencana['on'])->format('H:i') : '-' }}
-                        </td>
-                        <td style="background-color: #dbeafe; text-align: center; border: 1px solid #e5e7eb;">
-                            {{ !empty($rencana['off']) ? \Carbon\Carbon::parse($rencana['off'])->format('H:i') : '-' }}
-                        </td>
-                        <td style="background-color: #dbeafe; text-align: center; border: 1px solid #e5e7eb;">
-                            {{ !empty($rencana['durasi']) ? number_format($rencana['durasi'], 2) : '-' }}
-                        </td>
-                        <td style="background-color: #dbeafe; text-align: center; border: 1px solid #e5e7eb;">
-                            {{ !empty($rencana['keterangan']) ? $rencana['keterangan'] : '-' }}
-                        </td>
+                    <!-- Rencana Columns -->
+                    <td style="text-align: center; border: 1px solid #e5e7eb;">{{ !empty($rencana['beban']) ? number_format($rencana['beban'], 2) : '-' }}</td>
+                    <td style="text-align: center; border: 1px solid #e5e7eb;">{{ !empty($rencana['on']) ? \Carbon\Carbon::parse($rencana['on'])->format('H:i') : '-' }}</td>
+                    <td style="text-align: center; border: 1px solid #e5e7eb;">{{ !empty($rencana['off']) ? \Carbon\Carbon::parse($rencana['off'])->format('H:i') : '-' }}</td>
+                    <td style="text-align: center; border: 1px solid #e5e7eb;">{{ !empty($rencana['durasi']) ? number_format($rencana['durasi'], 2) : '-' }}</td>
+                    <td style="text-align: center; border: 1px solid #e5e7eb;">{{ !empty($rencana['keterangan']) ? $rencana['keterangan'] : '-' }}</td>
 
-                        <!-- Realisasi Columns -->
-                        <td style="background-color: #dcfce7; text-align: center; border: 1px solid #e5e7eb;">
-                            {{ !empty($realisasi['beban']) ? number_format($realisasi['beban'], 2) : '-' }}
-                        </td>
-                        <td style="background-color: #dcfce7; text-align: center; border: 1px solid #e5e7eb;">
-                            {{ !empty($realisasi['keterangan']) ? $realisasi['keterangan'] : '-' }}
-                        </td>
-                    @endfor
-                </tr>
-            @endfor
+                    <!-- Realisasi Columns -->
+                    <td style="text-align: center; border: 1px solid #e5e7eb;">{{ !empty($realisasi['beban']) ? number_format($realisasi['beban'], 2) : '-' }}</td>
+                    <td style="text-align: center; border: 1px solid #e5e7eb;">{{ !empty($realisasi['keterangan']) ? $realisasi['keterangan'] : '-' }}</td>
+                @endfor
+            </tr>
         @endforeach
-    @endforeach
+    @empty
+        <tr>
+            <td style="text-align: center; vertical-align: middle; border: 1px solid #e5e7eb;">1</td>
+            <td style="vertical-align: middle; border: 1px solid #e5e7eb;">-</td>
+            <td style="vertical-align: middle; border: 1px solid #e5e7eb;">-</td>
+            <td style="text-align: center; vertical-align: middle; border: 1px solid #e5e7eb;">-</td>
+            <td style="text-align: center; vertical-align: middle; border: 1px solid #e5e7eb;">-</td>
+
+            @for($day = 1; $day <= cal_days_in_month(CAL_GREGORIAN, $month, $year); $day++)
+                <!-- Empty Rencana Columns -->
+                <td style="text-align: center; border: 1px solid #e5e7eb;">-</td>
+                <td style="text-align: center; border: 1px solid #e5e7eb;">-</td>
+                <td style="text-align: center; border: 1px solid #e5e7eb;">-</td>
+                <td style="text-align: center; border: 1px solid #e5e7eb;">-</td>
+                <td style="text-align: center; border: 1px solid #e5e7eb;">-</td>
+
+                <!-- Empty Realisasi Columns -->
+                <td style="text-align: center; border: 1px solid #e5e7eb;">-</td>
+                <td style="text-align: center; border: 1px solid #e5e7eb;">-</td>
+            @endfor
+        </tr>
+    @endforelse
 </table> 

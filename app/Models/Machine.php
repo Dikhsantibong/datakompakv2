@@ -65,6 +65,12 @@ class Machine extends Model
         return $this->hasMany(MachineLog::class);
     }
 
+    public function latestOperation()
+    {
+        return $this->hasOne(MachineOperation::class)
+            ->latest('recorded_at');
+    }
+
     public function getConnectionName()
     {
         return session('unit', 'mysql');

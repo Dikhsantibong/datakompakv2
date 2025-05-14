@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\PDF;
 use App\Models\Machine;
 use App\Models\MachineLog;
+use App\Models\MachineOperation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -92,22 +93,32 @@ class DataEngineController extends Controller
     public function edit($date)
     {
         try {
-            $powerPlants = PowerPlant::with(['machines' => function ($query) {
-                $query->orderBy('name');
+            $powerPlants = PowerPlant::with(['machines' => function ($query) use ($date) {
+                $query->orderBy('name')
+                    ->with(['latestOperation' => function($q) use ($date) {
+                        $q->whereDate('recorded_at', '<=', $date)
+                          ->orderBy('recorded_at', 'desc');
+                    }]);
             }])->get();
 
             // Load the latest logs for each machine on the selected date
             $powerPlants->each(function ($powerPlant) use ($date) {
                 $powerPlant->machines->each(function ($machine) use ($date) {
                     $latestLog = $machine->getLatestLog($date);
+                    $latestOperation = $machine->latestOperation;
+
                     $machine->kw = $latestLog?->kw;
                     $machine->kvar = $latestLog?->kvar;
                     $machine->cos_phi = $latestLog?->cos_phi;
                     $machine->status = $latestLog?->status;
                     $machine->keterangan = $latestLog?->keterangan;
-                    $machine->daya_terpasang = $latestLog?->daya_terpasang;
-                    $machine->silm_slo = $latestLog?->silm_slo;
-                    $machine->dmp_performance = $latestLog?->dmp_performance;
+                    
+                    // Data dari MachineOperation
+                    $machine->daya_terpasang = $latestOperation?->installed_power;
+                    $machine->dmn = $latestOperation?->dmn;
+                    $machine->dmp = $latestOperation?->dmp;
+              
+                    
                     $machine->log_time = $latestLog?->time;
                 });
             });

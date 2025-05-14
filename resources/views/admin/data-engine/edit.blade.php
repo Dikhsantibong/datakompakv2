@@ -187,18 +187,21 @@
                                                         <input type="number" 
                                                                name="machines[{{ $machine->id }}][daya_terpasang]" 
                                                                step="0.01"
+                                                               value="{{ $machine->daya_terpasang }}"
                                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
                                                                placeholder="Masukkan daya">
                                                     </td>
                                                     <td class="px-4 py-3 min-w-[180px] border-r border-gray-200">
                                                         <input type="text" 
                                                                name="machines[{{ $machine->id }}][silm_slo]" 
+                                                               value="{{ $machine->dmn }}"
                                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
                                                                placeholder="Masukkan SILM/SLO">
                                                     </td>
                                                     <td class="px-4 py-3 min-w-[180px] border-r border-gray-200">
                                                         <input type="text" 
                                                                name="machines[{{ $machine->id }}][dmp_performance]" 
+                                                               value="{{ $machine->dmp }}"
                                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
                                                                placeholder="Masukkan DMP Performance">
                                                     </td>

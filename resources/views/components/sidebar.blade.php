@@ -185,9 +185,10 @@
                         </a>
                     </div>
                 </div>
+                @endif
 
                
-
+                @if(session('db_connection') === 'mysql')
                 <!-- Operasi UPKD Dropdown -->
                 <div class="relative" x-data="{ 
                     open: {{ request()->routeIs('admin.operasi-upkd.*') ? 'true' : 'false' }} 
@@ -246,7 +247,9 @@
                         </a>
                     </div>
                 </div>
+                @endif
 
+                @if(session('db_connection') === 'mysql')
                 <!-- Energi Primer UPKD Dropdown -->
                 <div class="relative" x-data="{ 
                     open: {{ request()->routeIs('admin.energiprimer.*') || request()->routeIs('admin.energiprimer-upkd.*') ? 'true' : 'false' }} 

@@ -120,9 +120,10 @@
                     </div>
                 </div>
 
-                @if(session('db_connection') === 'mysql')
+                
 
                 <!-- Operasi UL/Sentral Dropdown -->
+                @if(session('unit') === 'mysql')
                 <div class="relative" x-data="{ 
                     open: {{ request()->routeIs('admin.daily-summary') || 
                              request()->routeIs('admin.machine-status.*') || 
@@ -186,10 +187,12 @@
                     </div>
                 </div>
                 @endif
+                
 
                
-                @if(session('db_connection') === 'mysql')
+                
                 <!-- Operasi UPKD Dropdown -->
+                @if(session('unit') === 'mysql')
                 <div class="relative" x-data="{ 
                     open: {{ request()->routeIs('admin.operasi-upkd.*') ? 'true' : 'false' }} 
                 }">
@@ -248,9 +251,11 @@
                     </div>
                 </div>
                 @endif
+               
 
-                @if(session('db_connection') === 'mysql')
+                
                 <!-- Energi Primer UPKD Dropdown -->
+                @if(session('unit') === 'mysql')
                 <div class="relative" x-data="{ 
                     open: {{ request()->routeIs('admin.energiprimer.*') || request()->routeIs('admin.energiprimer-upkd.*') ? 'true' : 'false' }} 
                 }">
@@ -290,6 +295,7 @@
                     </div>
                 </div>
                 @endif
+               
 
                 <!-- Library -->
                 <a href="{{ route('admin.library.index') }}"

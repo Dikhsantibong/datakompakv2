@@ -119,7 +119,7 @@
                                             <option value="">Pilih Waktu</option>
                                             <option value="08:00" {{ old('time') == '08:00' ? 'selected' : '' }}>08.00</option>
                                             <option value="16:00" {{ old('time') == '16:00' ? 'selected' : '' }}>16.00</option>
-                                            <option value="20:00" {{ old('time') == '20:00' ? 'selected' : '' }}>20.00</option>
+                                            <option value="22:00" {{ old('time') == '22:00' ? 'selected' : '' }}>22.00</option>
                                         </select>
                                         @error('time')
                                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

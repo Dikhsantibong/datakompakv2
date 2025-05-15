@@ -59,6 +59,7 @@ use App\Http\Controllers\Admin\PatrolCheckController;
 use App\Http\Controllers\Admin\BlackstartController;
 use App\Http\Controllers\KitUpKendariController;
 use App\Http\Controllers\SubsistemController;
+use App\Http\Controllers\Admin\KesiapanKitController;
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -1399,5 +1400,12 @@ Route::get('/subsistem/bau-bau', [SubsistemController::class, 'bauBau'])->name('
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     // ... existing routes ...
     Route::get('data-engine/latest-data', [DataEngineController::class, 'getLatestData'])->name('data-engine.latest-data');
+    // ... existing code ...
+});
+
+// ... existing code ...
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    // ... existing routes ...
+    Route::get('kesiapan-kit', [KesiapanKitController::class, 'index'])->name('kesiapan-kit.index');
     // ... existing code ...
 });

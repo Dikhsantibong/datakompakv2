@@ -105,8 +105,20 @@
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
                                         {{ $machine->cos_phi ?? '-' }}
                                     </td>
-                                    <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
-                                        {{ $machine->status ?? '-' }}
+                                    <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200">
+                                        @if($machine->status)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                                {{ $machine->status === 'OPS' ? 'bg-green-100 text-green-800' :
+                                                   ($machine->status === 'RSH' ? 'bg-yellow-100 text-yellow-800' :
+                                                   ($machine->status === 'FO' ? 'bg-red-100 text-red-800' :
+                                                   ($machine->status === 'MO' ? 'bg-orange-100 text-orange-800' :
+                                                   ($machine->status === 'P0' ? 'bg-blue-100 text-blue-800' :
+                                                   ($machine->status === 'MB' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'))))) }}">
+                                                {{ $machine->status }}
+                                            </span>
+                                        @else
+                                            -
+                                        @endif
                                     </td>
                                     
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">

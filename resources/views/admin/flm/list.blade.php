@@ -183,9 +183,7 @@
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">No</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Tanggal</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Shift</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Waktu</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Operator</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Waktu</th>  
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Aksi</th>
                                     </tr>
                                 </thead>
@@ -213,15 +211,8 @@
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
                                                 {{ $firstItem->time->format('H:i') }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
-                                                {{ $firstItem->operator }}
-                                            </td>
-                                            
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center border border-gray-200">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                    {{ $firstItem->status }}
-                                                </span>
-                                            </td>
+                                           
+                                       
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center border border-gray-200">
                                                 <div class="flex items-center justify-center space-x-4">
                                                     <a href="{{ route('admin.flm.show', $firstItem->id) }}" 

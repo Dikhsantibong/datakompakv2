@@ -234,4 +234,6 @@
         </main>
     </div>
 </div>
+
+<script src="{{ asset('js/toggle.js') }}"></script>
 @endsection 

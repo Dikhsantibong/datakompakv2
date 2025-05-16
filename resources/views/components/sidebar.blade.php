@@ -23,28 +23,31 @@
                     <i class="fas fa-home w-5 h-5"></i>
                     <span class="ml-3 text-sm">Dashboard</span>
                 </a>
-
+            @if(session('unit') === 'mysql')
                 <!-- Monitoring Datakompak -->
                 <a href="{{ route('admin.monitoring-datakompak') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.monitoring-datakompak') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                     <i class="fas fa-chart-pie w-5 h-5"></i>
                     <span class="ml-3 text-sm">Monitoring Datakompak</span>
                 </a>
-
+            @endif
+            @if(session('unit') === 'mysql')
                 <!-- Kalender Operasi -->
                 <a href="{{ route('admin.kalender.calendar') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.kalender.calendar') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                     <i class="fas fa-calendar-alt w-5 h-5"></i>
                     <span class="ml-3 text-sm">Kalender Operasi</span>
                 </a>
+            @endif
 
                 <!-- Monitoring Section -->
+                @if(session('unit') === 'mysql')
                 <a href="{{ route('admin.monitor-kinerja') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.monitor-kinerja') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                     <i class="fas fa-chart-line w-5 h-5"></i>
                     <span class="ml-3 text-sm">Monitoring Kinerja UP Kendari</span>
                 </a>
-
+                @endif
                 <a href="{{ route('admin.machine-monitor') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.machine-monitor') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                     <i class="fas fa-cogs w-5 h-5"></i>

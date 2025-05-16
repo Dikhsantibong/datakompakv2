@@ -6,9 +6,11 @@
     
     <div class="flex-1 flex flex-col overflow-hidden">
         <!-- Header -->
-        <header class="bg-white shadow-sm">
-            <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center">
+        <header class="bg-white shadow-sm sticky top-0 z-20
+        ">
+            <div class="flex justify-between items-center px-6 py-3">
+                <div class="flex items-center gap-x-3">
+                    <!-- Mobile Menu Toggle -->
                     <button id="mobile-menu-toggle"
                         class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                         aria-controls="mobile-menu" aria-expanded="false">
@@ -18,7 +20,15 @@
                         </svg>
                     </button>
 
-                    <h1 class="text-xl font-semibold text-gray-900">Data Pemeriksaan FLM</h1>
+                    <button id="desktop-menu-toggle"
+                        class="hidden md:block relative items-center justify-center rounded-md text-gray-400 hover:bg-[#009BB9] p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </button>
+
+                    <h1 class="text-xl font-semibold text-gray-800">Data Pemeriksaan FLM</h1>
                 </div>
 
                 <div class="relative">
@@ -41,7 +51,6 @@
                 </div>
             </div>
         </header>
-
         <div class="flex items-center pt-2">
             <x-admin-breadcrumb :breadcrumbs="[['name' => 'Data Pemeriksaan FLM', 'url' => null]]" />
         </div>
@@ -176,7 +185,6 @@
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Shift</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Waktu</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Operator</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Detail Pemeriksaan</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Status</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Aksi</th>
                                     </tr>
@@ -208,50 +216,26 @@
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
                                                 {{ $firstItem->operator }}
                                             </td>
-                                            <td class="px-6 py-4 text-sm text-gray-500 border border-gray-200">
-                                                <div class="space-y-1">
-                                                @foreach($group as $data)
-                                                    <div class="p-2 {{ !$loop->last ? 'border-b' : '' }}">
-                                                        <div class="flex items-center justify-between">
-                                                            <span class="font-medium text-gray-700">{{ $data->sistem }} - {{ $data->mesin }}</span>
-                                                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                                                                @php
-                                                                    $tindakan = [];
-                                                                    if ($data->tindakan_bersihkan) $tindakan[] = 'B';
-                                                                    if ($data->tindakan_lumasi) $tindakan[] = 'L';
-                                                                    if ($data->tindakan_kencangkan) $tindakan[] = 'K';
-                                                                    if ($data->tindakan_perbaikan_koneksi) $tindakan[] = 'PK';
-                                                                    if ($data->tindakan_lainnya) $tindakan[] = 'LL';
-                                                                @endphp
-                                                                {{ implode('/', $tindakan) }}
-                                                            </span>
-                                                        </div>
-                                                        <div class="text-xs text-gray-500 mt-1 line-clamp-1" title="{{ $data->masalah }}">
-                                                            {{ $data->masalah }}
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                                </div>
-                                            </td>
+                                            
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-center border border-gray-200">
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                                     {{ $firstItem->status }}
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center border border-gray-200">
-                                                <div class="flex flex-col space-y-2">
+                                                <div class="flex items-center justify-center space-x-4">
                                                     <a href="{{ route('admin.flm.show', $firstItem->id) }}" 
-                                                       class="text-indigo-600 hover:text-indigo-900 flex items-center justify-center" 
+                                                       class="text-indigo-600 hover:text-indigo-900 flex items-center" 
                                                        title="Lihat Detail">
                                                         <i class="fas fa-eye mr-1"></i> Detail
                                                     </a>
                                                     <a href="{{ route('admin.flm.exportExcel', $firstItem->id) }}" 
-                                                       class="text-green-600 hover:text-green-900 flex items-center justify-center" 
+                                                       class="text-green-600 hover:text-green-900 flex items-center" 
                                                        title="Export Excel">
                                                         <i class="fas fa-file-excel mr-1"></i> Excel
                                                     </a>
                                                     <a href="{{ route('admin.flm.exportPdf', $firstItem->id) }}" 
-                                                       class="text-red-600 hover:text-red-900 flex items-center justify-center" 
+                                                       class="text-red-600 hover:text-red-900 flex items-center" 
                                                        title="Export PDF">
                                                         <i class="fas fa-file-pdf mr-1"></i> PDF
                                                     </a>
@@ -261,7 +245,7 @@
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" 
-                                                                class="text-red-600 hover:text-red-900 flex items-center justify-center w-full" 
+                                                                class="text-red-600 hover:text-red-900 flex items-center" 
                                                                 title="Hapus">
                                                             <i class="fas fa-trash-alt mr-1"></i> Hapus
                                                         </button>

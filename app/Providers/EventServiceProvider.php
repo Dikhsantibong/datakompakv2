@@ -60,5 +60,8 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        \App\Events\AbnormalReportUpdated::class => [
+            \App\Listeners\SyncAbnormalReportToUpKendari::class,
+        ],
     ];
 } 

@@ -5,9 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Events\AbnormalReportUpdated;
+use Illuminate\Support\Facades\Log;
 
 class AbnormalReport extends Model
 {
+    public static $isSyncing = false;
+
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -53,5 +57,64 @@ class AbnormalReport extends Model
     public function getConnectionName()
     {
         return session('unit', 'mysql');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($abnormalReport) {
+            try {
+                if (self::$isSyncing) return;
+
+                $currentSession = session('unit', 'mysql');
+                
+                // Only sync if not in mysql session
+                if ($currentSession !== 'mysql') {
+                    event(new AbnormalReportUpdated($abnormalReport, 'create'));
+                }
+            } catch (\Exception $e) {
+                Log::error('Error in AbnormalReport sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
+
+        static::updated(function ($abnormalReport) {
+            try {
+                if (self::$isSyncing) return;
+
+                $currentSession = session('unit', 'mysql');
+                
+                // Only sync if not in mysql session
+                if ($currentSession !== 'mysql') {
+                    event(new AbnormalReportUpdated($abnormalReport, 'update'));
+                }
+            } catch (\Exception $e) {
+                Log::error('Error in AbnormalReport sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
+
+        static::deleting(function ($abnormalReport) {
+            try {
+                if (self::$isSyncing) return;
+
+                $currentSession = session('unit', 'mysql');
+                
+                // Only sync if not in mysql session
+                if ($currentSession !== 'mysql') {
+                    event(new AbnormalReportUpdated($abnormalReport, 'delete'));
+                }
+            } catch (\Exception $e) {
+                Log::error('Error in AbnormalReport sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
     }
 } 

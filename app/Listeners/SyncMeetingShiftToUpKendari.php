@@ -18,7 +18,14 @@ class SyncMeetingShiftToUpKendari
                 'current_session' => $currentSession,
                 'meeting_shift_id' => $event->meetingShift->id,
                 'date' => $event->meetingShift->tanggal,
-                'action' => $event->action
+                'action' => $event->action,
+                'has_machine_statuses' => $event->meetingShift->machineStatuses->count(),
+                'has_auxiliary_equipment' => $event->meetingShift->auxiliaryEquipments->count(),
+                'has_resources' => $event->meetingShift->resources->count(),
+                'has_k3ls' => $event->meetingShift->k3ls->count(),
+                'has_notes' => $event->meetingShift->notes->count(),
+                'has_resume' => $event->meetingShift->resume ? 'yes' : 'no',
+                'has_attendances' => $event->meetingShift->attendances->count()
             ]);
 
             // Skip if already in mysql session
@@ -47,89 +54,153 @@ class SyncMeetingShiftToUpKendari
                         // Create main meeting shift record
                         $meetingShiftId = $upKendariDB->table('meeting_shifts')->insertGetId($data);
                         
+                        Log::info('Created main meeting shift record', [
+                            'new_id' => $meetingShiftId,
+                            'original_id' => $event->meetingShift->id
+                        ]);
+
                         // Sync machine statuses
                         foreach ($event->meetingShift->machineStatuses as $status) {
-                            $upKendariDB->table('machine_statuses')->insert([
-                                'meeting_shift_id' => $meetingShiftId,
-                                'machine_id' => $status->machine_id,
-                                'status' => $status->status,
-                                'keterangan' => $status->keterangan,
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ]);
+                            try {
+                                $upKendariDB->table('machine_statuses')->insert([
+                                    'meeting_shift_id' => $meetingShiftId,
+                                    'machine_id' => $status->machine_id,
+                                    'status' => $status->status,
+                                    'keterangan' => $status->keterangan,
+                                    'created_at' => now(),
+                                    'updated_at' => now()
+                                ]);
+                            } catch (\Exception $e) {
+                                Log::error('Error syncing machine status', [
+                                    'machine_id' => $status->machine_id,
+                                    'error' => $e->getMessage()
+                                ]);
+                                throw $e;
+                            }
                         }
 
                         // Sync auxiliary equipment
                         foreach ($event->meetingShift->auxiliaryEquipments as $equipment) {
-                            $upKendariDB->table('auxiliary_equipment_statuses')->insert([
-                                'meeting_shift_id' => $meetingShiftId,
-                                'name' => $equipment->name,
-                                'status' => $equipment->status,
-                                'keterangan' => $equipment->keterangan,
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ]);
+                            try {
+                                $upKendariDB->table('auxiliary_equipment_statuses')->insert([
+                                    'meeting_shift_id' => $meetingShiftId,
+                                    'name' => $equipment->name,
+                                    'status' => $equipment->status,
+                                    'keterangan' => $equipment->keterangan,
+                                    'created_at' => now(),
+                                    'updated_at' => now()
+                                ]);
+                            } catch (\Exception $e) {
+                                Log::error('Error syncing auxiliary equipment', [
+                                    'name' => $equipment->name,
+                                    'error' => $e->getMessage()
+                                ]);
+                                throw $e;
+                            }
                         }
 
                         // Sync resources
                         foreach ($event->meetingShift->resources as $resource) {
-                            $upKendariDB->table('resource_statuses')->insert([
-                                'meeting_shift_id' => $meetingShiftId,
-                                'name' => $resource->name,
-                                'category' => $resource->category,
-                                'status' => $resource->status,
-                                'keterangan' => $resource->keterangan,
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ]);
+                            try {
+                                $upKendariDB->table('resource_statuses')->insert([
+                                    'meeting_shift_id' => $meetingShiftId,
+                                    'name' => $resource->name,
+                                    'category' => $resource->category,
+                                    'status' => $resource->status,
+                                    'keterangan' => $resource->keterangan,
+                                    'created_at' => now(),
+                                    'updated_at' => now()
+                                ]);
+                            } catch (\Exception $e) {
+                                Log::error('Error syncing resource', [
+                                    'name' => $resource->name,
+                                    'error' => $e->getMessage()
+                                ]);
+                                throw $e;
+                            }
                         }
 
                         // Sync K3L
                         foreach ($event->meetingShift->k3ls as $k3l) {
-                            $upKendariDB->table('meeting_shift_k3l')->insert([
-                                'meeting_shift_id' => $meetingShiftId,
-                                'type' => $k3l->type,
-                                'uraian' => $k3l->uraian,
-                                'saran' => $k3l->saran,
-                                'eviden_path' => $k3l->eviden_path,
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ]);
+                            try {
+                                $upKendariDB->table('meeting_shift_k3l')->insert([
+                                    'meeting_shift_id' => $meetingShiftId,
+                                    'type' => $k3l->type,
+                                    'uraian' => $k3l->uraian,
+                                    'saran' => $k3l->saran,
+                                    'eviden_path' => $k3l->eviden_path,
+                                    'created_at' => now(),
+                                    'updated_at' => now()
+                                ]);
+                            } catch (\Exception $e) {
+                                Log::error('Error syncing k3l', [
+                                    'type' => $k3l->type,
+                                    'error' => $e->getMessage()
+                                ]);
+                                throw $e;
+                            }
                         }
 
                         // Sync notes
                         foreach ($event->meetingShift->notes as $note) {
-                            $upKendariDB->table('meeting_shift_notes')->insert([
-                                'meeting_shift_id' => $meetingShiftId,
-                                'type' => $note->type,
-                                'content' => $note->content,
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ]);
+                            try {
+                                $upKendariDB->table('meeting_shift_notes')->insert([
+                                    'meeting_shift_id' => $meetingShiftId,
+                                    'type' => $note->type,
+                                    'content' => $note->content,
+                                    'created_at' => now(),
+                                    'updated_at' => now()
+                                ]);
+                            } catch (\Exception $e) {
+                                Log::error('Error syncing note', [
+                                    'type' => $note->type,
+                                    'error' => $e->getMessage()
+                                ]);
+                                throw $e;
+                            }
                         }
 
                         // Sync resume
                         if ($event->meetingShift->resume) {
-                            $upKendariDB->table('meeting_shift_resume')->insert([
-                                'meeting_shift_id' => $meetingShiftId,
-                                'content' => $event->meetingShift->resume->content,
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ]);
+                            try {
+                                $upKendariDB->table('meeting_shift_resume')->insert([
+                                    'meeting_shift_id' => $meetingShiftId,
+                                    'content' => $event->meetingShift->resume->content,
+                                    'created_at' => now(),
+                                    'updated_at' => now()
+                                ]);
+                            } catch (\Exception $e) {
+                                Log::error('Error syncing resume', [
+                                    'error' => $e->getMessage()
+                                ]);
+                                throw $e;
+                            }
                         }
 
                         // Sync attendances
                         foreach ($event->meetingShift->attendances as $attendance) {
-                            $upKendariDB->table('meeting_shift_attendance')->insert([
-                                'meeting_shift_id' => $meetingShiftId,
-                                'nama' => $attendance->nama,
-                                'shift' => $attendance->shift,
-                                'status' => $attendance->status,
-                                'keterangan' => $attendance->keterangan,
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ]);
+                            try {
+                                $upKendariDB->table('meeting_shift_attendance')->insert([
+                                    'meeting_shift_id' => $meetingShiftId,
+                                    'nama' => $attendance->nama,
+                                    'shift' => $attendance->shift,
+                                    'status' => $attendance->status,
+                                    'keterangan' => $attendance->keterangan,
+                                    'created_at' => now(),
+                                    'updated_at' => now()
+                                ]);
+                            } catch (\Exception $e) {
+                                Log::error('Error syncing attendance', [
+                                    'nama' => $attendance->nama,
+                                    'error' => $e->getMessage()
+                                ]);
+                                throw $e;
+                            }
                         }
+
+                        Log::info('Successfully synced all related records', [
+                            'meeting_shift_id' => $meetingShiftId
+                        ]);
                         break;
                         
                     case 'update':

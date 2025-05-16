@@ -16,7 +16,16 @@ class MeetingShiftUpdated
 
     public function __construct(MeetingShift $meetingShift, string $action)
     {
-        $this->meetingShift = $meetingShift;
+        // Eager load all relationships before storing in the event
+        $this->meetingShift = $meetingShift->load([
+            'machineStatuses.machine.powerPlant',
+            'auxiliaryEquipments',
+            'resources',
+            'k3ls',
+            'notes',
+            'resume',
+            'attendances'
+        ]);
         $this->sourceUnit = session('unit', 'mysql');
         $this->action = $action;
     }

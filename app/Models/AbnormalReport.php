@@ -17,6 +17,7 @@ class AbnormalReport extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'sync_unit_origin' => 'string',
     ];
 
     public function chronologies(): HasMany

@@ -43,6 +43,7 @@ class SyncAbnormalReportToUpKendari
                             $data = [
                                 'id' => $event->abnormalReport->id,
                                 'created_by' => $event->abnormalReport->created_by,
+                                'sync_unit_origin' => $event->abnormalReport->sync_unit_origin,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
@@ -202,6 +203,7 @@ class SyncAbnormalReportToUpKendari
                         $upKendariDB->table('abnormal_reports')
                             ->where('id', $event->abnormalReport->id)
                             ->update([
+                                'sync_unit_origin' => session('unit_name', 'UP Kendari'),
                                 'updated_at' => now()
                             ]);
 

@@ -141,6 +141,17 @@
                                         </select>
                                     </div>
 
+                                    {{-- <div class="w-40">
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Asal Unit</label>
+                                        <select name="unit_origin" 
+                                                class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                            <option value="">Semua Unit</option>
+                                            <option value="UP Kendari" {{ request('unit_origin') == 'UP Kendari' ? 'selected' : '' }}>UP Kendari</option>
+                                            <option value="UP Sulsel" {{ request('unit_origin') == 'UP Sulsel' ? 'selected' : '' }}>UP Sulsel</option>
+                                            <option value="UP Sulut" {{ request('unit_origin') == 'UP Sulut' ? 'selected' : '' }}>UP Sulut</option>
+                                        </select>
+                                    </div> --}}
+
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
                                         <input type="date" name="start_date" 
@@ -181,12 +192,11 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin/Peralatan</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Oleh</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                        <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">No</th>
+                                        <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Tanggal</th>
+                                        <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Mesin/Peralatan</th>
+                                        <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Dibuat Oleh</th>
+                                        <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
@@ -204,27 +214,9 @@
                                             @endforeach
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
-                                            {{ $report->creator->name ?? 'N/A' }}
+                                            {{ $report->sync_unit_origin ?? 'N/A' }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
-                                            @php
-                                                $hasRusak = $report->affectedMachines->contains('kondisi_rusak', true);
-                                                $hasAbnormal = $report->affectedMachines->contains('kondisi_abnormal', true);
-                                            @endphp
-                                            @if($hasRusak)
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                                    Rusak
-                                                </span>
-                                            @elseif($hasAbnormal)
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                                    Abnormal
-                                                </span>
-                                            @else
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                                    Normal
-                                                </span>
-                                            @endif
-                                        </td>
+                                       
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center border border-gray-200">
                                             <a href="{{ route('admin.abnormal-report.show', $report->id) }}" 
                                                class="text-blue-600 hover:text-blue-900 mr-3" 

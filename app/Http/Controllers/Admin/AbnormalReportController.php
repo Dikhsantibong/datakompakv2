@@ -17,6 +17,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\AbnormalEvidence;
 use Illuminate\Support\Facades\Storage;
+use App\Models\PowerPlant;
 
 class AbnormalReportController extends Controller
 {
@@ -29,9 +30,22 @@ class AbnormalReportController extends Controller
     {
         DB::beginTransaction();
         try {
+            // Get unit source from current session
+            $unitSource = session('unit', 'mysql');
+            $unitMapping = [
+                'mysql_poasia' => 'PLTD Poasia',
+                'mysql_kolaka' => 'PLTD Kolaka',
+                'mysql_bau_bau' => 'PLTD Bau Bau',
+                'mysql_wua_wua' => 'PLTD Wua Wua',
+                'mysql' => 'UP Kendari'
+            ];
+            
+            $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';
+
             // Create main report
             $report = AbnormalReport::create([
-                'created_by' => Auth::id()
+                'created_by' => Auth::id(),
+                'sync_unit_origin' => $unitName
             ]);
 
             // Store evidences
@@ -144,6 +158,11 @@ class AbnormalReportController extends Controller
             $query->whereDate('created_at', '<=', $request->end_date);
         }
 
+        // Filter by unit origin
+        if ($request->filled('unit_origin')) {
+            $query->where('sync_unit_origin', $request->unit_origin);
+        }
+
         // Filter by status (Rusak/Abnormal/Normal)
         if ($request->filled('status')) {
             $status = $request->status;
@@ -224,6 +243,40 @@ class AbnormalReportController extends Controller
         DB::beginTransaction();
         try {
             $report = AbnormalReport::findOrFail($id);
+
+            // Update sync_unit_origin if not set
+            if (!$report->sync_unit_origin) {
+                $unitSource = session('unit', 'mysql');
+                $unitMapping = [
+                    'mysql_poasia' => 'PLTD POASIA',
+                    'mysql_kolaka' => 'PLTD KOLAKA',
+                    'mysql_bau_bau' => 'PLTD BAU BAU',
+                    'mysql_wua_wua' => 'PLTD WUA WUA',
+                    'mysql_winning' => 'PLTD WINNING',
+                    'mysql_erkee' => 'PLTD ERKEE',
+                    'mysql_ladumpi' => 'PLTD LADUMPI',
+                    'mysql_langara' => 'PLTD LANGARA',
+                    'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+                    'mysql_pasarwajo' => 'PLTD PASARWAJO',
+                    'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+                    'mysql_raha' => 'PLTD RAHA',
+                    'mysql_wajo' => 'PLTD WAJO',
+                    'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+                    'mysql_rongi' => 'PLTD RONGI',
+                    'mysql_sabilambo' => 'PLTD SABILAMBO',
+                    'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+                    'mysql_pltmg_kendari' => 'PLTD KENDARI',
+                    'mysql_baruta' => 'PLTD BARUTA',
+                    'mysql_moramo' => 'PLTD MORAMO',
+                    
+                ];
+                
+                $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';
+                
+                $report->update([
+                    'sync_unit_origin' => $unitName
+                ]);
+            }
 
             // Delete existing related records
             $report->chronologies()->delete();

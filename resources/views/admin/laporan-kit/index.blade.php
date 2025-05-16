@@ -242,31 +242,18 @@
                         <h3 class="text-lg font-semibold text-gray-900">DATA PEMERIKSAAN KWH</h3>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200 table-fixed">
                             <thead>
                                 <tr class="bg-gray-50">
-                                    <th colspan="5" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center">KWH PRODUKSI</th>
-                                    <th colspan="5" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center">KWH pemakaian sendiri (PS)</th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">aksi </th>
+                                    <th id="kwh-produksi-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center">KWH PRODUKSI</th>
+                                    <th id="kwh-ps-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center">KWH pemakaian sendiri (PS)</th>
+                                    <th rowspan="2" class="w-20 px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">aksi</th>
                                 </tr>
-                                <tr class="bg-gray-50">
-                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center"> PANEL 1</th>
-                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center"> PANEL 2</th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center align-middle">total prod.<br>kWH</th>
-                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center"> PANEL 1</th>
-                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center"> PANEL 2</th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 text-center align-middle">total prod.<br>kWH</th>
+                                <tr class="bg-gray-50" id="panel-header-row">
+                                    <!-- Panel headers will be added here dynamically -->
                                 </tr>
-                                <tr class="bg-gray-50">
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AWAL</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AKHIR</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AWAL</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AKHIR</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AWAL</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AKHIR</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AWAL</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">AKHIR</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 text-center"></th>
+                                <tr class="bg-gray-50" id="panel-subheader-row">
+                                    <!-- Panel subheaders will be added here dynamically -->
                                 </tr>
                             </thead>
                             <tbody id="kwh-tbody" class="bg-white divide-y divide-gray-200">
@@ -310,10 +297,6 @@
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">cm</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">cm</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
-                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
@@ -486,6 +469,7 @@
 @push('scripts')
 <script>
     let bbmRowCount = 0;
+    let panelCount = 2; // Start with 2 panels (Panel 1 and Panel 2)
     let kwhRowCount = 0;
     let pelumasRowCount = 0;
     let bahanKimiaRowCount = 0;
@@ -511,7 +495,7 @@
         });
 
         addBBMRow();
-        addKWHRow();
+        initializePanels();
         addPelumasRow();
         addBahanKimiaRow();
     });
@@ -629,26 +613,194 @@
         });
     }
 
+    function initializePanels() {
+        const headerRow = document.getElementById('panel-header-row');
+        const subheaderRow = document.getElementById('panel-subheader-row');
+        const kwhProduksiHeader = document.getElementById('kwh-produksi-header');
+        const kwhPSHeader = document.getElementById('kwh-ps-header');
+        
+        // Clear existing headers
+        headerRow.innerHTML = '';
+        subheaderRow.innerHTML = '';
+
+        // Hitung lebar kolom berdasarkan jumlah panel
+        const panelWidth = 160; // 80px per kolom (awal + akhir)
+        const totalPanelWidth = panelCount * panelWidth;
+        
+        // Set lebar kolom KWH PRODUKSI
+        kwhProduksiHeader.style.width = `${totalPanelWidth + 80}px`; // +80 untuk total prod
+        kwhProduksiHeader.colSpan = (panelCount * 2) + 1; // +1 untuk total prod
+
+        // Set lebar kolom KWH PS
+        kwhPSHeader.style.width = `${totalPanelWidth + 80}px`; // +80 untuk total PS
+        kwhPSHeader.colSpan = (panelCount * 2) + 1; // +1 untuk total PS
+
+        // Tambahkan panel produksi
+        for (let i = 1; i <= panelCount; i++) {
+            const panelHeader = document.createElement('th');
+            panelHeader.className = 'px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center relative';
+            panelHeader.style.width = '160px';
+            panelHeader.colSpan = 2;
+            
+            // Jika ini panel terakhir, tambahkan tombol tambah
+            if (i === panelCount) {
+                panelHeader.innerHTML = `
+                    PANEL ${i}
+                    <button type="button" onclick="addPanel()" class="absolute right-0 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                `;
+            } else {
+                panelHeader.textContent = `PANEL ${i}`;
+            }
+            headerRow.appendChild(panelHeader);
+        }
+
+        // Tambahkan total produksi
+        const totalProdHeader = document.createElement('th');
+        totalProdHeader.className = 'px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center align-middle';
+        totalProdHeader.style.width = '80px';
+        totalProdHeader.rowSpan = 2;
+        totalProdHeader.innerHTML = 'total prod.<br>kWH';
+        headerRow.appendChild(totalProdHeader);
+
+        // Tambahkan panel PS
+        for (let i = 1; i <= panelCount; i++) {
+            const panelHeader = document.createElement('th');
+            panelHeader.className = 'px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center';
+            panelHeader.style.width = '160px';
+            panelHeader.colSpan = 2;
+            panelHeader.textContent = `PANEL ${i}`;
+            headerRow.appendChild(panelHeader);
+        }
+
+        // Tambahkan total PS
+        const totalPSHeader = document.createElement('th');
+        totalPSHeader.className = 'px-4 py-3 text-sm font-semibold text-gray-900 text-center align-middle';
+        totalPSHeader.style.width = '80px';
+        totalPSHeader.rowSpan = 2;
+        totalPSHeader.innerHTML = 'total prod.<br>kWH';
+        headerRow.appendChild(totalPSHeader);
+
+        // Tambahkan subheader untuk setiap panel
+        for (let i = 0; i < panelCount * 2; i++) {
+            const awalHeader = document.createElement('th');
+            awalHeader.className = 'px-4 py-2 text-xs font-medium text-gray-500 border-r text-center';
+            awalHeader.style.width = '80px';
+            awalHeader.textContent = 'AWAL';
+            subheaderRow.appendChild(awalHeader);
+
+            const akhirHeader = document.createElement('th');
+            akhirHeader.className = 'px-4 py-2 text-xs font-medium text-gray-500 border-r text-center';
+            akhirHeader.style.width = '80px';
+            akhirHeader.textContent = 'AKHIR';
+            subheaderRow.appendChild(akhirHeader);
+        }
+    }
+
+    function updateRowWithNewPanel(row) {
+        const rowIndex = row.dataset.rowIndex;
+        const newInputs = [];
+
+        // Buat input panel produksi
+        for (let i = 1; i <= panelCount; i++) {
+            newInputs.push(`
+                <td class="w-40 px-4 py-2 border-r">
+                    <input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel${i}_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </td>
+                <td class="w-40 px-4 py-2 border-r">
+                    <input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel${i}_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </td>
+            `);
+        }
+
+        // Total produksi
+        newInputs.push(`
+            <td class="w-20 px-4 py-2 border-r">
+                <input type="number" step="0.1" name="kwh[${rowIndex}][prod_total]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            </td>
+        `);
+
+        // Buat input panel PS
+        for (let i = 1; i <= panelCount; i++) {
+            newInputs.push(`
+                <td class="w-40 px-4 py-2 border-r">
+                    <input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel${i}_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </td>
+                <td class="w-40 px-4 py-2 border-r">
+                    <input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel${i}_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </td>
+            `);
+        }
+
+        // Total PS
+        newInputs.push(`
+            <td class="w-20 px-4 py-2 border-r">
+                <input type="number" step="0.1" name="kwh[${rowIndex}][ps_total]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
+            </td>
+        `);
+
+        // Tombol hapus
+        newInputs.push(`
+            <td class="w-20 px-4 py-2">
+                <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `);
+
+        row.innerHTML = newInputs.join('');
+        setupKWHCalculations(row);
+    }
+
+    function addPanel() {
+        panelCount++;
+        initializePanels();
+        
+        // Update existing rows with new panel inputs
+        const rows = document.querySelectorAll('#kwh-tbody tr');
+        rows.forEach(row => {
+            updateRowWithNewPanel(row);
+        });
+    }
+
     function addKWHRow() {
         const tbody = document.getElementById('kwh-tbody');
         const rowIndex = kwhRowCount++;
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
-        row.innerHTML = `
-            <td class="w-40 px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel1_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="w-40 px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel1_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="w-40 px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel2_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="w-40 px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel2_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="w-40 px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][prod_total]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
-            <td class="w-40 px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel1_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="w-40 px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel1_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="w-40 px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel2_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="w-40 px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel2_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
-            <td class="w-40 px-4 py-2 border-r"><input type="number" step="0.1" name="kwh[${rowIndex}][ps_total]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
-            <td class="px-4 py-2"><button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button></td>
-        `;
+        row.dataset.rowIndex = rowIndex;
+        
+        updateRowWithNewPanel(row);
         tbody.appendChild(row);
-        setupKWHCalculations(row);
+    }
+
+    function calculateKWHTotals(row) {
+        let prodTotal = 0;
+        let psTotal = 0;
+
+        // Calculate production total
+        for (let i = 1; i <= panelCount; i++) {
+            const awal = parseFloat(row.querySelector(`input[name$="[prod_panel${i}_awal]"]`).value) || 0;
+            const akhir = parseFloat(row.querySelector(`input[name$="[prod_panel${i}_akhir]"]`).value) || 0;
+            prodTotal += (akhir - awal);
+        }
+        row.querySelector('input[name$="[prod_total]"]').value = prodTotal.toFixed(1);
+
+        // Calculate PS total
+        for (let i = 1; i <= panelCount; i++) {
+            const awal = parseFloat(row.querySelector(`input[name$="[ps_panel${i}_awal]"]`).value) || 0;
+            const akhir = parseFloat(row.querySelector(`input[name$="[ps_panel${i}_akhir]"]`).value) || 0;
+            psTotal += (akhir - awal);
+        }
+        row.querySelector('input[name$="[ps_total]"]').value = psTotal.toFixed(1);
+    }
+
+    function setupKWHCalculations(row) {
+        const inputs = row.querySelectorAll('input[type="number"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => calculateKWHTotals(row));
+        });
     }
 
     function calculatePelumasTotals(row) {
@@ -765,73 +917,12 @@
         setupBahanKimiaCalculations(row);
     }
 
-    function setupBBMCalculations(row) {
-        // Add event listeners for BBM calculations in the new row
-        const inputs = row.querySelectorAll('input[type="number"]');
-        inputs.forEach(input => {
-            input.addEventListener('input', calculateBBMTotals);
-        });
-    }
-
-    function setupKWHCalculations(row) {
-        // Add calculations for KWH totals
-        const inputs = row.querySelectorAll('input[type="number"]');
-        inputs.forEach(input => {
-            input.addEventListener('input', () => calculateKWHTotals(row));
-        });
-    }
-
-    function setupPelumasCalculations(row) {
-        // Calculate Storage Tank total
-        const tank1Liter = parseFloat(row.querySelector('input[name$="[tank1_liter]"]').value) || 0;
-        const tank2Liter = parseFloat(row.querySelector('input[name$="[tank2_liter]"]').value) || 0;
-        const tankTotalStok = tank1Liter + tank2Liter;
-        row.querySelector('input[name$="[tank_total_stok]"]').value = tankTotalStok.toFixed(1);
-
-        // Calculate Drum total
-        const drumArea1 = parseFloat(row.querySelector('input[name$="[drum_area1]"]').value) || 0;
-        const drumArea2 = parseFloat(row.querySelector('input[name$="[drum_area2]"]').value) || 0;
-        const drumTotalStok = drumArea1 + drumArea2;
-        row.querySelector('input[name$="[drum_total_stok]"]').value = drumTotalStok.toFixed(1);
-
-        // Calculate total stok tangki (total from tanks + drums)
-        const totalStokTangki = tankTotalStok + drumTotalStok;
-        row.querySelector('input[name$="[total_stok_tangki]"]').value = totalStokTangki.toFixed(1);
-
-        // Get terima pelumas value
-        const terimaPelumas = parseFloat(row.querySelector('input[name$="[terima_pelumas]"]').value) || 0;
-
-        // Calculate total pakai (total stok tangki + terima pelumas)
-        const totalPakai = totalStokTangki + terimaPelumas;
-        row.querySelector('input[name$="[total_pakai]"]').value = totalPakai.toFixed(1);
-    }
-
     function setupBahanKimiaCalculations(row) {
         // Add calculations for Bahan Kimia totals
         const inputs = row.querySelectorAll('input[type="number"]');
         inputs.forEach(input => {
             input.addEventListener('input', () => calculateBahanKimiaTotals(row));
         });
-    }
-
-    function calculateKWHTotals(row) {
-        // Calculate KWH Production total
-        const prodPanel1Awal = parseFloat(row.querySelector('input[name$="[prod_panel1_awal]"]').value) || 0;
-        const prodPanel1Akhir = parseFloat(row.querySelector('input[name$="[prod_panel1_akhir]"]').value) || 0;
-        const prodPanel2Awal = parseFloat(row.querySelector('input[name$="[prod_panel2_awal]"]').value) || 0;
-        const prodPanel2Akhir = parseFloat(row.querySelector('input[name$="[prod_panel2_akhir]"]').value) || 0;
-        
-        const prodTotal = (prodPanel1Akhir - prodPanel1Awal) + (prodPanel2Akhir - prodPanel2Awal);
-        row.querySelector('input[name$="[prod_total]"]').value = prodTotal.toFixed(1);
-
-        // Calculate KWH PS total
-        const psPanel1Awal = parseFloat(row.querySelector('input[name$="[ps_panel1_awal]"]').value) || 0;
-        const psPanel1Akhir = parseFloat(row.querySelector('input[name$="[ps_panel1_akhir]"]').value) || 0;
-        const psPanel2Awal = parseFloat(row.querySelector('input[name$="[ps_panel2_awal]"]').value) || 0;
-        const psPanel2Akhir = parseFloat(row.querySelector('input[name$="[ps_panel2_akhir]"]').value) || 0;
-        
-        const psTotal = (psPanel1Akhir - psPanel1Awal) + (psPanel2Akhir - psPanel2Awal);
-        row.querySelector('input[name$="[ps_total]"]').value = psTotal.toFixed(1);
     }
 
     function calculateBahanKimiaTotals(row) {
@@ -843,4 +934,4 @@
 </script>
 @endpush
 
-@endsection 
+@endsection

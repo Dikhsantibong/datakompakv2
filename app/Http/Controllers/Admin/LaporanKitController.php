@@ -23,7 +23,7 @@ class LaporanKitController extends Controller
                 $q->where('unit_source', $unitSource);
             })->orderBy('name')->get();
         } else {
-            $machines = Machine::orderBy('name')->get();
+            $machines = Machine::orderBy('name')->take(1)->get();
         }
         return view('admin.laporan-kit.index', compact('machines', 'powerPlants', 'unitSource'));
     }

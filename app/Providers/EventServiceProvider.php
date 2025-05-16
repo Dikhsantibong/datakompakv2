@@ -21,8 +21,14 @@ use App\Events\MachineLogUpdated;
 use App\Listeners\SyncMachineLogToUpKendari;
 use App\Events\MeetingShiftUpdated;
 use App\Listeners\SyncMeetingShiftToUpKendari;
-use App\Events\Registered;
-use App\Listeners\SendEmailVerificationNotification;
+use App\Events\Pemeriksaan5s5rUpdated;
+use App\Listeners\SyncPemeriksaan5s5rToUpKendari;
+use App\Events\ProgramKerja5rUpdated;
+use App\Listeners\SyncProgramKerja5rToUpKendari;
+use App\Events\PatrolCheckUpdated;
+use App\Listeners\SyncPatrolCheckToUpKendari;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -63,8 +69,17 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\AbnormalReportUpdated::class => [
             \App\Listeners\SyncAbnormalReportToUpKendari::class,
         ],
-        'App\Events\FlmInspectionUpdated' => [
-            'App\Listeners\SyncFlmInspectionToUpKendari',
+        \App\Events\FlmInspectionUpdated::class => [
+            \App\Listeners\SyncFlmInspectionToUpKendari::class,
+        ],
+        Pemeriksaan5s5rUpdated::class => [
+            SyncPemeriksaan5s5rToUpKendari::class,
+        ],
+        ProgramKerja5rUpdated::class => [
+            SyncProgramKerja5rToUpKendari::class,
+        ],
+        PatrolCheckUpdated::class => [
+            SyncPatrolCheckToUpKendari::class,
         ],
     ];
 } 

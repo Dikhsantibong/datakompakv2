@@ -69,10 +69,14 @@
                             <h2 class="text-lg font-medium text-gray-900">Informasi Laporan</h2>
                         </div>
                         <div class="p-6">
-                            <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+                            <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-3">
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Dibuat Oleh</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ $report->creator->name ?? 'N/A' }}</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500">Asal Unit</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $report->sync_unit_origin ?? 'N/A' }}</dd>
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Tanggal Dibuat</dt>

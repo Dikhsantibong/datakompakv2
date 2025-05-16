@@ -94,7 +94,7 @@
                                             onclick="toggleFullTableView()">
                                         <i class="fas fa-expand mr-1"></i> Full Table
                                     </button>
-                                    @if(request()->has('start_date') || request()->has('end_date') || request()->has('mesin') || request()->has('sistem'))
+                                    @if(request()->has('start_date') || request()->has('end_date') || request()->has('mesin') || request()->has('sistem') || request()->has('unit_origin'))
                                         <div class="flex flex-wrap gap-2" id="active-filters">
                                             @if(request('start_date'))
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -119,6 +119,14 @@
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                     Sistem: {{ request('sistem') }}
                                                     <button onclick="removeFilter('sistem')" class="ml-1 text-blue-600 hover:text-blue-800">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </span>
+                                            @endif
+                                            @if(request('unit_origin'))
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Asal Unit: {{ request('unit_origin') }}
+                                                    <button onclick="removeFilter('unit_origin')" class="ml-1 text-blue-600 hover:text-blue-800">
                                                         <i class="fas fa-times"></i>
                                                     </button>
                                                 </span>
@@ -162,6 +170,19 @@
                                                value="{{ request('sistem') }}">
                                     </div>
 
+                                    <div class="w-40">
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Asal Unit</label>
+                                        <select name="unit_origin" 
+                                                class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                            <option value="">Semua Unit</option>
+                                            <option value="PLTD Poasia" {{ request('unit_origin') == 'PLTD Poasia' ? 'selected' : '' }}>PLTD Poasia</option>
+                                            <option value="PLTD Kolaka" {{ request('unit_origin') == 'PLTD Kolaka' ? 'selected' : '' }}>PLTD Kolaka</option>
+                                            <option value="PLTD Bau Bau" {{ request('unit_origin') == 'PLTD Bau Bau' ? 'selected' : '' }}>PLTD Bau Bau</option>
+                                            <option value="PLTD Wua Wua" {{ request('unit_origin') == 'PLTD Wua Wua' ? 'selected' : '' }}>PLTD Wua Wua</option>
+                                            <option value="UP Kendari" {{ request('unit_origin') == 'UP Kendari' ? 'selected' : '' }}>UP Kendari</option>
+                                        </select>
+                                    </div>
+
                                     <div class="flex items-center gap-2">
                                         <button type="submit"
                                                 class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
@@ -184,6 +205,7 @@
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Tanggal</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Shift</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Waktu</th>  
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Asal Unit</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Aksi</th>
                                     </tr>
                                 </thead>
@@ -206,13 +228,24 @@
                                                 {{ $firstItem->tanggal->format('d/m/Y') }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
-                                                {{ $firstItem->shift }}
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                @if($firstItem->shift == 'A') bg-blue-100 text-blue-800
+                                                @elseif($firstItem->shift == 'B') bg-green-100 text-green-800
+                                                @elseif($firstItem->shift == 'C') bg-yellow-100 text-yellow-800
+                                                @else bg-purple-100 text-purple-800 @endif">
+                                                    {{ $firstItem->shift }}
+                                                </span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
-                                                {{ $firstItem->time->format('H:i') }}
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                    {{ $firstItem->time->format('H:i') }}
+                                                </span>
                                             </td>
-                                           
-                                       
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                    {{ $firstItem->sync_unit_origin ?? 'N/A' }}
+                                                </span>
+                                            </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center border border-gray-200">
                                                 <div class="flex items-center justify-center space-x-4">
                                                     <a href="{{ route('admin.flm.show', $firstItem->id) }}" 

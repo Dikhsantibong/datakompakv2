@@ -28,7 +28,8 @@ class Pemeriksaan5s5r extends Model
         'mengecat',
         'lainnya',
         'kondisi_akhir',
-        'eviden'
+        'eviden',
+        'sync_unit_origin'
     ];
 
     protected $casts = [
@@ -37,6 +38,7 @@ class Pemeriksaan5s5r extends Model
         'membuang_sampah' => 'boolean',
         'mengecat' => 'boolean',
         'lainnya' => 'boolean',
+        'sync_unit_origin' => 'string'
     ];
 
     public function getConnectionName()

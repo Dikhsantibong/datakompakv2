@@ -32,7 +32,8 @@ class FlmInspection extends Model
         'catatan',
         'eviden_sebelum',
         'eviden_sesudah',
-        'status'
+        'status',
+        'sync_unit_origin'
     ];
 
     protected $casts = [
@@ -43,6 +44,7 @@ class FlmInspection extends Model
         'tindakan_kencangkan' => 'boolean',
         'tindakan_perbaikan_koneksi' => 'boolean',
         'tindakan_lainnya' => 'boolean',
+        'sync_unit_origin' => 'string'
     ];
 
     public function getConnectionName()

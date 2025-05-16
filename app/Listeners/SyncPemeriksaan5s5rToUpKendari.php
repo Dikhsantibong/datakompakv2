@@ -36,6 +36,7 @@ class SyncPemeriksaan5s5rToUpKendari
                     'lainnya' => $event->pemeriksaan->lainnya,
                     'kondisi_akhir' => $event->pemeriksaan->kondisi_akhir,
                     'eviden' => $event->pemeriksaan->eviden,
+                    'sync_unit_origin' => $event->pemeriksaan->sync_unit_origin,
                     'updated_at' => now()
                 ];
 
@@ -120,6 +121,7 @@ class SyncPemeriksaan5s5rToUpKendari
                     'lainnya' => $event->pemeriksaan->lainnya,
                     'kondisi_akhir' => $event->pemeriksaan->kondisi_akhir,
                     'eviden' => $event->pemeriksaan->eviden,
+                    'sync_unit_origin' => $event->pemeriksaan->sync_unit_origin,
                     'updated_at' => now()
                 ];
 

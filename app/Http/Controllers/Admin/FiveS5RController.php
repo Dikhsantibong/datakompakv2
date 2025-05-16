@@ -21,6 +21,33 @@ class FiveS5RController extends Controller
 
     public function store(Request $request)
     {
+        // Get unit source from current session
+        $unitSource = session('unit', 'mysql');
+        $unitMapping = [
+            'mysql_poasia' => 'PLTD POASIA',
+            'mysql_kolaka' => 'PLTD KOLAKA',
+            'mysql_bau_bau' => 'PLTD BAU BAU',
+            'mysql_wua_wua' => 'PLTD WUA WUA',
+            'mysql_winning' => 'PLTD WINNING',
+            'mysql_erkee' => 'PLTD ERKEE',
+            'mysql_ladumpi' => 'PLTD LADUMPI',
+            'mysql_langara' => 'PLTD LANGARA',
+            'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+            'mysql_pasarwajo' => 'PLTD PASARWAJO',
+            'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+            'mysql_raha' => 'PLTD RAHA',
+            'mysql_wajo' => 'PLTD WAJO',
+            'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+            'mysql_rongi' => 'PLTD RONGI',
+            'mysql_sabilambo' => 'PLTD SABILAMBO',
+            'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+            'mysql_pltmg_kendari' => 'PLTD KENDARI',
+            'mysql_baruta' => 'PLTD BARUTA',
+            'mysql_moramo' => 'PLTD MORAMO',
+        ];
+        
+        $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';
+
         // Handle Pemeriksaan 5S5R data
         foreach(['Ringkas', 'Rapi', 'Resik', 'Rawat', 'Rajin'] as $kategori) {
             $evidenPath = null;
@@ -44,7 +71,8 @@ class FiveS5RController extends Controller
                 'mengecat' => $request->has("mengecat_$kategori"),
                 'lainnya' => $request->has("lainnya_$kategori"),
                 'kondisi_akhir' => $request->input("kondisi_akhir_pemeriksaan_$kategori"),
-                'eviden' => $evidenPath
+                'eviden' => $evidenPath,
+                'sync_unit_origin' => $unitName
             ]);
         }
 
@@ -105,7 +133,7 @@ class FiveS5RController extends Controller
     public function list()
     {
         $query = DB::table('tabel_pemeriksaan_5s5r as p1')
-            ->select('p1.id', 'p1.created_at', DB::raw('DATE(p1.created_at) as date'))
+            ->select('p1.id', 'p1.created_at', 'p1.sync_unit_origin', DB::raw('DATE(p1.created_at) as date'))
             ->whereIn('p1.id', function($query) {
                 $query->select(DB::raw('MAX(p2.id)'))
                     ->from('tabel_pemeriksaan_5s5r as p2')
@@ -120,6 +148,11 @@ class FiveS5RController extends Controller
             $query->whereDate('p1.created_at', '<=', request('end_date'));
         }
 
+        // Apply unit origin filter
+        if (request('unit_origin')) {
+            $query->where('p1.sync_unit_origin', request('unit_origin'));
+        }
+
         $items = $query->orderBy('p1.created_at', 'desc')
             ->get()
             ->map(function($item) {
@@ -127,11 +160,20 @@ class FiveS5RController extends Controller
                     'id' => $item->id,
                     'date' => date('Y-m-d', strtotime($item->created_at)),
                     'created_by' => 'Admin',
-                    'status' => 'Completed'
+                    'status' => 'Completed',
+                    'unit_origin' => $item->sync_unit_origin ?? 'UP Kendari'
                 ];
             });
 
-        return view('admin.5s5r.list', compact('items'));
+        // Get unique unit origins for filter dropdown
+        $unitOrigins = DB::table('tabel_pemeriksaan_5s5r')
+            ->select('sync_unit_origin')
+            ->whereNotNull('sync_unit_origin')
+            ->distinct()
+            ->pluck('sync_unit_origin')
+            ->toArray();
+
+        return view('admin.5s5r.list', compact('items', 'unitOrigins'));
     }
 
     public function edit($id)
@@ -156,6 +198,33 @@ class FiveS5RController extends Controller
         $mainRecord = Pemeriksaan5s5r::findOrFail($id);
         $date = date('Y-m-d', strtotime($mainRecord->created_at));
 
+        // Get unit source from current session
+        $unitSource = session('unit', 'mysql');
+        $unitMapping = [
+            'mysql_poasia' => 'PLTD POASIA',
+            'mysql_kolaka' => 'PLTD KOLAKA',
+            'mysql_bau_bau' => 'PLTD BAU BAU',
+            'mysql_wua_wua' => 'PLTD WUA WUA',
+            'mysql_winning' => 'PLTD WINNING',
+            'mysql_erkee' => 'PLTD ERKEE',
+            'mysql_ladumpi' => 'PLTD LADUMPI',
+            'mysql_langara' => 'PLTD LANGARA',
+            'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+            'mysql_pasarwajo' => 'PLTD PASARWAJO',
+            'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+            'mysql_raha' => 'PLTD RAHA',
+            'mysql_wajo' => 'PLTD WAJO',
+            'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+            'mysql_rongi' => 'PLTD RONGI',
+            'mysql_sabilambo' => 'PLTD SABILAMBO',
+            'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+            'mysql_pltmg_kendari' => 'PLTD KENDARI',
+            'mysql_baruta' => 'PLTD BARUTA',
+            'mysql_moramo' => 'PLTD MORAMO',
+        ];
+        
+        $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';
+
         DB::beginTransaction();
         try {
             // Update Pemeriksaan 5S5R data
@@ -175,7 +244,8 @@ class FiveS5RController extends Controller
                         'membuang_sampah' => $request->has("membuang_sampah_$kategori"),
                         'mengecat' => $request->has("mengecat_$kategori"),
                         'lainnya' => $request->has("lainnya_$kategori"),
-                        'kondisi_akhir' => $request->input("kondisi_akhir_pemeriksaan_$kategori")
+                        'kondisi_akhir' => $request->input("kondisi_akhir_pemeriksaan_$kategori"),
+                        'sync_unit_origin' => $unitName
                     ];
 
                     if ($request->hasFile("eviden_pemeriksaan_$kategori")) {

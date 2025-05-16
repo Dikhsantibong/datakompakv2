@@ -214,7 +214,9 @@
                                             @endforeach
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
-                                            {{ $report->sync_unit_origin ?? 'N/A' }}
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                {{ $report->sync_unit_origin ?? 'N/A' }}
+                                            </span>
                                         </td>
                                        
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center border border-gray-200">

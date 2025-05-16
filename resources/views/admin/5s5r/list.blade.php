@@ -120,6 +120,19 @@
                                                value="{{ request('end_date') }}">
                                     </div>
 
+                                    <div class="w-48">
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
+                                        <select name="unit_origin" 
+                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                            <option value="">Semua Unit</option>
+                                            @foreach($unitOrigins as $unit)
+                                                <option value="{{ $unit }}" {{ request('unit_origin') == $unit ? 'selected' : '' }}>
+                                                    {{ $unit }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <div class="flex items-center gap-2">
                                         <button type="submit"
                                                 class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
@@ -141,7 +154,7 @@
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Oleh</th>
-                                       
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                     </tr>
                                 </thead>
@@ -157,7 +170,9 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
                                             {{ $item['created_by'] }}
                                         </td>
-                                      
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
+                                            {{ $item['unit_origin'] }}
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
                                             <div class="flex items-center justify-center space-x-2">
                                                 <a href="{{ route('admin.5s5r.show', $item['id']) }}"

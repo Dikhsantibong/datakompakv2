@@ -38,6 +38,33 @@ class FlmController extends Controller
         // Generate unique flm_id untuk satu batch input
         $flm_id = 'FLM-' . date('Ymd') . '-' . Str::random(5);
 
+        // Get unit source from current session
+        $unitSource = session('unit', 'mysql');
+        $unitMapping = [
+            'mysql_poasia' => 'PLTD POASIA',
+                    'mysql_kolaka' => 'PLTD KOLAKA',
+                    'mysql_bau_bau' => 'PLTD BAU BAU',
+                    'mysql_wua_wua' => 'PLTD WUA WUA',
+                    'mysql_winning' => 'PLTD WINNING',
+                    'mysql_erkee' => 'PLTD ERKEE',
+                    'mysql_ladumpi' => 'PLTD LADUMPI',
+                    'mysql_langara' => 'PLTD LANGARA',
+                    'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+                    'mysql_pasarwajo' => 'PLTD PASARWAJO',
+                    'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+                    'mysql_raha' => 'PLTD RAHA',
+                    'mysql_wajo' => 'PLTD WAJO',
+                    'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+                    'mysql_rongi' => 'PLTD RONGI',
+                    'mysql_sabilambo' => 'PLTD SABILAMBO',
+                    'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+                    'mysql_pltmg_kendari' => 'PLTD KENDARI',
+                    'mysql_baruta' => 'PLTD BARUTA',
+                    'mysql_moramo' => 'PLTD MORAMO',
+        ];
+        
+        $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';
+
         foreach ($request->mesin as $key => $mesin) {
             if (empty($mesin)) continue;
 
@@ -58,7 +85,8 @@ class FlmController extends Controller
                 'tindakan_lainnya' => in_array('lainnya', $request->tindakan[$key] ?? []),
                 'kondisi_akhir' => $request->kondisi_akhir[$key],
                 'catatan' => $request->catatan[$key],
-                'status' => 'selesai'
+                'status' => 'selesai',
+                'sync_unit_origin' => $unitName
             ];
 
             // Handle file uploads
@@ -102,6 +130,11 @@ class FlmController extends Controller
         // Apply sistem filter
         if (request('sistem')) {
             $query->where('sistem', 'like', '%' . request('sistem') . '%');
+        }
+
+        // Apply unit origin filter
+        if (request('unit_origin')) {
+            $query->where('sync_unit_origin', request('unit_origin'));
         }
 
         // Group by flm_id to show related entries together

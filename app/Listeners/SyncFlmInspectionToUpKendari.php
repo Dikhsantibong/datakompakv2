@@ -43,6 +43,7 @@ class SyncFlmInspectionToUpKendari
                     'eviden_sebelum' => $event->flmInspection->eviden_sebelum,
                     'eviden_sesudah' => $event->flmInspection->eviden_sesudah,
                     'status' => $event->flmInspection->status,
+                    'sync_unit_origin' => $event->flmInspection->sync_unit_origin,
                     'updated_at' => now()
                 ];
 
@@ -140,6 +141,7 @@ class SyncFlmInspectionToUpKendari
                     'eviden_sebelum' => $event->flmInspection->eviden_sebelum,
                     'eviden_sesudah' => $event->flmInspection->eviden_sesudah,
                     'status' => $event->flmInspection->status,
+                    'sync_unit_origin' => $event->flmInspection->sync_unit_origin,
                     'updated_at' => now()
                 ];
 

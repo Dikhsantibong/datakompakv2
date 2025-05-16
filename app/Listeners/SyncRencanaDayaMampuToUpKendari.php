@@ -44,7 +44,9 @@ class SyncRencanaDayaMampuToUpKendari
                     'uuid' => $event->rencanaDayaMampu->uuid,
                     'machine_id' => $event->rencanaDayaMampu->machine_id,
                     'tanggal' => $event->rencanaDayaMampu->tanggal,
-                    'daily_data' => $event->rencanaDayaMampu->daily_data,
+                    'daily_data' => is_array($event->rencanaDayaMampu->daily_data) ? 
+                        json_encode($event->rencanaDayaMampu->daily_data) : 
+                        $event->rencanaDayaMampu->daily_data,
                     'daya_pjbtl_silm' => $event->rencanaDayaMampu->daya_pjbtl_silm,
                     'dmp_existing' => $event->rencanaDayaMampu->dmp_existing,
                     'unit_source' => $event->rencanaDayaMampu->unit_source,
@@ -127,7 +129,9 @@ class SyncRencanaDayaMampuToUpKendari
                     'uuid' => $event->rencanaDayaMampu->uuid,
                     'machine_id' => $event->rencanaDayaMampu->machine_id,
                     'tanggal' => $event->rencanaDayaMampu->tanggal,
-                    'daily_data' => $event->rencanaDayaMampu->daily_data,
+                    'daily_data' => is_array($event->rencanaDayaMampu->daily_data) ? 
+                        json_encode($event->rencanaDayaMampu->daily_data) : 
+                        $event->rencanaDayaMampu->daily_data,
                     'daya_pjbtl_silm' => $event->rencanaDayaMampu->daya_pjbtl_silm,
                     'dmp_existing' => $event->rencanaDayaMampu->dmp_existing,
                     'unit_source' => $event->rencanaDayaMampu->unit_source,

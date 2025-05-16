@@ -288,6 +288,7 @@
 </div>
 
 @push('scripts')
+<script src="{{ asset('js/toggle.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Auto-submit form when changing filters

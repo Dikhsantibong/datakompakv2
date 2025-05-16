@@ -16,7 +16,9 @@ class FollowUpAction extends Model
     protected $fillable = [
         'abnormal_report_id',
         'flm_tindakan',
-        'mo_non_rutin'
+        'mo_non_rutin',
+        'usul_mo_rutin',
+        'lainnya'
     ];
 
     protected $casts = [
@@ -53,6 +55,8 @@ class FollowUpAction extends Model
                         'abnormal_report_id' => $action->abnormal_report_id,
                         'flm_tindakan' => $action->flm_tindakan,
                         'mo_non_rutin' => $action->mo_non_rutin,
+                        'usul_mo_rutin' => $action->usul_mo_rutin,
+                        'lainnya' => $action->lainnya,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];

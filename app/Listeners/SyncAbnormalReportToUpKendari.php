@@ -117,6 +117,8 @@ class SyncAbnormalReportToUpKendari
                                         'abnormal_report_id' => $event->abnormalReport->id,
                                         'flm_tindakan' => $action->flm_tindakan,
                                         'mo_non_rutin' => $action->mo_non_rutin,
+                                        'usul_mo_rutin' => $action->usul_mo_rutin,
+                                        'lainnya' => $action->lainnya,
                                         'created_at' => now(),
                                         'updated_at' => now()
                                     ]);
@@ -133,7 +135,7 @@ class SyncAbnormalReportToUpKendari
                                 try {
                                     $upKendariDB->table('recommendations')->insert([
                                         'abnormal_report_id' => $event->abnormalReport->id,
-                                        'content' => $recommendation->content,
+                                        'rekomendasi' => $recommendation->rekomendasi,
                                         'created_at' => now(),
                                         'updated_at' => now()
                                     ]);
@@ -234,6 +236,8 @@ class SyncAbnormalReportToUpKendari
                                 'abnormal_report_id' => $event->abnormalReport->id,
                                 'kondisi_rusak' => $machine->kondisi_rusak,
                                 'kondisi_abnormal' => $machine->kondisi_abnormal,
+                                'nama_mesin' => $machine->nama_mesin,
+                                'keterangan' => $machine->keterangan,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ]);
@@ -244,6 +248,8 @@ class SyncAbnormalReportToUpKendari
                                 'abnormal_report_id' => $event->abnormalReport->id,
                                 'flm_tindakan' => $action->flm_tindakan,
                                 'mo_non_rutin' => $action->mo_non_rutin,
+                                'usul_mo_rutin' => $action->usul_mo_rutin,
+                                'lainnya' => $action->lainnya,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ]);
@@ -252,7 +258,7 @@ class SyncAbnormalReportToUpKendari
                         foreach ($event->abnormalReport->recommendations as $recommendation) {
                             $upKendariDB->table('recommendations')->insert([
                                 'abnormal_report_id' => $event->abnormalReport->id,
-                                'content' => $recommendation->content,
+                                'rekomendasi' => $recommendation->rekomendasi,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ]);

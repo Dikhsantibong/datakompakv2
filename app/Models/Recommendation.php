@@ -15,7 +15,7 @@ class Recommendation extends Model
 
     protected $fillable = [
         'abnormal_report_id',
-        'content'
+        'rekomendasi'
     ];
 
     protected $casts = [
@@ -50,7 +50,7 @@ class Recommendation extends Model
                     $data = [
                         'id' => $recommendation->id,
                         'abnormal_report_id' => $recommendation->abnormal_report_id,
-                        'content' => $recommendation->content,
+                        'rekomendasi' => $recommendation->rekomendasi,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
@@ -80,7 +80,7 @@ class Recommendation extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'content' => $recommendation->content,
+                        'rekomendasi' => $recommendation->rekomendasi,
                         'updated_at' => now()
                     ];
 

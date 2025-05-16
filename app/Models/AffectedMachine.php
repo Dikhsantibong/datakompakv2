@@ -16,7 +16,9 @@ class AffectedMachine extends Model
     protected $fillable = [
         'abnormal_report_id',
         'kondisi_rusak',
-        'kondisi_abnormal'
+        'kondisi_abnormal',
+        'nama_mesin',
+        'keterangan'
     ];
 
     protected $casts = [
@@ -53,6 +55,8 @@ class AffectedMachine extends Model
                         'abnormal_report_id' => $machine->abnormal_report_id,
                         'kondisi_rusak' => $machine->kondisi_rusak,
                         'kondisi_abnormal' => $machine->kondisi_abnormal,
+                        'nama_mesin' => $ $machine->nama_mesin,
+                        'keterangan' => $ $machine->keterangan,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];

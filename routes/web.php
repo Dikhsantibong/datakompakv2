@@ -1175,7 +1175,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     Route::get('/abnormal-report/list', [AbnormalReportController::class, 'list'])->name('admin.abnormal-report.list');
     Route::get('/abnormal-report/show/{id}', [AbnormalReportController::class, 'show'])->name('admin.abnormal-report.show');
-    Route::post('/abnormal-report/destroy/{id}', [AbnormalReportController::class, 'destroy'])->name('admin.abnormal-report.destroy');
+    Route::delete('/abnormal-report/destroy/{id}', [AbnormalReportController::class, 'destroy'])->name('admin.abnormal-report.destroy');
 });
 
 Route::get('/admin/kalender/export/excel', [CalendarController::class, 'exportExcel'])->name('admin.kalender.export.excel');

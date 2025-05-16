@@ -124,7 +124,7 @@
                 
 
                 <!-- Operasi UL/Sentral Dropdown -->
-                @if(session('unit') === 'mysql')
+                
                 <div class="relative" x-data="{ 
                     open: {{ request()->routeIs('admin.daily-summary') || 
                              request()->routeIs('admin.machine-status.*') || 
@@ -187,7 +187,7 @@
                         </a>
                     </div>
                 </div>
-                @endif
+           
                 
 
                

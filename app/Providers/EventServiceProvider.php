@@ -63,5 +63,8 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\AbnormalReportUpdated::class => [
             \App\Listeners\SyncAbnormalReportToUpKendari::class,
         ],
+        'App\Events\FlmInspectionUpdated' => [
+            'App\Listeners\SyncFlmInspectionToUpKendari',
+        ],
     ];
 } 

@@ -167,9 +167,9 @@
                     </div>
                 </div>
             </div>
-
             <!-- Action Buttons and Filter -->
             <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+                @if(session('unit') === 'mysql')
                 <div class="flex flex-wrap gap-4">
                     <a href="{{ route('admin.kalender.create') }}" 
                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors">
@@ -200,6 +200,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 <div class="flex items-center space-x-4">
                     <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="previousMonth()">
                         <i class="fas fa-chevron-left text-gray-600"></i>

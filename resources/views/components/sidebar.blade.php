@@ -31,14 +31,14 @@
                     <span class="ml-3 text-sm">Monitoring Datakompak</span>
                 </a>
             @endif
-            @if(session('unit') === 'mysql')
+            
                 <!-- Kalender Operasi -->
                 <a href="{{ route('admin.kalender.calendar') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.kalender.calendar') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                     <i class="fas fa-calendar-alt w-5 h-5"></i>
                     <span class="ml-3 text-sm">Kalender Operasi</span>
                 </a>
-            @endif
+            
 
                 <!-- Monitoring Section -->
                 @if(session('unit') === 'mysql')
@@ -306,7 +306,8 @@
                     <i class="fas fa-book w-5 h-5"></i>
                     <span class="ml-3 text-sm">Library</span>
                 </a>
-
+          
+                @if(session('unit') === 'mysql' || auth()->user()->role === 'admin' || auth()->user()->role === 'tl_ron_upkd' || auth()->user()->role === 'tl_ron')
                 <!-- Fitur Pendukung -->
                 <div class="relative" x-data="{ 
                     open: {{ request()->routeIs('admin.users') || 
@@ -341,6 +342,7 @@
                         </a>
                     </div>
                 </div>
+                @endif
             </nav>
         </div>
     </div>

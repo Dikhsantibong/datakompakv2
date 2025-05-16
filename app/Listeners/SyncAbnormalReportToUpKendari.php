@@ -99,6 +99,8 @@ class SyncAbnormalReportToUpKendari
                                         'abnormal_report_id' => $event->abnormalReport->id,
                                         'kondisi_rusak' => $machine->kondisi_rusak,
                                         'kondisi_abnormal' => $machine->kondisi_abnormal,
+                                        'nama_mesin' => $machine->nama_mesin,
+                                        'keterangan' => $machine->keterangan,
                                         'created_at' => now(),
                                         'updated_at' => now()
                                     ]);

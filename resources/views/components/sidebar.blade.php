@@ -53,7 +53,7 @@
                     <i class="fas fa-cogs w-5 h-5"></i>
                     <span class="ml-3 text-sm">Data Mesin Pembangkit</span>
                 </a>
-
+                @if(session('unit') === 'mysql' || auth()->user()->role === 'operator' || auth()->user()->role === 'admin')
                 <!-- Operator KIT Dropdown -->
                 <div class="relative" x-data="{ 
                     open: {{ request()->routeIs('admin.meeting-shift.*') || 
@@ -121,10 +121,11 @@
                     </div>
                 </div>
 
+                @endif
                 
 
                 <!-- Operasi UL/Sentral Dropdown -->
-                
+                @if(session('unit') === 'mysql' || auth()->user()->role === 'staf' || auth()->user()->role === 'admin')
                 <div class="relative" x-data="{ 
                     open: {{ request()->routeIs('admin.daily-summary') || 
                              request()->routeIs('admin.machine-status.*') || 
@@ -187,6 +188,7 @@
                         </a>
                     </div>
                 </div>
+                @endif
            
                 
 

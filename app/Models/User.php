@@ -71,7 +71,25 @@ class User extends Authenticatable
     {
         return $this->role === 'super_admin';
     }
-
+    
+    public function isOperator()
+    {
+        return $this->role === 'operator';
+    }
+    
+    public function isTlRonUpkd()
+    {
+        return $this->role === 'tl_ron_upkd';
+    }
+    public function isStaf()
+    {
+        return $this->role === 'staf';
+    }
+   
+    public function isTlRon()
+    {
+        return $this->role === 'tl_ron';
+    }
     public function getConnectionName()
     {
         return session('unit', 'u478221055_up_kendari');

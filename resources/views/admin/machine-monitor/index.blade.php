@@ -89,6 +89,7 @@
                 </div>
 
                 <!-- Unit Filter -->
+                @if(session('unit') === 'mysql')
                 <div class="bg-white rounded-lg shadow-md p-4 mb-6">
                     <div class="flex items-center justify-between">
                         <h3 class="text-lg font-medium text-gray-800">
@@ -105,6 +106,7 @@
                         </select>
                     </div>
                 </div>
+                @endif
 
                 <!-- Status Indicators -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">

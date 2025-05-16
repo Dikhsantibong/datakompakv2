@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use App\Events\RencanaDayaMampuUpdated;
+use Illuminate\Support\Facades\Log;
 
 class RencanaDayaMampu extends Model
 {
@@ -42,56 +43,76 @@ class RencanaDayaMampu extends Model
             }
         });
 
-        static::saved(function ($rencanaDayaMampu) {
-            if (self::$isSyncing) {
-                return;
-            }
-
-            $currentSession = session('unit', 'mysql');
-            $powerPlant = $rencanaDayaMampu->machine->powerPlant;
-
-            if ($powerPlant) {
-                if ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
-                    // Sync dari UP Kendari ke unit lokal
-                    event(new RencanaDayaMampuUpdated($rencanaDayaMampu, 'update'));
-                } elseif ($currentSession !== 'mysql' && $currentSession === $powerPlant->unit_source) {
-                    // Sync dari unit lokal ke UP Kendari
-                    event(new RencanaDayaMampuUpdated($rencanaDayaMampu, 'update'));
-                }
-            }
-        });
-
         static::created(function ($rencanaDayaMampu) {
-            if (self::$isSyncing) {
-                return;
-            }
+            try {
+                if (self::$isSyncing) return;
 
-            $currentSession = session('unit', 'mysql');
-            $powerPlant = $rencanaDayaMampu->machine->powerPlant;
+                $powerPlant = $rencanaDayaMampu->machine->powerPlant;
+                
+                if (!$powerPlant) {
+                    Log::warning('Skipping sync - Power Plant not found for rencana daya mampu:', [
+                        'machine_id' => $rencanaDayaMampu->machine_id
+                    ]);
+                    return;
+                }
 
-            if ($powerPlant) {
+                $currentSession = session('unit', 'mysql');
+
+                // Sinkronisasi hanya jika kondisi terpenuhi
                 if ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
                     event(new RencanaDayaMampuUpdated($rencanaDayaMampu, 'create'));
                 } elseif ($currentSession !== 'mysql' && $currentSession === $powerPlant->unit_source) {
                     event(new RencanaDayaMampuUpdated($rencanaDayaMampu, 'create'));
                 }
+            } catch (\Exception $e) {
+                Log::error('Error in RencanaDayaMampu sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
             }
         });
 
-        static::deleted(function ($rencanaDayaMampu) {
-            if (self::$isSyncing) {
-                return;
-            }
+        static::updated(function ($rencanaDayaMampu) {
+            try {
+                if (self::$isSyncing) return;
 
-            $currentSession = session('unit', 'mysql');
-            $powerPlant = $rencanaDayaMampu->machine->powerPlant;
+                $powerPlant = $rencanaDayaMampu->machine->powerPlant;
+                if ($powerPlant) {
+                    $currentSession = session('unit', 'mysql');
 
-            if ($powerPlant) {
-                if ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
-                    event(new RencanaDayaMampuUpdated($rencanaDayaMampu, 'delete'));
-                } elseif ($currentSession !== 'mysql' && $currentSession === $powerPlant->unit_source) {
-                    event(new RencanaDayaMampuUpdated($rencanaDayaMampu, 'delete'));
+                    if ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
+                        event(new RencanaDayaMampuUpdated($rencanaDayaMampu, 'update'));
+                    } elseif ($currentSession !== 'mysql' && $currentSession === $powerPlant->unit_source) {
+                        event(new RencanaDayaMampuUpdated($rencanaDayaMampu, 'update'));
+                    }
                 }
+            } catch (\Exception $e) {
+                Log::error('Error in RencanaDayaMampu sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
+
+        static::deleting(function ($rencanaDayaMampu) {
+            try {
+                if (self::$isSyncing) return;
+
+                $powerPlant = $rencanaDayaMampu->machine->powerPlant;
+                if ($powerPlant) {
+                    $currentSession = session('unit', 'mysql');
+
+                    if ($currentSession === 'mysql' && $powerPlant->unit_source !== 'mysql') {
+                        event(new RencanaDayaMampuUpdated($rencanaDayaMampu, 'delete'));
+                    } elseif ($currentSession !== 'mysql' && $currentSession === $powerPlant->unit_source) {
+                        event(new RencanaDayaMampuUpdated($rencanaDayaMampu, 'delete'));
+                    }
+                }
+            } catch (\Exception $e) {
+                Log::error('Error in RencanaDayaMampu sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
             }
         });
     }
@@ -251,8 +272,6 @@ class RencanaDayaMampu extends Model
         }
     }
 
-    
-
     public function updateSummary()
     {
         $data = $this->daily_data ?? [];
@@ -289,6 +308,4 @@ class RencanaDayaMampu extends Model
         }
         return $data;
     }
-
-    
 } 

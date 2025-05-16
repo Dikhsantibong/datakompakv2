@@ -2,22 +2,21 @@
 
 namespace App\Events;
 
+use App\Models\RencanaDayaMampu;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\RencanaDayaMampu;
 
 class RencanaDayaMampuUpdated
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $rencanaDayaMampu;
-    public $sourceUnit;
     public $action;
 
     public function __construct(RencanaDayaMampu $rencanaDayaMampu, string $action)
     {
         $this->rencanaDayaMampu = $rencanaDayaMampu;
-        $this->sourceUnit = session('unit', 'mysql');
         $this->action = $action;
     }
 } 

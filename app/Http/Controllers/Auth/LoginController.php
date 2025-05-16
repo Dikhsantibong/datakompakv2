@@ -32,7 +32,15 @@ class LoginController extends Controller
                 return redirect()->route('admin.dashboard');
             } elseif (Auth::user()->role == 'super_admin') {
                 return redirect()->route('admin.dashboard');
-            } else {
+            } elseif (Auth::user()->role == 'operator') {
+                return redirect()->route('admin.dashboard');
+            } elseif (Auth::user()->role == 'staf') {
+                return redirect()->route('admin.dashboard');
+            } elseif (Auth::user()->role == 'tl_ron_upkd') {
+                return redirect()->route('admin.dashboard');
+            } elseif (Auth::user()->role == 'tl_ron')   {
+                return redirect()->route('admin.dashboard');
+            } elseif (Auth::user()->role == 'stasiun')   { 
                 return redirect()->route('user.dashboard');
             }
         }

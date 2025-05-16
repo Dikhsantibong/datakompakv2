@@ -72,7 +72,10 @@
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Status</label>
                                         <div class="mt-2 space-y-2">
-                                            @php $currentStatus = json_decode($machineStatus->status) @endphp
+                                            @php 
+                                                $currentStatus = is_string($machineStatus->status) ? json_decode($machineStatus->status) : $machineStatus->status;
+                                                $currentStatus = is_array($currentStatus) ? $currentStatus : [];
+                                            @endphp
                                             <div class="flex items-center">
                                                 <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="operasi"
                                                     class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
@@ -145,7 +148,10 @@
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Status</label>
                                         <div class="mt-2 space-y-2">
-                                            @php $currentStatus = json_decode($equipment->status) @endphp
+                                            @php 
+                                                $currentStatus = is_string($equipment->status) ? json_decode($equipment->status) : $equipment->status;
+                                                $currentStatus = is_array($currentStatus) ? $currentStatus : [];
+                                            @endphp
                                             <div class="flex items-center">
                                                 <input type="checkbox" name="auxiliary_equipment[{{ $index }}][status][]" value="normal"
                                                     class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded"

@@ -193,7 +193,8 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
                                             @php
                                                 $operatingCount = $meetingShift->machineStatuses->filter(function($status) {
-                                                    return str_contains($status->status, 'operasi');
+                                                    $statusStr = is_array($status->status) ? json_encode($status->status) : (string)$status->status;
+                                                    return str_contains($statusStr, 'operasi');
                                                 })->count();
                                                 
                                                 $totalMachines = $meetingShift->machineStatuses->count();

@@ -19,6 +19,8 @@ use App\Events\RencanaDayaMampuUpdated;
 use App\Listeners\SyncRencanaDayaMampuToUpKendari;
 use App\Events\MachineLogUpdated;
 use App\Listeners\SyncMachineLogToUpKendari;
+use App\Events\MeetingShiftUpdated;
+use App\Listeners\SyncMeetingShiftToUpKendari;
 use App\Events\Registered;
 use App\Listeners\SendEmailVerificationNotification;
 
@@ -51,6 +53,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         MachineLogUpdated::class => [
             SyncMachineLogToUpKendari::class,
+        ],
+        MeetingShiftUpdated::class => [
+            SyncMeetingShiftToUpKendari::class,
         ],
         Registered::class => [
             SendEmailVerificationNotification::class,

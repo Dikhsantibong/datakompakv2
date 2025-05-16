@@ -130,7 +130,10 @@
                                         </td>
                                         <td class="px-6 py-4 text-sm border-b border-gray-200 border">
                                             <div class="flex flex-wrap gap-1">
-                                                @foreach(json_decode($status->status) as $stat)
+                                                @php
+                                                    $statuses = is_array($status->status) ? $status->status : json_decode($status->status);
+                                                @endphp
+                                                @foreach($statuses as $stat)
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                     {{ $stat }}
                                                 </span>
@@ -178,7 +181,10 @@
                                         </td>
                                         <td class="px-6 py-4 text-sm border-b border border-gray-200">
                                             <div class="flex flex-wrap gap-1">
-                                                @foreach(json_decode($equipment->status) as $stat)
+                                                @php
+                                                    $statuses = is_array($equipment->status) ? $equipment->status : json_decode($equipment->status);
+                                                @endphp
+                                                @foreach($statuses as $stat)
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                     {{ $stat }}
                                                 </span>
@@ -387,13 +393,13 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($meetingShift->attendances as $index => $attendance)
                                     <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 text-sm text-gray-500 border-b border-gray-200">
+                                        <td class="px-6 py-4 text-sm text-gray-500 border-b border-gray-200 border-r border-gray-200">
                                             {{ $index + 1 }}
                                         </td>
-                                        <td class="px-6 py-4 text-sm font-medium text-gray-900 border-b border-gray-200">
+                                        <td class="px-6 py-4 text-sm font-medium text-gray-900 border-r border-gray-200">
                                             {{ $attendance->nama }}
                                         </td>
-                                        <td class="px-6 py-4 text-center border-b border-gray-200">
+                                        <td class="px-6 py-4 text-center border-r border-gray-200">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                 @if($attendance->shift == 'A') bg-blue-100 text-blue-800
                                                 @elseif($attendance->shift == 'B') bg-green-100 text-green-800
@@ -402,7 +408,7 @@
                                                 Shift {{ $attendance->shift }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 border-b border-gray-200">
+                                        <td class="px-6 py-4 border-r border-gray-200">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                 @if($attendance->status == 'hadir') bg-green-100 text-green-800
                                                 @elseif($attendance->status == 'izin') bg-yellow-100 text-yellow-800

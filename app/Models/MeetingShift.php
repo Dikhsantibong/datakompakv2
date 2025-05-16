@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Events\MeetingShiftUpdated;
+use Illuminate\Support\Facades\Log;
 
 class MeetingShift extends Model
 {
     use HasFactory;
+
+    public static $isSyncing = false;
 
     protected $fillable = [
         'tanggal',
@@ -70,9 +74,68 @@ class MeetingShift extends Model
     {
         return $this->hasMany(MeetingShiftAttendance::class);
     }
+
     public function getConnectionName()
-    
     {
         return session('unit', 'mysql');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($meetingShift) {
+            try {
+                if (self::$isSyncing) return;
+
+                $currentSession = session('unit', 'mysql');
+                
+                // Only sync if not in mysql session
+                if ($currentSession !== 'mysql') {
+                    event(new MeetingShiftUpdated($meetingShift, 'create'));
+                }
+            } catch (\Exception $e) {
+                Log::error('Error in MeetingShift sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
+
+        static::updated(function ($meetingShift) {
+            try {
+                if (self::$isSyncing) return;
+
+                $currentSession = session('unit', 'mysql');
+                
+                // Only sync if not in mysql session
+                if ($currentSession !== 'mysql') {
+                    event(new MeetingShiftUpdated($meetingShift, 'update'));
+                }
+            } catch (\Exception $e) {
+                Log::error('Error in MeetingShift sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
+
+        static::deleting(function ($meetingShift) {
+            try {
+                if (self::$isSyncing) return;
+
+                $currentSession = session('unit', 'mysql');
+                
+                // Only sync if not in mysql session
+                if ($currentSession !== 'mysql') {
+                    event(new MeetingShiftUpdated($meetingShift, 'delete'));
+                }
+            } catch (\Exception $e) {
+                Log::error('Error in MeetingShift sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
     }
 }

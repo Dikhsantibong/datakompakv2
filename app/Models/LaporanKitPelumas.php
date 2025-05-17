@@ -10,13 +10,7 @@ class LaporanKitPelumas extends Model
 
     protected $fillable = [
         'laporan_kit_id',
-        'tank1_cm',
-        'tank1_liter',
-        'tank2_cm',
-        'tank2_liter', 
         'tank_total_stok',
-        'drum_area1',
-        'drum_area2',
         'drum_total_stok',
         'total_stok_tangki',
         'terima_pelumas',
@@ -24,9 +18,23 @@ class LaporanKitPelumas extends Model
         'jenis'
     ];
 
+    public function laporanKit()
+    {
+        return $this->belongsTo(LaporanKit::class, 'laporan_kit_id');
+    }
+
+    public function storageTanks()
+    {
+        return $this->hasMany(LaporanKitPelumasStorageTank::class, 'laporan_kit_pelumas_id');
+    }
+
+    public function drums()
+    {
+        return $this->hasMany(LaporanKitPelumasDrum::class, 'laporan_kit_pelumas_id');
+    }
+
     public function getConnectionName()
     {
         return session('unit', 'mysql');
     }
-    
 }

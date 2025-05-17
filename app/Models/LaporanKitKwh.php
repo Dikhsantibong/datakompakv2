@@ -22,8 +22,28 @@ class LaporanKitKwh extends Model
         'ps_total'
     ];
 
+    protected $casts = [
+        'prod_total' => 'decimal:2',
+        'ps_total' => 'decimal:2'
+    ];
+
     public function getConnectionName()
     {
         return session('unit', 'mysql');
+    }
+
+    public function laporanKit()
+    {
+        return $this->belongsTo(LaporanKit::class);
+    }
+
+    public function productionPanels()
+    {
+        return $this->hasMany(LaporanKitKwhProductionPanel::class, 'laporan_kit_kwh_id');
+    }
+
+    public function psPanels()
+    {
+        return $this->hasMany(LaporanKitKwhPsPanel::class, 'laporan_kit_kwh_id');
     }
 }

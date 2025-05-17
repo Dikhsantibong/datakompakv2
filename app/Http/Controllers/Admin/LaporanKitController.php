@@ -12,6 +12,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LaporanKitExport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Log as LogFacade;
 
 class LaporanKitController extends Controller
 {
@@ -96,16 +98,73 @@ class LaporanKitController extends Controller
                 }
             }
 
-            // Simpan KWH
-            if ($request->has('kwh')) {
-                foreach ($request->kwh as $kwh) {
-                    $laporanKit->kwh()->create($kwh);
+            // Store Pelumas with new structure
+            if ($request->has('pelumas')) {
+                foreach ($request->pelumas as $pelumasData) {
+                    // Debug log
+                    LogFacade::info('Processing pelumas data:', ['data' => $pelumasData]);
+                    
+                    // Create main Pelumas record
+                    $pelumas = $laporanKit->pelumas()->create([
+                        'tank_total_stok' => $pelumasData['tank_total_stok'] ?? 0,
+                        'drum_total_stok' => $pelumasData['drum_total_stok'] ?? 0,
+                        'total_stok_tangki' => $pelumasData['total_stok_tangki'] ?? 0,
+                        'terima_pelumas' => $pelumasData['terima_pelumas'] ?? 0,
+                        'total_pakai' => $pelumasData['total_pakai'] ?? 0,
+                        'jenis' => $pelumasData['jenis'] ?? null
+                    ]);
+
+                    // Store storage tanks
+                    for ($i = 1; isset($pelumasData["tank{$i}_cm"]); $i++) {
+                        // Debug log
+                        LogFacade::info("Processing storage tank {$i}:", [
+                            'cm' => $pelumasData["tank{$i}_cm"] ?? null,
+                            'liter' => $pelumasData["tank{$i}_liter"] ?? null
+                        ]);
+                        
+                        $pelumas->storageTanks()->create([
+                            'tank_number' => $i,
+                            'cm' => $pelumasData["tank{$i}_cm"],
+                            'liter' => $pelumasData["tank{$i}_liter"]
+                        ]);
+                    }
+
+                    // Store drums
+                    for ($i = 1; isset($pelumasData["drum_area{$i}"]); $i++) {
+                        $pelumas->drums()->create([
+                            'area_number' => $i,
+                            'jumlah' => $pelumasData["drum_area{$i}"]
+                        ]);
+                    }
                 }
             }
-            // Simpan Pelumas
-            if ($request->has('pelumas')) {
-                foreach ($request->pelumas as $pelumas) {
-                    $laporanKit->pelumas()->create($pelumas);
+
+            // Simpan KWH
+            if ($request->has('kwh')) {
+                foreach ($request->kwh as $kwhData) {
+                    // Create main KWH record
+                    $kwh = $laporanKit->kwh()->create([
+                        'prod_total' => $kwhData['prod_total'] ?? 0,
+                        'ps_total' => $kwhData['ps_total'] ?? 0
+                    ]);
+
+                    // Store production panels
+                    for ($i = 1; isset($kwhData["prod_panel{$i}_awal"]); $i++) {
+                        $kwh->productionPanels()->create([
+                            'panel_number' => $i,
+                            'awal' => $kwhData["prod_panel{$i}_awal"],
+                            'akhir' => $kwhData["prod_panel{$i}_akhir"]
+                        ]);
+                    }
+
+                    // Store PS panels
+                    for ($i = 1; isset($kwhData["ps_panel{$i}_awal"]); $i++) {
+                        $kwh->psPanels()->create([
+                            'panel_number' => $i,
+                            'awal' => $kwhData["ps_panel{$i}_awal"],
+                            'akhir' => $kwhData["ps_panel{$i}_akhir"]
+                        ]);
+                    }
                 }
             }
             // Simpan Bahan Kimia
@@ -177,8 +236,32 @@ class LaporanKitController extends Controller
     public function show($id)
     {
         $laporan = LaporanKit::with([
-            'jamOperasi', 'gangguan', 'bbm', 'kwh', 'pelumas', 'bahanKimia', 'bebanTertinggi', 'creator'
+            'jamOperasi', 
+            'gangguan', 
+            'bbm',
+            'bbm.storageTanks',
+            'bbm.serviceTanks',
+            'bbm.flowmeters',
+            'kwh',
+            'kwh.productionPanels',
+            'kwh.psPanels',
+            'pelumas',
+            'pelumas.storageTanks',
+            'pelumas.drums',
+            'bahanKimia', 
+            'bebanTertinggi', 
+            'creator'
         ])->findOrFail($id);
+
+        // Debug data loading
+        if ($laporan->bbm->isEmpty()) {
+            LogFacade::info('No BBM data found for laporan ID: ' . $id);
+        } else {
+            LogFacade::info('BBM data found. First BBM record ID: ' . $laporan->bbm->first()->id);
+            LogFacade::info('Service Tanks count: ' . $laporan->bbm->first()->serviceTanks->count());
+            LogFacade::info('Storage Tanks count: ' . $laporan->bbm->first()->storageTanks->count());
+            LogFacade::info('Flowmeters count: ' . $laporan->bbm->first()->flowmeters->count());
+        }
 
         return view('admin.laporan-kit.show', compact('laporan'));
     }

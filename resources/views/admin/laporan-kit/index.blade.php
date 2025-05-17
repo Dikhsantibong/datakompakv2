@@ -997,7 +997,7 @@
         // Calculate Storage Tank total
         let tankTotalLiter = 0;
         for (let i = 1; i <= pelumasStorageTankCount; i++) {
-            const liter = parseFloat(row.querySelector(`input[name$="[tank${i}_liter]"]`).value) || 0;
+            const liter = parseFloat(row.querySelector(`input[name$="[tank_${i}_liter]"]`).value) || 0;
             tankTotalLiter += liter;
         }
         row.querySelector('input[name$="[tank_total_stok]"]').value = tankTotalLiter.toFixed(1);
@@ -1116,10 +1116,10 @@
             for (let i = 1; i <= pelumasStorageTankCount; i++) {
                 newInputs.push(`
             <td class="px-4 py-2 border-r">
-                        <input type="number" step="0.1" name="pelumas[${rowIndex}][tank${i}_cm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <input type="number" step="0.1" name="pelumas[${rowIndex}][tank_${i}_cm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
             <td class="px-4 py-2 border-r">
-                        <input type="number" step="0.1" name="pelumas[${rowIndex}][tank${i}_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <input type="number" step="0.1" name="pelumas[${rowIndex}][tank_${i}_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </td>
                 `);
             }

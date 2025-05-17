@@ -154,57 +154,144 @@
                         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
                             <h3 class="text-lg font-semibold text-gray-900">Data Pemeriksaan BBM</h3>
                         </div>
+                        
+                        @php
+                            $bbmData = $laporan->bbm->first();
+                        @endphp
+
+                        <!-- Debug Info -->
+                        @if(config('app.debug'))
+                        <div class="p-4 bg-gray-100 text-sm">
+                            <p>BBM Data Available: {{ $bbmData ? 'Yes' : 'No' }}</p>
+                            @if($bbmData)
+                                <p>BBM ID: {{ $bbmData->id }}</p>
+                                <p>Storage Tanks Count: {{ $bbmData->storageTanks->count() }}</p>
+                                <p>Service Tanks Count: {{ $bbmData->serviceTanks->count() }}</p>
+                                <p>Flowmeters Count: {{ $bbmData->flowmeters->count() }}</p>
+                            @endif
+                        </div>
+                        @endif
+                        
+                        <!-- Storage Tanks -->
                         <div class="overflow-x-auto">
+                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                <h4 class="text-sm font-semibold text-gray-700">Storage Tanks</h4>
+                            </div>
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Storage Tank 1 (cm)</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Storage Tank 1 (liter)</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Storage Tank 2 (cm)</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Storage Tank 2 (liter)</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Total Stok</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Service Tank 1 (liter)</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Service Tank 1 (%)</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Service Tank 2 (liter)</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Service Tank 2 (%)</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Total Stok Tangki</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Terima BBM</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Flowmeter 1 Awal</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Flowmeter 1 Akhir</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Flowmeter 1 Pakai</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Flowmeter 2 Awal</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Flowmeter 2 Akhir</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Flowmeter 2 Pakai</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pakai</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Number</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CM</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liter</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @forelse($laporan->bbm as $row)
+                                    @if($bbmData && $bbmData->storageTanks->isNotEmpty())
+                                        @foreach($bbmData->storageTanks as $tank)
+                                        <tr>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">Storage Tank {{ $tank->tank_number }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->cm, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
+                                        </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Service Tanks -->
+                        <div class="overflow-x-auto">
+                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                <h4 class="text-sm font-semibold text-gray-700">Service Tanks</h4>
+                            </div>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
                                     <tr>
-                                        <td class="px-4 py-2 border-r">{{ $row->storage_tank_1_cm }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->storage_tank_1_liter }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->storage_tank_2_cm }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->storage_tank_2_liter }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->total_stok }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->service_tank_1_liter }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->service_tank_1_percentage }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->service_tank_2_liter }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->service_tank_2_percentage }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->total_stok_tangki }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->terima_bbm }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->flowmeter_1_awal }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->flowmeter_1_akhir }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->flowmeter_1_pakai }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->flowmeter_2_awal }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->flowmeter_2_akhir }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->flowmeter_2_pakai }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->total_pakai }}</td>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Number</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liter</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @if($bbmData && $bbmData->serviceTanks->isNotEmpty())
+                                        @foreach($bbmData->serviceTanks as $tank)
+                                        <tr>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">Service Tank {{ $tank->tank_number }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->percentage, 2) }}%</td>
+                                        </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Flowmeters -->
+                        <div class="overflow-x-auto">
+                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                <h4 class="text-sm font-semibold text-gray-700">Flowmeters</h4>
+                            </div>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flowmeter Number</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pakai</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @forelse($laporan->bbm->first()->flowmeters ?? [] as $flowmeter)
+                                    <tr>
+                                        <td class="px-4 py-2 border-r whitespace-nowrap">Flowmeter {{ $flowmeter->flowmeter_number }}</td>
+                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($flowmeter->awal, 2) }}</td>
+                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($flowmeter->akhir, 2) }}</td>
+                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($flowmeter->pakai, 2) }}</td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="18" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
                                     </tr>
                                     @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- BBM Summary -->
+                        <div class="overflow-x-auto">
+                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                <h4 class="text-sm font-semibold text-gray-700">Summary BBM</h4>
+                            </div>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Stok</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Stok Tangki</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Terima BBM</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pakai</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @if($laporan->bbm->first())
+                                    <tr>
+                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($laporan->bbm->first()->total_stok, 2) }}</td>
+                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($laporan->bbm->first()->total_stok_tangki, 2) }}</td>
+                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($laporan->bbm->first()->terima_bbm, 2) }}</td>
+                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($laporan->bbm->first()->total_pakai, 2) }}</td>
+                                    </tr>
+                                    @else
+                                    <tr>
+                                        <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                    </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -215,41 +302,114 @@
                         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
                             <h3 class="text-lg font-semibold text-gray-900">Data Pemeriksaan KWH</h3>
                         </div>
+
+                        @php
+                            $kwhData = $laporan->kwh->first();
+                        @endphp
+
+                        <!-- Production Panel -->
                         <div class="overflow-x-auto">
+                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                <h4 class="text-sm font-semibold text-gray-700">Production Panel</h4>
+                            </div>
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Prod Panel1 Awal</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Prod Panel1 Akhir</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Prod Panel2 Awal</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Prod Panel2 Akhir</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Prod Total</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">PS Panel1 Awal</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">PS Panel1 Akhir</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">PS Panel2 Awal</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">PS Panel2 Akhir</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">PS Total</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Panel</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @forelse($laporan->kwh as $row)
+                                    @if($kwhData && $kwhData->productionPanels->isNotEmpty())
+                                        @foreach($kwhData->productionPanels as $panel)
+                                        <tr>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">Panel {{ $panel->panel_number }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->awal, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->total, 2) }}</td>
+                                        </tr>
+                                        @endforeach
+                                        <tr class="bg-gray-50 font-semibold">
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">Total Production</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">-</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">-</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwhData->prod_total, 2) }}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- PS Panel -->
+                        <div class="overflow-x-auto">
+                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                <h4 class="text-sm font-semibold text-gray-700">PS Panel</h4>
+                            </div>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
                                     <tr>
-                                        <td class="px-4 py-2 border-r">{{ $row->prod_panel1_awal }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->prod_panel1_akhir }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->prod_panel2_awal }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->prod_panel2_akhir }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->prod_total }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->ps_panel1_awal }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->ps_panel1_akhir }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->ps_panel2_awal }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->ps_panel2_akhir }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->ps_total }}</td>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Panel</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                                     </tr>
-                                    @empty
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @if($kwhData && $kwhData->psPanels->isNotEmpty())
+                                        @foreach($kwhData->psPanels as $panel)
+                                        <tr>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">Panel {{ $panel->panel_number }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->awal, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->total, 2) }}</td>
+                                        </tr>
+                                        @endforeach
+                                        <tr class="bg-gray-50 font-semibold">
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">Total PS</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">-</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">-</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwhData->ps_total, 2) }}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- KWH Summary -->
+                        <div class="overflow-x-auto">
+                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                <h4 class="text-sm font-semibold text-gray-700">Summary KWH</h4>
+                            </div>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
                                     <tr>
-                                        <td colspan="10" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Production</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total PS</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Net Production</th>
                                     </tr>
-                                    @endforelse
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @if($kwhData)
+                                        <tr>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwhData->prod_total, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwhData->ps_total, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwhData->prod_total - $kwhData->ps_total, 2) }}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -260,45 +420,107 @@
                         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
                             <h3 class="text-lg font-semibold text-gray-900">Data Pemeriksaan Pelumas</h3>
                         </div>
+
+                        @php
+                            $pelumasData = $laporan->pelumas->first();
+                        @endphp
+
+                        <!-- Storage Tanks -->
                         <div class="overflow-x-auto">
+                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                <h4 class="text-sm font-semibold text-gray-700">Storage Tanks</h4>
+                            </div>
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tank1 (cm)</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tank1 (liter)</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tank2 (cm)</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tank2 (liter)</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Total Stok</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Drum Area1</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Drum Area2</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Drum Total Stok</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Total Stok Tangki</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Terima Pelumas</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pakai</th>
-                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Number</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CM</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liter</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @forelse($laporan->pelumas as $row)
+                                    @if($pelumasData && $pelumasData->storageTanks->isNotEmpty())
+                                        @foreach($pelumasData->storageTanks as $tank)
+                                        <tr>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">Storage Tank {{ $tank->tank_number }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->cm, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
+                                        </tr>
+                                        @endforeach
+                                        <tr class="bg-gray-50 font-semibold">
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">Total Storage</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">-</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumasData->tank_total_stok, 2) }}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Drums -->
+                        <div class="overflow-x-auto">
+                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                <h4 class="text-sm font-semibold text-gray-700">Drums</h4>
+                            </div>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
                                     <tr>
-                                        <td class="px-4 py-2 border-r">{{ $row->tank1_cm }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->tank1_liter }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->tank2_cm }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->tank2_liter }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->tank_total_stok }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->drum_area1 }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->drum_area2 }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->drum_total_stok }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->total_stok_tangki }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->terima_pelumas }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->total_pakai }}</td>
-                                        <td class="px-4 py-2 border-r">{{ $row->jenis }}</td>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Area</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
                                     </tr>
-                                    @empty
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @if($pelumasData && $pelumasData->drums->isNotEmpty())
+                                        @foreach($pelumasData->drums as $drum)
+                                        <tr>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">Area {{ $drum->area_number }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($drum->jumlah, 2) }}</td>
+                                        </tr>
+                                        @endforeach
+                                        <tr class="bg-gray-50 font-semibold">
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">Total Drums</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumasData->drum_total_stok, 2) }}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td colspan="2" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pelumas Summary -->
+                        <div class="overflow-x-auto">
+                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                <h4 class="text-sm font-semibold text-gray-700">Summary Pelumas</h4>
+                            </div>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
                                     <tr>
-                                        <td colspan="12" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Stok Tangki</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Terima Pelumas</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pakai</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
                                     </tr>
-                                    @endforelse
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @if($pelumasData)
+                                        <tr>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumasData->total_stok_tangki, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumasData->terima_pelumas, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumasData->total_pakai, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ $pelumasData->jenis }}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

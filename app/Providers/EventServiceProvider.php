@@ -81,5 +81,8 @@ class EventServiceProvider extends ServiceProvider
         PatrolCheckUpdated::class => [
             SyncPatrolCheckToUpKendari::class,
         ],
+        'App\Events\K3KampReportUpdated' => [
+            'App\Listeners\SyncK3KampReportToUpKendari',
+        ],
     ];
 } 

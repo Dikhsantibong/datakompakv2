@@ -32,10 +32,13 @@ class K3KampController extends Controller
         try {
             DB::beginTransaction();
 
+            K3KampReport::$isSyncing = false;
+
             // Create report
             $report = K3KampReport::create([
                 'date' => today(),
-                'created_by' => Auth::user()->id
+                'created_by' => Auth::user()->id,
+                'sync_unit_origin' => session('unit', 'mysql')
             ]);
 
             // Process K3 & Keamanan items
@@ -145,6 +148,8 @@ class K3KampController extends Controller
         try {
             DB::beginTransaction();
 
+            K3KampReport::$isSyncing = false;
+            
             $report = K3KampReport::findOrFail($id);
             
             // Update items
@@ -170,6 +175,8 @@ class K3KampController extends Controller
     public function destroy($id)
     {
         try {
+            K3KampReport::$isSyncing = false;
+            
             $report = K3KampReport::findOrFail($id);
             
             // Delete associated media files

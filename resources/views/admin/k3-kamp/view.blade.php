@@ -158,16 +158,18 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
                                             {{ ($reports->currentPage() - 1) * $reports->perPage() + $index + 1 }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
                                             {{ date('d/m/Y', strtotime($report->date)) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
-                                            {{ $report->creator->name ?? 'N/A' }}
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                {{ $report->sync_unit_origin ?? 'N/A' }}
+                                            </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
                                             {{ $report->items->count() }} Item
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap border-r border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap border-r border-gray-200 text-center">
                                             @php
                                                 $k3Items = $report->items->where('item_type', 'k3_keamanan');
                                                 $adaCount = $k3Items->where('status', 'ada')->count();
@@ -177,7 +179,7 @@
                                                 {{ $adaCount }}/{{ $totalK3 }} Ada
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap border-r border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap border-r border-gray-200 text-center">
                                             @php
                                                 $lingkunganItems = $report->items->where('item_type', 'lingkungan');
                                                 $adaCount = $lingkunganItems->where('status', 'ada')->count();

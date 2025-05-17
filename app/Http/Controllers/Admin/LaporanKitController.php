@@ -126,42 +126,61 @@ class LaporanKitController extends Controller
 
             // Store Pelumas with new structure
             if ($request->has('pelumas')) {
+                // Create single Pelumas record for all rows
+                $pelumas = $laporanKit->pelumas()->create([
+                    'tank_total_stok' => collect($request->pelumas)->sum('tank_total_stok') ?? 0,
+                    'drum_total_stok' => collect($request->pelumas)->sum('drum_total_stok') ?? 0,
+                    'total_stok_tangki' => collect($request->pelumas)->sum('total_stok_tangki') ?? 0,
+                    'terima_pelumas' => collect($request->pelumas)->sum('terima_pelumas') ?? 0,
+                    'total_pakai' => collect($request->pelumas)->sum('total_pakai') ?? 0,
+                    'jenis' => $request->pelumas[0]['jenis'] ?? null
+                ]);
+
+                // Initialize arrays for batch insertion
+                $storageTanks = [];
+                $drums = [];
+
+                // Process all rows to collect tank and drum data
                 foreach ($request->pelumas as $pelumasData) {
-                    // Debug log
-                    LogFacade::info('Processing pelumas data:', ['data' => $pelumasData]);
-                    
-                    // Create main Pelumas record
-                    $pelumas = $laporanKit->pelumas()->create([
-                        'tank_total_stok' => $pelumasData['tank_total_stok'] ?? 0,
-                        'drum_total_stok' => $pelumasData['drum_total_stok'] ?? 0,
-                        'total_stok_tangki' => $pelumasData['total_stok_tangki'] ?? 0,
-                        'terima_pelumas' => $pelumasData['terima_pelumas'] ?? 0,
-                        'total_pakai' => $pelumasData['total_pakai'] ?? 0,
-                        'jenis' => $pelumasData['jenis'] ?? null
-                    ]);
+                    // Debug log for pelumas data
+                    Log::info('Processing pelumas data:', ['data' => $pelumasData]);
 
-                    // Store storage tanks
-                    for ($i = 1; isset($pelumasData["tank{$i}_cm"]); $i++) {
-                        // Debug log
-                        LogFacade::info("Processing storage tank {$i}:", [
-                            'cm' => $pelumasData["tank{$i}_cm"] ?? null,
-                            'liter' => $pelumasData["tank{$i}_liter"] ?? null
-                        ]);
-                        
-                        $pelumas->storageTanks()->create([
+                    // Collect storage tanks data - Fix the field names to match the form
+                    for ($i = 1; isset($pelumasData["tank_{$i}_cm"]); $i++) {
+                        $storageTanks[] = [
+                            'laporan_kit_pelumas_id' => $pelumas->id,
                             'tank_number' => $i,
-                            'cm' => $pelumasData["tank{$i}_cm"],
-                            'liter' => $pelumasData["tank{$i}_liter"]
-                        ]);
+                            'cm' => $pelumasData["tank_{$i}_cm"],
+                            'liter' => $pelumasData["tank_{$i}_liter"],
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+                        // Debug log for storage tank data
+                        Log::info("Added storage tank data:", end($storageTanks));
                     }
 
-                    // Store drums
+                    // Collect drums data
                     for ($i = 1; isset($pelumasData["drum_area{$i}"]); $i++) {
-                        $pelumas->drums()->create([
+                        $drums[] = [
+                            'laporan_kit_pelumas_id' => $pelumas->id,
                             'area_number' => $i,
-                            'jumlah' => $pelumasData["drum_area{$i}"]
-                        ]);
+                            'jumlah' => $pelumasData["drum_area{$i}"],
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
                     }
+                }
+
+                // Debug log for final collections
+                Log::info('Storage tanks to insert:', ['count' => count($storageTanks), 'data' => $storageTanks]);
+                Log::info('Drums to insert:', ['count' => count($drums), 'data' => $drums]);
+
+                // Batch insert all collected data
+                if (!empty($storageTanks)) {
+                    $pelumas->storageTanks()->insert($storageTanks);
+                }
+                if (!empty($drums)) {
+                    $pelumas->drums()->insert($drums);
                 }
             }
 

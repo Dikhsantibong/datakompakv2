@@ -209,7 +209,12 @@
                                     </th>
                                     <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">Total Stok Tangki</th>
                                     <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">Terima BBM</th>
-                                    <th colspan="6" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">Flowmeter</th>
+                                    <th colspan="6" id="bbm-flowmeter-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100 relative">
+                                        Flowmeter
+                                        <button type="button" onclick="addFlowmeterPanel()" class="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </th>
                                     <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">total pakai</th>
                                     <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center align-middle bg-gray-100">aksi</th>
                                 </tr>
@@ -485,6 +490,7 @@
     let kwhPSPanelCount = 2;
     let pelumasStorageTankCount = 2;
     let pelumasDrumCount = 2;
+    let bbmFlowmeterCount = 2;
 
     // Initialize all tables on page load
     document.addEventListener('DOMContentLoaded', function() {
@@ -742,17 +748,15 @@
         row.querySelector('input[name$="[total_stok_tangki]"]').value = totalStokTangki.toFixed(1);
 
         // Calculate Flowmeter totals
-        const fm1Awal = parseFloat(row.querySelector('input[name$="[flowmeter_1_awal]"]').value) || 0;
-        const fm1Akhir = parseFloat(row.querySelector('input[name$="[flowmeter_1_akhir]"]').value) || 0;
-        const fm2Awal = parseFloat(row.querySelector('input[name$="[flowmeter_2_awal]"]').value) || 0;
-        const fm2Akhir = parseFloat(row.querySelector('input[name$="[flowmeter_2_akhir]"]').value) || 0;
-
-        const pakai1 = Math.max(0, fm1Akhir - fm1Awal);
-        const pakai2 = Math.max(0, fm2Akhir - fm2Awal);
-
-        row.querySelector('input[name$="[flowmeter_1_pakai]"]').value = pakai1.toFixed(1);
-        row.querySelector('input[name$="[flowmeter_2_pakai]"]').value = pakai2.toFixed(1);
-        row.querySelector('input[name$="[total_pakai]"]').value = (pakai1 + pakai2).toFixed(1);
+        let totalPakai = 0;
+        for (let i = 1; i <= bbmFlowmeterCount; i++) {
+            const awal = parseFloat(row.querySelector(`input[name$="[flowmeter_${i}_awal]"]`).value) || 0;
+            const akhir = parseFloat(row.querySelector(`input[name$="[flowmeter_${i}_akhir]"]`).value) || 0;
+            const pakai = Math.max(0, akhir - awal);
+            row.querySelector(`input[name$="[flowmeter_${i}_pakai]"]`).value = pakai.toFixed(1);
+            totalPakai += pakai;
+        }
+        row.querySelector('input[name$="[total_pakai]"]').value = totalPakai.toFixed(1);
     }
 
     // Functions for BBM panels
@@ -792,11 +796,15 @@
 
         // Update Storage Tank header colspan
         const storageHeader = document.getElementById('bbm-storage-header');
-        storageHeader.colSpan = bbmStorageTankCount * 2 + 1; // +1 for total stok
+        storageHeader.colSpan = bbmStorageTankCount * 2 + 1;
 
         // Update Service Tank header colspan
         const serviceHeader = document.getElementById('bbm-service-header');
-        serviceHeader.colSpan = bbmServiceTankCount * 2 + 1; // +1 for total stok
+        serviceHeader.colSpan = bbmServiceTankCount * 2 + 1;
+
+        // Update Flowmeter header colspan
+        const flowmeterHeader = document.getElementById('bbm-flowmeter-header');
+        flowmeterHeader.colSpan = bbmFlowmeterCount * 3;
 
         // Add Storage Tank panels
         for (let i = 1; i <= bbmStorageTankCount; i++) {
@@ -860,22 +868,22 @@
         totalServiceStokSubheader.textContent = 'liter';
         subheaderRow.appendChild(totalServiceStokSubheader);
 
-        // Add Flowmeter 1 & 2 headers
-        ['1', '2'].forEach(num => {
+        // Add Flowmeter panels
+        for (let i = 1; i <= bbmFlowmeterCount; i++) {
             const flowmeterHeader = document.createElement('th');
             flowmeterHeader.className = 'px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center';
             flowmeterHeader.colSpan = 3;
-            flowmeterHeader.textContent = num;
+            flowmeterHeader.textContent = `${i}`;
             headerRow.appendChild(flowmeterHeader);
 
             // Add awal/akhir/pakai subheaders
-            ['awal', 'akhir', `pakai ${num}`].forEach(text => {
+            ['awal', 'akhir', `pakai ${i}`].forEach(text => {
                 const header = document.createElement('th');
                 header.className = 'px-4 py-2 text-xs font-medium text-gray-500 border-r text-center';
                 header.textContent = text;
                 subheaderRow.appendChild(header);
             });
-        });
+        }
 
         // Add total pakai subheader
         const totalPakaiSubheader = document.createElement('th');
@@ -942,33 +950,22 @@
                 </td>
             `);
 
-            // Flowmeter 1
-            newInputs.push(`
-                <td class="px-4 py-2 border-r">
-                    <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </td>
-                <td class="px-4 py-2 border-r">
-                    <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </td>
-                <td class="px-4 py-2 border-r">
-                    <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_1_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
-                </td>
-            `);
+            // Dynamic Flowmeter inputs
+            for (let i = 1; i <= bbmFlowmeterCount; i++) {
+                newInputs.push(`
+                    <td class="px-4 py-2 border-r">
+                        <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_${i}_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </td>
+                    <td class="px-4 py-2 border-r">
+                        <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_${i}_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </td>
+                    <td class="px-4 py-2 border-r">
+                        <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_${i}_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+                    </td>
+                `);
+            }
 
-            // Flowmeter 2
-            newInputs.push(`
-                <td class="px-4 py-2 border-r">
-                    <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </td>
-                <td class="px-4 py-2 border-r">
-                    <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </td>
-                <td class="px-4 py-2 border-r">
-                    <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_2_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
-                </td>
-            `);
-
-            // Total Pakai (liter)
+            // Total Pakai
             newInputs.push(`
                 <td class="px-4 py-2 border-r">
                     <input type="number" step="0.1" name="bbm[${rowIndex}][total_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
@@ -1047,11 +1044,11 @@
 
         // Update Storage Tank header colspan
         const storageHeader = document.getElementById('pelumas-storage-header');
-        storageHeader.colSpan = pelumasStorageTankCount * 2 + 1; // +1 for total stok
+        storageHeader.colSpan = pelumasStorageTankCount * 2 + 1;
 
         // Update Drum header colspan
         const drumHeader = document.getElementById('pelumas-drum-header');
-        drumHeader.colSpan = pelumasDrumCount + 1; // +1 for total stok
+        drumHeader.colSpan = pelumasDrumCount + 1;
 
         // Add Storage Tank panels
         for (let i = 1; i <= pelumasStorageTankCount; i++) {
@@ -1224,6 +1221,13 @@
         const stokAwal = parseFloat(row.querySelector('input[name$="[stok_awal]"]').value) || 0;
         const terima = parseFloat(row.querySelector('input[name$="[terima]"]').value) || 0;
         row.querySelector('input[name$="[total_pakai]"]').value = (stokAwal + terima).toFixed(1);
+    }
+
+    // Add new function for flowmeter panel
+    function addFlowmeterPanel() {
+        bbmFlowmeterCount++;
+        initializeBBMPanels();
+        updateBBMRows();
     }
 </script>
 @endpush

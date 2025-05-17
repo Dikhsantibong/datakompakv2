@@ -81,6 +81,7 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ops</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Har</th>
@@ -92,6 +93,7 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($laporan->jamOperasi as $row)
                                     <tr>
+                                        <td class="px-6 py-4 border-r">{{ $loop->iteration }}</td>
                                         <td class="px-6 py-4 border-r">{{ $row->machine->name ?? '-' }}</td>
                                         <td class="px-6 py-4 border-r">{{ $row->ops }}</td>
                                         <td class="px-6 py-4 border-r">{{ $row->har }}</td>
@@ -123,6 +125,7 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mekanik</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elektrik</th>
@@ -131,6 +134,7 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($filteredGangguan as $row)
                                     <tr>
+                                        <td class="px-6 py-4 border-r">{{ $loop->iteration }}</td>
                                         <td class="px-6 py-4 border-r">{{ $row->machine->name ?? '-' }}</td>
                                         <td class="px-6 py-4 border-r">{{ $row->mekanik }}</td>
                                         <td class="px-6 py-4 border-r">{{ $row->elektrik }}</td>
@@ -309,6 +313,7 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                         <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Bahan Kimia</th>
                                         <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Stok Awal</th>
                                         <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Terima</th>
@@ -318,6 +323,7 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($laporan->bahanKimia as $row)
                                     <tr>
+                                        <td class="px-4 py-2 border-r">{{ $loop->iteration }}</td>
                                         <td class="px-4 py-2 border-r">{{ $row->jenis }}</td>
                                         <td class="px-4 py-2 border-r">{{ $row->stok_awal }}</td>
                                         <td class="px-4 py-2 border-r">{{ $row->terima }}</td>
@@ -342,6 +348,7 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                         <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
                                         <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Siang (07:00-17:00)</th>
                                         <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Malam (18:00-06:00)</th>
@@ -350,6 +357,7 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($laporan->bebanTertinggi as $row)
                                     <tr>
+                                        <td class="px-4 py-2 border-r">{{ $loop->iteration }}</td>
                                         <td class="px-4 py-2 border-r">{{ $row->machine->name ?? '-' }}</td>
                                         <td class="px-4 py-2 border-r">{{ $row->siang }}</td>
                                         <td class="px-4 py-2 border-r">{{ $row->malam }}</td>

@@ -86,19 +86,19 @@
                                     <tbody class="bg-white divide-y divide-gray-200">
                                         @foreach($report->items->where('item_type', 'k3_keamanan') as $item)
                                         <tr>
-                                            <td class="px-6 py-4 text-sm text-gray-900">{{ $item->item_name }}</td>
-                                            <td class="px-6 py-4 text-center">
+                                            <td class="px-6 py-4 text-sm text-gray-900 border-r border-gray-200">{{ $item->item_name }}</td>
+                                            <td class="px-6 py-4 text-center border-r border-gray-200">
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->status === 'ada' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                                     {{ ucfirst($item->status) }}
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 text-center">
+                                            <td class="px-6 py-4 text-center border-r border-gray-200">
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->kondisi === 'normal' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800' }}">
                                                     {{ ucfirst($item->kondisi) }}
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 text-sm text-gray-500">{{ $item->keterangan }}</td>
-                                            <td class="px-6 py-4 text-center">
+                                            <td class="px-6 py-4 text-sm text-gray-500 border-r border-gray-200">{{ $item->keterangan }}</td>
+                                            <td class="px-6 py-4 text-center border-r border-gray-200">
                                                 @if($item->media->count() > 0)
                                                     <button onclick="showMedia('{{ $item->id }}')" class="text-blue-600 hover:text-blue-900">
                                                         <i class="fas fa-image"></i>
@@ -140,19 +140,19 @@
                                     <tbody class="bg-white divide-y divide-gray-200">
                                         @foreach($report->items->where('item_type', 'lingkungan') as $item)
                                         <tr>
-                                            <td class="px-6 py-4 text-sm text-gray-900">{{ $item->item_name }}</td>
-                                            <td class="px-6 py-4 text-center">
+                                            <td class="px-6 py-4 text-sm text-gray-900 border-r border-gray-200">{{ $item->item_name }}</td>
+                                            <td class="px-6 py-4 text-center border-r border-gray-200">
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->status === 'ada' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                                     {{ ucfirst($item->status) }}
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 text-center">
+                                            <td class="px-6 py-4 text-center border-r border-gray-200">
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->kondisi === 'normal' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800' }}">
                                                     {{ ucfirst($item->kondisi) }}
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 text-sm text-gray-500">{{ $item->keterangan }}</td>
-                                            <td class="px-6 py-4 text-center">
+                                            <td class="px-6 py-4 text-sm text-gray-500 border-r border-gray-200">{{ $item->keterangan }}</td>
+                                            <td class="px-6 py-4 text-center border-r border-gray-200">
                                                 @if($item->media->count() > 0)
                                                     <button onclick="showMedia('{{ $item->id }}')" class="text-blue-600 hover:text-blue-900">
                                                         <i class="fas fa-image"></i>
@@ -184,7 +184,7 @@
                         <i class="fas fa-edit mr-2"></i>
                         Edit
                     </a>
-                    <a href="{{ route('admin.k3-kamp.export-pdf', $report->id) }}" 
+                    {{-- <a href="{{ route('admin.k3-kamp.export-pdf', $report->id) }}" 
                         class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                         <i class="fas fa-file-pdf mr-2"></i>
                         Export PDF
@@ -193,7 +193,7 @@
                         class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         <i class="fas fa-file-excel mr-2"></i>
                         Export Excel
-                    </a>
+                    </a> --}}
                 </div>
             </div>
         </main>

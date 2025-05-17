@@ -34,11 +34,39 @@ class K3KampController extends Controller
 
             K3KampReport::$isSyncing = false;
 
+            // Get unit source from current session
+            $unitSource = session('unit', 'mysql');
+            $unitMapping = [
+                'mysql_poasia' => 'PLTD POASIA',
+                'mysql_kolaka' => 'PLTD KOLAKA',
+                'mysql_bau_bau' => 'PLTD BAU BAU',
+                'mysql_wua_wua' => 'PLTD WUA WUA',
+                'mysql_winning' => 'PLTD WINNING',
+                'mysql_erkee' => 'PLTD ERKEE',
+                'mysql_ladumpi' => 'PLTD LADUMPI',
+                'mysql_langara' => 'PLTD LANGARA',
+                'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+                'mysql_pasarwajo' => 'PLTD PASARWAJO',
+                'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+                'mysql_raha' => 'PLTD RAHA',
+                'mysql_wajo' => 'PLTD WAJO',
+                'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+                'mysql_rongi' => 'PLTD RONGI',
+                'mysql_sabilambo' => 'PLTD SABILAMBO',
+                'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+                'mysql_pltmg_kendari' => 'PLTD KENDARI',
+                'mysql_baruta' => 'PLTD BARUTA',
+                'mysql_moramo' => 'PLTD MORAMO',
+                'mysql' => 'UP Kendari'
+            ];
+            
+            $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';
+
             // Create report
             $report = K3KampReport::create([
                 'date' => today(),
                 'created_by' => Auth::user()->id,
-                'sync_unit_origin' => session('unit', 'mysql')
+                'sync_unit_origin' => $unitName
             ]);
 
             // Process K3 & Keamanan items
@@ -151,6 +179,40 @@ class K3KampController extends Controller
             K3KampReport::$isSyncing = false;
             
             $report = K3KampReport::findOrFail($id);
+
+            // Update sync_unit_origin if not set
+            if (!$report->sync_unit_origin) {
+                $unitSource = session('unit', 'mysql');
+                $unitMapping = [
+                    'mysql_poasia' => 'PLTD POASIA',
+                    'mysql_kolaka' => 'PLTD KOLAKA',
+                    'mysql_bau_bau' => 'PLTD BAU BAU',
+                    'mysql_wua_wua' => 'PLTD WUA WUA',
+                    'mysql_winning' => 'PLTD WINNING',
+                    'mysql_erkee' => 'PLTD ERKEE',
+                    'mysql_ladumpi' => 'PLTD LADUMPI',
+                    'mysql_langara' => 'PLTD LANGARA',
+                    'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+                    'mysql_pasarwajo' => 'PLTD PASARWAJO',
+                    'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+                    'mysql_raha' => 'PLTD RAHA',
+                    'mysql_wajo' => 'PLTD WAJO',
+                    'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+                    'mysql_rongi' => 'PLTD RONGI',
+                    'mysql_sabilambo' => 'PLTD SABILAMBO',
+                    'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+                    'mysql_pltmg_kendari' => 'PLTD KENDARI',
+                    'mysql_baruta' => 'PLTD BARUTA',
+                    'mysql_moramo' => 'PLTD MORAMO',
+                    'mysql' => 'UP Kendari'
+                ];
+                
+                $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';
+                
+                $report->update([
+                    'sync_unit_origin' => $unitName
+                ]);
+            }
             
             // Update items
             foreach ($report->items as $item) {

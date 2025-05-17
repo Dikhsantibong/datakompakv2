@@ -58,43 +58,69 @@ class LaporanKitController extends Controller
 
             // Simpan BBM dengan struktur baru
             if ($request->has('bbm')) {
-                foreach ($request->bbm as $bbmData) {
-                    // Create main BBM record
-                    $bbm = $laporanKit->bbm()->create([
-                        'total_stok' => $bbmData['total_stok'] ?? 0,
-                        'service_total_stok' => $bbmData['service_total_stok'] ?? 0,
-                        'total_stok_tangki' => $bbmData['total_stok_tangki'] ?? 0,
-                        'terima_bbm' => $bbmData['terima_bbm'] ?? 0,
-                        'total_pakai' => $bbmData['total_pakai'] ?? 0
-                    ]);
+                // Create single BBM record for all rows
+                $bbm = $laporanKit->bbm()->create([
+                    'total_stok' => collect($request->bbm)->sum('total_stok') ?? 0,
+                    'service_total_stok' => collect($request->bbm)->sum('service_total_stok') ?? 0,
+                    'total_stok_tangki' => collect($request->bbm)->sum('total_stok_tangki') ?? 0,
+                    'terima_bbm' => collect($request->bbm)->sum('terima_bbm') ?? 0,
+                    'total_pakai' => collect($request->bbm)->sum('total_pakai') ?? 0
+                ]);
 
-                    // Store storage tanks
+                // Initialize arrays for batch insertion
+                $storageTanks = [];
+                $serviceTanks = [];
+                $flowmeters = [];
+
+                // Process all rows to collect tank and flowmeter data
+                foreach ($request->bbm as $bbmData) {
+                    // Collect storage tanks data
                     for ($i = 1; isset($bbmData["storage_tank_{$i}_cm"]); $i++) {
-                        $bbm->storageTanks()->create([
+                        $storageTanks[] = [
+                            'laporan_kit_bbm_id' => $bbm->id,
                             'tank_number' => $i,
                             'cm' => $bbmData["storage_tank_{$i}_cm"],
-                            'liter' => $bbmData["storage_tank_{$i}_liter"]
-                        ]);
+                            'liter' => $bbmData["storage_tank_{$i}_liter"],
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
                     }
 
-                    // Store service tanks
+                    // Collect service tanks data
                     for ($i = 1; isset($bbmData["service_tank_{$i}_liter"]); $i++) {
-                        $bbm->serviceTanks()->create([
+                        $serviceTanks[] = [
+                            'laporan_kit_bbm_id' => $bbm->id,
                             'tank_number' => $i,
                             'liter' => $bbmData["service_tank_{$i}_liter"],
-                            'percentage' => $bbmData["service_tank_{$i}_percentage"]
-                        ]);
+                            'percentage' => $bbmData["service_tank_{$i}_percentage"],
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
                     }
 
-                    // Store flowmeters
+                    // Collect flowmeters data
                     for ($i = 1; isset($bbmData["flowmeter_{$i}_awal"]); $i++) {
-                        $bbm->flowmeters()->create([
+                        $flowmeters[] = [
+                            'laporan_kit_bbm_id' => $bbm->id,
                             'flowmeter_number' => $i,
                             'awal' => $bbmData["flowmeter_{$i}_awal"],
                             'akhir' => $bbmData["flowmeter_{$i}_akhir"],
-                            'pakai' => $bbmData["flowmeter_{$i}_pakai"]
-                        ]);
+                            'pakai' => $bbmData["flowmeter_{$i}_pakai"],
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
                     }
+                }
+
+                // Batch insert all collected data
+                if (!empty($storageTanks)) {
+                    $bbm->storageTanks()->insert($storageTanks);
+                }
+                if (!empty($serviceTanks)) {
+                    $bbm->serviceTanks()->insert($serviceTanks);
+                }
+                if (!empty($flowmeters)) {
+                    $bbm->flowmeters()->insert($flowmeters);
                 }
             }
 
@@ -141,30 +167,50 @@ class LaporanKitController extends Controller
 
             // Simpan KWH
             if ($request->has('kwh')) {
-                foreach ($request->kwh as $kwhData) {
-                    // Create main KWH record
-                    $kwh = $laporanKit->kwh()->create([
-                        'prod_total' => $kwhData['prod_total'] ?? 0,
-                        'ps_total' => $kwhData['ps_total'] ?? 0
-                    ]);
+                // Create single KWH record for all rows
+                $kwh = $laporanKit->kwh()->create([
+                    'prod_total' => collect($request->kwh)->sum('prod_total') ?? 0,
+                    'ps_total' => collect($request->kwh)->sum('ps_total') ?? 0
+                ]);
 
-                    // Store production panels
+                // Process all rows to collect panel data
+                $productionPanels = [];
+                $psPanels = [];
+
+                foreach ($request->kwh as $kwhData) {
+                    // Collect production panels data
                     for ($i = 1; isset($kwhData["prod_panel{$i}_awal"]); $i++) {
-                        $kwh->productionPanels()->create([
+                        $productionPanels[] = [
+                            'laporan_kit_kwh_id' => $kwh->id,
                             'panel_number' => $i,
                             'awal' => $kwhData["prod_panel{$i}_awal"],
-                            'akhir' => $kwhData["prod_panel{$i}_akhir"]
-                        ]);
+                            'akhir' => $kwhData["prod_panel{$i}_akhir"],
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
                     }
 
-                    // Store PS panels
+                    // Collect PS panels data
                     for ($i = 1; isset($kwhData["ps_panel{$i}_awal"]); $i++) {
-                        $kwh->psPanels()->create([
+                        $psPanels[] = [
+                            'laporan_kit_kwh_id' => $kwh->id,
                             'panel_number' => $i,
                             'awal' => $kwhData["ps_panel{$i}_awal"],
-                            'akhir' => $kwhData["ps_panel{$i}_akhir"]
-                        ]);
+                            'akhir' => $kwhData["ps_panel{$i}_akhir"],
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
                     }
+                }
+
+                // Insert all production panels at once
+                if (!empty($productionPanels)) {
+                    $kwh->productionPanels()->insert($productionPanels);
+                }
+
+                // Insert all PS panels at once
+                if (!empty($psPanels)) {
+                    $kwh->psPanels()->insert($psPanels);
                 }
             }
             // Simpan Bahan Kimia

@@ -122,6 +122,18 @@ class RencanaDayaMampu extends Model
         return $this->belongsTo(Machine::class);
     }
 
+    public function machineOperation()
+    {
+        return $this->hasOneThrough(
+            MachineOperation::class,
+            Machine::class,
+            'id', // Foreign key on machines table
+            'machine_id', // Foreign key on machine_operations table
+            'machine_id', // Local key on rencana_daya_mampu table
+            'id' // Local key on machines table
+        );
+    }
+
     public function getConnectionName()
     {
         return session('unit', 'mysql');

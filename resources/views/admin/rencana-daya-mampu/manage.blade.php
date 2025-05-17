@@ -180,8 +180,22 @@
                                             <div class="truncate max-w-[150px]">{{ $plant->name }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap border-r-2">{{ $machine->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap border-r-2 text-center">{{ $machine->dmn_slo ?? '-' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap border-r-2 text-center">{{ $machine->dmp_pt ?? '-' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap border-r-2 text-center">
+                                            <span class="data-display">{{ $machine->latestOperation->dmn ?? '-' }}</span>
+                                            <input type="number" 
+                                                   name="operation[{{ $machine->id }}][dmn]" 
+                                                   class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" 
+                                                   value="{{ $machine->latestOperation->dmn ?? '0' }}" 
+                                                   step="0.01">
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap border-r-2 text-center">
+                                            <span class="data-display">{{ $machine->latestOperation->dmp ?? '-' }}</span>
+                                            <input type="number" 
+                                                   name="operation[{{ $machine->id }}][dmp]" 
+                                                   class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" 
+                                                   value="{{ $machine->latestOperation->dmp ?? '0' }}" 
+                                                   step="0.01">
+                                        </td>
                                         @for ($i = 1; $i <= date('t', strtotime($selectedYear.'-'.$selectedMonth.'-01')); $i++)
                                             @php
                                                 $date = $selectedYear . '-' . $selectedMonth . '-' . sprintf('%02d', $i);

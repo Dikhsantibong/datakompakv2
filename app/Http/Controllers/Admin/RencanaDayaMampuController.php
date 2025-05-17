@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\RencanaDayaMampuExport;
+use App\Models\MachineOperation;
 
 class RencanaDayaMampuController extends Controller
 {
@@ -46,7 +47,7 @@ class RencanaDayaMampuController extends Controller
                 return $query->where('unit_source', $unitSource);
             })->with(['machines' => function($query) use ($currentMonth) {
                 $query->orderBy('name')
-                    ->with(['rencanaDayaMampu' => function($query) use ($currentMonth) {
+                    ->with(['latestOperation', 'rencanaDayaMampu' => function($query) use ($currentMonth) {
                         $query->whereRaw("DATE_FORMAT(tanggal, '%Y-%m') = ?", [$currentMonth]);
                     }]);
             }])->orderBy('name')->get();
@@ -108,7 +109,21 @@ class RencanaDayaMampuController extends Controller
 
             // Process each machine's data
             foreach ($data['rencana'] ?? [] as $machineId => $dates) {
-                $machine = Machine::findOrFail($machineId);
+                $machine = Machine::with('latestOperation')->findOrFail($machineId);
+
+                // Update or create machine operation with DMN and DMP
+                if (isset($data['operation'][$machineId])) {
+                    $operationData = $data['operation'][$machineId];
+                    MachineOperation::updateOrCreate(
+                        ['machine_id' => $machineId],
+                        [
+                            'dmn' => $operationData['dmn'] ?? 0,
+                            'dmp' => $operationData['dmp'] ?? 0,
+                            'recorded_at' => now(),
+                            'unit_source' => $currentSession
+                        ]
+                    );
+                }
 
                 foreach ($dates as $date => $rencanaRows) {
                     Log::info("Processing rencana data for machine $machineId on date $date", [

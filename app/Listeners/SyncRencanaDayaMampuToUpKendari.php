@@ -88,12 +88,46 @@ class SyncRencanaDayaMampuToUpKendari
                                     'tanggal' => $event->rencanaDayaMampu->tanggal
                                 ]);
                             }
+
+                            // Sync machine operation data
+                            if ($event->rencanaDayaMampu->machine->latestOperation) {
+                                $operationData = [
+                                    'machine_id' => $event->rencanaDayaMampu->machine_id,
+                                    'dmn' => $event->rencanaDayaMampu->machine->latestOperation->dmn,
+                                    'dmp' => $event->rencanaDayaMampu->machine->latestOperation->dmp,
+                                    'recorded_at' => now(),
+                                    'unit_source' => $event->rencanaDayaMampu->unit_source
+                                ];
+
+                                $upKendariDB->table('machine_operations')
+                                    ->updateOrInsert(
+                                        ['machine_id' => $event->rencanaDayaMampu->machine_id],
+                                        $operationData
+                                    );
+                            }
                             break;
                             
                         case 'update':
                             $upKendariDB->table('rencana_daya_mampu')
                                 ->where('uuid', $event->rencanaDayaMampu->uuid)
                                 ->update($data);
+
+                            // Sync machine operation data
+                            if ($event->rencanaDayaMampu->machine->latestOperation) {
+                                $operationData = [
+                                    'machine_id' => $event->rencanaDayaMampu->machine_id,
+                                    'dmn' => $event->rencanaDayaMampu->machine->latestOperation->dmn,
+                                    'dmp' => $event->rencanaDayaMampu->machine->latestOperation->dmp,
+                                    'recorded_at' => now(),
+                                    'unit_source' => $event->rencanaDayaMampu->unit_source
+                                ];
+
+                                $upKendariDB->table('machine_operations')
+                                    ->updateOrInsert(
+                                        ['machine_id' => $event->rencanaDayaMampu->machine_id],
+                                        $operationData
+                                    );
+                            }
                             break;
                             
                         case 'delete':

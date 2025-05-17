@@ -145,81 +145,85 @@
                                     <tr>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Kondisi</th>
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Oleh</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Total Item</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status K3</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status Lingkungan</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($reports as $index => $report)
-                                        @foreach($report->items as $item)
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
-                                                {{ $index + 1 }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
-                                                {{ date('d/m/Y', strtotime($report->date)) }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
-                                                {{ $item->item_type === 'k3_keamanan' ? 'K3 & Keamanan' : 'Lingkungan' }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
-                                                {{ $item->item_name }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap border-r border-gray-200">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->status === 'ada' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                    {{ ucfirst($item->status) }}
-                                                </span>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap border-r border-gray-200">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->kondisi === 'normal' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                                    {{ ucfirst($item->kondisi) }}
-                                                </span>
-                                            </td>
-                                            <td class="px-6 py-4 text-sm text-gray-500 border-r border-gray-200">
-                                                {{ $item->keterangan }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                                <div class="flex items-center justify-center space-x-2">
-                                                    <a href="{{ route('admin.k3-kamp.show', $report->id) }}" 
-                                                       class="text-blue-600 hover:text-blue-900" 
-                                                       title="Lihat Detail">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a href="{{ route('admin.k3-kamp.edit', $report->id) }}" 
-                                                       class="text-green-600 hover:text-green-900"
-                                                       title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a href="{{ route('admin.k3-kamp.export-pdf', $report->id) }}" 
-                                                       class="text-red-600 hover:text-red-900"
-                                                       title="Export PDF">
-                                                        <i class="fas fa-file-pdf"></i>
-                                                    </a>
-                                                    <a href="{{ route('admin.k3-kamp.export-excel', $report->id) }}" 
-                                                       class="text-green-600 hover:text-green-900 flex items-center"
-                                                       title="Export Excel">
-                                                        <i class="fas fa-file-excel"></i>
-                                                    </a>
-                                                    <form action="{{ route('admin.k3-kamp.destroy', $report->id) }}" 
-                                                          method="POST" 
-                                                          class="inline-block"
-                                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" 
-                                                                class="text-red-600 hover:text-red-900"
-                                                                title="Hapus">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        @endforeach
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
+                                            {{ ($reports->currentPage() - 1) * $reports->perPage() + $index + 1 }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
+                                            {{ date('d/m/Y', strtotime($report->date)) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
+                                            {{ $report->creator->name ?? 'N/A' }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
+                                            {{ $report->items->count() }} Item
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap border-r border-gray-200">
+                                            @php
+                                                $k3Items = $report->items->where('item_type', 'k3_keamanan');
+                                                $adaCount = $k3Items->where('status', 'ada')->count();
+                                                $totalK3 = $k3Items->count();
+                                            @endphp
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $adaCount > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                {{ $adaCount }}/{{ $totalK3 }} Ada
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap border-r border-gray-200">
+                                            @php
+                                                $lingkunganItems = $report->items->where('item_type', 'lingkungan');
+                                                $adaCount = $lingkunganItems->where('status', 'ada')->count();
+                                                $totalLingkungan = $lingkunganItems->count();
+                                            @endphp
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $adaCount > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                {{ $adaCount }}/{{ $totalLingkungan }} Ada
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                            <div class="flex items-center justify-center space-x-2">
+                                                <a href="{{ route('admin.k3-kamp.show', $report->id) }}" 
+                                                   class="text-blue-600 hover:text-blue-900" 
+                                                   title="Lihat Detail">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{{ route('admin.k3-kamp.edit', $report->id) }}" 
+                                                   class="text-green-600 hover:text-green-900"
+                                                   title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="{{ route('admin.k3-kamp.export-pdf', $report->id) }}" 
+                                                   class="text-red-600 hover:text-red-900"
+                                                   title="Export PDF">
+                                                    <i class="fas fa-file-pdf"></i>
+                                                </a>
+                                                <a href="{{ route('admin.k3-kamp.export-excel', $report->id) }}" 
+                                                   class="text-green-600 hover:text-green-900"
+                                                   title="Export Excel">
+                                                    <i class="fas fa-file-excel"></i>
+                                                </a>
+                                                <form action="{{ route('admin.k3-kamp.destroy', $report->id) }}" 
+                                                      method="POST" 
+                                                      class="inline-block"
+                                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" 
+                                                            class="text-red-600 hover:text-red-900"
+                                                            title="Hapus">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>

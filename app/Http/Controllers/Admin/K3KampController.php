@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -48,13 +49,26 @@ class K3KampController extends Controller
             ];
 
             foreach ($k3Items as $index => $itemName) {
-                if ($request->has("status_$index")) {
-                    $report->items()->create([
+                // Get status (ada/tidak_ada)
+                $status = 'tidak_ada'; // Default value
+                if ($request->has("status_{$index}") && is_array($request->input("status_{$index}"))) {
+                    $status = $request->input("status_{$index}")[0];
+                }
+
+                // Get kondisi (normal/abnormal)
+                $kondisi = null;
+                if ($request->has("kondisi_{$index}") && is_array($request->input("kondisi_{$index}"))) {
+                    $kondisi = $request->input("kondisi_{$index}")[0];
+                }
+
+                // Create item if kondisi is set or keterangan is not empty
+                if ($kondisi || $request->filled("keterangan_{$index}")) {
+                    $item = $report->items()->create([
                         'item_type' => 'k3_keamanan',
                         'item_name' => $itemName,
-                        'status' => $request->input("status_$index")[0] ?? null,
-                        'kondisi' => $request->input("kondisi_$index")[0] ?? null,
-                        'keterangan' => $request->input("keterangan_$index")
+                        'status' => $status, // Will always have a value
+                        'kondisi' => $kondisi,
+                        'keterangan' => $request->input("keterangan_{$index}")
                     ]);
                 }
             }
@@ -67,13 +81,26 @@ class K3KampController extends Controller
             ];
 
             foreach ($lingkunganItems as $index => $itemName) {
-                if ($request->has("status_lingkungan_$index")) {
-                    $report->items()->create([
+                // Get status (ada/tidak_ada)
+                $status = 'tidak_ada'; // Default value
+                if ($request->has("status_lingkungan_{$index}") && is_array($request->input("status_lingkungan_{$index}"))) {
+                    $status = $request->input("status_lingkungan_{$index}")[0];
+                }
+
+                // Get kondisi (normal/abnormal)
+                $kondisi = null;
+                if ($request->has("kondisi_lingkungan_{$index}") && is_array($request->input("kondisi_lingkungan_{$index}"))) {
+                    $kondisi = $request->input("kondisi_lingkungan_{$index}")[0];
+                }
+
+                // Create item if kondisi is set or keterangan is not empty
+                if ($kondisi || $request->filled("keterangan_lingkungan_{$index}")) {
+                    $item = $report->items()->create([
                         'item_type' => 'lingkungan',
                         'item_name' => $itemName,
-                        'status' => $request->input("status_lingkungan_$index")[0] ?? null,
-                        'kondisi' => $request->input("kondisi_lingkungan_$index")[0] ?? null,
-                        'keterangan' => $request->input("keterangan_lingkungan_$index")
+                        'status' => $status, // Will always have a value
+                        'kondisi' => $kondisi,
+                        'keterangan' => $request->input("keterangan_lingkungan_{$index}")
                     ]);
                 }
             }
@@ -83,6 +110,7 @@ class K3KampController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Error saving K3 KAMP report: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan laporan: ' . $e->getMessage());
         }
     }

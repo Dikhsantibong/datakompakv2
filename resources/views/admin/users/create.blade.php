@@ -88,15 +88,11 @@
                                 id="role" 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                                 required>
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                            <option value="super_admin">Super Admin</option>
-                            <option value="asman_unit">ASMAN UNIT</option>
-                            <option value="tl_ron">TL RON</option>
-                            <option value="tl_ep">TL EP</option>
-                            <option value="operator">OPERATOR</option>
-                            <option value="staf">STAF</option>
-                            <option value="tl_ron_upkd">TL RON UPKD</option>
+                            @foreach($availableRoles as $value => $label)
+                                <option value="{{ $value }}" {{ old('role') === $value ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 

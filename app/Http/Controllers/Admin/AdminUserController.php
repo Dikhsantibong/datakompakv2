@@ -11,6 +11,21 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class AdminUserController extends Controller
 {
+    /**
+     * Available user roles in the system
+     */
+    private const AVAILABLE_ROLES = [
+        'user' => 'User',
+        'admin' => 'Admin',
+        'super_admin' => 'Super Admin',
+        'asman_unit' => 'ASMAN UNIT',
+        'tl_ron' => 'TL RON',
+        'tl_ep' => 'TL EP',
+        'operator' => 'OPERATOR',
+        'staf' => 'STAF',
+        'tl_ron_upkd' => 'TL RON UPKD'
+    ];
+
     public function index(Request $request)
     {
         $query = User::query();
@@ -25,7 +40,9 @@ class AdminUserController extends Controller
         
         // Filter berdasarkan role
         if ($role = $request->input('role')) {
-            $query->where('role', $role);
+            if (array_key_exists($role, self::AVAILABLE_ROLES)) {
+                $query->where('role', $role);
+            }
         }
         
         // Pagination
@@ -35,12 +52,17 @@ class AdminUserController extends Controller
             return view('admin.users.index', compact('users'))->render();
         }
         
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index', [
+            'users' => $users,
+            'availableRoles' => self::AVAILABLE_ROLES
+        ]);
     }
 
     public function create()
     {
-        return view('admin.users.create');
+        return view('admin.users.create', [
+            'availableRoles' => self::AVAILABLE_ROLES
+        ]);
     }
 
     public function store(Request $request)
@@ -49,7 +71,7 @@ class AdminUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'in:admin,user,super_admin,asman_unit,tl_ron,tl_ep,operator,staf,tl_ron_upkd'],
+            'role' => ['required', Rule::in(array_keys(self::AVAILABLE_ROLES))],
         ]);
 
         try {
@@ -74,7 +96,10 @@ class AdminUserController extends Controller
 
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        return view('admin.users.edit', [
+            'user' => $user,
+            'availableRoles' => self::AVAILABLE_ROLES
+        ]);
     }
 
     public function update(Request $request, User $user)
@@ -88,7 +113,7 @@ class AdminUserController extends Controller
                 'max:255',
                 Rule::unique('users')->ignore($user->id),
             ],
-            'role' => ['required', 'in:admin,user,super_admin,asman_unit,tl_ron,tl_ep,operator,staf,tl_ron_upkd'],
+            'role' => ['required', Rule::in(array_keys(self::AVAILABLE_ROLES))],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 

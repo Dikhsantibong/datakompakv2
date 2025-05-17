@@ -185,6 +185,19 @@
                                                value="{{ request('end_date') }}">
                                     </div>
 
+                                    <div class="w-48">
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
+                                        <select name="unit_origin" 
+                                                class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                            <option value="">Semua Unit</option>
+                                            @foreach($unitOrigins as $unit)
+                                                <option value="{{ $unit }}" {{ request('unit_origin') == $unit ? 'selected' : '' }}>
+                                                    {{ $unit }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <div class="flex items-center gap-2">
                                         <button type="submit"
                                                 class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
@@ -203,13 +216,14 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">No</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Tanggal</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Shift</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Waktu</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Dibuat Oleh</th>
-                                        {{-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th> --}}
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Aksi</th>
+                                        <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">No</th>
+                                        <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Tanggal</th>
+                                        <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Shift</th>
+                                        <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Waktu</th>
+                                        <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Dibuat Oleh</th>
+                                        <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Unit</th>
+                                        {{-- <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th> --}}
+                                        <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
@@ -222,13 +236,21 @@
                                             {{ optional($patrol->created_at)->format('d/m/Y') ?? '-' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
-                                            Shift {{ $patrol->shift }}
+                                            <span class="text-xs font-medium text-gray-500 rounded-full bg-blue-100 px-2 py-1">
+                                                
+                                                Shift {{ $patrol->shift }}
+                                            </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
                                             {{ $patrol->time }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
                                             {{ optional($patrol->creator)->name ?? 'N/A' }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
+                                            <span class="text-xs font-medium text-gray-500 rounded-full bg-blue-100 px-2 py-1">
+                                                {{ $patrol->sync_unit_origin ?? 'UP Kendari' }}
+                                            </span>
                                         </td>
                                         {{-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
                                             @if($patrol->status === 'abnormal')

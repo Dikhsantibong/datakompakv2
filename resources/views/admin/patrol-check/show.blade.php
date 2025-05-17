@@ -71,8 +71,8 @@
                         <div class="p-6">
                             <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Dibuat Oleh</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $patrol->creator->name ?? 'N/A' }}</dd>
+                                    <dt class="text-sm font-medium text-gray-500">Unit </dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $patrol->sync_unit_origin ?? 'N/A' }}</dd>
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Tanggal Dibuat</dt>

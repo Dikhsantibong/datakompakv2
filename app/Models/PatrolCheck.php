@@ -24,6 +24,7 @@ class PatrolCheck extends Model
         'condition_after',
         'notes',
         'status',
+        'sync_unit_origin'
     ];
 
     protected $casts = [
@@ -31,6 +32,7 @@ class PatrolCheck extends Model
         'condition_systems' => 'array',
         'abnormal_equipments' => 'array',
         'condition_after' => 'array',
+        'sync_unit_origin' => 'string'
     ];
 
     public function creator()

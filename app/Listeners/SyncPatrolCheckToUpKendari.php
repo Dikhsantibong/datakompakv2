@@ -32,6 +32,7 @@ class SyncPatrolCheckToUpKendari
                     'condition_after' => json_encode($event->patrolCheck->condition_after),
                     'notes' => $event->patrolCheck->notes,
                     'status' => $event->patrolCheck->status,
+                    'sync_unit_origin' => $event->patrolCheck->sync_unit_origin,
                     'updated_at' => now()
                 ];
 
@@ -114,6 +115,7 @@ class SyncPatrolCheckToUpKendari
                     'condition_after' => json_encode($event->patrolCheck->condition_after),
                     'notes' => $event->patrolCheck->notes,
                     'status' => $event->patrolCheck->status,
+                    'sync_unit_origin' => $event->patrolCheck->sync_unit_origin,
                     'updated_at' => now()
                 ];
 

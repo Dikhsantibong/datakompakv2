@@ -39,6 +39,11 @@ class PatrolCheckController extends Controller
             $query->where('created_by', request('created_by'));
         }
 
+        // Filter by unit origin
+        if (request()->has('unit_origin')) {
+            $query->where('sync_unit_origin', request('unit_origin'));
+        }
+
         // Filter by date range
         if (request()->has('start_date')) {
             $query->whereDate('created_at', '>=', request('start_date'));
@@ -48,7 +53,15 @@ class PatrolCheckController extends Controller
         }
 
         $patrols = $query->orderByDesc('created_at')->paginate(10);
-        return view('admin.patrol-check.list', compact('patrols'));
+
+        // Get unique unit origins for filter dropdown
+        $unitOrigins = PatrolCheck::select('sync_unit_origin')
+            ->whereNotNull('sync_unit_origin')
+            ->distinct()
+            ->pluck('sync_unit_origin')
+            ->toArray();
+
+        return view('admin.patrol-check.list', compact('patrols', 'unitOrigins'));
     }
 
     public function show($id)
@@ -67,6 +80,33 @@ class PatrolCheckController extends Controller
             'abnormal' => 'nullable|array',
             'condition_after' => 'nullable|array',
         ]);
+
+        // Get unit source from current session
+        $unitSource = session('unit', 'mysql');
+        $unitMapping = [
+            'mysql_poasia' => 'PLTD POASIA',
+            'mysql_kolaka' => 'PLTD KOLAKA',
+            'mysql_bau_bau' => 'PLTD BAU BAU',
+            'mysql_wua_wua' => 'PLTD WUA WUA',
+            'mysql_winning' => 'PLTD WINNING',
+            'mysql_erkee' => 'PLTD ERKEE',
+            'mysql_ladumpi' => 'PLTD LADUMPI',
+            'mysql_langara' => 'PLTD LANGARA',
+            'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+            'mysql_pasarwajo' => 'PLTD PASARWAJO',
+            'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+            'mysql_raha' => 'PLTD RAHA',
+            'mysql_wajo' => 'PLTD WAJO',
+            'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+            'mysql_rongi' => 'PLTD RONGI',
+            'mysql_sabilambo' => 'PLTD SABILAMBO',
+            'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+            'mysql_pltmg_kendari' => 'PLTD KENDARI',
+            'mysql_baruta' => 'PLTD BARUTA',
+            'mysql_moramo' => 'PLTD MORAMO',
+        ];
+        
+        $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';
 
         $condition_systems = collect($request->input('condition'))->map(function($val, $idx) use ($request) {
             $systems = ['Exhaust', 'Pelumas', 'BBM', 'JCW/HT', 'CW/LT'];
@@ -107,6 +147,7 @@ class PatrolCheckController extends Controller
                 'abnormal_equipments' => $abnormal_equipments,
                 'condition_after' => $condition_after,
                 'status' => $status,
+                'sync_unit_origin' => $unitName
             ]);
 
             return redirect()->route('admin.patrol-check.list')->with('success', 'Data berhasil disimpan');
@@ -134,6 +175,33 @@ class PatrolCheckController extends Controller
             'abnormal' => 'nullable|array',
             'condition_after' => 'nullable|array',
         ]);
+
+        // Get unit source from current session
+        $unitSource = session('unit', 'mysql');
+        $unitMapping = [
+            'mysql_poasia' => 'PLTD POASIA',
+            'mysql_kolaka' => 'PLTD KOLAKA',
+            'mysql_bau_bau' => 'PLTD BAU BAU',
+            'mysql_wua_wua' => 'PLTD WUA WUA',
+            'mysql_winning' => 'PLTD WINNING',
+            'mysql_erkee' => 'PLTD ERKEE',
+            'mysql_ladumpi' => 'PLTD LADUMPI',
+            'mysql_langara' => 'PLTD LANGARA',
+            'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+            'mysql_pasarwajo' => 'PLTD PASARWAJO',
+            'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+            'mysql_raha' => 'PLTD RAHA',
+            'mysql_wajo' => 'PLTD WAJO',
+            'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+            'mysql_rongi' => 'PLTD RONGI',
+            'mysql_sabilambo' => 'PLTD SABILAMBO',
+            'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+            'mysql_pltmg_kendari' => 'PLTD KENDARI',
+            'mysql_baruta' => 'PLTD BARUTA',
+            'mysql_moramo' => 'PLTD MORAMO',
+        ];
+        
+        $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';
 
         $condition_systems = collect($request->input('condition'))->map(function($val, $idx) use ($request) {
             $systems = ['Exhaust', 'Pelumas', 'BBM', 'JCW/HT', 'CW/LT'];
@@ -172,6 +240,7 @@ class PatrolCheckController extends Controller
             'abnormal_equipments' => $abnormal_equipments,
             'condition_after' => $condition_after,
             'status' => $status,
+            'sync_unit_origin' => $unitName
         ]);
 
         return redirect()->route('admin.patrol-check.list')->with('success', 'Data berhasil diperbarui');

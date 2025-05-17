@@ -7,17 +7,19 @@ use App\Models\PowerPlant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BahanBakarExport;
-
-use Excel;
 
 class BahanBakarController extends Controller
 {
     public function index(Request $request)
     {
-        $query = BahanBakar::with('unit');
+        $query = BahanBakar::with(['unit' => function($query) {
+            $query->withDefault([
+                'name' => 'Unit Tidak Ditemukan'
+            ]);
+        }]);
 
         // Filter berdasarkan unit
         if ($request->filled('unit_id')) {

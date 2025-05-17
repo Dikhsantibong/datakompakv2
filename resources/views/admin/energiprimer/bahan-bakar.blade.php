@@ -239,7 +239,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             <span class="text-gray-800 rounded-lg bg-gray-100 px-2 py-1">
-                                            {{ $item->unit->name }}
+                                            {{ $item->unit->name ?? 'Unit Tidak Ditemukan' }}
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">

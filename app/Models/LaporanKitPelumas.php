@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\LaporanKitSyncable;
 
 class LaporanKitPelumas extends Model
 {
+    use LaporanKitSyncable;
+
     protected $table = 'laporan_kit_pelumas';
 
     protected $fillable = [

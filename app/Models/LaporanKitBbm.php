@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\LaporanKitSyncable;
 
 class LaporanKitBbm extends Model
 {
+    use LaporanKitSyncable;
+
     protected $table = 'laporan_kit_bbm';
 
     protected $fillable = [
@@ -30,6 +33,11 @@ class LaporanKitBbm extends Model
     public function flowmeters()
     {
         return $this->hasMany(LaporanKitBbmFlowmeter::class);
+    }
+
+    public function laporanKit()
+    {
+        return $this->belongsTo(LaporanKit::class);
     }
 
     public function getConnectionName()

@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\LaporanKitSyncable;
 
 class LaporanKitJamOperasi extends Model
 {
+    use LaporanKitSyncable;
+
     protected $table = 'laporan_kit_jam_operasi';
 
     protected $fillable = [
@@ -21,6 +24,11 @@ class LaporanKitJamOperasi extends Model
     public function machine()
     {
         return $this->belongsTo(Machine::class, 'machine_id');
+    }
+
+    public function laporanKit()
+    {
+        return $this->belongsTo(LaporanKit::class);
     }
 
     public function getConnectionName()

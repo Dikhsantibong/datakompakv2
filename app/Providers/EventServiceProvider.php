@@ -29,6 +29,9 @@ use App\Events\PatrolCheckUpdated;
 use App\Listeners\SyncPatrolCheckToUpKendari;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use Illuminate\Support\Facades\Event;
+use App\Events\LaporanKitUpdated;
+use App\Listeners\SyncLaporanKitToUpKendari;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -84,5 +87,16 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\K3KampReportUpdated' => [
             'App\Listeners\SyncK3KampReportToUpKendari',
         ],
+        LaporanKitUpdated::class => [
+            SyncLaporanKitToUpKendari::class,
+        ],
     ];
+
+    /**
+     * Determine if events and listeners should be automatically discovered.
+     */
+    public function shouldDiscoverEvents(): bool
+    {
+        return false;
+    }
 } 

@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\LaporanKitSyncable;
 
 class LaporanKitPelumasDrum extends Model
 {
+    use LaporanKitSyncable;
+
     protected $table = 'laporan_kit_pelumas_drums';
 
     protected $fillable = [
@@ -17,6 +20,11 @@ class LaporanKitPelumasDrum extends Model
     public function pelumas()
     {
         return $this->belongsTo(LaporanKitPelumas::class, 'laporan_kit_pelumas_id');
+    }
+
+    public function laporanKit()
+    {
+        return $this->belongsTo(LaporanKit::class)->through('pelumas');
     }
 
     public function getConnectionName()

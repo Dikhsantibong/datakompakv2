@@ -16,7 +16,11 @@ class PelumasController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Pelumas::with('unit');
+        $query = Pelumas::with(['unit' => function($query) {
+            $query->withDefault([
+                'name' => 'Unit Tidak Ditemukan'
+            ]);
+        }]);
 
         // Filter berdasarkan unit
         if ($request->filled('unit_id')) {

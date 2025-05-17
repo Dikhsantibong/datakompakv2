@@ -207,7 +207,7 @@
                                             {{ $item->tanggal->format('Y-m-d') }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
-                                            {{ $item->unit->name }}
+                                            {{ $item->unit->name ?? 'Unit Tidak Ditemukan' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ $item->jenis_pelumas }}

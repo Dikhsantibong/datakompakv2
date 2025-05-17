@@ -11,6 +11,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LaporanKitExport;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LaporanKitController extends Controller
 {
@@ -38,69 +39,111 @@ class LaporanKitController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi sesuai kebutuhan
-        $validated = $request->validate([
-            'tanggal' => 'required|date',
-            'unit_source' => 'nullable|string',
-            // ...tambahkan validasi lain sesuai kebutuhan
-        ]);
+        DB::beginTransaction();
+        try {
+            // Validasi sesuai kebutuhan
+            $validated = $request->validate([
+                'tanggal' => 'required|date',
+                'unit_source' => 'nullable|string',
+            ]);
 
-        // Simpan ke tabel laporan_kits
-        $laporanKit = LaporanKit::create([
-            'tanggal' => $validated['tanggal'],
-            'unit_source' => $validated['unit_source'] ?? null,
-            'created_by' => Auth::id(),
-        ]);
+            // Simpan ke tabel laporan_kits
+            $laporanKit = LaporanKit::create([
+                'tanggal' => $validated['tanggal'],
+                'unit_source' => $validated['unit_source'] ?? null,
+                'created_by' => Auth::id(),
+            ]);
 
-        // Simpan BBM
-        if ($request->has('bbm')) {
-            foreach ($request->bbm as $bbm) {
-                $laporanKit->bbm()->create($bbm);
-            }
-        }
-        // Simpan KWH
-        if ($request->has('kwh')) {
-            foreach ($request->kwh as $kwh) {
-                $laporanKit->kwh()->create($kwh);
-            }
-        }
-        // Simpan Pelumas
-        if ($request->has('pelumas')) {
-            foreach ($request->pelumas as $pelumas) {
-                $laporanKit->pelumas()->create($pelumas);
-            }
-        }
-        // Simpan Bahan Kimia
-        if ($request->has('bahan_kimia')) {
-            foreach ($request->bahan_kimia as $bahan_kimia) {
-                $laporanKit->bahanKimia()->create($bahan_kimia);
-            }
-        }
-        // Simpan Jam Operasi
-        if ($request->has('mesin')) {
-            foreach ($request->mesin as $machineId => $mesin) {
-                $mesin['machine_id'] = $machineId;
-                $laporanKit->jamOperasi()->create($mesin);
-            }
-        }
-        // Simpan Beban Tertinggi
-        if ($request->has('beban')) {
-            foreach ($request->beban as $machineId => $beban) {
-                $beban['machine_id'] = $machineId;
-                $laporanKit->bebanTertinggi()->create($beban);
-            }
-        }
-        // Simpan Gangguan
-        if ($request->has('gangguan')) {
-            foreach ($request->gangguan as $machineId => $gangguan) {
-                if (!empty($gangguan['mekanik']) || !empty($gangguan['elektrik'])) {
-                    $gangguan['machine_id'] = $machineId;
-                    $laporanKit->gangguan()->create($gangguan);
+            // Simpan BBM dengan struktur baru
+            if ($request->has('bbm')) {
+                foreach ($request->bbm as $bbmData) {
+                    // Create main BBM record
+                    $bbm = $laporanKit->bbm()->create([
+                        'total_stok' => $bbmData['total_stok'] ?? 0,
+                        'service_total_stok' => $bbmData['service_total_stok'] ?? 0,
+                        'total_stok_tangki' => $bbmData['total_stok_tangki'] ?? 0,
+                        'terima_bbm' => $bbmData['terima_bbm'] ?? 0,
+                        'total_pakai' => $bbmData['total_pakai'] ?? 0
+                    ]);
+
+                    // Store storage tanks
+                    for ($i = 1; isset($bbmData["storage_tank_{$i}_cm"]); $i++) {
+                        $bbm->storageTanks()->create([
+                            'tank_number' => $i,
+                            'cm' => $bbmData["storage_tank_{$i}_cm"],
+                            'liter' => $bbmData["storage_tank_{$i}_liter"]
+                        ]);
+                    }
+
+                    // Store service tanks
+                    for ($i = 1; isset($bbmData["service_tank_{$i}_liter"]); $i++) {
+                        $bbm->serviceTanks()->create([
+                            'tank_number' => $i,
+                            'liter' => $bbmData["service_tank_{$i}_liter"],
+                            'percentage' => $bbmData["service_tank_{$i}_percentage"]
+                        ]);
+                    }
+
+                    // Store flowmeters
+                    for ($i = 1; isset($bbmData["flowmeter_{$i}_awal"]); $i++) {
+                        $bbm->flowmeters()->create([
+                            'flowmeter_number' => $i,
+                            'awal' => $bbmData["flowmeter_{$i}_awal"],
+                            'akhir' => $bbmData["flowmeter_{$i}_akhir"],
+                            'pakai' => $bbmData["flowmeter_{$i}_pakai"]
+                        ]);
+                    }
                 }
             }
-        }
 
-        return redirect()->route('admin.laporan-kit.index')->with('success', 'Data berhasil disimpan');
+            // Simpan KWH
+            if ($request->has('kwh')) {
+                foreach ($request->kwh as $kwh) {
+                    $laporanKit->kwh()->create($kwh);
+                }
+            }
+            // Simpan Pelumas
+            if ($request->has('pelumas')) {
+                foreach ($request->pelumas as $pelumas) {
+                    $laporanKit->pelumas()->create($pelumas);
+                }
+            }
+            // Simpan Bahan Kimia
+            if ($request->has('bahan_kimia')) {
+                foreach ($request->bahan_kimia as $bahan_kimia) {
+                    $laporanKit->bahanKimia()->create($bahan_kimia);
+                }
+            }
+            // Simpan Jam Operasi
+            if ($request->has('mesin')) {
+                foreach ($request->mesin as $machineId => $mesin) {
+                    $mesin['machine_id'] = $machineId;
+                    $laporanKit->jamOperasi()->create($mesin);
+                }
+            }
+            // Simpan Beban Tertinggi
+            if ($request->has('beban')) {
+                foreach ($request->beban as $machineId => $beban) {
+                    $beban['machine_id'] = $machineId;
+                    $laporanKit->bebanTertinggi()->create($beban);
+                }
+            }
+            // Simpan Gangguan
+            if ($request->has('gangguan')) {
+                foreach ($request->gangguan as $machineId => $gangguan) {
+                    if (!empty($gangguan['mekanik']) || !empty($gangguan['elektrik'])) {
+                        $gangguan['machine_id'] = $machineId;
+                        $laporanKit->gangguan()->create($gangguan);
+                    }
+                }
+            }
+
+            DB::commit();
+            return redirect()->route('admin.laporan-kit.index')->with('success', 'Data berhasil disimpan');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Gagal menyimpan data: ' . $e->getMessage());
+        }
     }
 
     public function list(Request $request)

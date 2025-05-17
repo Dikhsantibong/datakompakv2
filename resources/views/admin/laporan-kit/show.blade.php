@@ -172,7 +172,125 @@
                         </div>
                         @endif
                         
-                        <!-- Storage Tanks -->
+                        <!-- Production Panel -->
+                        <div class="overflow-x-auto">
+                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                <h4 class="text-sm font-semibold text-gray-700">Production Panel</h4>
+                            </div>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Panel</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @if($bbmData && $bbmData->productionPanels && $bbmData->productionPanels->isNotEmpty())
+                                        @php
+                                            $panelsPerRow = 2; // Assuming 2 panels per row based on your form
+                                            $totalPanels = $bbmData->productionPanels->count();
+                                            $rowCount = ceil($totalPanels / $panelsPerRow);
+                                        @endphp
+
+                                        @for($row = 0; $row < $rowCount; $row++)
+                                            @for($i = 0; $i < $panelsPerRow; $i++)
+                                                @php
+                                                    $panelIndex = ($row * $panelsPerRow) + $i;
+                                                    $panel = $bbmData->productionPanels->get($panelIndex);
+                                                @endphp
+                                                @if($panel)
+                                                <tr>
+                                                    @if($i === 0)
+                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $panelsPerRow }}">Row {{ $row + 1 }}</td>
+                                                    @endif
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Panel {{ $panel->panel_number }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->awal, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir - $panel->awal, 2) }}</td>
+                                                </tr>
+                                                @endif
+                                            @endfor
+                                            @if($row < $rowCount - 1)
+                                                <tr><td colspan="5" class="border-b border-gray-200"></td></tr>
+                                            @endif
+                                        @endfor
+
+                                        <tr class="bg-gray-50 font-semibold">
+                                            <td colspan="4" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Production:</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbmData->prod_total, 2) }}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td colspan="5" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- PS Panel -->
+                        <div class="overflow-x-auto">
+                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                <h4 class="text-sm font-semibold text-gray-700">PS Panel</h4>
+                            </div>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Panel</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @if($bbmData && $bbmData->psPanels && $bbmData->psPanels->isNotEmpty())
+                                        @php
+                                            $panelsPerRow = 2; // Assuming 2 panels per row based on your form
+                                            $totalPanels = $bbmData->psPanels->count();
+                                            $rowCount = ceil($totalPanels / $panelsPerRow);
+                                        @endphp
+
+                                        @for($row = 0; $row < $rowCount; $row++)
+                                            @for($i = 0; $i < $panelsPerRow; $i++)
+                                                @php
+                                                    $panelIndex = ($row * $panelsPerRow) + $i;
+                                                    $panel = $bbmData->psPanels->get($panelIndex);
+                                                @endphp
+                                                @if($panel)
+                                                <tr>
+                                                    @if($i === 0)
+                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $panelsPerRow }}">Row {{ $row + 1 }}</td>
+                                                    @endif
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Panel {{ $panel->panel_number }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->awal, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir - $panel->awal, 2) }}</td>
+                                                </tr>
+                                                @endif
+                                            @endfor
+                                            @if($row < $rowCount - 1)
+                                                <tr><td colspan="5" class="border-b border-gray-200"></td></tr>
+                                            @endif
+                                        @endfor
+
+                                        <tr class="bg-gray-50 font-semibold">
+                                            <td colspan="4" class="px-4 py-2 border-r whitespace-nowrap text-right">Total PS:</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbmData->ps_total, 2) }}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td colspan="5" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- BBM Storage Tanks -->
                         <div class="overflow-x-auto">
                             <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
                                 <h4 class="text-sm font-semibold text-gray-700">Storage Tanks</h4>
@@ -180,30 +298,56 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Number</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CM</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liter</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($bbmData && $bbmData->storageTanks->isNotEmpty())
-                                        @foreach($bbmData->storageTanks as $tank)
-                                        <tr>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">Storage Tank {{ $tank->tank_number }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->cm, 2) }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
+                                    @if($bbmData && $bbmData->storageTanks && $bbmData->storageTanks->isNotEmpty())
+                                        @php
+                                            $tanksPerRow = 2; // Assuming 2 tanks per row based on your form
+                                            $totalTanks = $bbmData->storageTanks->count();
+                                            $rowCount = ceil($totalTanks / $tanksPerRow);
+                                        @endphp
+
+                                        @for($row = 0; $row < $rowCount; $row++)
+                                            @for($i = 0; $i < $tanksPerRow; $i++)
+                                                @php
+                                                    $tankIndex = ($row * $tanksPerRow) + $i;
+                                                    $tank = $bbmData->storageTanks->get($tankIndex);
+                                                @endphp
+                                                @if($tank)
+                                                <tr>
+                                                    @if($i === 0)
+                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $tanksPerRow }}">Row {{ $row + 1 }}</td>
+                                                    @endif
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Tank {{ $tank->tank_number }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->cm, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
+                                                </tr>
+                                                @endif
+                                            @endfor
+                                            @if($row < $rowCount - 1)
+                                                <tr><td colspan="4" class="border-b border-gray-200"></td></tr>
+                                            @endif
+                                        @endfor
+
+                                        <tr class="bg-gray-50 font-semibold">
+                                            <td colspan="3" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Storage:</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbmData->total_stok, 2) }}</td>
                                         </tr>
-                                        @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
                                         </tr>
                                     @endif
                                 </tbody>
                             </table>
                         </div>
 
-                        <!-- Service Tanks -->
+                        <!-- BBM Service Tanks -->
                         <div class="overflow-x-auto">
                             <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
                                 <h4 class="text-sm font-semibold text-gray-700">Service Tanks</h4>
@@ -211,30 +355,57 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Number</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liter</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($bbmData && $bbmData->serviceTanks->isNotEmpty())
-                                        @foreach($bbmData->serviceTanks as $tank)
-                                        <tr>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">Service Tank {{ $tank->tank_number }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->percentage, 2) }}%</td>
+                                    @if($bbmData && $bbmData->serviceTanks && $bbmData->serviceTanks->isNotEmpty())
+                                        @php
+                                            $tanksPerRow = 2; // Assuming 2 tanks per row based on your form
+                                            $totalTanks = $bbmData->serviceTanks->count();
+                                            $rowCount = ceil($totalTanks / $tanksPerRow);
+                                        @endphp
+
+                                        @for($row = 0; $row < $rowCount; $row++)
+                                            @for($i = 0; $i < $tanksPerRow; $i++)
+                                                @php
+                                                    $tankIndex = ($row * $tanksPerRow) + $i;
+                                                    $tank = $bbmData->serviceTanks->get($tankIndex);
+                                                @endphp
+                                                @if($tank)
+                                                <tr>
+                                                    @if($i === 0)
+                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $tanksPerRow }}">Row {{ $row + 1 }}</td>
+                                                    @endif
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Tank {{ $tank->tank_number }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->percentage, 2) }}%</td>
+                                                </tr>
+                                                @endif
+                                            @endfor
+                                            @if($row < $rowCount - 1)
+                                                <tr><td colspan="4" class="border-b border-gray-200"></td></tr>
+                                            @endif
+                                        @endfor
+
+                                        <tr class="bg-gray-50 font-semibold">
+                                            <td colspan="2" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Service:</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbmData->service_total_stok, 2) }}</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">-</td>
                                         </tr>
-                                        @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
                                         </tr>
                                     @endif
                                 </tbody>
                             </table>
                         </div>
 
-                        <!-- Flowmeters -->
+                        <!-- BBM Flowmeters -->
                         <div class="overflow-x-auto">
                             <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
                                 <h4 class="text-sm font-semibold text-gray-700">Flowmeters</h4>
@@ -242,6 +413,7 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flowmeter Number</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
@@ -249,48 +421,44 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @forelse($laporan->bbm->first()->flowmeters ?? [] as $flowmeter)
-                                    <tr>
-                                        <td class="px-4 py-2 border-r whitespace-nowrap">Flowmeter {{ $flowmeter->flowmeter_number }}</td>
-                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($flowmeter->awal, 2) }}</td>
-                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($flowmeter->akhir, 2) }}</td>
-                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($flowmeter->pakai, 2) }}</td>
-                                    </tr>
-                                    @empty
-                                    <tr>
-                                        <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
-                                    </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                    @if($bbmData && $bbmData->flowmeters && $bbmData->flowmeters->isNotEmpty())
+                                        @php
+                                            $metersPerRow = 2; // Assuming 2 flowmeters per row based on your form
+                                            $totalMeters = $bbmData->flowmeters->count();
+                                            $rowCount = ceil($totalMeters / $metersPerRow);
+                                        @endphp
 
-                        <!-- BBM Summary -->
-                        <div class="overflow-x-auto">
-                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                <h4 class="text-sm font-semibold text-gray-700">Summary BBM</h4>
-                            </div>
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Stok</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Stok Tangki</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Terima BBM</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pakai</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($laporan->bbm->first())
-                                    <tr>
-                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($laporan->bbm->first()->total_stok, 2) }}</td>
-                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($laporan->bbm->first()->total_stok_tangki, 2) }}</td>
-                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($laporan->bbm->first()->terima_bbm, 2) }}</td>
-                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($laporan->bbm->first()->total_pakai, 2) }}</td>
-                                    </tr>
+                                        @for($row = 0; $row < $rowCount; $row++)
+                                            @for($i = 0; $i < $metersPerRow; $i++)
+                                                @php
+                                                    $meterIndex = ($row * $metersPerRow) + $i;
+                                                    $meter = $bbmData->flowmeters->get($meterIndex);
+                                                @endphp
+                                                @if($meter)
+                                                <tr>
+                                                    @if($i === 0)
+                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $metersPerRow }}">Row {{ $row + 1 }}</td>
+                                                    @endif
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Flowmeter {{ $meter->flowmeter_number }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($meter->awal, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($meter->akhir, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($meter->pakai, 2) }}</td>
+                                                </tr>
+                                                @endif
+                                            @endfor
+                                            @if($row < $rowCount - 1)
+                                                <tr><td colspan="5" class="border-b border-gray-200"></td></tr>
+                                            @endif
+                                        @endfor
+
+                                        <tr class="bg-gray-50 font-semibold">
+                                            <td colspan="4" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Pakai:</td>
+                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbmData->total_pakai, 2) }}</td>
+                                        </tr>
                                     @else
-                                    <tr>
-                                        <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
-                                    </tr>
+                                        <tr>
+                                            <td colspan="5" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                        </tr>
                                     @endif
                                 </tbody>
                             </table>
@@ -315,6 +483,7 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Panel</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
@@ -322,24 +491,43 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($kwhData && $kwhData->productionPanels->isNotEmpty())
-                                        @foreach($kwhData->productionPanels as $panel)
-                                        <tr>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">Panel {{ $panel->panel_number }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->awal, 2) }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir, 2) }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->total, 2) }}</td>
-                                        </tr>
-                                        @endforeach
+                                    @if($kwhData && $kwhData->productionPanels && $kwhData->productionPanels->isNotEmpty())
+                                        @php
+                                            $panelsPerRow = 2; // Assuming 2 panels per row based on your form
+                                            $totalPanels = $kwhData->productionPanels->count();
+                                            $rowCount = ceil($totalPanels / $panelsPerRow);
+                                        @endphp
+
+                                        @for($row = 0; $row < $rowCount; $row++)
+                                            @for($i = 0; $i < $panelsPerRow; $i++)
+                                                @php
+                                                    $panelIndex = ($row * $panelsPerRow) + $i;
+                                                    $panel = $kwhData->productionPanels->get($panelIndex);
+                                                @endphp
+                                                @if($panel)
+                                                <tr>
+                                                    @if($i === 0)
+                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $panelsPerRow }}">Row {{ $row + 1 }}</td>
+                                                    @endif
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Panel {{ $panel->panel_number }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->awal, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir - $panel->awal, 2) }}</td>
+                                                </tr>
+                                                @endif
+                                            @endfor
+                                            @if($row < $rowCount - 1)
+                                                <tr><td colspan="5" class="border-b border-gray-200"></td></tr>
+                                            @endif
+                                        @endfor
+
                                         <tr class="bg-gray-50 font-semibold">
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">Total Production</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">-</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">-</td>
+                                            <td colspan="4" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Production:</td>
                                             <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwhData->prod_total, 2) }}</td>
                                         </tr>
                                     @else
                                         <tr>
-                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                            <td colspan="5" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
                                         </tr>
                                     @endif
                                 </tbody>
@@ -354,6 +542,7 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Panel</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
@@ -361,24 +550,43 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($kwhData && $kwhData->psPanels->isNotEmpty())
-                                        @foreach($kwhData->psPanels as $panel)
-                                        <tr>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">Panel {{ $panel->panel_number }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->awal, 2) }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir, 2) }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->total, 2) }}</td>
-                                        </tr>
-                                        @endforeach
+                                    @if($kwhData && $kwhData->psPanels && $kwhData->psPanels->isNotEmpty())
+                                        @php
+                                            $panelsPerRow = 2; // Assuming 2 panels per row based on your form
+                                            $totalPanels = $kwhData->psPanels->count();
+                                            $rowCount = ceil($totalPanels / $panelsPerRow);
+                                        @endphp
+
+                                        @for($row = 0; $row < $rowCount; $row++)
+                                            @for($i = 0; $i < $panelsPerRow; $i++)
+                                                @php
+                                                    $panelIndex = ($row * $panelsPerRow) + $i;
+                                                    $panel = $kwhData->psPanels->get($panelIndex);
+                                                @endphp
+                                                @if($panel)
+                                                <tr>
+                                                    @if($i === 0)
+                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $panelsPerRow }}">Row {{ $row + 1 }}</td>
+                                                    @endif
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Panel {{ $panel->panel_number }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->awal, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir - $panel->awal, 2) }}</td>
+                                                </tr>
+                                                @endif
+                                            @endfor
+                                            @if($row < $rowCount - 1)
+                                                <tr><td colspan="5" class="border-b border-gray-200"></td></tr>
+                                            @endif
+                                        @endfor
+
                                         <tr class="bg-gray-50 font-semibold">
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">Total PS</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">-</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">-</td>
+                                            <td colspan="4" class="px-4 py-2 border-r whitespace-nowrap text-right">Total PS:</td>
                                             <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwhData->ps_total, 2) }}</td>
                                         </tr>
                                     @else
                                         <tr>
-                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                            <td colspan="5" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
                                         </tr>
                                     @endif
                                 </tbody>
@@ -433,28 +641,49 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Number</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CM</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liter</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($pelumasData && $pelumasData->storageTanks->isNotEmpty())
-                                        @foreach($pelumasData->storageTanks as $tank)
-                                        <tr>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">Storage Tank {{ $tank->tank_number }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->cm, 2) }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
-                                        </tr>
-                                        @endforeach
+                                    @if($pelumasData && $pelumasData->storageTanks && $pelumasData->storageTanks->isNotEmpty())
+                                        @php
+                                            $tanksPerRow = 3; // Assuming 3 tanks per row based on your form
+                                            $totalTanks = $pelumasData->storageTanks->count();
+                                            $rowCount = ceil($totalTanks / $tanksPerRow);
+                                        @endphp
+
+                                        @for($row = 0; $row < $rowCount; $row++)
+                                            @for($i = 0; $i < $tanksPerRow; $i++)
+                                                @php
+                                                    $tankIndex = ($row * $tanksPerRow) + $i;
+                                                    $tank = $pelumasData->storageTanks->get($tankIndex);
+                                                @endphp
+                                                @if($tank)
+                                                <tr>
+                                                    @if($i === 0)
+                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $tanksPerRow }}">Row {{ $row + 1 }}</td>
+                                                    @endif
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Tank {{ $tank->tank_number }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->cm, 2) }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
+                                                </tr>
+                                                @endif
+                                            @endfor
+                                            @if($row < $rowCount - 1)
+                                                <tr><td colspan="4" class="border-b border-gray-200"></td></tr>
+                                            @endif
+                                        @endfor
+
                                         <tr class="bg-gray-50 font-semibold">
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">Total Storage</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">-</td>
+                                            <td colspan="3" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Storage:</td>
                                             <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumasData->tank_total_stok, 2) }}</td>
                                         </tr>
                                     @else
                                         <tr>
-                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
                                         </tr>
                                     @endif
                                 </tbody>
@@ -469,25 +698,47 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Area</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($pelumasData && $pelumasData->drums->isNotEmpty())
-                                        @foreach($pelumasData->drums as $drum)
-                                        <tr>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">Area {{ $drum->area_number }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($drum->jumlah, 2) }}</td>
-                                        </tr>
-                                        @endforeach
+                                    @if($pelumasData && $pelumasData->drums && $pelumasData->drums->isNotEmpty())
+                                        @php
+                                            $drumsPerRow = 4; // Assuming 4 drums per row based on your form
+                                            $totalDrums = $pelumasData->drums->count();
+                                            $rowCount = ceil($totalDrums / $drumsPerRow);
+                                        @endphp
+
+                                        @for($row = 0; $row < $rowCount; $row++)
+                                            @for($i = 0; $i < $drumsPerRow; $i++)
+                                                @php
+                                                    $drumIndex = ($row * $drumsPerRow) + $i;
+                                                    $drum = $pelumasData->drums->get($drumIndex);
+                                                @endphp
+                                                @if($drum)
+                                                <tr>
+                                                    @if($i === 0)
+                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $drumsPerRow }}">Row {{ $row + 1 }}</td>
+                                                    @endif
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Area {{ $drum->area_number }}</td>
+                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($drum->jumlah, 2) }}</td>
+                                                </tr>
+                                                @endif
+                                            @endfor
+                                            @if($row < $rowCount - 1)
+                                                <tr><td colspan="3" class="border-b border-gray-200"></td></tr>
+                                            @endif
+                                        @endfor
+
                                         <tr class="bg-gray-50 font-semibold">
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">Total Drums</td>
+                                            <td colspan="2" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Drums:</td>
                                             <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumasData->drum_total_stok, 2) }}</td>
                                         </tr>
                                     @else
                                         <tr>
-                                            <td colspan="2" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
+                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
                                         </tr>
                                     @endif
                                 </tbody>

@@ -238,10 +238,18 @@
                                             {{ $item->tanggal->format('Y-m-d') }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                            <span class="text-gray-800 rounded-lg bg-gray-100 px-2 py-1">
                                             {{ $item->unit->name }}
+                                            </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                            <span class="text-gray-800 rounded-lg bg-gray-100 px-2 py-1
+                                                @if($item->jenis_bbm == 'B40') bg-blue-100 text-blue-800
+                                                @elseif($item->jenis_bbm == 'B35') bg-green-100 text-green-800
+                                                @elseif($item->jenis_bbm == 'HSD') bg-yellow-100 text-yellow-800
+                                                @else bg-purple-100 text-purple-800 @endif">
                                             {{ $item->jenis_bbm }}
+                                            </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             {{ number_format($item->saldo_awal, 2) }}
@@ -272,7 +280,7 @@
                                                 <span class="text-gray-400">Tidak ada dokumen</span>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center border border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center  border-gray-200">
                                             <div class="flex gap-3">
                                                 <a href="{{ route('admin.energiprimer.bahan-bakar.edit', $item->id) }}" 
                                                    class="inline-flex items-center px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-900">

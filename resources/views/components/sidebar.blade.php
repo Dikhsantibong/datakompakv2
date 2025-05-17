@@ -1,5 +1,5 @@
 <aside id="mobile-menu"
-    class="fixed z-20 transform overflow-hidden transition-transform duration-300 md:relative md:translate-x-0 h-screen w-[280px] bg-transparent shadow-md text-white hidden md:block p-3">
+    class="fixed z-20 transform overflow-hidden transition-transform duration-300 md:relative md:translate-x-0 h-screen w-[280px] bg-white shadow-md text-white hidden md:block p-3">
     <!-- Container untuk background dengan padding -->
     <div class="bg-[#0A749B] rounded-2xl h-full px-4 py-6 flex flex-col">
         <!-- Logo section -->

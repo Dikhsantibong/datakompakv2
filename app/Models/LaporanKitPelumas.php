@@ -41,7 +41,7 @@ class LaporanKitPelumas extends Model
     {
         return session('unit', 'mysql');
     }
-
+    
     protected static function boot()
     {
         parent::boot();

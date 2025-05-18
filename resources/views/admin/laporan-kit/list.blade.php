@@ -271,7 +271,7 @@
                                                     title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form action="#" 
+                                                <form action="{{ route('admin.laporan-kit.destroy', $laporan->id) }}" 
                                                       method="POST" 
                                                       class="inline-block"
                                                       onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">

@@ -77,24 +77,14 @@
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-medium text-gray-800">
                         <i class="fas fa-filter mr-2 text-blue-600"></i>
-                        Filter Unit & Tanggal
+                        Laporan KIT 00.00
                     </h3>
-                    <form method="GET" action="" class="flex items-center space-x-3">
-                        <select id="unitFilter" name="unit_source" onchange="this.form.submit()" class="form-select rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                            <option value="">Semua Unit</option>
-                            @foreach($powerPlants as $powerPlant)
-                                <option value="{{ $powerPlant->unit_source }}" {{ (request('unit_source', $unitSource ?? '') == $powerPlant->unit_source) ? 'selected' : '' }}>
-                                    {{ $powerPlant->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <input type="date" name="tanggal" value="{{ request('tanggal') }}" class="form-input rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500" onchange="this.form.submit()">
-                    </form>
                 </div>
             </div>
 
             <form action="{{ route('admin.laporan-kit.store') }}" method="POST" class="space-y-6">
                 @csrf
+                <input type="hidden" name="unit_source" value="{{ $unitSource }}">
                 <input type="hidden" name="unit_source" value="{{ $unitSource }}">
                 <input type="hidden" name="tanggal" value="{{ request('tanggal') }}">
                 
@@ -392,13 +382,10 @@
                 </div>
 
                 <div class="flex justify-end space-x-4 p-6">
-                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" @if(!request('tanggal')) disabled style="background:#ccc;cursor:not-allowed;" @endif>
+                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Simpan Data
                     </button>
                 </div>
-                @if(!request('tanggal'))
-                    <div class="text-red-600 text-sm text-right pr-6 pb-2">Silakan pilih tanggal terlebih dahulu sebelum mengisi dan menyimpan data.</div>
-                @endif
             </form>
         </div>
     </div>
@@ -654,7 +641,6 @@
                 <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
                     <i class="fas fa-trash"></i>
                 </button>
-            </td>
         `);
 
         row.innerHTML = newInputs.join('');

@@ -29,16 +29,9 @@ class LaporanKitController extends Controller
 {
     public function index(Request $request)
     {
-        $unitSource = $request->get('unit_source');
-        $powerPlants = PowerPlant::orderBy('name')->get();
-        if ($unitSource) {
-            $machines = Machine::whereHas('powerPlant', function($q) use ($unitSource) {
-                $q->where('unit_source', $unitSource);
-            })->orderBy('name')->get();
-        } else {
             $machines = Machine::orderBy('name')->take(1)->get();
-        }
-        return view('admin.laporan-kit.index', compact('machines', 'powerPlants', 'unitSource'));
+        $unitSource = 'mysql'; // Set default unit source
+        return view('admin.laporan-kit.index', compact('machines', 'unitSource'));
     }
 
     public function create()
@@ -53,16 +46,20 @@ class LaporanKitController extends Controller
     {
         DB::beginTransaction();
         try {
-            // Validasi sesuai kebutuhan
-            $validated = $request->validate([
-                'tanggal' => 'required|date',
-                'unit_source' => 'nullable|string',
+            // Get the first PowerPlant's unit_source
+            $powerPlant = PowerPlant::first();
+            $unitSource = $powerPlant ? $powerPlant->unit_source : 'mysql';
+
+            // Set today's date automatically and use PowerPlant's unit_source
+            $request->merge([
+                'tanggal' => now()->format('Y-m-d'),
+                'unit_source' => $unitSource
             ]);
 
             // Simpan ke tabel laporan_kits
             $laporanKit = LaporanKit::create([
-                'tanggal' => $validated['tanggal'],
-                'unit_source' => $validated['unit_source'] ?? null,
+                'tanggal' => $request->tanggal,
+                'unit_source' => $request->unit_source,
                 'created_by' => Auth::id(),
             ]);
 
@@ -130,13 +127,13 @@ class LaporanKitController extends Controller
                                     'akhir' => $bbmData["flowmeter_{$flowmeterNumber}_akhir"],
                                     'pakai' => $bbmData["flowmeter_{$flowmeterNumber}_pakai"]
                                 ]);
-                            }
-                        }
+            }
+        }
                     }
 
                     Log::info("Total flowmeters created: " . count($processedFlowmeters) . " for BBM ID: {$bbm->id}");
-                }
             }
+        }
 
             // Store Pelumas with new structure
             if ($request->has('pelumas')) {
@@ -174,7 +171,7 @@ class LaporanKitController extends Controller
             }
 
             // Store KWH with new structure
-            if ($request->has('kwh')) {
+        if ($request->has('kwh')) {
                 // Create single KWH record
                 $kwh = new LaporanKitKwh([
                     'prod_total' => collect($request->kwh)->sum('prod_total') ?? 0,
@@ -191,7 +188,7 @@ class LaporanKitController extends Controller
                             'akhir' => $kwhData["prod_panel{$i}_akhir"]
                         ]);
                         $kwh->productionPanels()->save($prodPanel);
-                    }
+            }
 
                     // Create PS panels
                     for ($i = 1; isset($kwhData["ps_panel{$i}_awal"]); $i++) {
@@ -201,42 +198,42 @@ class LaporanKitController extends Controller
                             'akhir' => $kwhData["ps_panel{$i}_akhir"]
                         ]);
                         $kwh->psPanels()->save($psPanel);
-                    }
-                }
+            }
+        }
             }
 
-            // Simpan Bahan Kimia
-            if ($request->has('bahan_kimia')) {
-                foreach ($request->bahan_kimia as $bahan_kimia) {
-                    $laporanKit->bahanKimia()->create($bahan_kimia);
-                }
+        // Simpan Bahan Kimia
+        if ($request->has('bahan_kimia')) {
+            foreach ($request->bahan_kimia as $bahan_kimia) {
+                $laporanKit->bahanKimia()->create($bahan_kimia);
             }
+        }
 
-            // Simpan Jam Operasi
-            if ($request->has('mesin')) {
-                foreach ($request->mesin as $machineId => $mesin) {
-                    $mesin['machine_id'] = $machineId;
-                    $laporanKit->jamOperasi()->create($mesin);
-                }
+        // Simpan Jam Operasi
+        if ($request->has('mesin')) {
+            foreach ($request->mesin as $machineId => $mesin) {
+                $mesin['machine_id'] = $machineId;
+                $laporanKit->jamOperasi()->create($mesin);
             }
+        }
 
-            // Simpan Beban Tertinggi
-            if ($request->has('beban')) {
-                foreach ($request->beban as $machineId => $beban) {
-                    $beban['machine_id'] = $machineId;
-                    $laporanKit->bebanTertinggi()->create($beban);
-                }
+        // Simpan Beban Tertinggi
+        if ($request->has('beban')) {
+            foreach ($request->beban as $machineId => $beban) {
+                $beban['machine_id'] = $machineId;
+                $laporanKit->bebanTertinggi()->create($beban);
             }
+        }
 
-            // Simpan Gangguan
-            if ($request->has('gangguan')) {
-                foreach ($request->gangguan as $machineId => $gangguan) {
-                    if (!empty($gangguan['mekanik']) || !empty($gangguan['elektrik'])) {
-                        $gangguan['machine_id'] = $machineId;
-                        $laporanKit->gangguan()->create($gangguan);
-                    }
+        // Simpan Gangguan
+        if ($request->has('gangguan')) {
+            foreach ($request->gangguan as $machineId => $gangguan) {
+                if (!empty($gangguan['mekanik']) || !empty($gangguan['elektrik'])) {
+                    $gangguan['machine_id'] = $machineId;
+                    $laporanKit->gangguan()->create($gangguan);
                 }
             }
+        }
 
             // Reload relationships to ensure all data is synced
             $laporanKit->load([
@@ -257,7 +254,7 @@ class LaporanKitController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('admin.laporan-kit.index')->with('success', 'Data berhasil disimpan');
+        return redirect()->route('admin.laporan-kit.index')->with('success', 'Data berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollback();
             Log::error('Error storing LaporanKit:', [
@@ -411,5 +408,19 @@ class LaporanKitController extends Controller
         // ... (tambahkan logic sesuai kebutuhan)
 
         return redirect()->route('admin.laporan-kit.list')->with('success', 'Laporan berhasil diupdate!');
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $laporanKit = LaporanKit::findOrFail($id);
+            $laporanKit->delete();
+            
+            return redirect()->route('admin.laporan-kit.list')
+                ->with('success', 'Laporan KIT berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.laporan-kit.list')
+                ->with('error', 'Gagal menghapus Laporan KIT.');
+        }
     }
 } 

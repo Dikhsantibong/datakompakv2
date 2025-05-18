@@ -229,35 +229,35 @@
                                         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                                             <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
                                                 <h3 class="text-sm font-semibold text-gray-700">Service Tanks Detail</h3>
-                                            </div>
-                                            <div class="overflow-x-auto">
-                                                <table class="min-w-full divide-y divide-gray-200">
-                                                    <thead class="bg-gray-50">
-                                                        <tr>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
                                                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Number</th>
                                                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liter</th>
                                                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="bg-white divide-y divide-gray-200">
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
                                                         @forelse($bbm->serviceTanks->sortBy('tank_number') as $tank)
                                                         <tr>
                                                             <td class="px-4 py-2 border-r whitespace-nowrap">Tank {{ $tank->tank_number }}</td>
                                                             <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
                                                             <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->percentage, 2) }}%</td>
-                                                        </tr>
-                                                        @empty
-                                                        <tr>
+                                    </tr>
+                                    @empty
+                                    <tr>
                                                             <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data service tank</td>
-                                                        </tr>
-                                                        @endforelse
+                                    </tr>
+                                    @endforelse
                                                         <tr class="bg-gray-50">
                                                             <td colspan="2" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Service:</td>
                                                             <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbm->service_total_stok, 2) }} L</td>
                                                         </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                </tbody>
+                            </table>
+                        </div>
                                         </div>
 
                                         <!-- Flowmeters Detail -->
@@ -342,157 +342,149 @@
                         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
                             <h3 class="text-lg font-semibold text-gray-900">Data Pemeriksaan KWH</h3>
                         </div>
+                        
+                        @if($laporan->kwh->isNotEmpty())
+                            @foreach($laporan->kwh as $kwh)
+                                <div class="p-6">
+                                    <!-- KWH Information Summary -->
+                                    <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <!-- Production Panel Summary -->
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Production Panel</h4>
+                                            <div class="text-sm">
+                                                <p class="text-gray-600">Jumlah Panel: <span class="font-medium">{{ $kwh->productionPanels->count() }}</span></p>
+                                                <p class="text-gray-600">Total Produksi: <span class="font-medium">{{ number_format($kwh->prod_total, 2) }} KWH</span></p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- PS Panel Summary -->
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <h4 class="text-sm font-semibold text-gray-700 mb-2">PS Panel</h4>
+                                            <div class="text-sm">
+                                                <p class="text-gray-600">Jumlah Panel: <span class="font-medium">{{ $kwh->psPanels->count() }}</span></p>
+                                                <p class="text-gray-600">Total PS: <span class="font-medium">{{ number_format($kwh->ps_total, 2) }} KWH</span></p>
+                                            </div>
+                                        </div>
 
-                        @php
-                            $kwhData = $laporan->kwh->first();
-                        @endphp
+                                        <!-- Net Production Summary -->
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Net Production</h4>
+                                            <div class="text-sm">
+                                                <p class="text-gray-600">Total Net: <span class="font-medium">{{ number_format($kwh->prod_total - $kwh->ps_total, 2) }} KWH</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                        <!-- Production Panel -->
-                        <div class="overflow-x-auto">
-                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                <h4 class="text-sm font-semibold text-gray-700">Production Panel</h4>
+                                    <!-- Detailed Panel Information -->
+                                    <div class="space-y-8">
+                                        <!-- Production Panels Detail -->
+                                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                                <h3 class="text-sm font-semibold text-gray-700">Production Panels Detail</h3>
+                                            </div>
+                                            <div class="overflow-x-auto">
+                                                <table class="min-w-full divide-y divide-gray-200">
+                                                    <thead class="bg-gray-50">
+                                                        <tr>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Panel Number</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="bg-white divide-y divide-gray-200">
+                                                        @forelse($kwh->productionPanels->sortBy('panel_number') as $panel)
+                                                        <tr>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">Panel {{ $panel->panel_number }}</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->awal, 2) }}</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir, 2) }}</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir - $panel->awal, 2) }}</td>
+                                                        </tr>
+                                                        @empty
+                                                        <tr>
+                                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data panel produksi</td>
+                                                        </tr>
+                                                        @endforelse
+                                                        <tr class="bg-gray-50">
+                                                            <td colspan="3" class="px-4 py-2 border-r whitespace-nowrap text-right font-medium">Total Production:</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwh->prod_total, 2) }} KWH</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- PS Panels Detail -->
+                                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                                <h3 class="text-sm font-semibold text-gray-700">PS Panels Detail</h3>
+                                            </div>
+                                            <div class="overflow-x-auto">
+                                                <table class="min-w-full divide-y divide-gray-200">
+                                                    <thead class="bg-gray-50">
+                                                        <tr>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Panel Number</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="bg-white divide-y divide-gray-200">
+                                                        @forelse($kwh->psPanels->sortBy('panel_number') as $panel)
+                                                        <tr>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">Panel {{ $panel->panel_number }}</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->awal, 2) }}</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir, 2) }}</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir - $panel->awal, 2) }}</td>
+                                                        </tr>
+                                                        @empty
+                                                        <tr>
+                                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data panel PS</td>
+                                                        </tr>
+                                                        @endforelse
+                                                        <tr class="bg-gray-50">
+                                                            <td colspan="3" class="px-4 py-2 border-r whitespace-nowrap text-right font-medium">Total PS:</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwh->ps_total, 2) }} KWH</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- Summary Section -->
+                                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                                <h3 class="text-sm font-semibold text-gray-700">Summary KWH</h3>
+                                            </div>
+                                            <div class="overflow-x-auto">
+                                                <table class="min-w-full divide-y divide-gray-200">
+                                                    <thead class="bg-gray-50">
+                                                        <tr>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Production</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total PS</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Net Production</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="bg-white divide-y divide-gray-200">
+                                                        <tr>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwh->prod_total, 2) }} KWH</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwh->ps_total, 2) }} KWH</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwh->prod_total - $kwh->ps_total, 2) }} KWH</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="p-6">
+                                <div class="text-center text-gray-500">
+                                    <p>No KWH data available</p>
+                                </div>
                             </div>
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Panel</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($kwhData && $kwhData->productionPanels && $kwhData->productionPanels->isNotEmpty())
-                                        @php
-                                            $panelsPerRow = 2; // Assuming 2 panels per row based on your form
-                                            $totalPanels = $kwhData->productionPanels->count();
-                                            $rowCount = ceil($totalPanels / $panelsPerRow);
-                                        @endphp
-
-                                        @for($row = 0; $row < $rowCount; $row++)
-                                            @for($i = 0; $i < $panelsPerRow; $i++)
-                                                @php
-                                                    $panelIndex = ($row * $panelsPerRow) + $i;
-                                                    $panel = $kwhData->productionPanels->get($panelIndex);
-                                                @endphp
-                                                @if($panel)
-                                                <tr>
-                                                    @if($i === 0)
-                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $panelsPerRow }}">Row {{ $row + 1 }}</td>
-                                                    @endif
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Panel {{ $panel->panel_number }}</td>
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->awal, 2) }}</td>
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir, 2) }}</td>
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir - $panel->awal, 2) }}</td>
-                                                </tr>
-                                                @endif
-                                            @endfor
-                                            @if($row < $rowCount - 1)
-                                                <tr><td colspan="5" class="border-b border-gray-200"></td></tr>
-                                            @endif
-                                        @endfor
-
-                                        <tr class="bg-gray-50 font-semibold">
-                                            <td colspan="4" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Production:</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwhData->prod_total, 2) }}</td>
-                                        </tr>
-                                    @else
-                                        <tr>
-                                            <td colspan="5" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- PS Panel -->
-                        <div class="overflow-x-auto">
-                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                <h4 class="text-sm font-semibold text-gray-700">PS Panel</h4>
-                            </div>
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Panel</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($kwhData && $kwhData->psPanels && $kwhData->psPanels->isNotEmpty())
-                                        @php
-                                            $panelsPerRow = 2; // Assuming 2 panels per row based on your form
-                                            $totalPanels = $kwhData->psPanels->count();
-                                            $rowCount = ceil($totalPanels / $panelsPerRow);
-                                        @endphp
-
-                                        @for($row = 0; $row < $rowCount; $row++)
-                                            @for($i = 0; $i < $panelsPerRow; $i++)
-                                                @php
-                                                    $panelIndex = ($row * $panelsPerRow) + $i;
-                                                    $panel = $kwhData->psPanels->get($panelIndex);
-                                                @endphp
-                                                @if($panel)
-                                                <tr>
-                                                    @if($i === 0)
-                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $panelsPerRow }}">Row {{ $row + 1 }}</td>
-                                                    @endif
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Panel {{ $panel->panel_number }}</td>
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->awal, 2) }}</td>
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir, 2) }}</td>
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($panel->akhir - $panel->awal, 2) }}</td>
-                                                </tr>
-                                                @endif
-                                            @endfor
-                                            @if($row < $rowCount - 1)
-                                                <tr><td colspan="5" class="border-b border-gray-200"></td></tr>
-                                            @endif
-                                        @endfor
-
-                                        <tr class="bg-gray-50 font-semibold">
-                                            <td colspan="4" class="px-4 py-2 border-r whitespace-nowrap text-right">Total PS:</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwhData->ps_total, 2) }}</td>
-                                        </tr>
-                                    @else
-                                        <tr>
-                                            <td colspan="5" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- KWH Summary -->
-                        <div class="overflow-x-auto">
-                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                <h4 class="text-sm font-semibold text-gray-700">Summary KWH</h4>
-                            </div>
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Production</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total PS</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Net Production</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($kwhData)
-                                        <tr>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwhData->prod_total, 2) }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwhData->ps_total, 2) }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($kwhData->prod_total - $kwhData->ps_total, 2) }}</td>
-                                        </tr>
-                                    @else
-                                        <tr>
-                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
+                        @endif
                     </div>
 
                     <!-- Data Pemeriksaan Pelumas -->
@@ -501,149 +493,145 @@
                             <h3 class="text-lg font-semibold text-gray-900">Data Pemeriksaan Pelumas</h3>
                         </div>
 
-                        @php
-                            $pelumasData = $laporan->pelumas->first();
-                        @endphp
+                        @if($laporan->pelumas->isNotEmpty())
+                            @foreach($laporan->pelumas as $pelumas)
+                                <div class="p-6">
+                                    <!-- Pelumas Information Summary -->
+                                    <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <!-- Storage Tanks Summary -->
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Storage Tanks</h4>
+                                            <div class="text-sm">
+                                                <p class="text-gray-600">Jumlah Tangki: <span class="font-medium">{{ $pelumas->storageTanks->count() }}</span></p>
+                                                <p class="text-gray-600">Total Stok: <span class="font-medium">{{ number_format($pelumas->tank_total_stok, 2) }} L</span></p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Drums Summary -->
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Drums</h4>
+                                            <div class="text-sm">
+                                                <p class="text-gray-600">Jumlah Area: <span class="font-medium">{{ $pelumas->drums->count() }}</span></p>
+                                                <p class="text-gray-600">Total Stok: <span class="font-medium">{{ number_format($pelumas->drum_total_stok, 2) }} L</span></p>
+                                            </div>
+                                        </div>
 
-                        <!-- Storage Tanks -->
-                        <div class="overflow-x-auto">
-                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                <h4 class="text-sm font-semibold text-gray-700">Storage Tanks</h4>
+                                        <!-- Usage Summary -->
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Penggunaan</h4>
+                                            <div class="text-sm">
+                                                <p class="text-gray-600">Total Terima: <span class="font-medium">{{ number_format($pelumas->terima_pelumas, 2) }} L</span></p>
+                                                <p class="text-gray-600">Total Pakai: <span class="font-medium">{{ number_format($pelumas->total_pakai, 2) }} L</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Detailed Information -->
+                                    <div class="space-y-8">
+                                        <!-- Storage Tanks Detail -->
+                                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                                <h3 class="text-sm font-semibold text-gray-700">Storage Tanks Detail</h3>
+                                            </div>
+                                            <div class="overflow-x-auto">
+                                                <table class="min-w-full divide-y divide-gray-200">
+                                                    <thead class="bg-gray-50">
+                                                        <tr>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Number</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CM</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liter</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="bg-white divide-y divide-gray-200">
+                                                        @forelse($pelumas->storageTanks->sortBy('tank_number') as $tank)
+                                                        <tr>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">Tank {{ $tank->tank_number }}</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->cm, 2) }}</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }} L</td>
+                                                        </tr>
+                                                        @empty
+                                                        <tr>
+                                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data storage tank</td>
+                                                        </tr>
+                                                        @endforelse
+                                                        <tr class="bg-gray-50">
+                                                            <td colspan="2" class="px-4 py-2 border-r whitespace-nowrap text-right font-medium">Total Storage:</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumas->tank_total_stok, 2) }} L</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- Drums Detail -->
+                                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                                <h3 class="text-sm font-semibold text-gray-700">Drums Detail</h3>
+                                            </div>
+                                            <div class="overflow-x-auto">
+                                                <table class="min-w-full divide-y divide-gray-200">
+                                                    <thead class="bg-gray-50">
+                                                        <tr>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Area Number</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="bg-white divide-y divide-gray-200">
+                                                        @forelse($pelumas->drums->sortBy('area_number') as $drum)
+                                                        <tr>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">Area {{ $drum->area_number }}</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($drum->jumlah, 2) }}</td>
+                                                        </tr>
+                                                        @empty
+                                                        <tr>
+                                                            <td colspan="2" class="px-4 py-2 text-center text-gray-400">Tidak ada data drum</td>
+                                                        </tr>
+                                                        @endforelse
+                                                        <tr class="bg-gray-50">
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap text-right font-medium">Total Drums:</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumas->drum_total_stok, 2) }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- Summary Section -->
+                                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                                                <h3 class="text-sm font-semibold text-gray-700">Summary Pelumas</h3>
+                                            </div>
+                                            <div class="overflow-x-auto">
+                                                <table class="min-w-full divide-y divide-gray-200">
+                                                    <thead class="bg-gray-50">
+                                                        <tr>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Stok Tangki</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Terima Pelumas</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pakai</th>
+                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="bg-white divide-y divide-gray-200">
+                                                        <tr>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumas->total_stok_tangki, 2) }} L</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumas->terima_pelumas, 2) }} L</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumas->total_pakai, 2) }} L</td>
+                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ $pelumas->jenis }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="p-6">
+                                <div class="text-center text-gray-500">
+                                    <p>No Pelumas data available</p>
+                                </div>
                             </div>
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Number</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CM</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liter</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($pelumasData && $pelumasData->storageTanks && $pelumasData->storageTanks->isNotEmpty())
-                                        @php
-                                            $tanksPerRow = 3;
-                                            $totalTanks = $pelumasData->storageTanks->count();
-                                            $rowCount = ceil($totalTanks / $tanksPerRow);
-                                            $tanks = $pelumasData->storageTanks->groupBy(function($tank) use ($tanksPerRow) {
-                                                return floor(($tank->id - 1) / $tanksPerRow);
-                                            });
-                                        @endphp
-
-                                        @foreach($tanks as $rowIndex => $rowTanks)
-                                            @foreach($rowTanks as $tank)
-                                                <tr>
-                                                    @if($loop->first)
-                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $tanksPerRow }}">Row {{ $rowIndex + 1 }}</td>
-                                                    @endif
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Tank {{ $tank->tank_number }}</td>
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->cm, 2) }}</td>
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
-                                                </tr>
-                                            @endforeach
-                                            @if(!$loop->last)
-                                                <tr><td colspan="4" class="border-b border-gray-200"></td></tr>
-                                            @endif
-                                        @endforeach
-
-                                        <tr class="bg-gray-50 font-semibold">
-                                            <td colspan="3" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Storage:</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumasData->tank_total_stok, 2) }}</td>
-                                        </tr>
-                                    @else
-                                        <tr>
-                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Drums -->
-                        <div class="overflow-x-auto">
-                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                <h4 class="text-sm font-semibold text-gray-700">Drums</h4>
-                            </div>
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Row</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Area</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($pelumasData && $pelumasData->drums && $pelumasData->drums->isNotEmpty())
-                                        @php
-                                            $drumsPerRow = 4; // Assuming 4 drums per row based on your form
-                                            $totalDrums = $pelumasData->drums->count();
-                                            $rowCount = ceil($totalDrums / $drumsPerRow);
-                                        @endphp
-
-                                        @for($row = 0; $row < $rowCount; $row++)
-                                            @for($i = 0; $i < $drumsPerRow; $i++)
-                                                @php
-                                                    $drumIndex = ($row * $drumsPerRow) + $i;
-                                                    $drum = $pelumasData->drums->get($drumIndex);
-                                                @endphp
-                                                @if($drum)
-                                                <tr>
-                                                    @if($i === 0)
-                                                        <td class="px-4 py-2 border-r whitespace-nowrap" rowspan="{{ $drumsPerRow }}">Row {{ $row + 1 }}</td>
-                                                    @endif
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">Area {{ $drum->area_number }}</td>
-                                                    <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($drum->jumlah, 2) }}</td>
-                                                </tr>
-                                                @endif
-                                            @endfor
-                                            @if($row < $rowCount - 1)
-                                                <tr><td colspan="3" class="border-b border-gray-200"></td></tr>
-                                            @endif
-                                        @endfor
-
-                                        <tr class="bg-gray-50 font-semibold">
-                                            <td colspan="2" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Drums:</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumasData->drum_total_stok, 2) }}</td>
-                                        </tr>
-                                    @else
-                                        <tr>
-                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Pelumas Summary -->
-                        <div class="overflow-x-auto">
-                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                <h4 class="text-sm font-semibold text-gray-700">Summary Pelumas</h4>
-                            </div>
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Stok Tangki</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Terima Pelumas</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pakai</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @if($pelumasData)
-                                        <tr>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumasData->total_stok_tangki, 2) }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumasData->terima_pelumas, 2) }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumasData->total_pakai, 2) }}</td>
-                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ $pelumasData->jenis }}</td>
-                                        </tr>
-                                    @else
-                                        <tr>
-                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
+                        @endif
                     </div>
 
                     <!-- Pemeriksaan Bahan Kimia -->

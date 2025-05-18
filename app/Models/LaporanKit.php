@@ -19,6 +19,23 @@ class LaporanKit extends Model
         // tambahkan field lain jika ada
     ];
 
+    protected $with = [
+        'jamOperasi',
+        'gangguan',
+        'bbm',
+        'bbm.storageTanks',
+        'bbm.serviceTanks',
+        'bbm.flowmeters',
+        'kwh',
+        'kwh.productionPanels',
+        'kwh.psPanels',
+        'pelumas',
+        'pelumas.storageTanks',
+        'pelumas.drums',
+        'bahanKimia',
+        'bebanTertinggi'
+    ];
+
     public function jamOperasi()    { return $this->hasMany(LaporanKitJamOperasi::class); }
     public function gangguan()      { return $this->hasMany(LaporanKitGangguan::class); }
     public function bbm()           { return $this->hasMany(LaporanKitBbm::class); }
@@ -40,21 +57,40 @@ class LaporanKit extends Model
     {
         parent::boot();
 
-        static::created(function ($model) {
+        static::created(function ($laporanKit) {
             try {
                 if (self::$isSyncing) return;
 
-                $powerPlant = $model->powerPlant;
+                $currentSession = session('unit', 'mysql');
                 
-                if (!$powerPlant) {
-                    Log::warning('Skipping sync - Power Plant not found for Laporan KIT:', [
-                        'id' => $model->id
+                // Only sync if not in mysql session
+                if ($currentSession !== 'mysql') {
+                    self::$isSyncing = true;
+                    
+                    // Load all relationships before dispatching event
+                    $laporanKit->load([
+                        'jamOperasi',
+                        'gangguan',
+                        'bbm',
+                        'bbm.storageTanks',
+                        'bbm.serviceTanks',
+                        'bbm.flowmeters',
+                        'kwh',
+                        'kwh.productionPanels',
+                        'kwh.psPanels',
+                        'pelumas',
+                        'pelumas.storageTanks',
+                        'pelumas.drums',
+                        'bahanKimia',
+                        'bebanTertinggi'
                     ]);
-                    return;
-                }
+                    
+                    event(new LaporanKitUpdated($laporanKit, 'create'));
 
-                event(new LaporanKitUpdated($model, 'create', 'LaporanKit'));
+                    self::$isSyncing = false;
+                }
             } catch (\Exception $e) {
+                self::$isSyncing = false;
                 Log::error('Error in LaporanKit sync:', [
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
@@ -62,15 +98,40 @@ class LaporanKit extends Model
             }
         });
 
-        static::updated(function ($model) {
+        static::updated(function ($laporanKit) {
             try {
                 if (self::$isSyncing) return;
 
-                $powerPlant = $model->powerPlant;
-                if ($powerPlant) {
-                    event(new LaporanKitUpdated($model, 'update', 'LaporanKit'));
+                $currentSession = session('unit', 'mysql');
+                
+                // Only sync if not in mysql session
+                if ($currentSession !== 'mysql') {
+                    self::$isSyncing = true;
+                    
+                    // Load all relationships before dispatching event
+                    $laporanKit->load([
+                        'jamOperasi',
+                        'gangguan',
+                        'bbm',
+                        'bbm.storageTanks',
+                        'bbm.serviceTanks',
+                        'bbm.flowmeters',
+                        'kwh',
+                        'kwh.productionPanels',
+                        'kwh.psPanels',
+                        'pelumas',
+                        'pelumas.storageTanks',
+                        'pelumas.drums',
+                        'bahanKimia',
+                        'bebanTertinggi'
+                    ]);
+                    
+                    event(new LaporanKitUpdated($laporanKit, 'update'));
+
+                    self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
+                self::$isSyncing = false;
                 Log::error('Error in LaporanKit sync:', [
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
@@ -78,15 +139,40 @@ class LaporanKit extends Model
             }
         });
 
-        static::deleting(function ($model) {
+        static::deleting(function ($laporanKit) {
             try {
                 if (self::$isSyncing) return;
 
-                $powerPlant = $model->powerPlant;
-                if ($powerPlant) {
-                    event(new LaporanKitUpdated($model, 'delete', 'LaporanKit'));
+                $currentSession = session('unit', 'mysql');
+                
+                // Only sync if not in mysql session
+                if ($currentSession !== 'mysql') {
+                    self::$isSyncing = true;
+                    
+                    // Load all relationships before dispatching event
+                    $laporanKit->load([
+                        'jamOperasi',
+                        'gangguan',
+                        'bbm',
+                        'bbm.storageTanks',
+                        'bbm.serviceTanks',
+                        'bbm.flowmeters',
+                        'kwh',
+                        'kwh.productionPanels',
+                        'kwh.psPanels',
+                        'pelumas',
+                        'pelumas.storageTanks',
+                        'pelumas.drums',
+                        'bahanKimia',
+                        'bebanTertinggi'
+                    ]);
+                    
+                    event(new LaporanKitUpdated($laporanKit, 'delete'));
+
+                    self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
+                self::$isSyncing = false;
                 Log::error('Error in LaporanKit sync:', [
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()

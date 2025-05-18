@@ -2,21 +2,42 @@
 
 namespace App\Events;
 
+use App\Models\LaporanKit;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 class LaporanKitUpdated
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $model;
+    public $laporanKit;
     public $action;
-    public $modelType;
 
-    public function __construct($model, $action, $modelType)
+    /**
+     * Create a new event instance.
+     */
+    public function __construct(LaporanKit $laporanKit, string $action)
     {
-        $this->model = $model;
-        $this->action = $action; // 'create', 'update', or 'delete'
-        $this->modelType = $modelType; // The type of model being synced
+        // Ensure all relationships are loaded
+        $laporanKit->load([
+            'jamOperasi',
+            'gangguan',
+            'bbm',
+            'bbm.storageTanks',
+            'bbm.serviceTanks',
+            'bbm.flowmeters',
+            'kwh',
+            'kwh.productionPanels',
+            'kwh.psPanels',
+            'pelumas',
+            'pelumas.storageTanks',
+            'pelumas.drums',
+            'bahanKimia',
+            'bebanTertinggi'
+        ]);
+        
+        $this->laporanKit = $laporanKit;
+        $this->action = $action;
     }
 } 

@@ -88,8 +88,33 @@
                                     @if(request()->has('unit_source') || request()->has('start_date') || request()->has('end_date'))
                                         <div class="flex flex-wrap gap-2" id="active-filters">
                                             @if(request('unit_source'))
+                                                @php
+                                                    $unitMapping = [
+                                                        'mysql_poasia' => 'PLTD POASIA',
+                                                        'mysql_kolaka' => 'PLTD KOLAKA',
+                                                        'mysql_bau_bau' => 'PLTD BAU BAU',
+                                                        'mysql_wua_wua' => 'PLTD WUA WUA',
+                                                        'mysql_winning' => 'PLTD WINNING',
+                                                        'mysql_erkee' => 'PLTD ERKEE',
+                                                        'mysql_ladumpi' => 'PLTD LADUMPI',
+                                                        'mysql_langara' => 'PLTD LANGARA',
+                                                        'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+                                                        'mysql_pasarwajo' => 'PLTD PASARWAJO',
+                                                        'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+                                                        'mysql_raha' => 'PLTD RAHA',
+                                                        'mysql_wajo' => 'PLTD WAJO',
+                                                        'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+                                                        'mysql_rongi' => 'PLTD RONGI',
+                                                        'mysql_sabilambo' => 'PLTD SABILAMBO',
+                                                        'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+                                                        'mysql_pltmg_kendari' => 'PLTD KENDARI',
+                                                        'mysql_baruta' => 'PLTD BARUTA',
+                                                        'mysql_moramo' => 'PLTD MORAMO',
+                                                        'mysql' => 'UP Kendari'
+                                                    ];
+                                                @endphp
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                    Unit: {{ $powerPlants->firstWhere('unit_source', request('unit_source'))?->name }}
+                                                    Unit: {{ $unitMapping[request('unit_source')] ?? request('unit_source') }}
                                                     <button onclick="removeFilter('unit_source')" class="ml-1 text-blue-600 hover:text-blue-800">
                                                         <i class="fas fa-times"></i>
                                                     </button>
@@ -120,9 +145,34 @@
                                         <select name="unit_source" 
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Unit</option>
-                                            @foreach($powerPlants as $powerPlant)
-                                                <option value="{{ $powerPlant->unit_source }}" {{ request('unit_source') == $powerPlant->unit_source ? 'selected' : '' }}>
-                                                    {{ $powerPlant->name }}
+                                            @php
+                                                $unitMapping = [
+                                                    'mysql_poasia' => 'PLTD POASIA',
+                                                    'mysql_kolaka' => 'PLTD KOLAKA',
+                                                    'mysql_bau_bau' => 'PLTD BAU BAU',
+                                                    'mysql_wua_wua' => 'PLTD WUA WUA',
+                                                    'mysql_winning' => 'PLTD WINNING',
+                                                    'mysql_erkee' => 'PLTD ERKEE',
+                                                    'mysql_ladumpi' => 'PLTD LADUMPI',
+                                                    'mysql_langara' => 'PLTD LANGARA',
+                                                    'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+                                                    'mysql_pasarwajo' => 'PLTD PASARWAJO',
+                                                    'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+                                                    'mysql_raha' => 'PLTD RAHA',
+                                                    'mysql_wajo' => 'PLTD WAJO',
+                                                    'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+                                                    'mysql_rongi' => 'PLTD RONGI',
+                                                    'mysql_sabilambo' => 'PLTD SABILAMBO',
+                                                    'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+                                                    'mysql_pltmg_kendari' => 'PLTD KENDARI',
+                                                    'mysql_baruta' => 'PLTD BARUTA',
+                                                    'mysql_moramo' => 'PLTD MORAMO',
+                                                    'mysql' => 'UP Kendari'
+                                                ];
+                                            @endphp
+                                            @foreach($unitMapping as $key => $name)
+                                                <option value="{{ $key }}" {{ request('unit_source') == $key ? 'selected' : '' }}>
+                                                    {{ $name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -157,7 +207,7 @@
                         </div>
 
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
@@ -179,8 +229,35 @@
                                         {{-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
                                             {{ $powerPlants->firstWhere('unit_source', $laporan->unit_source)?->name ?? '-' }}
                                         </td> --}}
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
-                                            {{ $laporan->creator->name ?? '-' }}
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                @php
+                                                    $unitMapping = [
+                                                        'mysql_poasia' => 'PLTD POASIA',
+                                                        'mysql_kolaka' => 'PLTD KOLAKA',
+                                                        'mysql_bau_bau' => 'PLTD BAU BAU',
+                                                        'mysql_wua_wua' => 'PLTD WUA WUA',
+                                                        'mysql_winning' => 'PLTD WINNING',
+                                                        'mysql_erkee' => 'PLTD ERKEE',
+                                                        'mysql_ladumpi' => 'PLTD LADUMPI',
+                                                        'mysql_langara' => 'PLTD LANGARA',
+                                                        'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+                                                        'mysql_pasarwajo' => 'PLTD PASARWAJO',
+                                                        'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+                                                        'mysql_raha' => 'PLTD RAHA',
+                                                        'mysql_wajo' => 'PLTD WAJO',
+                                                        'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+                                                        'mysql_rongi' => 'PLTD RONGI',
+                                                        'mysql_sabilambo' => 'PLTD SABILAMBO',
+                                                        'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+                                                        'mysql_pltmg_kendari' => 'PLTD KENDARI',
+                                                        'mysql_baruta' => 'PLTD BARUTA',
+                                                        'mysql_moramo' => 'PLTD MORAMO',
+                                                        'mysql' => 'UP Kendari'
+                                                    ];
+                                                @endphp
+                                                {{ $unitMapping[$laporan->unit_source] ?? $laporan->unit_source ?? '-' }}
+                                            </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
                                             <div class="flex items-center justify-center space-x-2">

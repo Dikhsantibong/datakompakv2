@@ -48,7 +48,10 @@ class RencanaDayaMampuController extends Controller
             })->with(['machines' => function($query) use ($currentMonth) {
                 $query->orderBy('name')
                     ->with(['latestOperation', 'rencanaDayaMampu' => function($query) use ($currentMonth) {
-                        $query->whereRaw("DATE_FORMAT(tanggal, '%Y-%m') = ?", [$currentMonth]);
+                        $year = substr($currentMonth, 0, 4);
+                        $month = substr($currentMonth, 5, 2);
+                        $query->whereYear('tanggal', $year)
+                              ->whereMonth('tanggal', $month);
                     }]);
             }])->orderBy('name')->get();
 
@@ -328,7 +331,10 @@ class RencanaDayaMampuController extends Controller
         })->with(['machines' => function($query) use ($selectedDate) {
             $query->orderBy('name')
                 ->with(['rencanaDayaMampu' => function($query) use ($selectedDate) {
-                    $query->whereRaw("DATE_FORMAT(tanggal, '%Y-%m') = ?", [$selectedDate]);
+                    $year = substr($selectedDate, 0, 4);
+                    $month = substr($selectedDate, 5, 2);
+                    $query->whereYear('tanggal', $year)
+                          ->whereMonth('tanggal', $month);
                 }]);
         }])->orderBy('name')->get();
 

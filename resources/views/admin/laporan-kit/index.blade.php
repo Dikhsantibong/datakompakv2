@@ -149,6 +149,7 @@
                                 <tr class="bg-gray-50">
                                     <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">mesin</th>
                                     <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 text-center">Jenis Gangguan</th>
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">Keterangan</th>
                                 </tr>
                                 <tr class="bg-gray-50">
                                     <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">mekanik</th>
@@ -164,6 +165,9 @@
                                     </td>
                                     <td class="px-4 py-2">
                                         <input type="number" name="gangguan[{{ $machine->id }}][elektrik]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <input type="text" name="gangguan[{{ $machine->id }}][keterangan]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan keterangan">
                                     </td>
                                 </tr>
                                 @empty

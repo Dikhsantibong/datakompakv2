@@ -16,7 +16,8 @@ class LaporanKitGangguan extends Model
         'laporan_kit_id',
         'machine_id',
         'mekanik',
-        'elektrik'
+        'elektrik',
+        'keterangan'
     ];
 
     public function machine()
@@ -49,6 +50,7 @@ class LaporanKitGangguan extends Model
                         'machine_id' => $gangguan->machine_id,
                         'mekanik' => $gangguan->mekanik,
                         'elektrik' => $gangguan->elektrik,
+                        'keterangan' => $gangguan->keterangan,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
@@ -81,6 +83,7 @@ class LaporanKitGangguan extends Model
                         'machine_id' => $gangguan->machine_id,
                         'mekanik' => $gangguan->mekanik,
                         'elektrik' => $gangguan->elektrik,
+                        'keterangan' => $gangguan->keterangan,
                         'updated_at' => now()
                     ];
 

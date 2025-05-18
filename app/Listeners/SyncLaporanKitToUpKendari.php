@@ -187,6 +187,25 @@ class SyncLaporanKitToUpKendari
                         }
                     }
 
+                    // Sync Gangguan
+                    foreach ($event->laporanKit->gangguan as $gangguan) {
+                        $gangguanData = [
+                            'id' => $gangguan->id,
+                            'laporan_kit_id' => $gangguan->laporan_kit_id,
+                            'machine_id' => $gangguan->machine_id,
+                            'mekanik' => $gangguan->mekanik,
+                            'elektrik' => $gangguan->elektrik,
+                            'keterangan' => $gangguan->keterangan,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+                        $upKendariDB->table('laporan_kit_gangguan')
+                            ->updateOrInsert(
+                                ['id' => $gangguan->id],
+                                $gangguanData
+                            );
+                    }
+
                     break;
 
                 case 'delete':

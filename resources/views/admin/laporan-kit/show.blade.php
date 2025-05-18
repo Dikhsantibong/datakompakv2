@@ -129,6 +129,7 @@
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mekanik</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elektrik</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
@@ -138,6 +139,7 @@
                                         <td class="px-6 py-4 border-r">{{ $row->machine->name ?? '-' }}</td>
                                         <td class="px-6 py-4 border-r">{{ $row->mekanik }}</td>
                                         <td class="px-6 py-4 border-r">{{ $row->elektrik }}</td>
+                                        <td class="px-6 py-4 border-r">{{ $row->keterangan ?? '-' }}</td>
                                     </tr>
                                     @empty
                                     <tr>

@@ -228,7 +228,7 @@ class LaporanKitController extends Controller
         // Simpan Gangguan
         if ($request->has('gangguan')) {
             foreach ($request->gangguan as $machineId => $gangguan) {
-                if (!empty($gangguan['mekanik']) || !empty($gangguan['elektrik'])) {
+                if (!empty($gangguan['mekanik']) || !empty($gangguan['elektrik']) || !empty($gangguan['keterangan'])) {
                     $gangguan['machine_id'] = $machineId;
                     $laporanKit->gangguan()->create($gangguan);
                 }

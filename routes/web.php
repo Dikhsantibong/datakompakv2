@@ -260,13 +260,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/', [LaporanKitController::class, 'index'])->name('index');
         Route::get('/create', [LaporanKitController::class, 'create'])->name('create');
         Route::post('/store', [LaporanKitController::class, 'store'])->name('store');
-        Route::get('/list', [LaporanKitController::class, 'list'])->name('list');
-        Route::get('/{laporanKit}', [LaporanKitController::class, 'show'])->name('show');
-        Route::get('/{id}/edit', [LaporanKitController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [LaporanKitController::class, 'update'])->name('update');
+        Route::get('/admin/laporan-kit/list', [LaporanKitController::class, 'list'])->name('admin.laporan-kit.list');
+        Route::get('/export-pdf', [LaporanKitController::class, 'exportPdf'])->name('laporan-kit.export-pdf');
+        Route::get('/export-excel', [LaporanKitController::class, 'exportExcel'])->name('laporan-kit.export-excel');
         Route::delete('/{id}', [LaporanKitController::class, 'destroy'])->name('destroy');
-        Route::get('/export-pdf/{id}', [LaporanKitController::class, 'exportPdf'])->name('export-pdf');
-        Route::get('/export-excel', [LaporanKitController::class, 'exportExcel'])->name('export-excel');
+        
     });
 
     // Abnormal Report routes

@@ -204,6 +204,7 @@ class AbnormalReportController extends Controller
             'recommendations',
             'admActions',
             'creator'
+            
         ])->findOrFail($id);
 
         return view('admin.abnormal-report.show', compact('report'));

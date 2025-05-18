@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="flex items-center">
                                     <i class="fas fa-user mr-2 text-purple-500"></i>
-                                    {{ $meetingShift->creator->name }}
+                                    {{ $meetingShift->machineStatuses->first()->machine->powerPlant->name }}
                                 </div>
                             </div>
                         </div>

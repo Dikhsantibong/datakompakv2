@@ -313,23 +313,4 @@ class DataEngineController extends Controller
             ], 500);
         }
     }
-
-    public function getOperatorWhatsApp()
-    {
-        try {
-            // Get operator's WhatsApp number from settings or database
-            // This is just an example - you should implement your own logic to get the number
-            $whatsappNumber = config('app.operator_whatsapp', '6281234567890'); // Default number if not set
-
-            return response()->json([
-                'success' => true,
-                'whatsapp_number' => $whatsappNumber
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error getting WhatsApp number: ' . $e->getMessage()
-            ], 500);
-        }
-    }
 } 

@@ -1411,3 +1411,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('kesiapan-kit', [KesiapanKitController::class, 'index'])->name('kesiapan-kit.index');
     // ... existing code ...
 });
+
+// ... existing code ...
+Route::prefix('admin/data-engine')->name('admin.data-engine.')->group(function () {
+    Route::get('/', [DataEngineController::class, 'index'])->name('index');
+    Route::get('/edit/{date}', [DataEngineController::class, 'edit'])->name('edit');
+    Route::post('/update', [DataEngineController::class, 'update'])->name('update');
+    Route::get('/export-excel', [DataEngineController::class, 'exportExcel'])->name('export-excel');
+    Route::get('/export-pdf', [DataEngineController::class, 'exportPdf'])->name('export-pdf');
+    Route::get('/get-latest-data', [DataEngineController::class, 'getLatestData'])->name('get-latest-data');
+    Route::get('/get-operator-whatsapp', [DataEngineController::class, 'getOperatorWhatsApp'])->name('get-operator-whatsapp');
+});
+// ... existing code ...

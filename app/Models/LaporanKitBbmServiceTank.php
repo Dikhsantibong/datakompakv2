@@ -73,7 +73,7 @@ class LaporanKitBbmServiceTank extends Model
 
         static::updated(function ($serviceTank) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -107,7 +107,7 @@ class LaporanKitBbmServiceTank extends Model
 
         static::deleting(function ($serviceTank) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 

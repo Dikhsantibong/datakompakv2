@@ -38,7 +38,7 @@ class LaporanKitPelumasDrum extends Model
 
         static::created(function ($drum) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -71,7 +71,7 @@ class LaporanKitPelumasDrum extends Model
 
         static::updated(function ($drum) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -104,7 +104,7 @@ class LaporanKitPelumasDrum extends Model
 
         static::deleting(function ($drum) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 

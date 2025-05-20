@@ -41,12 +41,7 @@ class LaporanKitKwhPsPanel extends Model
 
         static::created(function ($panel) {
             try {
-                if (self::$isSyncing) {
-                    Log::info('Skipping sync for LaporanKitKwhPsPanel created event - already syncing', [
-                        'id' => $panel->id
-                    ]);
-                    return;
-                }
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -86,12 +81,7 @@ class LaporanKitKwhPsPanel extends Model
 
         static::updated(function ($panel) {
             try {
-                if (self::$isSyncing) {
-                    Log::info('Skipping sync for LaporanKitKwhPsPanel updated event - already syncing', [
-                        'id' => $panel->id
-                    ]);
-                    return;
-                }
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -130,12 +120,7 @@ class LaporanKitKwhPsPanel extends Model
 
         static::deleted(function ($panel) {
             try {
-                if (self::$isSyncing) {
-                    Log::info('Skipping sync for LaporanKitKwhPsPanel deleted event - already syncing', [
-                        'id' => $panel->id
-                    ]);
-                    return;
-                }
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 

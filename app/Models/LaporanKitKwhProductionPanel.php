@@ -41,7 +41,7 @@ class LaporanKitKwhProductionPanel extends Model
 
         static::created(function ($productionPanel) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -75,7 +75,7 @@ class LaporanKitKwhProductionPanel extends Model
 
         static::updated(function ($productionPanel) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -109,7 +109,7 @@ class LaporanKitKwhProductionPanel extends Model
 
         static::deleting(function ($productionPanel) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 

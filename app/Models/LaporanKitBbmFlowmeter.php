@@ -76,7 +76,7 @@ class LaporanKitBbmFlowmeter extends Model
 
         static::updated(function ($flowmeter) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -111,7 +111,7 @@ class LaporanKitBbmFlowmeter extends Model
 
         static::deleting(function ($flowmeter) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 

@@ -55,8 +55,12 @@ class LaporanKitGangguan extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
-                    DB::connection('mysql')->table('laporan_kit_gangguan')->insert($data);
+                    // Use updateOrInsert instead of insert
+                    DB::connection('mysql')->table('laporan_kit_gangguan')
+                        ->updateOrInsert(
+                            ['id' => $gangguan->id],
+                            $data
+                        );
 
                     self::$isSyncing = false;
                 }
@@ -87,11 +91,12 @@ class LaporanKitGangguan extends Model
                         'updated_at' => now()
                     ];
 
-                    // Update in mysql database
+                    // Use updateOrInsert instead of update
                     DB::connection('mysql')->table('laporan_kit_gangguan')
-                        ->where('laporan_kit_id', $gangguan->laporan_kit_id)
-                        ->where('id', $gangguan->id)
-                        ->update($data);
+                        ->updateOrInsert(
+                            ['id' => $gangguan->id],
+                            $data
+                        );
 
                     self::$isSyncing = false;
                 }

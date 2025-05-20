@@ -189,21 +189,38 @@ class SyncLaporanKitToUpKendari
 
                     // Sync Gangguan
                     foreach ($event->laporanKit->gangguan as $gangguan) {
-                        $gangguanData = [
-                            'id' => $gangguan->id,
-                            'laporan_kit_id' => $gangguan->laporan_kit_id,
-                            'machine_id' => $gangguan->machine_id,
-                            'mekanik' => $gangguan->mekanik,
-                            'elektrik' => $gangguan->elektrik,
-                            'keterangan' => $gangguan->keterangan,
-                            'created_at' => now(),
-                            'updated_at' => now()
-                        ];
-                        $upKendariDB->table('laporan_kit_gangguan')
-                            ->updateOrInsert(
-                                ['id' => $gangguan->id],
-                                $gangguanData
-                            );
+                        try {
+                            $gangguanData = [
+                                'id' => $gangguan->id,
+                                'laporan_kit_id' => $gangguan->laporan_kit_id,
+                                'machine_id' => $gangguan->machine_id,
+                                'mekanik' => $gangguan->mekanik,
+                                'elektrik' => $gangguan->elektrik,
+                                'keterangan' => $gangguan->keterangan,
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ];
+
+                            // Use updateOrInsert to handle duplicate keys
+                            $upKendariDB->table('laporan_kit_gangguan')
+                                ->updateOrInsert(
+                                    ['id' => $gangguan->id],
+                                    $gangguanData
+                                );
+
+                            Log::info('Successfully synced LaporanKitGangguan', [
+                                'id' => $gangguan->id,
+                                'laporan_kit_id' => $gangguan->laporan_kit_id
+                            ]);
+                        } catch (\Exception $e) {
+                            Log::error('Error syncing LaporanKitGangguan:', [
+                                'id' => $gangguan->id,
+                                'error' => $e->getMessage(),
+                                'trace' => $e->getTraceAsString()
+                            ]);
+                            // Continue with other records even if one fails
+                            continue;
+                        }
                     }
 
                     break;

@@ -193,6 +193,8 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('dateFilterForm');
@@ -272,12 +274,7 @@ function toggleFullTableView() {
         if (mainContent) mainContent.classList.add('pt-0');
     }
 }
-</script>
 
-<script src="{{ asset('js/toggle.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
 function formatDate(date) {
     const months = [
         'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -292,35 +289,56 @@ function getFormattedReport() {
     const time = document.querySelector('select[name="time"]').value || '11:00';
     
     let report = `Assalamu Alaikum Wr.Wb\n`;
-    report += `Laporan Data Operasional Pembangkit PLN Nusantara Power\n`;
+    report += `Laporan Data Engine PLN Nusantara Power\n`;
     report += `Unit Pembangkitan Kendari, ${formatDate(date)}\n`;
     report += `Pukul : ${time} Wita\n\n`;
 
     // Get all power plant sections
-    const powerPlantSections = document.querySelectorAll('.bg-white.rounded-xl.shadow-sm.mb-8');
+    const powerPlantSections = document.querySelectorAll('.bg-white.rounded-xl.shadow-sm.overflow-hidden.border.border-gray-100');
     
     powerPlantSections.forEach(section => {
         const title = section.querySelector('h2').textContent.trim();
-        const machines = section.querySelectorAll('tbody tr');
+        const powerPlantInfo = section.querySelector('.flex.items-center.gap-4');
         
         report += `\n${title}\n`;
         
+        // Add power plant specific info (HOP/TMA/Inflow)
+        if (powerPlantInfo) {
+            const infoElements = powerPlantInfo.querySelectorAll('.flex.items-center.gap-2');
+            infoElements.forEach(info => {
+                const label = info.querySelector('.text-sm.font-medium').textContent.trim();
+                const value = info.querySelector('.text-sm.text-gray-900').textContent.trim();
+                const unit = info.querySelector('.text-sm.text-gray-600').textContent.trim();
+                report += `${label}: ${value} ${unit}\n`;
+            });
+        }
+
         // Add machine details
+        const machines = section.querySelectorAll('tbody tr');
         machines.forEach(machine => {
             const cells = machine.querySelectorAll('td');
-            if (cells.length >= 6) {
+            if (cells.length >= 11) {
                 const name = cells[1].querySelector('div').textContent.trim();
-                const kw = cells[2].textContent.trim();
-                const kvar = cells[3].textContent.trim();
-                const cosPhi = cells[4].textContent.trim();
-                const status = cells[5].querySelector('span').textContent.trim();
-                const description = cells[6].textContent.trim();
+                const dayaTerpasang = cells[3].textContent.trim();
+                const dmn = cells[4].textContent.trim();
+                const dmp = cells[5].textContent.trim();
+                const beban = cells[6].textContent.trim();
+                const kvar = cells[7].textContent.trim();
+                const cosPhi = cells[8].textContent.trim();
+                const status = cells[9].querySelector('span')?.textContent.trim() || '-';
+                const description = cells[10].textContent.trim();
                 
-                report += `- ${name} : ${kw}/${kvar}/${cosPhi} /${status} (${description})\n`;
+                report += `- ${name}:\n`;
+                report += `  Daya Terpasang: ${dayaTerpasang} kW\n`;
+                report += `  DMN: ${dmn}\n`;
+                report += `  DMP: ${dmp}\n`;
+                report += `  Beban: ${beban} kW\n`;
+                report += `  kVAR: ${kvar}\n`;
+                report += `  Cos φ: ${cosPhi}\n`;
+                report += `  Status: ${status}\n`;
+                report += `  Keterangan: ${description}\n\n`;
             }
         });
-        
-        report += '\n';
     });
 
     report += '\nBarakallahu Fikhum dan Terima Kasih';
@@ -349,4 +367,6 @@ document.getElementById('copyFormattedData').addEventListener('click', function(
     });
 });
 </script>
+
+<script src="{{ asset('js/toggle.js') }}"></script>
 @endsection

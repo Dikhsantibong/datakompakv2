@@ -31,7 +31,12 @@ class LaporanKitBahanKimia extends Model
 
         static::created(function ($bahanKimia) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing) {
+                    Log::info('Skipping sync for LaporanKitBahanKimia created event - already syncing', [
+                        'id' => $bahanKimia->id
+                    ]);
+                    return;
+                }
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -40,7 +45,6 @@ class LaporanKitBahanKimia extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $bahanKimia->id,
                         'laporan_kit_id' => $bahanKimia->laporan_kit_id,
                         'jenis' => $bahanKimia->jenis,
                         'stok_awal' => $bahanKimia->stok_awal,
@@ -50,23 +54,35 @@ class LaporanKitBahanKimia extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
-                    DB::connection('mysql')->table('laporan_kit_bahan_kimia')->insert($data);
-
-                    self::$isSyncing = false;
+                    // Sync to mysql database using updateOrInsert
+                    DB::connection('mysql')->table('laporan_kit_bahan_kimia')
+                        ->updateOrInsert(
+                            [
+                                'laporan_kit_id' => $bahanKimia->laporan_kit_id,
+                                'jenis' => $bahanKimia->jenis
+                            ],
+                            $data
+                        );
                 }
             } catch (\Exception $e) {
-                self::$isSyncing = false;
                 Log::error('Error in LaporanKitBahanKimia sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'id' => $bahanKimia->id
                 ]);
+            } finally {
+                self::$isSyncing = false;
             }
         });
 
         static::updated(function ($bahanKimia) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing) {
+                    Log::info('Skipping sync for LaporanKitBahanKimia updated event - already syncing', [
+                        'id' => $bahanKimia->id
+                    ]);
+                    return;
+                }
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -75,6 +91,7 @@ class LaporanKitBahanKimia extends Model
                     self::$isSyncing = true;
                     
                     $data = [
+                        'laporan_kit_id' => $bahanKimia->laporan_kit_id,
                         'jenis' => $bahanKimia->jenis,
                         'stok_awal' => $bahanKimia->stok_awal,
                         'terima' => $bahanKimia->terima,
@@ -82,26 +99,35 @@ class LaporanKitBahanKimia extends Model
                         'updated_at' => now()
                     ];
 
-                    // Update in mysql database
+                    // Sync to mysql database using updateOrInsert
                     DB::connection('mysql')->table('laporan_kit_bahan_kimia')
-                        ->where('laporan_kit_id', $bahanKimia->laporan_kit_id)
-                        ->where('id', $bahanKimia->id)
-                        ->update($data);
-
-                    self::$isSyncing = false;
+                        ->updateOrInsert(
+                            [
+                                'laporan_kit_id' => $bahanKimia->laporan_kit_id,
+                                'jenis' => $bahanKimia->jenis
+                            ],
+                            $data
+                        );
                 }
             } catch (\Exception $e) {
-                self::$isSyncing = false;
                 Log::error('Error in LaporanKitBahanKimia sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'id' => $bahanKimia->id
                 ]);
+            } finally {
+                self::$isSyncing = false;
             }
         });
 
-        static::deleting(function ($bahanKimia) {
+        static::deleted(function ($bahanKimia) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing) {
+                    Log::info('Skipping sync for LaporanKitBahanKimia deleted event - already syncing', [
+                        'id' => $bahanKimia->id
+                    ]);
+                    return;
+                }
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -112,17 +138,17 @@ class LaporanKitBahanKimia extends Model
                     // Delete from mysql database
                     DB::connection('mysql')->table('laporan_kit_bahan_kimia')
                         ->where('laporan_kit_id', $bahanKimia->laporan_kit_id)
-                        ->where('id', $bahanKimia->id)
+                        ->where('jenis', $bahanKimia->jenis)
                         ->delete();
-
-                    self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
-                self::$isSyncing = false;
                 Log::error('Error in LaporanKitBahanKimia sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'id' => $bahanKimia->id
                 ]);
+            } finally {
+                self::$isSyncing = false;
             }
         });
     }

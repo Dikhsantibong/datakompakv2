@@ -39,9 +39,14 @@ class LaporanKitKwhPsPanel extends Model
     {
         parent::boot();
 
-        static::created(function ($psPanel) {
+        static::created(function ($panel) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing) {
+                    Log::info('Skipping sync for LaporanKitKwhPsPanel created event - already syncing', [
+                        'id' => $panel->id
+                    ]);
+                    return;
+                }
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -50,32 +55,43 @@ class LaporanKitKwhPsPanel extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $psPanel->id,
-                        'laporan_kit_kwh_id' => $psPanel->laporan_kit_kwh_id,
-                        'panel_number' => $psPanel->panel_number,
-                        'awal' => $psPanel->awal,
-                        'akhir' => $psPanel->akhir,
+                        'laporan_kit_kwh_id' => $panel->laporan_kit_kwh_id,
+                        'panel_number' => $panel->panel_number,
+                        'awal' => $panel->awal,
+                        'akhir' => $panel->akhir,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
-                    DB::connection('mysql')->table('laporan_kit_kwh_ps_panels')->insert($data);
-
-                    self::$isSyncing = false;
+                    // Sync to mysql database using updateOrInsert
+                    DB::connection('mysql')->table('laporan_kit_kwh_ps_panels')
+                        ->updateOrInsert(
+                            [
+                                'laporan_kit_kwh_id' => $panel->laporan_kit_kwh_id,
+                                'panel_number' => $panel->panel_number
+                            ],
+                            $data
+                        );
                 }
             } catch (\Exception $e) {
-                self::$isSyncing = false;
                 Log::error('Error in LaporanKitKwhPsPanel sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'id' => $panel->id
                 ]);
+            } finally {
+                self::$isSyncing = false;
             }
         });
 
-        static::updated(function ($psPanel) {
+        static::updated(function ($panel) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing) {
+                    Log::info('Skipping sync for LaporanKitKwhPsPanel updated event - already syncing', [
+                        'id' => $panel->id
+                    ]);
+                    return;
+                }
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -84,32 +100,42 @@ class LaporanKitKwhPsPanel extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'panel_number' => $psPanel->panel_number,
-                        'awal' => $psPanel->awal,
-                        'akhir' => $psPanel->akhir,
+                        'laporan_kit_kwh_id' => $panel->laporan_kit_kwh_id,
+                        'panel_number' => $panel->panel_number,
+                        'awal' => $panel->awal,
+                        'akhir' => $panel->akhir,
                         'updated_at' => now()
                     ];
 
-                    // Update in mysql database
+                    // Sync to mysql database using updateOrInsert
                     DB::connection('mysql')->table('laporan_kit_kwh_ps_panels')
-                        ->where('laporan_kit_kwh_id', $psPanel->laporan_kit_kwh_id)
-                        ->where('id', $psPanel->id)
-                        ->update($data);
-
-                    self::$isSyncing = false;
+                        ->updateOrInsert(
+                            [
+                                'laporan_kit_kwh_id' => $panel->laporan_kit_kwh_id,
+                                'panel_number' => $panel->panel_number
+                            ],
+                            $data
+                        );
                 }
             } catch (\Exception $e) {
-                self::$isSyncing = false;
                 Log::error('Error in LaporanKitKwhPsPanel sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'id' => $panel->id
                 ]);
+            } finally {
+                self::$isSyncing = false;
             }
         });
 
-        static::deleting(function ($psPanel) {
+        static::deleted(function ($panel) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing) {
+                    Log::info('Skipping sync for LaporanKitKwhPsPanel deleted event - already syncing', [
+                        'id' => $panel->id
+                    ]);
+                    return;
+                }
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -119,18 +145,18 @@ class LaporanKitKwhPsPanel extends Model
                     
                     // Delete from mysql database
                     DB::connection('mysql')->table('laporan_kit_kwh_ps_panels')
-                        ->where('laporan_kit_kwh_id', $psPanel->laporan_kit_kwh_id)
-                        ->where('id', $psPanel->id)
+                        ->where('laporan_kit_kwh_id', $panel->laporan_kit_kwh_id)
+                        ->where('panel_number', $panel->panel_number)
                         ->delete();
-
-                    self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
-                self::$isSyncing = false;
                 Log::error('Error in LaporanKitKwhPsPanel sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'id' => $panel->id
                 ]);
+            } finally {
+                self::$isSyncing = false;
             }
         });
     }

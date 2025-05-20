@@ -38,7 +38,12 @@ class LaporanKitJamOperasi extends Model
 
         static::created(function ($jamOperasi) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing) {
+                    Log::info('Skipping sync for LaporanKitJamOperasi created event - already syncing', [
+                        'id' => $jamOperasi->id
+                    ]);
+                    return;
+                }
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -47,7 +52,6 @@ class LaporanKitJamOperasi extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $jamOperasi->id,
                         'laporan_kit_id' => $jamOperasi->laporan_kit_id,
                         'machine_id' => $jamOperasi->machine_id,
                         'ops' => $jamOperasi->ops,
@@ -59,23 +63,35 @@ class LaporanKitJamOperasi extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
-                    DB::connection('mysql')->table('laporan_kit_jam_operasi')->insert($data);
-
-                    self::$isSyncing = false;
+                    // Sync to mysql database using updateOrInsert
+                    DB::connection('mysql')->table('laporan_kit_jam_operasi')
+                        ->updateOrInsert(
+                            [
+                                'laporan_kit_id' => $jamOperasi->laporan_kit_id,
+                                'machine_id' => $jamOperasi->machine_id
+                            ],
+                            $data
+                        );
                 }
             } catch (\Exception $e) {
-                self::$isSyncing = false;
                 Log::error('Error in LaporanKitJamOperasi sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'id' => $jamOperasi->id
                 ]);
+            } finally {
+                self::$isSyncing = false;
             }
         });
 
         static::updated(function ($jamOperasi) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing) {
+                    Log::info('Skipping sync for LaporanKitJamOperasi updated event - already syncing', [
+                        'id' => $jamOperasi->id
+                    ]);
+                    return;
+                }
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -84,6 +100,7 @@ class LaporanKitJamOperasi extends Model
                     self::$isSyncing = true;
                     
                     $data = [
+                        'laporan_kit_id' => $jamOperasi->laporan_kit_id,
                         'machine_id' => $jamOperasi->machine_id,
                         'ops' => $jamOperasi->ops,
                         'har' => $jamOperasi->har,
@@ -93,26 +110,35 @@ class LaporanKitJamOperasi extends Model
                         'updated_at' => now()
                     ];
 
-                    // Update in mysql database
+                    // Sync to mysql database using updateOrInsert
                     DB::connection('mysql')->table('laporan_kit_jam_operasi')
-                        ->where('laporan_kit_id', $jamOperasi->laporan_kit_id)
-                        ->where('id', $jamOperasi->id)
-                        ->update($data);
-
-                    self::$isSyncing = false;
+                        ->updateOrInsert(
+                            [
+                                'laporan_kit_id' => $jamOperasi->laporan_kit_id,
+                                'machine_id' => $jamOperasi->machine_id
+                            ],
+                            $data
+                        );
                 }
             } catch (\Exception $e) {
-                self::$isSyncing = false;
                 Log::error('Error in LaporanKitJamOperasi sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'id' => $jamOperasi->id
                 ]);
+            } finally {
+                self::$isSyncing = false;
             }
         });
 
-        static::deleting(function ($jamOperasi) {
+        static::deleted(function ($jamOperasi) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing) {
+                    Log::info('Skipping sync for LaporanKitJamOperasi deleted event - already syncing', [
+                        'id' => $jamOperasi->id
+                    ]);
+                    return;
+                }
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -123,17 +149,17 @@ class LaporanKitJamOperasi extends Model
                     // Delete from mysql database
                     DB::connection('mysql')->table('laporan_kit_jam_operasi')
                         ->where('laporan_kit_id', $jamOperasi->laporan_kit_id)
-                        ->where('id', $jamOperasi->id)
+                        ->where('machine_id', $jamOperasi->machine_id)
                         ->delete();
-
-                    self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
-                self::$isSyncing = false;
                 Log::error('Error in LaporanKitJamOperasi sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'id' => $jamOperasi->id
                 ]);
+            } finally {
+                self::$isSyncing = false;
             }
         });
     }

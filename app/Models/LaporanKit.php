@@ -59,18 +59,18 @@ class LaporanKit extends Model
 
         static::created(function ($laporanKit) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing) {
+                    Log::info('Skipping sync for LaporanKit created event - already syncing', [
+                        'id' => $laporanKit->id
+                    ]);
+                    return;
+                }
 
                 $currentSession = session('unit', 'mysql');
                 
                 // Only sync if not in mysql session
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
-                    
-                    // Validate required relationships
-                    if (!$laporanKit->gangguan || !$laporanKit->bbm || !$laporanKit->kwh || !$laporanKit->pelumas) {
-                        throw new \Exception('Required relationships are missing');
-                    }
                     
                     // Load all relationships before dispatching event
                     $laporanKit->load([
@@ -90,31 +90,27 @@ class LaporanKit extends Model
                         'bebanTertinggi'
                     ]);
                     
-                    // Validate data before syncing
-                    foreach ($laporanKit->gangguan as $gangguan) {
-                        if (!$gangguan->machine_id || !isset($gangguan->mekanik) || !isset($gangguan->elektrik)) {
-                            throw new \Exception('Invalid gangguan data: missing required fields');
-                        }
-                    }
-                    
                     event(new LaporanKitUpdated($laporanKit, 'create'));
-
-                    self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
-                self::$isSyncing = false;
                 Log::error('Error in LaporanKit sync:', [
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString(),
                     'laporan_kit_id' => $laporanKit->id
                 ]);
-                throw $e;
+            } finally {
+                self::$isSyncing = false;
             }
         });
 
         static::updated(function ($laporanKit) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing) {
+                    Log::info('Skipping sync for LaporanKit updated event - already syncing', [
+                        'id' => $laporanKit->id
+                    ]);
+                    return;
+                }
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -141,21 +137,26 @@ class LaporanKit extends Model
                     ]);
                     
                     event(new LaporanKitUpdated($laporanKit, 'update'));
-
-                    self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
-                self::$isSyncing = false;
                 Log::error('Error in LaporanKit sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'laporan_kit_id' => $laporanKit->id
                 ]);
+            } finally {
+                self::$isSyncing = false;
             }
         });
 
         static::deleting(function ($laporanKit) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing) {
+                    Log::info('Skipping sync for LaporanKit deleting event - already syncing', [
+                        'id' => $laporanKit->id
+                    ]);
+                    return;
+                }
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -182,15 +183,15 @@ class LaporanKit extends Model
                     ]);
                     
                     event(new LaporanKitUpdated($laporanKit, 'delete'));
-
-                    self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
-                self::$isSyncing = false;
                 Log::error('Error in LaporanKit sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'laporan_kit_id' => $laporanKit->id
                 ]);
+            } finally {
+                self::$isSyncing = false;
             }
         });
     }

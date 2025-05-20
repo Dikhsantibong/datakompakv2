@@ -154,7 +154,7 @@
                             <i class="fas fa-calendar-day w-5 h-5"></i>
                             <span class="ml-3 text-sm">Ikhtisar Harian</span>
                         </a>
-                        <a href="{{ route('admin.machine-status.view') }}" 
+                        <a href="{{ route('admin.kesiapan-kit.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.machine-status.*') || request()->routeIs('admin.pembangkit.*') || request()->routeIs('admin.kesiapan-kit.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                             <i class="fas fa-tools w-5 h-5"></i>
                             <span class="ml-3 text-sm">Kesiapan KIT</span>

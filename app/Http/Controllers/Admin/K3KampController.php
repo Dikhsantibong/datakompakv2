@@ -98,7 +98,7 @@ class K3KampController extends Controller
                     $item = $report->items()->create([
                         'item_type' => 'k3_keamanan',
                         'item_name' => $itemName,
-                        'status' => $status, // Will always have a value
+                        'status' => $status,
                         'kondisi' => $kondisi,
                         'keterangan' => $request->input("keterangan_{$index}")
                     ]);

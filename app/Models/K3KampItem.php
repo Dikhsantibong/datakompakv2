@@ -53,7 +53,6 @@ class K3KampItem extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $item->id,
                         'report_id' => $item->report_id,
                         'item_type' => $item->item_type,
                         'item_name' => $item->item_name,

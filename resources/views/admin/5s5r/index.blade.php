@@ -248,14 +248,6 @@
                 <form action="{{ route('admin.5s5r.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <!-- Form Header -->
-                    <div class="mb-6">
-                        <div class="w-full md:w-1/3">
-                            <label class="block text-sm font-medium text-gray-700">Tanggal</label>
-                            <input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        </div>
-                    </div>
-
                     <!-- Main Content -->
                     <div class="space-y-6">
                         <!-- Tabel Pemeriksaan 5S5R -->

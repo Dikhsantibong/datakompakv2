@@ -153,41 +153,41 @@
                                     <tr>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Oleh</th>
+                                        {{-- <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Oleh</th> --}}
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @forelse($items as $index => $item)
+                                    @forelse($batches as $index => $batch)
                                     <tr class="hover:bg-gray-50 transition-colors">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
                                             {{ $index + 1 }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
-                                            {{ $item['date'] }}
+                                            {{ $batch->created_at->format('Y-m-d') }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
-                                            {{ $item['created_by'] }}
-                                        </td>
+                                        {{-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
+                                            {{ $batch->created_by }}
+                                        </td> --}}
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
                                             <span class="text-xs font-medium text-gray-500 rounded-full bg-blue-100 px-2 py-1">
-                                                {{ $item['unit_origin'] }}
+                                                {{ $batch->sync_unit_origin }}
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
                                             <div class="flex items-center justify-center space-x-2">
-                                                <a href="{{ route('admin.5s5r.show', $item['id']) }}"
+                                                <a href="{{ route('admin.5s5r.show', $batch->id) }}"
                                                     class="text-blue-600 hover:text-blue-900"
                                                     title="Lihat Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('admin.5s5r.edit', $item['id']) }}"
+                                                <a href="{{ route('admin.5s5r.edit', $batch->id) }}"
                                                     class="text-yellow-600 hover:text-yellow-900"
                                                     title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form action="{{ route('admin.5s5r.destroy', $item['id']) }}" 
+                                                <form action="{{ route('admin.5s5r.destroy', $batch->id) }}" 
                                                       method="POST" 
                                                       class="inline-block"
                                                       onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
@@ -199,12 +199,12 @@
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
-                                                <a href="{{ route('admin.5s5r.export.pdf', $item['id']) }}"
+                                                <a href="{{ route('admin.5s5r.export.pdf', $batch->id) }}"
                                                     class="text-red-600 hover:text-red-900"
                                                     title="Export PDF">
                                                     <i class="fas fa-file-pdf"></i>
                                                 </a>
-                                                <a href="{{ route('admin.5s5r.export.excel', $item['id']) }}"
+                                                <a href="{{ route('admin.5s5r.export.excel', $batch->id) }}"
                                                     class="text-green-600 hover:text-green-900"
                                                     title="Export Excel">
                                                     <i class="fas fa-file-excel"></i>

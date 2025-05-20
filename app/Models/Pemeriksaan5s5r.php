@@ -29,7 +29,8 @@ class Pemeriksaan5s5r extends Model
         'lainnya',
         'kondisi_akhir',
         'eviden',
-        'sync_unit_origin'
+        'group_id',
+        'batch_id',
     ];
 
     protected $casts = [
@@ -38,7 +39,6 @@ class Pemeriksaan5s5r extends Model
         'membuang_sampah' => 'boolean',
         'mengecat' => 'boolean',
         'lainnya' => 'boolean',
-        'sync_unit_origin' => 'string'
     ];
 
     public function getConnectionName()
@@ -100,5 +100,10 @@ class Pemeriksaan5s5r extends Model
                 ]);
             }
         });
+    }
+
+    public function batch()
+    {
+        return $this->belongsTo(FiveS5rBatch::class, 'batch_id');
     }
 } 

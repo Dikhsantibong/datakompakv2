@@ -22,7 +22,9 @@ class ProgramKerja5r extends Model
         'progress',
         'kondisi_akhir',
         'catatan',
-        'eviden'
+        'eviden',
+        'group_id',
+        'batch_id',
     ];
 
     protected $casts = [
@@ -88,5 +90,10 @@ class ProgramKerja5r extends Model
                 ]);
             }
         });
+    }
+
+    public function batch()
+    {
+        return $this->belongsTo(FiveS5rBatch::class, 'batch_id');
     }
 } 

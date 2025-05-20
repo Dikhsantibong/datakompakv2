@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\FiveS5RExport;
+use Illuminate\Support\Str;
+use App\Models\FiveS5rBatch;
+use Illuminate\Support\Facades\Auth;
 
 class FiveS5RController extends Controller
 {
@@ -48,6 +51,12 @@ class FiveS5RController extends Controller
         
         $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';
 
+        $batch = FiveS5rBatch::create([
+            'created_by' => Auth::id(),
+            'sync_unit_origin' => $unitName,
+        ]);
+        $batchId = $batch->id;
+
         // Handle Pemeriksaan 5S5R data
         foreach(['Ringkas', 'Rapi', 'Resik', 'Rawat', 'Rajin'] as $kategori) {
             $evidenPath = null;
@@ -72,7 +81,7 @@ class FiveS5RController extends Controller
                 'lainnya' => $request->has("lainnya_$kategori"),
                 'kondisi_akhir' => $request->input("kondisi_akhir_pemeriksaan_$kategori"),
                 'eviden' => $evidenPath,
-                'sync_unit_origin' => $unitName
+                'batch_id' => $batchId
             ]);
         }
 
@@ -93,7 +102,8 @@ class FiveS5RController extends Controller
                 'progress' => $request->input("progress_$i"),
                 'kondisi_akhir' => $request->input("kondisi_akhir_program_$i"),
                 'catatan' => $request->input("catatan_$i"),
-                'eviden' => $evidenPath
+                'eviden' => $evidenPath,
+                'batch_id' => $batchId
             ]);
         }
 
@@ -115,88 +125,43 @@ class FiveS5RController extends Controller
 
     public function show($id)
     {
-        // Get the date of the selected record
-        $mainRecord = Pemeriksaan5s5r::findOrFail($id);
-        $date = date('Y-m-d', strtotime($mainRecord->created_at));
-        
-        // Get all records for that date
-        $pemeriksaan = Pemeriksaan5s5r::whereDate('created_at', $date)->get();
-        $programKerja = ProgramKerja5r::whereDate('created_at', $date)->get();
-
+        $batch = FiveS5rBatch::findOrFail($id);
+        $pemeriksaan = $batch->pemeriksaan;
+        $programKerja = $batch->programKerja;
+        $sync_unit_origin = $batch->sync_unit_origin;
         if ($pemeriksaan->isEmpty()) {
             return redirect()->route('admin.5s5r.list')->with('error', 'Data tidak ditemukan');
         }
-
-        return view('admin.5s5r.show', compact('pemeriksaan', 'programKerja'));
+        return view('admin.5s5r.show', compact('pemeriksaan', 'programKerja', 'sync_unit_origin'));
     }
 
     public function list()
     {
-        $query = DB::table('tabel_pemeriksaan_5s5r as p1')
-            ->select('p1.id', 'p1.created_at', 'p1.sync_unit_origin', DB::raw('DATE(p1.created_at) as date'))
-            ->whereIn('p1.id', function($query) {
-                $query->select(DB::raw('MAX(p2.id)'))
-                    ->from('tabel_pemeriksaan_5s5r as p2')
-                    ->groupBy(DB::raw('DATE(p2.created_at)'));
-            });
-
-        // Apply date filters if provided
-        if (request('start_date')) {
-            $query->whereDate('p1.created_at', '>=', request('start_date'));
-        }
-        if (request('end_date')) {
-            $query->whereDate('p1.created_at', '<=', request('end_date'));
-        }
-
-        // Apply unit origin filter
+        $query = FiveS5rBatch::query();
         if (request('unit_origin')) {
-            $query->where('p1.sync_unit_origin', request('unit_origin'));
+            $query->where('sync_unit_origin', request('unit_origin'));
         }
-
-        $items = $query->orderBy('p1.created_at', 'desc')
-            ->get()
-            ->map(function($item) {
-                return [
-                    'id' => $item->id,
-                    'date' => date('Y-m-d', strtotime($item->created_at)),
-                    'created_by' => 'Admin',
-                    'status' => 'Completed',
-                    'unit_origin' => $item->sync_unit_origin ?? 'UP Kendari'
-                ];
-            });
-
-        // Get unique unit origins for filter dropdown
-        $unitOrigins = DB::table('tabel_pemeriksaan_5s5r')
-            ->select('sync_unit_origin')
-            ->whereNotNull('sync_unit_origin')
-            ->distinct()
-            ->pluck('sync_unit_origin')
-            ->toArray();
-
-        return view('admin.5s5r.list', compact('items', 'unitOrigins'));
+        $batches = $query->orderBy('created_at', 'desc')->get();
+        $unitOrigins = FiveS5rBatch::select('sync_unit_origin')->distinct()->pluck('sync_unit_origin')->toArray();
+        return view('admin.5s5r.list', compact('batches', 'unitOrigins'));
     }
 
     public function edit($id)
     {
-        // Get the date of the selected record
-        $mainRecord = Pemeriksaan5s5r::findOrFail($id);
-        $date = date('Y-m-d', strtotime($mainRecord->created_at));
-        
-        // Get all records for that date
-        $pemeriksaan = Pemeriksaan5s5r::whereDate('created_at', $date)->get();
-        $programKerja = ProgramKerja5r::whereDate('created_at', $date)->get();
-
+        $batch = FiveS5rBatch::findOrFail($id);
+        $pemeriksaan = $batch->pemeriksaan;
+        $programKerja = $batch->programKerja;
         if ($pemeriksaan->isEmpty()) {
             return redirect()->route('admin.5s5r.list')->with('error', 'Data tidak ditemukan');
         }
-
         return view('admin.5s5r.edit', compact('pemeriksaan', 'programKerja'));
     }
 
     public function update(Request $request, $id)
     {
-        $mainRecord = Pemeriksaan5s5r::findOrFail($id);
-        $date = date('Y-m-d', strtotime($mainRecord->created_at));
+        $batch = FiveS5rBatch::findOrFail($id);
+        $pemeriksaan = $batch->pemeriksaan;
+        $programKerja = $batch->programKerja;
 
         // Get unit source from current session
         $unitSource = session('unit', 'mysql');
@@ -229,7 +194,7 @@ class FiveS5RController extends Controller
         try {
             // Update Pemeriksaan 5S5R data
             foreach(['Ringkas', 'Rapi', 'Resik', 'Rawat', 'Rajin'] as $kategori) {
-                $record = Pemeriksaan5s5r::whereDate('created_at', $date)
+                $record = Pemeriksaan5s5r::where('batch_id', $batch->id)
                     ->where('kategori', $kategori)
                     ->first();
 
@@ -266,7 +231,7 @@ class FiveS5RController extends Controller
 
             // Update Program Kerja 5R data
             for($i = 1; $i <= 4; $i++) {
-                $record = ProgramKerja5r::whereDate('created_at', $date)
+                $record = ProgramKerja5r::where('batch_id', $batch->id)
                     ->where('program_kerja', "Shift $i")
                     ->first();
 
@@ -305,22 +270,18 @@ class FiveS5RController extends Controller
 
     public function exportPdf($id)
     {
-        $mainRecord = Pemeriksaan5s5r::findOrFail($id);
-        $date = date('Y-m-d', strtotime($mainRecord->created_at));
-        
-        $pemeriksaan = Pemeriksaan5s5r::whereDate('created_at', $date)->get();
-        $programKerja = ProgramKerja5r::whereDate('created_at', $date)->get();
+        $batch = FiveS5rBatch::findOrFail($id);
+        $pemeriksaan = $batch->pemeriksaan;
+        $programKerja = $batch->programKerja;
 
         $pdf = PDF::loadView('admin.5s5r.export.pdf', compact('pemeriksaan', 'programKerja'));
         
-        return $pdf->download('5s5r-report-' . $date . '.pdf');
+        return $pdf->download('5s5r-report-' . $id . '.pdf');
     }
 
     public function exportExcel($id)
     {
-        $mainRecord = Pemeriksaan5s5r::findOrFail($id);
-        $date = date('Y-m-d', strtotime($mainRecord->created_at));
-        
-        return Excel::download(new FiveS5RExport($id), '5s5r-report-' . $date . '.xlsx');
+        $batch = FiveS5rBatch::findOrFail($id);
+        return Excel::download(new FiveS5RExport($id), '5s5r-report-' . $id . '.xlsx');
     }
 } 

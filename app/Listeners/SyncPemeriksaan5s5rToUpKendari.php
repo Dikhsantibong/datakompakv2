@@ -36,7 +36,8 @@ class SyncPemeriksaan5s5rToUpKendari
                     'lainnya' => $event->pemeriksaan->lainnya,
                     'kondisi_akhir' => $event->pemeriksaan->kondisi_akhir,
                     'eviden' => $event->pemeriksaan->eviden,
-                    'sync_unit_origin' => $event->pemeriksaan->sync_unit_origin,
+                    'group_id' => $event->pemeriksaan->group_id,
+                    'batch_id' => $event->pemeriksaan->batch_id,
                     'updated_at' => now()
                 ];
 
@@ -121,7 +122,8 @@ class SyncPemeriksaan5s5rToUpKendari
                     'lainnya' => $event->pemeriksaan->lainnya,
                     'kondisi_akhir' => $event->pemeriksaan->kondisi_akhir,
                     'eviden' => $event->pemeriksaan->eviden,
-                    'sync_unit_origin' => $event->pemeriksaan->sync_unit_origin,
+                    'group_id' => $event->pemeriksaan->group_id,
+                    'batch_id' => $event->pemeriksaan->batch_id,
                     'updated_at' => now()
                 ];
 

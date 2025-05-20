@@ -229,6 +229,10 @@
                             Cetak
                         </button>
                     </div>
+
+                    <div class="mb-2">
+                        <span class="font-semibold">Unit Asal:</span> {{ $sync_unit_origin }}
+                    </div>
                 </div>
             </div>
         </main>

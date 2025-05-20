@@ -30,6 +30,8 @@ class SyncProgramKerja5rToUpKendari
                     'kondisi_akhir' => $event->programKerja->kondisi_akhir,
                     'catatan' => $event->programKerja->catatan,
                     'eviden' => $event->programKerja->eviden,
+                    'group_id' => $event->programKerja->group_id,
+                    'batch_id' => $event->programKerja->batch_id,
                     'updated_at' => now()
                 ];
 
@@ -108,6 +110,8 @@ class SyncProgramKerja5rToUpKendari
                     'kondisi_akhir' => $event->programKerja->kondisi_akhir,
                     'catatan' => $event->programKerja->catatan,
                     'eviden' => $event->programKerja->eviden,
+                    'group_id' => $event->programKerja->group_id,
+                    'batch_id' => $event->programKerja->batch_id,
                     'updated_at' => now()
                 ];
 

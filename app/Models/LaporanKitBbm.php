@@ -47,7 +47,7 @@ class LaporanKitBbm extends Model
 
         static::created(function ($bbm) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 

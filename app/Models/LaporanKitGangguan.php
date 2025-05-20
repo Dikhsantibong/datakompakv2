@@ -36,7 +36,7 @@ class LaporanKitGangguan extends Model
 
         static::created(function ($gangguan) {
             try {
-                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
+                if (self::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 

@@ -57,7 +57,7 @@ class LaporanKitKwh extends Model
 
         static::created(function ($kwh) {
             try {
-                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
+                if (self::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 

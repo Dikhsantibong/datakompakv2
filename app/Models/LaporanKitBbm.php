@@ -56,7 +56,6 @@ class LaporanKitBbm extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $bbm->id,
                         'laporan_kit_id' => $bbm->laporan_kit_id,
                         'total_stok' => $bbm->total_stok,
                         'service_total_stok' => $bbm->service_total_stok,
@@ -67,7 +66,7 @@ class LaporanKitBbm extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Sync to mysql database without id
                     DB::connection('mysql')->table('laporan_kit_bbm')->insert($data);
 
                     self::$isSyncing = false;

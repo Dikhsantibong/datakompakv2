@@ -48,7 +48,7 @@ class LaporanKitPelumas extends Model
 
         static::created(function ($pelumas) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -57,7 +57,6 @@ class LaporanKitPelumas extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $pelumas->id,
                         'laporan_kit_id' => $pelumas->laporan_kit_id,
                         'tank_total_stok' => $pelumas->tank_total_stok,
                         'drum_total_stok' => $pelumas->drum_total_stok,
@@ -69,7 +68,7 @@ class LaporanKitPelumas extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Sync to mysql database without id
                     DB::connection('mysql')->table('laporan_kit_pelumas')->insert($data);
 
                     self::$isSyncing = false;

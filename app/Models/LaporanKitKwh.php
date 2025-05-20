@@ -57,7 +57,7 @@ class LaporanKitKwh extends Model
 
         static::created(function ($kwh) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -66,7 +66,6 @@ class LaporanKitKwh extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $kwh->id,
                         'laporan_kit_id' => $kwh->laporan_kit_id,
                         'prod_panel1_awal' => $kwh->prod_panel1_awal,
                         'prod_panel1_akhir' => $kwh->prod_panel1_akhir,
@@ -82,7 +81,7 @@ class LaporanKitKwh extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Sync to mysql database without id
                     DB::connection('mysql')->table('laporan_kit_kwh')->insert($data);
 
                     self::$isSyncing = false;

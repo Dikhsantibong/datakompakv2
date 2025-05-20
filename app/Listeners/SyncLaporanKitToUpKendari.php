@@ -56,47 +56,49 @@ class SyncLaporanKitToUpKendari
 
                     // Sync BBM and related data
                     foreach ($event->laporanKit->bbm as $bbm) {
-                        // Sync Storage Tanks
+                        // Insert BBM induk tanpa ID
+                        $bbmData = [
+                            'laporan_kit_id' => $bbm->laporan_kit_id,
+                            'total_stok' => $bbm->total_stok,
+                            'service_total_stok' => $bbm->service_total_stok,
+                            'total_stok_tangki' => $bbm->total_stok_tangki,
+                            'terima_bbm' => $bbm->terima_bbm,
+                            'total_pakai' => $bbm->total_pakai,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+                        $bbmId = $upKendariDB->table('laporan_kit_bbm')->insertGetId($bbmData);
+
+                        // Sync Storage Tanks tanpa ID
                         foreach ($bbm->storageTanks as $tank) {
                             $tankData = [
-                                'id' => $tank->id,
-                                'laporan_kit_bbm_id' => $tank->laporan_kit_bbm_id,
+                                'laporan_kit_bbm_id' => $bbmId,
                                 'tank_number' => $tank->tank_number,
                                 'cm' => $tank->cm,
                                 'liter' => $tank->liter,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
-                            $upKendariDB->table('laporan_kit_bbm_storage_tanks')
-                                ->updateOrInsert(
-                                    ['id' => $tank->id],
-                                    $tankData
-                                );
+                            $upKendariDB->table('laporan_kit_bbm_storage_tanks')->insert($tankData);
                         }
 
-                        // Sync Service Tanks
+                        // Sync Service Tanks tanpa ID
                         foreach ($bbm->serviceTanks as $tank) {
                             $tankData = [
-                                'id' => $tank->id,
-                                'laporan_kit_bbm_id' => $tank->laporan_kit_bbm_id,
+                                'laporan_kit_bbm_id' => $bbmId,
                                 'tank_number' => $tank->tank_number,
                                 'liter' => $tank->liter,
                                 'percentage' => $tank->percentage,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
-                            $upKendariDB->table('laporan_kit_bbm_service_tanks')
-                                ->updateOrInsert(
-                                    ['id' => $tank->id],
-                                    $tankData
-                                );
+                            $upKendariDB->table('laporan_kit_bbm_service_tanks')->insert($tankData);
                         }
 
-                        // Sync Flowmeters
+                        // Sync Flowmeters tanpa ID
                         foreach ($bbm->flowmeters as $flowmeter) {
                             $flowmeterData = [
-                                'id' => $flowmeter->id,
-                                'laporan_kit_bbm_id' => $flowmeter->laporan_kit_bbm_id,
+                                'laporan_kit_bbm_id' => $bbmId,
                                 'flowmeter_number' => $flowmeter->flowmeter_number,
                                 'awal' => $flowmeter->awal,
                                 'akhir' => $flowmeter->akhir,
@@ -104,11 +106,7 @@ class SyncLaporanKitToUpKendari
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
-                            $upKendariDB->table('laporan_kit_bbm_flowmeters')
-                                ->updateOrInsert(
-                                    ['id' => $flowmeter->id],
-                                    $flowmeterData
-                                );
+                            $upKendariDB->table('laporan_kit_bbm_flowmeters')->insert($flowmeterData);
                         }
                     }
 

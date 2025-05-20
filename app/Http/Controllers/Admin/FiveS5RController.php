@@ -284,4 +284,20 @@ class FiveS5RController extends Controller
         $batch = FiveS5rBatch::findOrFail($id);
         return Excel::download(new FiveS5RExport($id), '5s5r-report-' . $id . '.xlsx');
     }
+
+    public function destroy($id)
+    {
+        try {
+            $batch = \App\Models\FiveS5rBatch::findOrFail($id);
+            $batch->pemeriksaan()->delete();
+            $batch->programKerja()->delete();
+            $batch->delete();
+
+            return redirect()->route('admin.5s5r.list')
+                ->with('success', 'Data 5S5R berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Gagal menghapus data 5S5R: ' . $e->getMessage());
+        }
+    }
 } 

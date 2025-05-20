@@ -12,8 +12,8 @@ class SyncLaporanKitToUpKendari
     {
         try {
             $upKendariDB = DB::connection('mysql');
-
             \App\Models\LaporanKit::$isSyncing = true;
+
             switch ($event->action) {
                 case 'create':
                 case 'update':
@@ -27,17 +27,18 @@ class SyncLaporanKitToUpKendari
                     ];
 
                     if ($event->action === 'create') {
-                        $upKendariDB->table('laporan_kits')->insert($data);
+                        $laporanKitId = $upKendariDB->table('laporan_kits')->insertGetId($data);
                     } else {
+                        $laporanKitId = $event->laporanKit->id;
                         $upKendariDB->table('laporan_kits')
-                            ->where('id', $event->laporanKit->id)
+                            ->where('id', $laporanKitId)
                             ->update($data);
                     }
 
                     // Sync BebanTertinggi
                     foreach ($event->laporanKit->bebanTertinggi as $beban) {
                         $bebanData = [
-                            'laporan_kit_id' => $beban->laporan_kit_id,
+                            'laporan_kit_id' => $laporanKitId,
                             'machine_id' => $beban->machine_id,
                             'siang' => $beban->siang,
                             'malam' => $beban->malam,
@@ -49,7 +50,7 @@ class SyncLaporanKitToUpKendari
                             $upKendariDB->table('laporan_kit_beban_tertinggi')->insert($bebanData);
                         } else {
                             $upKendariDB->table('laporan_kit_beban_tertinggi')
-                                ->where('laporan_kit_id', $beban->laporan_kit_id)
+                                ->where('laporan_kit_id', $laporanKitId)
                                 ->where('machine_id', $beban->machine_id)
                                 ->update($bebanData);
                         }
@@ -57,9 +58,9 @@ class SyncLaporanKitToUpKendari
 
                     // Sync BBM and related data
                     foreach ($event->laporanKit->bbm as $bbm) {
-                        // Insert BBM induk tanpa ID
+                        // Insert BBM induk
                         $bbmData = [
-                            'laporan_kit_id' => $bbm->laporan_kit_id,
+                            'laporan_kit_id' => $laporanKitId,
                             'total_stok' => $bbm->total_stok,
                             'service_total_stok' => $bbm->service_total_stok,
                             'total_stok_tangki' => $bbm->total_stok_tangki,
@@ -68,9 +69,17 @@ class SyncLaporanKitToUpKendari
                             'created_at' => now(),
                             'updated_at' => now()
                         ];
-                        $bbmId = $upKendariDB->table('laporan_kit_bbm')->insertGetId($bbmData);
 
-                        // Sync Storage Tanks tanpa ID
+                        if ($event->action === 'create') {
+                            $bbmId = $upKendariDB->table('laporan_kit_bbm')->insertGetId($bbmData);
+                        } else {
+                            $bbmId = $bbm->id;
+                            $upKendariDB->table('laporan_kit_bbm')
+                                ->where('id', $bbmId)
+                                ->update($bbmData);
+                        }
+
+                        // Sync Storage Tanks
                         foreach ($bbm->storageTanks as $tank) {
                             $tankData = [
                                 'laporan_kit_bbm_id' => $bbmId,
@@ -80,10 +89,18 @@ class SyncLaporanKitToUpKendari
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
-                            $upKendariDB->table('laporan_kit_bbm_storage_tanks')->insert($tankData);
+
+                            if ($event->action === 'create') {
+                                $upKendariDB->table('laporan_kit_bbm_storage_tanks')->insert($tankData);
+                            } else {
+                                $upKendariDB->table('laporan_kit_bbm_storage_tanks')
+                                    ->where('laporan_kit_bbm_id', $bbmId)
+                                    ->where('tank_number', $tank->tank_number)
+                                    ->update($tankData);
+                            }
                         }
 
-                        // Sync Service Tanks tanpa ID
+                        // Sync Service Tanks
                         foreach ($bbm->serviceTanks as $tank) {
                             $tankData = [
                                 'laporan_kit_bbm_id' => $bbmId,
@@ -93,10 +110,18 @@ class SyncLaporanKitToUpKendari
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
-                            $upKendariDB->table('laporan_kit_bbm_service_tanks')->insert($tankData);
+
+                            if ($event->action === 'create') {
+                                $upKendariDB->table('laporan_kit_bbm_service_tanks')->insert($tankData);
+                            } else {
+                                $upKendariDB->table('laporan_kit_bbm_service_tanks')
+                                    ->where('laporan_kit_bbm_id', $bbmId)
+                                    ->where('tank_number', $tank->tank_number)
+                                    ->update($tankData);
+                            }
                         }
 
-                        // Sync Flowmeters tanpa ID
+                        // Sync Flowmeters
                         foreach ($bbm->flowmeters as $flowmeter) {
                             $flowmeterData = [
                                 'laporan_kit_bbm_id' => $bbmId,
@@ -107,120 +132,172 @@ class SyncLaporanKitToUpKendari
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
-                            $upKendariDB->table('laporan_kit_bbm_flowmeters')->insert($flowmeterData);
+
+                            if ($event->action === 'create') {
+                                $upKendariDB->table('laporan_kit_bbm_flowmeters')->insert($flowmeterData);
+                            } else {
+                                $upKendariDB->table('laporan_kit_bbm_flowmeters')
+                                    ->where('laporan_kit_bbm_id', $bbmId)
+                                    ->where('flowmeter_number', $flowmeter->flowmeter_number)
+                                    ->update($flowmeterData);
+                            }
                         }
                     }
 
                     // Sync KWH and related data
                     foreach ($event->laporanKit->kwh as $kwh) {
+                        $kwhData = [
+                            'laporan_kit_id' => $laporanKitId,
+                            'prod_panel1_awal' => $kwh->prod_panel1_awal,
+                            'prod_panel1_akhir' => $kwh->prod_panel1_akhir,
+                            'prod_panel2_awal' => $kwh->prod_panel2_awal,
+                            'prod_panel2_akhir' => $kwh->prod_panel2_akhir,
+                            'prod_total' => $kwh->prod_total,
+                            'ps_panel1_awal' => $kwh->ps_panel1_awal,
+                            'ps_panel1_akhir' => $kwh->ps_panel1_akhir,
+                            'ps_panel2_awal' => $kwh->ps_panel2_awal,
+                            'ps_panel2_akhir' => $kwh->ps_panel2_akhir,
+                            'ps_total' => $kwh->ps_total,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+
+                        if ($event->action === 'create') {
+                            $kwhId = $upKendariDB->table('laporan_kit_kwh')->insertGetId($kwhData);
+                        } else {
+                            $kwhId = $kwh->id;
+                            $upKendariDB->table('laporan_kit_kwh')
+                                ->where('id', $kwhId)
+                                ->update($kwhData);
+                        }
+
                         // Sync Production Panels
                         foreach ($kwh->productionPanels as $panel) {
                             $panelData = [
-                                'id' => $panel->id,
-                                'laporan_kit_kwh_id' => $panel->laporan_kit_kwh_id,
+                                'laporan_kit_kwh_id' => $kwhId,
                                 'panel_number' => $panel->panel_number,
                                 'awal' => $panel->awal,
                                 'akhir' => $panel->akhir,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
-                            $upKendariDB->table('laporan_kit_kwh_production_panels')
-                                ->updateOrInsert(
-                                    ['id' => $panel->id],
-                                    $panelData
-                                );
+
+                            if ($event->action === 'create') {
+                                $upKendariDB->table('laporan_kit_kwh_production_panels')->insert($panelData);
+                            } else {
+                                $upKendariDB->table('laporan_kit_kwh_production_panels')
+                                    ->where('laporan_kit_kwh_id', $kwhId)
+                                    ->where('panel_number', $panel->panel_number)
+                                    ->update($panelData);
+                            }
                         }
 
                         // Sync PS Panels
                         foreach ($kwh->psPanels as $panel) {
                             $panelData = [
-                                'id' => $panel->id,
-                                'laporan_kit_kwh_id' => $panel->laporan_kit_kwh_id,
+                                'laporan_kit_kwh_id' => $kwhId,
                                 'panel_number' => $panel->panel_number,
                                 'awal' => $panel->awal,
                                 'akhir' => $panel->akhir,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
-                            $upKendariDB->table('laporan_kit_kwh_ps_panels')
-                                ->updateOrInsert(
-                                    ['id' => $panel->id],
-                                    $panelData
-                                );
+
+                            if ($event->action === 'create') {
+                                $upKendariDB->table('laporan_kit_kwh_ps_panels')->insert($panelData);
+                            } else {
+                                $upKendariDB->table('laporan_kit_kwh_ps_panels')
+                                    ->where('laporan_kit_kwh_id', $kwhId)
+                                    ->where('panel_number', $panel->panel_number)
+                                    ->update($panelData);
+                            }
                         }
                     }
 
                     // Sync Pelumas and related data
                     foreach ($event->laporanKit->pelumas as $pelumas) {
+                        $pelumasData = [
+                            'laporan_kit_id' => $laporanKitId,
+                            'tank_total_stok' => $pelumas->tank_total_stok,
+                            'drum_total_stok' => $pelumas->drum_total_stok,
+                            'total_stok_tangki' => $pelumas->total_stok_tangki,
+                            'terima_pelumas' => $pelumas->terima_pelumas,
+                            'total_pakai' => $pelumas->total_pakai,
+                            'jenis' => $pelumas->jenis,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+
+                        if ($event->action === 'create') {
+                            $pelumasId = $upKendariDB->table('laporan_kit_pelumas')->insertGetId($pelumasData);
+                        } else {
+                            $pelumasId = $pelumas->id;
+                            $upKendariDB->table('laporan_kit_pelumas')
+                                ->where('id', $pelumasId)
+                                ->update($pelumasData);
+                        }
+
                         // Sync Storage Tanks
                         foreach ($pelumas->storageTanks as $tank) {
                             $tankData = [
-                                'id' => $tank->id,
-                                'laporan_kit_pelumas_id' => $tank->laporan_kit_pelumas_id,
+                                'laporan_kit_pelumas_id' => $pelumasId,
                                 'tank_number' => $tank->tank_number,
                                 'cm' => $tank->cm,
                                 'liter' => $tank->liter,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
-                            $upKendariDB->table('laporan_kit_pelumas_storage_tanks')
-                                ->updateOrInsert(
-                                    ['id' => $tank->id],
-                                    $tankData
-                                );
+
+                            if ($event->action === 'create') {
+                                $upKendariDB->table('laporan_kit_pelumas_storage_tanks')->insert($tankData);
+                            } else {
+                                $upKendariDB->table('laporan_kit_pelumas_storage_tanks')
+                                    ->where('laporan_kit_pelumas_id', $pelumasId)
+                                    ->where('tank_number', $tank->tank_number)
+                                    ->update($tankData);
+                            }
                         }
 
                         // Sync Drums
                         foreach ($pelumas->drums as $drum) {
                             $drumData = [
-                                'id' => $drum->id,
-                                'laporan_kit_pelumas_id' => $drum->laporan_kit_pelumas_id,
+                                'laporan_kit_pelumas_id' => $pelumasId,
                                 'area_number' => $drum->area_number,
                                 'jumlah' => $drum->jumlah,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
-                            $upKendariDB->table('laporan_kit_pelumas_drums')
-                                ->updateOrInsert(
-                                    ['id' => $drum->id],
-                                    $drumData
-                                );
+
+                            if ($event->action === 'create') {
+                                $upKendariDB->table('laporan_kit_pelumas_drums')->insert($drumData);
+                            } else {
+                                $upKendariDB->table('laporan_kit_pelumas_drums')
+                                    ->where('laporan_kit_pelumas_id', $pelumasId)
+                                    ->where('area_number', $drum->area_number)
+                                    ->update($drumData);
+                            }
                         }
                     }
 
                     // Sync Gangguan
                     foreach ($event->laporanKit->gangguan as $gangguan) {
-                        try {
-                            $gangguanData = [
-                                'id' => $gangguan->id,
-                                'laporan_kit_id' => $gangguan->laporan_kit_id,
-                                'machine_id' => $gangguan->machine_id,
-                                'mekanik' => $gangguan->mekanik,
-                                'elektrik' => $gangguan->elektrik,
-                                'keterangan' => $gangguan->keterangan,
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ];
+                        $gangguanData = [
+                            'laporan_kit_id' => $laporanKitId,
+                            'machine_id' => $gangguan->machine_id,
+                            'mekanik' => $gangguan->mekanik,
+                            'elektrik' => $gangguan->elektrik,
+                            'keterangan' => $gangguan->keterangan,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
 
-                            // Use updateOrInsert to handle duplicate keys
+                        if ($event->action === 'create') {
+                            $upKendariDB->table('laporan_kit_gangguan')->insert($gangguanData);
+                        } else {
                             $upKendariDB->table('laporan_kit_gangguan')
-                                ->updateOrInsert(
-                                    ['id' => $gangguan->id],
-                                    $gangguanData
-                                );
-
-                            Log::info('Successfully synced LaporanKitGangguan', [
-                                'id' => $gangguan->id,
-                                'laporan_kit_id' => $gangguan->laporan_kit_id
-                            ]);
-                        } catch (\Exception $e) {
-                            Log::error('Error syncing LaporanKitGangguan:', [
-                                'id' => $gangguan->id,
-                                'error' => $e->getMessage(),
-                                'trace' => $e->getTraceAsString()
-                            ]);
-                            // Continue with other records even if one fails
-                            continue;
+                                ->where('laporan_kit_id', $laporanKitId)
+                                ->where('machine_id', $gangguan->machine_id)
+                                ->update($gangguanData);
                         }
                     }
 
@@ -248,13 +325,16 @@ class SyncLaporanKitToUpKendari
                         })
                         ->delete();
 
-                    // Delete flowmeters
                     $upKendariDB->table('laporan_kit_bbm_flowmeters')
                         ->whereIn('laporan_kit_bbm_id', function($query) use ($event) {
                             $query->select('id')
                                 ->from('laporan_kit_bbm')
                                 ->where('laporan_kit_id', $event->laporanKit->id);
                         })
+                        ->delete();
+
+                    $upKendariDB->table('laporan_kit_bbm')
+                        ->where('laporan_kit_id', $event->laporanKit->id)
                         ->delete();
 
                     $upKendariDB->table('laporan_kit_kwh_production_panels')
@@ -273,6 +353,10 @@ class SyncLaporanKitToUpKendari
                         })
                         ->delete();
 
+                    $upKendariDB->table('laporan_kit_kwh')
+                        ->where('laporan_kit_id', $event->laporanKit->id)
+                        ->delete();
+
                     $upKendariDB->table('laporan_kit_pelumas_storage_tanks')
                         ->whereIn('laporan_kit_pelumas_id', function($query) use ($event) {
                             $query->select('id')
@@ -289,10 +373,18 @@ class SyncLaporanKitToUpKendari
                         })
                         ->delete();
 
-                    // Finally delete the main record
+                    $upKendariDB->table('laporan_kit_pelumas')
+                        ->where('laporan_kit_id', $event->laporanKit->id)
+                        ->delete();
+
+                    $upKendariDB->table('laporan_kit_gangguan')
+                        ->where('laporan_kit_id', $event->laporanKit->id)
+                        ->delete();
+
                     $upKendariDB->table('laporan_kits')
                         ->where('id', $event->laporanKit->id)
                         ->delete();
+
                     break;
             }
 
@@ -301,16 +393,13 @@ class SyncLaporanKitToUpKendari
                 'id' => $event->laporanKit->id
             ]);
 
-            \App\Models\LaporanKit::$isSyncing = false;
-
         } catch (\Exception $e) {
-            \App\Models\LaporanKit::$isSyncing = false;
-            Log::error('Error syncing LaporanKit and related data to UP Kendari:', [
-                'action' => $event->action,
+            Log::error('Error in LaporanKit sync:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            throw $e;
+        } finally {
+            \App\Models\LaporanKit::$isSyncing = false;
         }
     }
 } 

@@ -41,7 +41,7 @@ class LaporanKitKwhPsPanel extends Model
 
         static::created(function ($psPanel) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 

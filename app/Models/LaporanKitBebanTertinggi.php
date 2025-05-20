@@ -40,7 +40,7 @@ class LaporanKitBebanTertinggi extends Model
 
         static::created(function ($bebanTertinggi) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 
@@ -49,7 +49,6 @@ class LaporanKitBebanTertinggi extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $bebanTertinggi->id,
                         'laporan_kit_id' => $bebanTertinggi->laporan_kit_id,
                         'machine_id' => $bebanTertinggi->machine_id,
                         'siang' => $bebanTertinggi->siang,
@@ -58,7 +57,7 @@ class LaporanKitBebanTertinggi extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Sync to mysql database without id
                     DB::connection('mysql')->table('laporan_kit_beban_tertinggi')->insert($data);
 
                     self::$isSyncing = false;

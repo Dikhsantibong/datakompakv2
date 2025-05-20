@@ -49,7 +49,6 @@ class LaporanKitPelumasStorageTank extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $storageTank->id,
                         'laporan_kit_pelumas_id' => $storageTank->laporan_kit_pelumas_id,
                         'tank_number' => $storageTank->tank_number,
                         'cm' => $storageTank->cm,
@@ -58,7 +57,7 @@ class LaporanKitPelumasStorageTank extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Sync to mysql database without id
                     DB::connection('mysql')->table('laporan_kit_pelumas_storage_tanks')->insert($data);
 
                     self::$isSyncing = false;

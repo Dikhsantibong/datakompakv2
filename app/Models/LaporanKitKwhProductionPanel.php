@@ -50,7 +50,6 @@ class LaporanKitKwhProductionPanel extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $productionPanel->id,
                         'laporan_kit_kwh_id' => $productionPanel->laporan_kit_kwh_id,
                         'panel_number' => $productionPanel->panel_number,
                         'awal' => $productionPanel->awal,
@@ -59,7 +58,7 @@ class LaporanKitKwhProductionPanel extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Sync to mysql database without id
                     DB::connection('mysql')->table('laporan_kit_kwh_production_panels')->insert($data);
 
                     self::$isSyncing = false;

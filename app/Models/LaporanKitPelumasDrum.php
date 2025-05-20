@@ -47,7 +47,6 @@ class LaporanKitPelumasDrum extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $drum->id,
                         'laporan_kit_pelumas_id' => $drum->laporan_kit_pelumas_id,
                         'area_number' => $drum->area_number,
                         'jumlah' => $drum->jumlah,
@@ -55,7 +54,7 @@ class LaporanKitPelumasDrum extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Sync to mysql database without id
                     DB::connection('mysql')->table('laporan_kit_pelumas_drums')->insert($data);
 
                     self::$isSyncing = false;

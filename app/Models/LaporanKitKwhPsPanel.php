@@ -58,24 +58,17 @@ class LaporanKitKwhPsPanel extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database using updateOrInsert
-                    DB::connection('mysql')->table('laporan_kit_kwh_ps_panels')
-                        ->updateOrInsert(
-                            [
-                                'laporan_kit_kwh_id' => $panel->laporan_kit_kwh_id,
-                                'panel_number' => $panel->panel_number
-                            ],
-                            $data
-                        );
+                    // Sync to mysql database without id
+                    DB::connection('mysql')->table('laporan_kit_kwh_ps_panels')->insert($data);
+
+                    self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
+                self::$isSyncing = false;
                 Log::error('Error in LaporanKitKwhPsPanel sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString(),
-                    'id' => $panel->id
+                    'trace' => $e->getTraceAsString()
                 ]);
-            } finally {
-                self::$isSyncing = false;
             }
         });
 

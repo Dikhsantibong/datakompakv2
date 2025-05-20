@@ -63,6 +63,13 @@
                         <h2 class="text-2xl font-bold mb-2">Data Engine Management</h2>
                         <p class="text-blue-100 mb-4">Monitor dan kelola data operasional mesin pembangkit listrik secara efisien.</p>
                         <div class="flex flex-wrap gap-3">
+                            <button id="copyFormattedData" 
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                                </svg>
+                                Salin Laporan
+                            </button>
                             <a href="{{ route('admin.data-engine.export-excel', request()->query()) }}" 
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <i class="fas fa-file-excel mr-2"></i> Export Excel
@@ -268,4 +275,78 @@ function toggleFullTableView() {
 </script>
 
 <script src="{{ asset('js/toggle.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+function formatDate(date) {
+    const months = [
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    const d = new Date(date);
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function getFormattedReport() {
+    const date = document.querySelector('input[name="date"]').value;
+    const time = document.querySelector('select[name="time"]').value || '11:00';
+    
+    let report = `Assalamu Alaikum Wr.Wb\n`;
+    report += `Laporan Data Operasional Pembangkit PLN Nusantara Power\n`;
+    report += `Unit Pembangkitan Kendari, ${formatDate(date)}\n`;
+    report += `Pukul : ${time} Wita\n\n`;
+
+    // Get all power plant sections
+    const powerPlantSections = document.querySelectorAll('.bg-white.rounded-xl.shadow-sm.mb-8');
+    
+    powerPlantSections.forEach(section => {
+        const title = section.querySelector('h2').textContent.trim();
+        const machines = section.querySelectorAll('tbody tr');
+        
+        report += `\n${title}\n`;
+        
+        // Add machine details
+        machines.forEach(machine => {
+            const cells = machine.querySelectorAll('td');
+            if (cells.length >= 6) {
+                const name = cells[1].querySelector('div').textContent.trim();
+                const kw = cells[2].textContent.trim();
+                const kvar = cells[3].textContent.trim();
+                const cosPhi = cells[4].textContent.trim();
+                const status = cells[5].querySelector('span').textContent.trim();
+                const description = cells[6].textContent.trim();
+                
+                report += `- ${name} : ${kw}/${kvar}/${cosPhi} /${status} (${description})\n`;
+            }
+        });
+        
+        report += '\n';
+    });
+
+    report += '\nBarakallahu Fikhum dan Terima Kasih';
+    return report;
+}
+
+document.getElementById('copyFormattedData').addEventListener('click', function() {
+    const formattedReport = getFormattedReport();
+    
+    navigator.clipboard.writeText(formattedReport).then(() => {
+        // Show success message using SweetAlert2
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Laporan telah disalin ke clipboard',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Gagal menyalin laporan ke clipboard'
+        });
+    });
+});
+</script>
 @endsection

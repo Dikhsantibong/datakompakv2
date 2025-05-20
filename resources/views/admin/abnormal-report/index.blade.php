@@ -383,19 +383,19 @@
                                             <tr>
                                         <td class="border px-4 py-2">1</td>
                                         <td class="border px-4 py-2 text-center">
-                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_flm[]" value="1">
+                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_flm" value="1">
                                         </td>
                                                 <td class="border px-4 py-2 text-center">
-                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_pm[]" value="1">
+                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_pm" value="1">
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
-                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_em[]" value="1">
+                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_cm" value="1">
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
-                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_ptw[]" value="1">
+                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_ptw" value="1">
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
-                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_sr[]" value="1">
+                                            <input type="checkbox" class="w-4 h-4 text-[#009BB9] border-gray-300 rounded focus:ring-[#009BB9]" name="adm_sr" value="1">
                                                 </td>
                                                 <td class="border px-4 py-2 text-center">
                                             <button type="button" class="delete-row text-red-600 hover:text-red-800">

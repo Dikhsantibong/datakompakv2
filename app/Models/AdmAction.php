@@ -18,7 +18,8 @@ class AdmAction extends Model
         'flm',
         'pm',
         'cm',
-        'ptw'
+        'ptw',
+        'sr'
     ];
 
     protected $casts = [
@@ -26,6 +27,7 @@ class AdmAction extends Model
         'pm' => 'boolean',
         'cm' => 'boolean',
         'ptw' => 'boolean',
+        'sr' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -61,6 +63,7 @@ class AdmAction extends Model
                         'pm' => $admAction->pm,
                         'cm' => $admAction->cm,
                         'ptw' => $admAction->ptw,
+                        'sr' => $admAction->sr,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
@@ -98,6 +101,7 @@ class AdmAction extends Model
                         'pm' => $admAction->pm,
                         'cm' => $admAction->cm,
                         'ptw' => $admAction->ptw,
+                        'sr' => $admAction->sr,
                         'updated_at' => now()
                     ];
 

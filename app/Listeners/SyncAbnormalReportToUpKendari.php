@@ -159,6 +159,7 @@ class SyncAbnormalReportToUpKendari
                                         'pm' => $admAction->pm,
                                         'cm' => $admAction->cm,
                                         'ptw' => $admAction->ptw,
+                                        'sr' => $admAction->sr,
                                         'created_at' => now(),
                                         'updated_at' => now()
                                     ]);
@@ -275,6 +276,7 @@ class SyncAbnormalReportToUpKendari
                                 'pm' => $admAction->pm,
                                 'cm' => $admAction->cm,
                                 'ptw' => $admAction->ptw,
+                                'sr' => $admAction->sr,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ]);

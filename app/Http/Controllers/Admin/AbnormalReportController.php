@@ -120,16 +120,14 @@ class AbnormalReportController extends Controller
             }
 
             // Store ADM actions
-            if ($request->has('adm_flm')) {
-                foreach ($request->adm_flm as $key => $_) {
-                    $report->admActions()->create([
-                        'flm' => isset($request->adm_flm) && is_array($request->adm_flm) && in_array($key, array_keys($request->adm_flm)) ? 1 : 0,
-                        'pm' => isset($request->adm_pm) && is_array($request->adm_pm) && in_array($key, array_keys($request->adm_pm)) ? 1 : 0,
-                        'cm' => isset($request->adm_cm) && is_array($request->adm_cm) && in_array($key, array_keys($request->adm_cm)) ? 1 : 0,
-                        'ptw' => isset($request->adm_ptw) && is_array($request->adm_ptw) && in_array($key, array_keys($request->adm_ptw)) ? 1 : 0,
-                        'sr' => isset($request->adm_sr) && is_array($request->adm_sr) && in_array($key, array_keys($request->adm_sr)) ? 1 : 0
-                    ]);
-                }
+            if ($request->has('adm_flm') || $request->has('adm_pm') || $request->has('adm_cm') || $request->has('adm_ptw') || $request->has('adm_sr')) {
+                $report->admActions()->create([
+                    'flm' => $request->has('adm_flm') ? 1 : 0,
+                    'pm' => $request->has('adm_pm') ? 1 : 0,
+                    'cm' => $request->has('adm_cm') ? 1 : 0,
+                    'ptw' => $request->has('adm_ptw') ? 1 : 0,
+                    'sr' => $request->has('adm_sr') ? 1 : 0
+                ]);
             }
 
             DB::commit();
@@ -368,16 +366,14 @@ class AbnormalReportController extends Controller
             }
 
             // Store ADM actions
-            if ($request->has('adm_flm')) {
-                foreach ($request->adm_flm as $key => $_) {
-                    $report->admActions()->create([
-                        'flm' => isset($request->adm_flm) && is_array($request->adm_flm) && in_array($key, array_keys($request->adm_flm)) ? 1 : 0,
-                        'pm' => isset($request->adm_pm) && is_array($request->adm_pm) && in_array($key, array_keys($request->adm_pm)) ? 1 : 0,
-                        'cm' => isset($request->adm_cm) && is_array($request->adm_cm) && in_array($key, array_keys($request->adm_cm)) ? 1 : 0,
-                        'ptw' => isset($request->adm_ptw) && is_array($request->adm_ptw) && in_array($key, array_keys($request->adm_ptw)) ? 1 : 0,
-                        'sr' => isset($request->adm_sr) && is_array($request->adm_sr) && in_array($key, array_keys($request->adm_sr)) ? 1 : 0
-                    ]);
-                }
+            if ($request->has('adm_flm') || $request->has('adm_pm') || $request->has('adm_cm') || $request->has('adm_ptw') || $request->has('adm_sr')) {
+                $report->admActions()->create([
+                    'flm' => $request->has('adm_flm') ? 1 : 0,
+                    'pm' => $request->has('adm_pm') ? 1 : 0,
+                    'cm' => $request->has('adm_cm') ? 1 : 0,
+                    'ptw' => $request->has('adm_ptw') ? 1 : 0,
+                    'sr' => $request->has('adm_sr') ? 1 : 0
+                ]);
             }
 
             DB::commit();

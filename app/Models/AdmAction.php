@@ -65,8 +65,12 @@ class AdmAction extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
-                    DB::connection('mysql')->table('adm_actions')->insert($data);
+                    // Use updateOrInsert instead of insert
+                    DB::connection('mysql')->table('adm_actions')
+                        ->updateOrInsert(
+                            ['id' => $admAction->id],
+                            $data
+                        );
 
                     self::$isSyncing = false;
                 }

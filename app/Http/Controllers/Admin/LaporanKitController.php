@@ -29,7 +29,7 @@ class LaporanKitController extends Controller
 {
     public function index(Request $request)
     {
-            $machines = Machine::orderBy('name')->take(1)->get();
+            $machines = Machine::orderBy('name')->get();
         $unitSource = 'mysql'; // Set default unit source
         return view('admin.laporan-kit.index', compact('machines', 'unitSource'));
     }

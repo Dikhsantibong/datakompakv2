@@ -13,6 +13,7 @@ class SyncLaporanKitToUpKendari
         try {
             $upKendariDB = DB::connection('mysql');
 
+            \App\Models\LaporanKit::$isSyncing = true;
             switch ($event->action) {
                 case 'create':
                 case 'update':
@@ -300,7 +301,10 @@ class SyncLaporanKitToUpKendari
                 'id' => $event->laporanKit->id
             ]);
 
+            \App\Models\LaporanKit::$isSyncing = false;
+
         } catch (\Exception $e) {
+            \App\Models\LaporanKit::$isSyncing = false;
             Log::error('Error syncing LaporanKit and related data to UP Kendari:', [
                 'action' => $event->action,
                 'error' => $e->getMessage(),

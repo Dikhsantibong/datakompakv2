@@ -42,7 +42,7 @@ class LaporanKitBbmFlowmeter extends Model
 
         static::created(function ($flowmeter) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 

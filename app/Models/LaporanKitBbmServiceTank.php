@@ -40,7 +40,7 @@ class LaporanKitBbmServiceTank extends Model
 
         static::created(function ($serviceTank) {
             try {
-                if (self::$isSyncing) return;
+                if (self::$isSyncing || \App\Models\LaporanKit::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
                 

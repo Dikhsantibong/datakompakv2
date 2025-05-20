@@ -361,8 +361,8 @@ function sendToWhatsApp() {
     // WhatsApp group ID dari link yang diberikan
     const groupId = "LpHTRWvi9hLIIZm1fSQTOi";
     
-    // Create WhatsApp URL
-    const whatsappUrl = `https://chat.whatsapp.com/${groupId}`;
+    // Create WhatsApp URL dengan parameter text untuk mengisi pesan otomatis
+    const whatsappUrl = `https://wa.me/group/${groupId}?text=${encodedMessage}`;
     
     // Buka WhatsApp Web dengan pesan yang sudah disiapkan
     window.open(whatsappUrl, '_blank');

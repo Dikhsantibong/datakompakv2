@@ -33,11 +33,27 @@ class AbnormalReportController extends Controller
             // Get unit source from current session
             $unitSource = session('unit', 'mysql');
             $unitMapping = [
-                'mysql_poasia' => 'PLTD Poasia',
-                'mysql_kolaka' => 'PLTD Kolaka',
-                'mysql_bau_bau' => 'PLTD Bau Bau',
-                'mysql_wua_wua' => 'PLTD Wua Wua',
-                'mysql' => 'UP Kendari'
+               'mysql_poasia' => 'PLTD POASIA',
+               'mysql_kolaka' => 'PLTD KOLAKA',
+               'mysql_bau_bau' => 'PLTD BAU BAU',
+               'mysql_wua_wua' => 'PLTD WUA WUA',
+               'mysql_winning' => 'PLTD WINNING',
+               'mysql_erkee' => 'PLTD ERKEE',
+               'mysql_ladumpi' => 'PLTD LADUMPI',
+               'mysql_langara' => 'PLTD LANGARA',
+               'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+               'mysql_pasarwajo' => 'PLTD PASARWAJO',
+               'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+               'mysql_raha' => 'PLTD RAHA',
+               'mysql_wajo' => 'PLTD WAJO',
+               'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+               'mysql_rongi' => 'PLTD RONGI',
+               'mysql_sabilambo' => 'PLTD SABILAMBO',
+               'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+               'mysql_pltmg_kendari' => 'PLTD KENDARI',
+               'mysql_baruta' => 'PLTD BARUTA',
+               'mysql_moramo' => 'PLTD MORAMO',
+               'mysql_mikuasi' => 'PLTM MIKUASI',
             ];
             
             $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';

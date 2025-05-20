@@ -61,8 +61,12 @@ class AffectedMachine extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
-                    DB::connection('mysql')->table('affected_machines')->insert($data);
+                    // Use updateOrInsert instead of insert
+                    DB::connection('mysql')->table('affected_machines')
+                        ->updateOrInsert(
+                            ['id' => $machine->id],
+                            $data
+                        );
 
                     self::$isSyncing = false;
                 }

@@ -83,8 +83,12 @@ class AbnormalChronology extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
-                    DB::connection('mysql')->table('abnormal_chronologies')->insert($data);
+                    // Use updateOrInsert instead of insert
+                    DB::connection('mysql')->table('abnormal_chronologies')
+                        ->updateOrInsert(
+                            ['id' => $chronology->id],
+                            $data
+                        );
 
                     self::$isSyncing = false;
                 }

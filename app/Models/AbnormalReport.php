@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Events\AbnormalReportUpdated;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class AbnormalReport extends Model
 {
@@ -72,7 +73,24 @@ class AbnormalReport extends Model
                 
                 // Only sync if not in mysql session
                 if ($currentSession !== 'mysql') {
-                    event(new AbnormalReportUpdated($abnormalReport, 'create'));
+                    self::$isSyncing = true;
+                    
+                    $data = [
+                        'id' => $abnormalReport->id,
+                        'created_by' => $abnormalReport->created_by,
+                        'sync_unit_origin' => $abnormalReport->sync_unit_origin,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ];
+
+                    // Use updateOrInsert instead of insert
+                    DB::connection('mysql')->table('abnormal_reports')
+                        ->updateOrInsert(
+                            ['id' => $abnormalReport->id],
+                            $data
+                        );
+
+                    self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
                 Log::error('Error in AbnormalReport sync:', [

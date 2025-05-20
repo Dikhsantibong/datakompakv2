@@ -51,7 +51,6 @@ class LaporanKitBbmFlowmeter extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $flowmeter->id,
                         'laporan_kit_bbm_id' => $flowmeter->laporan_kit_bbm_id,
                         'flowmeter_number' => $flowmeter->flowmeter_number,
                         'awal' => $flowmeter->awal,

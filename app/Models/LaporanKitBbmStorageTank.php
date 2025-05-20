@@ -49,7 +49,6 @@ class LaporanKitBbmStorageTank extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $storageTank->id,
                         'laporan_kit_bbm_id' => $storageTank->laporan_kit_bbm_id,
                         'tank_number' => $storageTank->tank_number,
                         'cm' => $storageTank->cm,

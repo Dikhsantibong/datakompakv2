@@ -253,7 +253,8 @@
                                                         'mysql_pltmg_kendari' => 'PLTD KENDARI',
                                                         'mysql_baruta' => 'PLTD BARUTA',
                                                         'mysql_moramo' => 'PLTD MORAMO',
-                                                        'mysql' => 'UP Kendari'
+                                                        'mysql' => 'UP Kendari',
+                                                        'mysql_mikuasi' => 'PLTM MIKUASI'
                                                     ];
                                                 @endphp
                                                 {{ $unitMapping[$laporan->unit_source] ?? $laporan->unit_source ?? '-' }}

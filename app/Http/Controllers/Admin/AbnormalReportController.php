@@ -269,6 +269,7 @@ class AbnormalReportController extends Controller
                     'mysql_pltmg_kendari' => 'PLTD KENDARI',
                     'mysql_baruta' => 'PLTD BARUTA',
                     'mysql_moramo' => 'PLTD MORAMO',
+                    'mysql_mikuasi' => 'PLTM MIKUASI',
                     
                 ];
                 

@@ -27,10 +27,6 @@ class DataEngineController extends Controller
             // Get all power plants for the filter dropdown
             $allPowerPlants = PowerPlant::orderBy('name')->get();
             
-            // Get current unit information
-            $currentUnit = session('unit', 'mysql');
-            $unitName = $currentUnit === 'mysql' ? 'Unit Pembangkitan Kendari' : PowerPlant::getDatabaseNameByUnitSource($currentUnit);
-            
             // Build query for filtered power plants
             $powerPlantsQuery = PowerPlant::with(['machines' => function ($query) {
                 $query->orderBy('name');
@@ -76,10 +72,10 @@ class DataEngineController extends Controller
             });
 
             if ($request->ajax()) {
-                return view('admin.data-engine._table', compact('powerPlants', 'date', 'time', 'unitName'))->render();
+                return view('admin.data-engine._table', compact('powerPlants', 'date', 'time'))->render();
             }
 
-            return view('admin.data-engine.index', compact('powerPlants', 'allPowerPlants', 'date', 'time', 'unitName'));
+            return view('admin.data-engine.index', compact('powerPlants', 'allPowerPlants', 'date', 'time'));
         } catch (\Exception $e) {
             Log::error('Error in DataEngine index:', [
                 'error' => $e->getMessage(),

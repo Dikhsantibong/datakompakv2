@@ -294,10 +294,19 @@ function formatDate(date) {
 function getFormattedReport() {
     const date = document.querySelector('input[name="date"]').value;
     const time = document.querySelector('select[name="time"]').value || '11:00';
+    const currentSession = '{{ session('unit') }}';
     
     let report = `Assalamu Alaikum Wr.Wb\n`;
     report += `Laporan Data Engine PLN\ Nusantara Power\n`;
-    report += `{{ $unitName }}, ${formatDate(date)}\n`;
+    
+    // Use power plant name if not in mysql session, otherwise use default text
+    if (currentSession !== 'mysql') {
+        const powerPlantName = document.querySelector('.bg-white.rounded-xl.shadow-sm.overflow-hidden.border.border-gray-100 h2')?.textContent.trim() || '';
+        report += `${powerPlantName}, ${formatDate(date)}\n`;
+    } else {
+        report += `Unit Pembangkitan Kendari, ${formatDate(date)}\n`;
+    }
+    
     report += `Pukul : ${time} Wita\n\n`;
 
     // Get all power plant sections

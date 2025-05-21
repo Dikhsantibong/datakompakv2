@@ -296,8 +296,8 @@ function getFormattedReport() {
     const time = document.querySelector('select[name="time"]').value || '11:00';
     
     let report = `Assalamu Alaikum Wr.Wb\n`;
-    report += `Laporan Data Engine PLN Nusantara Power\n`;
-    report += `Unit Pembangkitan Kendari, ${formatDate(date)}\n`;
+    report += `Laporan Data Engine PLN\ Nusantara Power\n`;
+    report += `{{ $unitName }}, ${formatDate(date)}\n`;
     report += `Pukul : ${time} Wita\n\n`;
 
     // Get all power plant sections

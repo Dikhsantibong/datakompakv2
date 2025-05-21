@@ -445,6 +445,7 @@
 </div>
 
 @push('scripts')
+<script src="{{ asset('js/toggle.js') }}"></script>
 <script>
 const backgroundImages = [
     "{{ asset('images/welcome.webp') }}",

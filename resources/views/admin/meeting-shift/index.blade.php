@@ -643,6 +643,25 @@ document.querySelectorAll('input[name$="[eviden]"]').forEach(input => {
         }
     });
 });
+
+// Add loading animation to submit button
+document.getElementById('meetingShiftForm').addEventListener('submit', function(e) {
+    const submitButton = document.getElementById('submitButton');
+    const loadingSpinner = submitButton.querySelector('.loading');
+    const buttonText = submitButton.querySelector('span:not(.loading)');
+    
+    // Show loading spinner and disable button
+    loadingSpinner.classList.remove('hidden');
+    buttonText.textContent = 'Menyimpan...';
+    submitButton.disabled = true;
+    
+    // If form validation fails, remove loading state
+    if (!this.checkValidity()) {
+        loadingSpinner.classList.add('hidden');
+        buttonText.textContent = 'Simpan';
+        submitButton.disabled = false;
+    }
+});
 </script>
 @endpush
 

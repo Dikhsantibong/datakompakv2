@@ -26,21 +26,12 @@
             -webkit-overflow-scrolling: touch;
             width: 100%;
             position: relative;
+            margin: 0 -1rem;
+            padding: 0 1rem;
         }
         .mobile-table-container table {
-            min-width: 1000px;
-        }
-        .sticky-column {
-            position: sticky;
-            left: 0;
-            background-color: white;
-            z-index: 10;
-        }
-        .sticky-column-header {
-            position: sticky;
-            left: 0;
-            background-color: #f9fafb;
-            z-index: 20;
+            min-width: 1200px;
+            width: 100%;
         }
         .mobile-input-group {
             flex-direction: column;
@@ -217,12 +208,12 @@
                                     </div>
                                 </div>
 
-                                <div class="mobile-table-container">
+                                <div class="overflow-x-auto mobile-table-container">
                                     <table class="min-w-full divide-y divide-gray-200">
                                         <thead>
                                             <tr class="bg-gray-50">
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky-column-header">No</th>
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky-column-header" style="left: 40px;">Mesin</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
                                                 <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam</th>
                                                 <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Daya Terpasang (kW)</th>
                                                 <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SILM/SLO</th>
@@ -237,8 +228,8 @@
                                         <tbody class="bg-white divide-y divide-gray-200">
                                             @forelse($powerPlant->machines as $index => $machine)
                                                 <tr class="hover:bg-gray-50">
-                                                    <td class="px-2 md:px-4 py-2 md:py-3 text-sm text-gray-500 border-r border-gray-200 sticky-column">{{ $index + 1 }}</td>
-                                                    <td class="px-2 md:px-4 py-2 md:py-3 min-w-[120px] md:min-w-[150px] sticky-column" style="left: 40px;">
+                                                    <td class="px-2 md:px-4 py-2 md:py-3 text-sm text-gray-500 border-r border-gray-200">{{ $index + 1 }}</td>
+                                                    <td class="px-2 md:px-4 py-2 md:py-3 min-w-[120px] md:min-w-[150px]">
                                                         <div class="text-sm font-medium text-gray-900">{{ $machine->name }}</div>
                                                         <input type="hidden" name="machines[{{ $machine->id }}][machine_id]" value="{{ $machine->id }}">
                                                     </td>

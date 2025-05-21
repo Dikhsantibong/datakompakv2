@@ -503,6 +503,7 @@
 </div>
 
 @push('scripts')
+<script src="{{ asset('js/toggle.js') }}"></script>
 <script>
 let alatBantuCount = 1;
 let resourceCount = 1;

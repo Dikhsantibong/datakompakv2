@@ -284,7 +284,7 @@
                                                     </td>
                                                     <td class="px-2 md:px-4 py-2 md:py-3 min-w-[120px] md:min-w-[150px] border-r border-gray-200">
                                                         <select name="machines[{{ $machine->id }}][status]" 
-                                                                class="w-full md:w-[120px] rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50">
+                                                                class="p-2 w-full md:w-[120px] rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50">
                                                             <option value="">Pilih Status</option>
                                                             <option value="RSH">RSH</option>
                                                             <option value="FO">FO</option>

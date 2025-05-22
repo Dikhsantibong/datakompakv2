@@ -150,7 +150,13 @@
                                         </thead>
                                         <tbody>
                                             @php
-                                                $systems = ['Exhaust', 'Pelumas', 'BBM', 'JCW/HT', 'CW/LT'];
+                                                $specialUnits = ['mysql_winning', 'mysql_rongi', 'mysql_sabilambo'];
+                                                $currentUnit = session('unit');
+                                                if (in_array($currentUnit, $specialUnits)) {
+                                                    $systems = ['Pendingin', 'Pelumas'];
+                                                } else {
+                                                    $systems = ['Exhaust', 'Pelumas', 'BBM', 'JCW/HT', 'CW/LT'];
+                                                }
                                             @endphp
 
                                             @foreach($systems as $index => $system)

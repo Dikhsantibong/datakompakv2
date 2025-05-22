@@ -253,6 +253,11 @@
                                                        title="Lihat Detail">
                                                         <i class="fas fa-eye mr-1"></i> Detail
                                                     </a>
+                                                    <a href="{{ route('admin.flm.edit', $firstItem->id) }}" 
+                                                       class="text-yellow-600 hover:text-yellow-900 flex items-center" 
+                                                       title="Edit">
+                                                        <i class="fas fa-edit mr-1"></i> Edit
+                                                    </a>
                                                     <a href="{{ route('admin.flm.exportExcel', $firstItem->id) }}" 
                                                        class="text-green-600 hover:text-green-900 flex items-center" 
                                                        title="Export Excel">

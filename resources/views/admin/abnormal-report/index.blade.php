@@ -416,8 +416,11 @@
                         <div class="space-y-4" id="evidence-container">
                             <div class="evidence-row flex items-start space-x-4">
                                 <div class="flex-1">
-                                    <label class="block text-sm font-medium text-gray-700">File</label>
-                                    <input type="file" name="evidence_files[]" class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                    <label class="block text-sm font-medium text-gray-700">File (Max: 10MB, Format: JPG, PNG, GIF)</label>
+                                    <input type="file" name="evidence_files[]" accept="image/*" class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md evidence-input" onchange="previewImage(this)">
+                                    <div class="mt-2 image-preview-container" style="display: none;">
+                                        <img src="" alt="Preview" class="image-preview max-w-xs h-auto rounded-lg shadow-md">
+                                    </div>
                                 </div>
                                 <div class="flex-1">
                                     <label class="block text-sm font-medium text-gray-700">Deskripsi</label>
@@ -514,6 +517,43 @@ function validateForm() {
     }
 
     return true;
+}
+
+function previewImage(input) {
+    const previewContainer = input.parentElement.querySelector('.image-preview-container');
+    const preview = previewContainer.querySelector('.image-preview');
+    
+    if (input.files && input.files[0]) {
+        // Check file size
+        const fileSize = input.files[0].size / 1024 / 1024; // in MB
+        if (fileSize > 10) {
+            alert('Ukuran file tidak boleh lebih dari 10MB');
+            input.value = '';
+            previewContainer.style.display = 'none';
+            return;
+        }
+
+        // Check file type
+        const fileType = input.files[0].type;
+        if (!fileType.startsWith('image/')) {
+            alert('File harus berupa gambar');
+            input.value = '';
+            previewContainer.style.display = 'none';
+            return;
+        }
+
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            previewContainer.style.display = 'block';
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.src = '';
+        previewContainer.style.display = 'none';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -667,17 +707,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Evidence handling
-    const evidenceContainer = document.getElementById('evidence-container');
+    // Modified evidence row creation
     const addEvidenceBtn = document.getElementById('add-evidence');
+    const evidenceContainer = document.getElementById('evidence-container');
 
     addEvidenceBtn.addEventListener('click', function() {
         const newRow = document.createElement('div');
         newRow.className = 'evidence-row flex items-start space-x-4';
         newRow.innerHTML = `
             <div class="flex-1">
-                <label class="block text-sm font-medium text-gray-700">File</label>
-                <input type="file" name="evidence_files[]" class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                <label class="block text-sm font-medium text-gray-700">File (Max: 10MB, Format: JPG, PNG, GIF)</label>
+                <input type="file" name="evidence_files[]" accept="image/*" class="mt-1 focus:ring-[#009BB9] focus:border-[#009BB9] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md evidence-input" onchange="previewImage(this)">
+                <div class="mt-2 image-preview-container" style="display: none;">
+                    <img src="" alt="Preview" class="image-preview max-w-xs h-auto rounded-lg shadow-md">
+                </div>
             </div>
             <div class="flex-1">
                 <label class="block text-sm font-medium text-gray-700">Deskripsi</label>
@@ -694,7 +737,7 @@ document.addEventListener('DOMContentLoaded', function() {
         evidenceContainer.appendChild(newRow);
     });
 
-    // Remove evidence row
+    // Remove evidence row and cleanup preview
     evidenceContainer.addEventListener('click', function(e) {
         if (e.target.closest('.remove-evidence')) {
             const row = e.target.closest('.evidence-row');

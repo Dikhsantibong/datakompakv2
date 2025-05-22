@@ -28,6 +28,14 @@ class AbnormalReportController extends Controller
 
     public function store(Request $request)
     {
+        // Add validation rules
+        $request->validate([
+            'evidence_files.*' => 'max:10240|mimes:jpeg,png,jpg,gif', // 10MB limit and image validation
+        ], [
+            'evidence_files.*.max' => 'Ukuran file tidak boleh lebih dari 10MB',
+            'evidence_files.*.mimes' => 'File harus berupa gambar (jpeg, png, jpg, gif)',
+        ]);
+
         DB::beginTransaction();
         try {
             // Get unit source from current session

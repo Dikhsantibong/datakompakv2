@@ -87,7 +87,7 @@
                                 <i class="fas fa-building"></i>
                                 <select name="unit" id="unit" class="modern-form-control" required>
                                     <option value="mysql" {{ $selectedUnit == 'mysql' ? 'selected' : '' }}>
-                                        UP Kendari
+                                        UP KENDARI
                                     </option>
                                     <option value="mysql_bau_bau" {{ $selectedUnit == 'mysql_bau_bau' ? 'selected' : '' }}>
                                         PLTD BAU-BAU

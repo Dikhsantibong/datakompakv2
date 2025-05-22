@@ -41,7 +41,7 @@
     
     <div class="flex-1 flex flex-col overflow-hidden">
         <!-- Header -->
-        <header class="bg-white shadow-sm sticky top-0 z-20
+        <header class="bg-white shadow-sm sticky top-0 z-10
         ">
             <div class="flex justify-between items-center px-6 py-3">
                 <div class="flex items-center gap-x-3">

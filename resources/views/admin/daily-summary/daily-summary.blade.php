@@ -1076,6 +1076,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
                     case 'hsd_fuel':
                     case 'b35_fuel':
                     case 'mfo_fuel':
+                    case 'b40_fuel':    
                         calculateTotalFuel(machineId);
                         calculateSFC(machineId);
                         break;

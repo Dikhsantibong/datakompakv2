@@ -149,16 +149,19 @@
                         <div class="px-4 py-5 sm:p-6">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">Kondisi Mesin</h3>
                                 <div class="mt-6">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Nama Mesin
+                                <div class="overflow-x-auto -mx-6 sm:mx-0">
+                                    <div class="inline-block min-w-full align-middle">
+                                        <div class="overflow-hidden shadow-sm ring-1 ring-black ring-opacity-5">
+                                            <table class="min-w-full divide-y divide-gray-200">
+                                                <thead class="bg-gray-50">
+                                                    <tr>
+                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                            Nama Mesin
                                                         </th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                             Status
                                                         </th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                             Keterangan
                                                         </th>
                                                     </tr>
@@ -166,11 +169,11 @@
                                                 <tbody class="bg-white divide-y divide-gray-200">
                                                     @foreach($machines as $index => $machine)
                                         <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 min-w-[150px]">
                                                             {{ $machine->name }}
                                                 <input type="hidden" name="machine_statuses[{{ $index }}][machine_id]" value="{{ $machine->id }}">
                                                         </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-6 py-4 whitespace-nowrap min-w-[200px]">
                                                 <div class="space-y-2">
                                                     <div class="flex items-center">
                                                         <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="operasi"
@@ -213,7 +216,7 @@
                                                     Pilih minimal satu status
                                                 </div>
                                                         </td>
-                                            <td class="px-6 py-4">
+                                            <td class="px-6 py-4 min-w-[200px]">
                                                 <textarea name="machine_statuses[{{ $index }}][keterangan]" rows="3"
                                                     class="p-2 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                                                       placeholder="Masukkan keterangan..."></textarea>

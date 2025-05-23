@@ -37,36 +37,32 @@ class SyncMeetingShiftToUpKendari
             $upKendariDB = DB::connection('mysql');
             
             try {
+                // Cek apakah parent sudah ada di database utama
+                $parentExists = $upKendariDB->table('meeting_shifts')->where('id', $event->meetingShift->id)->exists();
+
+                if (!$parentExists) {
+                    // Insert parent
+                    try {
+                        $upKendariDB->table('meeting_shifts')->insert([
+                            'id' => $event->meetingShift->id,
+                            'tanggal' => $event->meetingShift->tanggal,
+                            'current_shift' => $event->meetingShift->current_shift,
+                            'created_by' => $event->meetingShift->created_by,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]);
+                    } catch (\Exception $e) {
+                        // Jika gagal insert parent, JANGAN LANJUTKAN insert child!
+                        Log::error('Failed to insert parent MeetingShift, abort child sync', [
+                            'meeting_shift_id' => $event->meetingShift->id,
+                            'error' => $e->getMessage()
+                        ]);
+                        return;
+                    }
+                }
+
                 switch($event->action) {
                     case 'create':
-                        // First transaction: Create parent record
-                        DB::beginTransaction();
-                        try {
-                            // Create main meeting shift record
-                            $data = [
-                                'id' => $event->meetingShift->id, // Explicitly set the ID
-                                'tanggal' => $event->meetingShift->tanggal,
-                                'current_shift' => $event->meetingShift->current_shift,
-                                'created_by' => $event->meetingShift->created_by,
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ];
-                            
-                            $upKendariDB->table('meeting_shifts')->insert($data);
-                            
-                            DB::commit();
-                            
-                            Log::info('Created main meeting shift record', [
-                                'id' => $event->meetingShift->id
-                            ]);
-                        } catch (\Exception $e) {
-                            DB::rollBack();
-                            Log::error('Error creating main meeting shift record', [
-                                'error' => $e->getMessage()
-                            ]);
-                            throw $e;
-                        }
-
                         // Second transaction: Create child records
                         DB::beginTransaction();
                         try {

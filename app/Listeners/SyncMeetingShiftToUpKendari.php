@@ -39,26 +39,28 @@ class SyncMeetingShiftToUpKendari
             try {
                 switch($event->action) {
                     case 'create':
-                        // First transaction: Create parent record
                         DB::beginTransaction();
                         try {
-                            // Create main meeting shift record
                             $data = [
-                                'id' => $event->meetingShift->id, // Explicitly set the ID
+                                'id' => $event->meetingShift->id,
                                 'tanggal' => $event->meetingShift->tanggal,
                                 'current_shift' => $event->meetingShift->current_shift,
                                 'created_by' => $event->meetingShift->created_by,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
-                            
-                            $upKendariDB->table('meeting_shifts')->insert($data);
-                            
+
+                            // Cek apakah sudah ada ID tersebut di database tujuan
+                            $exists = $upKendariDB->table('meeting_shifts')->where('id', $event->meetingShift->id)->exists();
+                            if (!$exists) {
+                                $upKendariDB->table('meeting_shifts')->insert($data);
+                                Log::info('Created main meeting shift record', ['id' => $event->meetingShift->id]);
+                            } else {
+                                Log::warning('Meeting shift record already exists, skipping insert', ['id' => $event->meetingShift->id]);
+                                // Optional: update data jika ingin update data lama
+                            }
+
                             DB::commit();
-                            
-                            Log::info('Created main meeting shift record', [
-                                'id' => $event->meetingShift->id
-                            ]);
                         } catch (\Exception $e) {
                             DB::rollBack();
                             Log::error('Error creating main meeting shift record', [

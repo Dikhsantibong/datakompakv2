@@ -194,7 +194,7 @@
                                                         return $status->machine->powerPlant->name ?? null;
                                                     })
                                                     ->filter()
-                                                    ->unique(function($item) { return strtolower(trim($item)); })
+                                                    ->unique()
                                                     ->values();
                                             @endphp
                                             @foreach($units as $unit)

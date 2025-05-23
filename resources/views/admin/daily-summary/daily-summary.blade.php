@@ -314,26 +314,20 @@
                                                     <input type="number" 
                                                            step="0.001" 
                                                            name="data[{{ $machine->id }}][installed_power]"
-                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
-                                                           value="{{ old('data.'.$machine->id.'.installed_power', 
-                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->installed_power : '') }}">
+                                                           class="block w-[150px] border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center bg-gray-100" 
+                                                           value="{{ $machine->latestOperation->installed_power ?? '' }}" readonly>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" 
                                                            name="data[{{ $machine->id }}][dmn_power]"
-                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
-                                                           value="{{ old('data.'.$machine->id.'.dmn_power',
-                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->dmn_power : '') }}">
+                                                           class="block w-[150px] border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center bg-gray-100" 
+                                                           value="{{ $machine->latestOperation->dmn ?? '' }}" readonly>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" 
                                                            name="data[{{ $machine->id }}][capable_power]"
-                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
-                                                           value="{{ old('data.'.$machine->id.'.capable_power',
-                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->capable_power : '') }}">
+                                                           class="block w-[150px] border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center bg-gray-100" 
+                                                           value="{{ $machine->latestOperation->dmp ?? '' }}" readonly>
                                                 </div>
                                             </div>
                                         </td>
@@ -759,8 +753,8 @@
                                         <td class="px-4 py-3">
                                             <div class="px-2">
                                                 <textarea name="data[{{ $machine->id }}][notes]"
-                                                       style="width: 200px;"
-                                                       class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('data.'.$machine->id.'.notes',
+                                                       style="width: 250px;"
+                                                       class="block p-2  w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('data.'.$machine->id.'.notes',
                                                         isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
                                                         $existingData[$machine->power_plant_id.'_'.$machine->name]->notes : '') }}</textarea>
                                             </div>
@@ -860,46 +854,46 @@ document.addEventListener('DOMContentLoaded', function() {
     min-width: 100px !important;
 }
 .w-daya {
-    min-width: 300px !important;
+    min-width: 500px !important;
 }
 .w-beban {
-    min-width: 200px !important;
+    min-width: 250px !important;
 }
 .w-ratio {
     min-width: 100px !important;
 }
 .w-produksi {
-    min-width: 200px !important;
-}
-.w-pemakaian-sendiri {
     min-width: 300px !important;
 }
-.w-jam-operasi {
+.w-pemakaian-sendiri {
     min-width: 400px !important;
+}
+.w-jam-operasi {
+    min-width: 600px !important;
 }
 .w-trip {
-    min-width: 200px !important;
+    min-width: 300px !important;
 }
 .w-derating {
-    min-width: 400px !important;
+    min-width: 600px !important;
 }
 .w-kinerja {
-    min-width: 400px !important;
+    min-width: 600px !important;
 }
 .w-capability {
-    min-width: 150px !important;
+    min-width: 200px !important;
 }
 .w-nof {
-    min-width: 150px !important;
+    min-width: 200px !important;
 }
 .w-jsi {
     min-width: 150px !important;
 }
 .w-bahan-bakar {
-    min-width: 500px !important;
+    min-width: 600px !important;
 }
 .w-pelumas {
-    min-width: 700px !important;
+    min-width: 800px !important;
 }
 .w-efisiensi {
     min-width: 350px !important;
@@ -1258,8 +1252,9 @@ document.querySelector('form').addEventListener('submit', function(e) {
         const hsd = getNumericValue(machineId, 'hsd_fuel');
         const b35 = getNumericValue(machineId, 'b35_fuel');
         const mfo = getNumericValue(machineId, 'mfo_fuel');
+        const b40 = getNumericValue(machineId, 'b40_fuel');
         
-        const totalFuel = hsd + b35 + mfo;
+        const totalFuel = hsd + b35 + mfo + b40;
         document.querySelector(`[name="data[${machineId}][total_fuel]"]`).value = totalFuel.toFixed(2);
     }
 </script>

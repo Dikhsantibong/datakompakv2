@@ -13,6 +13,8 @@ use Barryvdh\DomPDF\Facade\Pdf; // Add this for PDF export
 use Maatwebsite\Excel\Facades\Excel; // Add this for Excel export
 use App\Exports\DailySummaryExport; // We'll create this class next
 use Carbon\Carbon;
+use App\Models\Machine;
+use App\Models\MachineOperation;
 
 class DailySummaryController extends Controller
 {
@@ -44,7 +46,7 @@ class DailySummaryController extends Controller
             $units = $query->orderBy('unit_source')
                 ->orderBy('name')
                 ->with(['machines' => function($query) {
-                    $query->orderBy('name');
+                    $query->orderBy('name')->with('latestOperation');
                 }])
                 ->get();
 
@@ -204,6 +206,22 @@ class DailySummaryController extends Controller
                                 'machine' => $data['machine_name'],
                                 'date' => $inputDate
                             ]);
+                        }
+
+                        // Simpan atau update MachineOperation
+                        $machine = Machine::with('latestOperation')->find($machineId);
+                        if ($machine) {
+                            $opData = [
+                                'installed_power' => $data['installed_power'] ?? ($machine->latestOperation->installed_power ?? 0),
+                                'dmn' => $data['dmn_power'] ?? ($machine->latestOperation->dmn ?? 0),
+                                'dmp' => $data['capable_power'] ?? ($machine->latestOperation->dmp ?? 0),
+                                'recorded_at' => now(),
+                                'unit_source' => session('unit', 'mysql'),
+                            ];
+                            MachineOperation::updateOrCreate(
+                                ['machine_id' => $machine->id],
+                                $opData
+                            );
                         }
                     } catch (\Exception $e) {
                         Log::error("Error saving daily summary", [

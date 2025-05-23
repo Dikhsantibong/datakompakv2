@@ -65,7 +65,7 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-6">
-                <!-- Welcome Card -->
+                {{-- <!-- Welcome Card -->
                 <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
                     <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
                     <div class="relative z-10">
@@ -89,7 +89,7 @@
                         <!-- Logo - Hidden on mobile -->
                         <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- Unit Filter -->
                 <div class="bg-white rounded-lg shadow-md p-4 mb-6">
@@ -110,76 +110,59 @@
                 </div>
 
                 <!-- Performance Indicators -->
-                <div class="grid grid-cols-1 md:grid-cols-6 gap-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-6 gap-3 mb-4">
                     <!-- EAF Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-blue-600 mb-2">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">EAF</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['eaf'], 1) }}%</p>
-                            <span class="text-blue-600 text-sm font-medium">Equivalent Availability Factor</span>
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-blue-600 mb-1"><i class="fas fa-chart-line"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">EAF</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($performance['eaf'], 1) }}%</p>
+                            <span class="text-blue-600 text-xs font-medium">Equivalent Availability Factor</span>
                         </div>
                     </div>
-
                     <!-- SOF Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-red-600 mb-2">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">SOF</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['sof'], 1) }}%</p>
-                            <span class="text-red-600 text-sm font-medium">Scheduled Outage Factor</span>
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-red-600 mb-1"><i class="fas fa-clock"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">SOF</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($performance['sof'], 1) }}%</p>
+                            <span class="text-red-600 text-xs font-medium">Scheduled Outage Factor</span>
                         </div>
                     </div>
-
                     <!-- EFOR Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-yellow-600 mb-2">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">EFOR</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['efor'], 1) }}%</p>
-                            <span class="text-yellow-600 text-sm font-medium">Equivalent Forced Outage Rate</span>
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-yellow-600 mb-1"><i class="fas fa-exclamation-triangle"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">EFOR</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($performance['efor'], 1) }}%</p>
+                            <span class="text-yellow-600 text-xs font-medium">Equivalent Forced Outage Rate</span>
                         </div>
                     </div>
-
                     <!-- SdOF Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-indigo-600 mb-2">
-                                <i class="fas fa-bolt"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">SdOF</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['sdof'], 1) }}%</p>
-                            <span class="text-indigo-600 text-sm font-medium">Sudden Outage Factor</span>
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-indigo-600 mb-1"><i class="fas fa-bolt"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">SdOF</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($performance['sdof'], 1) }}%</p>
+                            <span class="text-indigo-600 text-xs font-medium">Sudden Outage Factor</span>
                         </div>
                     </div>
-
                     <!-- NCF Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-emerald-600 mb-2">
-                                <i class="fas fa-tachometer-alt"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">NCF</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['ncf'], 1) }}%</p>
-                            <span class="text-emerald-600 text-sm font-medium">Net Capacity Factor</span>
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-emerald-600 mb-1"><i class="fas fa-tachometer-alt"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">NCF</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($performance['ncf'], 1) }}%</p>
+                            <span class="text-emerald-600 text-xs font-medium">Net Capacity Factor</span>
                         </div>
                     </div>
-
                     <!-- Transformer Losses Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-purple-600 mb-2">
-                                <i class="fas fa-plug"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">PS Susut Trafo</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($transformerLosses['current'], 2) }}</p>
-                            <span class="text-purple-600 text-sm font-medium">{{ $transformerLosses['unit'] }}</span>
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-purple-600 mb-1"><i class="fas fa-plug"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">PS Susut Trafo</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($transformerLosses['current'], 2) }}</p>
+                            <span class="text-purple-600 text-xs font-medium">{{ $transformerLosses['unit'] }}</span>
                         </div>
                     </div>
                 </div>

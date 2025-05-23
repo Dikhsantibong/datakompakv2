@@ -63,7 +63,7 @@
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-6">
                 <!-- Welcome Card -->
-                <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
+                {{-- <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
                     <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
                     <div class="relative z-10">
                         <!-- Text Content -->
@@ -86,7 +86,7 @@
                         <!-- Logo - Hidden on mobile -->
                         <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- Unit Filter -->
                 @if(session('unit') === 'mysql')
@@ -109,263 +109,144 @@
                 @endif
 
                 <!-- Status Indicators -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                @php
+                    $totalOPS = $latestLogs->where('status', 'OPS')->count();
+                    $totalFO = $latestLogs->where('status', 'FO')->count();
+                    $totalMO = $latestLogs->where('status', 'MO')->count();
+                    $maxBeban = $latestLogs->max('kw');
+                    $lastUpdate = $latestLogs->max('date');
+                @endphp
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-blue-600 mb-2">
-                                <i class="fas fa-cog"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">Total Mesin</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ App\Models\Machine::count() }} unit</p>
-                            <a href="{{ route('admin.machine-monitor.show', ['machine' => 1]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                                Lihat Detail →
-                            </a>
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-blue-600 mb-1"><i class="fas fa-cogs"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">Total Mesin</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ $machines->count() }}</p>
+                            <a href="{{ route('admin.machine-monitor.show') }}" class="text-blue-600 text-xs font-medium hover:underline">Lihat Data</a>
                         </div>
                     </div>
-
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-green-600 mb-2">
-                                <i class="fas fa-building"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">Total Unit</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ App\Models\PowerPlant::count() }} unit</p>
-                            <a href="{{ route('admin.power-plants.index') }}" class="text-green-600 hover:text-green-800 font-medium text-sm">
-                                Lihat Detail →
-                            </a>
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-indigo-600 mb-1"><i class="fas fa-industry"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">Unit Pembangkit</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ $powerPlants->count() ?? '-' }}</p>
+                            <a href="{{ route('admin.power-plants.index') }}" class="text-indigo-600 text-xs font-medium hover:underline">Lihat Unit</a>
                         </div>
                     </div>
-
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-red-600 mb-2">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">Masalah Aktif</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ $machines->sum(function ($machine) {
-                                return $machine->issues->where('status', 'open')->count();
-                            }) }} masalah</p>
-                            <span class="text-red-600 font-medium text-sm">Perlu Perhatian</span>
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-green-600 mb-1"><i class="fas fa-play-circle"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">Mesin Aktif (OPS)</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ $totalOPS }}</p>
+                            <span class="text-green-600 text-xs font-medium">Operational</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-red-600 mb-1"><i class="fas fa-exclamation-triangle"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">Mesin Gangguan (FO)</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ $totalFO }}</p>
+                            <span class="text-red-600 text-xs font-medium">Forced Outage</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-yellow-600 mb-1"><i class="fas fa-tools"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">Maintenance (MO)</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ $totalMO }}</p>
+                            <span class="text-yellow-600 text-xs font-medium">Maintenance</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-purple-600 mb-1"><i class="fas fa-bolt"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">Beban Maksimum</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($maxBeban, 2) }} kW</p>
+                            <span class="text-purple-600 text-xs font-medium">Peak Load</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-3 flex flex-col items-start">
+                            <div class="text-2xl text-gray-600 mb-1"><i class="fas fa-clock"></i></div>
+                            <h3 class="text-base font-semibold mb-0.5">Update Terakhir</h3>
+                            <p class="text-gray-600 mb-1 text-base font-bold">{{ $lastUpdate ? \Carbon\Carbon::parse($lastUpdate)->format('d/m/Y') : '-' }}</p>
+                            <span class="text-gray-600 text-xs font-medium">Last Update</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Performance Indicators -->
-                <div class="grid grid-cols-1 md:grid-cols-7 gap-6 mb-6">
-                    <!-- OPS Status Card -->
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-green-600 mb-2">
-                                <i class="fas fa-play-circle"></i>
-                                        </div>
-                            <h3 class="text-lg font-semibold mb-1">OPS</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ $machineStatusLogs->where('status', 'OPS')->count() }} kali</p>
-                            <span class="text-green-600 text-sm font-medium">Operation</span>
-                                        </div>
-                                    </div>
-
-                    <!-- RSH Status Card -->
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-blue-600 mb-2">
-                                <i class="fas fa-pause-circle"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">RSH</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ $machineStatusLogs->where('status', 'RSH')->count() }} kali</p>
-                            <span class="text-blue-600 text-sm font-medium">Reserve Shutdown</span>
-                            </div>
-                        </div>
-
-                    <!-- FO Status Card -->
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-red-600 mb-2">
-                                <i class="fas fa-stop-circle"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">FO</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ $machineStatusLogs->where('status', 'FO')->count() }} kali</p>
-                            <span class="text-red-600 text-sm font-medium">Forced Outage</span>
-                                        </div>
-                                    </div>
-
-                    <!-- MO Status Card -->
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-yellow-600 mb-2">
-                                <i class="fas fa-tools"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">MO</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ $machineStatusLogs->where('status', 'MO')->count() }} kali</p>
-                            <span class="text-yellow-600 text-sm font-medium">Maintenance Outage</span>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800">Diagram Status Mesin</h3>
+                        <canvas id="statusChart"></canvas>
                     </div>
-
-                    <!-- Average DMN -->
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-purple-600 mb-2">
-                                <i class="fas fa-chart-area"></i>
-                                    </div>
-                            <h3 class="text-lg font-semibold mb-1">DMN SLO</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($machineStatusLogs->avg('dmn'), 2) }}</p>
-                            <span class="text-purple-600 text-sm font-medium">Rata-rata DMN </span>
-                                    </div>
-                                </div>
-
-                    <!-- Average DMP -->
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-indigo-600 mb-2">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">DMP AKTUAL</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($machineStatusLogs->avg('dmp'), 2) }}</p>
-                            <span class="text-indigo-600 text-sm font-medium">Rata-rata DMP</span>
-                        </div>
+                    <div class="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800">Rata-rata Beban per Mesin</h3>
+                        <canvas id="avgBebanChart"></canvas>
                     </div>
-
-                    <!-- DMP Performance Test Card -->
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-4">
-                            <div class="text-3xl text-orange-600 mb-2">
-                                <i class="fas fa-tachometer-alt"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold mb-1">DMP TEST</h3>
-                            <p class="text-gray-600 mb-2 text-sm">0.00</p>
-                            <span class="text-orange-600 text-sm font-medium">Performance Test</span>
-                        </div>
+                    <div class="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800">DMN/SLO per Mesin</h3>
+                        <canvas id="dmnChart"></canvas>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800">DMP/PT per Mesin</h3>
+                        <canvas id="dmpChart"></canvas>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800">Tegangan (V) per Mesin</h3>
+                        <canvas id="voltChart"></canvas>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800">Arus (A) per Mesin</h3>
+                        <canvas id="ampChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Operating & Production Statistics -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- Status Statistics -->
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium">Statistik Status</h3>
-                            <i class="fas fa-chart-pie text-blue-600"></i>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-blue-50 rounded-lg p-4">
-                                <p class="text-sm text-gray-600">Total Status Log</p>
-                                <p class="text-2xl font-semibold text-blue-600">{{ $machineStatusLogs->count() }}</p>
-                                <p class="text-sm text-gray-500">records</p>
-                            </div>
-                            <div class="bg-green-50 rounded-lg p-4">
-                                <p class="text-sm text-gray-600">Status Aktif</p>
-                                <p class="text-2xl font-semibold text-green-600">{{ $machineStatusLogs->where('tanggal', now()->toDateString())->count() }}</p>
-                                <p class="text-sm text-gray-500">hari ini</p>
-                                    </div>
-                                    </div>
-                                </div>
-
-                    <!-- Load Statistics -->
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium">Statistik Beban</h3>
-                            <i class="fas fa-bolt text-yellow-600"></i>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-purple-50 rounded-lg p-4">
-                                <p class="text-sm text-gray-600">Rata-rata Beban</p>
-                                <p class="text-2xl font-semibold text-purple-600">{{ number_format($machineStatusLogs->avg('load_value'), 2) }}</p>
-                                <p class="text-sm text-gray-500">MW</p>
-                            </div>
-                            <div class="bg-indigo-50 rounded-lg p-4">
-                                <p class="text-sm text-gray-600">Beban Maksimum</p>
-                                <p class="text-2xl font-semibold text-indigo-600">{{ number_format($machineStatusLogs->max('load_value'), 2) }}</p>
-                                <p class="text-sm text-gray-500">MW</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Status Statistics -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- Monthly Status Frequency -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-medium text-gray-800">
-                                <i class="fas fa-chart-bar mr-2 text-blue-600"></i>
-                                Frekuensi Status Mesin (Bulan Ini)
-                            </h3>
-                            <select id="machineSelect"
-                                class="p-2 rounded-md border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
-                                <option value="all">Semua Mesin</option>
-                                @foreach($machines as $machine)
-                                    <option value="{{ $machine->id }}">{{ $machine->name }}</option>
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Tabel Data Mesin Kesiapan Kit</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SILM/SLO</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DMP Test</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Beban (kW)</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach($latestLogs as $i => $log)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2">{{ $i+1 }}</td>
+                                    <td class="px-4 py-2">{{ $log->machine->name }}</td>
+                                    <td class="px-4 py-2">{{ $log->date ? \Carbon\Carbon::parse($log->date)->format('d/m/Y') : '-' }}</td>
+                                    <td class="px-4 py-2">{{ $log->time ? \Carbon\Carbon::parse($log->time)->format('H:i') : '-' }}</td>
+                                    <td class="px-4 py-2">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                            {{ $log->status === 'OPS' ? 'bg-green-100 text-green-800' :
+                                               ($log->status === 'RSH' ? 'bg-yellow-100 text-yellow-800' :
+                                               ($log->status === 'FO' ? 'bg-red-100 text-red-800' :
+                                               ($log->status === 'MO' ? 'bg-orange-100 text-orange-800' :
+                                               ($log->status === 'P0' ? 'bg-blue-100 text-blue-800' :
+                                               ($log->status === 'MB' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'))))) }}">
+                                            {{ $log->status }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-2">{{ $log->silm_slo ?? '-' }}</td>
+                                    <td class="px-4 py-2">{{ $log->dmp_performance ?? '-' }}</td>
+                                    <td class="px-4 py-2">{{ $log->kw ?? '-' }}</td>
+                                    <td class="px-4 py-2">{{ $log->keterangan ?? '-' }}</td>
+                                </tr>
                                 @endforeach
-                                </select>
-                            </div>
-                        <div class="h-80">
-                            <canvas id="statusFrequencyChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Status Duration -->
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <h3 class="text-lg font-medium mb-4 text-gray-800">
-                            <i class="fas fa-clock mr-2 text-green-600"></i>
-                            Durasi Status (Jam)
-                        </h3>
-                        <div class="h-80">
-                            <canvas id="statusDurationChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Status Analysis -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- Status Trend -->
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <h3 class="text-lg font-medium mb-4 text-gray-800">
-                            <i class="fas fa-chart-line mr-2 text-purple-600"></i>
-                            Tren Status Bulanan
-                        </h3>
-                        <div class="h-80">
-                            <canvas id="statusTrendChart"></canvas>
-                        </div>
-                    </div>
-                    
-                    <!-- Status Comparison -->
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <h3 class="text-lg font-medium mb-4 text-gray-800">
-                            <i class="fas fa-balance-scale mr-2 text-red-600"></i>
-                            Perbandingan Status Antar Unit
-                        </h3>
-                        <div class="h-80">
-                            <canvas id="statusComparisonChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Status Information -->
-                <div class="bg-white rounded-lg shadow">
-                    <div class="p-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-800">
-                            <i class="fas fa-info-circle mr-2 text-gray-600"></i>
-                            Keterangan Status
-                        </h3>
-                    </div>
-                    <div class="p-4">
-                        <dl class="grid grid-cols-1 gap-4">
-                            <div class="grid grid-cols-3 gap-4">
-                                <dt class="font-medium text-gray-700">OPS (Operation)</dt>
-                                <dd class="col-span-2 text-gray-600">Mesin dalam kondisi beroperasi normal.</dd>
-                            </div>
-                            <div class="grid grid-cols-3 gap-4">
-                                <dt class="font-medium text-gray-700">RSH (Reserve Shutdown)</dt>
-                                <dd class="col-span-2 text-gray-600">Mesin dalam kondisi siap operasi namun tidak beroperasi.</dd>
-                            </div>
-                            <div class="grid grid-cols-3 gap-4">
-                                <dt class="font-medium text-gray-700">FO (Forced Outage)</dt>
-                                <dd class="col-span-2 text-gray-600">Mesin mengalami gangguan dan harus berhenti beroperasi.</dd>
-                            </div>
-                            <div class="grid grid-cols-3 gap-4">
-                                <dt class="font-medium text-gray-700">MO (Maintenance Outage)</dt>
-                                <dd class="col-span-2 text-gray-600">Mesin dalam kondisi pemeliharaan terjadwal.</dd>
-                            </div>
-                        </dl>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -455,21 +336,15 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Get current month's data
-    const currentDate = new Date();
-    const monthlyData = @json($machineStatusLogs->filter(function($log) {
-        return Carbon\Carbon::parse($log->tanggal)->month === now()->month;
-    })->groupBy('status')->map->count());
-
-    // Status Frequency Chart
-    const frequencyCtx = document.getElementById('statusFrequencyChart').getContext('2d');
-    new Chart(frequencyCtx, {
-                    type: 'bar',
-                    data: {
-            labels: Object.keys(monthlyData),
+    // Pie chart status
+    const ctx = document.getElementById('statusChart').getContext('2d');
+    const statusData = @json($statusCounts);
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(statusData),
             datasets: [{
-                label: 'Frekuensi',
-                data: Object.values(monthlyData),
+                data: Object.values(statusData),
                 backgroundColor: [
                     'rgba(52, 211, 153, 0.8)',  // OPS - Green
                     'rgba(59, 130, 246, 0.8)',  // RSH - Blue
@@ -479,202 +354,128 @@ document.addEventListener('DOMContentLoaded', function() {
                 ],
                 borderWidth: 1
             }]
-                    },
-                    options: {
-                        responsive: true,
-            maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                        text: 'Jumlah Kejadian'
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return `${context.parsed.y} kali`;
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    // Status Duration Chart
-    const durationData = @json($machineStatusLogs->filter(function($log) {
-        return Carbon\Carbon::parse($log->tanggal)->month === now()->month;
-    })->groupBy('status')->map(function($logs) {
-        return $logs->count() * 24;
-    }));
-
-    const durationCtx = document.getElementById('statusDurationChart').getContext('2d');
-    new Chart(durationCtx, {
-        type: 'pie',
-        data: {
-            labels: Object.keys(durationData),
-            datasets: [{
-                data: Object.values(durationData),
-                backgroundColor: [
-                    'rgba(52, 211, 153, 0.8)',
-                    'rgba(59, 130, 246, 0.8)',
-                    'rgba(239, 68, 68, 0.8)',
-                    'rgba(251, 191, 36, 0.8)',
-                    'rgba(107, 114, 128, 0.8)'
-                ]
-            }]
-        },
-        options: {
-                        responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'right'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return `${context.label}: ${context.parsed} jam`;
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    // Monthly Status Trend
-    const monthlyTrend = @json($machineStatusLogs
-        ->groupBy(function($log) {
-            return Carbon\Carbon::parse($log->tanggal)->format('Y-m');
-        })
-        ->map(function($logs) {
-            return $logs->groupBy('status')->map->count();
-        })
-    );
-
-    const trendCtx = document.getElementById('statusTrendChart').getContext('2d');
-    const months = Object.keys(monthlyTrend);
-    const statuses = [...new Set(Object.values(monthlyTrend).flatMap(m => Object.keys(m)))];
-    
-    new Chart(trendCtx, {
-        type: 'line',
-                    data: {
-            labels: months,
-            datasets: statuses.map((status, index) => ({
-                label: status,
-                data: months.map(month => monthlyTrend[month]?.[status] || 0),
-                borderColor: [
-                    'rgb(52, 211, 153)',
-                    'rgb(59, 130, 246)',
-                    'rgb(239, 68, 68)',
-                    'rgb(251, 191, 36)',
-                    'rgb(107, 114, 128)'
-                ][index],
-                            tension: 0.1
-            }))
-                    },
-                    options: {
-                        responsive: true,
-            maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                        text: 'Jumlah Kejadian'
-                    }
-                }
-            }
-        }
-    });
-
-    // Status Comparison by Unit
-    const unitComparison = @json($machines->map(function($machine) {
-        return [
-            'name' => $machine->name,
-            'statuses' => $machine->statusLogs()
-                ->whereMonth('tanggal', now()->month)
-                ->get()
-                ->groupBy('status')
-                ->map->count()
-        ];
-    }));
-
-    const comparisonCtx = document.getElementById('statusComparisonChart').getContext('2d');
-    const units = unitComparison.map(u => u.name);
-    const statusTypes = [...new Set(unitComparison.flatMap(u => Object.keys(u.statuses)))];
-
-    new Chart(comparisonCtx, {
-        type: 'bar',
-        data: {
-            labels: units,
-            datasets: statusTypes.map((status, index) => ({
-                label: status,
-                data: unitComparison.map(u => u.statuses[status] || 0),
-                backgroundColor: [
-                    'rgba(52, 211, 153, 0.8)',
-                    'rgba(59, 130, 246, 0.8)',
-                    'rgba(239, 68, 68, 0.8)',
-                    'rgba(251, 191, 36, 0.8)',
-                    'rgba(107, 114, 128, 0.8)'
-                ][index % 5]
-            }))
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    stacked: true
-                },
-                y: {
-                    stacked: true,
-                    beginAtZero: true,
-                            title: {
-                                display: true,
-                        text: 'Jumlah Kejadian'
-                    }
-                            }
-                        }
-                    }
-                });
-
-    // Handle machine selection change
-    document.getElementById('machineSelect').addEventListener('change', function(e) {
-        const machineId = e.target.value;
-        if (machineId !== 'all') {
-            window.location.href = `?machine_id=${machineId}`;
-                        } else {
-            window.location.href = window.location.pathname;
+            plugins: {
+                legend: { position: 'bottom' }
+            }
         }
     });
 
-    // Background image rotation for welcome card
-    const backgroundImages = [
-        "{{ asset('images/welcome.webp') }}",
-        "{{ asset('images/welcome2.jpeg') }}",
-        "{{ asset('images/welcome3.jpg') }}"
-    ];
+    // Bar chart rata-rata beban per mesin
+    const avgBebanCtx = document.getElementById('avgBebanChart').getContext('2d');
+    const bebanLabels = @json($latestLogs->pluck('machine.name'));
+    const bebanData = @json($latestLogs->pluck('kw'));
+    new Chart(avgBebanCtx, {
+        type: 'bar',
+        data: {
+            labels: bebanLabels,
+            datasets: [{
+                label: 'Beban (kW)',
+                data: bebanData,
+                backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'kW' }
+                },
+                x: {
+                    title: { display: true, text: 'Mesin' }
+                }
+            }
+        }
+    });
 
-    let currentImageIndex = 0;
-    const welcomeCard = document.querySelector('.welcome-card');
-
-    function changeBackground() {
-        welcomeCard.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
-        currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
-    }
-
-    // Set initial background
-    changeBackground();
-
-    // Change background every 5 seconds
-    setInterval(changeBackground, 5000);
+    // DMN/SLO per Mesin
+    const dmnCtx = document.getElementById('dmnChart').getContext('2d');
+    new Chart(dmnCtx, {
+        type: 'bar',
+        data: {
+            labels: @json($latestLogs->pluck('machine.name')),
+            datasets: [{
+                label: 'DMN/SLO',
+                data: @json($latestLogs->pluck('silm_slo')),
+                backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                borderColor: 'rgba(16, 185, 129, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Mesin' } } }
+        }
+    });
+    // DMP/PT per Mesin
+    const dmpCtx = document.getElementById('dmpChart').getContext('2d');
+    new Chart(dmpCtx, {
+        type: 'bar',
+        data: {
+            labels: @json($latestLogs->pluck('machine.name')),
+            datasets: [{
+                label: 'DMP/PT',
+                data: @json($latestLogs->pluck('dmp_performance')),
+                backgroundColor: 'rgba(251, 191, 36, 0.7)',
+                borderColor: 'rgba(251, 191, 36, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Mesin' } } }
+        }
+    });
+    // Tegangan (V) per Mesin
+    const voltCtx = document.getElementById('voltChart').getContext('2d');
+    new Chart(voltCtx, {
+        type: 'bar',
+        data: {
+            labels: @json($latestLogs->pluck('machine.name')),
+            datasets: [{
+                label: 'Tegangan (V)',
+                data: @json($latestLogs->pluck('volt')),
+                backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                borderColor: 'rgba(99, 102, 241, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Mesin' } } }
+        }
+    });
+    // Arus (A) per Mesin
+    const ampCtx = document.getElementById('ampChart').getContext('2d');
+    new Chart(ampCtx, {
+        type: 'bar',
+        data: {
+            labels: @json($latestLogs->pluck('machine.name')),
+            datasets: [{
+                label: 'Arus (A)',
+                data: @json($latestLogs->pluck('amp')),
+                backgroundColor: 'rgba(236, 72, 153, 0.7)',
+                borderColor: 'rgba(236, 72, 153, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Mesin' } } }
+        }
+    });
 
     // Handle unit filter change
     document.getElementById('unitFilter').addEventListener('change', function(e) {

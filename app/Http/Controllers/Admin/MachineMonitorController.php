@@ -171,6 +171,22 @@ class MachineMonitorController extends Controller
             config(['database.default' => 'mysql']);
         }
 
+        $machines = \App\Models\Machine::with('logs')->get();
+
+        // Ambil log terbaru per mesin
+        $latestLogs = collect();
+        foreach ($machines as $machine) {
+            $log = $machine->logs()->orderBy('date', 'desc')->orderBy('time', 'desc')->first();
+            if ($log) {
+                $latestLogs->push($log);
+            }
+        }
+
+        $statusCounts = $latestLogs->groupBy('status')->map->count();
+        $avgDMN = $latestLogs->avg('silm_slo');
+        $avgDMP = $latestLogs->avg('dmp_performance');
+        $avgBeban = $latestLogs->avg('kw');
+
         return view('admin.machine-monitor.index', compact(
             'machines',
             'healthCategories',
@@ -182,7 +198,12 @@ class MachineMonitorController extends Controller
             'selectedTime',
             'efficiencyData',
             'powerPlants',
-            'selectedUnitSource'
+            'selectedUnitSource',
+            'latestLogs',
+            'statusCounts',
+            'avgDMN',
+            'avgDMP',
+            'avgBeban'
         ));
     }
 

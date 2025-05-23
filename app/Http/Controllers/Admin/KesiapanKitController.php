@@ -40,8 +40,8 @@ class KesiapanKitController extends Controller
                     ->where('power_plant_id', $powerPlant->id)
                     ->where('date', $date);
                 
-                if ($request->filled('time') && in_array($request->time, $specificTimes)) {
-                    $latestLogQuery->where('time', $request->time);
+                if ($request->filled('time')) {
+                    $latestLogQuery->where('time', '<=', $request->time);
                 }
                 
                 $latestLog = $latestLogQuery->orderBy('time', 'desc')->first();

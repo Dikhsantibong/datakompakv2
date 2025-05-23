@@ -20,8 +20,8 @@ class MonitorKinerjaController extends Controller
         // Base query for daily summaries
         $query = DailySummary::query();
         
-        // If a specific unit is selected, filter by unit_source
-        if ($selectedUnitSource) {
+        // Jika filter unit_source dipilih dan tidak kosong, filter berdasarkan unit_source
+        if (!empty($selectedUnitSource)) {
             $query->where('unit_source', $selectedUnitSource);
         }
 
@@ -41,7 +41,17 @@ class MonitorKinerjaController extends Controller
                 'mfo' => [],
                 'b35' => [],
                 'b40' => []
-            ]
+            ],
+            'kit_ratio' => [],
+            'usage_percentage' => [],
+            'water_usage' => [],
+            'trip_machine' => [],
+            'trip_electrical' => [],
+            'efdh' => [],
+            'epdh' => [],
+            'eudh' => [],
+            'esdh' => [],
+            'jsi' => [],
         ];
 
         // Fetch last 7 days data with unit filter
@@ -49,6 +59,9 @@ class MonitorKinerjaController extends Controller
             'eaf', 'sof', 'efor', 'ncf', 
             'net_production', 'hsd_fuel', 
             'mfo_fuel', 'b35_fuel', 'b40_fuel',
+            'kit_ratio', 'usage_percentage', 'water_usage',
+            'trip_machine', 'trip_electrical',
+            'efdh', 'epdh', 'eudh', 'esdh', 'jsi',
             'created_at'
         )
         ->orderBy('created_at', 'desc')
@@ -67,6 +80,16 @@ class MonitorKinerjaController extends Controller
             $chartData['fuel']['mfo'][] = $data->mfo_fuel;
             $chartData['fuel']['b35'][] = $data->b35_fuel;
             $chartData['fuel']['b40'][] = $data->b40_fuel;
+            $chartData['kit_ratio'][] = $data->kit_ratio;
+            $chartData['usage_percentage'][] = $data->usage_percentage;
+            $chartData['water_usage'][] = $data->water_usage;
+            $chartData['trip_machine'][] = $data->trip_machine;
+            $chartData['trip_electrical'][] = $data->trip_electrical;
+            $chartData['efdh'][] = $data->efdh;
+            $chartData['epdh'][] = $data->epdh;
+            $chartData['eudh'][] = $data->eudh;
+            $chartData['esdh'][] = $data->esdh;
+            $chartData['jsi'][] = $data->jsi;
         }
 
         // Prepare data for the view
@@ -77,18 +100,29 @@ class MonitorKinerjaController extends Controller
                 'efor' => $latestSummary->efor ?? 0,
                 'sdof' => $latestSummary->sdof ?? 0,
                 'ncf' => $latestSummary->ncf ?? 0,
+                'kit_ratio' => $latestSummary->kit_ratio ?? 0,
+                'usage_percentage' => $latestSummary->usage_percentage ?? 0,
+                'jsi' => $latestSummary->jsi ?? 0,
             ],
             'operatingStats' => [
                 'operating_hours' => $latestSummary->operating_hours ?? 0,
                 'standby_hours' => $latestSummary->standby_hours ?? 0,
                 'planned_outage' => $latestSummary->planned_outage ?? 0,
                 'maintenance_outage' => $latestSummary->maintenance_outage ?? 0,
+                'period_hours' => $latestSummary->period_hours ?? 0,
+                'forced_outage' => $latestSummary->forced_outage ?? 0,
+                'efdh' => $latestSummary->efdh ?? 0,
+                'epdh' => $latestSummary->epdh ?? 0,
+                'eudh' => $latestSummary->eudh ?? 0,
+                'esdh' => $latestSummary->esdh ?? 0,
             ],
             'productionStats' => [
                 'gross_production' => $latestSummary->gross_production ?? 0,
                 'net_production' => $latestSummary->net_production ?? 0,
                 'peak_load_day' => $latestSummary->peak_load_day ?? 0,
                 'peak_load_night' => $latestSummary->peak_load_night ?? 0,
+                'aux_power' => $latestSummary->aux_power ?? 0,
+                'transformer_losses' => $latestSummary->transformer_losses ?? 0,
             ],
             'fuelUsage' => [
                 'hsd' => $latestSummary->hsd_fuel ?? 0,
@@ -96,11 +130,15 @@ class MonitorKinerjaController extends Controller
                 'b40' => $latestSummary->b40_fuel ?? 0,
                 'mfo' => $latestSummary->mfo_fuel ?? 0,
                 'total' => $latestSummary->total_fuel ?? 0,
+                'water' => $latestSummary->water_usage ?? 0,
             ],
             'oilUsage' => [
                 'meditran' => $latestSummary->meditran_oil ?? 0,
                 'salyx_420' => $latestSummary->salyx_420 ?? 0,
                 'salyx_430' => $latestSummary->salyx_430 ?? 0,
+                'travolube_a' => $latestSummary->travolube_a ?? 0,
+                'turbolube_46' => $latestSummary->turbolube_46 ?? 0,
+                'turbolube_68' => $latestSummary->turbolube_68 ?? 0,
                 'total' => $latestSummary->total_oil ?? 0,
             ],
             'technicalParams' => [

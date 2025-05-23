@@ -184,6 +184,60 @@
                     </div>
                 </div>
 
+                <!-- Additional Performance Parameters -->
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-pink-600 mb-2">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">Kit Ratio</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['kit_ratio'], 2) }}%</p>
+                            <span class="text-pink-600 text-sm font-medium">Rasio Daya Kit</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-cyan-600 mb-2">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">Usage %</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['usage_percentage'], 2) }}%</p>
+                            <span class="text-cyan-600 text-sm font-medium">Persentase Pemakaian Sendiri</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-blue-800 mb-2">
+                                <i class="fas fa-water"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">Water Usage</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($fuelUsage['water'], 2) }} m³</p>
+                            <span class="text-blue-800 text-sm font-medium">Pemakaian Air</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-orange-600 mb-2">
+                                <i class="fas fa-random"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">Trip</h3>
+                            <p class="text-gray-600 mb-2 text-sm">Mesin: {{ number_format($chartData['trip_machine'][count($chartData['trip_machine'])-1] ?? 0, 0) }} | Listrik: {{ number_format($chartData['trip_electrical'][count($chartData['trip_electrical'])-1] ?? 0, 0) }}</p>
+                            <span class="text-orange-600 text-sm font-medium">Trip Mesin & Listrik</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-fuchsia-600 mb-2">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">JSI</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['jsi'], 2) }}</p>
+                            <span class="text-fuchsia-600 text-sm font-medium">JSI (Indeks Kinerja)</span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Operating & Production Statistics -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <!-- Operating Statistics -->
@@ -331,6 +385,56 @@
                         <h3 class="text-lg font-medium mb-4">Konsumsi Bahan Bakar</h3>
                         <div style="height: 300px;">
                             <canvas id="fuelChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Diagram Tambahan -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Kit Ratio Chart -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-medium mb-4">Grafik Kit Ratio</h3>
+                        <div style="height: 300px;">
+                            <canvas id="kitRatioChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Usage Percentage Chart -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-medium mb-4">Grafik Usage Percentage</h3>
+                        <div style="height: 300px;">
+                            <canvas id="usagePercentageChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Water Usage Chart -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-medium mb-4">Grafik Water Usage</h3>
+                        <div style="height: 300px;">
+                            <canvas id="waterUsageChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Trip Chart -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-medium mb-4">Grafik Trip Mesin & Listrik</h3>
+                        <div style="height: 300px;">
+                            <canvas id="tripChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- EFDH/EPDH/EUDH/ESDH Chart -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-medium mb-4">Grafik EFDH / EPDH / EUDH / ESDH</h3>
+                        <div style="height: 300px;">
+                            <canvas id="efdhChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- JSI Chart -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-medium mb-4">Grafik JSI</h3>
+                        <div style="height: 300px;">
+                            <canvas id="jsiChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -751,6 +855,177 @@ new Chart(fuelCtx, {
 // Handle unit filter change
 document.getElementById('unitFilter').addEventListener('change', function(e) {
     window.location.href = `${window.location.pathname}?unit_source=${e.target.value}`;
+});
+
+// Kit Ratio Chart
+const kitRatioCtx = document.getElementById('kitRatioChart').getContext('2d');
+new Chart(kitRatioCtx, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode($chartData['labels']) !!},
+        datasets: [{
+            label: 'Kit Ratio (%)',
+            data: {!! json_encode($chartData['kit_ratio']) !!},
+            borderColor: 'rgb(236, 72, 153)',
+            backgroundColor: 'rgba(236, 72, 153, 0.1)',
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true, ticks: { callback: v => v + '%' } } }
+    }
+});
+
+// Usage Percentage Chart
+const usagePercentageCtx = document.getElementById('usagePercentageChart').getContext('2d');
+new Chart(usagePercentageCtx, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode($chartData['labels']) !!},
+        datasets: [{
+            label: 'Usage Percentage (%)',
+            data: {!! json_encode($chartData['usage_percentage']) !!},
+            borderColor: 'rgb(6, 182, 212)',
+            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true, ticks: { callback: v => v + '%' } } }
+    }
+});
+
+// Water Usage Chart
+const waterUsageCtx = document.getElementById('waterUsageChart').getContext('2d');
+new Chart(waterUsageCtx, {
+    type: 'bar',
+    data: {
+        labels: {!! json_encode($chartData['labels']) !!},
+        datasets: [{
+            label: 'Water Usage (m³)',
+            data: {!! json_encode($chartData['water_usage']) !!},
+            backgroundColor: 'rgba(30, 64, 175, 0.5)',
+            borderColor: 'rgb(30, 64, 175)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true, ticks: { callback: v => v + ' m³' } } }
+    }
+});
+
+// Trip Chart
+const tripCtx = document.getElementById('tripChart').getContext('2d');
+new Chart(tripCtx, {
+    type: 'bar',
+    data: {
+        labels: {!! json_encode($chartData['labels']) !!},
+        datasets: [
+            {
+                label: 'Trip Mesin',
+                data: {!! json_encode($chartData['trip_machine']) !!},
+                backgroundColor: 'rgba(251, 146, 60, 0.5)',
+                borderColor: 'rgb(251, 146, 60)',
+                borderWidth: 1
+            },
+            {
+                label: 'Trip Listrik',
+                data: {!! json_encode($chartData['trip_electrical']) !!},
+                backgroundColor: 'rgba(251, 191, 36, 0.5)',
+                borderColor: 'rgb(251, 191, 36)',
+                borderWidth: 1
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true } }
+    }
+});
+
+// EFDH/EPDH/EUDH/ESDH Chart
+const efdhCtx = document.getElementById('efdhChart').getContext('2d');
+new Chart(efdhCtx, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode($chartData['labels']) !!},
+        datasets: [
+            {
+                label: 'EFDH',
+                data: {!! json_encode($chartData['efdh']) !!},
+                borderColor: 'rgb(59, 130, 246)',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                fill: true,
+                tension: 0.4
+            },
+            {
+                label: 'EPDH',
+                data: {!! json_encode($chartData['epdh']) !!},
+                borderColor: 'rgb(16, 185, 129)',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                fill: true,
+                tension: 0.4
+            },
+            {
+                label: 'EUDH',
+                data: {!! json_encode($chartData['eudh']) !!},
+                borderColor: 'rgb(251, 191, 36)',
+                backgroundColor: 'rgba(251, 191, 36, 0.1)',
+                fill: true,
+                tension: 0.4
+            },
+            {
+                label: 'ESDH',
+                data: {!! json_encode($chartData['esdh']) !!},
+                borderColor: 'rgb(168, 85, 247)',
+                backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                fill: true,
+                tension: 0.4
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true } }
+    }
+});
+
+// JSI Chart
+const jsiCtx = document.getElementById('jsiChart').getContext('2d');
+new Chart(jsiCtx, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode($chartData['labels']) !!},
+        datasets: [{
+            label: 'JSI',
+            data: {!! json_encode($chartData['jsi']) !!},
+            borderColor: 'rgb(232, 121, 249)',
+            backgroundColor: 'rgba(232, 121, 249, 0.1)',
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true } }
+    }
 });
 </script>
 @endpush 

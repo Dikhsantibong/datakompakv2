@@ -203,15 +203,15 @@
                                         <th class="border-r"></th>
                                         <th class="px-4 py-2 border-r">
                                             <div class="grid grid-cols-3 gap-0">
-                                                <span class="subcol-border px-2 mr-4">Terpasang</span>
-                                                <span class="subcol-border px-2 mr-4" style="margin-left: 10px;">DMN</span>
-                                                <span class="px-2" style="margin-left: 10px;">Mampu</span>
+                                                <span class="subcol-border px-2 mr-4 text-center">Terpasang</span>
+                                                <span class="subcol-border px-2 mr-4 text-center" style="margin-left: 10px;">DMN</span>
+                                                <span class="px-2 text-center" style="margin-left: 10px;">Mampu</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2 border-r">
                                             <div class="grid grid-cols-2 gap-0">
-                                                <span class="subcol-border px-2">Siang</span>
-                                                <span class="px-2">Malam</span>
+                                                <span class="subcol-border px-2 text-center">Siang</span>
+                                                <span class="px-2 text-center">Malam</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2 border-r">
@@ -221,15 +221,15 @@
                                         </th>
                                         <th class="px-4 py-2 border-r">
                                             <div class="grid grid-cols-2 gap-0">
-                                                <span class="subcol-border px-2">Bruto</span>
-                                                <span class="px-2">Netto</span>
+                                                <span class="subcol-border px-2 text-center">Bruto</span>
+                                                <span class="px-2 text-center">Netto</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2 border-r">
                                             <div class="grid grid-cols-3 gap-0">
-                                                <span class="subcol-border px-2">Aux (kWh)</span>
-                                                <span class="subcol-border px-2">Susut Trafo (kWh)</span>
-                                                <span class="px-2">Persentase (%)</span>
+                                                <span class="subcol-border px-2 text-center">Aux (kWh)</span>
+                                                <span class="subcol-border px-2 text-center">Susut Trafo (kWh)</span>
+                                                <span class="px-2 text-center">Persentase (%)</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2 border-r">
@@ -239,53 +239,53 @@
                                         </th>
                                         <th class="px-4 py-2">
                                             <div class="grid grid-cols-5 gap-0">
-                                                <span class="subcol-border px-2">OPR</span>
-                                                <span class="subcol-border px-2">STANDBY</span>
-                                                <span class="subcol-border px-2">PO</span>
-                                                <span class="subcol-border px-2">MO</span>
-                                                <span class="px-2">FO</span>
+                                                <span class="subcol-border px-2 text-center">OPR</span>
+                                                <span class="subcol-border px-2 text-center">STANDBY</span>
+                                                <span class="subcol-border px-2 text-center">PO</span>
+                                                <span class="subcol-border px-2 text-center">MO</span>
+                                                <span class="px-2 text-center">FO</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2 border-r">
                                             <div class="grid grid-cols-2 gap-0">
-                                                <span class="subcol-border px-2">Mesin (kali)</span>
-                                                <span class="px-2">Listrik (kali)</span>
+                                                <span class="subcol-border px-2 text-center">Mesin (kali)</span>
+                                                <span class="px-2 text-center">Listrik (kali)</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2">
                                             <div class="grid grid-cols-4 gap-0">
-                                                <span class="subcol-border px-2">EFDH</span>
-                                                <span class="subcol-border px-2">EPDH</span>
-                                                <span class="subcol-border px-2">EUDH</span>
-                                                <span class="px-2">ESDH</span>
+                                                <span class="subcol-border px-2 text-center">EFDH</span>
+                                                <span class="subcol-border px-2 text-center">EPDH</span>
+                                                <span class="subcol-border px-2 text-center">EUDH</span>
+                                                <span class="px-2 text-center">ESDH</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2 border-r">
                                             <div class="grid grid-cols-4 gap-0">
-                                                <span class="subcol-border px-2">EAF (%)</span>
-                                                <span class="subcol-border px-2">SOF (%)</span>
-                                                <span class="subcol-border px-2">EFOR (%)</span>
-                                                <span class="px-2">SdOF (Kali)</span>
+                                                <span class="subcol-border px-2 text-center">EAF (%)</span>
+                                                <span class="subcol-border px-2 text-center">SOF (%)</span>
+                                                <span class="subcol-border px-2 text-center">EFOR (%)</span>
+                                                <span class="px-2 text-center">SdOF (Kali)</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2">
                                             <div class="text-center">
-                                                <span class="px-2">NCF</span>
+                                                <span class="px-2 text-center">NCF</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2 border-r">
                                             <div class="text-center">
-                                                <span class="px-2">NOF</span>
+                                                <span class="px-2 text-center">NOF</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2 border-r">
                                             <div class="text-center">
-                                                <span class="px-2">Jam</span>
+                                                <span class="px-2 text-center">Jam</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2 border border-gray-300">
                                             <div class="grid grid-cols-6 gap-1">
-                                                <span class="px-2 text-center border-r border-gray-300">HSD (Liter)</span>
+                                                <span class="px-2 text-center border-r border-gray-300 ">HSD (Liter)</span>
                                                 <span class="px-2 text-center border-r border-gray-300">B30 (Liter)</span>
                                                 <span class="px-2 text-center border-r border-gray-300">B40 (Liter)</span>
                                                 <span class="px-2 text-center border-r border-gray-300">MFO (Liter)</span>

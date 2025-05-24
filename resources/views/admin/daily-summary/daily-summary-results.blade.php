@@ -234,46 +234,46 @@ document.addEventListener('DOMContentLoaded', function() {
     min-width: 100px !important;
 }
 .w-daya {
-    min-width: 300px !important;
+    min-width: 500px !important;
 }
 .w-beban {
-    min-width: 200px !important;
+    min-width: 250px !important;
 }
 .w-ratio {
     min-width: 100px !important;
 }
 .w-produksi {
-    min-width: 200px !important;
-}
-.w-pemakaian-sendiri {
     min-width: 300px !important;
 }
-.w-jam-operasi {
+.w-pemakaian-sendiri {
     min-width: 400px !important;
+}
+.w-jam-operasi {
+    min-width: 600px !important;
 }
 .w-trip {
-    min-width: 200px !important;
+    min-width: 300px !important;
 }
 .w-derating {
-    min-width: 400px !important;
+    min-width: 600px !important;
 }
 .w-kinerja {
-    min-width: 400px !important;
+    min-width: 600px !important;
 }
 .w-capability {
     min-width: 100px !important;
 }
 .w-nof {
-    min-width: 100px !important;
+    min-width: 200px !important;
 }
 .w-jsi {
-    min-width: 100px !important;
+    min-width: 150px !important;
 }
 .w-bahan-bakar {
-    min-width: 500px !important;
+    min-width: 600px !important;
 }
 .w-pelumas {
-    min-width: 700px !important;
+    min-width: 800px !important;
 }
 .w-efisiensi {
     min-width: 350px !important;

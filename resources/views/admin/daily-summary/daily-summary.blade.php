@@ -1123,8 +1123,11 @@ document.querySelector('form').addEventListener('submit', function(e) {
     function calculateRatioDaya(machineId) {
         const peakDay = getNumericValue(machineId, 'peak_load_day');
         const peakNight = getNumericValue(machineId, 'peak_load_night');
-        const capablePower = getNumericValue(machineId, 'capable_power');
-        
+        let capablePower = getNumericValue(machineId, 'capable_power');
+        // Jika nilai capablePower < 50, asumsikan satuan MW, konversi ke kW
+        if (capablePower > 0 && capablePower < 50) {
+            capablePower = capablePower * 1000;
+        }
         if (capablePower > 0) {
             const ratio = (Math.max(peakDay, peakNight) / capablePower) * 100;
             document.querySelector(`[name="data[${machineId}][kit_ratio]"]`).value = ratio.toFixed(2);

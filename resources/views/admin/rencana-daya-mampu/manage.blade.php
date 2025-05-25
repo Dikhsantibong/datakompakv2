@@ -303,7 +303,9 @@
     </div>
 </div>
 
+<script src="{{asset('js/toggle.js')}}"></script>
 <script>
+
 function updateFilter() {
     const month = document.getElementById('month').value;
     const year = document.getElementById('year').value;

@@ -905,7 +905,7 @@ document.addEventListener('DOMContentLoaded', function() {
     min-width: 200px !important;
 }
 .w-jsi {
-    min-width: 150px !important;
+    min-width: 300px !important;
 }
 .w-bahan-bakar {
     min-width: 600px !important;

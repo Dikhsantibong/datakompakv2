@@ -99,7 +99,7 @@
                             Filter Unit
                         </h3>
                         <select id="unitFilter" name="unit_source" class="form-select rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                            <option value="">Semua Unit</option>
+                            <option value="">Pilih Unit</option>
                             @foreach($powerPlants as $powerPlant)
                                 <option value="{{ $powerPlant->unit_source }}" {{ $selectedUnitSource == $powerPlant->unit_source ? 'selected' : '' }}>
                                     {{ $powerPlant->name }}

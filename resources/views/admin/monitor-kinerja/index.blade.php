@@ -65,8 +65,8 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-6">
-                {{-- <!-- Welcome Card -->
-                <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
+                <!-- Welcome Card -->
+                {{-- <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
                     <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
                     <div class="relative z-10">
                         <!-- Text Content -->
@@ -110,113 +110,196 @@
                 </div>
 
                 <!-- Performance Indicators -->
-                <div class="grid grid-cols-1 md:grid-cols-6 gap-3 mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-6 gap-6 mb-6">
                     <!-- EAF Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-3 flex flex-col items-start">
-                            <div class="text-2xl text-blue-600 mb-1"><i class="fas fa-chart-line"></i></div>
-                            <h3 class="text-base font-semibold mb-0.5">EAF</h3>
-                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($performance['eaf'], 1) }}%</p>
-                            <span class="text-blue-600 text-xs font-medium">Equivalent Availability Factor</span>
+                        <div class="p-4">
+                            <div class="text-3xl text-blue-600 mb-2">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">EAF</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['eaf'], 1) }}%</p>
+                            <span class="text-blue-600 text-sm font-medium">Equivalent Availability Factor</span>
                         </div>
                     </div>
+
                     <!-- SOF Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-3 flex flex-col items-start">
-                            <div class="text-2xl text-red-600 mb-1"><i class="fas fa-clock"></i></div>
-                            <h3 class="text-base font-semibold mb-0.5">SOF</h3>
-                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($performance['sof'], 1) }}%</p>
-                            <span class="text-red-600 text-xs font-medium">Scheduled Outage Factor</span>
+                        <div class="p-4">
+                            <div class="text-3xl text-red-600 mb-2">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">SOF</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['sof'], 1) }}%</p>
+                            <span class="text-red-600 text-sm font-medium">Scheduled Outage Factor</span>
                         </div>
                     </div>
+
                     <!-- EFOR Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-3 flex flex-col items-start">
-                            <div class="text-2xl text-yellow-600 mb-1"><i class="fas fa-exclamation-triangle"></i></div>
-                            <h3 class="text-base font-semibold mb-0.5">EFOR</h3>
-                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($performance['efor'], 1) }}%</p>
-                            <span class="text-yellow-600 text-xs font-medium">Equivalent Forced Outage Rate</span>
+                        <div class="p-4">
+                            <div class="text-3xl text-yellow-600 mb-2">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">EFOR</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['efor'], 1) }}%</p>
+                            <span class="text-yellow-600 text-sm font-medium">Equivalent Forced Outage Rate</span>
                         </div>
                     </div>
+
                     <!-- SdOF Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-3 flex flex-col items-start">
-                            <div class="text-2xl text-indigo-600 mb-1"><i class="fas fa-bolt"></i></div>
-                            <h3 class="text-base font-semibold mb-0.5">SdOF</h3>
-                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($performance['sdof'], 1) }}%</p>
-                            <span class="text-indigo-600 text-xs font-medium">Sudden Outage Factor</span>
+                        <div class="p-4">
+                            <div class="text-3xl text-indigo-600 mb-2">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">SdOF</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['sdof'], 1) }}%</p>
+                            <span class="text-indigo-600 text-sm font-medium">Sudden Outage Factor</span>
                         </div>
                     </div>
+
                     <!-- NCF Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-3 flex flex-col items-start">
-                            <div class="text-2xl text-emerald-600 mb-1"><i class="fas fa-tachometer-alt"></i></div>
-                            <h3 class="text-base font-semibold mb-0.5">NCF</h3>
-                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($performance['ncf'], 1) }}%</p>
-                            <span class="text-emerald-600 text-xs font-medium">Net Capacity Factor</span>
+                        <div class="p-4">
+                            <div class="text-3xl text-emerald-600 mb-2">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">NCF</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['ncf'], 1) }}%</p>
+                            <span class="text-emerald-600 text-sm font-medium">Net Capacity Factor</span>
                         </div>
                     </div>
+
                     <!-- Transformer Losses Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <div class="p-3 flex flex-col items-start">
-                            <div class="text-2xl text-purple-600 mb-1"><i class="fas fa-plug"></i></div>
-                            <h3 class="text-base font-semibold mb-0.5">PS Susut Trafo</h3>
-                            <p class="text-gray-600 mb-1 text-base font-bold">{{ number_format($transformerLosses['current'], 2) }}</p>
-                            <span class="text-purple-600 text-xs font-medium">{{ $transformerLosses['unit'] }}</span>
+                        <div class="p-4">
+                            <div class="text-3xl text-purple-600 mb-2">
+                                <i class="fas fa-plug"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">PS Susut Trafo</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($transformerLosses['current'], 2) }}</p>
+                            <span class="text-purple-600 text-sm font-medium">{{ $transformerLosses['unit'] }}</span>
                         </div>
                     </div>
-                </div>
 
-                <!-- Additional Performance Parameters -->
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+                    <!-- Kit Ratio Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div class="p-4">
                             <div class="text-3xl text-pink-600 mb-2">
                                 <i class="fas fa-percentage"></i>
                             </div>
                             <h3 class="text-lg font-semibold mb-1">Kit Ratio</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['kit_ratio'], 2) }}%</p>
-                            <span class="text-pink-600 text-sm font-medium">Rasio Daya Kit</span>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['kit_ratio'], 1) }}%</p>
+                            <span class="text-pink-600 text-sm font-medium">Rasio Daya KIT</span>
                         </div>
                     </div>
+
+                    <!-- Usage Percentage Card -->
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-orange-600 mb-2">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">Usage (%)</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['usage_percentage'], 1) }}%</p>
+                            <span class="text-orange-600 text-sm font-medium">Persentase Pemakaian Sendiri</span>
+                        </div>
+                    </div>
+
+                    <!-- Water Usage Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div class="p-4">
                             <div class="text-3xl text-cyan-600 mb-2">
                                 <i class="fas fa-tint"></i>
                             </div>
-                            <h3 class="text-lg font-semibold mb-1">Usage %</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['usage_percentage'], 2) }}%</p>
-                            <span class="text-cyan-600 text-sm font-medium">Persentase Pemakaian Sendiri</span>
+                            <h3 class="text-lg font-semibold mb-1">Air (M³)</h3>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($fuelUsage['water'], 1) }}</p>
+                            <span class="text-cyan-600 text-sm font-medium">Pemakaian Air</span>
                         </div>
                     </div>
+
+                    <!-- Trip Machine Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div class="p-4">
-                            <div class="text-3xl text-blue-800 mb-2">
-                                <i class="fas fa-water"></i>
+                            <div class="text-3xl text-gray-700 mb-2">
+                                <i class="fas fa-tools"></i>
                             </div>
-                            <h3 class="text-lg font-semibold mb-1">Water Usage</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($fuelUsage['water'], 2) }} m³</p>
-                            <span class="text-blue-800 text-sm font-medium">Pemakaian Air</span>
+                            <h3 class="text-lg font-semibold mb-1">Trip Mesin</h3>
+                            <p class="text-gray-700 mb-2 text-sm">{{ number_format($performance['trip_machine'] ?? ($latestSummary->trip_machine ?? 0), 0) }}</p>
+                            <span class="text-gray-700 text-sm font-medium">Jumlah Trip Mesin</span>
                         </div>
                     </div>
+
+                    <!-- Trip Electrical Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div class="p-4">
-                            <div class="text-3xl text-orange-600 mb-2">
-                                <i class="fas fa-random"></i>
+                            <div class="text-3xl text-blue-700 mb-2">
+                                <i class="fas fa-bolt"></i>
                             </div>
-                            <h3 class="text-lg font-semibold mb-1">Trip</h3>
-                            <p class="text-gray-600 mb-2 text-sm">Mesin: {{ number_format($chartData['trip_machine'][count($chartData['trip_machine'])-1] ?? 0, 0) }} | Listrik: {{ number_format($chartData['trip_electrical'][count($chartData['trip_electrical'])-1] ?? 0, 0) }}</p>
-                            <span class="text-orange-600 text-sm font-medium">Trip Mesin & Listrik</span>
+                            <h3 class="text-lg font-semibold mb-1">Trip Listrik</h3>
+                            <p class="text-blue-700 mb-2 text-sm">{{ number_format($performance['trip_electrical'] ?? ($latestSummary->trip_electrical ?? 0), 0) }}</p>
+                            <span class="text-blue-700 text-sm font-medium">Jumlah Trip Listrik</span>
                         </div>
                     </div>
+
+                    <!-- EFDH Card -->
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-green-600 mb-2">
+                                <i class="fas fa-hourglass-half"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">EFDH</h3>
+                            <p class="text-green-600 mb-2 text-sm">{{ number_format($performance['efdh'] ?? ($latestSummary->efdh ?? 0), 1) }}</p>
+                            <span class="text-green-600 text-sm font-medium">Equivalent Forced Derating Hours</span>
+                        </div>
+                    </div>
+
+                    <!-- EPDH Card -->
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-orange-500 mb-2">
+                                <i class="fas fa-hourglass-end"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">EPDH</h3>
+                            <p class="text-orange-500 mb-2 text-sm">{{ number_format($performance['epdh'] ?? ($latestSummary->epdh ?? 0), 1) }}</p>
+                            <span class="text-orange-500 text-sm font-medium">Equivalent Planned Derating Hours</span>
+                        </div>
+                    </div>
+
+                    <!-- EUDH Card -->
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-purple-600 mb-2">
+                                <i class="fas fa-hourglass-start"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">EUDH</h3>
+                            <p class="text-purple-600 mb-2 text-sm">{{ number_format($performance['eudh'] ?? ($latestSummary->eudh ?? 0), 1) }}</p>
+                            <span class="text-purple-600 text-sm font-medium">Equivalent Unplanned Derating Hours</span>
+                        </div>
+                    </div>
+
+                    <!-- ESDH Card -->
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="p-4">
+                            <div class="text-3xl text-pink-600 mb-2">
+                                <i class="fas fa-hourglass"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1">ESDH</h3>
+                            <p class="text-pink-600 mb-2 text-sm">{{ number_format($performance['esdh'] ?? ($latestSummary->esdh ?? 0), 1) }}</p>
+                            <span class="text-pink-600 text-sm font-medium">Equivalent Sudden Derating Hours</span>
+                        </div>
+                    </div>
+
+                    <!-- JSI Card -->
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div class="p-4">
                             <div class="text-3xl text-fuchsia-600 mb-2">
                                 <i class="fas fa-star"></i>
                             </div>
                             <h3 class="text-lg font-semibold mb-1">JSI</h3>
-                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['jsi'], 2) }}</p>
-                            <span class="text-fuchsia-600 text-sm font-medium">JSI (Indeks Kinerja)</span>
+                            <p class="text-gray-600 mb-2 text-sm">{{ number_format($performance['jsi'], 1) }}</p>
+                            <span class="text-fuchsia-600 text-sm font-medium">Jadwal Shift Indeks</span>
                         </div>
                     </div>
                 </div>
@@ -346,14 +429,12 @@
                 </div>
 
                 <!-- Charts Section -->
-                <!-- Performance Chart -->
                 <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
                     <h3 class="text-lg font-medium mb-4">Grafik Kinerja Pembangkit</h3>
                     <div style="height: 300px;">
                         <canvas id="performanceChart"></canvas>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <!-- Production Chart -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
@@ -362,7 +443,6 @@
                             <canvas id="productionChart"></canvas>
                         </div>
                     </div>
-
                     <!-- Fuel Consumption Chart -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
                         <h3 class="text-lg font-medium mb-4">Konsumsi Bahan Bakar</h3>
@@ -371,54 +451,42 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Diagram Tambahan -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <!-- Kit Ratio Chart -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-medium mb-4">Grafik Kit Ratio</h3>
+                        <h3 class="text-lg font-medium mb-4">Grafik Kit Ratio 7 Hari Terakhir</h3>
                         <div style="height: 300px;">
                             <canvas id="kitRatioChart"></canvas>
                         </div>
                     </div>
                     <!-- Usage Percentage Chart -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-medium mb-4">Grafik Usage Percentage</h3>
+                        <h3 class="text-lg font-medium mb-4">Grafik Usage Percentage 7 Hari Terakhir</h3>
                         <div style="height: 300px;">
-                            <canvas id="usagePercentageChart"></canvas>
+                            <canvas id="usageChart"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- Water Usage Chart -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-medium mb-4">Grafik Water Usage</h3>
-                        <div style="height: 300px;">
-                            <canvas id="waterUsageChart"></canvas>
-                        </div>
-                    </div>
                     <!-- Trip Chart -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-medium mb-4">Grafik Trip Mesin & Listrik</h3>
+                        <h3 class="text-lg font-medium mb-4">Grafik Trip Mesin & Trip Listrik</h3>
                         <div style="height: 300px;">
                             <canvas id="tripChart"></canvas>
                         </div>
                     </div>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- EFDH/EPDH/EUDH/ESDH Chart -->
+                    <!-- Derating Hours Chart -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-medium mb-4">Grafik EFDH / EPDH / EUDH / ESDH</h3>
+                        <h3 class="text-lg font-medium mb-4">Grafik Derating Hours (EFDH, EPDH, EUDH, ESDH)</h3>
                         <div style="height: 300px;">
-                            <canvas id="efdhChart"></canvas>
+                            <canvas id="deratingChart"></canvas>
                         </div>
                     </div>
-                    <!-- JSI Chart -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-medium mb-4">Grafik JSI</h3>
-                        <div style="height: 300px;">
-                            <canvas id="jsiChart"></canvas>
-                        </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                    <h3 class="text-lg font-medium mb-4">Grafik JSI 7 Hari Terakhir</h3>
+                    <div style="height: 300px;">
+                        <canvas id="jsiChart"></canvas>
                     </div>
                 </div>
 
@@ -545,469 +613,126 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('kinerjaChart').getContext('2d');
-    const chartData = {
-        labels: {!! json_encode($chartData['labels'] ?? []) !!},
-        datasets: [{
-            label: 'EAF',
-            data: {!! json_encode($chartData['eaf'] ?? []) !!},
-            borderColor: 'rgb(59, 130, 246)',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            fill: true,
-            tension: 0.4
-        }, {
-            label: 'SOF',
-            data: {!! json_encode($chartData['sof'] ?? []) !!},
-            borderColor: 'rgb(239, 68, 68)',
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-            fill: true,
-            tension: 0.4
-        }]
-    };
-
-    new Chart(ctx, {
+    // Performance Chart
+    const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+    new Chart(performanceCtx, {
         type: 'line',
-        data: chartData,
+        data: {
+            labels: {!! json_encode($chartData['labels']) !!},
+            datasets: [
+                { label: 'EAF (%)', data: {!! json_encode($chartData['eaf']) !!}, borderColor: 'rgb(59, 130, 246)', backgroundColor: 'rgba(59, 130, 246, 0.1)', borderWidth: 2, pointRadius: 4, pointHoverRadius: 6, tension: 0.3 },
+                { label: 'SOF (%)', data: {!! json_encode($chartData['sof']) !!}, borderColor: 'rgb(239, 68, 68)', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderWidth: 2, pointRadius: 4, pointHoverRadius: 6, tension: 0.3 },
+                { label: 'EFOR (%)', data: {!! json_encode($chartData['efor']) !!}, borderColor: 'rgb(234, 179, 8)', backgroundColor: 'rgba(234, 179, 8, 0.1)', borderWidth: 2, pointRadius: 4, pointHoverRadius: 6, tension: 0.3 },
+                { label: 'NCF (%)', data: {!! json_encode($chartData['ncf']) !!}, borderColor: 'rgb(34, 197, 94)', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 2, pointRadius: 4, pointHoverRadius: 6, tension: 0.3 }
+            ]
+        },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            interaction: {
-                intersect: false,
-                mode: 'index'
-            },
-            plugins: {
-                legend: {
-                    position: 'top',
-                    labels: {
-                        usePointStyle: true,
-                        padding: 20
-                    }
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    titleColor: '#1f2937',
-                    bodyColor: '#1f2937',
-                    borderColor: '#e5e7eb',
-                    borderWidth: 1,
-                    padding: 12,
-                    displayColors: true
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        drawBorder: false,
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    },
-                    ticks: {
-                        callback: function(value) {
-                            return value + '%';
-                        }
-                    }
-                },
-                x: {
-                    grid: {
-                        drawBorder: false,
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    }
-                }
-            }
+            interaction: { mode: 'index', intersect: false },
+            plugins: { legend: { position: 'top', labels: { usePointStyle: true, padding: 20, font: { size: 12 } } }, tooltip: { backgroundColor: 'rgba(255, 255, 255, 0.9)', titleColor: '#1f2937', bodyColor: '#1f2937', borderColor: '#e5e7eb', borderWidth: 1, padding: 12, displayColors: true, callbacks: { label: function(context) { return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%'; } } } },
+            scales: { y: { beginAtZero: true, max: 100, grid: { drawBorder: false, color: 'rgba(0, 0, 0, 0.05)' }, ticks: { callback: function(value) { return value + '%'; }, font: { size: 11 } } }, x: { grid: { drawBorder: false, color: 'rgba(0, 0, 0, 0.05)' }, ticks: { font: { size: 11 } } } }
         }
     });
-});
-
-const backgroundImages = [
-    "{{ asset('images/welcome.webp') }}",
-    "{{ asset('images/welcome2.jpeg') }}",
-    "{{ asset('images/welcome3.jpg') }}"
-];
-
-let currentImageIndex = 0;
-const welcomeCard = document.querySelector('.welcome-card');
-
-function changeBackground() {
-    welcomeCard.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
-    currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
-}
-
-// Set gambar awal
-changeBackground();
-
-// Ganti gambar setiap 5 detik
-setInterval(changeBackground, 5000);
-
-// Performance Chart
-const performanceCtx = document.getElementById('performanceChart').getContext('2d');
-new Chart(performanceCtx, {
-    type: 'line',
-    data: {
-        labels: {!! json_encode($chartData['labels']) !!},
-        datasets: [{
-            label: 'EAF (%)',
-            data: {!! json_encode($chartData['eaf']) !!},
-            borderColor: 'rgb(59, 130, 246)',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            borderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            tension: 0.3
-        }, {
-            label: 'SOF (%)',
-            data: {!! json_encode($chartData['sof']) !!},
-            borderColor: 'rgb(239, 68, 68)',
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-            borderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            tension: 0.3
-        }, {
-            label: 'EFOR (%)',
-            data: {!! json_encode($chartData['efor']) !!},
-            borderColor: 'rgb(234, 179, 8)',
-            backgroundColor: 'rgba(234, 179, 8, 0.1)',
-            borderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            tension: 0.3
-        }, {
-            label: 'NCF (%)',
-            data: {!! json_encode($chartData['ncf']) !!},
-            borderColor: 'rgb(34, 197, 94)',
-            backgroundColor: 'rgba(34, 197, 94, 0.1)',
-            borderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            tension: 0.3
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-            mode: 'index',
-            intersect: false,
+    // Production Chart
+    const productionCtx = document.getElementById('productionChart').getContext('2d');
+    new Chart(productionCtx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($chartData['labels']) !!},
+            datasets: [{ label: 'Produksi Netto (MW)', data: {!! json_encode($chartData['production']) !!}, borderColor: 'rgb(59, 130, 246)', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4 }]
         },
-        plugins: {
-            legend: {
-                position: 'top',
-                labels: {
-                    usePointStyle: true,
-                    padding: 20,
-                    font: {
-                        size: 12
-                    }
-                }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                titleColor: '#1f2937',
-                bodyColor: '#1f2937',
-                borderColor: '#e5e7eb',
-                borderWidth: 1,
-                padding: 12,
-                displayColors: true,
-                callbacks: {
-                    label: function(context) {
-                        return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
-                    }
-                }
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                max: 100,
-                grid: {
-                    drawBorder: false,
-                    color: 'rgba(0, 0, 0, 0.05)'
-                },
-                ticks: {
-                    callback: function(value) {
-                        return value + '%';
-                    },
-                    font: {
-                        size: 11
-                    }
-                }
-            },
-            x: {
-                grid: {
-                    drawBorder: false,
-                    color: 'rgba(0, 0, 0, 0.05)'
-                },
-                ticks: {
-                    font: {
-                        size: 11
-                    }
-                }
-            }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'top' } },
+            scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return value + ' MW'; } } } }
         }
-    }
-});
-
-// Production Chart
-const productionCtx = document.getElementById('productionChart').getContext('2d');
-new Chart(productionCtx, {
-    type: 'line',
-    data: {
-        labels: {!! json_encode($chartData['labels']) !!},
-        datasets: [{
-            label: 'Produksi Netto (MW)',
-            data: {!! json_encode($chartData['production']) !!},
-            borderColor: 'rgb(59, 130, 246)',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            fill: true,
-            tension: 0.4
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'top',
-            }
+    });
+    // Fuel Consumption Chart
+    const fuelCtx = document.getElementById('fuelChart').getContext('2d');
+    new Chart(fuelCtx, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($chartData['labels']) !!},
+            datasets: [
+                { label: 'HSD', data: {!! json_encode($chartData['fuel']['hsd']) !!}, backgroundColor: 'rgba(34, 197, 94, 0.5)', borderColor: 'rgb(34, 197, 94)', borderWidth: 1 },
+                { label: 'MFO', data: {!! json_encode($chartData['fuel']['mfo']) !!}, backgroundColor: 'rgba(234, 179, 8, 0.5)', borderColor: 'rgb(234, 179, 8)', borderWidth: 1 },
+                { label: 'B35', data: {!! json_encode($chartData['fuel']['b35']) !!}, backgroundColor: 'rgba(59, 130, 246, 0.5)', borderColor: 'rgb(59, 130, 246)', borderWidth: 1 },
+                { label: 'B40', data: {!! json_encode($chartData['fuel']['b40']) !!}, backgroundColor: 'rgba(147, 51, 234, 0.5)', borderColor: 'rgb(147, 51, 234)', borderWidth: 1 }
+            ]
         },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    callback: function(value) {
-                        return value + ' MW';
-                    }
-                }
-            }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'top' } },
+            scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return value + ' L'; } } } }
         }
-    }
-});
-
-// Fuel Consumption Chart
-const fuelCtx = document.getElementById('fuelChart').getContext('2d');
-new Chart(fuelCtx, {
-    type: 'bar',
-    data: {
-        labels: {!! json_encode($chartData['labels']) !!},
-        datasets: [{
-            label: 'HSD',
-            data: {!! json_encode($chartData['fuel']['hsd']) !!},
-            backgroundColor: 'rgba(34, 197, 94, 0.5)',
-            borderColor: 'rgb(34, 197, 94)',
-            borderWidth: 1
-        }, {
-            label: 'MFO',
-            data: {!! json_encode($chartData['fuel']['mfo']) !!},
-            backgroundColor: 'rgba(234, 179, 8, 0.5)',
-            borderColor: 'rgb(234, 179, 8)',
-            borderWidth: 1
-        }, {
-            label: 'B35',
-            data: {!! json_encode($chartData['fuel']['b35']) !!},
-            backgroundColor: 'rgba(59, 130, 246, 0.5)',
-            borderColor: 'rgb(59, 130, 246)',
-            borderWidth: 1
-        }, {
-            label: 'B40',
-            data: {!! json_encode($chartData['fuel']['b40']) !!},
-            backgroundColor: 'rgba(147, 51, 234, 0.5)',
-            borderColor: 'rgb(147, 51, 234)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'top',
-            }
+    });
+    // Kit Ratio Chart
+    const kitRatioCtx = document.getElementById('kitRatioChart').getContext('2d');
+    new Chart(kitRatioCtx, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($chartData['labels']) !!},
+            datasets: [{ label: 'Kit Ratio (%)', data: {!! json_encode($chartData['kit_ratio']) !!}, backgroundColor: 'rgba(236, 72, 153, 0.5)', borderColor: 'rgb(236, 72, 153)', borderWidth: 1 }]
         },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    callback: function(value) {
-                        return value + ' L';
-                    }
-                }
-            }
-        }
-    }
-});
-
-// Handle unit filter change
-document.getElementById('unitFilter').addEventListener('change', function(e) {
-    window.location.href = `${window.location.pathname}?unit_source=${e.target.value}`;
-});
-
-// Kit Ratio Chart
-const kitRatioCtx = document.getElementById('kitRatioChart').getContext('2d');
-new Chart(kitRatioCtx, {
-    type: 'line',
-    data: {
-        labels: {!! json_encode($chartData['labels']) !!},
-        datasets: [{
-            label: 'Kit Ratio (%)',
-            data: {!! json_encode($chartData['kit_ratio']) !!},
-            borderColor: 'rgb(236, 72, 153)',
-            backgroundColor: 'rgba(236, 72, 153, 0.1)',
-            fill: true,
-            tension: 0.4
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'top' } },
-        scales: { y: { beginAtZero: true, ticks: { callback: v => v + '%' } } }
-    }
-});
-
-// Usage Percentage Chart
-const usagePercentageCtx = document.getElementById('usagePercentageChart').getContext('2d');
-new Chart(usagePercentageCtx, {
-    type: 'line',
-    data: {
-        labels: {!! json_encode($chartData['labels']) !!},
-        datasets: [{
-            label: 'Usage Percentage (%)',
-            data: {!! json_encode($chartData['usage_percentage']) !!},
-            borderColor: 'rgb(6, 182, 212)',
-            backgroundColor: 'rgba(6, 182, 212, 0.1)',
-            fill: true,
-            tension: 0.4
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'top' } },
-        scales: { y: { beginAtZero: true, ticks: { callback: v => v + '%' } } }
-    }
-});
-
-// Water Usage Chart
-const waterUsageCtx = document.getElementById('waterUsageChart').getContext('2d');
-new Chart(waterUsageCtx, {
-    type: 'bar',
-    data: {
-        labels: {!! json_encode($chartData['labels']) !!},
-        datasets: [{
-            label: 'Water Usage (m³)',
-            data: {!! json_encode($chartData['water_usage']) !!},
-            backgroundColor: 'rgba(30, 64, 175, 0.5)',
-            borderColor: 'rgb(30, 64, 175)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'top' } },
-        scales: { y: { beginAtZero: true, ticks: { callback: v => v + ' m³' } } }
-    }
-});
-
-// Trip Chart
-const tripCtx = document.getElementById('tripChart').getContext('2d');
-new Chart(tripCtx, {
-    type: 'bar',
-    data: {
-        labels: {!! json_encode($chartData['labels']) !!},
-        datasets: [
-            {
-                label: 'Trip Mesin',
-                data: {!! json_encode($chartData['trip_machine']) !!},
-                backgroundColor: 'rgba(251, 146, 60, 0.5)',
-                borderColor: 'rgb(251, 146, 60)',
-                borderWidth: 1
-            },
-            {
-                label: 'Trip Listrik',
-                data: {!! json_encode($chartData['trip_electrical']) !!},
-                backgroundColor: 'rgba(251, 191, 36, 0.5)',
-                borderColor: 'rgb(251, 191, 36)',
-                borderWidth: 1
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'top' } },
-        scales: { y: { beginAtZero: true } }
-    }
-});
-
-// EFDH/EPDH/EUDH/ESDH Chart
-const efdhCtx = document.getElementById('efdhChart').getContext('2d');
-new Chart(efdhCtx, {
-    type: 'line',
-    data: {
-        labels: {!! json_encode($chartData['labels']) !!},
-        datasets: [
-            {
-                label: 'EFDH',
-                data: {!! json_encode($chartData['efdh']) !!},
-                borderColor: 'rgb(59, 130, 246)',
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                fill: true,
-                tension: 0.4
-            },
-            {
-                label: 'EPDH',
-                data: {!! json_encode($chartData['epdh']) !!},
-                borderColor: 'rgb(16, 185, 129)',
-                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                fill: true,
-                tension: 0.4
-            },
-            {
-                label: 'EUDH',
-                data: {!! json_encode($chartData['eudh']) !!},
-                borderColor: 'rgb(251, 191, 36)',
-                backgroundColor: 'rgba(251, 191, 36, 0.1)',
-                fill: true,
-                tension: 0.4
-            },
-            {
-                label: 'ESDH',
-                data: {!! json_encode($chartData['esdh']) !!},
-                borderColor: 'rgb(168, 85, 247)',
-                backgroundColor: 'rgba(168, 85, 247, 0.1)',
-                fill: true,
-                tension: 0.4
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'top' } },
-        scales: { y: { beginAtZero: true } }
-    }
-});
-
-// JSI Chart
-const jsiCtx = document.getElementById('jsiChart').getContext('2d');
-new Chart(jsiCtx, {
-    type: 'line',
-    data: {
-        labels: {!! json_encode($chartData['labels']) !!},
-        datasets: [{
-            label: 'JSI',
-            data: {!! json_encode($chartData['jsi']) !!},
-            borderColor: 'rgb(232, 121, 249)',
-            backgroundColor: 'rgba(232, 121, 249, 0.1)',
-            fill: true,
-            tension: 0.4
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'top' } },
-        scales: { y: { beginAtZero: true } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } }
+    });
+    // Usage Percentage Chart
+    const usageCtx = document.getElementById('usageChart').getContext('2d');
+    new Chart(usageCtx, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($chartData['labels']) !!},
+            datasets: [{ label: 'Usage (%)', data: {!! json_encode($chartData['usage_percentage']) !!}, backgroundColor: 'rgba(251, 191, 36, 0.5)', borderColor: 'rgb(251, 191, 36)', borderWidth: 1 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } }
+    });
+    // Trip Chart
+    const tripCtx = document.getElementById('tripChart').getContext('2d');
+    new Chart(tripCtx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($chartData['labels']) !!},
+            datasets: [
+                { label: 'Trip Mesin', data: {!! json_encode($chartData['trip_machine']) !!}, borderColor: 'rgb(75, 85, 99)', backgroundColor: 'rgba(75, 85, 99, 0.1)', fill: true, tension: 0.3 },
+                { label: 'Trip Listrik', data: {!! json_encode($chartData['trip_electrical']) !!}, borderColor: 'rgb(156, 163, 175)', backgroundColor: 'rgba(156, 163, 175, 0.1)', fill: true, tension: 0.3 }
+            ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } }
+    });
+    // Derating Hours Chart
+    const deratingCtx = document.getElementById('deratingChart').getContext('2d');
+    new Chart(deratingCtx, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($chartData['labels']) !!},
+            datasets: [
+                { label: 'EFDH', data: {!! json_encode($chartData['efdh']) !!}, backgroundColor: 'rgba(132, 204, 22, 0.5)', borderColor: 'rgb(132, 204, 22)', borderWidth: 1 },
+                { label: 'EPDH', data: {!! json_encode($chartData['epdh']) !!}, backgroundColor: 'rgba(163, 230, 53, 0.5)', borderColor: 'rgb(163, 230, 53)', borderWidth: 1 },
+                { label: 'EUDH', data: {!! json_encode($chartData['eudh']) !!}, backgroundColor: 'rgba(190, 242, 100, 0.5)', borderColor: 'rgb(190, 242, 100)', borderWidth: 1 },
+                { label: 'ESDH', data: {!! json_encode($chartData['esdh']) !!}, backgroundColor: 'rgba(217, 249, 157, 0.5)', borderColor: 'rgb(217, 249, 157)', borderWidth: 1 }
+            ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } }
+    });
+    // JSI Chart
+    const jsiCtx = document.getElementById('jsiChart').getContext('2d');
+    new Chart(jsiCtx, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($chartData['labels']) !!},
+            datasets: [{ label: 'JSI', data: {!! json_encode($chartData['jsi']) !!}, backgroundColor: 'rgba(232, 121, 249, 0.5)', borderColor: 'rgb(232, 121, 249)', borderWidth: 1 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+    });
+    // Event handler filter unit
+    const unitFilter = document.getElementById('unitFilter');
+    if (unitFilter) {
+        unitFilter.addEventListener('change', function(e) {
+            window.location.href = `${window.location.pathname}?unit_source=${e.target.value}`;
+        });
     }
 });
 </script>

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FiveS5rBatch extends Model
 {
-    protected $table = 'five_s5r_batches';
+    protected $table = '    ';
     protected $fillable = [
         'created_by',
         'sync_unit_origin',

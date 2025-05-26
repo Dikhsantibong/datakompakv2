@@ -332,20 +332,29 @@
                                                     <input type="number" 
                                                            step="0.001" 
                                                            name="data[{{ $machine->id }}][installed_power]"
-                                                           class="block w-[150px] border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center bg-gray-100" 
-                                                           value="{{ $machine->latestOperation->installed_power ?? '' }}" readonly>
+                                                           class="block w-[150px] border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center" 
+                                                           value="{{ old('data.'.$machine->id.'.installed_power',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->installed_power : 
+                                                                ($machine->latestOperation->installed_power ?? '')) }}">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" 
                                                            name="data[{{ $machine->id }}][dmn_power]"
-                                                           class="block w-[150px] border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center bg-gray-100" 
-                                                           value="{{ $machine->latestOperation->dmn ?? '' }}" readonly>
+                                                           class="block w-[150px] border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center" 
+                                                           value="{{ old('data.'.$machine->id.'.dmn_power',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->dmn_power : 
+                                                                ($machine->latestOperation->dmn ?? '')) }}">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" 
                                                            name="data[{{ $machine->id }}][capable_power]"
-                                                           class="block w-[150px] border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center bg-gray-100" 
-                                                           value="{{ $machine->latestOperation->dmp ?? '' }}" readonly>
+                                                           class="block w-[150px] border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center" 
+                                                           value="{{ old('data.'.$machine->id.'.capable_power',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->capable_power : 
+                                                                ($machine->latestOperation->dmp ?? '')) }}">
                                                 </div>
                                             </div>
                                         </td>

@@ -18,6 +18,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 
 class FiveS5RExport implements FromView, WithTitle, WithEvents, WithStyles, WithDrawings
 {
@@ -51,7 +52,7 @@ class FiveS5RExport implements FromView, WithTitle, WithEvents, WithStyles, With
 
     public function drawings()
     {
-        // PLN Logo
+        // PLN Logo (kiri)
         $plnDrawing = new Drawing();
         $plnDrawing->setName('PLN Logo');
         $plnDrawing->setDescription('PLN Logo');
@@ -61,17 +62,66 @@ class FiveS5RExport implements FromView, WithTitle, WithEvents, WithStyles, With
         $plnDrawing->setOffsetX(30);
         $plnDrawing->setOffsetY(5);
 
-        // K3 Logo
-        $k3Drawing = new Drawing();
-        $k3Drawing->setName('K3 Logo');
-        $k3Drawing->setDescription('K3 Logo');
-        $k3Drawing->setPath(public_path('logo/k3_logo.png'));
-        $k3Drawing->setHeight(60);
-        $k3Drawing->setCoordinates('H2');
-        $k3Drawing->setOffsetX(30);
-        $k3Drawing->setOffsetY(5);
+        // Get current user name
+        $userName = Auth::user()->name ?? '';
+        
+        // Unit Logo (kanan) - Choose logo based on user name
+        $unitDrawing = new Drawing();
+        $unitDrawing->setName('Unit Logo');
+        $unitDrawing->setDescription('Unit Logo');
+        
+        // Set logo path based on user name
+        if (stripos($userName, 'PLTU MORAMO') !== false) {
+            $logoPath = 'logo/PLTU_MORAMO.png';
+        } elseif (stripos($userName, 'PLTD WUA WUA') !== false || stripos($userName, 'PLTD WUA-WUA') !== false) {
+            $logoPath = 'logo/PLTD_WUA_WUA.png';
+        } elseif (stripos($userName, 'PLTD POASIA CONTAINERIZED') !== false) {
+            $logoPath = 'logo/PLTD_POASIA_CONTAINERIZED.png';
+        } elseif (stripos($userName, 'PLTD POASIA') !== false) {
+            $logoPath = 'logo/PLTD_POASIA.png';
+        } elseif (stripos($userName, 'PLTD KOLAKA') !== false) {
+            $logoPath = 'logo/PLTD_KOLAKA.png';
+        } elseif (stripos($userName, 'PLTD LANIPA NIPA') !== false || stripos($userName, 'PLTD LANIPANIPA') !== false) {
+            $logoPath = 'logo/PLTD_LANIPA_NIPA.png';
+        } elseif (stripos($userName, 'PLTD LADUMPI') !== false) {
+            $logoPath = 'logo/PLTD_LADUMPI.png';
+        } elseif (stripos($userName, 'PLTM SABILAMBO') !== false) {
+            $logoPath = 'logo/PLTM_SABILAMBO.png';
+        } elseif (stripos($userName, 'PLTM MIKUASI') !== false) {
+            $logoPath = 'logo/PLTM_MIKUASI.png';
+        } elseif (stripos($userName, 'PLTD BAU BAU') !== false || stripos($userName, 'PLTD BAU-BAU') !== false) {
+            $logoPath = 'logo/PLTD_BAU_BAU.png';
+        } elseif (stripos($userName, 'PLTD PASARWAJO') !== false) {
+            $logoPath = 'logo/PLTD_PASARWAJO.png';
+        } elseif (stripos($userName, 'PLTM WINNING') !== false) {
+            $logoPath = 'logo/PLTM_WINNING.png';
+        } elseif (stripos($userName, 'PLTD RAHA') !== false) {
+            $logoPath = 'logo/PLTD_RAHA.png';
+        } elseif (stripos($userName, 'PLTD WANGI WANGI') !== false || stripos($userName, 'PLTD WANGI-WANGI') !== false) {
+            $logoPath = 'logo/PLTD_WANGI_WANGI.png';
+        } elseif (stripos($userName, 'PLTD LANGARA') !== false) {
+            $logoPath = 'logo/PLTD_LANGARA.png';
+        } elseif (stripos($userName, 'PLTD EREKE') !== false) {
+            $logoPath = 'logo/PLTD_EREKE.png';
+        } elseif (stripos($userName, 'PLTMG KENDARI') !== false) {
+            $logoPath = 'logo/PLTMG_KENDARI.png';
+        } elseif (stripos($userName, 'PLTU BARUTA') !== false) {
+            $logoPath = 'logo/PLTU_BARUTA.png';
+        } elseif (stripos($userName, 'PLTMG BAU BAU') !== false || stripos($userName, 'PLTMG BAU-BAU') !== false) {
+            $logoPath = 'logo/PLTMG_BAU_BAU.png';
+        } elseif (stripos($userName, 'PLTM RONGI') !== false) {
+            $logoPath = 'logo/PLTM_RONGI.png';
+        } else {
+            $logoPath = 'logo/UP_KENDARI.png';
+        }
+        
+        $unitDrawing->setPath(public_path($logoPath));
+        $unitDrawing->setHeight(60);
+        $unitDrawing->setCoordinates('H2');
+        $unitDrawing->setOffsetX(30);
+        $unitDrawing->setOffsetY(5);
 
-        return [$plnDrawing, $k3Drawing];
+        return [$plnDrawing, $unitDrawing];
     }
 
     public function title(): string

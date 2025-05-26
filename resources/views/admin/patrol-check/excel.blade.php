@@ -3,11 +3,15 @@
     <!-- Header -->
     <tr>
         <!-- Logo kiri atas -->
-        <td rowspan="4" style="width:80px; text-align:left; vertical-align:top; border:none;"></td>
+        <td rowspan="4" style="width:120px; text-align:left; vertical-align:top; border:none; height:70px;">
+            <!-- PLN Logo will be placed here by export class -->
+        </td>
         <!-- Judul di tengah atas -->
         <td colspan="6" style="text-align:center; font-size:20px; font-weight:bold; color:#333; border:none;">Patrol Check KIT</td>
         <!-- Logo kanan atas -->
-        <td rowspan="4" style="width:120px; text-align:right; vertical-align:top; border:none;"></td>
+        <td rowspan="4" style="width:120px; text-align:right; vertical-align:top; border:none; height:70px;">
+            <!-- Unit Logo will be placed here by export class -->
+        </td>
     </tr>
     <tr>
         <!-- Nama user di kanan atas -->

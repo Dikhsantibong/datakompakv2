@@ -1,23 +1,31 @@
-<table>
-    <!-- Logo row -->
+<table style="border-collapse: collapse;">
+    <!-- Logo spacing row - no border -->
     <tr>
-        <td colspan="5" style="text-align: center;">
-            {{-- <img src="{{ public_path('logo/navlog1.png') }}" width="200"> --}}
+        <td colspan="11" style="height:20px; border:none;"></td>
+    </tr>
+    <!-- Logo row - no border -->
+    <tr>
+        <td colspan="3" style="border:none; height:60px;">
+            <!-- PLN Logo will be placed here by export class -->
         </td>
-        <td></td>
-        <td colspan="5"></td>
+        <td colspan="5" style="border:none; text-align:center;">
+            <span style="font-size:22px; color:#00AEEF; font-family:Arial;">{{ Auth::user()->name ?? 'UP KENDARI' }}</span>
+        </td>
+        <td colspan="3" style="border:none; height:60px;">
+            <!-- Unit Logo will be placed here by export class -->
+        </td>
     </tr>
-
-    <!-- Spacing row -->
-    <tr><td colspan="11"></td></tr>
-
-    <!-- Header -->
+    <!-- Spacing before header - no border -->
+    <tr>
+        <td colspan="11" style="height:20px; border:none;"></td>
+    </tr>
+    <!-- Header utama -->
     <tr class="main-header">
-        <td colspan="11">Laporan Abnormal/Gangguan - {{ $report->created_at->format('d F Y') }}</td>
+        <td colspan="11" style="font-size:16px; font-weight:bold; text-align:center; background:#D1D5DB; height:30px;">Laporan Abnormal/Gangguan - {{ $report->created_at->format('d F Y') }}</td>
     </tr>
-
-    <!-- Spacing row -->
-    <tr><td colspan="11"></td></tr>
+    <tr>
+        <td colspan="11" style="height:15px;"></td>
+    </tr>
 
     <!-- Kronologi Kejadian Section -->
     <tr class="section-header">

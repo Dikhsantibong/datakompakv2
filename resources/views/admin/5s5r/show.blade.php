@@ -138,11 +138,19 @@
                                             </td>
                                             <td class="px-6 py-4 text-sm text-gray-500">
                                                 @if($item->eviden)
-                                                    <a href="{{ Storage::url($item->eviden) }}" target="_blank" class="text-blue-600 hover:text-blue-900">
-                                                        Lihat Eviden
-                                                    </a>
+                                                    <div class="relative group">
+                                                        <img src="{{ Storage::url($item->eviden) }}" 
+                                                             alt="Eviden {{ $item->kategori }}"
+                                                             class="w-32 h-32 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                                                             onclick="openImageModal('{{ Storage::url($item->eviden) }}', '{{ $item->kategori }}')">
+                                                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <div class="bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
+                                                                Klik untuk memperbesar
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 @else
-                                                    -
+                                                    <span class="text-gray-400 italic">Tidak ada eviden</span>
                                                 @endif
                                             </td>
                                         </tr>
@@ -200,11 +208,19 @@
                                             </td>
                                             <td class="px-6 py-4 text-sm text-gray-500 border-r border-gray-200">
                                                 @if($program->eviden)
-                                                    <a href="{{ Storage::url($program->eviden) }}" target="_blank" class="text-blue-600 hover:text-blue-900">
-                                                        Lihat Eviden
-                                                    </a>
+                                                    <div class="relative group">
+                                                        <img src="{{ Storage::url($program->eviden) }}" 
+                                                             alt="Eviden Program {{ $program->program_kerja }}"
+                                                             class="w-32 h-32 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                                                             onclick="openImageModal('{{ Storage::url($program->eviden) }}', 'Program {{ $program->program_kerja }}')">
+                                                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <div class="bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
+                                                                Klik untuk memperbesar
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 @else
-                                                    -
+                                                    <span class="text-gray-400 italic">Tidak ada eviden</span>
                                                 @endif
                                             </td>
                                         </tr>
@@ -240,4 +256,52 @@
 </div>
 
 <script src="{{ asset('js/toggle.js') }}"></script>
+
+<!-- Image Preview Modal -->
+<div id="imageModal" class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-75 flex items-center justify-center">
+    <div class="relative max-w-4xl w-full mx-4">
+        <div class="bg-white rounded-lg shadow-xl">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-gray-900" id="modalTitle"></h3>
+                <button onclick="closeImageModal()" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <img id="modalImage" src="" alt="Preview" class="max-w-full h-auto mx-auto rounded-lg">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openImageModal(imageUrl, title) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    
+    modalImage.src = imageUrl;
+    modalTitle.textContent = 'Eviden ' + title;
+    modal.classList.remove('hidden');
+    
+    // Close modal when clicking outside
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            closeImageModal();
+        }
+    };
+
+    // Add keyboard support for closing
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeImageModal();
+        }
+    });
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    modal.classList.add('hidden');
+}
+</script>
 @endsection 

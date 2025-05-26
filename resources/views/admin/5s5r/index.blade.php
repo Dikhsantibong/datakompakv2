@@ -315,24 +315,23 @@
                                                 <td class="border px-4 py-2 text-center"><input type="checkbox" name="lainnya_{{ $item }}" class="form-checkbox"></td>
                                                 <td class="border px-4 py-2"><textarea type="text" name="kondisi_akhir_pemeriksaan_{{ $item }}" class="w-[200px] h-[100px] p-1 border-gray-300 rounded"></textarea></td>
                                                 <td class="border px-4 py-2" style="min-width: 500px;">
-                                                    <div class="file-upload-wrapper">
+                                                    <div class="mb-6">
+                                                        <label class="block text-sm font-medium text-gray-700 mb-2">Eviden {{ $item }}</label>
                                                         <input type="file" 
-                                                               name="eviden_pemeriksaan_{{ $item }}" 
-                                                               class="hidden eviden-input" 
-                                                               id="eviden-{{ $index }}"
+                                                               id="file_pemeriksaan_{{ $item }}"
+                                                               class="hidden"
                                                                accept="image/*"
-                                                               onchange="previewFile(this, 'preview-{{ $index }}', 'info-{{ $index }}', 'remove-{{ $index }}')">
-                                                        <label for="eviden-{{ $index }}" class="upload-btn">
-                                                            <i class="fas fa-upload"></i> Upload Foto
-                                                        </label>
-                                                        <div class="upload-placeholder">Klik untuk upload atau drag & drop file disini</div>
-                                                        <img id="preview-{{ $index }}" class="file-preview">
-                                                        <div id="info-{{ $index }}" class="file-info"></div>
-                                                        <span id="remove-{{ $index }}" 
-                                                              class="remove-file" 
-                                                              onclick="removeFile('eviden-{{ $index }}', 'preview-{{ $index }}', 'info-{{ $index }}', 'remove-{{ $index }}')">
-                                                            ×
-                                                        </span>
+                                                               onchange="handleFileSelect(this, '{{ $item }}', 'pemeriksaan')">
+                                                        <input type="hidden" name="eviden_pemeriksaan_{{ $item }}" id="eviden_pemeriksaan_{{ $item }}">
+                                                        <button type="button" 
+                                                                onclick="document.getElementById('file_pemeriksaan_{{ $item }}').click()"
+                                                                class="w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-200">
+                                                            <i class="fas fa-upload mr-2"></i>
+                                                            Upload Eviden {{ $item }}
+                                                        </button>
+                                                        <div id="preview_pemeriksaan_{{ $item }}" class="mt-2 relative">
+                                                            <!-- Preview will be shown here -->
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -388,24 +387,23 @@
                                                 <td class="border px-4 py-2"><textarea name="kondisi_akhir_program_{{ $index + 1 }}" class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
                                                 <td class="border px-4 py-2"><textarea name="catatan_{{ $index + 1 }}" class="w-full p-1 border-gray-300 rounded" rows="3" style="width: 200px"></textarea></td>
                                                 <td class="border px-4 py-2" style="min-width: 500px;">
-                                                    <div class="file-upload-wrapper">
+                                                    <div class="mb-6">
+                                                        <label class="block text-sm font-medium text-gray-700 mb-2">Eviden Program {{ $letter }}</label>
                                                         <input type="file" 
-                                                               name="eviden_program_{{ $index + 1 }}" 
-                                                               class="hidden eviden-input" 
-                                                               id="eviden2-{{ $index }}"
+                                                               id="file_program_{{ $index + 1 }}"
+                                                               class="hidden"
                                                                accept="image/*"
-                                                               onchange="previewFile(this, 'preview2-{{ $index }}', 'info2-{{ $index }}', 'remove2-{{ $index }}')">
-                                                        <label for="eviden2-{{ $index }}" class="upload-btn">
-                                                            <i class="fas fa-upload"></i> Upload Foto
-                                                        </label>
-                                                        <div class="upload-placeholder">Klik untuk upload atau drag & drop file disini</div>
-                                                        <img id="preview2-{{ $index }}" class="file-preview">
-                                                        <div id="info2-{{ $index }}" class="file-info"></div>
-                                                        <span id="remove2-{{ $index }}" 
-                                                              class="remove-file" 
-                                                              onclick="removeFile('eviden2-{{ $index }}', 'preview2-{{ $index }}', 'info2-{{ $index }}', 'remove2-{{ $index }}')">
-                                                            ×
-                                                        </span>
+                                                               onchange="handleFileSelect(this, '{{ $index + 1 }}', 'program')">
+                                                        <input type="hidden" name="eviden_program_{{ $index + 1 }}" id="eviden_program_{{ $index + 1 }}">
+                                                        <button type="button" 
+                                                                onclick="document.getElementById('file_program_{{ $index + 1 }}').click()"
+                                                                class="w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-200">
+                                                            <i class="fas fa-upload mr-2"></i>
+                                                            Upload Eviden Program {{ $letter }}
+                                                        </button>
+                                                        <div id="preview_program_{{ $index + 1 }}" class="mt-2 relative">
+                                                            <!-- Preview will be shown here -->
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -477,73 +475,80 @@ changeBackground();
 // Ganti gambar setiap 5 detik
 setInterval(changeBackground, 5000);
 
-function previewFile(input, previewId, infoId, removeId) {
-    const preview = document.getElementById(previewId);
-    const info = document.getElementById(infoId);
-    const remove = document.getElementById(removeId);
+function handleFileSelect(input, identifier, type) {
     const file = input.files[0];
+    if (!file) return;
 
-    if (file) {
-        // Show preview image
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block';
+    const formData = new FormData();
+    formData.append('media_file', file);
+    formData.append('kategori', identifier);
+    formData.append('type', type);
+    formData.append('_token', '{{ csrf_token() }}');
+
+    // Show loading state
+    const previewDiv = document.getElementById(`preview_${type}_${identifier}`);
+    previewDiv.innerHTML = '<div class="text-center py-2">Uploading...</div>';
+
+    fetch('{{ route('admin.5s5r.upload-media') }}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update hidden input with file path
+            document.getElementById(`eviden_${type}_${identifier}`).value = data.data.file_path;
+            
+            // Show preview
+            previewDiv.innerHTML = `
+                <div class="relative">
+                    <img src="${data.data.preview_url}" 
+                         alt="Preview" 
+                         class="w-full h-32 object-cover rounded-md">
+                    <button onclick="deleteMedia('${data.data.file_path}', '${type}', '${identifier}')"
+                            class="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 m-1 hover:bg-red-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">${data.data.file_name}</p>
+            `;
+        } else {
+            previewDiv.innerHTML = `<div class="text-red-500 text-sm">${data.message}</div>`;
         }
-        reader.readAsDataURL(file);
-
-        // Show file info
-        const fileSize = (file.size / 1024).toFixed(2);
-        info.textContent = `${file.name} (${fileSize} KB)`;
-        info.style.display = 'block';
-
-        // Show remove button
-        remove.style.display = 'block';
-    }
-}
-
-function removeFile(inputId, previewId, infoId, removeId) {
-    const input = document.getElementById(inputId);
-    const preview = document.getElementById(previewId);
-    const info = document.getElementById(infoId);
-    const remove = document.getElementById(removeId);
-
-    // Clear input
-    input.value = '';
-
-    // Hide preview
-    preview.src = '';
-    preview.style.display = 'none';
-
-    // Hide info
-    info.textContent = '';
-    info.style.display = 'none';
-
-    // Hide remove button
-    remove.style.display = 'none';
-}
-
-// Validate file size and type before upload
-document.querySelectorAll('.eviden-input').forEach(input => {
-    input.addEventListener('change', function() {
-        const file = this.files[0];
-        const maxSize = 2 * 1024 * 1024; // 2MB
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-
-        if (file) {
-            if (file.size > maxSize) {
-                alert('Ukuran file terlalu besar. Maksimal 2MB');
-                this.value = '';
-                return;
-            }
-
-            if (!allowedTypes.includes(file.type)) {
-                alert('Tipe file tidak didukung. Gunakan format JPG, PNG, atau WEBP');
-                this.value = '';
-                return;
-            }
-        }
+    })
+    .catch(error => {
+        previewDiv.innerHTML = '<div class="text-red-500 text-sm">Upload failed</div>';
+        console.error('Error:', error);
     });
-});
+}
+
+function deleteMedia(filePath, type, identifier) {
+    if (!confirm('Are you sure you want to delete this image?')) return;
+
+    fetch('{{ route('admin.5s5r.delete-media') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ file_path: filePath })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Clear preview and hidden input
+            document.getElementById(`preview_${type}_${identifier}`).innerHTML = '';
+            document.getElementById(`eviden_${type}_${identifier}`).value = '';
+            document.getElementById(`file_${type}_${identifier}`).value = '';
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to delete media');
+    });
+}
 </script>
 @endsection 

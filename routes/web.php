@@ -1411,3 +1411,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('kesiapan-kit', [KesiapanKitController::class, 'index'])->name('kesiapan-kit.index');
     // ... existing code ...
 });
+
+// 5S5R routes
+Route::post('/admin/5s5r/upload-media', [FiveS5RController::class, 'uploadMedia'])->name('admin.5s5r.upload-media');
+Route::post('/admin/5s5r/delete-media', [FiveS5RController::class, 'deleteMedia'])->name('admin.5s5r.delete-media');

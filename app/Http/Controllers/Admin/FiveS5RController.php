@@ -300,4 +300,61 @@ class FiveS5RController extends Controller
                 ->with('error', 'Gagal menghapus data 5S5R: ' . $e->getMessage());
         }
     }
+
+    public function uploadMedia(Request $request)
+    {
+        $request->validate([
+            'media_file' => 'required|file|mimes:jpeg,png,jpg,gif|max:51200', // 50MB max
+            'kategori' => 'required',
+            'type' => 'required|in:pemeriksaan,program'
+        ]);
+
+        try {
+            $file = $request->file('media_file');
+            $fileName = time() . '_' . $request->kategori . '_' . $file->getClientOriginalName();
+            
+            // Store file in the appropriate directory based on type
+            $path = $file->storeAs(
+                "public/5s5r/{$request->type}",
+                $fileName
+            );
+
+            // Return success response with preview URL
+            return response()->json([
+                'success' => true,
+                'message' => 'Media berhasil diupload',
+                'data' => [
+                    'preview_url' => asset('storage/' . str_replace('public/', '', $path)),
+                    'file_path' => str_replace('public/', '', $path),
+                    'file_name' => $file->getClientOriginalName()
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengupload media: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deleteMedia(Request $request)
+    {
+        try {
+            if (Storage::exists('public/' . $request->file_path)) {
+                Storage::delete('public/' . $request->file_path);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Media berhasil dihapus'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus media: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 } 

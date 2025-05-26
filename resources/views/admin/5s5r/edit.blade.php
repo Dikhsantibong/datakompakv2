@@ -5,9 +5,11 @@
     @include('components.sidebar')
     
     <div class="flex-1 flex flex-col overflow-hidden">
-        <header class="bg-white shadow-sm">
-            <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center">
+        <header class="bg-white shadow-sm sticky top-0 z-20
+        ">
+            <div class="flex justify-between items-center px-6 py-3">
+                <div class="flex items-center gap-x-3">
+                    <!-- Mobile Menu Toggle -->
                     <button id="mobile-menu-toggle"
                         class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                         aria-controls="mobile-menu" aria-expanded="false">
@@ -17,14 +19,34 @@
                         </svg>
                     </button>
 
-                    <h1 class="text-xl font-semibold text-gray-900 ml-2">Edit 5S5R</h1>
+                    <button id="desktop-menu-toggle"
+                        class="hidden md:block relative items-center justify-center rounded-md text-gray-400 hover:bg-[#009BB9] p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </button>
+
+                    <h1 class="text-xl font-semibold text-gray-800">Edit Data Pemeriksaan 5S5R</h1>
                 </div>
 
-                <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-500">{{ date('Y-m-d', strtotime($pemeriksaan->first()->created_at)) }}</span>
-                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                        ID: {{ $pemeriksaan->first()->id }}
-                    </span>
+                <div class="relative">
+                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
+                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                    </button>
+                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                        <a href="{{ route('logout') }}" 
+                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
+                        </form>
+                    </div>
                 </div>
             </div>
         </header>
@@ -118,52 +140,64 @@
                         </div>
 
                         <!-- Program Kerja 5R -->
-                        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                            <div class="px-6 py-4 border-b border-gray-200">
-                                <h2 class="text-lg font-medium text-gray-900">
-                                    <i class="fas fa-tasks mr-2 text-gray-400"></i>
-                                    Program Kerja 5R
-                                </h2>
-                            </div>
+                        <div class="bg-white rounded-lg shadow-sm">
                             <div class="p-6">
-                                @foreach($programKerja as $index => $program)
-                                <div class="mb-8 border-b pb-6 last:border-b-0">
-                                    <h3 class="text-lg font-medium mb-4">{{ $program->program_kerja }}</h3>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Goal</label>
-                                            <input type="text" name="goal_{{ $index + 1 }}" value="{{ $program->goal }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Kondisi Awal</label>
-                                            <textarea name="kondisi_awal_program_{{ $index + 1 }}" rows="3" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">{{ $program->kondisi_awal }}</textarea>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Progress</label>
-                                            <input type="text" name="progress_{{ $index + 1 }}" value="{{ $program->progress }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Kondisi Akhir</label>
-                                            <textarea name="kondisi_akhir_program_{{ $index + 1 }}" rows="3" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">{{ $program->kondisi_akhir }}</textarea>
-                                        </div>
-                                        <div class="md:col-span-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Catatan</label>
-                                            <textarea name="catatan_{{ $index + 1 }}" rows="3" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">{{ $program->catatan }}</textarea>
-                                        </div>
-                                        <div class="md:col-span-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Eviden</label>
-                                            @if($program->eviden)
-                                                <div class="mb-2">
-                                                    <a href="{{ Storage::url($program->eviden) }}" target="_blank" class="text-blue-600 hover:text-blue-900">
-                                                        Lihat Eviden Saat Ini
-                                                    </a>
-                                                </div>
-                                            @endif
-                                            <input type="file" name="eviden_program_{{ $index + 1 }}" class="w-full">
-                                        </div>
-                                    </div>
+                                <h2 class="text-lg font-medium text-gray-900 mb-4">Tabel Program Kerja 5R</h2>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full border border-gray-300">
+                                        <thead>
+                                            <tr class="bg-gray-100">
+                                                <th class="border px-4 py-2 text-sm">NO</th>
+                                                <th class="border px-4 py-2 text-sm">Program Kerja 5R</th>
+                                                <th class="border px-4 py-2 text-sm">Goal</th>
+                                                <th class="border px-4 py-2 text-sm">Kondisi Awal</th>
+                                                <th colspan="4" class="border px-4 py-2 text-sm text-center">Progres</th>
+                                                <th class="border px-4 py-2 text-sm">Kondisi Akhir</th>
+                                                <th class="border px-4 py-2 text-sm">Catatan</th>
+                                                <th class="border px-4 py-2 text-sm">Eviden</th>
+                                            </tr>
+                                            <tr class="bg-gray-50">
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2 text-sm">0-25%</th>
+                                                <th class="border px-4 py-2 text-sm">26-50%</th>
+                                                <th class="border px-4 py-2 text-sm">51-75%</th>
+                                                <th class="border px-4 py-2 text-sm">76-100%</th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($programKerja as $index => $program)
+                                            <tr>
+                                                <td class="border px-4 py-2 text-center">{{ chr(65 + $index) }}</td>
+                                                <td class="border px-4 py-2">{{ $program->program_kerja }}</td>
+                                                <td class="border px-4 py-2"><textarea name="goal_{{ $index + 1 }}" class="w-[200px] p-1 border-gray-300 rounded" rows="3">{{ $program->goal }}</textarea></td>
+                                                <td class="border px-4 py-2"><textarea name="kondisi_awal_program_{{ $index + 1 }}" class="w-[200px] p-1 border-gray-300 rounded" rows="3">{{ $program->kondisi_awal }}</textarea></td>
+                                                <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $index + 1 }}" value="0-25" {{ $program->progress == '0-25' ? 'checked' : '' }}></td>
+                                                <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $index + 1 }}" value="26-50" {{ $program->progress == '26-50' ? 'checked' : '' }}></td>
+                                                <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $index + 1 }}" value="51-75" {{ $program->progress == '51-75' ? 'checked' : '' }}></td>
+                                                <td class="border px-4 py-2 text-center"><input type="radio" name="progress_{{ $index + 1 }}" value="76-100" {{ $program->progress == '76-100' ? 'checked' : '' }}></td>
+                                                <td class="border px-4 py-2"><textarea name="kondisi_akhir_program_{{ $index + 1 }}" class="w-[200px] p-1 border-gray-300 rounded" rows="3">{{ $program->kondisi_akhir }}</textarea></td>
+                                                <td class="border px-4 py-2"><textarea name="catatan_{{ $index + 1 }}" class="w-[200px] p-1 border-gray-300 rounded" rows="3">{{ $program->catatan }}</textarea></td>
+                                                <td class="border px-4 py-2" style="min-width: 200px;">
+                                                    @if($program->eviden)
+                                                        <div class="mb-2">
+                                                            <a href="{{ Storage::url($program->eviden) }}" target="_blank" class="text-blue-600 hover:text-blue-900">
+                                                                Lihat Eviden Saat Ini
+                                                            </a>
+                                                        </div>
+                                                    @endif
+                                                    <input type="file" name="eviden_program_{{ $index + 1 }}" class="w-full">
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
-                                @endforeach
                             </div>
                         </div>
 

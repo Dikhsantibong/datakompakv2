@@ -70,6 +70,9 @@ class K3KampController extends Controller
                 'sync_unit_origin' => $unitName
             ]);
 
+            // Debug log
+            Log::info('Created report', ['report_id' => $report->id]);
+
             // Process K3 & Keamanan items
             $k3Items = [
                 'Potensi gangguan keamanan',
@@ -81,19 +84,16 @@ class K3KampController extends Controller
             ];
 
             foreach ($k3Items as $index => $itemName) {
-                // Get status (ada/tidak_ada)
-                $status = 'tidak_ada'; // Default value
+                $status = 'tidak_ada';
                 if ($request->has("status_{$index}") && is_array($request->input("status_{$index}"))) {
                     $status = $request->input("status_{$index}")[0];
                 }
 
-                // Get kondisi (normal/abnormal)
                 $kondisi = null;
                 if ($request->has("kondisi_{$index}") && is_array($request->input("kondisi_{$index}"))) {
                     $kondisi = $request->input("kondisi_{$index}")[0];
                 }
 
-                // Create item if kondisi is set or keterangan is not empty
                 if ($kondisi || $request->filled("keterangan_{$index}")) {
                     $item = $report->items()->create([
                         'item_type' => 'k3_keamanan',
@@ -102,6 +102,28 @@ class K3KampController extends Controller
                         'kondisi' => $kondisi,
                         'keterangan' => $request->input("keterangan_{$index}")
                     ]);
+
+                    // Debug log
+                    Log::info('Created k3 item', [
+                        'item_id' => $item->id,
+                        'item_name' => $itemName,
+                        'eviden_path' => $request->input("eviden_path_{$index}")
+                    ]);
+
+                    // Update media jika ada
+                    if ($request->filled("eviden_path_{$index}")) {
+                        $mediaPath = $request->input("eviden_path_{$index}");
+                        $updated = K3KampMedia::where('item_id', 0)
+                            ->where('file_path', $mediaPath)
+                            ->update(['item_id' => $item->id]);
+                        
+                        // Debug log
+                        Log::info('Updated media for k3 item', [
+                            'item_id' => $item->id,
+                            'media_path' => $mediaPath,
+                            'rows_updated' => $updated
+                        ]);
+                    }
                 }
             }
 
@@ -113,28 +135,56 @@ class K3KampController extends Controller
             ];
 
             foreach ($lingkunganItems as $index => $itemName) {
-                // Get status (ada/tidak_ada)
-                $status = 'tidak_ada'; // Default value
+                $status = 'tidak_ada';
                 if ($request->has("status_lingkungan_{$index}") && is_array($request->input("status_lingkungan_{$index}"))) {
                     $status = $request->input("status_lingkungan_{$index}")[0];
                 }
 
-                // Get kondisi (normal/abnormal)
                 $kondisi = null;
                 if ($request->has("kondisi_lingkungan_{$index}") && is_array($request->input("kondisi_lingkungan_{$index}"))) {
                     $kondisi = $request->input("kondisi_lingkungan_{$index}")[0];
                 }
 
-                // Create item if kondisi is set or keterangan is not empty
                 if ($kondisi || $request->filled("keterangan_lingkungan_{$index}")) {
                     $item = $report->items()->create([
                         'item_type' => 'lingkungan',
                         'item_name' => $itemName,
-                        'status' => $status, // Will always have a value
+                        'status' => $status,
                         'kondisi' => $kondisi,
                         'keterangan' => $request->input("keterangan_lingkungan_{$index}")
                     ]);
+
+                    // Debug log
+                    Log::info('Created lingkungan item', [
+                        'item_id' => $item->id,
+                        'item_name' => $itemName,
+                        'eviden_path' => $request->input("eviden_path_lingkungan_{$index}")
+                    ]);
+
+                    // Update media jika ada
+                    if ($request->filled("eviden_path_lingkungan_{$index}")) {
+                        $mediaPath = $request->input("eviden_path_lingkungan_{$index}");
+                        $updated = K3KampMedia::where('item_id', 0)
+                            ->where('file_path', $mediaPath)
+                            ->update(['item_id' => $item->id]);
+                        
+                        // Debug log
+                        Log::info('Updated media for lingkungan item', [
+                            'item_id' => $item->id,
+                            'media_path' => $mediaPath,
+                            'rows_updated' => $updated
+                        ]);
+                    }
                 }
+            }
+
+            // Update any remaining unlinked media
+            $unlinkedMedia = K3KampMedia::where('item_id', 0)->get();
+            if ($unlinkedMedia->count() > 0) {
+                Log::warning('Found unlinked media after processing', [
+                    'count' => $unlinkedMedia->count(),
+                    'media_ids' => $unlinkedMedia->pluck('id')
+                ]);
             }
 
             DB::commit();
@@ -142,7 +192,10 @@ class K3KampController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error saving K3 KAMP report: ' . $e->getMessage());
+            Log::error('Error saving K3 KAMP report: ' . $e->getMessage(), [
+                'exception' => $e,
+                'request_data' => $request->all()
+            ]);
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan laporan: ' . $e->getMessage());
         }
     }
@@ -334,9 +387,10 @@ class K3KampController extends Controller
                 'public'
             );
 
-            // Create media record
+            // Create media record with item_id 0 initially
+            // It will be updated later when the form is submitted
             $media = K3KampMedia::create([
-                'item_id' => $request->row_id,
+                'item_id' => 0, // Set to 0 initially
                 'media_type' => 'image',
                 'file_path' => $path,
                 'original_name' => $file->getClientOriginalName(),
@@ -349,7 +403,8 @@ class K3KampController extends Controller
                 'data' => [
                     'id' => $media->id,
                     'preview_url' => asset('storage/' . $path),
-                    'file_name' => $file->getClientOriginalName()
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $path // Send back file_path for hidden input
                 ]
             ]);
 

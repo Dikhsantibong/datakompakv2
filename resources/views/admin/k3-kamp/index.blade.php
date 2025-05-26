@@ -134,6 +134,7 @@
                                                        class="hidden"
                                                        accept="image/*"
                                                        onchange="handleFileSelect(this, '{{ $index }}')">
+                                                <input type="hidden" name="eviden_path_{{ $index }}" id="eviden_path_{{ $index }}">
                                                 <button type="button" 
                                                         onclick="document.getElementById('file_{{ $index }}').click()"
                                                         class="w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-200">
@@ -186,17 +187,18 @@
                                             </td>
                                             <td class="px-6 py-4 border-r border">
                                                 <input type="file" 
-                                                       id="file_{{ $index }}"
+                                                       id="file_lingkungan_{{ $index }}"
                                                        class="hidden"
                                                        accept="image/*"
-                                                       onchange="handleFileSelect(this, '{{ $index }}')">
+                                                       onchange="handleFileSelect(this, 'lingkungan_{{ $index }}')">
+                                                <input type="hidden" name="eviden_path_lingkungan_{{ $index }}" id="eviden_path_lingkungan_{{ $index }}">
                                                 <button type="button" 
-                                                        onclick="document.getElementById('file_{{ $index }}').click()"
+                                                        onclick="document.getElementById('file_lingkungan_{{ $index }}').click()"
                                                         class="w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-200">
                                                     <i class="fas fa-upload mr-2"></i>
                                                     Upload Eviden
                                                 </button>
-                                                <div id="preview_{{ $index }}" class="mt-2 relative">
+                                                <div id="preview_lingkungan_{{ $index }}" class="mt-2 relative">
                                                     <!-- Preview will be shown here -->
                                                 </div>
                                             </td>
@@ -339,6 +341,9 @@ function handleFileSelect(input, rowId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
+            // Set file path to hidden input
+            document.getElementById(`eviden_path_${rowId}`).value = data.data.file_path;
+            
             // Show preview
             previewDiv.innerHTML = `
                 <div class="relative">
@@ -375,8 +380,10 @@ function deleteMedia(mediaId, rowId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
+            // Clear preview and hidden input
             document.getElementById(`preview_${rowId}`).innerHTML = '';
             document.getElementById(`file_${rowId}`).value = '';
+            document.getElementById(`eviden_path_${rowId}`).value = '';
         } else {
             alert(data.message);
         }

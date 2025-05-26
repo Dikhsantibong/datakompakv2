@@ -122,14 +122,14 @@
                                                     <textarea name="kondisi_akhir_pemeriksaan_{{ $item->kategori }}" class="w-[200px] h-[100px] p-1 border-gray-300 rounded">{{ $item->kondisi_akhir }}</textarea>
                                                 </td>
                                                 <td class="border px-4 py-2" style="min-width: 200px;">
-                                                    @if($item->eviden)
-                                                        <div class="mb-2">
-                                                            <a href="{{ Storage::url($item->eviden) }}" target="_blank" class="text-blue-600 hover:text-blue-900">
-                                                                Lihat Eviden Saat Ini
-                                                            </a>
-                                                        </div>
-                                                    @endif
-                                                    <input type="file" name="eviden_pemeriksaan_{{ $item->kategori }}" class="w-full">
+                                            @if($item->eviden)
+                                                <div class="mb-2">
+                                                    <a href="{{ Storage::url($item->eviden) }}" target="_blank" class="text-blue-600 hover:text-blue-900">
+                                                        Lihat Eviden Saat Ini
+                                                    </a>
+                                                </div>
+                                            @endif
+                                            <input type="file" name="eviden_pemeriksaan_{{ $item->kategori }}" class="w-full">
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -171,7 +171,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($programKerja as $index => $program)
+                                @foreach($programKerja as $index => $program)
                                             <tr>
                                                 <td class="border px-4 py-2 text-center">{{ chr(65 + $index) }}</td>
                                                 <td class="border px-4 py-2">{{ $program->program_kerja }}</td>
@@ -184,14 +184,14 @@
                                                 <td class="border px-4 py-2"><textarea name="kondisi_akhir_program_{{ $index + 1 }}" class="w-[200px] p-1 border-gray-300 rounded" rows="3">{{ $program->kondisi_akhir }}</textarea></td>
                                                 <td class="border px-4 py-2"><textarea name="catatan_{{ $index + 1 }}" class="w-[200px] p-1 border-gray-300 rounded" rows="3">{{ $program->catatan }}</textarea></td>
                                                 <td class="border px-4 py-2" style="min-width: 200px;">
-                                                    @if($program->eviden)
-                                                        <div class="mb-2">
-                                                            <a href="{{ Storage::url($program->eviden) }}" target="_blank" class="text-blue-600 hover:text-blue-900">
-                                                                Lihat Eviden Saat Ini
-                                                            </a>
-                                                        </div>
-                                                    @endif
-                                                    <input type="file" name="eviden_program_{{ $index + 1 }}" class="w-full">
+                                            @if($program->eviden)
+                                                <div class="mb-2">
+                                                    <a href="{{ Storage::url($program->eviden) }}" target="_blank" class="text-blue-600 hover:text-blue-900">
+                                                        Lihat Eviden Saat Ini
+                                                    </a>
+                                                </div>
+                                            @endif
+                                            <input type="file" name="eviden_program_{{ $index + 1 }}" class="w-full">
                                                 </td>
                                             </tr>
                                             @endforeach

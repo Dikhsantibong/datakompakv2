@@ -103,10 +103,10 @@
                                                     <div class="flex flex-wrap gap-2 justify-center">
                                                         @foreach($item->media as $media)
                                                             <div class="relative group">
-                                                                <img src="{{ asset('storage/' . $media->file_path) }}" 
+                                                                <img src="{{ Storage::url($media->file_path) }}" 
                                                                      alt="Eviden {{ $item->item_name }}"
                                                                      class="w-20 h-20 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
-                                                                     onclick="openImageModal('{{ asset('storage/' . $media->file_path) }}', '{{ $item->item_name }}')">
+                                                                     onclick="openImageModal('{{ Storage::url($media->file_path) }}', '{{ $item->item_name }}')">
                                                                 <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                                     <div class="bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs">
                                                                         Klik untuk memperbesar
@@ -169,10 +169,10 @@
                                                     <div class="flex flex-wrap gap-2 justify-center">
                                                         @foreach($item->media as $media)
                                                             <div class="relative group">
-                                                                <img src="{{ asset('storage/' . $media->file_path) }}" 
+                                                                <img src="{{ Storage::url($media->file_path) }}" 
                                                                      alt="Eviden {{ $item->item_name }}"
                                                                      class="w-20 h-20 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
-                                                                     onclick="openImageModal('{{ asset('storage/' . $media->file_path) }}', '{{ $item->item_name }}')">
+                                                                     onclick="openImageModal('{{ Storage::url($media->file_path) }}', '{{ $item->item_name }}')">
                                                                 <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                                     <div class="bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs">
                                                                         Klik untuk memperbesar

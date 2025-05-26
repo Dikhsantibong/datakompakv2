@@ -21,4 +21,10 @@ class FiveS5rBatch extends Model
     {
         return $this->hasMany(ProgramKerja5r::class, 'batch_id');
     }
+
+    public function getConnectionName()
+    {
+        return session('unit', 'mysql');
+    }
+    
 } 

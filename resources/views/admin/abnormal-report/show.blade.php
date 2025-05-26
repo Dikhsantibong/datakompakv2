@@ -352,30 +352,52 @@
                             <h2 class="text-lg font-medium text-gray-900">Evidence</h2>
                         </div>
                         <div class="p-6">
-                            <div class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 @forelse($report->evidences as $evidence)
-                                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="flex-shrink-0">
-                                            <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h4 class="text-sm font-medium text-gray-900">{{ basename($evidence->file_path) }}</h4>
-                                            <p class="text-sm text-gray-500">{{ $evidence->description }}</p>
-                                        </div>
+                                <div class="flex flex-col bg-gray-50 p-4 rounded-lg">
+                                    @php
+                                        $extension = pathinfo($evidence->file_path, PATHINFO_EXTENSION);
+                                        $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                                    @endphp
+                                    
+                                    @if($isImage)
+                                    <div class="mb-4">
+                                        <img src="{{ Storage::url($evidence->file_path) }}" 
+                                             alt="Preview" 
+                                             class="w-full h-48 object-cover rounded-lg shadow-sm">
                                     </div>
-                                    <a href="{{ Storage::url($evidence->file_path) }}" target="_blank" 
-                                       class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#009BB9] hover:bg-[#009BB9]/80">
-                                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                        </svg>
-                                        Download
-                                    </a>
+                                    @endif
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="flex-shrink-0">
+                                                @if($isImage)
+                                                    <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                @else
+                                                    <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                    </svg>
+                                                @endif
+                                            </div>
+                                            <div>
+                                                <h4 class="text-sm font-medium text-gray-900">{{ basename($evidence->file_path) }}</h4>
+                                                <p class="text-sm text-gray-500">{{ $evidence->description }}</p>
+                                            </div>
+                                        </div>
+                                        <a href="{{ Storage::url($evidence->file_path) }}" 
+                                           target="_blank" 
+                                           class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#009BB9] hover:bg-[#009BB9]/80">
+                                            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                            </svg>
+                                            Download
+                                        </a>
+                                    </div>
                                 </div>
                                 @empty
-                                <div class="text-center text-gray-500">
+                                <div class="col-span-2 text-center text-gray-500">
                                     Tidak ada evidence yang diupload
                                 </div>
                                 @endforelse

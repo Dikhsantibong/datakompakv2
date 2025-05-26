@@ -291,24 +291,73 @@ class K3KampController extends Controller
     public function destroy($id)
     {
         try {
+            DB::beginTransaction();
+
+            // Set sync flag false untuk semua model
             K3KampReport::$isSyncing = false;
+            K3KampItem::$isSyncing = false;
+            K3KampMedia::$isSyncing = false;
             
-            $report = K3KampReport::findOrFail($id);
+            // Ambil report beserta relasi
+            $report = K3KampReport::with(['items.media'])->findOrFail($id);
             
-            // Delete associated media files
+            // Debug log
+            Log::info('Starting deletion process for report', [
+                'report_id' => $id,
+                'items_count' => $report->items->count(),
+                'media_count' => $report->items->sum(function($item) {
+                    return $item->media->count();
+                })
+            ]);
+
+            // 1. Hapus semua media files dan records
             foreach ($report->items as $item) {
                 foreach ($item->media as $media) {
-                    Storage::delete($media->file_path);
+                    // Hapus file fisik
+                    Storage::disk('public')->delete($media->file_path);
+                    
+                    // Hapus record media
+                    $media->delete();
+
+                    Log::info('Deleted media', [
+                        'media_id' => $media->id,
+                        'file_path' => $media->file_path
+                    ]);
                 }
             }
-            
-            $report->delete();
 
+            // 2. Hapus semua items
+            foreach ($report->items as $item) {
+                $item->delete();
+                
+                Log::info('Deleted item', [
+                    'item_id' => $item->id,
+                    'item_type' => $item->item_type,
+                    'item_name' => $item->item_name
+                ]);
+            }
+
+            // 3. Hapus report
+            $report->delete();
+            
+            Log::info('Successfully deleted report and all related data', [
+                'report_id' => $id
+            ]);
+
+            DB::commit();
             return redirect()->route('admin.k3-kamp.view')
-                ->with('success', 'Laporan berhasil dihapus');
+                ->with('success', 'Laporan dan semua data terkait berhasil dihapus');
+
         } catch (\Exception $e) {
+            DB::rollBack();
+            
+            Log::error('Error deleting K3 KAMP report: ' . $e->getMessage(), [
+                'exception' => $e,
+                'report_id' => $id
+            ]);
+            
             return redirect()->back()
-                ->with('error', 'Terjadi kesalahan saat menghapus laporan');
+                ->with('error', 'Terjadi kesalahan saat menghapus laporan: ' . $e->getMessage());
         }
     }
 

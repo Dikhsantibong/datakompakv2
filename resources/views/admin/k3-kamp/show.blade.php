@@ -100,9 +100,21 @@
                                             <td class="px-6 py-4 text-sm text-gray-500 border-r border-gray-200">{{ $item->keterangan }}</td>
                                             <td class="px-6 py-4 text-center border-r border-gray-200">
                                                 @if($item->media->count() > 0)
-                                                    <button onclick="showMedia('{{ $item->id }}')" class="text-blue-600 hover:text-blue-900">
-                                                        <i class="fas fa-image"></i>
-                                                    </button>
+                                                    <div class="flex flex-wrap gap-2 justify-center">
+                                                        @foreach($item->media as $media)
+                                                            <div class="relative group">
+                                                                <img src="{{ asset('storage/' . $media->file_path) }}" 
+                                                                     alt="Eviden {{ $item->item_name }}"
+                                                                     class="w-20 h-20 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                                                                     onclick="openImageModal('{{ asset('storage/' . $media->file_path) }}', '{{ $item->item_name }}')">
+                                                                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                    <div class="bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs">
+                                                                        Klik untuk memperbesar
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
                                                 @else
                                                     <span class="text-gray-400">
                                                         <i class="fas fa-ban"></i>
@@ -154,9 +166,21 @@
                                             <td class="px-6 py-4 text-sm text-gray-500 border-r border-gray-200">{{ $item->keterangan }}</td>
                                             <td class="px-6 py-4 text-center border-r border-gray-200">
                                                 @if($item->media->count() > 0)
-                                                    <button onclick="showMedia('{{ $item->id }}')" class="text-blue-600 hover:text-blue-900">
-                                                        <i class="fas fa-image"></i>
-                                                    </button>
+                                                    <div class="flex flex-wrap gap-2 justify-center">
+                                                        @foreach($item->media as $media)
+                                                            <div class="relative group">
+                                                                <img src="{{ asset('storage/' . $media->file_path) }}" 
+                                                                     alt="Eviden {{ $item->item_name }}"
+                                                                     class="w-20 h-20 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                                                                     onclick="openImageModal('{{ asset('storage/' . $media->file_path) }}', '{{ $item->item_name }}')">
+                                                                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                    <div class="bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs">
+                                                                        Klik untuk memperbesar
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
                                                 @else
                                                     <span class="text-gray-400">
                                                         <i class="fas fa-ban"></i>
@@ -201,16 +225,18 @@
 </div>
 
 <!-- Media Modal -->
-<div id="mediaModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
-    <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
-        <div class="flex justify-between items-center pb-3">
-            <h3 class="text-lg font-medium text-gray-900">Media</h3>
-            <button onclick="closeMediaModal()" class="text-gray-400 hover:text-gray-500">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div id="mediaContent" class="mt-4">
-            <!-- Media content will be loaded here -->
+<div id="imageModal" class="fixed inset-0 z-50 hidden overflow-y-auto h-full w-full bg-black bg-opacity-75 flex items-center justify-center">
+    <div class="relative max-w-4xl w-full mx-4">
+        <div class="bg-white rounded-lg shadow-xl">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-900" id="modalTitle"></h3>
+                <button onclick="closeImageModal()" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <img id="modalImage" src="" alt="Preview" class="max-w-full h-auto mx-auto rounded-lg">
+            </div>
         </div>
     </div>
 </div>
@@ -218,14 +244,32 @@
 @push('scripts')
 <script src="{{ asset('js/toggle.js') }}"></script>
 <script>
-function showMedia(itemId) {
-    // Add your media display logic here
-    const modal = document.getElementById('mediaModal');
+function openImageModal(imageUrl, title) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    
+    modalImage.src = imageUrl;
+    modalTitle.textContent = 'Eviden ' + title;
     modal.classList.remove('hidden');
+    
+    // Close modal when clicking outside
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            closeImageModal();
+        }
+    };
+
+    // Add keyboard support for closing
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeImageModal();
+        }
+    });
 }
 
-function closeMediaModal() {
-    const modal = document.getElementById('mediaModal');
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
     modal.classList.add('hidden');
 }
 </script>

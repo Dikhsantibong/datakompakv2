@@ -206,48 +206,75 @@
 
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <h3 class="text-lg font-semibold mb-4 text-gray-800">Tabel Data Mesin Kesiapan Kit</h3>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SILM/SLO</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DMP Test</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Beban (kW)</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($latestLogs as $i => $log)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2">{{ $i+1 }}</td>
-                                    <td class="px-4 py-2">{{ $log->machine->name }}</td>
-                                    <td class="px-4 py-2">{{ $log->date ? \Carbon\Carbon::parse($log->date)->format('d/m/Y') : '-' }}</td>
-                                    <td class="px-4 py-2">{{ $log->time ? \Carbon\Carbon::parse($log->time)->format('H:i') : '-' }}</td>
-                                    <td class="px-4 py-2">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                            {{ $log->status === 'OPS' ? 'bg-green-100 text-green-800' :
-                                               ($log->status === 'RSH' ? 'bg-yellow-100 text-yellow-800' :
-                                               ($log->status === 'FO' ? 'bg-red-100 text-red-800' :
-                                               ($log->status === 'MO' ? 'bg-orange-100 text-orange-800' :
-                                               ($log->status === 'P0' ? 'bg-blue-100 text-blue-800' :
-                                               ($log->status === 'MB' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'))))) }}">
-                                            {{ $log->status }}
+                    @foreach($powerPlants as $powerPlant)
+                    <div class="bg-white rounded-lg shadow p-6 mb-4 unit-table">
+                        <div class="overflow-auto">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="flex flex-col">
+                                    <h2 class="text-lg font-semibold text-gray-800">{{ $powerPlant->name }}</h2>
+                                    <div class="text-sm text-gray-600">
+                                        <span class="font-medium">Update Terakhir:</span>
+                                        <span id="last_update_{{ $powerPlant->id }}" class="ml-1">
+                                            @php
+                                                $lastUpdate = $latestLogs
+                                                    ->where('machine.power_plant_id', $powerPlant->id)
+                                                    ->max('date');
+                                                echo $lastUpdate ? \Carbon\Carbon::parse($lastUpdate)->format('d/m/Y H:i') : '-';
+                                            @endphp
                                         </span>
-                                    </td>
-                                    <td class="px-4 py-2">{{ $log->silm_slo ?? '-' }}</td>
-                                    <td class="px-4 py-2">{{ $log->dmp_performance ?? '-' }}</td>
-                                    <td class="px-4 py-2">{{ $log->kw ?? '-' }}</td>
-                                    <td class="px-4 py-2">{{ $log->keterangan ?? '-' }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SILM/SLO</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DMP Test</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Beban (kW)</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @php $machinesInUnit = $latestLogs->where('machine.power_plant_id', $powerPlant->id); @endphp
+                                        @forelse($machinesInUnit as $i => $log)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $i+1 }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $log->machine->name }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $log->date ? \Carbon\Carbon::parse($log->date)->format('d/m/Y') : '-' }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $log->time ? \Carbon\Carbon::parse($log->time)->format('H:i') : '-' }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                                    {{ $log->status === 'OPS' ? 'bg-green-100 text-green-800' :
+                                                       ($log->status === 'RSH' ? 'bg-yellow-100 text-yellow-800' :
+                                                       ($log->status === 'FO' ? 'bg-red-100 text-red-800' :
+                                                       ($log->status === 'MO' ? 'bg-orange-100 text-orange-800' :
+                                                       ($log->status === 'P0' ? 'bg-blue-100 text-blue-800' :
+                                                       ($log->status === 'MB' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'))))) }}">
+                                                    {{ $log->status }}
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $log->silm_slo ?? '-' }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $log->dmp_performance ?? '-' }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $log->kw ?? '-' }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $log->keterangan ?? '-' }}</td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="9" class="px-4 py-2 text-center text-gray-500">Tidak ada data mesin untuk unit ini</td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
+                    @endforeach
                 </div>
             </div>
         </main>

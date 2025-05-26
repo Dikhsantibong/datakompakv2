@@ -289,17 +289,41 @@ class FiveS5RController extends Controller
 
     public function destroy($id)
     {
+        DB::beginTransaction();
         try {
-            $batch = \App\Models\FiveS5rBatch::findOrFail($id);
+            $batch = FiveS5rBatch::with(['pemeriksaan', 'programKerja'])->findOrFail($id);
+
+            // Delete evidence files for Pemeriksaan 5S5R
+            foreach ($batch->pemeriksaan as $pemeriksaan) {
+                if ($pemeriksaan->eviden) {
+                    Storage::disk('public')->delete($pemeriksaan->eviden);
+                }
+            }
+
+            // Delete evidence files for Program Kerja 5R
+            foreach ($batch->programKerja as $program) {
+                if ($program->eviden) {
+                    Storage::disk('public')->delete($program->eviden);
+                }
+            }
+
+            // Delete all related records
             $batch->pemeriksaan()->delete();
             $batch->programKerja()->delete();
+
+            // Finally delete the main batch
             $batch->delete();
 
-            return redirect()->route('admin.5s5r.list')
-                ->with('success', 'Data 5S5R berhasil dihapus.');
+            DB::commit();
+            return redirect()
+                ->route('admin.5s5r.list')
+                ->with('success', 'Data 5S5R dan semua data terkait berhasil dihapus');
+
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Gagal menghapus data 5S5R: ' . $e->getMessage());
+            DB::rollback();
+            return redirect()
+                ->back()
+                ->with('error', 'Terjadi kesalahan saat menghapus data 5S5R: ' . $e->getMessage());
         }
     }
 

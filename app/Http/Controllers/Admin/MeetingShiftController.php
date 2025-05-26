@@ -13,7 +13,7 @@ use App\Models\MeetingShiftK3l;
 use App\Models\MeetingShiftNote;
 use App\Models\MeetingShiftResume;
 use App\Models\MeetingShiftAttendance;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\DB;  
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;

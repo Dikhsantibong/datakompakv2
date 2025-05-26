@@ -150,18 +150,22 @@ class K3KampExport implements FromCollection, WithTitle, WithEvents, WithStyles,
             $plnDrawing->setDescription('PLN Logo');
             $plnDrawing->setPath(public_path('logo/navlog1.png'));
             $plnDrawing->setHeight(60);
-            $plnDrawing->setCoordinates('B2');
+            $plnDrawing->setCoordinates('A1');
+            $plnDrawing->setOffsetX(5);
+            $plnDrawing->setOffsetY(5);
             $drawings[] = $plnDrawing;
         }
 
-        if (file_exists(public_path('logo/k3_logo.png'))) {
-            $k3Drawing = new Drawing();
-            $k3Drawing->setName('K3 Logo');
-            $k3Drawing->setDescription('K3 Logo');
-            $k3Drawing->setPath(public_path('logo/k3_logo.png'));
-            $k3Drawing->setHeight(60);
-            $k3Drawing->setCoordinates('E2');
-            $drawings[] = $k3Drawing;
+        if (file_exists(public_path('logo/PLN-bg.png'))) {
+            $plnBgDrawing = new Drawing();
+            $plnBgDrawing->setName('PLN-bg Logo');
+            $plnBgDrawing->setDescription('PLN-bg Logo');
+            $plnBgDrawing->setPath(public_path('logo/PLN-bg.png'));
+            $plnBgDrawing->setHeight(60);
+            $plnBgDrawing->setCoordinates('H1');
+            $plnBgDrawing->setOffsetX(5);
+            $plnBgDrawing->setOffsetY(5);
+            $drawings[] = $plnBgDrawing;
         }
 
         // Add K3 & Keamanan items

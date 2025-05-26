@@ -47,21 +47,21 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
         $plnDrawing->setDescription('PLN Logo');
         $plnDrawing->setPath(public_path('logo/navlog1.png'));
         $plnDrawing->setHeight(60);
-        $plnDrawing->setCoordinates('B1');
-        $plnDrawing->setOffsetX(30);
+        $plnDrawing->setCoordinates('A1');
+        $plnDrawing->setOffsetX(5);
         $plnDrawing->setOffsetY(5);
 
-        // K3 Logo
-        $k3Drawing = new Drawing();
-        $k3Drawing->setName('K3 Logo');
-        $k3Drawing->setDescription('K3 Logo');
-        $k3Drawing->setPath(public_path('logo/k3_logo.png'));
-        $k3Drawing->setHeight(60);
-        $k3Drawing->setCoordinates('D1');
-        $k3Drawing->setOffsetX(30);
-        $k3Drawing->setOffsetY(5);
+        // PLN-bg Logo
+        $plnBgDrawing = new Drawing();
+        $plnBgDrawing->setName('PLN-bg Logo');
+        $plnBgDrawing->setDescription('PLN-bg Logo');
+        $plnBgDrawing->setPath(public_path('logo/PLN-bg.png'));
+        $plnBgDrawing->setHeight(60);
+        $plnBgDrawing->setCoordinates('H1');
+        $plnBgDrawing->setOffsetX(5);
+        $plnBgDrawing->setOffsetY(5);
 
-        return [$plnDrawing, $k3Drawing];
+        return [$plnDrawing, $plnBgDrawing];
     }
 
     public function title(): string
@@ -233,6 +233,32 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
                 foreach ($this->sectionRows as $row) {
                     $sheet->getRowDimension($row)->setRowHeight(25);
                     $sheet->getRowDimension($row + 1)->setRowHeight(20);
+                    // Tambah spasi antar section
+                    $sheet->getRowDimension($row - 1)->setRowHeight(10);
+                }
+
+                // Tambahkan nama user di bawah logo PLN-bg.png
+                $creatorName = $this->meetingShift->creator->name ?? '';
+                if (!$creatorName) {
+                    $creatorName = 'UP KENDARI';
+                }
+                if ($creatorName) {
+                    // Username di kanan logo PLN-bg.png (E2:G2)
+                    $sheet->mergeCells('E2:G2');
+                    $sheet->setCellValue('E2', $creatorName);
+                    $sheet->getStyle('E2')->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 22,
+                            'color' => ['rgb' => '00AEEF'],
+                            'name' => 'Arial',
+                        ],
+                        'alignment' => [
+                            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+                            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP
+                        ]
+                    ]);
+                    $sheet->getRowDimension(2)->setRowHeight(32);
                 }
             }
         ];

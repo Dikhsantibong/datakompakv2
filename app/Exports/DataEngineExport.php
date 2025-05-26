@@ -94,21 +94,21 @@ class DataEngineExport implements FromView, WithTitle, WithEvents, WithStyles, W
         $plnDrawing->setDescription('PLN Logo');
         $plnDrawing->setPath(public_path('logo/navlog1.png'));
         $plnDrawing->setHeight(60);
-        $plnDrawing->setCoordinates('B1');
-        $plnDrawing->setOffsetX(30);
+        $plnDrawing->setCoordinates('A1');
+        $plnDrawing->setOffsetX(5);
         $plnDrawing->setOffsetY(5);
 
-        // Engine Logo
-        $engineDrawing = new Drawing();
-        $engineDrawing->setName('Engine Logo');
-        $engineDrawing->setDescription('Engine Logo');
-        $engineDrawing->setPath(public_path('logo/k3_logo.png'));
-        $engineDrawing->setHeight(60);
-        $engineDrawing->setCoordinates('E1');
-        $engineDrawing->setOffsetX(30);
-        $engineDrawing->setOffsetY(5);
+        // PLN-bg Logo (ganti Engine Logo)
+        $plnBgDrawing = new Drawing();
+        $plnBgDrawing->setName('PLN-bg Logo');
+        $plnBgDrawing->setDescription('PLN-bg Logo');
+        $plnBgDrawing->setPath(public_path('logo/PLN-bg.png'));
+        $plnBgDrawing->setHeight(60);
+        $plnBgDrawing->setCoordinates('H1');
+        $plnBgDrawing->setOffsetX(5);
+        $plnBgDrawing->setOffsetY(5);
 
-        return [$plnDrawing, $engineDrawing];
+        return [$plnDrawing, $plnBgDrawing];
     }
 
     public function title(): string

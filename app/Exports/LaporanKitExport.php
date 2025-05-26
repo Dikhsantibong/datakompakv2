@@ -85,21 +85,21 @@ class LaporanKitExport implements FromView, WithTitle, WithEvents, WithStyles, W
         $plnDrawing->setDescription('PLN Logo');
         $plnDrawing->setPath(public_path('logo/navlog1.png'));
         $plnDrawing->setHeight(60);
-        $plnDrawing->setCoordinates('B2');
-        $plnDrawing->setOffsetX(30);
+        $plnDrawing->setCoordinates('A1');
+        $plnDrawing->setOffsetX(5);
         $plnDrawing->setOffsetY(5);
 
-        // Kit Logo
-        $kitDrawing = new Drawing();
-        $kitDrawing->setName('Kit Logo');
-        $kitDrawing->setDescription('Kit Logo');
-        $kitDrawing->setPath(public_path('logo/k3_logo.png'));
-        $kitDrawing->setHeight(60);
-        $kitDrawing->setCoordinates('E2');
-        $kitDrawing->setOffsetX(30);
-        $kitDrawing->setOffsetY(5);
+        // PLN-bg Logo (ganti Kit Logo)
+        $plnBgDrawing = new Drawing();
+        $plnBgDrawing->setName('PLN-bg Logo');
+        $plnBgDrawing->setDescription('PLN-bg Logo');
+        $plnBgDrawing->setPath(public_path('logo/PLN-bg.png'));
+        $plnBgDrawing->setHeight(60);
+        $plnBgDrawing->setCoordinates('H1');
+        $plnBgDrawing->setOffsetX(5);
+        $plnBgDrawing->setOffsetY(5);
 
-        return [$plnDrawing, $kitDrawing];
+        return [$plnDrawing, $plnBgDrawing];
     }
 
     public function title(): string

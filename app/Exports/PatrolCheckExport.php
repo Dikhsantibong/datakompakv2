@@ -52,7 +52,7 @@ class PatrolCheckExport implements FromView, WithTitle, WithEvents, WithStyles, 
         $plnDrawing->setOffsetX(5);
         $plnDrawing->setOffsetY(5);
 
-        // Hanya logo PLN, tidak ada logo K3
+        // Hanya logo PLN, tidak ada logo PLN-bg
         return [$plnDrawing];
     }
 

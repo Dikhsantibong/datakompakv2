@@ -59,7 +59,8 @@ class FiveS5RController extends Controller
 
         // Handle Pemeriksaan 5S5R data
         foreach(['Ringkas', 'Rapi', 'Resik', 'Rawat', 'Rajin'] as $kategori) {
-            $evidenPath = null;
+            // Ambil path dari input hidden (hasil upload AJAX)
+            $evidenPath = $request->input("eviden_pemeriksaan_$kategori");
             if ($request->hasFile("eviden_pemeriksaan_$kategori")) {
                 $file = $request->file("eviden_pemeriksaan_$kategori");
                 $filename = time() . '_' . $kategori . '_' . $file->getClientOriginalName();
@@ -87,7 +88,8 @@ class FiveS5RController extends Controller
 
         // Handle Program Kerja 5R data
         for($i = 1; $i <= 4; $i++) {
-            $evidenPath = null;
+            // Ambil path dari input hidden (hasil upload AJAX)
+            $evidenPath = $request->input("eviden_program_$i");
             if ($request->hasFile("eviden_program_$i")) {
                 $file = $request->file("eviden_program_$i");
                 $filename = time() . '_program_' . $i . '_' . $file->getClientOriginalName();

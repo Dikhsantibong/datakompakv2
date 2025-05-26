@@ -46,21 +46,23 @@
             <td>{{ $item->masalah }}</td>
             <td>{{ implode(', ', $tindakan) }}</td>
             <td>{{ ucfirst($item->status) }}</td>
-            <td>
+            <td style="text-align:center; vertical-align:middle; height:75px;">
                 @if($item->eviden_sebelum)
                     <img src="{{ public_path('storage/' . $item->eviden_sebelum) }}" 
-                         width="150" 
-                         height="100" 
+                         width="100" 
+                         height="75"
+                         style="margin:auto; display:block;" 
                          alt="Kondisi Sebelum">
                 @else
                     -
                 @endif
             </td>
-            <td>
+            <td style="text-align:center; vertical-align:middle; height:75px;">
                 @if($item->eviden_sesudah)
                     <img src="{{ public_path('storage/' . $item->eviden_sesudah) }}" 
-                         width="150" 
-                         height="100" 
+                         width="100" 
+                         height="75"
+                         style="margin:auto; display:block;" 
                          alt="Kondisi Sesudah">
                 @else
                     -

@@ -146,9 +146,18 @@ class FlmExport implements FromView, WithTitle, WithEvents, WithStyles, WithDraw
         $sheet->getColumnDimension('F')->setWidth(30);  // Masalah
         $sheet->getColumnDimension('G')->setWidth(25);  // Tindakan
         $sheet->getColumnDimension('H')->setWidth(15);  // Status
+        $sheet->getColumnDimension('I')->setWidth(15);  // Foto Sebelum
+        $sheet->getColumnDimension('J')->setWidth(15);  // Foto Sesudah
 
         // Set row height for logo row
         $sheet->getRowDimension(2)->setRowHeight(50);
+        // Set row height for image rows
+        if ($this->flmData) {
+            foreach ($this->flmData as $index => $item) {
+                $row = $index + 6; // Data starts from row 6
+                $sheet->getRowDimension($row)->setRowHeight(75); // Set height for image rows
+            }
+        }
 
         // Default style for all cells
         $sheet->getParent()->getDefaultStyle()->applyFromArray([
@@ -212,14 +221,14 @@ class FlmExport implements FromView, WithTitle, WithEvents, WithStyles, WithDraw
 
         // Apply styles to all section headers
         foreach ($this->sectionRows as $row) {
-            $sheet->getStyle("A{$row}:H{$row}")->applyFromArray($sectionHeaderStyle);
+            $sheet->getStyle("A{$row}:J{$row}")->applyFromArray($sectionHeaderStyle);
             $sheet->getRowDimension($row)->setRowHeight(25);
         }
 
         // Apply styles to table headers (rows after section headers)
         foreach ($this->sectionRows as $row) {
             $tableHeaderRow = $row + 1;
-            $sheet->getStyle("A{$tableHeaderRow}:H{$tableHeaderRow}")->applyFromArray($tableHeaderStyle);
+            $sheet->getStyle("A{$tableHeaderRow}:J{$tableHeaderRow}")->applyFromArray($tableHeaderStyle);
             $sheet->getRowDimension($tableHeaderRow)->setRowHeight(20);
         }
 
@@ -263,7 +272,7 @@ class FlmExport implements FromView, WithTitle, WithEvents, WithStyles, WithDraw
             AfterSheet::class => function(AfterSheet $event) {
                 $sheet = $event->sheet;
                 $lastRow = $sheet->getHighestRow();
-                $lastColumn = 'H';
+                $lastColumn = 'J';
 
                 // Set page orientation to landscape
                 $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
@@ -298,6 +307,14 @@ class FlmExport implements FromView, WithTitle, WithEvents, WithStyles, WithDraw
                 foreach ($this->sectionRows as $row) {
                     $sheet->getRowDimension($row)->setRowHeight(25);
                     $sheet->getRowDimension($row + 1)->setRowHeight(20);
+                }
+
+                // Center align image cells
+                if ($this->flmData) {
+                    foreach ($this->flmData as $index => $item) {
+                        $row = $index + 6; // Data starts from row 6
+                        $sheet->getStyle("I{$row}:J{$row}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                    }
                 }
             }
         ];

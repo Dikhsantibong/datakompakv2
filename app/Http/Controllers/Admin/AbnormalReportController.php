@@ -234,17 +234,45 @@ class AbnormalReportController extends Controller
 
     public function destroy($id)
     {
+        DB::beginTransaction();
         try {
-            $report = AbnormalReport::findOrFail($id);
+            $report = AbnormalReport::with([
+                'chronologies',
+                'affectedMachines',
+                'followUpActions',
+                'recommendations',
+                'admActions',
+                'evidences'
+            ])->findOrFail($id);
+
+            // Delete evidence files from storage
+            foreach ($report->evidences as $evidence) {
+                if ($evidence->file_path) {
+                    Storage::disk('public')->delete($evidence->file_path);
+                }
+            }
+
+            // Delete all related records
+            $report->chronologies()->delete();
+            $report->affectedMachines()->delete();
+            $report->followUpActions()->delete();
+            $report->recommendations()->delete();
+            $report->admActions()->delete();
+            $report->evidences()->delete();
+
+            // Finally delete the main report
             $report->delete();
 
+            DB::commit();
             return redirect()
                 ->route('admin.abnormal-report.list')
-                ->with('success', 'Laporan berhasil dihapus');
+                ->with('success', 'Laporan dan semua data terkait berhasil dihapus');
+
         } catch (\Exception $e) {
+            DB::rollback();
             return redirect()
                 ->back()
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+                ->with('error', 'Terjadi kesalahan saat menghapus: ' . $e->getMessage());
         }
     }
 

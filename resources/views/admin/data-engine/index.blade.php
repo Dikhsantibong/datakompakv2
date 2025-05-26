@@ -4,6 +4,34 @@
 <div class="flex h-screen bg-gray-100">
     @include('components.sidebar')
 
+    <!-- Add Modal for Time Selection -->
+    <div id="timeSelectionModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-96">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Pilih Jam Laporan</h3>
+            <div class="grid grid-cols-4 gap-2 mb-4">
+                @for ($hour = 0; $hour < 24; $hour++)
+                    <button 
+                        class="time-button px-3 py-2 text-sm font-medium rounded-md hover:bg-blue-50 border"
+                        data-time="{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00">
+                        {{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00
+                    </button>
+                @endfor
+            </div>
+            <div class="flex justify-end gap-2">
+                <button 
+                    onclick="closeTimeModal()"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                    Batal
+                </button>
+                <button 
+                    onclick="confirmTimeSelection()"
+                    class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                    Pilih
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="flex-1 overflow-x-hidden overflow-y-auto">
         <!-- Header -->
         <header class="bg-white shadow-sm sticky top-0 z-20
@@ -291,15 +319,74 @@ function formatDate(date) {
     return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-function getFormattedReport() {
+// Add new functions for time selection modal
+let selectedTime = null;
+
+function showTimeModal() {
+    const modal = document.getElementById('timeSelectionModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    
+    // Reset previously selected button
+    document.querySelectorAll('.time-button').forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white');
+        btn.classList.add('text-gray-700');
+    });
+    
+    // If there's a previously selected time, highlight it
+    if (selectedTime) {
+        const btn = document.querySelector(`[data-time="${selectedTime}"]`);
+        if (btn) {
+            btn.classList.add('bg-blue-600', 'text-white');
+            btn.classList.remove('text-gray-700');
+        }
+    }
+}
+
+function closeTimeModal() {
+    const modal = document.getElementById('timeSelectionModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+// Add click handlers for time buttons
+document.querySelectorAll('.time-button').forEach(button => {
+    button.addEventListener('click', function() {
+        // Remove highlight from all buttons
+        document.querySelectorAll('.time-button').forEach(btn => {
+            btn.classList.remove('bg-blue-600', 'text-white');
+            btn.classList.add('text-gray-700');
+        });
+        
+        // Add highlight to selected button
+        this.classList.add('bg-blue-600', 'text-white');
+        this.classList.remove('text-gray-700');
+        selectedTime = this.dataset.time;
+    });
+});
+
+function confirmTimeSelection() {
+    if (selectedTime) {
+        shareToWhatsApp(selectedTime);
+        closeTimeModal();
+    } else {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Pilih Jam',
+            text: 'Silakan pilih jam terlebih dahulu',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }
+}
+
+function getFormattedReport(selectedTime) {
     const date = document.querySelector('input[name="date"]').value;
-    const time = document.querySelector('select[name="time"]').value || '11:00';
     const currentSession = '{{ session('unit') }}';
     
     let report = `Assalamu Alaikum Wr.Wb\n`;
     report += `Laporan Data Engine PLN\ Nusantara Power\n`;
     
-    // Use power plant name if not in mysql session, otherwise use default text
     if (currentSession !== 'mysql') {
         const powerPlantName = document.querySelector('.bg-white.rounded-xl.shadow-sm.overflow-hidden.border.border-gray-100 h2')?.textContent.trim() || '';
         report += `${powerPlantName}, ${formatDate(date)}\n`;
@@ -307,7 +394,7 @@ function getFormattedReport() {
         report += `Unit Pembangkitan Kendari, ${formatDate(date)}\n`;
     }
     
-    report += `Pukul : ${time} Wita\n\n`;
+    report += `Pukul : ${selectedTime} Wita\n\n`;
 
     // Get all power plant sections
     const powerPlantSections = document.querySelectorAll('.bg-white.rounded-xl.shadow-sm.overflow-hidden.border.border-gray-100');
@@ -361,19 +448,15 @@ function getFormattedReport() {
     return report;
 }
 
-function shareToWhatsApp() {
-    const formattedReport = getFormattedReport();
-    // Encode the message for URL
+function shareToWhatsApp(selectedTime) {
+    const formattedReport = getFormattedReport(selectedTime);
     const encodedMessage = encodeURIComponent(formattedReport);
-    // Replace line breaks with %0A for WhatsApp
     const whatsappMessage = encodedMessage.replace(/\n/g, '%0A');
-    
-    // Open WhatsApp Web with the message
     window.open(`https://wa.me/?text=${whatsappMessage}`, '_blank');
 }
 
 document.getElementById('shareWhatsApp').addEventListener('click', function() {
-    shareToWhatsApp();
+    showTimeModal();
 });
 
 document.getElementById('copyFormattedData').addEventListener('click', function() {

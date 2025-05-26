@@ -319,8 +319,7 @@ class K3KampController extends Controller
     public function uploadMedia(Request $request)
     {
         $request->validate([
-            'media_file' => 'required|file|max:51200', // 50MB max
-            'media_type' => 'required|in:image,video',
+            'media_file' => 'required|file|mimes:jpeg,png,jpg,gif|max:51200', // 50MB max
             'row_id' => 'required'
         ]);
 
@@ -338,7 +337,7 @@ class K3KampController extends Controller
             // Create media record
             $media = K3KampMedia::create([
                 'item_id' => $request->row_id,
-                'media_type' => $request->media_type,
+                'media_type' => 'image',
                 'file_path' => $path,
                 'original_name' => $file->getClientOriginalName(),
                 'file_size' => $file->getSize()
@@ -347,7 +346,11 @@ class K3KampController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Media berhasil diupload',
-                'data' => $media
+                'data' => [
+                    'id' => $media->id,
+                    'preview_url' => asset('storage/' . $path),
+                    'file_name' => $file->getClientOriginalName()
+                ]
             ]);
 
         } catch (\Exception $e) {

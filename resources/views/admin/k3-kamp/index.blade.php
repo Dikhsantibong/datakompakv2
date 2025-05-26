@@ -129,13 +129,18 @@
                                                           placeholder="Masukkan keterangan..."></textarea>
                                             </td>
                                             <td class="px-6 py-4 border-r border">
+                                                <input type="file" 
+                                                       id="file_{{ $index }}"
+                                                       class="hidden"
+                                                       accept="image/*"
+                                                       onchange="handleFileSelect(this, '{{ $index }}')">
                                                 <button type="button" 
-                                                        onclick="showMediaModal('row_{{ $index }}')"
+                                                        onclick="document.getElementById('file_{{ $index }}').click()"
                                                         class="w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-200">
                                                     <i class="fas fa-upload mr-2"></i>
-                                                    Upload Media
+                                                    Upload Eviden
                                                 </button>
-                                                <div id="preview_row_{{ $index }}" class="hidden mt-2">
+                                                <div id="preview_{{ $index }}" class="mt-2 relative">
                                                     <!-- Preview will be shown here -->
                                                 </div>
                                             </td>
@@ -180,13 +185,18 @@
                                                           placeholder="Masukkan keterangan..."></textarea>
                                             </td>
                                             <td class="px-6 py-4 border-r border">
+                                                <input type="file" 
+                                                       id="file_{{ $index }}"
+                                                       class="hidden"
+                                                       accept="image/*"
+                                                       onchange="handleFileSelect(this, '{{ $index }}')">
                                                 <button type="button" 
-                                                        onclick="showMediaModal('lingkungan_{{ $index }}')"
+                                                        onclick="document.getElementById('file_{{ $index }}').click()"
                                                         class="w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-200">
                                                     <i class="fas fa-upload mr-2"></i>
-                                                    Upload Media
+                                                    Upload Eviden
                                                 </button>
-                                                <div id="preview_lingkungan_{{ $index }}" class="hidden mt-2">
+                                                <div id="preview_{{ $index }}" class="mt-2 relative">
                                                     <!-- Preview will be shown here -->
                                                 </div>
                                             </td>
@@ -307,6 +317,74 @@ function closeMediaModal() {
     const modal = document.getElementById('mediaUploadModal');
     modal.classList.add('hidden');
     document.getElementById('mediaType').value = '';
+}
+
+function handleFileSelect(input, rowId) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('media_file', file);
+    formData.append('row_id', rowId);
+    formData.append('_token', '{{ csrf_token() }}');
+
+    // Show loading state
+    const previewDiv = document.getElementById(`preview_${rowId}`);
+    previewDiv.innerHTML = '<div class="text-center py-2">Uploading...</div>';
+
+    fetch('{{ route('admin.k3-kamp.upload-media') }}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show preview
+            previewDiv.innerHTML = `
+                <div class="relative">
+                    <img src="${data.data.preview_url}" 
+                         alt="Preview" 
+                         class="w-full h-32 object-cover rounded-md">
+                    <button onclick="deleteMedia('${data.data.id}', '${rowId}')"
+                            class="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 m-1 hover:bg-red-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">${data.data.file_name}</p>
+            `;
+        } else {
+            previewDiv.innerHTML = `<div class="text-red-500 text-sm">${data.message}</div>`;
+        }
+    })
+    .catch(error => {
+        previewDiv.innerHTML = '<div class="text-red-500 text-sm">Upload failed</div>';
+        console.error('Error:', error);
+    });
+}
+
+function deleteMedia(mediaId, rowId) {
+    if (!confirm('Are you sure you want to delete this image?')) return;
+
+    fetch(`{{ url('admin/k3-kamp/delete-media') }}/${mediaId}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById(`preview_${rowId}`).innerHTML = '';
+            document.getElementById(`file_${rowId}`).value = '';
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to delete media');
+    });
 }
 </script>
 @endsection 

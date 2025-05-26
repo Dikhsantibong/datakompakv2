@@ -46,77 +46,74 @@
                     
                     <div class="space-y-6">
                         <!-- 5S5R Details -->
-                        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                            <div class="px-6 py-4 border-b border-gray-200">
-                                <h2 class="text-lg font-medium text-gray-900">
-                                    <i class="fas fa-clipboard-list mr-2 text-gray-400"></i>
-                                    Detail Pemeriksaan 5S5R
-                                </h2>
-                            </div>
+                        <div class="bg-white rounded-lg shadow-sm">
                             <div class="p-6">
-                                @foreach($pemeriksaan as $item)
-                                <div class="mb-8 border-b pb-6">
-                                    <h3 class="text-lg font-medium mb-4">{{ $item->kategori }}</h3>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Kondisi Awal</label>
-                                            <textarea name="kondisi_awal_pemeriksaan_{{ $item->kategori }}" rows="3" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">{{ $item->kondisi_awal }}</textarea>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">PIC</label>
-                                            <input type="text" name="pic_{{ $item->kategori }}" value="{{ $item->pic }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Area Kerja</label>
-                                            <input type="text" name="area_kerja_{{ $item->kategori }}" value="{{ $item->area_kerja }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Area Produksi</label>
-                                            <input type="text" name="area_produksi_{{ $item->kategori }}" value="{{ $item->area_produksi }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        </div>
-                                        <div class="md:col-span-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Tindakan</label>
-                                            <div class="flex flex-wrap gap-4">
-                                                <label class="inline-flex items-center">
-                                                    <input type="checkbox" name="membersihkan_{{ $item->kategori }}" {{ $item->membersihkan ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                                    <span class="ml-2">Membersihkan</span>
-                                                </label>
-                                                <label class="inline-flex items-center">
-                                                    <input type="checkbox" name="merapikan_{{ $item->kategori }}" {{ $item->merapikan ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                                    <span class="ml-2">Merapikan</span>
-                                                </label>
-                                                <label class="inline-flex items-center">
-                                                    <input type="checkbox" name="membuang_sampah_{{ $item->kategori }}" {{ $item->membuang_sampah ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                                    <span class="ml-2">Membuang Sampah</span>
-                                                </label>
-                                                <label class="inline-flex items-center">
-                                                    <input type="checkbox" name="mengecat_{{ $item->kategori }}" {{ $item->mengecat ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                                    <span class="ml-2">Mengecat</span>
-                                                </label>
-                                                <label class="inline-flex items-center">
-                                                    <input type="checkbox" name="lainnya_{{ $item->kategori }}" {{ $item->lainnya ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                                    <span class="ml-2">Lainnya</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="md:col-span-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Kondisi Akhir</label>
-                                            <textarea name="kondisi_akhir_pemeriksaan_{{ $item->kategori }}" rows="3" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">{{ $item->kondisi_akhir }}</textarea>
-                                        </div>
-                                        <div class="md:col-span-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Eviden</label>
-                                            @if($item->eviden)
-                                                <div class="mb-2">
-                                                    <a href="{{ Storage::url($item->eviden) }}" target="_blank" class="text-blue-600 hover:text-blue-900">
-                                                        Lihat Eviden Saat Ini
-                                                    </a>
-                                                </div>
-                                            @endif
-                                            <input type="file" name="eviden_pemeriksaan_{{ $item->kategori }}" class="w-full">
-                                        </div>
-                                    </div>
+                                <h2 class="text-lg font-medium text-gray-900 mb-4">Tabel Pemeriksaan 5S5R</h2>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full border border-gray-300">
+                                        <thead>
+                                            <tr class="bg-gray-100">
+                                                <th class="border px-4 py-2 text-sm">No.</th>
+                                                <th class="border px-4 py-2 text-sm">Uraian</th>
+                                                <th class="border px-4 py-2 text-sm" style="min-width: 500px">Detail</th>
+                                                <th class="border px-4 py-2 text-sm">Kondisi Awal</th>
+                                                <th colspan="3" class="border px-4 py-2 text-sm text-center">Area</th>
+                                                <th colspan="5" class="border px-4 py-2 text-sm text-center">Tindakan</th>
+                                                <th class="border px-4 py-2 text-sm">Kondisi Akhir</th>
+                                                <th class="border px-4 py-2 text-sm">Eviden</th>
+                                            </tr>
+                                            <tr class="bg-gray-50">
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2 text-sm">PIC</th>
+                                                <th class="border px-4 py-2 text-sm">Area Kerja</th>
+                                                <th class="border px-4 py-2 text-sm">Area Produksi</th>
+                                                <th class="border px-4 py-2 text-sm">Membersihkan</th>
+                                                <th class="border px-4 py-2 text-sm">Merapikan</th>
+                                                <th class="border px-4 py-2 text-sm">Membuang Sampah</th>
+                                                <th class="border px-4 py-2 text-sm">Mengecat</th>
+                                                <th class="border px-4 py-2 text-sm">Lainnya</th>
+                                                <th class="border px-4 py-2"></th>
+                                                <th class="border px-4 py-2"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($pemeriksaan as $index => $item)
+                                            <tr>
+                                                <td class="border px-4 py-2 text-center">{{ $index + 1 }}</td>
+                                                <td class="border px-4 py-2">{{ $item->kategori }}</td>
+                                                <td class="border px-4 py-2" style="width: 400px">{{ $item->detail }}</td>
+                                                <td class="border px-4 py-2">
+                                                    <textarea name="kondisi_awal_pemeriksaan_{{ $item->kategori }}" class="w-[300px] h-[100px] p-1 border-gray-300 rounded" rows="3">{{ $item->kondisi_awal }}</textarea>
+                                                </td>
+                                                <td class="border px-4 py-2"><textarea name="pic_{{ $item->kategori }}" class="w-[200px] h-[100px] p-1 border-gray-300 rounded">{{ $item->pic }}</textarea></td>
+                                                <td class="border px-4 py-2"><textarea name="area_kerja_{{ $item->kategori }}" class="w-[200px] h-[100px] p-1 border-gray-300 rounded">{{ $item->area_kerja }}</textarea></td>
+                                                <td class="border px-4 py-2"><textarea name="area_produksi_{{ $item->kategori }}" class="w-[200px] h-[100px] p-1 border-gray-300 rounded">{{ $item->area_produksi }}</textarea></td>
+                                                <td class="border px-4 py-2 text-center"><input type="checkbox" name="membersihkan_{{ $item->kategori }}" class="form-checkbox" {{ $item->membersihkan ? 'checked' : '' }}></td>
+                                                <td class="border px-4 py-2 text-center"><input type="checkbox" name="merapikan_{{ $item->kategori }}" class="form-checkbox" {{ $item->merapikan ? 'checked' : '' }}></td>
+                                                <td class="border px-4 py-2 text-center"><input type="checkbox" name="membuang_sampah_{{ $item->kategori }}" class="form-checkbox" {{ $item->membuang_sampah ? 'checked' : '' }}></td>
+                                                <td class="border px-4 py-2 text-center"><input type="checkbox" name="mengecat_{{ $item->kategori }}" class="form-checkbox" {{ $item->mengecat ? 'checked' : '' }}></td>
+                                                <td class="border px-4 py-2 text-center"><input type="checkbox" name="lainnya_{{ $item->kategori }}" class="form-checkbox" {{ $item->lainnya ? 'checked' : '' }}></td>
+                                                <td class="border px-4 py-2">
+                                                    <textarea name="kondisi_akhir_pemeriksaan_{{ $item->kategori }}" class="w-[200px] h-[100px] p-1 border-gray-300 rounded">{{ $item->kondisi_akhir }}</textarea>
+                                                </td>
+                                                <td class="border px-4 py-2" style="min-width: 200px;">
+                                                    @if($item->eviden)
+                                                        <div class="mb-2">
+                                                            <a href="{{ Storage::url($item->eviden) }}" target="_blank" class="text-blue-600 hover:text-blue-900">
+                                                                Lihat Eviden Saat Ini
+                                                            </a>
+                                                        </div>
+                                                    @endif
+                                                    <input type="file" name="eviden_pemeriksaan_{{ $item->kategori }}" class="w-full">
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
-                                @endforeach
                             </div>
                         </div>
 

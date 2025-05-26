@@ -17,6 +17,8 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles, WithDrawings
 {
@@ -41,7 +43,7 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
 
     public function drawings()
     {
-        // PLN Logo
+        // PLN Logo (kiri)
         $plnDrawing = new Drawing();
         $plnDrawing->setName('PLN Logo');
         $plnDrawing->setDescription('PLN Logo');
@@ -51,17 +53,30 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
         $plnDrawing->setOffsetX(5);
         $plnDrawing->setOffsetY(5);
 
-        // PLN-bg Logo
-        $plnBgDrawing = new Drawing();
-        $plnBgDrawing->setName('PLN-bg Logo');
-        $plnBgDrawing->setDescription('PLN-bg Logo');
-        $plnBgDrawing->setPath(public_path('logo/PLN-bg.png'));
-        $plnBgDrawing->setHeight(60);
-        $plnBgDrawing->setCoordinates('H1');
-        $plnBgDrawing->setOffsetX(5);
-        $plnBgDrawing->setOffsetY(5);
+        // Get current user name
+        $userName = Auth::user()->name ?? '';
+        
+        // Unit Logo (kanan) - Choose logo based on user name
+        $unitDrawing = new Drawing();
+        $unitDrawing->setName('Unit Logo');
+        $unitDrawing->setDescription('Unit Logo');
+        
+        // Set logo path based on user name
+        if (stripos($userName, 'PLTD POASIA') !== false) {
+            $logoPath = 'logo/PLTD_POASIA.png';
+        } elseif (stripos($userName, 'PLTD KOLAKA') !== false) {
+            $logoPath = 'logo/PLTD_KOLAKA.png';
+        } else {
+            $logoPath = 'logo/UP_KENDARI.png';
+        }
+        
+        $unitDrawing->setPath(public_path($logoPath));
+        $unitDrawing->setHeight(60);
+        $unitDrawing->setCoordinates('E1');  // Ubah dari H1 ke E1 agar masuk dalam colspan="6"
+        $unitDrawing->setOffsetX(5);
+        $unitDrawing->setOffsetY(5);
 
-        return [$plnDrawing, $plnBgDrawing];
+        return [$plnDrawing, $unitDrawing];
     }
 
     public function title(): string
@@ -131,7 +146,7 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => ['rgb' => 'F8FAFC']
-            ],
+            ], 
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
@@ -207,7 +222,7 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
                 $sheet->getStyle('A1:' . $lastColumn . $lastRow)->getAlignment()->setWrapText(true);
 
                 // Add borders to all cells
-                $sheet->getStyle('A1:' . $lastColumn . $lastRow)->applyFromArray([
+                $sheet->getStyle('A1:F' . $lastRow)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,

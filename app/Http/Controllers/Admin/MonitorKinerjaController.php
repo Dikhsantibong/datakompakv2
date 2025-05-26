@@ -92,6 +92,9 @@ class MonitorKinerjaController extends Controller
             $chartData['jsi'][] = $data->jsi;
         }
 
+        // Ambil semua summary, bisa difilter sesuai kebutuhan (misal: 30 hari terakhir)
+        $dailySummaries = DailySummary::orderBy('date', 'desc')->get();
+
         // Prepare data for the view
         $data = [
             'performance' => [
@@ -153,7 +156,8 @@ class MonitorKinerjaController extends Controller
             ],
             'chartData' => $chartData,
             'powerPlants' => $powerPlants,
-            'selectedUnitSource' => $selectedUnitSource
+            'selectedUnitSource' => $selectedUnitSource,
+            'dailySummaries' => $dailySummaries,
         ];
 
         return view('admin.monitor-kinerja.index', $data);

@@ -490,6 +490,68 @@
                     </div>
                 </div>
 
+                <!-- Tabel Rekap Kinerja Mesin per Unit -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Tabel Rekap Kinerja Mesin per Unit</h3>
+                    @foreach($powerPlants as $powerPlant)
+                    <div class="bg-white rounded-lg shadow p-6 mb-4 unit-table">
+                        <div class="overflow-auto">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="flex flex-col">
+                                    <h2 class="text-lg font-semibold text-gray-800">{{ $powerPlant->name }}</h2>
+                                    <div class="text-sm text-gray-600">
+                                        <span class="font-medium">Update Terakhir:</span>
+                                        <span id="last_update_{{ $powerPlant->id }}" class="ml-1">
+                                            @php
+                                                $lastUpdate = $dailySummaries
+                                                    ->where('power_plant_id', $powerPlant->id)
+                                                    ->max('date');
+                                                echo $lastUpdate ? \Carbon\Carbon::parse($lastUpdate)->format('d/m/Y H:i') : '-';
+                                            @endphp
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam Operasi</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam Standby</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produksi Netto (MW)</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kit Ratio (%)</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @php $summariesInUnit = $dailySummaries->where('power_plant_id', $powerPlant->id); @endphp
+                                        @forelse($summariesInUnit as $i => $summary)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $i+1 }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $summary->machine_name }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $summary->date ? \Carbon\Carbon::parse($summary->date)->format('d/m/Y') : '-' }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $summary->operating_hours ?? '-' }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $summary->standby_hours ?? '-' }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $summary->net_production ?? '-' }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $summary->kit_ratio ?? '-' }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $summary->notes ?? '-' }}</td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="8" class="px-4 py-2 text-center text-gray-500">Tidak ada data summary untuk unit ini</td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
                 <!-- Keterangan Section -->
                 <div class="bg-white rounded-lg shadow">
                     <div class="p-4 border-b border-gray-200 flex justify-between items-center">

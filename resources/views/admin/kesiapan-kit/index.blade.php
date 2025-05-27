@@ -343,11 +343,58 @@ function shareToWhatsApp() {
     window.open(`https://wa.me/?text=${whatsappMessage}`, '_blank');
 }
 
-document.getElementById('shareWhatsApp').addEventListener('click', function() {
+// Helper untuk validasi tanggal dan jam
+function validateDateTimeSelection() {
+    const dateInput = document.querySelector('input[name="date"]');
+    const timeSelect = document.querySelector('select[name="time"]');
+    let valid = true;
+
+    // Remove previous highlight
+    dateInput.classList.remove('input-error');
+    timeSelect.classList.remove('input-error');
+
+    if (!dateInput.value) {
+        dateInput.classList.add('input-error');
+        valid = false;
+    }
+    if (!timeSelect.value) {
+        timeSelect.classList.add('input-error');
+        valid = false;
+    }
+    return valid;
+}
+
+// Ubah event WhatsApp
+const shareBtn = document.getElementById('shareWhatsApp');
+shareBtn.addEventListener('click', function(e) {
+    const valid = validateDateTimeSelection();
+    if (!valid) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Pilih Tanggal & Jam',
+            text: 'Silakan pilih tanggal dan jam terlebih dahulu sebelum mengirim ke WhatsApp.',
+            timer: 2000,
+            showConfirmButton: false
+        });
+        return;
+    }
     shareToWhatsApp();
 });
 
-document.getElementById('copyFormattedData').addEventListener('click', function() {
+// Ubah event Salin Laporan
+const copyBtn = document.getElementById('copyFormattedData');
+copyBtn.addEventListener('click', function(e) {
+    const valid = validateDateTimeSelection();
+    if (!valid) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Pilih Tanggal & Jam',
+            text: 'Silakan pilih tanggal dan jam terlebih dahulu sebelum menyalin laporan.',
+            timer: 2000,
+            showConfirmButton: false
+        });
+        return;
+    }
     const formattedReport = getFormattedReport();
     navigator.clipboard.writeText(formattedReport).then(() => {
         if (window.Swal) {
@@ -373,7 +420,24 @@ document.getElementById('copyFormattedData').addEventListener('click', function(
         }
     });
 });
+
+// Hilangkan highlight saat user memilih
+const dateInput = document.querySelector('input[name="date"]');
+const timeSelect = document.querySelector('select[name="time"]');
+dateInput.addEventListener('change', function() {
+    if (dateInput.value) dateInput.classList.remove('input-error');
+});
+timeSelect.addEventListener('change', function() {
+    if (timeSelect.value) timeSelect.classList.remove('input-error');
+});
 </script>
+
+<style>
+    .input-error {
+        border-color: #dc2626 !important; /* Tailwind red-600 */
+        box-shadow: 0 0 0 1px #dc2626;
+    }
+</style>
 
 <script src="{{ asset('js/toggle.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

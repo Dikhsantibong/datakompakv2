@@ -114,7 +114,7 @@
                                             'mysql_bau_bau' => 'PLTD BAU BAU',
                                             'mysql_wua_wua' => 'PLTD WUA WUA',
                                             'mysql_winning' => 'PLTD WINNING',
-                                            'mysql_erkee' => 'PLTD ERKEE',
+                                            'mysql_ereke' => 'PLTD EREKE',
                                             'mysql_ladumpi' => 'PLTD LADUMPI',
                                             'mysql_langara' => 'PLTD LANGARA',
                                             'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',

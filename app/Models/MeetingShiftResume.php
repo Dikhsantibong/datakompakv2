@@ -30,6 +30,13 @@ class MeetingShiftResume extends Model
         'content'
     ];
 
+    protected $guarded = ['id'];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
+
     /**
      * Get the meeting shift that owns this resume.
      *
@@ -59,14 +66,26 @@ class MeetingShiftResume extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $resume->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'resume_id' => $resume->id,
+                            'meeting_shift_id' => $resume->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
-                        'meeting_shift_id' => $resume->meeting_shift_id,
+                        'meeting_shift_id' => $parentId,
                         'content' => $resume->content,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Use insert to get a new ID
                     DB::connection('mysql')->table('meeting_shift_resume')->insert($data);
 
                     self::$isSyncing = false;
@@ -75,7 +94,10 @@ class MeetingShiftResume extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftResume sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $resume->meeting_shift_id
                 ]);
             }
         });
@@ -90,16 +112,27 @@ class MeetingShiftResume extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $resume->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'resume_id' => $resume->id,
+                            'meeting_shift_id' => $resume->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
+                        'meeting_shift_id' => $parentId,
                         'content' => $resume->content,
+                        'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Update in mysql database
-                    DB::connection('mysql')->table('meeting_shift_resume')
-                        ->where('meeting_shift_id', $resume->meeting_shift_id)
-                        ->where('id', $resume->id)
-                        ->update($data);
+                    // Insert new record instead of update
+                    DB::connection('mysql')->table('meeting_shift_resume')->insert($data);
 
                     self::$isSyncing = false;
                 }
@@ -107,7 +140,10 @@ class MeetingShiftResume extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftResume sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $resume->meeting_shift_id
                 ]);
             }
         });
@@ -124,7 +160,6 @@ class MeetingShiftResume extends Model
                     
                     // Delete from mysql database
                     DB::connection('mysql')->table('meeting_shift_resume')
-                        ->where('meeting_shift_id', $resume->meeting_shift_id)
                         ->where('id', $resume->id)
                         ->delete();
 

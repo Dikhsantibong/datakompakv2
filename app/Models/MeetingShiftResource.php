@@ -74,17 +74,29 @@ class MeetingShiftResource extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $resource->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'resource_id' => $resource->id,
+                            'meeting_shift_id' => $resource->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
-                        'meeting_shift_id' => $resource->meeting_shift_id,
+                        'meeting_shift_id' => $parentId,
                         'name' => $resource->name,
                         'category' => $resource->category,
                         'status' => $resource->status,
-                        'keterangan' => $resource->keterangan,
+                        'keterangan' => $resource->keterangan ?? '',
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Use insert to get a new ID
                     DB::connection('mysql')->table('resource_statuses')->insert($data);
 
                     self::$isSyncing = false;
@@ -93,7 +105,10 @@ class MeetingShiftResource extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftResource sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $resource->meeting_shift_id
                 ]);
             }
         });
@@ -108,19 +123,30 @@ class MeetingShiftResource extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $resource->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'resource_id' => $resource->id,
+                            'meeting_shift_id' => $resource->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
+                        'meeting_shift_id' => $parentId,
                         'name' => $resource->name,
                         'category' => $resource->category,
                         'status' => $resource->status,
-                        'keterangan' => $resource->keterangan,
+                        'keterangan' => $resource->keterangan ?? '',
+                        'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Update in mysql database
-                    DB::connection('mysql')->table('resource_statuses')
-                        ->where('meeting_shift_id', $resource->meeting_shift_id)
-                        ->where('id', $resource->id)
-                        ->update($data);
+                    // Insert new record instead of update
+                    DB::connection('mysql')->table('resource_statuses')->insert($data);
 
                     self::$isSyncing = false;
                 }
@@ -128,7 +154,10 @@ class MeetingShiftResource extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftResource sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $resource->meeting_shift_id
                 ]);
             }
         });
@@ -145,7 +174,6 @@ class MeetingShiftResource extends Model
                     
                     // Delete from mysql database
                     DB::connection('mysql')->table('resource_statuses')
-                        ->where('meeting_shift_id', $resource->meeting_shift_id)
                         ->where('id', $resource->id)
                         ->delete();
 

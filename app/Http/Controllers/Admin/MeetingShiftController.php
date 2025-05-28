@@ -81,6 +81,7 @@ class MeetingShiftController extends Controller
             }
         }
 
+        DB::beginTransaction();
         try {
             // Validate all form inputs
             $validated = $request->validate([
@@ -126,8 +127,6 @@ class MeetingShiftController extends Controller
                 'absensi.*.status' => 'required|in:hadir,izin,sakit,cuti,alpha,terlambat,ganti shift',
                 'absensi.*.keterangan' => 'nullable|string',
             ]);
-
-            DB::beginTransaction();
 
             // Create main meeting shift record first and make sure it's saved
             $meetingShift = new MeetingShift();
@@ -586,6 +585,7 @@ class MeetingShiftController extends Controller
 
     public function update(Request $request, $id)
     {
+        DB::beginTransaction();
         try {
             // Validate all form inputs
             $validated = $request->validate([
@@ -632,10 +632,7 @@ class MeetingShiftController extends Controller
                 'absensi.*.keterangan' => 'nullable|string',
             ]);
 
-            DB::beginTransaction();
-
             $meetingShift = MeetingShift::findOrFail($id);
-            
             // Update main meeting shift record
             $meetingShift->update([
                 'tanggal' => $validated['tanggal'],
@@ -711,7 +708,6 @@ class MeetingShiftController extends Controller
                 'type' => 'sistem',
                 'content' => $validated['catatan_sistem']
             ]);
-
             MeetingShiftNote::create([
                 'meeting_shift_id' => $meetingShift->id,
                 'type' => 'umum',
@@ -742,9 +738,7 @@ class MeetingShiftController extends Controller
             }
 
             DB::commit();
-            
             Log::info('Meeting shift updated successfully', ['meeting_shift_id' => $meetingShift->id]);
-            
             return redirect()->route('admin.meeting-shift.show', $meetingShift->id)
                            ->with('success', 'Data meeting shift berhasil diperbarui');
 
@@ -755,7 +749,6 @@ class MeetingShiftController extends Controller
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
             return redirect()->back()
                            ->with('error', 'Terjadi kesalahan saat memperbarui data meeting shift: ' . $e->getMessage())
                            ->withInput();
@@ -764,16 +757,13 @@ class MeetingShiftController extends Controller
 
     public function destroy($id)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
-            
             $meetingShift = MeetingShift::findOrFail($id);
-            
             // Delete related records first
             $meetingShift->machineStatuses()->delete();
             $meetingShift->auxiliaryEquipments()->delete();
             $meetingShift->resources()->delete();
-            
             // Delete K3L records and their evidence files
             foreach ($meetingShift->k3ls as $k3l) {
                 if ($k3l->eviden_path) {
@@ -781,24 +771,18 @@ class MeetingShiftController extends Controller
                 }
                 $k3l->delete();
             }
-            
             $meetingShift->notes()->delete();
             $meetingShift->resume()->delete();
             $meetingShift->attendances()->delete();
-            
             // Finally delete the main record
             $meetingShift->delete();
-            
             DB::commit();
-            
             return redirect()
                 ->route('admin.meeting-shift.list')
                 ->with('success', 'Data meeting shift berhasil dihapus');
-                
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error deleting meeting shift: ' . $e->getMessage());
-            
             return redirect()
                 ->back()
                 ->with('error', 'Terjadi kesalahan saat menghapus data meeting shift: ' . $e->getMessage());

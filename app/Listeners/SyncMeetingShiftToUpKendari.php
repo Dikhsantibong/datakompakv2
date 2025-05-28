@@ -35,160 +35,186 @@ class SyncMeetingShiftToUpKendari
             }
 
             $upKendariDB = DB::connection('mysql');
-            
+
+            DB::beginTransaction();
             try {
                 switch($event->action) {
                     case 'create':
-                        try {
-                            $data = [
-                                'id' => $event->meetingShift->id,
+                        // Try to get the latest ID from mysql database
+                        $latestId = $upKendariDB->table('meeting_shifts')->max('id');
+                        $newId = $latestId ? $latestId + 1 : 1;
+
+                        // Create main meeting shift record with new ID
+                        $data = [
+                            'id' => $newId,
+                            'tanggal' => $event->meetingShift->tanggal,
+                            'current_shift' => $event->meetingShift->current_shift,
+                            'created_by' => $event->meetingShift->created_by,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+
+                        // Insert with new ID
+                        $upKendariDB->table('meeting_shifts')->insert($data);
+
+                        Log::info('Created meeting shift record with new ID', [
+                            'original_id' => $event->meetingShift->id,
+                            'new_id' => $newId
+                        ]);
+
+                        // Sync machine statuses with new parent ID
+                        foreach ($event->meetingShift->machineStatuses as $status) {
+                            $upKendariDB->table('machine_statuses')->insert([
+                                'meeting_shift_id' => $newId,
+                                'machine_id' => $status->machine_id,
+                                'status' => is_string($status->status) ? $status->status : json_encode($status->status),
+                                'keterangan' => $status->keterangan,
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+                        }
+
+                        // Sync auxiliary equipment with new parent ID
+                        foreach ($event->meetingShift->auxiliaryEquipments as $equipment) {
+                            $upKendariDB->table('auxiliary_equipment_statuses')->insert([
+                                'meeting_shift_id' => $newId,
+                                'name' => $equipment->name,
+                                'status' => is_string($equipment->status) ? $equipment->status : json_encode($equipment->status),
+                                'keterangan' => $equipment->keterangan,
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+                        }
+
+                        // Sync resources with new parent ID
+                        foreach ($event->meetingShift->resources as $resource) {
+                            $upKendariDB->table('resource_statuses')->insert([
+                                'meeting_shift_id' => $newId,
+                                'name' => $resource->name,
+                                'category' => $resource->category,
+                                'status' => $resource->status,
+                                'keterangan' => $resource->keterangan ?? '',
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+                        }
+
+                        // Sync K3L with new parent ID
+                        foreach ($event->meetingShift->k3ls as $k3l) {
+                            $upKendariDB->table('meeting_shift_k3l')->insert([
+                                'meeting_shift_id' => $newId,
+                                'type' => $k3l->type,
+                                'uraian' => $k3l->uraian,
+                                'saran' => $k3l->saran,
+                                'eviden_path' => $k3l->eviden_path ?? null,
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+                        }
+
+                        // Sync notes with new parent ID
+                        foreach ($event->meetingShift->notes as $note) {
+                            $upKendariDB->table('meeting_shift_notes')->insert([
+                                'meeting_shift_id' => $newId,
+                                'type' => $note->type,
+                                'content' => $note->content,
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+                        }
+
+                        // Sync resume with new parent ID
+                        if ($event->meetingShift->resume) {
+                            $upKendariDB->table('meeting_shift_resume')->insert([
+                                'meeting_shift_id' => $newId,
+                                'content' => $event->meetingShift->resume->content,
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+                        }
+
+                        // Sync attendances with new parent ID
+                        foreach ($event->meetingShift->attendances as $attendance) {
+                            $upKendariDB->table('meeting_shift_attendance')->insert([
+                                'meeting_shift_id' => $newId,
+                                'nama' => $attendance->nama,
+                                'shift' => $attendance->shift,
+                                'status' => $attendance->status,
+                                'keterangan' => $attendance->keterangan ?? '',
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+                        }
+
+                        Log::info('Successfully synced all related records with new parent ID', [
+                            'original_id' => $event->meetingShift->id,
+                            'new_id' => $newId,
+                            'machine_statuses' => $event->meetingShift->machineStatuses->count(),
+                            'auxiliary_equipment' => $event->meetingShift->auxiliaryEquipments->count(),
+                            'resources' => $event->meetingShift->resources->count(),
+                            'k3ls' => $event->meetingShift->k3ls->count(),
+                            'notes' => $event->meetingShift->notes->count(),
+                            'has_resume' => $event->meetingShift->resume ? 'yes' : 'no',
+                            'attendances' => $event->meetingShift->attendances->count()
+                        ]);
+                        break;
+
+                    case 'update':
+                        // Check if record exists
+                        $exists = $upKendariDB->table('meeting_shifts')
+                            ->where('id', $event->meetingShift->id)
+                            ->exists();
+
+                        if (!$exists) {
+                            // If record doesn't exist, treat it as a create with new ID
+                            $latestId = $upKendariDB->table('meeting_shifts')->max('id');
+                            $newId = $latestId ? $latestId + 1 : 1;
+
+                            // Create main record with new ID
+                            $upKendariDB->table('meeting_shifts')->insert([
+                                'id' => $newId,
                                 'tanggal' => $event->meetingShift->tanggal,
                                 'current_shift' => $event->meetingShift->current_shift,
                                 'created_by' => $event->meetingShift->created_by,
                                 'created_at' => now(),
                                 'updated_at' => now()
-                            ];
-
-                            $exists = $upKendariDB->table('meeting_shifts')->where('id', $event->meetingShift->id)->exists();
-                            if (!$exists) {
-                                $upKendariDB->table('meeting_shifts')->insert($data);
-                                $newId = $event->meetingShift->id;
-                                Log::info('Created main meeting shift record', ['id' => $newId]);
-                            } else {
-                                $dataNoId = $data;
-                                unset($dataNoId['id']);
-                                $newId = $upKendariDB->table('meeting_shifts')->insertGetId($dataNoId);
-                                Log::info('Created main meeting shift record with new id', ['old_id' => $event->meetingShift->id, 'new_id' => $newId]);
-                            }
-                        } catch (\Exception $e) {
-                            Log::error('Error creating main meeting shift record', [
-                                'error' => $e->getMessage()
                             ]);
-                            throw $e;
+
+                            Log::info('Created new record during update (record not found)', [
+                                'original_id' => $event->meetingShift->id,
+                                'new_id' => $newId
+                            ]);
+
+                            // Use new ID for all child records
+                            $parentId = $newId;
+                        } else {
+                            // Update existing record
+                            $upKendariDB->table('meeting_shifts')
+                                ->where('id', $event->meetingShift->id)
+                                ->update([
+                                    'tanggal' => $event->meetingShift->tanggal,
+                                    'current_shift' => $event->meetingShift->current_shift,
+                                    'updated_at' => now()
+                                ]);
+
+                            $parentId = $event->meetingShift->id;
                         }
 
-                        // Second transaction: Create child records
-                        DB::beginTransaction();
-                        try {
-                            // Sync machine statuses
-                            foreach ($event->meetingShift->machineStatuses as $status) {
-                                $upKendariDB->table('machine_statuses')->insert([
-                                    'meeting_shift_id' => $newId,
-                                    'machine_id' => $status->machine_id,
-                                    'status' => json_encode($status->status),
-                                    'keterangan' => $status->keterangan,
-                                    'created_at' => now(),
-                                    'updated_at' => now()
-                                ]);
-                            }
+                        // Delete existing child records
+                        $upKendariDB->table('machine_statuses')->where('meeting_shift_id', $parentId)->delete();
+                        $upKendariDB->table('auxiliary_equipment_statuses')->where('meeting_shift_id', $parentId)->delete();
+                        $upKendariDB->table('resource_statuses')->where('meeting_shift_id', $parentId)->delete();
+                        $upKendariDB->table('meeting_shift_k3l')->where('meeting_shift_id', $parentId)->delete();
+                        $upKendariDB->table('meeting_shift_notes')->where('meeting_shift_id', $parentId)->delete();
+                        $upKendariDB->table('meeting_shift_resume')->where('meeting_shift_id', $parentId)->delete();
+                        $upKendariDB->table('meeting_shift_attendance')->where('meeting_shift_id', $parentId)->delete();
 
-                            // Sync auxiliary equipment
-                            foreach ($event->meetingShift->auxiliaryEquipments as $equipment) {
-                                $upKendariDB->table('auxiliary_equipment_statuses')->insert([
-                                    'meeting_shift_id' => $newId,
-                                    'name' => $equipment->name,
-                                    'status' => json_encode($equipment->status),
-                                    'keterangan' => $equipment->keterangan,
-                                    'created_at' => now(),
-                                    'updated_at' => now()
-                                ]);
-                            }
-
-                            // Sync resources
-                            foreach ($event->meetingShift->resources as $resource) {
-                                $upKendariDB->table('resource_statuses')->insert([
-                                    'meeting_shift_id' => $newId,
-                                    'name' => $resource->name,
-                                    'category' => $resource->category,
-                                    'status' => $resource->status,
-                                    'keterangan' => $resource->keterangan ?? '',
-                                    'created_at' => now(),
-                                    'updated_at' => now()
-                                ]);
-                            }
-
-                            // Sync K3L
-                            foreach ($event->meetingShift->k3ls as $k3l) {
-                                $upKendariDB->table('meeting_shift_k3l')->insert([
-                                    'meeting_shift_id' => $newId,
-                                    'type' => $k3l->type,
-                                    'uraian' => $k3l->uraian,
-                                    'saran' => $k3l->saran,
-                                    'eviden_path' => $k3l->eviden_path ?? null,
-                                    'created_at' => now(),
-                                    'updated_at' => now()
-                                ]);
-                            }
-
-                            // Sync notes
-                            foreach ($event->meetingShift->notes as $note) {
-                                $upKendariDB->table('meeting_shift_notes')->insert([
-                                    'meeting_shift_id' => $newId,
-                                    'type' => $note->type,
-                                    'content' => $note->content,
-                                    'created_at' => now(),
-                                    'updated_at' => now()
-                                ]);
-                            }
-
-                            // Sync resume
-                            if ($event->meetingShift->resume) {
-                                $upKendariDB->table('meeting_shift_resume')->insert([
-                                    'meeting_shift_id' => $newId,
-                                    'content' => $event->meetingShift->resume->content,
-                                    'created_at' => now(),
-                                    'updated_at' => now()
-                                ]);
-                            }
-
-                            // Sync attendances
-                            foreach ($event->meetingShift->attendances as $attendance) {
-                                $upKendariDB->table('meeting_shift_attendance')->insert([
-                                    'meeting_shift_id' => $newId,
-                                    'nama' => $attendance->nama,
-                                    'shift' => $attendance->shift,
-                                    'status' => $attendance->status,
-                                    'keterangan' => $attendance->keterangan ?? '',
-                                    'created_at' => now(),
-                                    'updated_at' => now()
-                                ]);
-                            }
-
-                            DB::commit();
-                            Log::info('Successfully synced all related records', [
-                                'meeting_shift_id' => $newId
-                            ]);
-                        } catch (\Exception $e) {
-                            DB::rollBack();
-                            throw $e;
-                        }
-                        break;
-                        
-                    case 'update':
-                        // Update main meeting shift record
-                        $upKendariDB->table('meeting_shifts')
-                            ->where('id', $event->meetingShift->id)
-                            ->update([
-                                'tanggal' => $event->meetingShift->tanggal,
-                                'current_shift' => $event->meetingShift->current_shift,
-                                'updated_at' => now()
-                            ]);
-                            
-                        // Delete and reinsert all related records
-                        $upKendariDB->table('machine_statuses')->where('meeting_shift_id', $event->meetingShift->id)->delete();
-                        $upKendariDB->table('auxiliary_equipment_statuses')->where('meeting_shift_id', $event->meetingShift->id)->delete();
-                        $upKendariDB->table('resource_statuses')->where('meeting_shift_id', $event->meetingShift->id)->delete();
-                        $upKendariDB->table('meeting_shift_k3l')->where('meeting_shift_id', $event->meetingShift->id)->delete();
-                        $upKendariDB->table('meeting_shift_notes')->where('meeting_shift_id', $event->meetingShift->id)->delete();
-                        $upKendariDB->table('meeting_shift_resume')->where('meeting_shift_id', $event->meetingShift->id)->delete();
-                        $upKendariDB->table('meeting_shift_attendance')->where('meeting_shift_id', $event->meetingShift->id)->delete();
-
-                        // Reinsert all related records
+                        // Reinsert all related records with correct parent ID
                         foreach ($event->meetingShift->machineStatuses as $status) {
                             $upKendariDB->table('machine_statuses')->insert([
-                                'meeting_shift_id' => $event->meetingShift->id,
+                                'meeting_shift_id' => $parentId,
                                 'machine_id' => $status->machine_id,
-                                'status' => json_encode($status->status),
+                                'status' => is_string($status->status) ? $status->status : json_encode($status->status),
                                 'keterangan' => $status->keterangan,
                                 'created_at' => now(),
                                 'updated_at' => now()
@@ -197,9 +223,9 @@ class SyncMeetingShiftToUpKendari
 
                         foreach ($event->meetingShift->auxiliaryEquipments as $equipment) {
                             $upKendariDB->table('auxiliary_equipment_statuses')->insert([
-                                'meeting_shift_id' => $event->meetingShift->id,
+                                'meeting_shift_id' => $parentId,
                                 'name' => $equipment->name,
-                                'status' => json_encode($equipment->status),
+                                'status' => is_string($equipment->status) ? $equipment->status : json_encode($equipment->status),
                                 'keterangan' => $equipment->keterangan,
                                 'created_at' => now(),
                                 'updated_at' => now()
@@ -208,7 +234,7 @@ class SyncMeetingShiftToUpKendari
 
                         foreach ($event->meetingShift->resources as $resource) {
                             $upKendariDB->table('resource_statuses')->insert([
-                                'meeting_shift_id' => $event->meetingShift->id,
+                                'meeting_shift_id' => $parentId,
                                 'name' => $resource->name,
                                 'category' => $resource->category,
                                 'status' => $resource->status,
@@ -220,7 +246,7 @@ class SyncMeetingShiftToUpKendari
 
                         foreach ($event->meetingShift->k3ls as $k3l) {
                             $upKendariDB->table('meeting_shift_k3l')->insert([
-                                'meeting_shift_id' => $event->meetingShift->id,
+                                'meeting_shift_id' => $parentId,
                                 'type' => $k3l->type,
                                 'uraian' => $k3l->uraian,
                                 'saran' => $k3l->saran,
@@ -232,7 +258,7 @@ class SyncMeetingShiftToUpKendari
 
                         foreach ($event->meetingShift->notes as $note) {
                             $upKendariDB->table('meeting_shift_notes')->insert([
-                                'meeting_shift_id' => $event->meetingShift->id,
+                                'meeting_shift_id' => $parentId,
                                 'type' => $note->type,
                                 'content' => $note->content,
                                 'created_at' => now(),
@@ -242,7 +268,7 @@ class SyncMeetingShiftToUpKendari
 
                         if ($event->meetingShift->resume) {
                             $upKendariDB->table('meeting_shift_resume')->insert([
-                                'meeting_shift_id' => $event->meetingShift->id,
+                                'meeting_shift_id' => $parentId,
                                 'content' => $event->meetingShift->resume->content,
                                 'created_at' => now(),
                                 'updated_at' => now()
@@ -251,7 +277,7 @@ class SyncMeetingShiftToUpKendari
 
                         foreach ($event->meetingShift->attendances as $attendance) {
                             $upKendariDB->table('meeting_shift_attendance')->insert([
-                                'meeting_shift_id' => $event->meetingShift->id,
+                                'meeting_shift_id' => $parentId,
                                 'nama' => $attendance->nama,
                                 'shift' => $attendance->shift,
                                 'status' => $attendance->status,
@@ -260,8 +286,20 @@ class SyncMeetingShiftToUpKendari
                                 'updated_at' => now()
                             ]);
                         }
+
+                        Log::info('Successfully synced all records', [
+                            'action' => $exists ? 'updated' : 'created',
+                            'parent_id' => $parentId,
+                            'machine_statuses' => $event->meetingShift->machineStatuses->count(),
+                            'auxiliary_equipment' => $event->meetingShift->auxiliaryEquipments->count(),
+                            'resources' => $event->meetingShift->resources->count(),
+                            'k3ls' => $event->meetingShift->k3ls->count(),
+                            'notes' => $event->meetingShift->notes->count(),
+                            'has_resume' => $event->meetingShift->resume ? 'yes' : 'no',
+                            'attendances' => $event->meetingShift->attendances->count()
+                        ]);
                         break;
-                        
+
                     case 'delete':
                         // Delete all related records first
                         $upKendariDB->table('machine_statuses')->where('meeting_shift_id', $event->meetingShift->id)->delete();
@@ -271,21 +309,27 @@ class SyncMeetingShiftToUpKendari
                         $upKendariDB->table('meeting_shift_notes')->where('meeting_shift_id', $event->meetingShift->id)->delete();
                         $upKendariDB->table('meeting_shift_resume')->where('meeting_shift_id', $event->meetingShift->id)->delete();
                         $upKendariDB->table('meeting_shift_attendance')->where('meeting_shift_id', $event->meetingShift->id)->delete();
-                        
                         // Delete main record
                         $upKendariDB->table('meeting_shifts')->where('id', $event->meetingShift->id)->delete();
                         break;
                 }
-                
+
                 DB::commit();
-                
+
                 Log::info("Meeting shift sync to UP Kendari successful", [
                     'action' => $event->action,
                     'meeting_shift_id' => $event->meetingShift->id
                 ]);
-                
+
             } catch (\Exception $e) {
                 DB::rollBack();
+                Log::error('Sync error details', [
+                    'message' => $e->getMessage(),
+                    'sql' => $e->getSql ?? null,
+                    'bindings' => $e->getBindings ?? null,
+                    'meeting_shift_id' => $event->meetingShift->id,
+                    'action' => $event->action
+                ]);
                 throw $e;
             }
 

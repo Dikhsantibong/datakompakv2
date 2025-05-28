@@ -6,12 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Events\MeetingShiftUpdated;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class MeetingShift extends Model
 {
     use HasFactory;
 
     public static $isSyncing = false;
+
+    protected $guarded = ['id'];
 
     protected $fillable = [
         'tanggal',
@@ -92,9 +95,37 @@ class MeetingShift extends Model
                 
                 // Only sync if not in mysql session
                 if ($currentSession !== 'mysql') {
-                    event(new MeetingShiftUpdated($meetingShift, 'create'));
+                    self::$isSyncing = true;
+
+                    // Get the latest ID from mysql database
+                    $latestId = DB::connection('mysql')->table('meeting_shifts')->max('id');
+                    $newId = $latestId ? $latestId + 1 : 1;
+
+                    // Create main record with new ID
+                    $data = [
+                        'id' => $newId,
+                        'tanggal' => $meetingShift->tanggal,
+                        'current_shift' => $meetingShift->current_shift,
+                        'created_by' => $meetingShift->created_by,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ];
+
+                    // Insert with new ID
+                    DB::connection('mysql')->table('meeting_shifts')->insert($data);
+
+                    // Store the mapping for child records
+                    session(['meeting_shift_id_map.' . $meetingShift->id => $newId]);
+
+                    Log::info('Created meeting shift record with new ID', [
+                        'original_id' => $meetingShift->id,
+                        'new_id' => $newId
+                    ]);
+
+                    self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
+                self::$isSyncing = false;
                 Log::error('Error in MeetingShift sync:', [
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
@@ -110,9 +141,56 @@ class MeetingShift extends Model
                 
                 // Only sync if not in mysql session
                 if ($currentSession !== 'mysql') {
-                    event(new MeetingShiftUpdated($meetingShift, 'update'));
+                    self::$isSyncing = true;
+
+                    // Check if record exists
+                    $exists = DB::connection('mysql')->table('meeting_shifts')
+                        ->where('id', $meetingShift->id)
+                        ->exists();
+
+                    if (!$exists) {
+                        // If record doesn't exist, treat it as a create with new ID
+                        $latestId = DB::connection('mysql')->table('meeting_shifts')->max('id');
+                        $newId = $latestId ? $latestId + 1 : 1;
+
+                        // Create main record with new ID
+                        $data = [
+                            'id' => $newId,
+                            'tanggal' => $meetingShift->tanggal,
+                            'current_shift' => $meetingShift->current_shift,
+                            'created_by' => $meetingShift->created_by,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+
+                        // Insert with new ID
+                        DB::connection('mysql')->table('meeting_shifts')->insert($data);
+
+                        // Store the mapping for child records
+                        session(['meeting_shift_id_map.' . $meetingShift->id => $newId]);
+
+                        Log::info('Created new record during update (record not found)', [
+                            'original_id' => $meetingShift->id,
+                            'new_id' => $newId
+                        ]);
+                    } else {
+                        // Update existing record
+                        DB::connection('mysql')->table('meeting_shifts')
+                            ->where('id', $meetingShift->id)
+                            ->update([
+                                'tanggal' => $meetingShift->tanggal,
+                                'current_shift' => $meetingShift->current_shift,
+                                'updated_at' => now()
+                            ]);
+
+                        // Store the mapping for child records
+                        session(['meeting_shift_id_map.' . $meetingShift->id => $meetingShift->id]);
+                    }
+
+                    self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
+                self::$isSyncing = false;
                 Log::error('Error in MeetingShift sync:', [
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()

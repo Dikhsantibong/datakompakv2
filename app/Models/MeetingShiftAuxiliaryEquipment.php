@@ -15,6 +15,8 @@ class MeetingShiftAuxiliaryEquipment extends Model
 
     protected $table = 'auxiliary_equipment_statuses';
 
+    protected $guarded = ['id'];
+
     protected $fillable = [
         'meeting_shift_id',
         'name',
@@ -23,7 +25,9 @@ class MeetingShiftAuxiliaryEquipment extends Model
     ];
 
     protected $casts = [
-        'status' => 'json'
+        'status' => 'json',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     public function meetingShift()
@@ -51,6 +55,7 @@ class MeetingShiftAuxiliaryEquipment extends Model
                     self::$isSyncing = true;
                     
                     $data = [
+                        'id' => $equipment->id,
                         'meeting_shift_id' => $equipment->meeting_shift_id,
                         'name' => $equipment->name,
                         'status' => $equipment->status,
@@ -59,8 +64,12 @@ class MeetingShiftAuxiliaryEquipment extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
-                    DB::connection('mysql')->table('auxiliary_equipment_statuses')->insert($data);
+                    // Use updateOrInsert instead of insert
+                    DB::connection('mysql')->table('auxiliary_equipment_statuses')
+                        ->updateOrInsert(
+                            ['id' => $equipment->id],
+                            $data
+                        );
 
                     self::$isSyncing = false;
                 }
@@ -92,7 +101,6 @@ class MeetingShiftAuxiliaryEquipment extends Model
 
                     // Update in mysql database
                     DB::connection('mysql')->table('auxiliary_equipment_statuses')
-                        ->where('meeting_shift_id', $equipment->meeting_shift_id)
                         ->where('id', $equipment->id)
                         ->update($data);
 
@@ -119,7 +127,6 @@ class MeetingShiftAuxiliaryEquipment extends Model
                     
                     // Delete from mysql database
                     DB::connection('mysql')->table('auxiliary_equipment_statuses')
-                        ->where('meeting_shift_id', $equipment->meeting_shift_id)
                         ->where('id', $equipment->id)
                         ->delete();
 

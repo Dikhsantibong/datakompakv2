@@ -25,13 +25,7 @@ class MeetingShiftAttendance extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'meeting_shift_id',
-        'nama',
-        'shift',
-        'status',
-        'keterangan'
-    ];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be cast.
@@ -40,7 +34,9 @@ class MeetingShiftAttendance extends Model
      */
     protected $casts = [
         'shift' => 'string',
-        'status' => 'string'
+        'status' => 'string',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     /**
@@ -92,17 +88,29 @@ class MeetingShiftAttendance extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $attendance->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'attendance_id' => $attendance->id,
+                            'meeting_shift_id' => $attendance->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
-                        'meeting_shift_id' => $attendance->meeting_shift_id,
+                        'meeting_shift_id' => $parentId,
                         'nama' => $attendance->nama,
                         'shift' => $attendance->shift,
                         'status' => $attendance->status,
-                        'keterangan' => $attendance->keterangan,
+                        'keterangan' => $attendance->keterangan ?? '',
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Use insert to get a new ID
                     DB::connection('mysql')->table('meeting_shift_attendance')->insert($data);
 
                     self::$isSyncing = false;
@@ -111,7 +119,10 @@ class MeetingShiftAttendance extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftAttendance sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $attendance->meeting_shift_id
                 ]);
             }
         });
@@ -126,19 +137,30 @@ class MeetingShiftAttendance extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $attendance->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'attendance_id' => $attendance->id,
+                            'meeting_shift_id' => $attendance->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
+                        'meeting_shift_id' => $parentId,
                         'nama' => $attendance->nama,
                         'shift' => $attendance->shift,
                         'status' => $attendance->status,
-                        'keterangan' => $attendance->keterangan,
+                        'keterangan' => $attendance->keterangan ?? '',
+                        'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Update in mysql database
-                    DB::connection('mysql')->table('meeting_shift_attendance')
-                        ->where('meeting_shift_id', $attendance->meeting_shift_id)
-                        ->where('id', $attendance->id)
-                        ->update($data);
+                    // Insert new record instead of update
+                    DB::connection('mysql')->table('meeting_shift_attendance')->insert($data);
 
                     self::$isSyncing = false;
                 }
@@ -146,7 +168,10 @@ class MeetingShiftAttendance extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftAttendance sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $attendance->meeting_shift_id
                 ]);
             }
         });
@@ -163,7 +188,6 @@ class MeetingShiftAttendance extends Model
                     
                     // Delete from mysql database
                     DB::connection('mysql')->table('meeting_shift_attendance')
-                        ->where('meeting_shift_id', $attendance->meeting_shift_id)
                         ->where('id', $attendance->id)
                         ->delete();
 

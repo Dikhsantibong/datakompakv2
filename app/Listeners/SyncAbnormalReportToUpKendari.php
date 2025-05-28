@@ -93,7 +93,7 @@ class SyncAbnormalReportToUpKendari
                                 }
                             }
 
-                            // Sync affected machines
+                            
                             foreach ($event->abnormalReport->affectedMachines as $machine) {
                                 try {
                                     $upKendariDB->table('affected_machines')->insert([

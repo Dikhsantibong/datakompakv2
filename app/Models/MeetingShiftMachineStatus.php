@@ -15,6 +15,8 @@ class MeetingShiftMachineStatus extends Model
 
     protected $table = 'machine_statuses';
 
+    protected $guarded = ['id'];
+
     protected $fillable = [
         'meeting_shift_id',
         'machine_id',
@@ -23,7 +25,9 @@ class MeetingShiftMachineStatus extends Model
     ];
 
     protected $casts = [
-        'status' => 'json'
+        'status' => 'json',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     public function meetingShift()
@@ -55,16 +59,28 @@ class MeetingShiftMachineStatus extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $machineStatus->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'machine_status_id' => $machineStatus->id,
+                            'meeting_shift_id' => $machineStatus->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
-                        'meeting_shift_id' => $machineStatus->meeting_shift_id,
+                        'meeting_shift_id' => $parentId,
                         'machine_id' => $machineStatus->machine_id,
-                        'status' => $machineStatus->status,
+                        'status' => is_string($machineStatus->status) ? $machineStatus->status : json_encode($machineStatus->status),
                         'keterangan' => $machineStatus->keterangan,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Use insert to get a new ID
                     DB::connection('mysql')->table('machine_statuses')->insert($data);
 
                     self::$isSyncing = false;
@@ -73,7 +89,10 @@ class MeetingShiftMachineStatus extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftMachineStatus sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $machineStatus->meeting_shift_id
                 ]);
             }
         });
@@ -88,18 +107,29 @@ class MeetingShiftMachineStatus extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $machineStatus->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'machine_status_id' => $machineStatus->id,
+                            'meeting_shift_id' => $machineStatus->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
+                        'meeting_shift_id' => $parentId,
                         'machine_id' => $machineStatus->machine_id,
-                        'status' => $machineStatus->status,
+                        'status' => is_string($machineStatus->status) ? $machineStatus->status : json_encode($machineStatus->status),
                         'keterangan' => $machineStatus->keterangan,
+                        'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Update in mysql database
-                    DB::connection('mysql')->table('machine_statuses')
-                        ->where('meeting_shift_id', $machineStatus->meeting_shift_id)
-                        ->where('id', $machineStatus->id)
-                        ->update($data);
+                    // Insert new record instead of update
+                    DB::connection('mysql')->table('machine_statuses')->insert($data);
 
                     self::$isSyncing = false;
                 }
@@ -107,7 +137,10 @@ class MeetingShiftMachineStatus extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftMachineStatus sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $machineStatus->meeting_shift_id
                 ]);
             }
         });
@@ -124,7 +157,6 @@ class MeetingShiftMachineStatus extends Model
                     
                     // Delete from mysql database
                     DB::connection('mysql')->table('machine_statuses')
-                        ->where('meeting_shift_id', $machineStatus->meeting_shift_id)
                         ->where('id', $machineStatus->id)
                         ->delete();
 

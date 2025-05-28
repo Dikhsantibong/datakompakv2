@@ -39,7 +39,9 @@ class MeetingShiftK3l extends Model
      * @var array
      */
     protected $casts = [
-        'type' => 'string'
+        'type' => 'string',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     /**
@@ -79,8 +81,20 @@ class MeetingShiftK3l extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $k3l->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'k3l_id' => $k3l->id,
+                            'meeting_shift_id' => $k3l->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
-                        'meeting_shift_id' => $k3l->meeting_shift_id,
+                        'meeting_shift_id' => $parentId,
                         'type' => $k3l->type,
                         'uraian' => $k3l->uraian,
                         'saran' => $k3l->saran,
@@ -89,7 +103,7 @@ class MeetingShiftK3l extends Model
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Use insert to get a new ID
                     DB::connection('mysql')->table('meeting_shift_k3l')->insert($data);
 
                     self::$isSyncing = false;
@@ -98,7 +112,10 @@ class MeetingShiftK3l extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftK3l sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $k3l->meeting_shift_id
                 ]);
             }
         });
@@ -113,19 +130,30 @@ class MeetingShiftK3l extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $k3l->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'k3l_id' => $k3l->id,
+                            'meeting_shift_id' => $k3l->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
+                        'meeting_shift_id' => $parentId,
                         'type' => $k3l->type,
                         'uraian' => $k3l->uraian,
                         'saran' => $k3l->saran,
                         'eviden_path' => $k3l->eviden_path,
+                        'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Update in mysql database
-                    DB::connection('mysql')->table('meeting_shift_k3l')
-                        ->where('meeting_shift_id', $k3l->meeting_shift_id)
-                        ->where('id', $k3l->id)
-                        ->update($data);
+                    // Insert new record instead of update
+                    DB::connection('mysql')->table('meeting_shift_k3l')->insert($data);
 
                     self::$isSyncing = false;
                 }
@@ -133,7 +161,10 @@ class MeetingShiftK3l extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftK3l sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $k3l->meeting_shift_id
                 ]);
             }
         });
@@ -150,7 +181,6 @@ class MeetingShiftK3l extends Model
                     
                     // Delete from mysql database
                     DB::connection('mysql')->table('meeting_shift_k3l')
-                        ->where('meeting_shift_id', $k3l->meeting_shift_id)
                         ->where('id', $k3l->id)
                         ->delete();
 

@@ -13,10 +13,17 @@ class MeetingShiftNote extends Model
 
     public static $isSyncing = false;
 
+    protected $guarded = ['id'];
+
     protected $fillable = [
         'meeting_shift_id',
         'type',
         'content'
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     public function meetingShift()
@@ -43,15 +50,27 @@ class MeetingShiftNote extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $note->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'note_id' => $note->id,
+                            'meeting_shift_id' => $note->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
-                        'meeting_shift_id' => $note->meeting_shift_id,
+                        'meeting_shift_id' => $parentId,
                         'type' => $note->type,
                         'content' => $note->content,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Use insert to get a new ID
                     DB::connection('mysql')->table('meeting_shift_notes')->insert($data);
 
                     self::$isSyncing = false;
@@ -60,7 +79,10 @@ class MeetingShiftNote extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftNote sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $note->meeting_shift_id
                 ]);
             }
         });
@@ -75,17 +97,28 @@ class MeetingShiftNote extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $note->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'note_id' => $note->id,
+                            'meeting_shift_id' => $note->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
+                        'meeting_shift_id' => $parentId,
                         'type' => $note->type,
                         'content' => $note->content,
+                        'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Update in mysql database
-                    DB::connection('mysql')->table('meeting_shift_notes')
-                        ->where('meeting_shift_id', $note->meeting_shift_id)
-                        ->where('id', $note->id)
-                        ->update($data);
+                    // Insert new record instead of update
+                    DB::connection('mysql')->table('meeting_shift_notes')->insert($data);
 
                     self::$isSyncing = false;
                 }
@@ -93,7 +126,10 @@ class MeetingShiftNote extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftNote sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $note->meeting_shift_id
                 ]);
             }
         });
@@ -110,7 +146,6 @@ class MeetingShiftNote extends Model
                     
                     // Delete from mysql database
                     DB::connection('mysql')->table('meeting_shift_notes')
-                        ->where('meeting_shift_id', $note->meeting_shift_id)
                         ->where('id', $note->id)
                         ->delete();
 

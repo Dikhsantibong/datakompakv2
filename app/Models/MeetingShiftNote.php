@@ -61,7 +61,7 @@ class MeetingShiftNote extends Model
                         self::$isSyncing = false;
                         return;
                     }
-
+                    
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'type' => $note->type,
@@ -108,7 +108,7 @@ class MeetingShiftNote extends Model
                         self::$isSyncing = false;
                         return;
                     }
-
+                    
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'type' => $note->type,

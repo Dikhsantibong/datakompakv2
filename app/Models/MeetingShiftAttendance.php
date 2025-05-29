@@ -99,7 +99,7 @@ class MeetingShiftAttendance extends Model
                         self::$isSyncing = false;
                         return;
                     }
-
+                    
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'nama' => $attendance->nama,
@@ -148,7 +148,7 @@ class MeetingShiftAttendance extends Model
                         self::$isSyncing = false;
                         return;
                     }
-
+                    
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'nama' => $attendance->nama,

@@ -70,7 +70,7 @@ class MeetingShiftMachineStatus extends Model
                         self::$isSyncing = false;
                         return;
                     }
-
+                    
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'machine_id' => $machineStatus->machine_id,
@@ -118,7 +118,7 @@ class MeetingShiftMachineStatus extends Model
                         self::$isSyncing = false;
                         return;
                     }
-
+                    
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'machine_id' => $machineStatus->machine_id,

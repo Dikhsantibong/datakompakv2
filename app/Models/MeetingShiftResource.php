@@ -134,7 +134,7 @@ class MeetingShiftResource extends Model
                         self::$isSyncing = false;
                         return;
                     }
-
+                    
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'name' => $resource->name,

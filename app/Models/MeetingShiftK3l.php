@@ -92,7 +92,7 @@ class MeetingShiftK3l extends Model
                         self::$isSyncing = false;
                         return;
                     }
-
+                    
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'type' => $k3l->type,
@@ -141,7 +141,7 @@ class MeetingShiftK3l extends Model
                         self::$isSyncing = false;
                         return;
                     }
-
+                    
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'type' => $k3l->type,

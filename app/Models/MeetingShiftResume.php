@@ -77,7 +77,7 @@ class MeetingShiftResume extends Model
                         self::$isSyncing = false;
                         return;
                     }
-
+                    
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'content' => $resume->content,
@@ -123,7 +123,7 @@ class MeetingShiftResume extends Model
                         self::$isSyncing = false;
                         return;
                     }
-
+                    
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'content' => $resume->content,

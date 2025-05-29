@@ -93,14 +93,14 @@ class SyncAbnormalReportToUpKendari
                                 }
                             }
 
-                            
+                            // Sync affected machines
                             foreach ($event->abnormalReport->affectedMachines as $machine) {
                                 try {
                                     $upKendariDB->table('affected_machines')->insert([
                                         'abnormal_report_id' => $event->abnormalReport->id,
+                                        'nama_mesin' => $machine->nama_mesin,
                                         'kondisi_rusak' => $machine->kondisi_rusak,
                                         'kondisi_abnormal' => $machine->kondisi_abnormal,
-                                        'nama_mesin' => $machine->nama_mesin,
                                         'keterangan' => $machine->keterangan,
                                         'created_at' => now(),
                                         'updated_at' => now()
@@ -127,7 +127,8 @@ class SyncAbnormalReportToUpKendari
                                     ]);
                                 } catch (\Exception $e) {
                                     Log::error('Error syncing follow up action', [
-                                        'error' => $e->getMessage()
+                                        'error' => $e->getMessage(),
+                                        'abnormal_report_id' => $event->abnormalReport->id
                                     ]);
                                     throw $e;
                                 }
@@ -239,9 +240,9 @@ class SyncAbnormalReportToUpKendari
                         foreach ($event->abnormalReport->affectedMachines as $machine) {
                             $upKendariDB->table('affected_machines')->insert([
                                 'abnormal_report_id' => $event->abnormalReport->id,
+                                'nama_mesin' => $machine->nama_mesin,
                                 'kondisi_rusak' => $machine->kondisi_rusak,
                                 'kondisi_abnormal' => $machine->kondisi_abnormal,
-                                'nama_mesin' => $machine->nama_mesin,
                                 'keterangan' => $machine->keterangan,
                                 'created_at' => now(),
                                 'updated_at' => now()

@@ -56,7 +56,7 @@
         </div>
 
         <!-- Main Content Area -->
-                    <div class="p-6">
+        <div class="p-6">
             <!-- Welcome Card -->
             <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
                 <div class="max-w-3xl">
@@ -66,7 +66,6 @@
                         <a href="{{ route('admin.meeting-shift.list') }}" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-600 bg-white rounded-md hover:bg-gray-50">
                             <i class="fas fa-list mr-2"></i> Lihat Daftar Meeting
                         </a>
-                        
                     </div>
                 </div>
             </div>
@@ -121,7 +120,7 @@
 
                 <div class="space-y-8">
                     <!-- Header Information -->
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
                         <div class="px-4 py-5 sm:p-6">
                             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                 <div>
@@ -145,10 +144,10 @@
                     </div>
 
                     <!-- Kondisi Mesin -->
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-                        <div class="px-4 py-5 sm:p-6">
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+                        <div class="px-4 py-5 sm:p-6 mb-6">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">Kondisi Mesin</h3>
-                                <div class="mt-6">
+                            <div class="mt-6">
                                 <div class="overflow-x-auto -mx-6 sm:mx-0">
                                     <div class="inline-block min-w-full align-middle">
                                         <div class="overflow-hidden shadow-sm ring-1 ring-black ring-opacity-5">
@@ -168,69 +167,72 @@
                                                 </thead>
                                                 <tbody class="bg-white divide-y divide-gray-200">
                                                     @foreach($machines as $index => $machine)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 min-w-[150px]">
+                                                    <tr>
+                                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 min-w-[150px]">
                                                             {{ $machine->name }}
-                                                <input type="hidden" name="machine_statuses[{{ $index }}][machine_id]" value="{{ $machine->id }}">
+                                                            <input type="hidden" name="machine_statuses[{{ $index }}][machine_id]" value="{{ $machine->id }}">
                                                         </td>
-                                            <td class="px-6 py-4 whitespace-nowrap min-w-[200px]">
-                                                <div class="space-y-2">
-                                                    <div class="flex items-center">
-                                                        <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="operasi"
-                                                            class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                            data-machine-index="{{ $index }}"
-                                                            onchange="validateMachineStatus({{ $index }})">
-                                                        <label class="ml-2 text-sm text-gray-700">Operasi</label>
-                                                    </div>
-                                                    <div class="flex items-center">
-                                                        <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="standby"
-                                                            class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                            data-machine-index="{{ $index }}"
-                                                            onchange="validateMachineStatus({{ $index }})">
-                                                        <label class="ml-2 text-sm text-gray-700">Standby</label>
-                                                    </div>
-                                                    <div class="flex items-center">
-                                                        <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="har_rutin"
-                                                            class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                            data-machine-index="{{ $index }}"
-                                                            onchange="validateMachineStatus({{ $index }})">
-                                                        <label class="ml-2 text-sm text-gray-700">HAR Rutin</label>
-                                                    </div>
-                                                    <div class="flex items-center">
-                                                        <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="har_nonrutin"
-                                                            class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                            data-machine-index="{{ $index }}"
-                                                            onchange="validateMachineStatus({{ $index }})">
-                                                        <label class="ml-2 text-sm text-gray-700">HAR Non-Rutin</label>
-                                                    </div>
-                                                    <div class="flex items-center">
-                                                        <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="gangguan"
-                                                            class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                            data-machine-index="{{ $index }}"
-                                                            onchange="validateMachineStatus({{ $index }})">
-                                                        <label class="ml-2 text-sm text-gray-700">Gangguan</label>
-                                                    </div>
-                                                </div>
-                                                <!-- Error message for machine status -->
-                                                <div class="hidden text-red-500 text-xs mt-1" id="machine-status-error-{{ $index }}">
-                                                    Pilih minimal satu status
-                                                </div>
+                                                        <td class="px-6 py-4 whitespace-nowrap min-w-[200px]">
+                                                            <div class="space-y-2">
+                                                                <div class="flex items-center">
+                                                                    <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="operasi"
+                                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
+                                                                        data-machine-index="{{ $index }}"
+                                                                        onchange="validateMachineStatus({{ $index }})">
+                                                                    <label class="ml-2 text-sm text-gray-700">Operasi</label>
+                                                                </div>
+                                                                <div class="flex items-center">
+                                                                    <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="standby"
+                                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
+                                                                        data-machine-index="{{ $index }}"
+                                                                        onchange="validateMachineStatus({{ $index }})">
+                                                                    <label class="ml-2 text-sm text-gray-700">Standby</label>
+                                                                </div>
+                                                                <div class="flex items-center">
+                                                                    <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="har_rutin"
+                                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
+                                                                        data-machine-index="{{ $index }}"
+                                                                        onchange="validateMachineStatus({{ $index }})">
+                                                                    <label class="ml-2 text-sm text-gray-700">HAR Rutin</label>
+                                                                </div>
+                                                                <div class="flex items-center">
+                                                                    <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="har_nonrutin"
+                                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
+                                                                        data-machine-index="{{ $index }}"
+                                                                        onchange="validateMachineStatus({{ $index }})">
+                                                                    <label class="ml-2 text-sm text-gray-700">HAR Non-Rutin</label>
+                                                                </div>
+                                                                <div class="flex items-center">
+                                                                    <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="gangguan"
+                                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
+                                                                        data-machine-index="{{ $index }}"
+                                                                        onchange="validateMachineStatus({{ $index }})">
+                                                                    <label class="ml-2 text-sm text-gray-700">Gangguan</label>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Error message for machine status -->
+                                                            <div class="hidden text-red-500 text-xs mt-1" id="machine-status-error-{{ $index }}">
+                                                                Pilih minimal satu status
+                                                            </div>
                                                         </td>
-                                            <td class="px-6 py-4 min-w-[200px]">
-                                                <textarea name="machine_statuses[{{ $index }}][keterangan]" rows="3"
-                                                    class="p-2 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
-                                                                      placeholder="Masukkan keterangan..."></textarea>
+                                                        <td class="px-6 py-4 min-w-[200px]">
+                                                            <textarea name="machine_statuses[{{ $index }}][keterangan]" rows="3"
+                                                                class="p-2 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
+                                                                placeholder="Masukkan keterangan..."></textarea>
                                                         </td>
                                                     </tr>
                                                     @endforeach
                                                 </tbody>
                                             </table>
-                            </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                    <!-- Kondisi Alat Bantu -->
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <!-- Kondisi Alat Bantu -->
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
                         <div class="px-4 py-5 sm:p-6">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">Kondisi Alat Bantu</h3>
                             <div class="mt-6">
@@ -270,7 +272,7 @@
                                             <label class="block text-sm font-medium text-gray-700">Keterangan</label>
                                             <textarea name="auxiliary_equipment[0][keterangan]" rows="3"
                                                 class="p-2 mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
-                                                                      placeholder="Masukkan keterangan..."></textarea>
+                                                placeholder="Masukkan keterangan..."></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -282,11 +284,11 @@
                                     </button>
                                 </div>
                             </div>
-                                        </div>
-                                    </div>
+                        </div>
+                    </div>
 
-                                    <!-- Kondisi Resource -->
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <!-- Kondisi Resource -->
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
                         <div class="px-4 py-5 sm:p-6">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">Kondisi Resource</h3>
                             <div class="mt-6">
@@ -324,7 +326,7 @@
                                             <label class="block text-sm font-medium text-gray-700">Keterangan</label>
                                             <textarea name="resources[0][keterangan]" rows="3"
                                                 class="p-2 mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
-                                                                          placeholder="Masukkan keterangan..."></textarea>
+                                                placeholder="Masukkan keterangan..."></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -336,11 +338,11 @@
                                     </button>
                                 </div>
                             </div>
-                                        </div>
-                                    </div>
+                        </div>
+                    </div>
 
-                                    <!-- Kondisi K3L -->
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <!-- Kondisi K3L -->
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
                         <div class="px-4 py-5 sm:p-6">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">Kondisi K3L</h3>
                             <div class="mt-6">
@@ -354,13 +356,13 @@
                                                 <option value="unsafe_action">Unsafe Action</option>
                                                 <option value="unsafe_condition">Unsafe Condition</option>
                                             </select>
-                                                            </div>
+                                        </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Uraian</label>
                                             <textarea name="k3l[0][uraian]" required rows="3"
                                                 class="p-2 mt-1 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                                 placeholder="Masukkan uraian..."></textarea>
-                                                            </div>
+                                        </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Saran</label>
                                             <textarea name="k3l[0][saran]" required rows="3"
@@ -382,11 +384,11 @@
                                     </button>
                                 </div>
                             </div>
-                                        </div>
-                                    </div>
+                        </div>
+                    </div>
 
                     <!-- Catatan -->
-                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 mb-8">
                         <!-- Catatan Sistem -->
                         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                             <div class="px-4 py-5 sm:p-6">
@@ -396,10 +398,10 @@
                                         class="p-2 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                         placeholder="Masukkan catatan sistem..."></textarea>
                                 </div>
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
 
-                                    <!-- Catatan Umum -->
+                        <!-- Catatan Umum -->
                         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                             <div class="px-4 py-5 sm:p-6">
                                 <h3 class="text-lg leading-6 font-medium text-gray-900">Catatan Serah Terima</h3>
@@ -407,25 +409,25 @@
                                     <textarea name="catatan_umum" rows="4" required
                                         class="p-2 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                         placeholder="Masukkan catatan umum..."></textarea>
-                                        </div>
-                                    </div>
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Resume Rapat -->
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
                         <div class="px-4 py-5 sm:p-6">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">Resume Rapat</h3>
                             <div class="mt-2">
                                 <textarea name="resume" rows="4" required
                                     class="p-2 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"
                                     placeholder="Masukkan resume rapat..."></textarea>
-                                                    </div>
-                                                    </div>
-                                                    </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Absensi -->
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
                         <div class="px-4 py-5 sm:p-6">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">Absensi</h3>
                             <div class="mt-6">
@@ -440,31 +442,31 @@
                                             <label class="block text-sm font-medium text-gray-700">Shift</label>
                                             <select name="absensi[0][shift]" required
                                                 class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm rounded-md">
-                                                                <option value="">Pilih Shift</option>
-                                                                <option value="A">Shift A</option>
-                                                                <option value="B">Shift B</option>
-                                                                <option value="C">Shift C</option>
-                                                                <option value="D">Shift D</option>
-                                                                <option value="staf ops">Staf Ops</option>
-                                                                <option value="TL OP">TL OP</option>
-                                                                <option value="TL HAR">TL HAR</option>
-                                                                <option value="TL OPHAR">TL OPHAR</option>
-                                                                <option value="MUL">MUL</option>
-                                                            </select>
+                                                <option value="">Pilih Shift</option>
+                                                <option value="A">Shift A</option>
+                                                <option value="B">Shift B</option>
+                                                <option value="C">Shift C</option>
+                                                <option value="D">Shift D</option>
+                                                <option value="staf ops">Staf Ops</option>
+                                                <option value="TL OP">TL OP</option>
+                                                <option value="TL HAR">TL HAR</option>
+                                                <option value="TL OPHAR">TL OPHAR</option>
+                                                <option value="MUL">MUL</option>
+                                            </select>
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Status</label>
                                             <select name="absensi[0][status]" required
                                                 class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm rounded-md">
-                                                                <option value="">Pilih Status</option>
-                                                                <option value="hadir">Hadir</option>
-                                                                <option value="izin">Izin</option>
-                                                                <option value="sakit">Sakit</option>
-                                                                <option value="cuti">Cuti</option>
-                                                                <option value="alpha">Alpha</option>
-                                                                <option value="terlambat">Terlambat</option>
-                                                                <option value="ganti shift">Ganti Shift</option>
-                                                            </select>
+                                                <option value="">Pilih Status</option>
+                                                <option value="hadir">Hadir</option>
+                                                <option value="izin">Izin</option>
+                                                <option value="sakit">Sakit</option>
+                                                <option value="cuti">Cuti</option>
+                                                <option value="alpha">Alpha</option>
+                                                <option value="terlambat">Terlambat</option>
+                                                <option value="ganti shift">Ganti Shift</option>
+                                            </select>
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Keterangan</label>
@@ -501,7 +503,7 @@
                     </div>
                 </div>
             </form>
-            </div>
+        </div>
     </div>
 </div>
 

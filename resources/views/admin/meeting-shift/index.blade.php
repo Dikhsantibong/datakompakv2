@@ -151,16 +151,16 @@
                                 <div class="overflow-x-auto -mx-6 sm:mx-0">
                                     <div class="inline-block min-w-full align-middle">
                                         <div class="overflow-hidden shadow-sm ring-1 ring-black ring-opacity-5">
-                                            <table class="min-w-full divide-y divide-gray-200">
+                                            <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
                                                 <thead class="bg-gray-50">
                                                     <tr>
-                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border text border-gray-200">
                                                             Nama Mesin
                                                         </th>
-                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
                                                             Status
                                                         </th>
-                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
                                                             Keterangan
                                                         </th>
                                                     </tr>
@@ -168,11 +168,11 @@
                                                 <tbody class="bg-white divide-y divide-gray-200">
                                                     @foreach($machines as $index => $machine)
                                                     <tr>
-                                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 min-w-[150px]">
+                                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 min-w-[150px] border-r border-gray-200">
                                                             {{ $machine->name }}
                                                             <input type="hidden" name="machine_statuses[{{ $index }}][machine_id]" value="{{ $machine->id }}">
                                                         </td>
-                                                        <td class="px-6 py-4 whitespace-nowrap min-w-[200px]">
+                                                        <td class="px-6 py-4 whitespace-nowrap min-w-[200px] border-r border-gray-200">
                                                             <div class="space-y-2">
                                                                 <div class="flex items-center">
                                                                     <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="operasi"

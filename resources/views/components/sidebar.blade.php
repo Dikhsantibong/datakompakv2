@@ -131,9 +131,11 @@
                 @if(session('unit') === 'mysql' || auth()->user()->role === 'staf' || auth()->user()->role === 'admin')
                 <div class="relative" x-data="{ 
                     open: {{ request()->routeIs('admin.daily-summary') || 
+                             request()->routeIs('admin.rencana-daya-mampu.*') ||
                              request()->routeIs('admin.machine-status.*') || 
                              request()->routeIs('admin.pembangkit.*') || 
                              request()->routeIs('admin.rencana-daya-mampu') ||
+                             request()->routeIs('admin.rencana-daya-mampu.*') ||
                              request()->routeIs('admin.kesiapan-kit.*') ||
                              request()->routeIs('admin.energiprimer.bahan-bakar.*') ||
                              request()->routeIs('admin.energiprimer.pelumas.*') ||

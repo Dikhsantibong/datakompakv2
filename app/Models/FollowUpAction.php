@@ -52,8 +52,20 @@ class FollowUpAction extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('abnormal_report_id_map.' . $action->abnormal_report_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent AbnormalReport mapping not found', [
+                            'follow_up_action_id' => $action->id,
+                            'abnormal_report_id' => $action->abnormal_report_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+                    
                     $data = [
-                        'abnormal_report_id' => $action->abnormal_report_id,
+                        'abnormal_report_id' => $parentId,
                         'flm_tindakan' => $action->flm_tindakan,
                         'mo_non_rutin' => $action->mo_non_rutin,
                         'usul_mo_rutin' => $action->usul_mo_rutin,

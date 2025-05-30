@@ -65,9 +65,20 @@ class AbnormalChronology extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('abnormal_report_id_map.' . $chronology->abnormal_report_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent AbnormalReport mapping not found', [
+                            'chronology_id' => $chronology->id,
+                            'abnormal_report_id' => $chronology->abnormal_report_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+                    
                     $data = [
-                        'id' => $chronology->id,
-                        'abnormal_report_id' => $chronology->abnormal_report_id,
+                        'abnormal_report_id' => $parentId,
                         'waktu' => $chronology->waktu,
                         'uraian_kejadian' => $chronology->uraian_kejadian,
                         'visual' => $chronology->visual,
@@ -83,12 +94,8 @@ class AbnormalChronology extends Model
                         'updated_at' => now()
                     ];
 
-                    // Use updateOrInsert instead of insert
-                    DB::connection('mysql')->table('abnormal_chronologies')
-                        ->updateOrInsert(
-                            ['id' => $chronology->id],
-                            $data
-                        );
+                    // Use insert for auto-increment
+                    DB::connection('mysql')->table('abnormal_chronologies')->insert($data);
 
                     self::$isSyncing = false;
                 }

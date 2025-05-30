@@ -76,19 +76,17 @@ class AbnormalReport extends Model
                     self::$isSyncing = true;
                     
                     $data = [
-                        'id' => $abnormalReport->id,
                         'created_by' => $abnormalReport->created_by,
                         'sync_unit_origin' => $abnormalReport->sync_unit_origin,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Use updateOrInsert instead of insert
-                    DB::connection('mysql')->table('abnormal_reports')
-                        ->updateOrInsert(
-                            ['id' => $abnormalReport->id],
-                            $data
-                        );
+                    // Use insert to get new auto-increment ID
+                    $newId = DB::connection('mysql')->table('abnormal_reports')->insertGetId($data);
+
+                    // Store the new ID mapping in session for child records
+                    session(['abnormal_report_id_map.' . $abnormalReport->id => $newId]);
 
                     self::$isSyncing = false;
                 }

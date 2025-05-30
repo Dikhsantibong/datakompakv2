@@ -47,15 +47,26 @@ class Recommendation extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('abnormal_report_id_map.' . $recommendation->abnormal_report_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent AbnormalReport mapping not found', [
+                            'recommendation_id' => $recommendation->id,
+                            'abnormal_report_id' => $recommendation->abnormal_report_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+                    
                     $data = [
-                        'id' => $recommendation->id,
-                        'abnormal_report_id' => $recommendation->abnormal_report_id,
+                        'abnormal_report_id' => $parentId,
                         'rekomendasi' => $recommendation->rekomendasi,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Sync to mysql database
+                    // Use insert for auto-increment
                     DB::connection('mysql')->table('recommendations')->insert($data);
 
                     self::$isSyncing = false;

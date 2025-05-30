@@ -50,9 +50,20 @@ class AffectedMachine extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('abnormal_report_id_map.' . $machine->abnormal_report_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent AbnormalReport mapping not found', [
+                            'affected_machine_id' => $machine->id,
+                            'abnormal_report_id' => $machine->abnormal_report_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+                    
                     $data = [
-                        'id' => $machine->id,
-                        'abnormal_report_id' => $machine->abnormal_report_id,
+                        'abnormal_report_id' => $parentId,
                         'kondisi_rusak' => $machine->kondisi_rusak,
                         'kondisi_abnormal' => $machine->kondisi_abnormal,
                         'nama_mesin' => $machine->nama_mesin,
@@ -61,12 +72,8 @@ class AffectedMachine extends Model
                         'updated_at' => now()
                     ];
 
-                    // Use updateOrInsert instead of insert
-                    DB::connection('mysql')->table('affected_machines')
-                        ->updateOrInsert(
-                            ['id' => $machine->id],
-                            $data
-                        );
+                    // Use insert for auto-increment
+                    DB::connection('mysql')->table('affected_machines')->insert($data);
 
                     self::$isSyncing = false;
                 }
@@ -121,7 +128,7 @@ class AffectedMachine extends Model
                 // Only sync if not in mysql session
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
-                    
+                        
                     // Delete from mysql database
                     DB::connection('mysql')->table('affected_machines')
                         ->where('abnormal_report_id', $machine->abnormal_report_id)

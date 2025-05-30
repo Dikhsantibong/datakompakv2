@@ -41,20 +41,24 @@ class SyncAbnormalReportToUpKendari
                         try {
                             // Create main abnormal report record
                             $data = [
-                                'id' => $event->abnormalReport->id,
                                 'created_by' => $event->abnormalReport->created_by,
                                 'sync_unit_origin' => $event->abnormalReport->sync_unit_origin,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ];
                             
-                            $upKendariDB->table('abnormal_reports')->insert($data);
+                            // Insert without specifying ID to use auto-increment
+                            $newParentId = $upKendariDB->table('abnormal_reports')->insertGetId($data);
                             
                             DB::commit();
                             
                             Log::info('Created main abnormal report record', [
-                                'id' => $event->abnormalReport->id
+                                'original_id' => $event->abnormalReport->id,
+                                'new_id' => $newParentId
                             ]);
+
+                            // Store the new ID mapping for child records
+                            $parentIdMap = $newParentId;
                         } catch (\Exception $e) {
                             DB::rollBack();
                             Log::error('Error creating main abnormal report record', [
@@ -70,7 +74,7 @@ class SyncAbnormalReportToUpKendari
                             foreach ($event->abnormalReport->chronologies as $chronology) {
                                 try {
                                     $upKendariDB->table('abnormal_chronologies')->insert([
-                                        'abnormal_report_id' => $event->abnormalReport->id,
+                                        'abnormal_report_id' => $parentIdMap,
                                         'waktu' => $chronology->waktu,
                                         'uraian_kejadian' => $chronology->uraian_kejadian,
                                         'visual' => $chronology->visual,
@@ -97,7 +101,7 @@ class SyncAbnormalReportToUpKendari
                             foreach ($event->abnormalReport->affectedMachines as $machine) {
                                 try {
                                     $upKendariDB->table('affected_machines')->insert([
-                                        'abnormal_report_id' => $event->abnormalReport->id,
+                                        'abnormal_report_id' => $parentIdMap,
                                         'nama_mesin' => $machine->nama_mesin,
                                         'kondisi_rusak' => $machine->kondisi_rusak,
                                         'kondisi_abnormal' => $machine->kondisi_abnormal,
@@ -117,7 +121,7 @@ class SyncAbnormalReportToUpKendari
                             foreach ($event->abnormalReport->followUpActions as $action) {
                                 try {
                                     $upKendariDB->table('follow_up_actions')->insert([
-                                        'abnormal_report_id' => $event->abnormalReport->id,
+                                        'abnormal_report_id' => $parentIdMap,
                                         'flm_tindakan' => $action->flm_tindakan,
                                         'mo_non_rutin' => $action->mo_non_rutin,
                                         'usul_mo_rutin' => $action->usul_mo_rutin,
@@ -128,7 +132,7 @@ class SyncAbnormalReportToUpKendari
                                 } catch (\Exception $e) {
                                     Log::error('Error syncing follow up action', [
                                         'error' => $e->getMessage(),
-                                        'abnormal_report_id' => $event->abnormalReport->id
+                                        'abnormal_report_id' => $parentIdMap
                                     ]);
                                     throw $e;
                                 }
@@ -138,7 +142,7 @@ class SyncAbnormalReportToUpKendari
                             foreach ($event->abnormalReport->recommendations as $recommendation) {
                                 try {
                                     $upKendariDB->table('recommendations')->insert([
-                                        'abnormal_report_id' => $event->abnormalReport->id,
+                                        'abnormal_report_id' => $parentIdMap,
                                         'rekomendasi' => $recommendation->rekomendasi,
                                         'created_at' => now(),
                                         'updated_at' => now()
@@ -155,7 +159,7 @@ class SyncAbnormalReportToUpKendari
                             foreach ($event->abnormalReport->admActions as $admAction) {
                                 try {
                                     $upKendariDB->table('adm_actions')->insert([
-                                        'abnormal_report_id' => $event->abnormalReport->id,
+                                        'abnormal_report_id' => $parentIdMap,
                                         'flm' => $admAction->flm,
                                         'pm' => $admAction->pm,
                                         'cm' => $admAction->cm,
@@ -176,7 +180,7 @@ class SyncAbnormalReportToUpKendari
                             foreach ($event->abnormalReport->evidences as $evidence) {
                                 try {
                                     $upKendariDB->table('abnormal_evidences')->insert([
-                                        'abnormal_report_id' => $event->abnormalReport->id,
+                                        'abnormal_report_id' => $parentIdMap,
                                         'file_path' => $evidence->file_path,
                                         'description' => $evidence->description,
                                         'created_at' => now(),
@@ -192,7 +196,8 @@ class SyncAbnormalReportToUpKendari
 
                             DB::commit();
                             Log::info('Successfully synced all related records', [
-                                'abnormal_report_id' => $event->abnormalReport->id
+                                'original_id' => $event->abnormalReport->id,
+                                'new_id' => $parentIdMap
                             ]);
                         } catch (\Exception $e) {
                             DB::rollBack();

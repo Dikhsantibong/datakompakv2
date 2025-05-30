@@ -56,9 +56,20 @@ class AdmAction extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('abnormal_report_id_map.' . $admAction->abnormal_report_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent AbnormalReport mapping not found', [
+                            'adm_action_id' => $admAction->id,
+                            'abnormal_report_id' => $admAction->abnormal_report_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+                    
                     $data = [
-                        'id' => $admAction->id,
-                        'abnormal_report_id' => $admAction->abnormal_report_id,
+                        'abnormal_report_id' => $parentId,
                         'flm' => $admAction->flm,
                         'pm' => $admAction->pm,
                         'cm' => $admAction->cm,
@@ -68,12 +79,8 @@ class AdmAction extends Model
                         'updated_at' => now()
                     ];
 
-                    // Use updateOrInsert instead of insert
-                    DB::connection('mysql')->table('adm_actions')
-                        ->updateOrInsert(
-                            ['id' => $admAction->id],
-                            $data
-                        );
+                    // Use insert for auto-increment
+                    DB::connection('mysql')->table('adm_actions')->insert($data);
 
                     self::$isSyncing = false;
                 }

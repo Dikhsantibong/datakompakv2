@@ -76,7 +76,6 @@
                          x-transition:leave="transition ease-in duration-200"
                          x-transition:leave-start="transform opacity-100 scale-100"
                          x-transition:leave-end="transform opacity-0 scale-95"
-                         @click.away="open = false" 
                          class="pl-4 mt-1 space-y-1">
                         <a href="{{ session('unit') === 'mysql' ? route('admin.meeting-shift.list') : route('admin.meeting-shift.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.meeting-shift.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
@@ -147,7 +146,6 @@
                          x-transition:leave="transition ease-in duration-200"
                          x-transition:leave-start="transform opacity-100 scale-100"
                          x-transition:leave-end="transform opacity-0 scale-95"
-                         @click.away="open = false" 
                          class="pl-4 mt-1 space-y-1">
                         <a href="{{ route('admin.daily-summary') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.daily-summary') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
@@ -214,7 +212,6 @@
                          x-transition:leave="transition ease-in duration-200"
                          x-transition:leave-start="transform opacity-100 scale-100"
                          x-transition:leave-end="transform opacity-0 scale-95"
-                         @click.away="open = false" 
                          class="pl-4 mt-1 space-y-1">
                         <a href="{{ route('admin.operasi-upkd.rapat.index') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.operasi-upkd.rapat.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
@@ -277,7 +274,6 @@
                          x-transition:leave="transition ease-in duration-200"
                          x-transition:leave-start="transform opacity-100 scale-100"
                          x-transition:leave-end="transform opacity-0 scale-95"
-                         @click.away="open = false" 
                          class="pl-4 mt-1 space-y-1">
                         <a href="#" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.energiprimer-upkd.rapat.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
@@ -328,7 +324,6 @@
                          x-transition:leave="transition ease-in duration-200"
                          x-transition:leave-start="transform opacity-100 scale-100"
                          x-transition:leave-end="transform opacity-0 scale-95"
-                         @click.away="open = false" 
                          class="pl-4 mt-1 space-y-1">
                         <a href="{{ route('admin.users') }}" 
                            class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">

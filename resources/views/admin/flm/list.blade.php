@@ -213,7 +213,9 @@
                                     @php
                                         $currentFlmId = null;
                                         $rowNumber = 1;
-                                        $groupedData = $flmData->groupBy('flm_id');
+                                        $groupedData = $flmData->sortByDesc(function($item) {
+                                            return [$item->tanggal->format('Y-m-d'), $item->time->format('H:i')];
+                                        })->groupBy('flm_id');
                                     @endphp
 
                                     @foreach($groupedData as $flmId => $group)

@@ -73,7 +73,7 @@
             <!-- Main Content -->
             <main class="px-6">
                 <!-- Welcome Card -->
-            <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
+            {{-- <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
                 <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400 opacity-90 rounded-lg"></div>
                 <div class="relative z-10">
                     <!-- Text Content -->
@@ -96,7 +96,7 @@
                     <!-- Logo - Hidden on mobile -->
                     <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
                 </div>
-            </div>
+            </div> --}}
 
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" style="margin-bottom: 20px;">
                     <div class="p-4 bg-white border-b border-gray-200">

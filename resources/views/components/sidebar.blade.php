@@ -23,14 +23,17 @@
                     <i class="fas fa-home w-5 h-5"></i>
                     <span class="ml-3 text-sm">Dashboard</span>
                 </a>
-            @if(session('unit') === 'mysql')
+
+               
+
+                @if(session('unit') === 'mysql')
                 <!-- Monitoring Datakompak -->
                 <a href="{{ route('admin.monitoring-datakompak') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.monitoring-datakompak') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                     <i class="fas fa-chart-pie w-5 h-5"></i>
                     <span class="ml-3 text-sm">Monitoring Datakompak</span>
                 </a>
-            @endif
+                @endif
             
                 <!-- Kalender Operasi -->
                 <a href="{{ route('admin.kalender.calendar') }}"
@@ -53,6 +56,47 @@
                     <i class="fas fa-cogs w-5 h-5"></i>
                     <span class="ml-3 text-sm">Data Mesin Pembangkit</span>
                 </a>
+                @if(session('unit') === 'mysql')
+                 <!-- Data Master Dropdown -->
+                 <div class="relative" x-data="{ 
+                    open: {{ request()->routeIs('admin.machine-monitor.show') || 
+                             request()->routeIs('admin.power-plants.*') ? 'true' : 'false' }} 
+                }">
+                    <button @click="open = !open" 
+                            class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
+                        <div class="flex items-center">
+                            <i class="fas fa-database w-5 h-5"></i>
+                            <span class="ml-3 text-sm font-bold">Data Master</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="transform opacity-0 scale-95"
+                         x-transition:enter-end="transform opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-200"
+                         x-transition:leave-start="transform opacity-100 scale-100"
+                         x-transition:leave-end="transform opacity-0 scale-95"
+                         class="pl-4 mt-1 space-y-1">
+                        <a href="{{ route('admin.machine-monitor.show') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.machine-monitor.show') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                            <i class="fas fa-cogs w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Data Mesin</span>
+                        </a>
+                        <a href="{{ route('admin.power-plants.index') }}" 
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.power-plants.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                            <i class="fas fa-industry w-5 h-5"></i>
+                            <span class="ml-3 text-sm">Data Unit</span>
+                        </a>
+                    <a href="{{ route('admin.users') }}"
+                       class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.users.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                        <i class="fas fa-users w-5 h-5"></i>
+                        <span class="ml-3 text-sm">Data User</span>
+                    </a>
+
+                    </div>
+                </div>
+                @endif
                 @if(session('unit') === 'mysql' || auth()->user()->role === 'operator' || auth()->user()->role === 'admin')
                 <!-- Operator KIT Dropdown -->
                 <div class="relative" x-data="{ 
@@ -69,7 +113,7 @@
                             class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
                         <div class="flex items-center">
                             <i class="fas fa-users-cog w-5 h-5"></i>
-                            <span class="ml-3 text-sm">Operator KIT</span>
+                            <span class="ml-3 text-sm font-bold">Operator KIT</span>
                         </div>
                         <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
                     </button>
@@ -127,6 +171,8 @@
                 @endif
                 
 
+               
+                
                 <!-- Operasi UL/Sentral Dropdown -->
                 @if(session('unit') === 'mysql' || auth()->user()->role === 'staf' || auth()->user()->role === 'admin')
                 <div class="relative" x-data="{ 
@@ -146,7 +192,7 @@
                             class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-left {{ request()->routeIs('admin.daily-summary') || request()->routeIs('admin.machine-status.*') || request()->routeIs('admin.pembangkit.*') || request()->routeIs('admin.rencana-daya-mampu') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                         <div class="flex items-center">
                             <i class="fas fa-industry w-5 h-5"></i>
-                            <span class="ml-3 text-sm">Operasi UL/Sentral</span>
+                            <span class="ml-3 text-sm font-bold">Operasi UL/Sentral</span>
                         </div>
                         <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
                     </button>
@@ -212,7 +258,7 @@
                             class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
                         <div class="flex items-center">
                             <i class="fas fa-building w-5 h-5"></i>
-                            <span class="ml-3 text-sm">Operasi UPKD</span>
+                            <span class="ml-3 text-sm font-bold">Operasi UPKD</span>
                         </div>
                         <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
                     </button>
@@ -265,7 +311,7 @@
                
 
                 
-                <!-- Energi Primer UPKD Dropdown -->
+                {{-- <!-- Energi Primer UPKD Dropdown -->
                 @if(session('unit') === 'mysql')
                 <div class="relative" x-data="{ 
                     open: {{ request()->routeIs('admin.energiprimer.*') || request()->routeIs('admin.energiprimer-upkd.*') ? 'true' : 'false' }} 
@@ -305,7 +351,7 @@
                     </div>
                 </div>
                 @endif
-               
+                --}}
 
                 <!-- Library -->
                 <a href="{{ route('admin.library.index') }}"

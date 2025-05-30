@@ -59,7 +59,11 @@
                     open: {{ request()->routeIs('admin.meeting-shift.*') || 
                              request()->routeIs('admin.flm.*') || 
                              request()->routeIs('admin.5s5r.*') || 
-                             request()->routeIs('admin.k3-kamp.*') ? 'true' : 'false' }} 
+                             request()->routeIs('admin.k3-kamp.*') ||
+                             request()->routeIs('admin.abnormal-report.*') ||
+                             request()->routeIs('admin.data-engine.*') ||
+                             request()->routeIs('admin.laporan-kit.*') ||
+                             request()->routeIs('admin.patrol-check.*') ? 'true' : 'false' }} 
                 }">
                     <button @click="open = !open" 
                             class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-gray-100 hover:bg-white/10">
@@ -129,7 +133,12 @@
                     open: {{ request()->routeIs('admin.daily-summary') || 
                              request()->routeIs('admin.machine-status.*') || 
                              request()->routeIs('admin.pembangkit.*') || 
-                             request()->routeIs('admin.rencana-daya-mampu') ? 'true' : 'false' }} 
+                             request()->routeIs('admin.rencana-daya-mampu') ||
+                             request()->routeIs('admin.kesiapan-kit.*') ||
+                             request()->routeIs('admin.energiprimer.bahan-bakar.*') ||
+                             request()->routeIs('admin.energiprimer.pelumas.*') ||
+                             request()->routeIs('admin.energiprimer.bahan-kimia.*') ||
+                             request()->routeIs('admin.blackstart.*') ? 'true' : 'false' }} 
                 }">
                     <button @click="open = !open" 
                             class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors duration-300 text-left {{ request()->routeIs('admin.daily-summary') || request()->routeIs('admin.machine-status.*') || request()->routeIs('admin.pembangkit.*') || request()->routeIs('admin.rencana-daya-mampu') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">

@@ -261,7 +261,7 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
-                                            <div class="flex items-center justify-center space-x-2">
+                                          
                                                 <a href="{{ route('admin.laporan-kit.show', $laporan) }}"
                                                     class="text-blue-600 hover:text-blue-900"
                                                     title="Lihat Detail">

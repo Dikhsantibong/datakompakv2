@@ -260,15 +260,15 @@
                                                 {{ $unitMapping[$laporan->unit_source] ?? $laporan->unit_source ?? '-' }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200 gap">
                                           
                                                 <a href="{{ route('admin.laporan-kit.show', $laporan) }}"
-                                                    class="text-blue-600 hover:text-blue-900"
+                                                    class="text-blue-600 hover:text-blue-900 mr-4"
                                                     title="Lihat Detail">
                                                     <i class="fas fa-eye"></i>Detail
                                                 </a>
                                                 <a href="{{ route('admin.laporan-kit.edit', $laporan->id) }}"
-                                                    class="text-yellow-600 hover:text-yellow-900"
+                                                    class="text-yellow-600 hover:text-yellow-900 mr-4"
                                                     title="Edit">
                                                     <i class="fas fa-edit"></i>Edit
                                                 </a>
@@ -279,15 +279,17 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" 
-                                                            class="text-red-600 hover:text-red-900"
+                                                            class="text-red-600 hover:text-red-900 mr-4"
                                                             title="Hapus">
                                                         <i class="fas fa-trash"></i>Hapus
                                                     </button>
                                                 </form>
-                                                <a href="{{ route('admin.laporan-kit.export-pdf', $laporan->id) }}" class="text-red-600 hover:text-red-900" title="Download PDF">
+                                                <a href="{{ route('admin.laporan-kit.export-pdf', $laporan->id) }}"
+                                                     class="text-red-600 hover:text-red-900 mr-4 " title="Download PDF">
                                                     <i class="fas fa-file-pdf"></i>PDF
                                                 </a>
-                                                <a href="{{ route('admin.laporan-kit.export-excel') }}" class="text-green-600 hover:text-green-900" title="Download Excel">
+                                                <a href="{{ route('admin.laporan-kit.export-excel') }}"
+                                                     class="text-green-600 hover:text-green-900 mr-4" title="Download Excel">
                                                     <i class="fas fa-file-excel"></i>Excel
                                                 </a>
                                             </div>

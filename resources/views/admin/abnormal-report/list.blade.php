@@ -223,22 +223,22 @@
                                             <a href="{{ route('admin.abnormal-report.show', $report->id) }}" 
                                                class="text-blue-600 hover:text-blue-900 mr-3" 
                                                title="Lihat Detail">
-                                                <i class="fas fa-eye"></i>
+                                                <i class="fas fa-eye"></i>Detail
                                             </a>
                                             <a href="{{ route('admin.abnormal-report.edit', $report->id) }}" 
                                                class="text-yellow-600 hover:text-yellow-900 mr-3" 
                                                title="Edit">
-                                                <i class="fas fa-edit"></i>
+                                                <i class="fas fa-edit"></i>Edit
                                             </a>
                                             <a href="{{ route('admin.abnormal-report.export-excel', $report->id) }}" 
                                                class="text-green-600 hover:text-green-900 mr-3" 
                                                title="Export Excel">
-                                                <i class="fas fa-file-excel"></i>
+                                                <i class="fas fa-file-excel"></i>Excel
                                             </a>
                                             <a href="{{ route('admin.abnormal-report.export-pdf', $report->id) }}" 
                                                class="text-red-600 hover:text-red-900 mr-3" 
                                                title="Export PDF">
-                                                <i class="fas fa-file-pdf"></i>
+                                                <i class="fas fa-file-pdf"></i>PDF
                                             </a>
                                             <form action="{{ route('admin.abnormal-report.destroy', $report->id) }}" 
                                                   method="POST" 
@@ -249,7 +249,7 @@
                                                 <button type="submit" 
                                                         class="text-red-600 hover:text-red-900" 
                                                         title="Hapus">
-                                                    <i class="fas fa-trash"></i>
+                                                    <i class="fas fa-trash"></i>Hapus
                                                 </button>
                                             </form>
                                         </td>

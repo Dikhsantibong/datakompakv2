@@ -194,22 +194,22 @@
                                                 <a href="{{ route('admin.k3-kamp.show', $report->id) }}" 
                                                    class="text-blue-600 hover:text-blue-900" 
                                                    title="Lihat Detail">
-                                                    <i class="fas fa-eye"></i>
+                                                    <i class="fas fa-eye"></i>Detail
                                                 </a>
                                                 <a href="{{ route('admin.k3-kamp.edit', $report->id) }}" 
                                                    class="text-green-600 hover:text-green-900"
                                                    title="Edit">
-                                                    <i class="fas fa-edit"></i>
+                                                    <i class="fas fa-edit"></i>Edit
                                                 </a>
                                                 <a href="{{ route('admin.k3-kamp.export-pdf', $report->id) }}" 
                                                    class="text-red-600 hover:text-red-900"
                                                    title="Export PDF">
-                                                    <i class="fas fa-file-pdf"></i>
+                                                    <i class="fas fa-file-pdf"></i>PDF
                                                 </a>
                                                 <a href="{{ route('admin.k3-kamp.export-excel', $report->id) }}" 
                                                    class="text-green-600 hover:text-green-900"
                                                    title="Export Excel">
-                                                    <i class="fas fa-file-excel"></i>
+                                                    <i class="fas fa-file-excel"></i>Excel
                                                 </a>
                                                 <form action="{{ route('admin.k3-kamp.destroy', $report->id) }}" 
                                                       method="POST" 
@@ -220,7 +220,7 @@
                                                     <button type="submit" 
                                                             class="text-red-600 hover:text-red-900"
                                                             title="Hapus">
-                                                        <i class="fas fa-trash"></i>
+                                                        <i class="fas fa-trash"></i>Hapus
                                                     </button>
                                                 </form>
                                             </div>

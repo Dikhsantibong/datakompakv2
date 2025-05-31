@@ -241,12 +241,12 @@
                                                 <a href="{{ route('admin.meeting-shift.show', $meetingShift->id) }}"
                                                     class="text-blue-600 hover:text-blue-900"
                                                     title="Lihat Detail">
-                                                    <i class="fas fa-eye"></i>
+                                                    <i class="fas fa-eye"></i>Detail
                                                 </a>
                                                 <a href="{{ route('admin.meeting-shift.edit', $meetingShift) }}"
                                                     class="text-yellow-600 hover:text-yellow-900"
                                                     title="Edit">
-                                                    <i class="fas fa-edit"></i>
+                                                    <i class="fas fa-edit"></i>Edit
                                                 </a>
                                                 <form action="{{ route('admin.meeting-shift.destroy', $meetingShift) }}" 
                                                       method="POST" 
@@ -257,13 +257,13 @@
                                                     <button type="submit" 
                                                             class="text-red-600 hover:text-red-900"
                                                             title="Hapus">
-                                                        <i class="fas fa-trash"></i>
+                                                        <i class="fas fa-trash"></i>Hapus
                                                     </button>
                                                 </form>
                                                 <a href="{{ route('admin.meeting-shift.export', $meetingShift) }}"
                                                     class="text-green-600 hover:text-green-900"
                                                     title="Export">
-                                                    <i class="fas fa-file-export"></i>
+                                                    <i class="fas fa-file-export"></i>Excel
                                                 </a>
                                             </div>
                                         </td>

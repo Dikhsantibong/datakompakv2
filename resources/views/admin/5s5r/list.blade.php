@@ -148,7 +148,7 @@
                         </div>
 
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
@@ -180,12 +180,12 @@
                                                 <a href="{{ route('admin.5s5r.show', $batch->id) }}"
                                                     class="text-blue-600 hover:text-blue-900"
                                                     title="Lihat Detail">
-                                                    <i class="fas fa-eye"></i>
+                                                    <i class="fas fa-eye"></i>Detail
                                                 </a>
                                                 <a href="{{ route('admin.5s5r.edit', $batch->id) }}"
                                                     class="text-yellow-600 hover:text-yellow-900"
                                                     title="Edit">
-                                                    <i class="fas fa-edit"></i>
+                                                    <i class="fas fa-edit"></i>Edit
                                                 </a>
                                                 <form action="{{ route('admin.5s5r.destroy', $batch->id) }}" 
                                                       method="POST" 
@@ -196,18 +196,18 @@
                                                     <button type="submit" 
                                                             class="text-red-600 hover:text-red-900"
                                                             title="Hapus">
-                                                        <i class="fas fa-trash"></i>
+                                                        <i class="fas fa-trash"></i>Hapus
                                                     </button>
                                                 </form>
                                                 <a href="{{ route('admin.5s5r.export.pdf', $batch->id) }}"
                                                     class="text-red-600 hover:text-red-900"
                                                     title="Export PDF">
-                                                    <i class="fas fa-file-pdf"></i>
+                                                    <i class="fas fa-file-pdf"></i>PDF
                                                 </a>
                                                 <a href="{{ route('admin.5s5r.export.excel', $batch->id) }}"
                                                     class="text-green-600 hover:text-green-900"
                                                     title="Export Excel">
-                                                    <i class="fas fa-file-excel"></i>
+                                                    <i class="fas fa-file-excel"></i>Excel
                                                 </a>
                                             </div>
                                         </td>

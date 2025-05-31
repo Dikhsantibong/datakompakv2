@@ -125,6 +125,7 @@
                             <span class="px-1 text-center border-r border-gray-300 text-pelumas">TravoLube A (LITER)</span>
                             <span class="px-1 text-center border-r border-gray-300 text-pelumas">Turbolube 46 (LITER)</span>
                             <span class="px-1 text-center border-r border-gray-300 text-pelumas">Turbolube 68 (LITER)</span>
+                            <span class="px-1 text-center border-r border-gray-300 text-pelumas">Shell Argina S3 (LITER)</span>
                             <span class="px-1 text-center text-pelumas">TOTAL (LITER)</span>
                         </div>
                     </th>
@@ -260,6 +261,7 @@
                                 <div class="text-center border-r">{{ $summary ? number_format($summary->travolube_a, 2) : '-' }}</div>
                                 <div class="text-center border-r">{{ $summary ? number_format($summary->turbolube_46, 2) : '-' }}</div>
                                 <div class="text-center border-r">{{ $summary ? number_format($summary->turbolube_68, 2) : '-' }}</div>
+                                <div class="text-center border-r">{{ $summary ? number_format($summary->shell_argina_s3, 2) : '-' }}</div>
                                 <div class="text-center">{{ $summary ? number_format($summary->total_oil, 2) : '-' }}</div>
                             </div>
                         </td>

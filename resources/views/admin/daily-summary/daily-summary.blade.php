@@ -293,14 +293,15 @@
                                                 <span class="px-2 text-center border-r border-gray-300">Air (M³)</span>
                                             </div>
                                         </th>
-                                        <th class="px-4 py-2 border border-gray-300 w-pelumas">
-                                            <div class="grid grid-cols-7 gap-0">
+                                        <th class="px-4 py-2 border border-gray-300">
+                                            <div class="grid grid-cols-8 gap-0">
                                                 <span class="px-1 text-center border-r border-gray-300 text-pelumas">Meditran SX 15W/40 CH-4 (LITER)</span>
                                                 <span class="px-1 text-center border-r border-gray-300 text-pelumas">Salyx 420 (LITER)</span>
                                                 <span class="px-1 text-center border-r border-gray-300 text-pelumas">Salyx 430 (LITER)</span>
                                                 <span class="px-1 text-center border-r border-gray-300 text-pelumas">TravoLube A (LITER)</span>
                                                 <span class="px-1 text-center border-r border-gray-300 text-pelumas">Turbolube 46 (LITER)</span>
                                                 <span class="px-1 text-center border-r border-gray-300 text-pelumas">Turbolube 68 (LITER)</span>
+                                                <span class="px-1 text-center border-r border-gray-300 text-pelumas">Shell Argina S3 (LITER)</span>
                                                 <span class="px-1 text-center text-pelumas">TOTAL (LITER)</span>
                                             </div>
                                         </th>
@@ -690,7 +691,7 @@
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border border-gray-300">
-                                            <div class="grid grid-cols-7 gap-0">
+                                            <div class="grid grid-cols-8 gap-0">
                                                 <div class="input-group border-r border-gray-300 px-0.5">
                                                     <input type="number" step="0.01" 
                                                            name="data[{{ $machine->id }}][meditran_oil]"
@@ -738,6 +739,14 @@
                                                            value="{{ old('data.'.$machine->id.'.turbolube_68',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
                                                                 $existingData[$machine->power_plant_id.'_'.$machine->name]->turbolube_68 : '') }}">
+                                                </div>
+                                                <div class="input-group border-r border-gray-300 px-0.5">
+                                                    <input type="number" step="0.01" 
+                                                           name="data[{{ $machine->id }}][shell_argina_s3]"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           value="{{ old('data.'.$machine->id.'.shell_argina_s3',
+                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->shell_argina_s3 : '') }}">
                                                 </div>
                                                 <div class="input-group px-0.5">
                                                     <input type="number" step="0.01" 
@@ -1272,8 +1281,9 @@ document.querySelector('form').addEventListener('submit', function(e) {
         const travolube = getNumericValue(machineId, 'travolube_a');
         const turbolube46 = getNumericValue(machineId, 'turbolube_46');
         const turbolube68 = getNumericValue(machineId, 'turbolube_68');
+        const shellArginaS3 = getNumericValue(machineId, 'shell_argina_s3');
         
-        const totalOil = meditran + salyx420 + salyx430 + travolube + turbolube46 + turbolube68;
+        const totalOil = meditran + salyx420 + salyx430 + travolube + turbolube46 + turbolube68 + shellArginaS3;
         document.querySelector(`[name="data[${machineId}][total_oil]"]`).value = totalOil.toFixed(2);
     }
 

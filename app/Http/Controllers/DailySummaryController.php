@@ -140,6 +140,7 @@ class DailySummaryController extends Controller
                 '*.travolube_a' => 'nullable|numeric',
                 '*.turbolube_46' => 'nullable|numeric',
                 '*.turbolube_68' => 'nullable|numeric',
+                '*.shell_argina_s3' => 'nullable|numeric',
                 '*.total_oil' => 'nullable|numeric',
                 '*.sfc_scc' => 'nullable|numeric',
                 '*.nphr' => 'nullable|numeric',

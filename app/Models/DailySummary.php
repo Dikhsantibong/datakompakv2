@@ -65,6 +65,7 @@ class DailySummary extends Model
         'travolube_a',       // TravoLube A (LITER)
         'turbolube_46',      // Turbolube 46 (LITER)
         'turbolube_68',      // Turbolube 68 (LITER)
+        'shell_argina_s3',   // Shell Argina S3 (LITER)
         'total_oil',         // TOTAL (LITER)
         'sfc_scc',           // SFC/SCC (LITER/KWH)
         'nphr',              // TARA KALOR/NPHR (KCAL/KWH)
@@ -118,6 +119,7 @@ class DailySummary extends Model
         'travolube_a' => 'decimal:3',
         'turbolube_46' => 'decimal:3',
         'turbolube_68' => 'decimal:3',
+        'shell_argina_s3' => 'decimal:2',
         'total_oil' => 'decimal:3',
         'sfc_scc' => 'decimal:3',
         'nphr' => 'decimal:3',

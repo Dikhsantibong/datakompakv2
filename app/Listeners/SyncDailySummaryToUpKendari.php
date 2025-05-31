@@ -200,6 +200,7 @@ class SyncDailySummaryToUpKendari
             'travolube_a' => $dailySummary->travolube_a,
             'turbolube_46' => $dailySummary->turbolube_46,
             'turbolube_68' => $dailySummary->turbolube_68,
+            'shell_argina_s3' => $dailySummary->shell_argina_s3,
             'total_oil' => $dailySummary->total_oil,
             
             // Efficiency Metrics

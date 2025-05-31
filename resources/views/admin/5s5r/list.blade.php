@@ -153,8 +153,10 @@
                                     <tr>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                        {{-- <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Oleh</th> --}}
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">PIC</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Area Kerja</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                     </tr>
                                 </thead>
@@ -167,47 +169,72 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
                                             {{ $batch->created_at->format('Y-m-d') }}
                                         </td>
-                                        {{-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
-                                            {{ $batch->created_by }}
-                                        </td> --}}
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
-                                            <span class="text-xs font-medium text-gray-500 rounded-full bg-blue-100 px-2 py-1">
+                                            <span class="text-xs font-medium rounded-full bg-green-100 text-green-800 px-2 py-1">
                                                 {{ $batch->sync_unit_origin }}
                                             </span>
                                         </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
+                                            @php
+                                                $pic = $batch->pemeriksaan->first()->pic ?? '-';
+                                            @endphp
+                                            {{ $pic }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
+                                            @php
+                                                $area = $batch->pemeriksaan->first()->area_kerja ?? '-';
+                                            @endphp
+                                            {{ $area }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
+                                            @php
+                                                $totalProgress = 0;
+                                                $programCount = $batch->programKerja->count();
+                                                foreach($batch->programKerja as $program) {
+                                                    $totalProgress += (int)$program->progress;
+                                                }
+                                                $avgProgress = $programCount > 0 ? round($totalProgress / $programCount) : 0;
+                                            @endphp
+                                            <div class="flex items-center justify-center">
+                                                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mr-2" style="width: 100px;">
+                                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $avgProgress }}%"></div>
+                                                </div>
+                                                <span>{{ $avgProgress }}%</span>
+                                            </div>
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
-                                            <div class="flex items-center justify-center space-x-2">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <a href="{{ route('admin.5s5r.show', $batch->id) }}"
-                                                    class="text-blue-600 hover:text-blue-900"
-                                                    title="Lihat Detail">
-                                                    <i class="fas fa-eye"></i>Detail
+                                                   class="text-indigo-600 hover:text-indigo-900 flex items-center"
+                                                   title="Lihat Detail">
+                                                    <i class="fas fa-eye mr-1"></i> Detail
                                                 </a>
                                                 <a href="{{ route('admin.5s5r.edit', $batch->id) }}"
-                                                    class="text-yellow-600 hover:text-yellow-900"
-                                                    title="Edit">
-                                                    <i class="fas fa-edit"></i>Edit
+                                                   class="text-yellow-600 hover:text-yellow-900 flex items-center"
+                                                   title="Edit">
+                                                    <i class="fas fa-edit mr-1"></i> Edit
                                                 </a>
-                                                <form action="{{ route('admin.5s5r.destroy', $batch->id) }}" 
-                                                      method="POST" 
-                                                      class="inline-block"
+                                                <form action="{{ route('admin.5s5r.destroy', $batch->id) }}"
+                                                      method="POST"
+                                                      class="inline"
                                                       onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" 
-                                                            class="text-red-600 hover:text-red-900"
+                                                    <button type="submit"
+                                                            class="text-red-600 hover:text-red-900 flex items-center"
                                                             title="Hapus">
-                                                        <i class="fas fa-trash"></i>Hapus
+                                                        <i class="fas fa-trash-alt mr-1"></i> Hapus
                                                     </button>
                                                 </form>
                                                 <a href="{{ route('admin.5s5r.export.pdf', $batch->id) }}"
-                                                    class="text-red-600 hover:text-red-900"
-                                                    title="Export PDF">
-                                                    <i class="fas fa-file-pdf"></i>PDF
+                                                   class="text-red-600 hover:text-red-900 flex items-center"
+                                                   title="Export PDF">
+                                                    <i class="fas fa-file-pdf mr-1"></i> PDF
                                                 </a>
                                                 <a href="{{ route('admin.5s5r.export.excel', $batch->id) }}"
-                                                    class="text-green-600 hover:text-green-900"
-                                                    title="Export Excel">
-                                                    <i class="fas fa-file-excel"></i>Excel
+                                                   class="text-green-600 hover:text-green-900 flex items-center"
+                                                   title="Export Excel">
+                                                    <i class="fas fa-file-excel mr-1"></i> Excel
                                                 </a>
                                             </div>
                                         </td>

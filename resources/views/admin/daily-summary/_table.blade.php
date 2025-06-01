@@ -149,7 +149,16 @@
                         <td class="px-4 py-3 border-r">{{ $machine->name }}</td>
                         
                         @php
-                            $summary = $unit->dailySummaries->where('machine_name', $machine->name)->first();
+                            $summary = $unit->dailySummaries->first(function($summary) use ($machine) {
+                                // Try exact match first
+                                if ($summary->machine_name === $machine->name) {
+                                    return true;
+                                }
+                                
+                                // Try with MIRRLEES prefix
+                                $mirrleesMachineName = str_replace('MIRR', 'MIRRLEES', $machine->name);
+                                return $summary->machine_name === $mirrleesMachineName;
+                            });
                         @endphp
                         
                         <!-- Daya (MW) -->

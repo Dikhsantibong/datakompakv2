@@ -298,7 +298,12 @@ class DailySummaryController extends Controller
     public function results(Request $request)
     {
         try {
-            $date = $request->input('date', now()->format('Y-m-d'));
+            // Ensure date is properly formatted
+            $date = $request->input('date');
+            if (!$date) {
+                $date = now()->format('Y-m-d');
+            }
+
             $search = $request->input('search');
 
             // Get unit source from session
@@ -307,25 +312,28 @@ class DailySummaryController extends Controller
             // Base query for PowerPlant
             $query = PowerPlant::query();
 
+            // Log initial query state
+            Log::info('Initial Query State:', [
+                'session_unit' => $unitSource,
+                'request_unit_source' => $request->input('unit_source'),
+                'date' => $date
+            ]);
+
             // If logged in as UP KENDARI (mysql session)
             if ($unitSource === 'mysql') {
                 // Allow filtering by unit source from request
-                $selectedUnitSource = request('unit_source', 'all');
-                if ($selectedUnitSource !== 'all') {
+                $selectedUnitSource = $request->input('unit_source');
+                
+                Log::info('Processing mysql session filter:', [
+                    'selected_unit_source' => $selectedUnitSource
+                ]);
+
+                if ($selectedUnitSource && $selectedUnitSource !== 'all') {
                     $query->where('unit_source', $selectedUnitSource);
                 }
             } else {
                 // For other units, only show their own data
                 $query->where('unit_source', $unitSource);
-            }
-
-            // Get unique unit sources for dropdown only if logged in as UP KENDARI
-            $unitSources = [];
-            if ($unitSource === 'mysql') {
-                $unitSources = PowerPlant::select('unit_source')
-                    ->distinct()
-                    ->pluck('unit_source')
-                    ->filter();
             }
 
             // Add search functionality if search parameter is provided
@@ -338,12 +346,77 @@ class DailySummaryController extends Controller
                 });
             }
 
-            $units = $query->with(['dailySummaries' => function($query) use ($date) {
+            // Load power plants with their machines and daily summaries
+            $units = $query->with(['machines' => function($query) {
+                $query->orderBy('name');
+            }, 'dailySummaries' => function($query) use ($date) {
                 $query->whereDate('date', $date);
             }])->get();
 
-            if ($request->ajax()) {
-                return view('admin.daily-summary.daily-summary-results', compact('units', 'date', 'unitSources', 'unitSource'))->render();
+            // Map machine names if needed
+            $units->each(function($unit) {
+                $unit->machines->each(function($machine) use ($unit) {
+                    // Get the daily summary for this machine
+                    $summary = $unit->dailySummaries->first(function($summary) use ($machine) {
+                        // Try exact match first
+                        if ($summary->machine_name === $machine->name) {
+                            return true;
+                        }
+                        
+                        // Try with MIRRLEES prefix
+                        $mirrleesMachineName = str_replace('MIRR', 'MIRRLEES', $machine->name);
+                        if ($summary->machine_name === $mirrleesMachineName) {
+                            return true;
+                        }
+                        
+                        return false;
+                    });
+
+                    if ($summary) {
+                        // Log successful match
+                        Log::info("Found matching summary:", [
+                            'machine_name' => $machine->name,
+                            'summary_machine_name' => $summary->machine_name
+                        ]);
+                    }
+                });
+            });
+
+            // Log query results
+            Log::info('Query Results:', [
+                'sql' => $query->toSql(),
+                'bindings' => $query->getBindings(),
+                'units_count' => $units->count(),
+                'daily_summaries_count' => $units->flatMap->dailySummaries->count()
+            ]);
+
+            // Debug log for each unit's daily summaries
+            foreach ($units as $unit) {
+                Log::info("Unit Data:", [
+                    'unit_id' => $unit->id,
+                    'unit_name' => $unit->name,
+                    'unit_source' => $unit->unit_source,
+                    'daily_summaries_count' => $unit->dailySummaries->count(),
+                    'machines_count' => $unit->machines->count(),
+                    'machine_names' => $unit->machines->pluck('name')->toArray(),
+                    'summary_machine_names' => $unit->dailySummaries->pluck('machine_name')->toArray()
+                ]);
+            }
+
+            // Get unique unit sources for dropdown only if logged in as UP KENDARI
+            $unitSources = [];
+            if ($unitSource === 'mysql') {
+                $unitSources = PowerPlant::select('unit_source')
+                    ->distinct()
+                    ->whereNotNull('unit_source')
+                    ->where('unit_source', '!=', '')
+                    ->pluck('unit_source')
+                    ->filter();
+            }
+
+            // If this is an AJAX request, only return the table content
+            if ($request->ajax() || $request->has('ajax')) {
+                return view('admin.daily-summary._table_content', compact('units'));
             }
 
             return view('admin.daily-summary.daily-summary-results', compact('units', 'date', 'unitSources', 'unitSource'));
@@ -354,7 +427,7 @@ class DailySummaryController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
             
-            if ($request->ajax()) {
+            if ($request->ajax() || $request->has('ajax')) {
                 return response()->json(['error' => 'Terjadi kesalahan saat memuat data.'], 500);
             }
             

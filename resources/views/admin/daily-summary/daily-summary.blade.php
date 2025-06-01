@@ -130,7 +130,7 @@
                                             'mysql_baruta' => 'PLTD BARUTA',
                                             'mysql_moramo' => 'PLTD MORAMO',
                                             'mysql_mikuasi' => 'PLTM MIKUASI',
-                                            'mysql'=> 'UP KENDARI',
+                                            
 
                                             default => strtoupper($source)
                                         };

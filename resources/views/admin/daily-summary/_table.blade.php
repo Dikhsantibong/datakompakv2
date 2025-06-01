@@ -118,7 +118,7 @@
                         </div>
                     </th>
                     <th class="px-4 py-2 border border-gray-300">
-                        <div class="grid grid-cols-7 gap-0">
+                        <div class="grid grid-cols-8 gap-0">
                             <span class="px-1 text-center border-r border-gray-300 text-pelumas">Meditran SX 15W/40 CH-4 (LITER)</span>
                             <span class="px-1 text-center border-r border-gray-300 text-pelumas">Salyx 420 (LITER)</span>
                             <span class="px-1 text-center border-r border-gray-300 text-pelumas">Salyx 430 (LITER)</span>
@@ -263,7 +263,7 @@
 
                         <!-- Pemakaian Pelumas -->
                         <td class="px-4 py-3 border-r">
-                            <div class="grid grid-cols-7 gap-0">
+                            <div class="grid grid-cols-8 gap-0">
                                 <div class="text-center border-r">{{ $summary ? number_format($summary->meditran_oil, 2) : '-' }}</div>
                                 <div class="text-center border-r">{{ $summary ? number_format($summary->salyx_420, 2) : '-' }}</div>
                                 <div class="text-center border-r">{{ $summary ? number_format($summary->salyx_430, 2) : '-' }}</div>

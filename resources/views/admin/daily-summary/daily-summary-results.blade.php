@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
     min-width: 350px !important;
 }
 .w-keterangan {
-    min-width: 150px !important;
+    min-width: 200px !important;
 }
 .text-pelumas {
     font-size: 11px !important;

@@ -14,6 +14,7 @@ class LaporanKitBbm extends Model
 
     protected $fillable = [
         'laporan_kit_id',
+        'machine_id',
         'total_stok',
         'service_total_stok',
         'total_stok_tangki',
@@ -34,6 +35,11 @@ class LaporanKitBbm extends Model
     public function flowmeters()
     {
         return $this->hasMany(LaporanKitBbmFlowmeter::class);
+    }
+
+    public function machine()
+    {
+        return $this->belongsTo(Machine::class);
     }
 
     public function getConnectionName()
@@ -57,6 +63,7 @@ class LaporanKitBbm extends Model
                     
                     $data = [
                         'laporan_kit_id' => $bbm->laporan_kit_id,
+                        'machine_id' => $bbm->machine_id,
                         'total_stok' => $bbm->total_stok,
                         'service_total_stok' => $bbm->service_total_stok,
                         'total_stok_tangki' => $bbm->total_stok_tangki,
@@ -91,6 +98,7 @@ class LaporanKitBbm extends Model
                     self::$isSyncing = true;
                     
                     $data = [
+                        'machine_id' => $bbm->machine_id,
                         'total_stok' => $bbm->total_stok,
                         'service_total_stok' => $bbm->service_total_stok,
                         'total_stok_tangki' => $bbm->total_stok_tangki,

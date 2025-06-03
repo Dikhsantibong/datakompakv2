@@ -157,183 +157,97 @@
                             <h3 class="text-lg font-semibold text-gray-900">Data Pemeriksaan BBM</h3>
                         </div>
                         
-                        @if(!$laporan->bbm->isEmpty())
-                            @foreach($laporan->bbm as $bbm)
-                                <div class="p-6">
-                                    <!-- Tank Information Summary -->
-                                    <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                                        <!-- Storage Tanks Summary -->
-                                        <div class="bg-gray-50 rounded-lg p-4">
-                                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Storage Tanks</h4>
-                                            <div class="text-sm">
-                                                <p class="text-gray-600">Jumlah Tangki: <span class="font-medium">{{ $bbm->storageTanks->count() }}</span></p>
-                                                <p class="text-gray-600">Total Stok: <span class="font-medium">{{ number_format($bbm->total_stok, 2) }} L</span></p>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Service Tanks Summary -->
-                                        <div class="bg-gray-50 rounded-lg p-4">
-                                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Service Tanks</h4>
-                                            <div class="text-sm">
-                                                <p class="text-gray-600">Jumlah Tangki: <span class="font-medium">{{ $bbm->serviceTanks->count() }}</span></p>
-                                                <p class="text-gray-600">Total Stok: <span class="font-medium">{{ number_format($bbm->service_total_stok, 2) }} L</span></p>
-                                            </div>
-                                        </div>
-
-                                        <!-- Flowmeters Summary -->
-                                        <div class="bg-gray-50 rounded-lg p-4">
-                                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Flowmeters</h4>
-                                            <div class="text-sm">
-                                                <p class="text-gray-600">Jumlah Flowmeter: <span class="font-medium">{{ $bbm->flowmeters->count() }}</span></p>
-                                                <p class="text-gray-600">Total Pakai: <span class="font-medium">{{ number_format($bbm->total_pakai, 2) }} L</span></p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Detailed Tank Information -->
-                                    <div class="space-y-8">
-                                        <!-- Storage Tanks Detail -->
-                                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                                <h3 class="text-sm font-semibold text-gray-700">Storage Tanks Detail</h3>
-                                            </div>
-                                            <div class="overflow-x-auto">
-                                                <table class="min-w-full divide-y divide-gray-200">
-                                                    <thead class="bg-gray-50">
-                                                        <tr>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Number</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CM</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liter</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="bg-white divide-y divide-gray-200">
-                                                        @forelse($bbm->storageTanks->sortBy('tank_number') as $tank)
-                                                        <tr>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">Tank {{ $tank->tank_number }}</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->cm, 2) }}</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
-                                                        </tr>
-                                                        @empty
-                                                        <tr>
-                                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data storage tank</td>
-                                                        </tr>
-                                                        @endforelse
-                                                        <tr class="bg-gray-50">
-                                                            <td colspan="2" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Storage:</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbm->total_stok, 2) }} L</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                                                                <!-- Service Tanks Detail -->
-                                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                                <h3 class="text-sm font-semibold text-gray-700">Service Tanks Detail</h3>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Number</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liter</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                                        @forelse($bbm->serviceTanks->sortBy('tank_number') as $tank)
-                                                        <tr>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">Tank {{ $tank->tank_number }}</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }}</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->percentage, 2) }}%</td>
-                                    </tr>
-                                    @empty
-                                    <tr>
-                                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data service tank</td>
-                                    </tr>
-                                    @endforelse
-                                                        <tr class="bg-gray-50">
-                                                            <td colspan="2" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Service:</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbm->service_total_stok, 2) }} L</td>
-                                                        </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                                        </div>
-
-                                        <!-- Flowmeters Detail -->
-                                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                                <h3 class="text-sm font-semibold text-gray-700">Flowmeters Detail</h3>
-                                            </div>
-                                            <div class="overflow-x-auto">
-                                                <table class="min-w-full divide-y divide-gray-200">
-                                                    <thead class="bg-gray-50">
-                                                        <tr>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flowmeter Number</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Awal</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Akhir</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pakai</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="bg-white divide-y divide-gray-200">
-                                                        @forelse($bbm->flowmeters->sortBy('flowmeter_number') as $flowmeter)
-                                                        <tr>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">Flowmeter {{ $flowmeter->flowmeter_number }}</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($flowmeter->awal, 2) }}</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($flowmeter->akhir, 2) }}</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($flowmeter->pakai, 2) }}</td>
-                                                        </tr>
-                                                        @empty
-                                                        <tr>
-                                                            <td colspan="4" class="px-4 py-2 text-center text-gray-400">Tidak ada data flowmeter</td>
-                                                        </tr>
-                                                        @endforelse
-                                                        <tr class="bg-gray-50">
-                                                            <td colspan="3" class="px-4 py-2 border-r whitespace-nowrap text-right">Total Pakai:</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbm->total_pakai, 2) }} L</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Summary Section -->
-                                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                                        <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                            <h3 class="text-sm font-semibold text-gray-700">Summary BBM</h3>
-                                        </div>
-                                        <div class="overflow-x-auto">
-                                            <table class="min-w-full divide-y divide-gray-200">
-                                                <thead class="bg-gray-50">
-                                                    <tr>
-                                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Stok Tangki</th>
-                                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Storage</th>
-                                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
-                                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Terima BBM</th>
-                                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pakai</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="bg-white divide-y divide-gray-200">
-                                                    <tr>
-                                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbm->total_stok_tangki, 2) }} L</td>
-                                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbm->total_stok, 2) }} L</td>
-                                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbm->service_total_stok, 2) }} L</td>
-                                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbm->terima_bbm, 2) }} L</td>
-                                                        <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($bbm->total_pakai, 2) }} L</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                        @if($laporan->bbm && $laporan->bbm->isNotEmpty())
+                            <div class="p-6">
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead>
+                                            <tr class="bg-gray-50">
+                                                <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center align-middle">Mesin</th>
+                                                <th colspan="10" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">
+                                                    Storage Tank
+                                                </th>
+                                                <th colspan="10" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">
+                                                    Service Tank
+                                                </th>
+                                                <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Total Stok Tangki</th>
+                                                <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Terima BBM</th>
+                                                <th colspan="15" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">
+                                                    Flowmeter
+                                                </th>
+                                                <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">total pakai</th>
+                                            </tr>
+                                            <tr class="bg-gray-50">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
+                                                @endfor
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
+                                                @endfor
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                <th colspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
+                                                @endfor
+                                            </tr>
+                                            <tr class="bg-gray-50">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">cm</th>
+                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                                @endfor
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">%</th>
+                                                @endfor
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">awal</th>
+                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">akhir</th>
+                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">pakai {{ $i }}</th>
+                                                @endfor
+                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            @foreach($laporan->bbm as $bbm)
+                                            <tr>
+                                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">{{ $bbm->machine->name ?? '-' }}</td>
+                                                
+                                                <!-- Storage Tank values -->
+                                                @foreach($bbm->storageTanks->sortBy('tank_number') as $tank)
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($tank->cm, 2) }}</td>
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($tank->liter, 2) }}</td>
+                                                @endforeach
+                                                
+                                                <!-- Service Tank values -->
+                                                @foreach($bbm->serviceTanks->sortBy('tank_number') as $tank)
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($tank->liter, 2) }}</td>
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($tank->percentage, 2) }}</td>
+                                                @endforeach
+                                                
+                                                <!-- Total Stok Tangki -->
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($bbm->total_stok_tangki, 2) }}</td>
+                                                
+                                                <!-- Terima BBM -->
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($bbm->terima_bbm, 2) }}</td>
+                                                
+                                                <!-- Flowmeter values -->
+                                                @foreach($bbm->flowmeters->sortBy('flowmeter_number') as $flowmeter)
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($flowmeter->awal, 2) }}</td>
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($flowmeter->akhir, 2) }}</td>
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($flowmeter->pakai, 2) }}</td>
+                                                @endforeach
+                                                
+                                                <!-- Total Pakai -->
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($bbm->total_pakai, 2) }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
-                            @endforeach
+                            </div>
                         @else
                             <div class="p-6">
-                                <div class="text-center text-gray-500">
-                                    <p>No BBM data available</p>
+                                <div class="text-center text-gray-500 bg-gray-50 rounded-lg p-4">
+                                    <i class="fas fa-info-circle text-blue-500 text-xl mb-2"></i>
+                                    <p>Tidak ada data BBM tersedia</p>
                                 </div>
                             </div>
                         @endif
@@ -494,143 +408,81 @@
                         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
                             <h3 class="text-lg font-semibold text-gray-900">Data Pemeriksaan Pelumas</h3>
                         </div>
-
-                        @if($laporan->pelumas->isNotEmpty())
-                            @foreach($laporan->pelumas as $pelumas)
-                                <div class="p-6">
-                                    <!-- Pelumas Information Summary -->
-                                    <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                                        <!-- Storage Tanks Summary -->
-                                        <div class="bg-gray-50 rounded-lg p-4">
-                                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Storage Tanks</h4>
-                                            <div class="text-sm">
-                                                <p class="text-gray-600">Jumlah Tangki: <span class="font-medium">{{ $pelumas->storageTanks->count() }}</span></p>
-                                                <p class="text-gray-600">Total Stok: <span class="font-medium">{{ number_format($pelumas->tank_total_stok, 2) }} L</span></p>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Drums Summary -->
-                                        <div class="bg-gray-50 rounded-lg p-4">
-                                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Drums</h4>
-                                            <div class="text-sm">
-                                                <p class="text-gray-600">Jumlah Area: <span class="font-medium">{{ $pelumas->drums->count() }}</span></p>
-                                                <p class="text-gray-600">Total Stok: <span class="font-medium">{{ number_format($pelumas->drum_total_stok, 2) }} L</span></p>
-                                            </div>
-                                        </div>
-
-                                        <!-- Usage Summary -->
-                                        <div class="bg-gray-50 rounded-lg p-4">
-                                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Penggunaan</h4>
-                                            <div class="text-sm">
-                                                <p class="text-gray-600">Total Terima: <span class="font-medium">{{ number_format($pelumas->terima_pelumas, 2) }} L</span></p>
-                                                <p class="text-gray-600">Total Pakai: <span class="font-medium">{{ number_format($pelumas->total_pakai, 2) }} L</span></p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Detailed Information -->
-                                    <div class="space-y-8">
-                                        <!-- Storage Tanks Detail -->
-                                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                                <h3 class="text-sm font-semibold text-gray-700">Storage Tanks Detail</h3>
-                                            </div>
-                                            <div class="overflow-x-auto">
-                                                <table class="min-w-full divide-y divide-gray-200">
-                                                    <thead class="bg-gray-50">
-                                                        <tr>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tank Number</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CM</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liter</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="bg-white divide-y divide-gray-200">
-                                                        @forelse($pelumas->storageTanks->sortBy('tank_number') as $tank)
-                                                        <tr>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">Tank {{ $tank->tank_number }}</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->cm, 2) }}</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($tank->liter, 2) }} L</td>
-                                                        </tr>
-                                                        @empty
-                                                        <tr>
-                                                            <td colspan="3" class="px-4 py-2 text-center text-gray-400">Tidak ada data storage tank</td>
-                                                        </tr>
-                                                        @endforelse
-                                                        <tr class="bg-gray-50">
-                                                            <td colspan="2" class="px-4 py-2 border-r whitespace-nowrap text-right font-medium">Total Storage:</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumas->tank_total_stok, 2) }} L</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                        <!-- Drums Detail -->
-                                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                                <h3 class="text-sm font-semibold text-gray-700">Drums Detail</h3>
-                                            </div>
-                                            <div class="overflow-x-auto">
-                                                <table class="min-w-full divide-y divide-gray-200">
-                                                    <thead class="bg-gray-50">
-                                                        <tr>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Area Number</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="bg-white divide-y divide-gray-200">
-                                                        @forelse($pelumas->drums->sortBy('area_number') as $drum)
-                                                        <tr>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">Area {{ $drum->area_number }}</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($drum->jumlah, 2) }}</td>
-                                                        </tr>
-                                                        @empty
-                                                        <tr>
-                                                            <td colspan="2" class="px-4 py-2 text-center text-gray-400">Tidak ada data drum</td>
-                                                        </tr>
-                                                        @endforelse
-                                                        <tr class="bg-gray-50">
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap text-right font-medium">Total Drums:</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumas->drum_total_stok, 2) }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                        <!-- Summary Section -->
-                                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                                            <div class="px-6 py-3 border-b border-gray-200 bg-gray-50">
-                                                <h3 class="text-sm font-semibold text-gray-700">Summary Pelumas</h3>
-                                            </div>
-                                            <div class="overflow-x-auto">
-                                                <table class="min-w-full divide-y divide-gray-200">
-                                                    <thead class="bg-gray-50">
-                                                        <tr>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Stok Tangki</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Terima Pelumas</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pakai</th>
-                                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="bg-white divide-y divide-gray-200">
-                                                        <tr>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumas->total_stok_tangki, 2) }} L</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumas->terima_pelumas, 2) }} L</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ number_format($pelumas->total_pakai, 2) }} L</td>
-                                                            <td class="px-4 py-2 border-r whitespace-nowrap">{{ $pelumas->jenis }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
+                        
+                        @if($laporan->pelumas && $laporan->pelumas->isNotEmpty())
+                            <div class="p-6">
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead>
+                                            <tr class="bg-gray-50">
+                                                <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center align-middle">Mesin</th>
+                                                <th colspan="10" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">
+                                                    Storage Tank
+                                                </th>
+                                                <th colspan="5" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">
+                                                    Drum Area
+                                                </th>
+                                                <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Total Stok Tangki</th>
+                                                <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Terima Pelumas</th>
+                                                <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Total Pakai</th>
+                                                <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center align-middle border-r">Jenis Pelumas</th>
+                                            </tr>
+                                            <tr class="bg-gray-50">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
+                                                @endfor
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                <th class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">Area {{ $i }}</th>
+                                                @endfor
+                                            </tr>
+                                            <tr class="bg-gray-50">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">cm</th>
+                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                                @endfor
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                                @endfor
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            @foreach($laporan->pelumas as $pelumas)
+                                            <tr>
+                                                <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">{{ $pelumas->machine->name ?? '-' }}</td>
+                                                
+                                                <!-- Storage Tank values -->
+                                                @foreach($pelumas->storageTanks->sortBy('tank_number') as $tank)
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($tank->cm, 2) }}</td>
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($tank->liter, 2) }}</td>
+                                                @endforeach
+                                                
+                                                <!-- Drum values -->
+                                                @foreach($pelumas->drums->sortBy('area_number') as $drum)
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($drum->jumlah, 2) }}</td>
+                                                @endforeach
+                                                
+                                                <!-- Total Stok Tangki -->
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($pelumas->total_stok_tangki, 2) }}</td>
+                                                
+                                                <!-- Terima Pelumas -->
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($pelumas->terima_pelumas, 2) }}</td>
+                                                
+                                                <!-- Total Pakai -->
+                                                <td class="px-4 py-2 border-r text-center">{{ number_format($pelumas->total_pakai, 2) }}</td>
+                                                
+                                                <!-- Jenis Pelumas -->
+                                                <td class="px-4 py-2 border-r text-center">{{ $pelumas->jenis }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
-                            @endforeach
+                            </div>
                         @else
                             <div class="p-6">
-                                <div class="text-center text-gray-500">
-                                    <p>No Pelumas data available</p>
+                                <div class="text-center text-gray-500 bg-gray-50 rounded-lg p-4">
+                                    <i class="fas fa-info-circle text-blue-500 text-xl mb-2"></i>
+                                    <p>Tidak ada data Pelumas tersedia</p>
                                 </div>
                             </div>
                         @endif

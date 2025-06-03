@@ -14,6 +14,7 @@ class LaporanKitPelumas extends Model
 
     protected $fillable = [
         'laporan_kit_id',
+        'machine_id',
         'tank_total_stok',
         'drum_total_stok',
         'total_stok_tangki',
@@ -37,6 +38,11 @@ class LaporanKitPelumas extends Model
         return $this->hasMany(LaporanKitPelumasDrum::class, 'laporan_kit_pelumas_id');
     }
 
+    public function machine()
+    {
+        return $this->belongsTo(Machine::class);
+    }
+
     public function getConnectionName()
     {
         return session('unit', 'mysql');
@@ -58,6 +64,7 @@ class LaporanKitPelumas extends Model
                     
                     $data = [
                         'laporan_kit_id' => $pelumas->laporan_kit_id,
+                        'machine_id' => $pelumas->machine_id,
                         'tank_total_stok' => $pelumas->tank_total_stok,
                         'drum_total_stok' => $pelumas->drum_total_stok,
                         'total_stok_tangki' => $pelumas->total_stok_tangki,
@@ -93,6 +100,7 @@ class LaporanKitPelumas extends Model
                     self::$isSyncing = true;
                     
                     $data = [
+                        'machine_id' => $pelumas->machine_id,
                         'tank_total_stok' => $pelumas->tank_total_stok,
                         'drum_total_stok' => $pelumas->drum_total_stok,
                         'total_stok_tangki' => $pelumas->total_stok_tangki,

@@ -37,6 +37,7 @@ class SyncLaporanKitToUpKendari
                     foreach ($laporanKit->bbm as $bbm) {
                         $bbmData = [
                             'laporan_kit_id' => $laporanKitIdBaru,
+                            'machine_id' => $bbm->machine_id,
                             'total_stok' => $bbm->total_stok,
                             'service_total_stok' => $bbm->service_total_stok,
                             'total_stok_tangki' => $bbm->total_stok_tangki,
@@ -125,6 +126,7 @@ class SyncLaporanKitToUpKendari
                     foreach ($laporanKit->pelumas as $pelumas) {
                         $pelumasData = [
                             'laporan_kit_id' => $laporanKitIdBaru,
+                            'machine_id' => $pelumas->machine_id,
                             'tank_total_stok' => $pelumas->tank_total_stok,
                             'drum_total_stok' => $pelumas->drum_total_stok,
                             'total_stok_tangki' => $pelumas->total_stok_tangki,

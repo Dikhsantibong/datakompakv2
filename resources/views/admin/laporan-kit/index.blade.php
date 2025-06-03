@@ -167,7 +167,7 @@
                                         <input type="number" name="gangguan[{{ $machine->id }}][elektrik]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     </td>
                                     <td class="px-4 py-2">
-                                        <input type="text" name="gangguan[{{ $machine->id }}][keterangan]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan keterangan">
+                                        <textarea name="gangguan[{{ $machine->id }}][keterangan]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 " placeholder="Masukkan keterangan" rows="2"></textarea>
                                     </td>
                                 </tr>
                                 @empty
@@ -189,45 +189,65 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead>
                                 <tr class="bg-gray-50">
-                                    <th colspan="5" id="bbm-storage-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100 relative">
+                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center align-middle">Mesin</th>
+                                    <th colspan="10" id="bbm-storage-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">
                                         Storage Tank
-                                        <button type="button" onclick="addStorageTankPanel()" class="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
                                     </th>
-                                    <th colspan="5" id="bbm-service-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100 relative">
+                                    <th colspan="10" id="bbm-service-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">
                                         Service Tank
-                                        <button type="button" onclick="addServiceTankPanel()" class="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
                                     </th>
-                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">Total Stok Tangki</th>
-                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">Terima BBM</th>
-                                    <th colspan="6" id="bbm-flowmeter-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100 relative">
+                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Total Stok Tangki</th>
+                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Terima BBM</th>
+                                    <th colspan="15" id="bbm-flowmeter-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">
                                         Flowmeter
-                                        <button type="button" onclick="addFlowmeterPanel()" class="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
                                     </th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle bg-gray-100">total pakai</th>
-                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center align-middle bg-gray-100">aksi</th>
+                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">total pakai</th>
+                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center align-middle border-r">aksi</th>
                                 </tr>
                                 <tr class="bg-gray-50" id="bbm-panel-header-row">
-                                    <!-- Panel headers will be added here dynamically -->
+                                    <!-- Tank numbers -->
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
+                                    @endfor
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
+                                    @endfor
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th colspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
+                                    @endfor
                                 </tr>
                                 <tr class="bg-gray-50" id="bbm-panel-subheader-row">
-                                    <!-- Panel subheaders will be added here dynamically -->
+                                    <!-- Storage Tank subheaders -->
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">cm</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                    @endfor
+                                    <!-- Service Tank subheaders -->
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">%</th>
+                                    @endfor
+                                    <!-- Flowmeter subheaders -->
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">awal</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">akhir</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">pakai {{ $i }}</th>
+                                    @endfor
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
                                 </tr>
                             </thead>
                             <tbody id="bbm-tbody" class="bg-white divide-y divide-gray-200">
-                                <!-- Rows will be added here dynamically -->
+                                @forelse($machines as $machine)
+                                <tr class="hover:bg-gray-50" data-machine-id="{{ $machine->id }}">
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">{{ $machine->name }}</td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="20" class="px-4 py-4 text-sm text-gray-500 text-center">Tidak ada data mesin</td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
-                    </div>
-                    <div class="mt-4 flex justify-end">
-                        <button type="button" onclick="addBBMRow()" class="inline-flex items-center px-3 py-2 border border-blue-600 text-sm leading-4 font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            <i class="fas fa-plus mr-2"></i> Tambah Data
-                        </button>
                     </div>
                 </div>
 
@@ -266,11 +286,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-4 flex justify-end">
-                        <button type="button" onclick="addKWHRow()" class="inline-flex items-center px-3 py-2 border border-blue-600 text-sm leading-4 font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            <i class="fas fa-plus mr-2"></i> Tambah Data
-                        </button>
-                    </div>
                 </div>
 
                 <!-- DATA PEMERIKSAAN PELUMAS -->
@@ -282,40 +297,53 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead>
                                 <tr class="bg-gray-50">
-                                    <th colspan="5" id="pelumas-storage-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center relative">
+                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center align-middle">Mesin</th>
+                                    <th colspan="10" id="pelumas-storage-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">
                                         Storage Tank
-                                        <button type="button" onclick="addPelumasStorageTankPanel()" class="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
                                     </th>
-                                    <th colspan="3" id="pelumas-drum-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center relative">
+                                    <th colspan="5" id="pelumas-drum-header" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center bg-gray-100">
                                         Drum Pelumas
-                                        <button type="button" onclick="addPelumasDrumPanel()" class="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
                                     </th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Total Stok Tangki</th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Terima pelumas</th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">total pakai pelumas</th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center align-middle">jenis pelumas</th>
-                                    <th rowspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center align-middle">aksi</th>
+                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Total Stok Tangki</th>
+                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">Terima pelumas</th>
+                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b border-r text-center align-middle">total pakai pelumas</th>
+                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center align-middle border-r">jenis pelumas</th>
+                                    <th rowspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-b text-center align-middle border-r">aksi</th>
                                 </tr>
                                 <tr class="bg-gray-50" id="pelumas-panel-header-row">
-                                    <!-- Panel headers will be added here dynamically -->
+                                    <!-- Storage Tank numbers -->
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
+                                    @endfor
+                                    <!-- Drum Area numbers -->
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">Area {{ $i }}</th>
+                                    @endfor
                                 </tr>
                                 <tr class="bg-gray-50" id="pelumas-panel-subheader-row">
-                                    <!-- Panel subheaders will be added here dynamically -->
+                                    <!-- Storage Tank subheaders -->
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">cm</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                    @endfor
+                                    <!-- Drum Area subheaders -->
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                    @endfor
                                 </tr>
                             </thead>
                             <tbody id="pelumas-tbody" class="bg-white divide-y divide-gray-200">
-                                <!-- Rows will be added here dynamically -->
+                                @forelse($machines as $machine)
+                                <tr class="hover:bg-gray-50" data-machine-id="{{ $machine->id }}">
+                                    <td class="px-4 py-2 text-sm text-gray-900 border-r text-center">{{ $machine->name }}</td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="20" class="px-4 py-4 text-sm text-gray-500 text-center">Tidak ada data mesin</td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
-                    </div>
-                    <div class="mt-4 flex justify-end">
-                        <button type="button" onclick="addPelumasRow()" class="inline-flex items-center px-3 py-2 border border-blue-600 text-sm leading-4 font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            <i class="fas fa-plus mr-2"></i> Tambah Data
-                        </button>
                     </div>
                 </div>
 
@@ -339,11 +367,6 @@
                                 <!-- Rows will be added here dynamically -->
                             </tbody>
                         </table>
-                    </div>
-                    <div class="mt-4 flex justify-end">
-                        <button type="button" onclick="addBahanKimiaRow()" class="inline-flex items-center px-3 py-2 border border-blue-600 text-sm leading-4 font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            <i class="fas fa-plus mr-2"></i> Tambah Data
-                        </button>
                     </div>
                 </div>
 
@@ -475,13 +498,13 @@
     let bahanKimiaRowCount = 0;
 
     // Panel counts for each table
-    let bbmStorageTankCount = 2;
-    let bbmServiceTankCount = 2;
+    let bbmStorageTankCount = 5;
+    let bbmServiceTankCount = 5;
     let kwhProduksiPanelCount = 2;
     let kwhPSPanelCount = 2;
-    let pelumasStorageTankCount = 2;
-    let pelumasDrumCount = 2;
-    let bbmFlowmeterCount = 2;
+    let pelumasStorageTankCount = 5;
+    let pelumasDrumCount = 5;
+    let bbmFlowmeterCount = 5;
 
     // Initialize all tables on page load
     document.addEventListener('DOMContentLoaded', function() {
@@ -641,7 +664,7 @@
 
             // Delete button
         newInputs.push(`
-            <td class="w-20 px-4 py-2">
+            <td class="w-20 px-4 py-2 border-r">
                 <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
                     <i class="fas fa-trash"></i>
                 </button>
@@ -750,18 +773,6 @@
     }
 
     // Functions for BBM panels
-    function addStorageTankPanel() {
-        bbmStorageTankCount++;
-        initializeBBMPanels();
-        updateBBMRows();
-    }
-
-    function addServiceTankPanel() {
-        bbmServiceTankCount++;
-        initializeBBMPanels();
-        updateBBMRows();
-    }
-
     function addBBMRow() {
         const tbody = document.getElementById('bbm-tbody');
         const row = document.createElement('tr');
@@ -883,19 +894,19 @@
     }
 
     function updateBBMRows() {
-        const rows = document.querySelectorAll('#bbm-tbody tr');
+        const rows = document.querySelectorAll('#bbm-tbody tr[data-machine-id]');
         rows.forEach(row => {
-            const rowIndex = row.dataset.rowIndex;
+            const machineId = row.dataset.machineId;
             const newInputs = [];
 
             // Storage Tank inputs
             for (let i = 1; i <= bbmStorageTankCount; i++) {
                 newInputs.push(`
                     <td class="px-4 py-2 border-r">
-                        <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_${i}_cm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <input type="number" step="0.1" name="bbm[${machineId}][storage_tank_${i}_cm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </td>
                     <td class="px-4 py-2 border-r">
-                        <input type="number" step="0.1" name="bbm[${rowIndex}][storage_tank_${i}_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <input type="number" step="0.1" name="bbm[${machineId}][storage_tank_${i}_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </td>
                 `);
             }
@@ -903,7 +914,7 @@
             // Total stok for Storage Tank
             newInputs.push(`
                 <td class="px-4 py-2 border-r">
-                    <input type="number" step="0.1" name="bbm[${rowIndex}][total_stok]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+                    <input type="number" step="0.1" name="bbm[${machineId}][total_stok]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
                 </td>
             `);
 
@@ -911,10 +922,10 @@
             for (let i = 1; i <= bbmServiceTankCount; i++) {
                 newInputs.push(`
                     <td class="px-4 py-2 border-r">
-                        <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_${i}_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <input type="number" step="0.1" name="bbm[${machineId}][service_tank_${i}_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </td>
                     <td class="px-4 py-2 border-r">
-                        <input type="number" step="0.1" name="bbm[${rowIndex}][service_tank_${i}_percentage]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <input type="number" step="0.1" name="bbm[${machineId}][service_tank_${i}_percentage]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </td>
                 `);
             }
@@ -922,21 +933,21 @@
             // Total stok for Service Tank
             newInputs.push(`
                 <td class="px-4 py-2 border-r">
-                    <input type="number" step="0.1" name="bbm[${rowIndex}][service_total_stok]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+                    <input type="number" step="0.1" name="bbm[${machineId}][service_total_stok]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
                 </td>
             `);
 
             // Total Stok Tangki
             newInputs.push(`
                 <td class="px-4 py-2 border-r">
-                    <input type="number" step="0.1" name="bbm[${rowIndex}][total_stok_tangki]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+                    <input type="number" step="0.1" name="bbm[${machineId}][total_stok_tangki]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
                 </td>
             `);
 
             // Terima BBM
             newInputs.push(`
                 <td class="px-4 py-2 border-r">
-                    <input type="number" step="0.1" name="bbm[${rowIndex}][terima_bbm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <input type="number" step="0.1" name="bbm[${machineId}][terima_bbm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </td>
             `);
 
@@ -944,13 +955,13 @@
             for (let i = 1; i <= bbmFlowmeterCount; i++) {
                 newInputs.push(`
                     <td class="px-4 py-2 border-r">
-                        <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_${i}_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <input type="number" step="0.1" name="bbm[${machineId}][flowmeter_${i}_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </td>
                     <td class="px-4 py-2 border-r">
-                        <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_${i}_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <input type="number" step="0.1" name="bbm[${machineId}][flowmeter_${i}_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </td>
                     <td class="px-4 py-2 border-r">
-                        <input type="number" step="0.1" name="bbm[${rowIndex}][flowmeter_${i}_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+                        <input type="number" step="0.1" name="bbm[${machineId}][flowmeter_${i}_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
                     </td>
                 `);
             }
@@ -958,20 +969,28 @@
             // Total Pakai
             newInputs.push(`
                 <td class="px-4 py-2 border-r">
-                    <input type="number" step="0.1" name="bbm[${rowIndex}][total_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+                    <input type="number" step="0.1" name="bbm[${machineId}][total_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
                 </td>
             `);
 
             // Action button
             newInputs.push(`
-                <td class="px-4 py-2">
-                    <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
+                <td class="px-4 py-2 text-center border-r">
+                    <button type="button" class="text-red-600 hover:text-red-800">
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
             `);
 
-            row.innerHTML = newInputs.join('');
+            // Update the row's HTML after the first cell (machine name)
+            const cells = row.querySelectorAll('td');
+            if (cells.length > 1) {
+                // Remove all cells except the first one (machine name)
+                for (let i = cells.length - 1; i > 0; i--) {
+                    cells[i].remove();
+                }
+            }
+            row.insertAdjacentHTML('beforeend', newInputs.join(''));
             setupBBMCalculations(row);
         });
     }
@@ -1097,68 +1116,76 @@
     }
 
     function updatePelumasRows() {
-        const rows = document.querySelectorAll('#pelumas-tbody tr');
+        const rows = document.querySelectorAll('#pelumas-tbody tr[data-machine-id]');
         rows.forEach(row => {
-            const rowIndex = row.dataset.rowIndex;
+            const machineId = row.dataset.machineId;
             const newInputs = [];
 
             // Storage Tank inputs
             for (let i = 1; i <= pelumasStorageTankCount; i++) {
                 newInputs.push(`
-            <td class="px-4 py-2 border-r">
-                        <input type="number" step="0.1" name="pelumas[${rowIndex}][tank_${i}_cm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                        <input type="number" step="0.1" name="pelumas[${rowIndex}][tank_${i}_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
+                    <td class="px-4 py-2 border-r">
+                        <input type="number" step="0.1" name="pelumas[${machineId}][tank_${i}_cm]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </td>
+                    <td class="px-4 py-2 border-r">
+                        <input type="number" step="0.1" name="pelumas[${machineId}][tank_${i}_liter]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </td>
                 `);
             }
 
             // Total stok tank
             newInputs.push(`
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][tank_total_stok]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
-            </td>
+                <td class="px-4 py-2 border-r">
+                    <input type="number" step="0.1" name="pelumas[${machineId}][tank_total_stok]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+                </td>
             `);
 
             // Drum area inputs
             for (let i = 1; i <= pelumasDrumCount; i++) {
                 newInputs.push(`
-            <td class="px-4 py-2 border-r">
-                        <input type="number" step="0.1" name="pelumas[${rowIndex}][drum_area${i}]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
+                    <td class="px-4 py-2 border-r">
+                        <input type="number" step="0.1" name="pelumas[${machineId}][drum_area${i}]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </td>
                 `);
             }
 
             // Total stok drum
             newInputs.push(`
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][drum_total_stok]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
-            </td>
+                <td class="px-4 py-2 border-r">
+                    <input type="number" step="0.1" name="pelumas[${machineId}][drum_total_stok]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+                </td>
             `);
 
             // Remaining static inputs
             newInputs.push(`
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][total_stok_tangki]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][terima_pelumas]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="number" step="0.1" name="pelumas[${rowIndex}][total_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
-            </td>
-            <td class="px-4 py-2 border-r">
-                <input type="text" name="pelumas[${rowIndex}][jenis]" class="w-[180px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </td>
-            <td class="px-4 py-2">
+                <td class="px-4 py-2 border-r">
+                    <input type="number" step="0.1" name="pelumas[${machineId}][total_stok_tangki]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+                </td>
+                <td class="px-4 py-2 border-r">
+                    <input type="number" step="0.1" name="pelumas[${machineId}][terima_pelumas]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </td>
+                <td class="px-4 py-2 border-r">
+                    <input type="number" step="0.1" name="pelumas[${machineId}][total_pakai]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
+                </td>
+                <td class="px-4 py-2 border-r">
+                    <input type="text" name="pelumas[${machineId}][jenis]" class="w-[180px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </td>
+                <td class="px-4 py-2 border-r">
                     <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
                         <i class="fas fa-trash"></i>
-                </button>
-            </td>
+                    </button>
+                </td>
             `);
 
-            row.innerHTML = newInputs.join('');
+            // Update the row's HTML after the first cell (machine name)
+            const cells = row.querySelectorAll('td');
+            if (cells.length > 1) {
+                // Remove all cells except the first one (machine name)
+                for (let i = cells.length - 1; i > 0; i--) {
+                    cells[i].remove();
+                }
+            }
+            row.insertAdjacentHTML('beforeend', newInputs.join(''));
             setupPelumasCalculations(row);
         });
     }
@@ -1168,18 +1195,6 @@
         inputs.forEach(input => {
             input.addEventListener('input', () => calculatePelumasTotals(row));
         });
-    }
-
-    function addPelumasStorageTankPanel() {
-        pelumasStorageTankCount++;
-        initializePelumasPanels();
-        updatePelumasRows();
-    }
-
-    function addPelumasDrumPanel() {
-        pelumasDrumCount++;
-        initializePelumasPanels();
-        updatePelumasRows();
     }
 
     function addBahanKimiaRow() {
@@ -1192,7 +1207,7 @@
             <td class="px-4 py-2 border-r"><input type="number" name="bahan_kimia[${rowIndex}][stok_awal]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
             <td class="px-4 py-2 border-r"><input type="number" name="bahan_kimia[${rowIndex}][terima]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></td>
             <td class="px-4 py-2 border-r"><input type="number" name="bahan_kimia[${rowIndex}][total_pakai]" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly></td>
-            <td class="px-4 py-2"><button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button></td>
+            <td class="px-4 py-2 border-r"><button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800 text-center border-r"><i class="fas fa-trash"></i></button></td>
         `;
         tbody.appendChild(row);
         setupBahanKimiaCalculations(row);

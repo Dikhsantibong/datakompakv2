@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -57,10 +57,11 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
+            'options' => [
                 PDO::ATTR_EMULATE_PREPARES => true,
-                PDO::ATTR_STRINGIFY_FETCHES => true,
-            ]) : [],
+                PDO::ATTR_PERSISTENT => false,
+                PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+            ],
         ],
 
         'mariadb' => [

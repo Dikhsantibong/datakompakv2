@@ -8,6 +8,7 @@ use App\Http\Middleware\UserMiddleware;
 use Illuminate\Pagination\Paginator;
 use App\Models\WoBacklog;
 use App\Observers\WoBacklogObserver;
+use Illuminate\Support\Facades\DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +30,13 @@ class AppServiceProvider extends ServiceProvider
         
         Paginator::useBootstrap();
         WoBacklog::observe(WoBacklogObserver::class);
+
+        // Add connection handling
+        DB::disconnect();
+        
+        // Register shutdown function to clean up connections
+        register_shutdown_function(function () {
+            DB::disconnect();
+        });
     }
 }

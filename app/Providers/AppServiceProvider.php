@@ -31,12 +31,23 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
         WoBacklog::observe(WoBacklogObserver::class);
 
-        // Add connection handling
-        DB::disconnect();
-        
-        // Register shutdown function to clean up connections
-        register_shutdown_function(function () {
-            DB::disconnect();
+        // Improved database connection handling
+        DB::beforeExecuting(function ($query) {
+            // Close any existing connections before heavy queries
+            if (stripos($query, 'select') === 0) {
+                DB::disconnect();
+            }
         });
+
+        // Clean up connections periodically
+        if (!app()->runningInConsole()) {
+            register_shutdown_function(function () {
+                DB::disconnect();
+            });
+        }
+
+        // Set global session variables
+        DB::statement("SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION'");
+        DB::statement("SET SESSION max_prepared_stmt_count=0");
     }
 }

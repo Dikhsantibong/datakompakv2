@@ -155,8 +155,16 @@ return [
     'charset' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
     'prefix' => '',
-    'strict' => true,
+    'strict' => false,
     'engine' => null,
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::ATTR_PERSISTENT => false,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION'",
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    ],
 ],
 
 'mysql_wua_wua' => [

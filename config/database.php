@@ -151,6 +151,7 @@ return [
         PDO::ATTR_STRINGIFY_FETCHES => true,
         PDO::MYSQL_ATTR_DIRECT_QUERY => true,   
         PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 'mysql_poasia' => [

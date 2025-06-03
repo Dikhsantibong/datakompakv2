@@ -1,4 +1,4 @@
-    <?php
+<?php
 
 use Illuminate\Support\Str;
 
@@ -142,6 +142,15 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,   
+        PDO::ATTR_PERSISTENT => false
 ],
 
 'mysql_poasia' => [

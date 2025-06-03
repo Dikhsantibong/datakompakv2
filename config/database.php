@@ -192,6 +192,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 'u478221055_up_kendari' => [
@@ -228,6 +238,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 
@@ -244,6 +264,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 'mysql_langara' => [
@@ -258,6 +288,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 'mysql_lanipa_nipa' => [
@@ -272,6 +312,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 'mysql_pasarwajo' => [
@@ -286,6 +336,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 
@@ -302,6 +362,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 'mysql_raha' => [
@@ -316,6 +386,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 'mysql_wangi_wangi' => [
@@ -330,6 +410,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 
@@ -347,6 +437,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 'mysql_rongi' => [
@@ -361,6 +461,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 'mysql_sabilambo' => [
@@ -375,6 +485,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 'mysql_winning' => [
@@ -389,6 +509,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 // PLTMG Units
@@ -404,6 +534,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 'mysql_kendari' => [
@@ -418,6 +558,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 // PLTU Units
@@ -433,6 +583,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
 'mysql_moramo' => [
@@ -447,6 +607,16 @@ return [
     'prefix' => '',
     'strict' => true,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
+    'options' => [
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_STRINGIFY_FETCHES => true,
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
+    ]
 ],
 
     ],

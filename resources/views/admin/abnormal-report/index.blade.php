@@ -450,7 +450,6 @@
                 <div class="flex justify-end mt-6">
                     <button type="submit" 
                         class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#009BB9] hover:bg-[#009BB9]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009BB9] relative"
-                        onclick="return validateForm()"
                         id="submitBtn">
                         <span class="inline-flex items-center">
                             <i class="fas fa-save mr-2"></i>
@@ -536,6 +535,16 @@ function validateForm() {
         return false;
     }
 
+    return true;
+}
+
+// Handle form submission
+document.getElementById('abnormalReportForm').addEventListener('submit', function(e) {
+    if (!validateForm()) {
+        e.preventDefault();
+        return false;
+    }
+
     // Show loading spinner and disable button
     const submitBtn = document.getElementById('submitBtn');
     const loader = submitBtn.querySelector('.loader');
@@ -545,21 +554,8 @@ function validateForm() {
     loader.classList.remove('hidden');
     btnText.classList.add('opacity-50');
 
+    // Allow form submission
     return true;
-}
-
-// Reset button state when form submission fails
-document.getElementById('abnormalReportForm').addEventListener('submit', function(e) {
-    if (!validateForm()) {
-        e.preventDefault();
-        const submitBtn = document.getElementById('submitBtn');
-        const loader = submitBtn.querySelector('.loader');
-        const btnText = submitBtn.querySelector('span:not(.loader)');
-        
-        submitBtn.disabled = false;
-        loader.classList.add('hidden');
-        btnText.classList.remove('opacity-50');
-    }
 });
 
 function previewImage(input) {

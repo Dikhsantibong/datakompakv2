@@ -9,7 +9,7 @@ use Illuminate\Pagination\Paginator;
 use App\Models\WoBacklog;
 use App\Observers\WoBacklogObserver;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Events\StatementPrepared;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,15 +32,22 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
         WoBacklog::observe(WoBacklogObserver::class);
 
-        // Improved database connection handling
+        // Handle database connections
         DB::beforeExecuting(function ($query) {
-            // Close any existing connections before heavy queries
             if (stripos($query, 'select') === 0) {
                 DB::disconnect();
             }
         });
 
-        // Clean up connections periodically
+        // Listen for statement preparation
+        DB::listen(function ($query) {
+            if ($query->connectionName === 'mysql_poasia') {
+                // Force close prepared statements after each query
+                DB::connection('mysql_poasia')->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+                DB::connection('mysql_poasia')->getPdo()->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+            }
+        });
+
         if (!app()->runningInConsole()) {
             register_shutdown_function(function () {
                 DB::disconnect();

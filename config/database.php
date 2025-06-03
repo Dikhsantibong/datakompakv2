@@ -158,11 +158,11 @@ return [
     'strict' => false,
     'engine' => null,
     'options' => [
-        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::ATTR_EMULATE_PREPARES => false,
         PDO::ATTR_PERSISTENT => false,
         PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
         PDO::ATTR_STRINGIFY_FETCHES => true,
-        PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION', max_prepared_stmt_count=1000000",
+        PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION'",
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ],
 ],

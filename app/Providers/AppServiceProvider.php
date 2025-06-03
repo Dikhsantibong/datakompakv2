@@ -9,6 +9,7 @@ use Illuminate\Pagination\Paginator;
 use App\Models\WoBacklog;
 use App\Observers\WoBacklogObserver;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -47,7 +48,14 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // Set global session variables
-        DB::statement("SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION'");
-        DB::statement("SET SESSION max_prepared_stmt_count=0");
+        try {
+            DB::statement("SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION'");
+            
+            // Try to set global variable if user has privileges
+            DB::statement("SET GLOBAL max_prepared_stmt_count=1000000");
+        } catch (\Exception $e) {
+            // Log error but don't stop the application
+            \Log::warning("Could not set MySQL variables: " . $e->getMessage());
+        }
     }
 }

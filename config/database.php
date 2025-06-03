@@ -157,13 +157,15 @@ return [
     'prefix' => '',
     'strict' => false,
     'engine' => null,
+    'modes' => [
+        'NO_ENGINE_SUBSTITUTION'
+    ],
     'options' => [
-        PDO::ATTR_EMULATE_PREPARES => false,
-        PDO::ATTR_PERSISTENT => false,
+        PDO::ATTR_EMULATE_PREPARES => true,
         PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
         PDO::ATTR_STRINGIFY_FETCHES => true,
-        PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION'",
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
+        PDO::ATTR_PERSISTENT => false
     ],
 ],
 

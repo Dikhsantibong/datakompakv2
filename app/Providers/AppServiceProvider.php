@@ -10,6 +10,7 @@ use App\Models\WoBacklog;
 use App\Observers\WoBacklogObserver;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Events\StatementPrepared;
+use PDO;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,22 +36,19 @@ class AppServiceProvider extends ServiceProvider
         // Handle database connections
         DB::beforeExecuting(function ($query) {
             if (stripos($query, 'select') === 0) {
-                DB::disconnect();
+                // Force raw queries for SELECT statements
+                if (DB::connection()->getPdo()) {
+                    DB::connection()->getPdo()->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+                }
             }
         });
 
-        // Listen for statement preparation
-        DB::listen(function ($query) {
-            if ($query->connectionName === 'mysql_poasia') {
-                // Force close prepared statements after each query
-                DB::connection('mysql_poasia')->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-                DB::connection('mysql_poasia')->getPdo()->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-            }
-        });
-
+        // Handle connection cleanup
         if (!app()->runningInConsole()) {
             register_shutdown_function(function () {
-                DB::disconnect();
+                if (DB::connection()->getPdo()) {
+                    DB::disconnect();
+                }
             });
         }
 

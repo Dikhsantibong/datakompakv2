@@ -28,12 +28,27 @@ class PatrolCheck extends Model
     ];
 
     protected $casts = [
-        'time' => 'datetime',
         'condition_systems' => 'array',
         'abnormal_equipments' => 'array',
         'condition_after' => 'array',
         'sync_unit_origin' => 'string'
     ];
+
+    /**
+     * Get the time in H:i format
+     */
+    public function getTimeAttribute($value)
+    {
+        return $value ? date('H:i', strtotime($value)) : null;
+    }
+
+    /**
+     * Set the time value
+     */
+    public function setTimeAttribute($value)
+    {
+        $this->attributes['time'] = $value ? date('H:i:s', strtotime($value)) : null;
+    }
 
     public function creator()
     {

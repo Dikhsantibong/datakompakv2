@@ -115,12 +115,12 @@
                                     </div>
                                     <div>
                                         <label for="time" class="block text-sm font-medium text-gray-700 mb-1">Waktu</label>
-                                        <select id="time" name="time" required class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                            <option value="">Pilih Waktu</option>
-                                            <option value="08:00" {{ old('time') == '08:00' ? 'selected' : '' }}>08.00</option>
-                                            <option value="16:00" {{ old('time') == '16:00' ? 'selected' : '' }}>16.00</option>
-                                            <option value="22:00" {{ old('time') == '22:00' ? 'selected' : '' }}>22.00</option>
-                                        </select>
+                                        <input type="time" 
+                                            id="time" 
+                                            name="time" 
+                                            required 
+                                            class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                            value="{{ old('time') }}">
                                         @error('time')
                                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                         @enderror

@@ -74,7 +74,7 @@ class PatrolCheckController extends Controller
     {
         $request->validate([
             'shift' => 'required|in:A,B,C,D',
-            'time' => 'required|in:08:00,16:00,22:00',
+            'time' => 'required|date_format:H:i',
             'condition' => 'required|array',
             'notes' => 'required|array',
             'abnormal' => 'nullable|array',
@@ -169,7 +169,7 @@ class PatrolCheckController extends Controller
         $patrol = PatrolCheck::findOrFail($id);
         $request->validate([
             'shift' => 'required|in:A,B,C,D',
-            'time' => 'required|in:08:00,16:00,22:00',
+            'time' => 'required|date_format:H:i',
             'condition' => 'required|array',
             'notes' => 'required|array',
             'abnormal' => 'nullable|array',

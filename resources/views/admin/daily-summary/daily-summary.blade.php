@@ -203,9 +203,9 @@
                                         <th class="border-r"></th>
                                         <th class="px-4 py-2 border-r">
                                             <div class="grid grid-cols-3 gap-0">
-                                                <span class="subcol-border px-2 mr-4 text-center">Terpasang</span>
-                                                <span class="subcol-border px-2 mr-4 text-center" style="margin-left: 10px;">DMN</span>
-                                                <span class="px-2 text-center" style="margin-left: 10px;">Mampu</span>
+                                                <span class="subcol-border px-2 mr-4 text-center">Daya Terpasang</span>
+                                                <span class="subcol-border px-2 mr-4 text-center" style="margin-left: 10px;">DMN SLO</span>
+                                                <span class="px-2 text-center" style="margin-left: 10px;">Daya Mampu</span>
                                             </div>
                                         </th>
                                         <th class="px-4 py-2 border-r">

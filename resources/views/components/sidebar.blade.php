@@ -44,13 +44,13 @@
             
 
                 <!-- Monitoring Section -->
-                @if(session('unit') === 'mysql')
+                
                 <a href="{{ route('admin.monitor-kinerja') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.monitor-kinerja') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                     <i class="fas fa-chart-line w-5 h-5"></i>
                     <span class="ml-3 text-sm">Monitoring Kinerja UP Kendari</span>
                 </a>
-                @endif
+               
                 <a href="{{ route('admin.machine-monitor') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.machine-monitor') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
                     <i class="fas fa-cogs w-5 h-5"></i>

@@ -210,12 +210,12 @@
                                             <tr>
                                                 <td class="border px-4 py-2 text-center">1</td>
                                                 <td class="border px-4 py-2">
-                                                    <input type="text" name="abnormal[0][equipment]" class="form-input w-full rounded-md">
+                                                    <input type="text" name="abnormal[0][equipment]" class="form-input w-150px rounded-md">
                                                 </td>
                                                 <td class="border px-4 py-2">
                                                     <textarea 
                                                         name="abnormal[0][condition]" 
-                                                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        class="w-200px px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         rows="3"
                                                         placeholder="Masukkan kondisi awal">{{ $abnormal['condition'] ?? '' }}</textarea>
                                                 </td>
@@ -240,14 +240,14 @@
                                                 <td class="border px-4 py-2">
                                                     <textarea 
                                                         name="condition_after[0][condition]" 
-                                                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        class="w-200px px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         rows="3"
                                                         placeholder="Masukkan kondisi akhir">{{ $patrol->condition_after[$index]['condition'] ?? '' }}</textarea>
                                                 </td>
                                                 <td class="border px-4 py-2">
                                                     <textarea 
                                                         name="condition_after[0][notes]" 
-                                                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        class="w-200 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         rows="3"
                                                         placeholder="Masukkan keterangan">{{ $patrol->condition_after[$index]['notes'] ?? '' }}</textarea>
                                                 </td>

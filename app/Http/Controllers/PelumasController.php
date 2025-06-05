@@ -79,20 +79,35 @@ class PelumasController extends Controller
             ->first();
 
         if (!$previousBalance) {
+            // Jika tidak ada data sebelumnya, validasi saldo awal harus diisi
             $request->validate([
                 'saldo_awal' => 'required|numeric|min:0',
             ]);
             $saldoAwal = $request->saldo_awal;
             $isOpeningBalance = true;
         } else {
+            // Jika ada data sebelumnya, gunakan saldo akhir sebelumnya
             $saldoAwal = $previousBalance->saldo_akhir;
             $isOpeningBalance = false;
         }
 
+        // Hitung saldo akhir
         $saldoAkhir = $saldoAwal + $request->penerimaan - $request->pemakaian;
 
         try {
             DB::beginTransaction();
+
+            $data = [
+                'tanggal' => $request->tanggal,
+                'unit_id' => $request->unit_id,
+                'jenis_pelumas' => $request->jenis_pelumas,
+                'saldo_awal' => $saldoAwal,
+                'penerimaan' => $request->penerimaan,
+                'pemakaian' => $request->pemakaian,
+                'saldo_akhir' => $saldoAkhir,
+                'is_opening_balance' => $isOpeningBalance,
+                'catatan_transaksi' => $request->catatan_transaksi
+            ];
 
             // Handle file upload
             if ($request->hasFile('document')) {
@@ -102,18 +117,7 @@ class PelumasController extends Controller
                 $data['document'] = $fileName;
             }
 
-            Pelumas::create([
-                'tanggal' => $request->tanggal,
-                'unit_id' => $request->unit_id,
-                'jenis_pelumas' => $request->jenis_pelumas,
-                'saldo_awal' => $saldoAwal,
-                'penerimaan' => $request->penerimaan,
-                'pemakaian' => $request->pemakaian,
-                'saldo_akhir' => $saldoAkhir,
-                'is_opening_balance' => $isOpeningBalance,
-                'catatan_transaksi' => $request->catatan_transaksi,
-                'document' => isset($data['document']) ? $data['document'] : null
-            ]);
+            Pelumas::create($data);
 
             DB::commit();
             return redirect()->route('admin.energiprimer.pelumas')
@@ -155,7 +159,18 @@ class PelumasController extends Controller
         try {
             DB::beginTransaction();
 
+            // Hitung saldo akhir
             $saldoAkhir = $pelumas->saldo_awal + $request->penerimaan - $request->pemakaian;
+
+            $data = [
+                'tanggal' => $request->tanggal,
+                'unit_id' => $request->unit_id,
+                'jenis_pelumas' => $request->jenis_pelumas,
+                'penerimaan' => $request->penerimaan,
+                'pemakaian' => $request->pemakaian,
+                'saldo_akhir' => $saldoAkhir,
+                'catatan_transaksi' => $request->catatan_transaksi
+            ];
 
             // Handle file upload
             if ($request->hasFile('document')) {
@@ -163,23 +178,14 @@ class PelumasController extends Controller
                 if ($pelumas->document) {
                     Storage::delete('public/documents/pelumas/' . $pelumas->document);
                 }
-                
+
                 $file = $request->file('document');
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $file->storeAs('public/documents/pelumas', $fileName);
                 $data['document'] = $fileName;
             }
 
-            $pelumas->update([
-                'tanggal' => $request->tanggal,
-                'unit_id' => $request->unit_id,
-                'jenis_pelumas' => $request->jenis_pelumas,
-                'penerimaan' => $request->penerimaan,
-                'pemakaian' => $request->pemakaian,
-                'saldo_akhir' => $saldoAkhir,
-                'catatan_transaksi' => $request->catatan_transaksi,
-                'document' => isset($data['document']) ? $data['document'] : null
-            ]);
+            $pelumas->update($data);
 
             DB::commit();
             return redirect()->route('admin.energiprimer.pelumas')

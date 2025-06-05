@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Events\BahanBakarUpdated;
+use Illuminate\Support\Facades\Log;
 
 class BahanBakar extends Model
 {
+    public static $isSyncing = false;
+
     protected $table = 'bahan_bakar';
     
     protected $fillable = [
@@ -34,8 +38,65 @@ class BahanBakar extends Model
     {
         return $this->belongsTo(PowerPlant::class, 'unit_id');
     }
+
     public function getConnectionName()
     {
         return session('unit', 'mysql');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($bahanBakar) {
+            try {
+                if (self::$isSyncing) return;
+
+                $currentSession = session('unit', 'mysql');
+                
+                // Trigger sync event
+                event(new BahanBakarUpdated($bahanBakar, 'create'));
+                
+            } catch (\Exception $e) {
+                Log::error('Error in BahanBakar sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
+
+        static::updated(function ($bahanBakar) {
+            try {
+                if (self::$isSyncing) return;
+
+                $currentSession = session('unit', 'mysql');
+                
+                // Trigger sync event
+                event(new BahanBakarUpdated($bahanBakar, 'update'));
+                
+            } catch (\Exception $e) {
+                Log::error('Error in BahanBakar sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
+
+        static::deleting(function ($bahanBakar) {
+            try {
+                if (self::$isSyncing) return;
+
+                $currentSession = session('unit', 'mysql');
+                
+                // Trigger sync event
+                event(new BahanBakarUpdated($bahanBakar, 'delete'));
+                
+            } catch (\Exception $e) {
+                Log::error('Error in BahanBakar sync:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        });
     }
 } 

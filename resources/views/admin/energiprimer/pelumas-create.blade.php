@@ -62,7 +62,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Tanggal</label>
-                                    <input type="date" name="tanggal" required
+                                    <input type="date" name="tanggal" id="tanggal" required
                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('tanggal') border-red-500 @enderror"
                                            value="{{ old('tanggal') }}">
                                     @error('tanggal')
@@ -72,8 +72,8 @@
                                 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Unit</label>
-                                    <select name="unit_id" required
-                                            class="p-2 mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('unit_id') border-red-500 @enderror">
+                                    <select name="unit_id" id="unit_id" required
+                                            class="p-2 mt-1 block w-full h-10 rounded-md  shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('unit_id') border-red-500 @enderror">
                                         <option value="">Pilih Unit</option>
                                         @foreach($units as $unit)
                                             <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
@@ -88,10 +88,9 @@
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Jenis Pelumas</label>
-                                    <input type="text" name="jenis_pelumas" required
-                                           class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('jenis_pelumas') border-red-500 @enderror"
-                                           value="{{ old('jenis_pelumas') }}"
-                                           placeholder="Masukkan jenis pelumas">
+                                    <input type="text" name="jenis_pelumas" id="jenis_pelumas" required
+                                           class="mt-1 block w-full rounded-md  shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('jenis_pelumas') border-red-500 @enderror"
+                                           value="{{ old('jenis_pelumas') }}">
                                     @error('jenis_pelumas')
                                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                                     @enderror
@@ -182,7 +181,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const unitSelect = document.getElementById('unit_id');
-    const jenisPelumasInput = document.querySelector('input[name="jenis_pelumas"]');
+    const jenisPelumasInput = document.getElementById('jenis_pelumas');
     const tanggalInput = document.getElementById('tanggal');
     const saldoAwalContainer = document.getElementById('saldo-awal-container');
     const saldoAwalInput = document.getElementById('saldo_awal');
@@ -191,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!unitSelect.value || !jenisPelumasInput.value || !tanggalInput.value) return;
 
         try {
-            const response = await fetch(`/api/check-previous-balance-pelumas?unit_id=${unitSelect.value}&jenis_pelumas=${jenisPelumasInput.value}&tanggal=${tanggalInput.value}`);
+            const response = await fetch(`/api/check-previous-pelumas-balance?unit_id=${unitSelect.value}&jenis_pelumas=${jenisPelumasInput.value}&tanggal=${tanggalInput.value}`);
             const data = await response.json();
 
             if (data.has_previous) {

@@ -87,5 +87,14 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\LaporanKitUpdated::class => [
             \App\Listeners\SyncLaporanKitToUpKendari::class,
         ],
+        'App\Events\BahanBakarUpdated' => [
+            'App\Listeners\SyncBahanBakarToUpKendari',
+        ],
+        'App\Events\PelumasUpdated' => [
+            'App\Listeners\SyncPelumasToUpKendari',
+        ],
+        'App\Events\BahanKimiaUpdated' => [
+            'App\Listeners\SyncBahanKimiaToUpKendari',
+        ],
     ];
 } 

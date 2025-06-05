@@ -56,7 +56,7 @@ class FlmController extends Controller
                     'mysql_wajo' => 'PLTD WAJO',
                     'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
                     'mysql_rongi' => 'PLTD RONGI',
-                    'mysql_sabilambo' => 'PLTD SABILAMBO',
+                    'mysql_sabilambo' => 'PLTM SABILAMBO',
                     'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
                     'mysql_pltmg_kendari' => 'PLTD KENDARI',
                     'mysql_baruta' => 'PLTD BARUTA',

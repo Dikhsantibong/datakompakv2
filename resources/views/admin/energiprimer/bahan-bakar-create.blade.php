@@ -151,10 +151,10 @@
                                     <div class="mt-1 flex items-center">
                                         <input type="file" name="document" 
                                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 @error('document') border-red-500 @enderror"
-                                               accept=".pdf,.doc,.docx,.xls,.xlsx">
+                                               accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
                                     </div>
                                     <p class="mt-1 text-sm text-gray-500">
-                                        Format yang diizinkan: PDF, DOC, DOCX, XLS, XLSX (Maks. 2MB)
+                                        Format yang diizinkan: PDF, DOC, DOCX, XLS, XLSX, JPG, JPEG, PNG (Maks. 2MB)
                                     </p>
                                     @error('document')
                                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>

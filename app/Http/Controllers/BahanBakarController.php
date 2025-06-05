@@ -68,7 +68,7 @@ class BahanBakarController extends Controller
             'pemakaian' => 'required|numeric|min:0',
             'hop' => 'required|numeric|min:0',
             'catatan_transaksi' => 'nullable|string|max:1000',
-            'document' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:2048'
+            'document' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048'
         ]);
 
         // Cek apakah ini data pertama untuk unit dan jenis BBM tersebut
@@ -150,7 +150,7 @@ class BahanBakarController extends Controller
             'pemakaian' => 'required|numeric|min:0',
             'hop' => 'required|numeric|min:0',
             'catatan_transaksi' => 'nullable|string|max:1000',
-            'document' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:2048'
+            'document' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048'
         ]);
 
         $bahanBakar = BahanBakar::findOrFail($id);

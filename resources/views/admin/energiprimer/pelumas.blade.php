@@ -229,11 +229,28 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
                                             @if($item->document)
-                                                <a href="{{ Storage::url('documents/pelumas/' . $item->document) }}" 
-                                                   target="_blank"
-                                                   class="text-blue-600 hover:text-blue-900">
-                                                    <i class="fas fa-file-download mr-1"></i> Download
-                                                </a>
+                                                @php
+                                                    $extension = pathinfo($item->document, PATHINFO_EXTENSION);
+                                                    $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png']);
+                                                @endphp
+                                                @if($isImage)
+                                                    <a href="{{ Storage::url('documents/pelumas/' . $item->document) }}" 
+                                                       target="_blank"
+                                                       class="group relative inline-block">
+                                                        <img src="{{ Storage::url('documents/pelumas/' . $item->document) }}" 
+                                                             alt="Preview" 
+                                                             class="h-8 w-8 object-cover rounded">
+                                                        <div class="hidden group-hover:block absolute z-10 p-2 bg-gray-800 text-white text-xs rounded mt-1">
+                                                            Klik untuk melihat gambar
+                                                        </div>
+                                                    </a>
+                                                @else
+                                                    <a href="{{ Storage::url('documents/pelumas/' . $item->document) }}" 
+                                                       target="_blank"
+                                                       class="text-blue-600 hover:text-blue-900">
+                                                        <i class="fas fa-file-download mr-1"></i> Download
+                                                    </a>
+                                                @endif
                                             @else
                                                 <span class="text-gray-400">Tidak ada dokumen</span>
                                             @endif

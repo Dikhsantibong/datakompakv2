@@ -283,7 +283,7 @@
                                                class="text-red-600 hover:text-red-900 mr-3" 
                                                title="Export PDF">
                                                 <i class="fas fa-file-pdf"></i>PDF
-                                            </a>
+                                            </a>    
                                             <form action="{{ route('admin.patrol-check.destroy', $patrol->id ?? 0) }}" 
                                                   method="POST" 
                                                   class="inline"

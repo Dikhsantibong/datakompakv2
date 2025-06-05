@@ -440,32 +440,8 @@
                                         <td class="px-4 py-3 border-r">
                                             <div class="px-2">
                                                 @php
-                                                    // Get the first day of current month
-                                                    $firstDayOfMonth = \Carbon\Carbon::now()->startOfMonth();
-                                                    $today = \Carbon\Carbon::now();
-                                                    $dayOfMonth = $today->day;
-                                                    
-                                                    // Get the last record for this machine from previous month
-                                                    $lastMonthRecord = \App\Models\DailySummary::where('power_plant_id', $machine->power_plant_id)
-                                                        ->where('machine_name', $machine->name)
-                                                        ->whereMonth('created_at', $firstDayOfMonth->copy()->subMonth()->month)
-                                                        ->orderBy('created_at', 'desc')
-                                                        ->first();
-                                                    
-                                                    // Get all records for this machine in current month
-                                                    $currentMonthRecords = \App\Models\DailySummary::where('power_plant_id', $machine->power_plant_id)
-                                                        ->where('machine_name', $machine->name)
-                                                        ->whereMonth('created_at', $today->month)
-                                                        ->orderBy('created_at', 'desc')
-                                                        ->get();
-
-                                                    // Calculate period hours - always 24 hours per day
+                                                    // Set period hours to always 24
                                                     $periodHours = 24;
-
-                                                    // If there are records this month, calculate cumulative hours
-                                                    if ($currentMonthRecords->isNotEmpty()) {
-                                                        $periodHours = $dayOfMonth * 24; // Jumlah hari dalam bulan ini * 24
-                                                    }
                                                 @endphp
                                                 <input type="number" 
                                                        step="0.01" 

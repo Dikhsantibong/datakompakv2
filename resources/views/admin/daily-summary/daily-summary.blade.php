@@ -383,10 +383,11 @@
                                             <div class="px-2">
                                                 <input type="number" step="0.01" 
                                                        name="data[{{ $machine->id }}][kit_ratio]"
-                                                       class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                       class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                        value="{{ old('data.'.$machine->id.'.kit_ratio',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->kit_ratio : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->kit_ratio : '') }}"
+                                                       readonly>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
@@ -422,18 +423,20 @@
                                                 <div class="input-group">
                                                     <input type="number" step="0.001" 
                                                            name="data[{{ $machine->id }}][transformer_losses]"
-                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                            value="{{ old('data.'.$machine->id.'.transformer_losses',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->transformer_losses : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->transformer_losses : '') }}"
+                                                           readonly>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" 
                                                            name="data[{{ $machine->id }}][usage_percentage]"
-                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                            value="{{ old('data.'.$machine->id.'.usage_percentage',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->usage_percentage : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->usage_percentage : '') }}"
+                                                           readonly>
                                                 </div>
                                             </div>
                                         </td>
@@ -556,53 +559,59 @@
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" 
                                                            name="data[{{ $machine->id }}][eaf]"
-                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                            value="{{ old('data.'.$machine->id.'.eaf',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->eaf : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->eaf : '') }}"
+                                                           readonly>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" 
                                                            name="data[{{ $machine->id }}][sof]"
-                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                            value="{{ old('data.'.$machine->id.'.sof',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->sof : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->sof : '') }}"
+                                                           readonly>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" 
                                                            name="data[{{ $machine->id }}][efor]"
-                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                            value="{{ old('data.'.$machine->id.'.efor',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->efor : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->efor : '') }}"
+                                                           readonly>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="1" 
                                                            name="data[{{ $machine->id }}][sdof]"
-                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                            value="{{ old('data.'.$machine->id.'.sdof',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->sdof : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->sdof : '') }}"
+                                                           readonly>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3">
                                             <div class="px-2">
                                                 <input type="number" step="0.01" name="data[{{ $machine->id }}][ncf]"
-                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                        value="{{ old('data.'.$machine->id.'.ncf',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->ncf : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->ncf : '') }}"
+                                                       readonly>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
                                             <div class="px-2">
                                                 <input type="number" step="0.01" name="data[{{ $machine->id }}][nof]"
-                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                       class="block w-full  border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                        value="{{ old('data.'.$machine->id.'.nof',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->nof : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->nof : '') }}"
+                                                       readonly>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border-r">
@@ -651,10 +660,11 @@
                                                 <div class="input-group border-r border-gray-300">
                                                     <input type="number" step="0.01" 
                                                            name="data[{{ $machine->id }}][total_fuel]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                            value="{{ old('data.'.$machine->id.'.total_fuel',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->total_fuel : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->total_fuel : '') }}"
+                                                           readonly>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" 
@@ -727,10 +737,11 @@
                                                 <div class="input-group px-0.5">
                                                     <input type="number" step="0.01" 
                                                            name="data[{{ $machine->id }}][total_oil]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                            value="{{ old('data.'.$machine->id.'.total_oil',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->total_oil : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->total_oil : '') }}"
+                                                           readonly>
                                                 </div>
                                             </div>
                                         </td>
@@ -739,10 +750,11 @@
                                                 <div class="input-group border-r border-gray-300 px-0.5">
                                                     <input type="number" step="0.001" 
                                                            name="data[{{ $machine->id }}][sfc_scc]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                            value="{{ old('data.'.$machine->id.'.sfc_scc',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->sfc_scc : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->sfc_scc : '') }}"
+                                                           readonly>
                                                 </div>
                                                 <div class="input-group border-r border-gray-300 px-0.5">
                                                     <input type="number" step="0.001" 
@@ -755,10 +767,11 @@
                                                 <div class="input-group px-0.5">
                                                     <input type="number" step="0.001" 
                                                            name="data[{{ $machine->id }}][slc]"
-                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
+                                                           class="block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm text-center formula-field"
                                                            value="{{ old('data.'.$machine->id.'.slc',
                                                                 isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->slc : '') }}">
+                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->slc : '') }}"
+                                                           readonly>
                                                 </div>
                                             </div>
                                         </td>
@@ -912,10 +925,21 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 .w-keterangan {
     min-width: 150px !important;
-
 }
 .text-pelumas {
     font-size: 11px !important;
+}
+
+/* Tambahkan style untuk kolom rumus */
+.formula-field {
+    background-color: #f0f7ff !important; /* Warna biru muda */
+    cursor: not-allowed !important;
+}
+
+.formula-field:focus {
+    background-color: #f0f7ff !important;
+    border-color: #d1d5db !important;
+    box-shadow: none !important;
 }
 
 /* Remove default arrow in modern browsers */

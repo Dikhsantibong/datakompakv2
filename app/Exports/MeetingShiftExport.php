@@ -26,12 +26,14 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
 
     protected $meetingShift;
     protected $sectionRows;
+    protected $signatureStartRow;
 
     public function __construct(MeetingShift $meetingShift)
     {
         $this->meetingShift = $meetingShift;
         // Define section header rows (will be populated after view rendering)
         $this->sectionRows = [];
+        $this->signatureStartRow = null;
     }
 
     public function view(): View
@@ -251,6 +253,15 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
                 $lastRow = $sheet->getHighestRow();
                 $lastColumn = $sheet->getHighestColumn();
 
+                // Find signature section row
+                for ($row = 1; $row <= $lastRow; $row++) {
+                    $cellValue = $sheet->getCell("A{$row}")->getValue();
+                    if ($cellValue === 'Dibuat Oleh') {
+                        $this->signatureStartRow = $row;
+                        break;
+                    }
+                }
+
                 // Set page orientation to landscape
                 $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
                 
@@ -266,6 +277,39 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
                         ]
                     ]
                 ]);
+
+                // Style signature section
+                if ($this->signatureStartRow) {
+                    // Style for signature headers
+                    $sheet->getStyle("A{$this->signatureStartRow}:F{$this->signatureStartRow}")->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 11
+                        ],
+                        'alignment' => [
+                            'horizontal' => Alignment::HORIZONTAL_CENTER,
+                            'vertical' => Alignment::VERTICAL_CENTER
+                        ],
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => Border::BORDER_THIN,
+                                'color' => ['rgb' => '000000']
+                            ]
+                        ]
+                    ]);
+
+                    // Style for signature spaces
+                    $signatureSpaceRow = $this->signatureStartRow + 1;
+                    $sheet->getStyle("A{$signatureSpaceRow}:F{$signatureSpaceRow}")->applyFromArray([
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => Border::BORDER_THIN,
+                                'color' => ['rgb' => '000000']
+                            ]
+                        ]
+                    ]);
+                    $sheet->getRowDimension($signatureSpaceRow)->setRowHeight(80);
+                }
 
                 // Set print area
                 $sheet->getPageSetup()->setPrintArea('A1:' . $lastColumn . $lastRow);

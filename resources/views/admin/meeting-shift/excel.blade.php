@@ -138,7 +138,19 @@
     @endforeach
     <tr><td colspan="6" style="height:15px;"></td></tr>
 
+    <!-- Signature Section -->
+    <tr><td colspan="6" style="height:30px;"></td></tr>
+    <tr>
+        <td colspan="3" style="text-align:center; font-weight:bold; border:1px solid #000;">Dibuat Oleh</td>
+        <td colspan="3" style="text-align:center; font-weight:bold; border:1px solid #000;">Diterima Oleh</td>
+    </tr>
+    <tr>
+        <td colspan="3" style="height:80px; border:1px solid #000;"></td>
+        <td colspan="3" style="height:80px; border:1px solid #000;"></td>
+    </tr>
+
     <!-- Footer -->
+    <tr><td colspan="6" style="height:15px;"></td></tr>
     <tr class="footer">
         <td colspan="6" style="font-size:11px; text-align:right; color:#555;">Dibuat oleh: {{ $meetingShift->creator->name }} | Tanggal: {{ $meetingShift->created_at->format('d/m/Y H:i') }}</td>
     </tr>

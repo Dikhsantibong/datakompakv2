@@ -130,7 +130,7 @@
                                         </label>
                                         <select id="timeSelector" 
                                                 class="w-full md:w-32 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50 transition duration-150 ease-in-out h-10">
-                                            @for ($hour = 0; $hour < 24; $hour++)
+                                            @for ($hour = 0; $hour <= 24; $hour++)
                                                 <option value="{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00" class="text-center">
                                                     {{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00
                                                 </option>

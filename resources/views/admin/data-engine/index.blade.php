@@ -9,7 +9,7 @@
         <div class="bg-white rounded-lg p-6 w-96">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Pilih Jam Laporan</h3>
             <div class="grid grid-cols-4 gap-2 mb-4">
-                @for ($hour = 0; $hour < 24; $hour++)
+                @for ($hour = 0; $hour <= 24; $hour++)
                     <button 
                         class="time-button px-3 py-2 text-sm font-medium rounded-md hover:bg-blue-50 border"
                         data-time="{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00">
@@ -188,7 +188,7 @@
                                         <select name="time" 
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Jam</option>
-                                            @for ($hour = 0; $hour < 24; $hour++)
+                                            @for ($hour = 0; $hour <= 24; $hour++)
                                                 <option value="{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00:00" 
                                                         {{ request('time') == str_pad($hour, 2, '0', STR_PAD_LEFT) . ':00:00' ? 'selected' : '' }}>
                                                     {{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00

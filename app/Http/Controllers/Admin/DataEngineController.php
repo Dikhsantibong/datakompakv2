@@ -24,6 +24,12 @@ class DataEngineController extends Controller
             $date = $request->date ?? now()->format('Y-m-d');
             $time = $request->time ?? null;
             
+            // Handle 24:00 time by converting it to 00:00 of the next day
+            if ($time === '24:00:00') {
+                $time = '00:00:00';
+                $date = Carbon::parse($date)->addDay()->format('Y-m-d');
+            }
+            
             // Get all power plants for the filter dropdown
             $allPowerPlants = PowerPlant::orderBy('name')->get();
             
@@ -95,6 +101,13 @@ class DataEngineController extends Controller
     {
         try {
             $time = request('time');
+            
+            // Handle 24:00 time by converting it to 00:00 of the next day
+            if ($time === '24:00:00') {
+                $time = '00:00:00';
+                $date = Carbon::parse($date)->addDay()->format('Y-m-d');
+            }
+            
             $powerPlants = PowerPlant::with(['machines' => function ($query) use ($date) {
                 $query->orderBy('name')
                     ->with(['latestOperation' => function($q) use ($date) {
@@ -157,6 +170,16 @@ class DataEngineController extends Controller
             $machines = $request->input('machines', []);
             $powerPlants = $request->input('power_plants', []);
             $currentSession = session('unit', 'mysql');
+
+            // Handle 24:00 time entries by converting to 00:00 next day
+            foreach ($machines as &$machineData) {
+                if (isset($machineData['time']) && $machineData['time'] === '24:00') {
+                    $machineData['time'] = '00:00';
+                    $machineData['date'] = Carbon::parse($date)->addDay()->format('Y-m-d');
+                } else {
+                    $machineData['date'] = $date;
+                }
+            }
 
             Log::info('Starting DataEngine update', [
                 'date' => $date,

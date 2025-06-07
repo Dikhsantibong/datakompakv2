@@ -54,22 +54,29 @@ class MeetingShiftAuxiliaryEquipment extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $equipment->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'equipment_id' => $equipment->id,
+                            'meeting_shift_id' => $equipment->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
-                        'id' => $equipment->id,
-                        'meeting_shift_id' => $equipment->meeting_shift_id,
+                        'meeting_shift_id' => $parentId,
                         'name' => $equipment->name,
-                        'status' => $equipment->status,
-                        'keterangan' => $equipment->keterangan,
+                        'status' => is_string($equipment->status) ? $equipment->status : json_encode($equipment->status),
+                        'keterangan' => $equipment->keterangan ?? '',
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Use updateOrInsert instead of insert
-                    DB::connection('mysql')->table('auxiliary_equipment_statuses')
-                        ->updateOrInsert(
-                            ['id' => $equipment->id],
-                            $data
-                        );
+                    // Use insert to get a new ID
+                    DB::connection('mysql')->table('auxiliary_equipment_statuses')->insert($data);
 
                     self::$isSyncing = false;
                 }
@@ -77,7 +84,10 @@ class MeetingShiftAuxiliaryEquipment extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftAuxiliaryEquipment sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $equipment->meeting_shift_id
                 ]);
             }
         });
@@ -92,17 +102,29 @@ class MeetingShiftAuxiliaryEquipment extends Model
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
                     
+                    // Get mapped parent ID from session
+                    $parentId = session('meeting_shift_id_map.' . $equipment->meeting_shift_id);
+
+                    if (!$parentId) {
+                        Log::error('Parent MeetingShift mapping not found', [
+                            'equipment_id' => $equipment->id,
+                            'meeting_shift_id' => $equipment->meeting_shift_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
+
                     $data = [
+                        'meeting_shift_id' => $parentId,
                         'name' => $equipment->name,
-                        'status' => $equipment->status,
-                        'keterangan' => $equipment->keterangan,
+                        'status' => is_string($equipment->status) ? $equipment->status : json_encode($equipment->status),
+                        'keterangan' => $equipment->keterangan ?? '',
+                        'created_at' => now(),
                         'updated_at' => now()
                     ];
 
-                    // Update in mysql database
-                    DB::connection('mysql')->table('auxiliary_equipment_statuses')
-                        ->where('id', $equipment->id)
-                        ->update($data);
+                    // Insert new record instead of update
+                    DB::connection('mysql')->table('auxiliary_equipment_statuses')->insert($data);
 
                     self::$isSyncing = false;
                 }
@@ -110,7 +132,10 @@ class MeetingShiftAuxiliaryEquipment extends Model
                 self::$isSyncing = false;
                 Log::error('Error in MeetingShiftAuxiliaryEquipment sync:', [
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $data ?? null,
+                    'parent_id' => $parentId ?? null,
+                    'original_id' => $equipment->meeting_shift_id
                 ]);
             }
         });

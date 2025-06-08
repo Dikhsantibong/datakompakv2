@@ -178,35 +178,35 @@
                                                                     <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="operasi"
                                                                         class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
                                                                         data-machine-index="{{ $index }}"
-                                                                        onchange="validateMachineStatus({{ $index }})">
+                                                                        onchange="handleMachineStatusChange(this, {{ $index }})">
                                                                     <label class="ml-2 text-sm text-gray-700">Operasi</label>
                                                                 </div>
                                                                 <div class="flex items-center">
                                                                     <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="standby"
                                                                         class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
                                                                         data-machine-index="{{ $index }}"
-                                                                        onchange="validateMachineStatus({{ $index }})">
+                                                                        onchange="handleMachineStatusChange(this, {{ $index }})">
                                                                     <label class="ml-2 text-sm text-gray-700">Standby</label>
                                                                 </div>
                                                                 <div class="flex items-center">
                                                                     <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="har_rutin"
                                                                         class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
                                                                         data-machine-index="{{ $index }}"
-                                                                        onchange="validateMachineStatus({{ $index }})">
+                                                                        onchange="handleMachineStatusChange(this, {{ $index }})">
                                                                     <label class="ml-2 text-sm text-gray-700">HAR Rutin</label>
                                                                 </div>
                                                                 <div class="flex items-center">
                                                                     <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="har_nonrutin"
                                                                         class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
                                                                         data-machine-index="{{ $index }}"
-                                                                        onchange="validateMachineStatus({{ $index }})">
+                                                                        onchange="handleMachineStatusChange(this, {{ $index }})">
                                                                     <label class="ml-2 text-sm text-gray-700">HAR Non-Rutin</label>
                                                                 </div>
                                                                 <div class="flex items-center">
                                                                     <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="gangguan"
                                                                         class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
                                                                         data-machine-index="{{ $index }}"
-                                                                        onchange="validateMachineStatus({{ $index }})">
+                                                                        onchange="handleMachineStatusChange(this, {{ $index }})">
                                                                     <label class="ml-2 text-sm text-gray-700">Gangguan</label>
                                                                 </div>
                                                             </div>
@@ -248,22 +248,26 @@
                                             <div class="mt-2 space-y-2">
                                                 <div class="flex items-center">
                                                     <input type="checkbox" name="auxiliary_equipment[0][status][]" value="normal"
-                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded">
+                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded"
+                                                        onchange="handleAuxiliaryStatusChange(this, 0)">
                                                     <label class="ml-2 text-sm text-gray-700">Normal</label>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <input type="checkbox" name="auxiliary_equipment[0][status][]" value="abnormal"
-                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded">
+                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded"
+                                                        onchange="handleAuxiliaryStatusChange(this, 0)">
                                                     <label class="ml-2 text-sm text-gray-700">Abnormal</label>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <input type="checkbox" name="auxiliary_equipment[0][status][]" value="gangguan"
-                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded">
+                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded"
+                                                        onchange="handleAuxiliaryStatusChange(this, 0)">
                                                     <label class="ml-2 text-sm text-gray-700">Gangguan</label>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <input type="checkbox" name="auxiliary_equipment[0][status][]" value="flm"
-                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded">
+                                                        class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded"
+                                                        onchange="handleAuxiliaryStatusChange(this, 0)">
                                                     <label class="ml-2 text-sm text-gray-700">FLM</label>
                                                 </div>
                                             </div>
@@ -519,13 +523,19 @@ function addAlatBantu() {
     const container = document.getElementById('alat-bantu-container');
     const template = document.querySelector('.alat-bantu-item').cloneNode(true);
     
-    // Update input names
+    // Update input names and add event listeners
     template.querySelectorAll('input, textarea').forEach(input => {
-        input.name = input.name.replace('[0]', `[${alatBantuCount}]`);
-        if (input.type !== 'checkbox') {
-            input.value = '';
-        } else {
+        const oldIndex = input.name.match(/\[(\d+)\]/)[1];
+        const newName = input.name.replace(`[${oldIndex}]`, `[${alatBantuCount}]`);
+        input.name = newName;
+        
+        if (input.type === 'checkbox') {
             input.checked = false;
+            input.onchange = function() {
+                handleAuxiliaryStatusChange(this, alatBantuCount);
+            };
+        } else {
+            input.value = '';
         }
     });
     
@@ -591,6 +601,24 @@ function validateMachineStatus(index) {
     } else {
         errorElement.classList.add('hidden');
     }
+}
+
+// Add function to handle single checkbox selection
+function handleMachineStatusChange(checkbox, index) {
+    const checkboxes = document.querySelectorAll(`input[name^="machine_statuses[${index}][status]"]`);
+    
+    // If the clicked checkbox is being checked
+    if (checkbox.checked) {
+        // Uncheck all other checkboxes in the same group
+        checkboxes.forEach(cb => {
+            if (cb !== checkbox) {
+                cb.checked = false;
+            }
+        });
+    }
+    
+    // Run the validation
+    validateMachineStatus(index);
 }
 
 // Validate all machine statuses before form submission
@@ -667,6 +695,20 @@ document.getElementById('meetingShiftForm').addEventListener('submit', function(
         submitButton.disabled = false;
     }
 });
+
+function handleAuxiliaryStatusChange(checkbox, index) {
+    const checkboxes = document.querySelectorAll(`input[name="auxiliary_equipment[${index}][status][]"]`);
+    
+    // If the clicked checkbox is being checked
+    if (checkbox.checked) {
+        // Uncheck all other checkboxes in the same group
+        checkboxes.forEach(cb => {
+            if (cb !== checkbox) {
+                cb.checked = false;
+            }
+        });
+    }
+}
 </script>
 @endpush
 

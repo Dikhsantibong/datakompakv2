@@ -77,6 +77,10 @@
                                     Shift {{ $meetingShift->current_shift }}
                                 </div>
                                 <div class="flex items-center">
+                                    <i class="fas fa-sign-in-alt mr-2 text-yellow-500"></i>
+                                    Jam Masuk: {{ $meetingShift->created_at->format('H:i') }}
+                                </div>
+                                <div class="flex items-center">
                                     <i class="fas fa-user mr-2 text-purple-500"></i>
                                     {{ $meetingShift->machineStatuses->first()->machine->powerPlant->name }}
                                 </div>

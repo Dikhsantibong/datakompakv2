@@ -18,193 +18,96 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\MachineLog;
+use Illuminate\Support\Collection;
+use Illuminate\View\View;
 
 class MachineMonitorController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        // Get selected unit source from request
-        $selectedUnitSource = $request->input('unit_source');
-        
-        // Get all power plants for the filter dropdown
         $powerPlants = PowerPlant::all();
-
-        // Base query for machines
-        $machinesQuery = Machine::with(['issues', 'metrics']);
+        $machines = Machine::all();
         
-        // If a specific unit is selected, switch to that database and filter
-        if ($selectedUnitSource) {
-            // Get the database connection for the selected unit
-            $dbConnection = PowerPlant::getConnectionByUnitSource($selectedUnitSource);
-            
-            // Set the database connection for the Machine model
-            config(['database.default' => $dbConnection]);
-            
-            // Filter machines by unit_source
-            $machinesQuery->where('unit_source', $selectedUnitSource);
-        }
+        // Get latest logs with single query
+        $latestLogs = MachineLog::with('machine')
+            ->whereIn('id', function($query) {
+                $query->selectRaw('MAX(id)')
+                    ->from('machine_logs')
+                    ->groupBy('machine_id');
+            })
+            ->get();
 
-        // Execute the query
-        $machines = $machinesQuery->get();
-        
-        // Calculate efficiency data
-        $efficiencyData = $machines->map(function ($machine) {
-            return [
-                'name' => $machine->name,
-                'efficiency' => $machine->metrics->avg('efficiency') ?? 0
-            ];
-        });
-
-        // Calculate health categories
-        $healthCategories = $machines->map(function ($machine) {
-            return [
-                'machine_id' => $machine->id,
-                'name' => $machine->name,
-                'open_issues' => $machine->issues()->where('status', 'open')->count(),
-                'status_logs' => $machine->statusLogs,
-                'operations' => $machine->operations,
-            ];
-        });
-
-        // Calculate uptime/downtime
-        $uptime = $machines->map(function($machine) {
-            $logs = MachineStatusLog::where('machine_id', $machine->id)
-                ->where('tanggal', '>=', Carbon::now()->subDay())
-                ->get();
-            
-            $totalTime = 0;
-            $uptimeMinutes = 0;
-            
-            if ($logs->count() > 0) {
-                foreach ($logs as $index => $log) {
-                    $startTime = Carbon::parse($log->tanggal);
-                    $endTime = isset($logs[$index + 1]) 
-                        ? Carbon::parse($logs[$index + 1]->tanggal) 
-                        : Carbon::now();
-                    
-                    $duration = $startTime->diffInMinutes($endTime);
-                    $totalTime += $duration;
-                    
-                    if ($log->status === 'START' || $log->status === 'PARALLEL') {
-                        $uptimeMinutes += $duration;
-                    }
-                }
-                
-                $uptimePercentage = $totalTime > 0 ? ($uptimeMinutes / $totalTime) * 100 : 0;
-                $downtimePercentage = $totalTime > 0 ? 100 - $uptimePercentage : 0;
-            } else {
-                $uptimePercentage = $machine->status === 'START' ? 100 : 0;
-                $downtimePercentage = $machine->status === 'STOP' ? 100 : 0;
-            }
-            
-            return [
-                'name' => $machine->name,
-                'uptime' => round($uptimePercentage, 2),
-                'downtime' => round($downtimePercentage, 2),
-            ];
-        });
-
-        // Get recent issues
-        $recentIssuesQuery = MachineIssue::with(['machine', 'category']);
-        if ($selectedUnitSource) {
-            $recentIssuesQuery->whereHas('machine', function($query) use ($selectedUnitSource) {
-                $query->where('unit_source', $selectedUnitSource);
-            });
-        }
-        $recentIssues = $recentIssuesQuery->latest()->take(10)->get();
-
-        // Calculate monthly issues
-        $monthlyIssuesQuery = MachineIssue::selectRaw('COUNT(*) as count, MONTH(created_at) as month')
-            ->whereYear('created_at', date('Y'));
-        if ($selectedUnitSource) {
-            $monthlyIssuesQuery->whereHas('machine', function($query) use ($selectedUnitSource) {
-                $query->where('unit_source', $selectedUnitSource);
-            });
-        }
-        $monthlyIssues = $monthlyIssuesQuery->groupBy('month')->pluck('count', 'month')->toArray();
-        
-        // Prepare monthly issues data array
-        $monthlyIssuesData = array_fill(1, 12, 0);
-        foreach ($monthlyIssues as $month => $count) {
-            $monthlyIssuesData[$month] = $count;
-        }
-
-        // Get machine status logs
-        $machineStatusLogsQuery = MachineStatusLog::with('machine');
-        if ($selectedUnitSource) {
-            $machineStatusLogsQuery->whereHas('machine', function($query) use ($selectedUnitSource) {
-                $query->where('unit_source', $selectedUnitSource);
-            });
-        }
-        $machineStatusLogs = $machineStatusLogsQuery->get();
-
-        // Get today's date and define shift times
-        $today = Carbon::today();
-        $shiftTimes = [
-            '06:00' => '06:00:00',
-            '11:00' => '11:00:00',
-            '14:00' => '14:00:00',
-            '18:00' => '18:00:00',
-            '19:00' => '19:00:00',
+        // Manual counting for status
+        $statusCounts = [
+            'OPS' => 0,
+            'RSH' => 0,
+            'FO' => 0,
+            'MO' => 0,
+            'Others' => 0
         ];
 
-        // Get selected time or default to all
-        $selectedTime = $request->input('time_filter', 'all');
+        // Process logs manually to avoid collection operations
+        $processedData = [
+            'labels' => [],
+            'kw' => [],
+            'silm_slo' => [],
+            'dmp_performance' => [],
+            'volt' => [],
+            'amp' => []
+        ];
 
-        // Filter logs based on selected time
-        $filteredLogs = $machineStatusLogs->filter(function($log) use ($selectedTime, $shiftTimes, $today) {
-            if ($selectedTime === 'all') {
-                return true;
-            }
-            
-            if (isset($shiftTimes[$selectedTime])) {
-                return $log->tanggal->isSameDay($today) && 
-                       $log->input_time && 
-                       $log->input_time->format('H:i:s') === $shiftTimes[$selectedTime];
-            }
-            
-            return false;
-        });
+        $maxBeban = 0;
+        $lastUpdate = null;
 
-        // Reset the default database connection
-        if ($selectedUnitSource) {
-            config(['database.default' => 'mysql']);
+        foreach ($latestLogs as $log) {
+            // Process status counts
+            if (isset($statusCounts[$log->status])) {
+                $statusCounts[$log->status]++;
+            } else {
+                $statusCounts['Others']++;
+            }
+
+            // Process machine name
+            $machineName = $log->machine->name ?? 'Unknown';
+            $processedData['labels'][] = $machineName;
+
+            // Process numeric values
+            $processedData['kw'][] = $this->parseNumeric($log->kw);
+            $processedData['silm_slo'][] = $this->parseNumeric($log->silm_slo);
+            $processedData['dmp_performance'][] = $this->parseNumeric($log->dmp_performance);
+            $processedData['volt'][] = $this->parseNumeric($log->volt);
+            $processedData['amp'][] = $this->parseNumeric($log->amp);
+
+            // Update maxBeban
+            $currentKw = $this->parseNumeric($log->kw);
+            if ($currentKw > $maxBeban) {
+                $maxBeban = $currentKw;
+            }
+
+            // Update lastUpdate
+            if ($log->date && (!$lastUpdate || $log->date > $lastUpdate)) {
+                $lastUpdate = $log->date;
+            }
         }
-
-        $machines = \App\Models\Machine::with('logs')->get();
-
-        // Ambil log terbaru per mesin
-        $latestLogs = collect();
-        foreach ($machines as $machine) {
-            $log = $machine->logs()->orderBy('date', 'desc')->orderBy('time', 'desc')->first();
-            if ($log) {
-                $latestLogs->push($log);
-            }
-        }
-
-        $statusCounts = $latestLogs->groupBy('status')->map->count();
-        $avgDMN = $latestLogs->avg('silm_slo');
-        $avgDMP = $latestLogs->avg('dmp_performance');
-        $avgBeban = $latestLogs->avg('kw');
 
         return view('admin.machine-monitor.index', compact(
-            'machines',
-            'healthCategories',
-            'monthlyIssues',
-            'uptime',
-            'recentIssues',
-            'machineStatusLogs',
-            'filteredLogs',
-            'selectedTime',
-            'efficiencyData',
             'powerPlants',
-            'selectedUnitSource',
+            'machines',
             'latestLogs',
             'statusCounts',
-            'avgDMN',
-            'avgDMP',
-            'avgBeban'
+            'processedData',
+            'maxBeban',
+            'lastUpdate'
         ));
+    }
+
+    private function parseNumeric($value): float
+    {
+        if (is_numeric($value)) {
+            return (float) $value;
+        }
+        return 0.0;
     }
 
     public function storeIssue(Request $request)

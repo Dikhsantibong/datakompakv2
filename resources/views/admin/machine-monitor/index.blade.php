@@ -110,11 +110,11 @@
 
                 <!-- Status Indicators -->
                 @php
-                    $totalOPS = $latestLogs->where('status', 'OPS')->count();
-                    $totalFO = $latestLogs->where('status', 'FO')->count();
-                    $totalMO = $latestLogs->where('status', 'MO')->count();
-                    $maxBeban = $latestLogs->max('kw');
-                    $lastUpdate = $latestLogs->max('date');
+                    $totalOPS = $statusCounts['OPS'] ?? 0;
+                    $totalFO = $statusCounts['FO'] ?? 0;
+                    $totalMO = $statusCounts['MO'] ?? 0;
+                    $maxBeban = $maxBeban ?? 0;
+                    $lastUpdate = $lastUpdate ?? null;
                 @endphp
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
@@ -392,15 +392,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Bar chart rata-rata beban per mesin
     const avgBebanCtx = document.getElementById('avgBebanChart').getContext('2d');
-    const bebanLabels = @json($latestLogs->pluck('machine.name'));
-    const bebanData = @json($latestLogs->pluck('kw'));
     new Chart(avgBebanCtx, {
         type: 'bar',
         data: {
-            labels: bebanLabels,
+            labels: @json($processedData['labels']),
             datasets: [{
                 label: 'Beban (kW)',
-                data: bebanData,
+                data: @json($processedData['kw']),
                 backgroundColor: 'rgba(59, 130, 246, 0.7)',
                 borderColor: 'rgba(59, 130, 246, 1)',
                 borderWidth: 1
@@ -408,17 +406,10 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: { display: false }
-            },
+            plugins: { legend: { display: false } },
             scales: {
-                y: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'kW' }
-                },
-                x: {
-                    title: { display: true, text: 'Mesin' }
-                }
+                y: { beginAtZero: true, title: { display: true, text: 'kW' } },
+                x: { title: { display: true, text: 'Mesin' } }
             }
         }
     });
@@ -428,10 +419,10 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(dmnCtx, {
         type: 'bar',
         data: {
-            labels: @json($latestLogs->pluck('machine.name')),
+            labels: @json($processedData['labels']),
             datasets: [{
                 label: 'DMN/SLO',
-                data: @json($latestLogs->pluck('silm_slo')),
+                data: @json($processedData['silm_slo']),
                 backgroundColor: 'rgba(16, 185, 129, 0.7)',
                 borderColor: 'rgba(16, 185, 129, 1)',
                 borderWidth: 1
@@ -443,15 +434,16 @@ document.addEventListener('DOMContentLoaded', function() {
             scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Mesin' } } }
         }
     });
+
     // DMP/PT per Mesin
     const dmpCtx = document.getElementById('dmpChart').getContext('2d');
     new Chart(dmpCtx, {
         type: 'bar',
         data: {
-            labels: @json($latestLogs->pluck('machine.name')),
+            labels: @json($processedData['labels']),
             datasets: [{
                 label: 'DMP/PT',
-                data: @json($latestLogs->pluck('dmp_performance')),
+                data: @json($processedData['dmp_performance']),
                 backgroundColor: 'rgba(251, 191, 36, 0.7)',
                 borderColor: 'rgba(251, 191, 36, 1)',
                 borderWidth: 1
@@ -463,15 +455,16 @@ document.addEventListener('DOMContentLoaded', function() {
             scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Mesin' } } }
         }
     });
+
     // Tegangan (V) per Mesin
     const voltCtx = document.getElementById('voltChart').getContext('2d');
     new Chart(voltCtx, {
         type: 'bar',
         data: {
-            labels: @json($latestLogs->pluck('machine.name')),
+            labels: @json($processedData['labels']),
             datasets: [{
                 label: 'Tegangan (V)',
-                data: @json($latestLogs->pluck('volt')),
+                data: @json($processedData['volt']),
                 backgroundColor: 'rgba(99, 102, 241, 0.7)',
                 borderColor: 'rgba(99, 102, 241, 1)',
                 borderWidth: 1
@@ -483,15 +476,16 @@ document.addEventListener('DOMContentLoaded', function() {
             scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Mesin' } } }
         }
     });
+
     // Arus (A) per Mesin
     const ampCtx = document.getElementById('ampChart').getContext('2d');
     new Chart(ampCtx, {
         type: 'bar',
         data: {
-            labels: @json($latestLogs->pluck('machine.name')),
+            labels: @json($processedData['labels']),
             datasets: [{
                 label: 'Arus (A)',
-                data: @json($latestLogs->pluck('amp')),
+                data: @json($processedData['amp']),
                 backgroundColor: 'rgba(236, 72, 153, 0.7)',
                 borderColor: 'rgba(236, 72, 153, 1)',
                 borderWidth: 1

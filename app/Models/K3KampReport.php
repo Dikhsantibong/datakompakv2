@@ -51,8 +51,6 @@ class K3KampReport extends Model
                 if (self::$isSyncing) return;
 
                 $currentSession = session('unit', 'mysql');
-                
-                // Add unit mapping
                 $unitMapping = [
                     'mysql_poasia' => 'PLTD POASIA',
                     'mysql_kolaka' => 'PLTD KOLAKA',
@@ -76,23 +74,17 @@ class K3KampReport extends Model
                     'mysql_moramo' => 'PLTD MORAMO',
                     'mysql' => 'UP Kendari'
                 ];
-                
-                // Only sync if not in mysql session
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
-                    
                     $data = [
-                        'id' => $report->id,
                         'date' => $report->date,
                         'created_by' => $report->created_by,
                         'sync_unit_origin' => $unitMapping[$currentSession] ?? 'UP Kendari',
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
-
-                    // Sync to mysql database
-                    DB::connection('mysql')->table('k3_kamp_reports')->insert($data);
-
+                    $reportId = DB::connection('mysql')->table('k3_kamp_reports')->insertGetId($data);
+                    session(['k3_kamp_report_id_map.' . $report->id => $reportId]);
                     self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
@@ -107,10 +99,7 @@ class K3KampReport extends Model
         static::updated(function ($report) {
             try {
                 if (self::$isSyncing) return;
-
                 $currentSession = session('unit', 'mysql');
-                
-                // Add unit mapping
                 $unitMapping = [
                     'mysql_poasia' => 'PLTD POASIA',
                     'mysql_kolaka' => 'PLTD KOLAKA',
@@ -134,23 +123,23 @@ class K3KampReport extends Model
                     'mysql_moramo' => 'PLTD MORAMO',
                     'mysql' => 'UP Kendari'
                 ];
-                
-                // Only sync if not in mysql session
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
-                    
                     $data = [
                         'date' => $report->date,
                         'created_by' => $report->created_by,
                         'sync_unit_origin' => $unitMapping[$currentSession] ?? 'UP Kendari',
                         'updated_at' => now()
                     ];
-
-                    // Update in mysql database
-                    DB::connection('mysql')->table('k3_kamp_reports')
-                        ->where('id', $report->id)
-                        ->update($data);
-
+                    $exists = DB::connection('mysql')->table('k3_kamp_reports')->where('id', $report->id)->exists();
+                    if (!$exists) {
+                        $data['created_at'] = now();
+                        $reportId = DB::connection('mysql')->table('k3_kamp_reports')->insertGetId($data);
+                        session(['k3_kamp_report_id_map.' . $report->id => $reportId]);
+                    } else {
+                        DB::connection('mysql')->table('k3_kamp_reports')->where('id', $report->id)->update($data);
+                        session(['k3_kamp_report_id_map.' . $report->id => $report->id]);
+                    }
                     self::$isSyncing = false;
                 }
             } catch (\Exception $e) {

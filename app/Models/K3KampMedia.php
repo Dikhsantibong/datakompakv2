@@ -38,16 +38,20 @@ class K3KampMedia extends Model
         static::created(function ($media) {
             try {
                 if (self::$isSyncing) return;
-
                 $currentSession = session('unit', 'mysql');
-                
-                // Only sync if not in mysql session
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
-                    
+                    $parentId = session('k3_kamp_item_id_map.' . $media->item_id);
+                    if (!$parentId) {
+                        Log::error('Parent K3KampItem mapping not found', [
+                            'media_id' => $media->id,
+                            'item_id' => $media->item_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
                     $data = [
-                        'id' => $media->id,
-                        'item_id' => $media->item_id,
+                        'item_id' => $parentId,
                         'media_type' => $media->media_type,
                         'file_path' => $media->file_path,
                         'original_name' => $media->original_name,
@@ -55,10 +59,7 @@ class K3KampMedia extends Model
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
-
-                    // Sync to mysql database
                     DB::connection('mysql')->table('k3_kamp_media')->insert($data);
-
                     self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
@@ -73,27 +74,30 @@ class K3KampMedia extends Model
         static::updated(function ($media) {
             try {
                 if (self::$isSyncing) return;
-
                 $currentSession = session('unit', 'mysql');
-                
-                // Only sync if not in mysql session
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
-                    
+                    $parentId = session('k3_kamp_item_id_map.' . $media->item_id);
+                    if (!$parentId) {
+                        Log::error('Parent K3KampItem mapping not found', [
+                            'media_id' => $media->id,
+                            'item_id' => $media->item_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
                     $data = [
+                        'item_id' => $parentId,
                         'media_type' => $media->media_type,
                         'file_path' => $media->file_path,
                         'original_name' => $media->original_name,
                         'file_size' => $media->file_size,
                         'updated_at' => now()
                     ];
-
-                    // Update in mysql database
-                    DB::connection('mysql')->table('k3_kamp_media')
-                        ->where('item_id', $media->item_id)
-                        ->where('id', $media->id)
-                        ->update($data);
-
+                    DB::connection('mysql')->table('k3_kamp_media')->updateOrInsert([
+                        'item_id' => $parentId,
+                        'file_path' => $media->file_path
+                    ], $data);
                     self::$isSyncing = false;
                 }
             } catch (\Exception $e) {

@@ -45,15 +45,20 @@ class K3KampItem extends Model
         static::created(function ($item) {
             try {
                 if (self::$isSyncing) return;
-
                 $currentSession = session('unit', 'mysql');
-                
-                // Only sync if not in mysql session
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
-                    
+                    $parentId = session('k3_kamp_report_id_map.' . $item->report_id);
+                    if (!$parentId) {
+                        Log::error('Parent K3KampReport mapping not found', [
+                            'item_id' => $item->id,
+                            'report_id' => $item->report_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
                     $data = [
-                        'report_id' => $item->report_id,
+                        'report_id' => $parentId,
                         'item_type' => $item->item_type,
                         'item_name' => $item->item_name,
                         'status' => $item->status,
@@ -62,10 +67,8 @@ class K3KampItem extends Model
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
-
-                    // Sync to mysql database
-                    DB::connection('mysql')->table('k3_kamp_items')->insert($data);
-
+                    $itemId = DB::connection('mysql')->table('k3_kamp_items')->insertGetId($data);
+                    session(['k3_kamp_item_id_map.' . $item->id => $itemId]);
                     self::$isSyncing = false;
                 }
             } catch (\Exception $e) {
@@ -80,14 +83,20 @@ class K3KampItem extends Model
         static::updated(function ($item) {
             try {
                 if (self::$isSyncing) return;
-
                 $currentSession = session('unit', 'mysql');
-                
-                // Only sync if not in mysql session
                 if ($currentSession !== 'mysql') {
                     self::$isSyncing = true;
-                    
+                    $parentId = session('k3_kamp_report_id_map.' . $item->report_id);
+                    if (!$parentId) {
+                        Log::error('Parent K3KampReport mapping not found', [
+                            'item_id' => $item->id,
+                            'report_id' => $item->report_id
+                        ]);
+                        self::$isSyncing = false;
+                        return;
+                    }
                     $data = [
+                        'report_id' => $parentId,
                         'item_type' => $item->item_type,
                         'item_name' => $item->item_name,
                         'status' => $item->status,
@@ -95,13 +104,15 @@ class K3KampItem extends Model
                         'keterangan' => $item->keterangan,
                         'updated_at' => now()
                     ];
-
-                    // Update in mysql database
-                    DB::connection('mysql')->table('k3_kamp_items')
-                        ->where('report_id', $item->report_id)
-                        ->where('id', $item->id)
-                        ->update($data);
-
+                    $exists = DB::connection('mysql')->table('k3_kamp_items')->where('id', $item->id)->exists();
+                    if (!$exists) {
+                        $data['created_at'] = now();
+                        $itemId = DB::connection('mysql')->table('k3_kamp_items')->insertGetId($data);
+                        session(['k3_kamp_item_id_map.' . $item->id => $itemId]);
+                    } else {
+                        DB::connection('mysql')->table('k3_kamp_items')->where('id', $item->id)->update($data);
+                        session(['k3_kamp_item_id_map.' . $item->id => $item->id]);
+                    }
                     self::$isSyncing = false;
                 }
             } catch (\Exception $e) {

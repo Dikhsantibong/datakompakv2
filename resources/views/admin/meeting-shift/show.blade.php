@@ -70,7 +70,7 @@
                             <div class="flex flex-wrap gap-4 items-center text-sm text-gray-600">
                                 <div class="flex items-center">
                                     <i class="fas fa-calendar mr-2 text-blue-500"></i>
-                                    {{ $meetingShift->tanggal->format('d F Y') }}
+                                    {{ $meetingShift->created_at ? \Carbon\Carbon::parse($meetingShift->created_at)->format('d F Y') : '-' }}
                                 </div>
                                 <div class="flex items-center">
                                     <i class="fas fa-clock mr-2 text-green-500"></i>

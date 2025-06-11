@@ -64,7 +64,7 @@ class K3KampExport implements FromCollection, WithTitle, WithEvents, WithStyles,
         
         // Add creator
         $data->push([
-            'Dibuat oleh: ' . $this->report->creator->name,
+            'Dibuat oleh: ' . $this->report->sync_unit_origin,
             '',
             '',
             '',

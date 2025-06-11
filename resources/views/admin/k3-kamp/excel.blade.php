@@ -6,7 +6,7 @@
         <td colspan="7">Tanggal: {{ $report->date->format('d/m/Y') }}</td>
     </tr>
     <tr>
-        <td colspan="7">Dibuat oleh: {{ $report->creator->name }}</td>
+        <td colspan="7">Dibuat pada: {{ $report->created_at->format('d/m/Y H:i') }}</td>
     </tr>
     <tr><td colspan="7"></td></tr>
     <tr>

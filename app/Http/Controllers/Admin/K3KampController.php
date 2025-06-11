@@ -66,7 +66,6 @@ class K3KampController extends Controller
             // Create report
             $report = K3KampReport::create([
                 'date' => today(),
-                'created_by' => Auth::user()->id,
                 'sync_unit_origin' => $unitName
             ]);
 
@@ -202,7 +201,7 @@ class K3KampController extends Controller
 
     public function view()
     {
-        $reports = K3KampReport::with(['items.media', 'creator'])
+        $reports = K3KampReport::with(['items.media'])
             ->orderBy('date', 'desc')
             ->paginate(10);
 
@@ -211,7 +210,7 @@ class K3KampController extends Controller
 
     public function show($id)
     {
-        $report = K3KampReport::with(['items.media', 'creator'])
+        $report = K3KampReport::with(['items.media'])
             ->findOrFail($id);
 
         return view('admin.k3-kamp.show', compact('report'));
@@ -370,8 +369,7 @@ class K3KampController extends Controller
                     $query->with(['media' => function($query) {
                         $query->orderBy('created_at', 'desc');
                     }]);
-                },
-                'creator'
+                }
             ])->findOrFail($id);
 
             // Pastikan date dan created_at adalah instance Carbon
@@ -407,7 +405,7 @@ class K3KampController extends Controller
     public function exportPdf($id)
     {
         try {
-            $report = K3KampReport::with(['items.media', 'creator'])
+            $report = K3KampReport::with(['items.media'])
                 ->findOrFail($id);
 
             $pdf = PDF::loadView('admin.k3-kamp.pdf', compact('report'));

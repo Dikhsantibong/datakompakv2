@@ -22,7 +22,7 @@ class SyncK3KampReportToUpKendari
                 'mysql_kolaka' => 'PLTD KOLAKA',
                 'mysql_bau_bau' => 'PLTD BAU BAU',
                 'mysql_wua_wua' => 'PLTD WUA WUA',
-                'mysql_winning' => 'PLTD WINNING',
+                'mysql_winning' => 'PLTM WINNING',
                 'mysql_erkee' => 'PLTD ERKEE',
                 'mysql_ladumpi' => 'PLTD LADUMPI',
                 'mysql_langara' => 'PLTD LANGARA',
@@ -32,12 +32,13 @@ class SyncK3KampReportToUpKendari
                 'mysql_raha' => 'PLTD RAHA',
                 'mysql_wajo' => 'PLTD WAJO',
                 'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
-                'mysql_rongi' => 'PLTD RONGI',
+                'mysql_rongi' => 'PLTM RONGI',
                 'mysql_sabilambo' => 'PLTM SABILAMBO',
-                'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
-                'mysql_pltmg_kendari' => 'PLTD KENDARI',
-                'mysql_baruta' => 'PLTD BARUTA',
-                'mysql_moramo' => 'PLTD MORAMO',
+                'mysql_pltmg_bau_bau' => 'PLTMG BAU BAU',
+                'mysql_pltmg_kendari' => 'PLTMG KENDARI',
+                'mysql_baruta' => 'PLTU BARUTA',
+                'mysql_moramo' => 'PLTU MORAMO',
+                'mysql_mikuasi' => 'PLTM MIKUASI',
                 'mysql' => 'UP Kendari'
             ];
 
@@ -61,7 +62,6 @@ class SyncK3KampReportToUpKendari
             if ($currentSession !== 'mysql') {
                 $reportData = [
                     'date' => $event->k3KampReport->date,
-                    'created_by' => $event->k3KampReport->created_by,
                     'sync_unit_origin' => $event->k3KampReport->sync_unit_origin,
                     'updated_at' => now()
                 ];
@@ -179,7 +179,6 @@ class SyncK3KampReportToUpKendari
                 ]);
                 $reportData = [
                     'date' => $event->k3KampReport->date,
-                    'created_by' => $event->k3KampReport->created_by,
                     'sync_unit_origin' => $event->k3KampReport->sync_unit_origin,
                     'updated_at' => now()
                 ];

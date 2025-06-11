@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +16,6 @@ class K3KampReport extends Model
 
     protected $fillable = [
         'date',
-        'created_by',
         'sync_unit_origin'
     ];
 
@@ -25,16 +23,11 @@ class K3KampReport extends Model
         'date'
     ];
 
-    protected $with = ['items.media']; // Eager load items and media by default
+    protected $with = ['items.media'];
 
     public function items(): HasMany
     {
         return $this->hasMany(K3KampItem::class, 'report_id');
-    }
-
-    public function creator(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function getConnectionName()
@@ -78,7 +71,6 @@ class K3KampReport extends Model
                     self::$isSyncing = true;
                     $data = [
                         'date' => $report->date,
-                        'created_by' => $report->created_by,
                         'sync_unit_origin' => $unitMapping[$currentSession] ?? 'UP Kendari',
                         'created_at' => now(),
                         'updated_at' => now()
@@ -127,7 +119,6 @@ class K3KampReport extends Model
                     self::$isSyncing = true;
                     $data = [
                         'date' => $report->date,
-                        'created_by' => $report->created_by,
                         'sync_unit_origin' => $unitMapping[$currentSession] ?? 'UP Kendari',
                         'updated_at' => now()
                     ];

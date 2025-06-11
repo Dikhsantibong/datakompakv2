@@ -59,10 +59,54 @@
             ]" />
         </div>
 
+        
+
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-4 sm:px-6 py-8">
                 <div class="space-y-6">
+                    <!-- Report Details Section -->
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-medium text-gray-900">
+                                <i class="fas fa-info-circle mr-2 text-gray-400"></i>
+                                Informasi Laporan
+                            </h2>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <dl class="space-y-4">
+                                        <div>
+                                            <dt class="text-sm font-medium text-gray-500">Tanggal Laporan</dt>
+                                            <dd class="mt-1 text-sm text-gray-900">{{ \Carbon\Carbon::parse($report->date)->format('d/m/Y') }}</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="text-sm font-medium text-gray-500">Asal Unit</dt>
+                                            <dd class="mt-1 text-sm text-gray-900">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                    {{ $report->sync_unit_origin }}
+                                                </span>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                                <div>
+                                    <dl class="space-y-4">
+                                        <div>
+                                            <dt class="text-sm font-medium text-gray-500">Dibuat Pada</dt>
+                                            <dd class="mt-1 text-sm text-gray-900">{{ \Carbon\Carbon::parse($report->created_at)->format('d/m/Y H:i:s') }}</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="text-sm font-medium text-gray-500">Terakhir Diperbarui</dt>
+                                            <dd class="mt-1 text-sm text-gray-900">{{ \Carbon\Carbon::parse($report->updated_at)->format('d/m/Y H:i:s') }}</dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- K3 & Keamanan Section -->
                     <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200">

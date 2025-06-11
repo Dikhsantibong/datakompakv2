@@ -177,7 +177,7 @@
                                             {{ $loop->iteration }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
-                                            {{ $meetingShift->tanggal ? $meetingShift->tanggal->format('d F Y') : '-' }}
+                                            {{ $meetingShift->created_at ? \Carbon\Carbon::parse($meetingShift->created_at)->format('d F Y') : '-' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium

@@ -70,19 +70,20 @@
                             <div class="flex flex-wrap gap-4 items-center text-sm text-gray-600">
                                 <div class="flex items-center">
                                     <i class="fas fa-calendar mr-2 text-blue-500"></i>
-                                    {{ $meetingShift->created_at ? \Carbon\Carbon::parse($meetingShift->created_at)->format('d F Y') : '-' }}
+                                   Tanggal: {{ $meetingShift->tanggal ? \Carbon\Carbon::parse($meetingShift->tanggal)->format('d F Y') : '-' }}
                                 </div>
                                 <div class="flex items-center">
                                     <i class="fas fa-clock mr-2 text-green-500"></i>
-                                    Shift {{ $meetingShift->current_shift }}
+                                    Shift : {{ $meetingShift->current_shift }}
                                 </div>
                                 <div class="flex items-center">
                                     <i class="fas fa-sign-in-alt mr-2 text-yellow-500"></i>
-                                    Jam Masuk: {{ $meetingShift->created_at->format('H:i') }}
+                                    Jam Masuk: {{ $meetingShift->created_at->format('d F Y, H:i') }}
                                 </div>
+                                
                                 <div class="flex items-center">
                                     <i class="fas fa-user mr-2 text-purple-500"></i>
-                                    {{ $meetingShift->machineStatuses->first()->machine->powerPlant->name }}
+                                    Unit: {{ $meetingShift->machineStatuses->first()->machine->powerPlant->name }}
                                 </div>
                             </div>
                         </div>

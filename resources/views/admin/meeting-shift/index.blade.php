@@ -709,6 +709,23 @@ function handleAuxiliaryStatusChange(checkbox, index) {
         });
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Set default date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('tanggal').value = today;
+
+    // Handle checkbox exclusivity within groups
+    const checkboxGroups = document.querySelectorAll('tr');
+    checkboxGroups.forEach(row => {
+        const checkboxes = row.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                validateMachineStatus(row.rowIndex - 1);
+            });
+        });
+    });
+});
 </script>
 @endpush
 

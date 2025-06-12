@@ -1415,3 +1415,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 // 5S5R routes
 Route::post('/admin/5s5r/upload-media', [FiveS5RController::class, 'uploadMedia'])->name('admin.5s5r.upload-media');
 Route::post('/admin/5s5r/delete-media', [FiveS5RController::class, 'deleteMedia'])->name('admin.5s5r.delete-media');
+
+// ... existing code ...
+Route::middleware(['auth'])->group(function () {
+    // ... other routes ...
+    
+    Route::prefix('admin')->name('admin.')->group(function () {
+        // ... other admin routes ...
+        
+        // Data Engine routes
+        Route::get('/data-engine', [DataEngineController::class, 'index'])->name('data-engine.index');
+        Route::get('/data-engine/daily-list', [DataEngineController::class, 'listDailyInputs'])->name('data-engine.daily-list');
+        Route::get('/data-engine/edit/{date}', [DataEngineController::class, 'edit'])->name('data-engine.edit');
+        Route::post('/data-engine/update', [DataEngineController::class, 'update'])->name('data-engine.update');
+        Route::get('/data-engine/export-excel', [DataEngineController::class, 'exportExcel'])->name('data-engine.export-excel');
+        Route::get('/data-engine/export-pdf', [DataEngineController::class, 'exportPdf'])->name('data-engine.export-pdf');
+        Route::get('/data-engine/latest-data', [DataEngineController::class, 'getLatestData'])->name('data-engine.latest-data');
+    });
+});

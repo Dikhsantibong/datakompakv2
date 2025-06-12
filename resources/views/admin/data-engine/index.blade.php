@@ -117,6 +117,12 @@
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
                                 <i class="fas fa-plus mr-2"></i> Update Data
                             </a>
+                            @if(session('unit') == 'mysql')
+                            <a href="{{ route('admin.data-engine.daily-list', ['date' => request('date', now()->format('Y-m-d'))]) }}" 
+                               class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                                <i class="fas fa-tasks mr-2"></i> Manage Input
+                            </a>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -350,6 +350,46 @@ class DataEngineController extends Controller
         }
     }
 
+    public function listDailyInputs(Request $request)
+    {
+        try {
+            $date = $request->date ?? now()->format('Y-m-d');
+            
+            // Get all power plants
+            $powerPlants = PowerPlant::orderBy('name')->get();
+            
+            // Generate hours array (00:00 to 23:00)
+            $hours = collect(range(0, 23))->map(function($hour) {
+                return str_pad($hour, 2, '0', STR_PAD_LEFT) . ':00:00';
+            });
+            
+            // Get input status for each power plant and hour
+            $powerPlants->each(function($powerPlant) use ($date, $hours) {
+                $logs = DB::table('power_plant_logs')
+                    ->where('power_plant_id', $powerPlant->id)
+                    ->where('date', $date)
+                    ->pluck('time')
+                    ->map(function($time) {
+                        return Carbon::parse($time)->format('H:i:00');
+                    })
+                    ->toArray();
+                
+                $powerPlant->hourlyStatus = $hours->mapWithKeys(function($hour) use ($logs) {
+                    return [$hour => in_array($hour, $logs)];
+                });
+            });
+            
+            return view('admin.data-engine.daily-list', compact('powerPlants', 'date', 'hours'));
+        } catch (\Exception $e) {
+            Log::error('Error in DataEngine listDailyInputs:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data: ' . $e->getMessage());
+        }
+    }
+
     public function getLatestData(Request $request)
     {
         try {

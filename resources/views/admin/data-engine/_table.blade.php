@@ -40,6 +40,9 @@
                                     <span class="text-sm font-medium text-gray-700">HOP:</span>
                                     <span class="text-sm text-gray-900">{{ $powerPlant->hop ?? '-' }}</span>
                                     <span class="text-sm text-gray-600">hari</span>
+                                    @if($powerPlant->log_time && request('time') && $powerPlant->log_time !== request('time'))
+                                        <span class="text-xs text-gray-500 ml-2">(Data dari: {{ \Carbon\Carbon::parse($powerPlant->log_time)->format('H:i') }})</span>
+                                    @endif
                                 </div>
                             @endif
                         </div>

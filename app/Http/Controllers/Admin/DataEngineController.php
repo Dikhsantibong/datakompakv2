@@ -47,21 +47,44 @@ class DataEngineController extends Controller
 
             // Load the latest logs for each power plant and machine on the selected date
             $powerPlants->each(function ($powerPlant) use ($date, $time) {
-                // Get power plant logs
+                // Get power plant logs with improved time handling
                 $latestLogQuery = DB::table('power_plant_logs')
                     ->where('power_plant_id', $powerPlant->id)
                     ->where('date', $date);
-                
+
                 if ($time) {
-                    // Ambil log dengan waktu <= $time, urutkan desc, ambil satu
-                    $latestLogQuery->where('time', '<=', $time);
+                    // First try to get exact time match
+                    $exactTimeLog = clone $latestLogQuery;
+                    $exactMatch = $exactTimeLog->where('time', $time)->first();
+
+                    if ($exactMatch) {
+                        $latestLog = $exactMatch;
+                    } else {
+                        // If no exact match, get the closest previous time
+                        $latestLog = $latestLogQuery
+                            ->where('time', '<=', $time)
+                            ->orderBy('time', 'desc')
+                            ->first();
+
+                        // If no previous time exists, get the next closest time
+                        if (!$latestLog) {
+                            $latestLog = DB::table('power_plant_logs')
+                                ->where('power_plant_id', $powerPlant->id)
+                                ->where('date', $date)
+                                ->where('time', '>', $time)
+                                ->orderBy('time', 'asc')
+                                ->first();
+                        }
+                    }
+                } else {
+                    // If no time specified, get the latest log for the date
+                    $latestLog = $latestLogQuery->orderBy('time', 'desc')->first();
                 }
-                
-                $latestLog = $latestLogQuery->orderBy('time', 'desc')->first();
 
                 $powerPlant->hop = $latestLog?->hop;
                 $powerPlant->tma = $latestLog?->tma;
                 $powerPlant->inflow = $latestLog?->inflow;
+                $powerPlant->log_time = $latestLog?->time; // Add this to track the actual time of the log
 
                 // Get machine logs
                 $powerPlant->machines->each(function ($machine) use ($date, $time) {

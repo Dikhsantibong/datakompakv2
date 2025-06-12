@@ -135,7 +135,7 @@
                                         <i class="fas fa-expand mr-1"></i> Full Table
                                     </button>
                                     
-                                    @if(request()->has('power_plant_id') || request()->has('date'))
+                                    @if(request()->has('power_plant_id') || request()->has('date') || request()->has('time'))
                                         <div class="flex flex-wrap gap-2" id="active-filters">
                                             @if(request('power_plant_id'))
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -149,6 +149,14 @@
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                     Tanggal: {{ \Carbon\Carbon::parse(request('date'))->format('d/m/Y') }}
                                                     <button onclick="removeFilter('date')" class="ml-1 text-blue-600 hover:text-blue-800">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </span>
+                                            @endif
+                                            @if(request('time'))
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Jam: {{ \Carbon\Carbon::parse(request('time'))->format('H:i') }}
+                                                    <button onclick="removeFilter('time')" class="ml-1 text-blue-600 hover:text-blue-800">
                                                         <i class="fas fa-times"></i>
                                                     </button>
                                                 </span>

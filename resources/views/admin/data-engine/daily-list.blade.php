@@ -56,7 +56,7 @@
         <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <!-- Date Filter -->
             <div class="mb-6">
-                <form action="{{ route('admin.data-engine.daily-list') }}" method="GET" class="flex items-center gap-4">
+                <div class="flex items-center gap-4">
                     <div>
                         <label for="date" class="block text-sm font-medium text-gray-700">Tanggal</label>
                         <input type="date" 
@@ -65,10 +65,7 @@
                                value="{{ $date }}"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     </div>
-                    <button type="submit" class="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                        Tampilkan
-                    </button>
-                </form>
+                </div>
             </div>
 
             <!-- Status Grid -->
@@ -76,8 +73,16 @@
                 <div class="p-6">
                     <h2 class="text-lg font-medium text-gray-900 mb-4">Status Input per Unit dan Jam</h2>
                     
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
+                    <div class="overflow-x-auto relative" id="tableContainer">
+                        <!-- Loading Overlay -->
+                        <div id="loadingOverlay" class="hidden absolute inset-0 bg-white bg-opacity-75 z-50 flex items-center justify-center">
+                            <div class="flex items-center gap-2">
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                                <span class="text-gray-600">Loading...</span>
+                            </div>
+                        </div>
+
+                        <table class="min-w-full divide-y divide-gray-200 border">
                             <thead>
                                 <tr>
                                     <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-white z-10 border-r">
@@ -138,8 +143,45 @@
 </div>
 
 <script>
-document.getElementById('date').addEventListener('change', function() {
-    this.form.submit();
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('date');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const tableContainer = document.getElementById('tableContainer');
+
+    dateInput.addEventListener('change', function() {
+        // Show loading overlay
+        loadingOverlay.classList.remove('hidden');
+
+        // Make AJAX request
+        fetch(`{{ route('admin.data-engine.daily-list') }}?date=${this.value}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            // Extract the table content from the response
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newTable = doc.querySelector('table').outerHTML;
+            
+            // Update the table content
+            tableContainer.querySelector('table').outerHTML = newTable;
+            
+            // Update URL without refreshing
+            window.history.pushState({}, '', `{{ route('admin.data-engine.daily-list') }}?date=${this.value}`);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // You might want to show an error message to the user here
+        })
+        .finally(() => {
+            // Hide loading overlay
+            loadingOverlay.classList.add('hidden');
+        });
+    });
 });
 </script>
+
+<script src="{{ asset('js/toggle.js') }}"></script>
 @endsection 

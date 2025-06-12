@@ -379,12 +379,20 @@ class DataEngineController extends Controller
                 });
             });
             
+            if ($request->ajax()) {
+                return view('admin.data-engine._daily-list-table', compact('powerPlants', 'date', 'hours'))->render();
+            }
+            
             return view('admin.data-engine.daily-list', compact('powerPlants', 'date', 'hours'));
         } catch (\Exception $e) {
             Log::error('Error in DataEngine listDailyInputs:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
+            
+            if ($request->ajax()) {
+                return response()->json(['error' => 'Terjadi kesalahan saat memuat data: ' . $e->getMessage()], 500);
+            }
             
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data: ' . $e->getMessage());
         }

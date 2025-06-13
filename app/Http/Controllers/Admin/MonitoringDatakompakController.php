@@ -13,6 +13,8 @@ use App\Models\PowerPlant;
 use App\Models\MachineLog;
 use App\Models\MeetingShift;
 use Illuminate\Support\Collection;
+use App\Models\BahanBakar;
+use App\Models\Pelumas;
 
 class MonitoringDatakompakController extends Controller
 {
@@ -44,6 +46,12 @@ class MonitoringDatakompakController extends Controller
                 break;
             case 'meeting-shift':
                 $data = $this->getMeetingShiftData(Carbon::createFromFormat('Y-m', $month)->format('Y-m-d'), $powerPlants);
+                break;
+            case 'bahan-bakar':
+                $data = $this->getBahanBakarData($month);
+                break;
+            case 'pelumas':
+                $data = $this->getPelumasData($month);
                 break;
             default:
                 $data = $this->getDataEngineData($date, $powerPlants);
@@ -332,5 +340,93 @@ class MonitoringDatakompakController extends Controller
                          ->sortByDesc('time')
                          ->take(10)
                          ->values();
+    }
+
+    private function getBahanBakarData($month)
+    {
+        $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+
+        // Get all power plants
+        $powerPlants = PowerPlant::with(['machines'])->get();
+
+        // Get all dates in the month
+        $dates = collect();
+        $currentDate = $startDate->copy();
+        while ($currentDate <= $endDate) {
+            $dates->push($currentDate->format('Y-m-d'));
+            $currentDate->addDay();
+        }
+
+        // Get bahan bakar data
+        $bahanBakarData = BahanBakar::with('unit')
+            ->whereBetween('tanggal', [$startDate, $endDate])
+            ->get()
+            ->groupBy(['unit_id', 'tanggal']);
+
+        // Prepare data for each power plant
+        foreach ($powerPlants as $powerPlant) {
+            $powerPlant->dailyData = collect();
+            foreach ($dates as $date) {
+                $dayData = $bahanBakarData->get($powerPlant->id, collect())->get($date, collect())->first();
+                $powerPlant->dailyData->put($date, [
+                    'status' => $dayData ? true : false,
+                    'data' => $dayData
+                ]);
+            }
+        }
+
+        return [
+            'type' => 'bahan-bakar',
+            'month' => $month,
+            'dates' => $dates->map(function($date) {
+                return Carbon::parse($date)->format('d/m');
+            }),
+            'powerPlants' => $powerPlants
+        ];
+    }
+
+    private function getPelumasData($month)
+    {
+        $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+
+        // Get all power plants
+        $powerPlants = PowerPlant::with(['machines'])->get();
+
+        // Get all dates in the month
+        $dates = collect();
+        $currentDate = $startDate->copy();
+        while ($currentDate <= $endDate) {
+            $dates->push($currentDate->format('Y-m-d'));
+            $currentDate->addDay();
+        }
+
+        // Get pelumas data
+        $pelumasData = Pelumas::with('unit')
+            ->whereBetween('tanggal', [$startDate, $endDate])
+            ->get()
+            ->groupBy(['unit_id', 'tanggal']);
+
+        // Prepare data for each power plant
+        foreach ($powerPlants as $powerPlant) {
+            $powerPlant->dailyData = collect();
+            foreach ($dates as $date) {
+                $dayData = $pelumasData->get($powerPlant->id, collect())->get($date, collect())->first();
+                $powerPlant->dailyData->put($date, [
+                    'status' => $dayData ? true : false,
+                    'data' => $dayData
+                ]);
+            }
+        }
+
+        return [
+            'type' => 'pelumas',
+            'month' => $month,
+            'dates' => $dates->map(function($date) {
+                return Carbon::parse($date)->format('d/m');
+            }),
+            'powerPlants' => $powerPlants
+        ];
     }
 } 

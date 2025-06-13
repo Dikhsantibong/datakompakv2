@@ -89,7 +89,7 @@
                                         Unit
                                     </th>
                                     @foreach($hours as $hour)
-                                        <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                                        <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap border-r">
                                             {{ \Carbon\Carbon::parse($hour)->format('H:i') }}
                                         </th>
                                     @endforeach
@@ -102,7 +102,7 @@
                                             {{ $powerPlant->name }}
                                         </td>
                                         @foreach($hours as $hour)
-                                            <td class="px-3 py-4 whitespace-nowrap text-center">
+                                            <td class="px-3 py-4 whitespace-nowrap text-center border-r">
                                                 @if($powerPlant->hourlyStatus[$hour])
                                                     <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
                                                         <i class="fas fa-check text-xs"></i>

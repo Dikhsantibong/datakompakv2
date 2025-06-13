@@ -15,6 +15,7 @@ use App\Models\MeetingShift;
 use Illuminate\Support\Collection;
 use App\Models\BahanBakar;
 use App\Models\Pelumas;
+use App\Models\LaporanKit;
 
 class MonitoringDatakompakController extends Controller
 {
@@ -52,6 +53,9 @@ class MonitoringDatakompakController extends Controller
                 break;
             case 'pelumas':
                 $data = $this->getPelumasData($month);
+                break;
+            case 'laporan-kit':
+                $data = $this->getLaporanKitData($month);
                 break;
             default:
                 $data = $this->getDataEngineData($date, $powerPlants);
@@ -432,6 +436,58 @@ class MonitoringDatakompakController extends Controller
 
         return [
             'type' => 'pelumas',
+            'month' => $month,
+            'dates' => $dates->map(function($date) {
+                return Carbon::parse($date)->format('d/m');
+            }),
+            'powerPlants' => $powerPlants
+        ];
+    }
+
+    private function getLaporanKitData($month)
+    {
+        $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+
+        // Get all power plants
+        $powerPlants = PowerPlant::all();
+
+        // Get all dates in the month
+        $dates = collect();
+        $currentDate = $startDate->copy();
+        while ($currentDate <= $endDate) {
+            $dates->push($currentDate->format('Y-m-d'));
+            $currentDate->addDay();
+        }
+
+        // Get all laporan kit data for the month
+        $laporanKitData = LaporanKit::with(['jamOperasi', 'gangguan', 'bbm', 'kwh', 'pelumas', 'bahanKimia', 'bebanTertinggi'])
+            ->whereBetween(DB::raw('DATE(tanggal)'), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+            ->get()
+            ->groupBy([
+                'unit_source',
+                function($item) {
+                    return Carbon::parse($item->tanggal)->format('Y-m-d');
+                }
+            ]);
+
+        // Prepare data for each power plant
+        foreach ($powerPlants as $powerPlant) {
+            $powerPlant->dailyData = collect();
+            foreach ($dates as $date) {
+                $dayData = $laporanKitData->get($powerPlant->unit_source, collect())
+                    ->get($date, collect())
+                    ->first();
+                
+                $powerPlant->dailyData->put($date, [
+                    'status' => !is_null($dayData),
+                    'data' => $dayData
+                ]);
+            }
+        }
+
+        return [
+            'type' => 'laporan-kit',
             'month' => $month,
             'dates' => $dates->map(function($date) {
                 return Carbon::parse($date)->format('d/m');

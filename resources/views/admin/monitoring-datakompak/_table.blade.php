@@ -268,6 +268,71 @@
             @endforeach
         </tbody>
     </table>
+@elseif($data['type'] === 'laporan-kit')
+    <div class="mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">Laporan KIT - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 border">
+            <thead>
+                <tr>
+                    <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-white z-10 border-r">
+                        Unit
+                    </th>
+                    @foreach($data['dates'] as $date)
+                        <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap border-r">
+                            {{ $date }}
+                        </th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach($data['powerPlants'] as $powerPlant)
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
+                            {{ $powerPlant->name }}
+                        </td>
+                        @foreach($data['dates'] as $index => $date)
+                            @php
+                                $fullDate = \Carbon\Carbon::createFromFormat('d/m', $date)->format('Y-m-d');
+                                $dayData = $powerPlant->dailyData[$fullDate];
+                            @endphp
+                            <td class="px-3 py-4 whitespace-nowrap text-center border-r relative group">
+                                @if($dayData['status'])
+                                    <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full cursor-pointer">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </span>
+                                    <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
+                                        <div class="text-sm">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <p class="font-semibold">{{ $powerPlant->name }}</p>
+                                                <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
+                                            </div>
+                                            @if($dayData['data'])
+                                                <div class="space-y-2">
+                                                    <p><span class="font-medium">Jam Operasi:</span> {{ $dayData['data']->jamOperasi->count() }} entries</p>
+                                                    <p><span class="font-medium">Gangguan:</span> {{ $dayData['data']->gangguan->count() }} entries</p>
+                                                    <p><span class="font-medium">BBM:</span> {{ $dayData['data']->bbm->count() }} entries</p>
+                                                    <p><span class="font-medium">KWH:</span> {{ $dayData['data']->kwh->count() }} entries</p>
+                                                    <p><span class="font-medium">Pelumas:</span> {{ $dayData['data']->pelumas->count() }} entries</p>
+                                                    <p><span class="font-medium">Bahan Kimia:</span> {{ $dayData['data']->bahanKimia->count() }} entries</p>
+                                                    <p><span class="font-medium">Beban Tertinggi:</span> {{ $dayData['data']->bebanTertinggi->count() }} entries</p>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @else
+                                    <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
+                                        <i class="fas fa-times text-xs"></i>
+                                    </span>
+                                @endif
+                            </td>
+                        @endforeach
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 @else
     <table class="min-w-full divide-y divide-gray-200 border">
         <thead>

@@ -51,7 +51,7 @@ class DataEngineController extends Controller
                 $latestLogQuery = DB::table('power_plant_logs')
                     ->where('power_plant_id', $powerPlant->id)
                     ->where('date', $date);
-
+                
                 if ($time) {
                     // First try to get exact time match
                     $exactTimeLog = clone $latestLogQuery;
@@ -74,11 +74,11 @@ class DataEngineController extends Controller
                                 ->where('time', '>', $time)
                                 ->orderBy('time', 'asc')
                                 ->first();
-                        }
+                }
                     }
                 } else {
                     // If no time specified, get the latest log for the date
-                    $latestLog = $latestLogQuery->orderBy('time', 'desc')->first();
+                $latestLog = $latestLogQuery->orderBy('time', 'desc')->first();
                 }
 
                 $powerPlant->hop = $latestLog?->hop;

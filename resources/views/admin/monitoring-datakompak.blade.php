@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @push('styles')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
@@ -9,117 +8,9 @@
             overflow-y: auto;
             height: calc(100vh - 64px);
         }
-        .welcome-card {
-            background-image: url('{{ asset('images/welcome.webp') }}');
-            background-size: cover;
-            background-position: center;
-            transition: background-image 1s ease-in-out;
-            font-family: 'Poppins', sans-serif;
-            min-height: 200px;
-        }
-
-        .typing-animation {
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 3px solid white;
-            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-            margin: 0;
-            width: 0;
-        }
-
-        @media (max-width: 768px) {
-            .typing-animation {
-                white-space: normal;
-                border-right: none;
-                width: 100%;
-                font-size: 1.5rem;
-                line-height: 1.2;
-                animation: fadeIn 1s ease-in forwards;
-            }
-            
-            .welcome-card {
-                background-position: center;
-                padding: 1.5rem;
-                min-height: 180px;
-            }
-        }
-
-        .fade-in {
-            opacity: 0;
-            animation: fadeIn 1s ease-in forwards;
-            animation-delay: 1s;
-        }
-
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: white }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .welcome-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                to bottom,
-                rgba(0, 0, 0, 0.2),
-                rgba(0, 0, 0, 0.4)
-            );
-            border-radius: 0.5rem;
-            z-index: 1;
-        }
-
-        .welcome-card > div {
-            position: relative;
-            z-index: 2;
-        }
-        .status-badge {
-            transition: all 0.3s ease;
-        }
-        .status-badge:hover {
-            transform: scale(1.05);
-        }
-        .unit-card {
-            transition: all 0.3s ease;
-        }
-        .unit-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-        
-        .progress-ring {
-            transition: all 0.3s ease;
-        }
-        
-        .activity-timeline::before {
-            content: '';
-            position: absolute;
-            left: 15px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #e5e7eb;
-        }
-        
-        .activity-item::before {
-            content: '';
-            position: absolute;
-            left: -23px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: currentColor;
+        .tab-active {
+            border-bottom: 2px solid #2563eb;
+            color: #2563eb;
         }
     </style>
 @endpush
@@ -128,13 +19,11 @@
 <div class="flex h-screen bg-gray-100">
     @include('components.sidebar')
     
-    <div id="main-content" class="flex-1 flex flex-col overflow-hidden">
+    <div class="flex-1 flex flex-col overflow-hidden">
         <!-- Header -->
-        <header class="bg-white shadow-sm sticky top-0 z-20
-        ">
+        <header class="bg-white shadow-sm sticky top-0 z-20">
             <div class="flex justify-between items-center px-6 py-3">
                 <div class="flex items-center gap-x-3">
-                    <!-- Mobile Menu Toggle -->
                     <button id="mobile-menu-toggle"
                         class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                         aria-controls="mobile-menu" aria-expanded="false">
@@ -182,110 +71,81 @@
 
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto  px-4">
-                <!-- Welcome Card -->
-                <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
-                    <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-800 opacity-75 rounded-lg"></div>
-                    <div class="relative z-10">
-                        <!-- Text Content -->
-                        <div class="space-y-2 md:space-y-4">
-                            <div style="overflow: hidden;">
-                                <h2 class="text-2xl md:text-3xl font-bold tracking-tight typing-animation">
-                                    Monitor Status Input Data
-                                </h2>
+            <div class="container mx-auto px-4">
+                <!-- Stats Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                                <i class="fas fa-industry text-xl"></i>
                             </div>
-                            <p class="text-sm md:text-lg font-medium fade-in">
-                                PLN NUSANTARA POWER UNIT PEMBANGKITAN KENDARI
-                            </p>
-                            <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 fade-in">
-                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    <div class="text-center">
-                                        <div class="text-2xl font-bold">{{ $stats['total_units'] }}</div>
-                                        <div class="text-sm">Total Unit</div>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-2xl font-bold">{{ $stats['completed'] }}</div>
-                                        <div class="text-sm">Sudah Input</div>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-2xl font-bold">{{ $stats['pending'] }}</div>
-                                        <div class="text-sm">Belum Input</div>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-2xl font-bold">{{ $stats['overdue'] }}</div>
-                                        <div class="text-sm">Terlambat</div>
-                                    </div>
-                                </div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-500">Total Unit</p>
+                                <p class="text-lg font-semibold">{{ $stats['total_units'] }}</p>
                             </div>
                         </div>
-                        
-                        <!-- Logo - Hidden on mobile -->
-                        <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-green-100 text-green-600">
+                                <i class="fas fa-check-circle text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-500">Sudah Input</p>
+                                <p class="text-lg font-semibold">{{ $stats['completed'] }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                                <i class="fas fa-clock text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-500">Pending</p>
+                                <p class="text-lg font-semibold">{{ $stats['pending'] }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-red-100 text-red-600">
+                                <i class="fas fa-exclamation-circle text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-500">Terlambat</p>
+                                <p class="text-lg font-semibold">{{ $stats['overdue'] }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Content Sections -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- Input Status Summary -->
-                    <div class="bg-white rounded-xl shadow-sm p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-gray-800">
-                                <i class="fas fa-clipboard-check mr-2 text-blue-600"></i>
-                                Status Input Data
-                            </h3>
-                            <span class="text-sm text-gray-500">Hari Ini</span>
-                        </div>
+                <!-- Recent Activities -->
+                <div class="bg-white rounded-lg shadow mb-6">
+                    <div class="p-6">
+                        <h2 class="text-lg font-semibold mb-4">Aktivitas Terkini</h2>
                         <div class="space-y-4">
-                            <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-600">Daily Summary</p>
-                                    <p class="text-xs text-gray-500">Input data harian</p>
-                                </div>
-                                <span class="px-3 py-1 text-xs font-medium rounded-full {{ $stats['completed'] > 0 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                    {{ $stats['completed'] > 0 ? 'Completed' : 'Pending' }}
-                                </span>
-                            </div>
-                            <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-600">Machine Status</p>
-                                    <p class="text-xs text-gray-500">Status mesin terkini</p>
-                                </div>
-                                <span class="px-3 py-1 text-xs font-medium rounded-full {{ $stats['completed'] > 0 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                    {{ $stats['completed'] > 0 ? 'Updated' : 'Pending' }}
-                                </span>
-                            </div>
-                            <div class="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-600">Engine Data</p>
-                                    <p class="text-xs text-gray-500">Data performa mesin</p>
-                                </div>
-                                <span class="px-3 py-1 text-xs font-medium rounded-full {{ $stats['completed'] > 0 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                    {{ $stats['completed'] > 0 ? 'Recorded' : 'Pending' }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recent Activities -->
-                    <div class="bg-white rounded-xl shadow-sm p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-gray-800">
-                                <i class="fas fa-history mr-2 text-blue-600"></i>
-                                Aktivitas Terkini
-                            </h3>
-                            <span class="text-sm text-gray-500">24 Jam Terakhir</span>
-                        </div>
-                        <div class="relative pl-8 space-y-4 activity-timeline">
-                            @foreach($recentActivities->take(5) as $activity)
-                                <div class="relative activity-item pl-4 {{ $activity['type'] === 'Daily Summary' ? 'text-blue-600' : ($activity['type'] === 'Machine Status' ? 'text-green-600' : 'text-purple-600') }}">
-                                    <div class="bg-white rounded-lg border p-3">
-                                        <div class="flex justify-between items-start">
-                                            <div>
-                                                <p class="text-sm font-medium text-gray-900">{{ $activity['unit'] }}</p>
-                                                <p class="text-sm text-gray-500">{{ $activity['action'] }}</p>
+                            @foreach($recentActivities as $activity)
+                                <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                                    <div class="flex-shrink-0">
+                                        @if($activity['type'] === 'Daily Summary')
+                                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                                <i class="fas fa-calendar text-blue-600"></i>
                                             </div>
-                                            <span class="text-xs text-gray-400">{{ Carbon\Carbon::parse($activity['time'])->diffForHumans() }}</span>
-                                        </div>
+                                        @elseif($activity['type'] === 'Machine Status')
+                                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                                                <i class="fas fa-cog text-green-600"></i>
+                                            </div>
+                                        @else
+                                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                                                <i class="fas fa-chart-line text-purple-600"></i>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-900">{{ $activity['unit'] }}</p>
+                                        <p class="text-sm text-gray-500">{{ $activity['action'] }}</p>
+                                        <p class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($activity['time'])->diffForHumans() }}</p>
                                     </div>
                                 </div>
                             @endforeach
@@ -293,151 +153,66 @@
                     </div>
                 </div>
 
-                <!-- Unit Status Sections -->
-                <div class="space-y-6">
-                    <!-- Overdue Units -->
-                    @if($overdueUnits->isNotEmpty())
-                    <div class="bg-white rounded-xl shadow-sm p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-red-600">Overdue Units</h3>
-                            <span class="text-sm text-gray-500">{{ $overdueUnits->count() }} Units</span>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            @foreach($overdueUnits as $unit)
-                                <div class="bg-red-50 rounded-lg p-4 unit-card">
-                                    <div class="flex items-start justify-between">
-                                        <div class="flex-1">
-                                            <h4 class="font-medium text-gray-900">{{ $unit['name'] }}</h4>
-                                            <p class="text-sm text-gray-600 mt-1">
-                                                <i class="fas fa-clock mr-1"></i>
-                                                Last Update: {{ $unit['last_update'] ? Carbon\Carbon::parse($unit['last_update'])->diffForHumans() : 'Never' }}
-                                            </p>
-                                            <div class="mt-3">
-                                                <div class="flex flex-wrap gap-2">
-                                                    @if(!$unit['daily_summary'])
-                                                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-red-100 text-red-700">
-                                                            <i class="fas fa-exclamation-circle mr-1"></i> Missing Daily Summary
-                                                        </span>
-                                                    @endif
-                                                    @if(!$unit['machine_status'])
-                                                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-red-100 text-red-700">
-                                                            <i class="fas fa-exclamation-circle mr-1"></i> Missing Machine Status
-                                                        </span>
-                                                    @endif
-                                                    @if(!$unit['engine_data'])
-                                                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-red-100 text-red-700">
-                                                            <i class="fas fa-exclamation-circle mr-1"></i> Missing Engine Data
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="ml-4 flex flex-col items-end">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                Overdue
-                                            </span>
-                                            <div class="mt-2 text-sm text-gray-500">
-                                                {{ $unit['completed_inputs'] }}/3 Complete
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
+                <!-- Tabs -->
+                <div class="mb-6">
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-8">
+                            <a href="#" 
+                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'data-engine' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                               data-tab="data-engine">
+                                Data Engine 24 Jam
+                            </a>
+                            <a href="#" 
+                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'daily-summary' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                               data-tab="daily-summary">
+                                Ikhtisar Harian
+                            </a>
+                            <a href="#" 
+                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'meeting-shift' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                               data-tab="meeting-shift">
+                                Meeting Shift
+                            </a>
+                        </nav>
                     </div>
-                    @endif
+                </div>
 
-                    <!-- Pending Units -->
-                    @if($pendingUnits->isNotEmpty())
-                    <div class="bg-white rounded-xl shadow-sm p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-yellow-600">Pending Units</h3>
-                            <span class="text-sm text-gray-500">{{ $pendingUnits->count() }} Units</span>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            @foreach($pendingUnits as $unit)
-                                <div class="bg-yellow-50 rounded-lg p-4 unit-card">
-                                    <div class="flex items-start justify-between">
-                                        <div class="flex-1">
-                                            <h4 class="font-medium text-gray-900">{{ $unit['name'] }}</h4>
-                                            <p class="text-sm text-gray-600 mt-1">
-                                                <i class="fas fa-clock mr-1"></i>
-                                                Last Update: {{ $unit['last_update'] ? Carbon\Carbon::parse($unit['last_update'])->diffForHumans() : 'Never' }}
-                                            </p>
-                                            <div class="mt-3">
-                                                <div class="flex flex-wrap gap-2">
-                                                    @if(!$unit['daily_summary'])
-                                                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-yellow-100 text-yellow-700">
-                                                            <i class="fas fa-exclamation-circle mr-1"></i> Missing Daily Summary
-                                                        </span>
-                                                    @endif
-                                                    @if(!$unit['machine_status'])
-                                                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-yellow-100 text-yellow-700">
-                                                            <i class="fas fa-exclamation-circle mr-1"></i> Missing Machine Status
-                                                        </span>
-                                                    @endif
-                                                    @if(!$unit['engine_data'])
-                                                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-yellow-100 text-yellow-700">
-                                                            <i class="fas fa-exclamation-circle mr-1"></i> Missing Engine Data
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="ml-4 flex flex-col items-end">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                Pending
-                                            </span>
-                                            <div class="mt-2 text-sm text-gray-500">
-                                                {{ $unit['completed_inputs'] }}/3 Complete
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
+                <!-- Date Filter -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-4">
+                        <div>
+                            <label for="month" class="block text-sm font-medium text-gray-700">Bulan</label>
+                            <input type="month" 
+                                   name="month" 
+                                   id="month"
+                                   value="{{ $month }}"
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                         </div>
                     </div>
-                    @endif
+                </div>
 
-                    <!-- Completed Units -->
-                    @if($completedUnits->isNotEmpty())
-                    <div class="bg-white rounded-xl shadow-sm p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-green-600">Completed Units</h3>
-                            <span class="text-sm text-gray-500">{{ $completedUnits->count() }} Units</span>
+                <!-- Table Container -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-6">
+                        <div class="overflow-x-auto relative" id="tableContainer">
+                            @include('admin.monitoring-datakompak._table')
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            @foreach($completedUnits as $unit)
-                                <div class="bg-green-50 rounded-lg p-4 unit-card">
-                                    <div class="flex items-start justify-between">
-                                        <div class="flex-1">
-                                            <h4 class="font-medium text-gray-900">{{ $unit['name'] }}</h4>
-                                            <p class="text-sm text-gray-600 mt-1">
-                                                <i class="fas fa-clock mr-1"></i>
-                                                Updated: {{ Carbon\Carbon::parse($unit['last_update'])->diffForHumans() }}
-                                            </p>
-                                            <div class="mt-3">
-                                                <div class="flex flex-wrap gap-2">
-                                                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-green-100 text-green-700">
-                                                        <i class="fas fa-check-circle mr-1"></i> All Data Complete
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="ml-4 flex flex-col items-end">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                Completed
-                                            </span>
-                                            <div class="mt-2 text-sm text-gray-500">
-                                                3/3 Complete
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
+
+                        <!-- Legend -->
+                        <div class="mt-4 flex items-center gap-6">
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
+                                    <i class="fas fa-check text-xs"></i>
+                                </span>
+                                <span class="text-sm text-gray-600">Data sudah diinput</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
+                                    <i class="fas fa-times text-xs"></i>
+                                </span>
+                                <span class="text-sm text-gray-600">Data belum diinput</span>
+                            </div>
                         </div>
                     </div>
-                    @endif
                 </div>
             </div>
         </main>
@@ -447,26 +222,6 @@
 @push('scripts')
 <script src="{{ asset('js/toggle.js') }}"></script>
 <script>
-const backgroundImages = [
-    "{{ asset('images/welcome.webp') }}",
-    "{{ asset('images/welcome2.jpeg') }}",
-    "{{ asset('images/welcome3.jpg') }}"
-];
-
-let currentImageIndex = 0;
-const welcomeCard = document.querySelector('.welcome-card');
-
-function changeBackground() {
-    welcomeCard.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
-    currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
-}
-
-// Set gambar awal
-changeBackground();
-
-// Ganti gambar setiap 5 detik
-setInterval(changeBackground, 5000);
-
 // Toggle dropdown
 function toggleDropdown() {
     const dropdown = document.getElementById('dropdown');
@@ -481,6 +236,57 @@ window.addEventListener('click', function(e) {
     if (!dropdown.contains(e.target) && !dropdownToggle.contains(e.target)) {
         dropdown.classList.add('hidden');
     }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const monthInput = document.getElementById('month');
+    const tableContainer = document.getElementById('tableContainer');
+    const tabLinks = document.querySelectorAll('.tab-link');
+    let currentTab = '{{ $activeTab }}';
+
+    function updateContent(month, tab) {
+        fetch(`{{ route('admin.monitoring-datakompak') }}?month=${month}&tab=${tab}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newTable = doc.querySelector('table').outerHTML;
+            
+            tableContainer.querySelector('table').outerHTML = newTable;
+            
+            // Update URL without refreshing
+            window.history.pushState({}, '', `{{ route('admin.monitoring-datakompak') }}?month=${month}&tab=${tab}`);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    monthInput.addEventListener('change', function() {
+        updateContent(this.value, currentTab);
+    });
+
+    tabLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Update active tab styling
+            tabLinks.forEach(l => {
+                l.classList.remove('tab-active');
+                l.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+            });
+            this.classList.add('tab-active');
+            this.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+
+            // Update content
+            currentTab = this.dataset.tab;
+            updateContent(monthInput.value, currentTab);
+        });
+    });
 });
 </script>
 @endpush

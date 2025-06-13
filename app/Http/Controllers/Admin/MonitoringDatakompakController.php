@@ -10,17 +10,62 @@ use App\Models\DailySummary;
 use App\Models\MachineStatusLog;
 use App\Models\EngineData;
 use App\Models\PowerPlant;
+use App\Models\MachineLog;
+use App\Models\MeetingShift;
+use Illuminate\Support\Collection;
 
 class MonitoringDatakompakController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $today = Carbon::today();
-        
+        $month = $request->get('month', now()->format('Y-m'));
+        $activeTab = $request->get('tab', 'data-engine');
+
         // Get all power plants
         $powerPlants = PowerPlant::with(['machines'])->get();
-        
-        $monitoringData = [];
+
+        // Parse the month to get start and end dates
+        $date = Carbon::createFromFormat('Y-m', $month)->format('Y-m-d');
+
+        // Calculate stats and get categorized units
+        $statsData = $this->calculateStats($powerPlants, $date);
+        $stats = $statsData['stats'];
+        $categorizedUnits = $statsData['units'];
+
+        // Get data based on active tab
+        switch ($activeTab) {
+            case 'data-engine':
+                $data = $this->getDataEngineData($date, $powerPlants);
+                break;
+            case 'daily-summary':
+                $data = $this->getDailySummaryData($date, $powerPlants);
+                break;
+            case 'meeting-shift':
+                $data = $this->getMeetingShiftData($date, $powerPlants);
+                break;
+            default:
+                $data = $this->getDataEngineData($date, $powerPlants);
+        }
+
+        if ($request->ajax()) {
+            return view('admin.monitoring-datakompak._table', compact('data', 'activeTab', 'date'));
+        }
+
+        // Get recent activities
+        $recentActivities = $this->getRecentActivities();
+
+        return view('admin.monitoring-datakompak', compact(
+            'data',
+            'activeTab',
+            'month',
+            'stats',
+            'recentActivities',
+            'categorizedUnits'
+        ));
+    }
+
+    private function calculateStats($powerPlants, $date)
+    {
         $stats = [
             'total_units' => 0,
             'completed' => 0,
@@ -28,113 +73,182 @@ class MonitoringDatakompakController extends Controller
             'overdue' => 0
         ];
 
+        $completedUnits = new Collection();
+        $pendingUnits = new Collection();
+        $overdueUnits = new Collection();
+
         foreach ($powerPlants as $plant) {
+            $stats['total_units']++;
+
             $plantData = [
                 'id' => $plant->id,
                 'name' => $plant->name,
-                'type' => $this->getPlantType($plant->name),
-                'status' => 'pending',
-                'daily_summary' => null,
-                'machine_status' => null,
-                'engine_data' => null,
-                'last_update' => null,
-                'machines_count' => $plant->machines->count(),
-                'completed_inputs' => 0
+                'machines' => $plant->machines,
+                'completed_inputs' => 0,
+                'last_update' => null
             ];
 
             // Check DailySummary
-            $dailySummary = DailySummary::where('power_plant_id', $plant->id)
-                ->whereDate('date', $today)
-                ->latest()
-                ->first();
+            $hasDaily = DailySummary::where('power_plant_id', $plant->id)
+                ->whereDate('date', $date)
+                ->exists();
 
             // Check MachineStatusLog
-            $machineStatus = MachineStatusLog::whereIn('machine_id', $plant->machines->pluck('id'))
-                ->whereDate('tanggal', $today)
-                ->latest()
-                ->first();
+            $hasStatus = MachineStatusLog::whereIn('machine_id', $plant->machines->pluck('id'))
+                ->whereDate('tanggal', $date)
+                ->exists();
 
             // Check EngineData
-            $engineData = EngineData::whereIn('machine_id', $plant->machines->pluck('id'))
-                ->whereDate('date', $today)
-                ->latest()
-                ->first();
+            $hasEngine = EngineData::whereIn('machine_id', $plant->machines->pluck('id'))
+                ->whereDate('date', $date)
+                ->exists();
 
-            // Calculate completion status
-            $hasDaily = !is_null($dailySummary);
-            $hasStatus = !is_null($machineStatus);
-            $hasEngine = !is_null($engineData);
+            $plantData['completed_inputs'] = ($hasDaily ? 1 : 0) + ($hasStatus ? 1 : 0) + ($hasEngine ? 1 : 0);
 
-            $plantData['daily_summary'] = $dailySummary;
-            $plantData['machine_status'] = $machineStatus;
-            $plantData['engine_data'] = $engineData;
-
-            // Calculate last update
-            $dates = array_filter([
-                $dailySummary?->created_at,
-                $machineStatus?->created_at,
-                $engineData?->created_at
-            ]);
-            
-            $plantData['last_update'] = !empty($dates) ? max($dates) : null;
-            
-            // Calculate status
             if ($hasDaily && $hasStatus && $hasEngine) {
-                $plantData['status'] = 'completed';
-                $plantData['completed_inputs'] = 3;
                 $stats['completed']++;
+                $completedUnits->push($plantData);
             } else {
-                $hoursLate = $plantData['last_update'] 
-                    ? Carbon::now()->diffInHours($plantData['last_update'])
-                    : 24;
-                
-                if ($hoursLate > 6) {
-                    $plantData['status'] = 'overdue';
-                    $stats['overdue']++;
-                } else {
-                    $plantData['status'] = 'pending';
-                    $stats['pending']++;
-                }
-                
-                $plantData['completed_inputs'] = ($hasDaily ? 1 : 0) + 
-                                               ($hasStatus ? 1 : 0) + 
-                                               ($hasEngine ? 1 : 0);
-            }
+                // Get latest update time
+                $latestUpdates = [];
 
-            $monitoringData[] = $plantData;
-            $stats['total_units']++;
+                $dailySummaryUpdate = DailySummary::where('power_plant_id', $plant->id)
+                    ->latest('updated_at')
+                    ->value('updated_at');
+                if ($dailySummaryUpdate) {
+                    $latestUpdates[] = $dailySummaryUpdate;
+                }
+
+                $machineStatusUpdate = MachineStatusLog::whereIn('machine_id', $plant->machines->pluck('id'))
+                    ->latest('updated_at')
+                    ->value('updated_at');
+                if ($machineStatusUpdate) {
+                    $latestUpdates[] = $machineStatusUpdate;
+                }
+
+                $engineDataUpdate = EngineData::whereIn('machine_id', $plant->machines->pluck('id'))
+                    ->latest('updated_at')
+                    ->value('updated_at');
+                if ($engineDataUpdate) {
+                    $latestUpdates[] = $engineDataUpdate;
+                }
+
+                if (!empty($latestUpdates)) {
+                    $latestUpdate = max($latestUpdates);
+                    $plantData['last_update'] = $latestUpdate;
+
+                    if (Carbon::parse($latestUpdate)->diffInHours(now()) > 6) {
+                        $stats['overdue']++;
+                        $overdueUnits->push($plantData);
+                    } else {
+                        $stats['pending']++;
+                        $pendingUnits->push($plantData);
+                    }
+                } else {
+                    $stats['pending']++;
+                    $pendingUnits->push($plantData);
+                }
+            }
         }
 
-        // Group plants by status
-        $completedUnits = collect($monitoringData)->where('status', 'completed')->values();
-        $pendingUnits = collect($monitoringData)->where('status', 'pending')->values();
-        $overdueUnits = collect($monitoringData)->where('status', 'overdue')->values();
-
-        // Calculate unit types for chart
-        $unitTypes = [
-            'PLTD' => collect($monitoringData)->where('type', 'PLTD')->count(),
-            'PLTM' => collect($monitoringData)->where('type', 'PLTM')->count(),
-            'PLTU' => collect($monitoringData)->where('type', 'PLTU')->count(),
-            'PLTMG' => collect($monitoringData)->where('type', 'PLTMG')->count(),
-            'Other' => collect($monitoringData)->whereNotIn('type', ['PLTD', 'PLTM', 'PLTU', 'PLTMG'])->count(),
+        return [
+            'stats' => $stats,
+            'units' => [
+                'completed' => $completedUnits,
+                'pending' => $pendingUnits,
+                'overdue' => $overdueUnits
+            ]
         ];
+    }
 
-        // Get system performance stats
-        $systemStats = $this->getSystemStats();
+    private function getDataEngineData($date, $powerPlants)
+    {
+        $hours = [];
+        for ($i = 0; $i < 24; $i++) {
+            $hours[] = Carbon::parse($date)->startOfDay()->addHours($i)->format('Y-m-d H:i:s');
+        }
 
-        // Get recent activities
-        $recentActivities = $this->getRecentActivities();
+        foreach ($powerPlants as $powerPlant) {
+            $hourlyStatus = [];
+            foreach ($hours as $hour) {
+                $hasData = MachineLog::whereIn('machine_id', $powerPlant->machines->pluck('id'))
+                    ->whereDate('date', Carbon::parse($hour)->format('Y-m-d'))
+                    ->whereTime('time', Carbon::parse($hour)->format('H:i:s'))
+                    ->exists();
+                $hourlyStatus[$hour] = $hasData;
+            }
+            $powerPlant->hourlyStatus = $hourlyStatus;
+        }
 
-        return view('admin.monitoring-datakompak', compact(
-            'monitoringData',
-            'completedUnits',
-            'pendingUnits',
-            'overdueUnits',
-            'stats',
-            'unitTypes',
-            'systemStats',
-            'recentActivities'
-        ));
+        return [
+            'type' => 'data-engine',
+            'hours' => $hours,
+            'powerPlants' => $powerPlants
+        ];
+    }
+
+    private function getDailySummaryData($date, $powerPlants)
+    {
+        $startDate = Carbon::parse($date)->startOfMonth();
+        $endDate = Carbon::parse($date)->endOfMonth();
+        $dates = [];
+
+        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+            $dates[] = $date->format('Y-m-d');
+        }
+
+        foreach ($powerPlants as $powerPlant) {
+            $dailyStatus = [];
+            foreach ($dates as $date) {
+                $hasData = DailySummary::where('power_plant_id', $powerPlant->id)
+                    ->whereDate('date', $date)
+                    ->exists();
+                $dailyStatus[$date] = $hasData;
+            }
+            $powerPlant->dailyStatus = $dailyStatus;
+        }
+
+        return [
+            'type' => 'daily-summary',
+            'dates' => $dates,
+            'powerPlants' => $powerPlants
+        ];
+    }
+
+    private function getMeetingShiftData($date, $powerPlants)
+    {
+        $shifts = ['A', 'B', 'C', 'D'];
+        $dates = [];
+        
+        // Start from the 1st of the month
+        $startDate = Carbon::parse($date)->startOfMonth();
+        $endDate = Carbon::parse($date)->endOfMonth();
+        
+        // Generate dates for the entire month
+        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+            $dates[] = $date->format('Y-m-d');
+        }
+        
+        foreach ($powerPlants as $powerPlant) {
+            $shiftStatus = [];
+            foreach ($dates as $date) {
+                foreach ($shifts as $shift) {
+                    $key = $date . '_' . $shift;
+                    $hasData = MeetingShift::whereDate('tanggal', $date)
+                        ->where('current_shift', $shift)
+                        ->exists();
+                    $shiftStatus[$key] = $hasData;
+                }
+            }
+            $powerPlant->shiftStatus = $shiftStatus;
+        }
+
+        return [
+            'type' => 'meeting-shift',
+            'shifts' => $shifts,
+            'dates' => $dates,
+            'powerPlants' => $powerPlants
+        ];
     }
 
     private function getPlantType($plantName)

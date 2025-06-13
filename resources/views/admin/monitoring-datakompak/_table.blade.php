@@ -1,12 +1,13 @@
 @if($data['type'] === 'data-engine')
+    <div class="mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">Data Engine - {{ \Carbon\Carbon::parse($data['date'])->isoFormat('D MMMM Y') }}</h3>
+    </div>
     <table class="min-w-full divide-y divide-gray-200 border">
-        <thead>
+        <thead class="bg-gray-50">
             <tr>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-white z-10 border-r">
-                    Unit
-                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">Unit</th>
                 @foreach($data['hours'] as $hour)
-                    <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap border-r">
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r">
                         {{ \Carbon\Carbon::parse($hour)->format('H:i') }}
                     </th>
                 @endforeach
@@ -15,11 +16,11 @@
         <tbody class="bg-white divide-y divide-gray-200">
             @foreach($data['powerPlants'] as $powerPlant)
                 <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r">
                         {{ $powerPlant->name }}
                     </td>
                     @foreach($data['hours'] as $hour)
-                        <td class="px-3 py-4 whitespace-nowrap text-center border-r">
+                        <td class="px-6 py-4 whitespace-nowrap text-center border-r">
                             @if($powerPlant->hourlyStatus[$hour])
                                 <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
                                     <i class="fas fa-check text-xs"></i>

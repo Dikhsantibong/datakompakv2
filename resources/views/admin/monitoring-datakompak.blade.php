@@ -120,39 +120,7 @@
                     </div>
                 </div>
 
-                <!-- Recent Activities -->
-                <div class="bg-white rounded-lg shadow mb-6">
-                    <div class="p-6">
-                        <h2 class="text-lg font-semibold mb-4">Aktivitas Terkini</h2>
-                        <div class="space-y-4">
-                            @foreach($recentActivities as $activity)
-                                <div class="flex items-center p-4 bg-gray-50 rounded-lg">
-                                    <div class="flex-shrink-0">
-                                        @if($activity['type'] === 'Daily Summary')
-                                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                                                <i class="fas fa-calendar text-blue-600"></i>
-                                            </div>
-                                        @elseif($activity['type'] === 'Machine Status')
-                                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                                                <i class="fas fa-cog text-green-600"></i>
-                                            </div>
-                                        @else
-                                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                                                <i class="fas fa-chart-line text-purple-600"></i>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="ml-4">
-                                        <p class="text-sm font-medium text-gray-900">{{ $activity['unit'] }}</p>
-                                        <p class="text-sm text-gray-500">{{ $activity['action'] }}</p>
-                                        <p class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($activity['time'])->diffForHumans() }}</p>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
+                
                 <!-- Tabs -->
                 <div class="mb-6">
                     <div class="border-b border-gray-200">
@@ -176,10 +144,20 @@
                     </div>
                 </div>
 
-                <!-- Date Filter -->
+                <!-- Filters -->
                 <div class="mb-6">
                     <div class="flex items-center gap-4">
-                        <div>
+                        <!-- Date Filter for Data Engine -->
+                        <div class="{{ $activeTab === 'data-engine' ? '' : 'hidden' }}" id="date-filter">
+                            <label for="date" class="block text-sm font-medium text-gray-700">Tanggal</label>
+                            <input type="date" 
+                                   name="date" 
+                                   id="date"
+                                   value="{{ $date }}"
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        </div>
+                        <!-- Month Filter for other tabs -->
+                        <div class="{{ $activeTab === 'data-engine' ? 'hidden' : '' }}" id="month-filter">
                             <label for="month" class="block text-sm font-medium text-gray-700">Bulan</label>
                             <input type="month" 
                                    name="month" 
@@ -239,42 +217,43 @@ window.addEventListener('click', function(e) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('date');
     const monthInput = document.getElementById('month');
+    const dateFilter = document.getElementById('date-filter');
+    const monthFilter = document.getElementById('month-filter');
     const tableContainer = document.getElementById('tableContainer');
     const tabLinks = document.querySelectorAll('.tab-link');
     let currentTab = '{{ $activeTab }}';
 
-    function updateContent(month, tab) {
-        fetch(`{{ route('admin.monitoring-datakompak') }}?month=${month}&tab=${tab}`, {
+    function updateContent(tab, params) {
+        const queryString = new URLSearchParams(params).toString();
+        fetch(`{{ route('admin.monitoring-datakompak') }}?${queryString}`, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         })
         .then(response => response.text())
         .then(html => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const newTable = doc.querySelector('table').outerHTML;
-            
-            tableContainer.querySelector('table').outerHTML = newTable;
-            
-            // Update URL without refreshing
-            window.history.pushState({}, '', `{{ route('admin.monitoring-datakompak') }}?month=${month}&tab=${tab}`);
+            tableContainer.innerHTML = html;
+            window.history.pushState({}, '', `{{ route('admin.monitoring-datakompak') }}?${queryString}`);
         })
         .catch(error => {
             console.error('Error:', error);
         });
     }
 
-    monthInput.addEventListener('change', function() {
-        updateContent(this.value, currentTab);
+    dateInput?.addEventListener('change', function() {
+        updateContent(currentTab, { date: this.value, tab: currentTab });
+    });
+
+    monthInput?.addEventListener('change', function() {
+        updateContent(currentTab, { month: this.value, tab: currentTab });
     });
 
     tabLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Update active tab styling
             tabLinks.forEach(l => {
                 l.classList.remove('tab-active');
                 l.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
@@ -282,9 +261,16 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('tab-active');
             this.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
 
-            // Update content
             currentTab = this.dataset.tab;
-            updateContent(monthInput.value, currentTab);
+            if (currentTab === 'data-engine') {
+                dateFilter.classList.remove('hidden');
+                monthFilter.classList.add('hidden');
+                updateContent(currentTab, { date: dateInput.value, tab: currentTab });
+            } else {
+                dateFilter.classList.add('hidden');
+                monthFilter.classList.remove('hidden');
+                updateContent(currentTab, { month: monthInput.value, tab: currentTab });
+            }
         });
     });
 });

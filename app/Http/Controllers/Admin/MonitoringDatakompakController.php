@@ -19,16 +19,18 @@ class MonitoringDatakompakController extends Controller
     public function index(Request $request)
     {
         $month = $request->get('month', now()->format('Y-m'));
+        $date = $request->get('date', now()->format('Y-m-d'));
         $activeTab = $request->get('tab', 'data-engine');
 
         // Get all power plants
         $powerPlants = PowerPlant::with(['machines'])->get();
 
-        // Parse the month to get start and end dates
-        $date = Carbon::createFromFormat('Y-m', $month)->format('Y-m-d');
-
-        // Calculate stats and get categorized units
-        $statsData = $this->calculateStats($powerPlants, $date);
+        // Calculate stats and get categorized units based on active tab
+        if ($activeTab === 'data-engine') {
+            $statsData = $this->calculateStats($powerPlants, $date);
+        } else {
+            $statsData = $this->calculateStats($powerPlants, Carbon::createFromFormat('Y-m', $month)->format('Y-m-d'));
+        }
         $stats = $statsData['stats'];
         $categorizedUnits = $statsData['units'];
 
@@ -38,17 +40,17 @@ class MonitoringDatakompakController extends Controller
                 $data = $this->getDataEngineData($date, $powerPlants);
                 break;
             case 'daily-summary':
-                $data = $this->getDailySummaryData($date, $powerPlants);
+                $data = $this->getDailySummaryData(Carbon::createFromFormat('Y-m', $month)->format('Y-m-d'), $powerPlants);
                 break;
             case 'meeting-shift':
-                $data = $this->getMeetingShiftData($date, $powerPlants);
+                $data = $this->getMeetingShiftData(Carbon::createFromFormat('Y-m', $month)->format('Y-m-d'), $powerPlants);
                 break;
             default:
                 $data = $this->getDataEngineData($date, $powerPlants);
         }
 
         if ($request->ajax()) {
-            return view('admin.monitoring-datakompak._table', compact('data', 'activeTab', 'date'));
+            return view('admin.monitoring-datakompak._table', compact('data', 'activeTab', 'date', 'month'));
         }
 
         // Get recent activities
@@ -58,6 +60,7 @@ class MonitoringDatakompakController extends Controller
             'data',
             'activeTab',
             'month',
+            'date',
             'stats',
             'recentActivities',
             'categorizedUnits'
@@ -164,8 +167,10 @@ class MonitoringDatakompakController extends Controller
     private function getDataEngineData($date, $powerPlants)
     {
         $hours = [];
+        $selectedDate = Carbon::parse($date);
+        
         for ($i = 0; $i < 24; $i++) {
-            $hours[] = Carbon::parse($date)->startOfDay()->addHours($i)->format('Y-m-d H:i:s');
+            $hours[] = $selectedDate->copy()->startOfDay()->addHours($i)->format('Y-m-d H:i:s');
         }
 
         foreach ($powerPlants as $powerPlant) {
@@ -183,6 +188,7 @@ class MonitoringDatakompakController extends Controller
         return [
             'type' => 'data-engine',
             'hours' => $hours,
+            'date' => $selectedDate->format('Y-m-d'),
             'powerPlants' => $powerPlants
         ];
     }

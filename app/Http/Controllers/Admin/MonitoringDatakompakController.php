@@ -23,10 +23,10 @@ class MonitoringDatakompakController extends Controller
         $month = $request->get('month', now()->format('Y-m'));
         $date = $request->get('date', now()->format('Y-m-d'));
         $activeTab = $request->get('tab', 'data-engine');
-
+        
         // Get all power plants
         $powerPlants = PowerPlant::with(['machines'])->get();
-
+        
         // Calculate stats and get categorized units based on active tab
         if ($activeTab === 'data-engine') {
             $statsData = $this->calculateStats($powerPlants, $date);
@@ -149,7 +149,7 @@ class MonitoringDatakompakController extends Controller
                     $plantData['last_update'] = $latestUpdate;
 
                     if (Carbon::parse($latestUpdate)->diffInHours(now()) > 6) {
-                        $stats['overdue']++;
+                    $stats['overdue']++;
                         $overdueUnits->push($plantData);
                     } else {
                         $stats['pending']++;
@@ -348,7 +348,7 @@ class MonitoringDatakompakController extends Controller
         $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
 
         // Get all power plants
-        $powerPlants = PowerPlant::with(['machines'])->get();
+        $powerPlants = PowerPlant::all();
 
         // Get all dates in the month
         $dates = collect();
@@ -358,19 +358,24 @@ class MonitoringDatakompakController extends Controller
             $currentDate->addDay();
         }
 
-        // Get bahan bakar data
+        // Get all bahan bakar data for the month
         $bahanBakarData = BahanBakar::with('unit')
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->get()
-            ->groupBy(['unit_id', 'tanggal']);
+            ->groupBy(['unit_id', function($item) {
+                return $item->tanggal->format('Y-m-d');
+            }]);
 
         // Prepare data for each power plant
         foreach ($powerPlants as $powerPlant) {
             $powerPlant->dailyData = collect();
             foreach ($dates as $date) {
-                $dayData = $bahanBakarData->get($powerPlant->id, collect())->get($date, collect())->first();
+                $dayData = $bahanBakarData->get($powerPlant->id, collect())
+                    ->get($date, collect())
+                    ->first();
+                
                 $powerPlant->dailyData->put($date, [
-                    'status' => $dayData ? true : false,
+                    'status' => !is_null($dayData),
                     'data' => $dayData
                 ]);
             }
@@ -392,7 +397,7 @@ class MonitoringDatakompakController extends Controller
         $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
 
         // Get all power plants
-        $powerPlants = PowerPlant::with(['machines'])->get();
+        $powerPlants = PowerPlant::all();
 
         // Get all dates in the month
         $dates = collect();
@@ -402,19 +407,24 @@ class MonitoringDatakompakController extends Controller
             $currentDate->addDay();
         }
 
-        // Get pelumas data
+        // Get all pelumas data for the month
         $pelumasData = Pelumas::with('unit')
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->get()
-            ->groupBy(['unit_id', 'tanggal']);
+            ->groupBy(['unit_id', function($item) {
+                return $item->tanggal->format('Y-m-d');
+            }]);
 
         // Prepare data for each power plant
         foreach ($powerPlants as $powerPlant) {
             $powerPlant->dailyData = collect();
             foreach ($dates as $date) {
-                $dayData = $pelumasData->get($powerPlant->id, collect())->get($date, collect())->first();
+                $dayData = $pelumasData->get($powerPlant->id, collect())
+                    ->get($date, collect())
+                    ->first();
+                
                 $powerPlant->dailyData->put($date, [
-                    'status' => $dayData ? true : false,
+                    'status' => !is_null($dayData),
                     'data' => $dayData
                 ]);
             }

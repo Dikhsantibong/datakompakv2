@@ -72,7 +72,10 @@
                                     </span>
                                     <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
                                         <div class="text-sm">
-                                            <p class="font-semibold mb-2">{{ $powerPlant->name }} - {{ $date }}</p>
+                                            <div class="flex justify-between items-center mb-2">
+                                                <p class="font-semibold">{{ $powerPlant->name }}</p>
+                                                <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
+                                            </div>
                                             <div class="grid grid-cols-2 gap-2">
                                                 <p class="text-gray-600">Jenis BBM:</p>
                                                 <p>{{ $dayData['data']->jenis_bbm }}</p>
@@ -87,6 +90,12 @@
                                                 <p class="text-gray-600">HOP:</p>
                                                 <p>{{ number_format($dayData['data']->hop, 2) }}</p>
                                             </div>
+                                            @if($dayData['data']->catatan_transaksi)
+                                                <div class="mt-2 pt-2 border-t">
+                                                    <p class="text-gray-600">Catatan:</p>
+                                                    <p class="mt-1">{{ $dayData['data']->catatan_transaksi }}</p>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @else
@@ -137,7 +146,10 @@
                                     </span>
                                     <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
                                         <div class="text-sm">
-                                            <p class="font-semibold mb-2">{{ $powerPlant->name }} - {{ $date }}</p>
+                                            <div class="flex justify-between items-center mb-2">
+                                                <p class="font-semibold">{{ $powerPlant->name }}</p>
+                                                <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
+                                            </div>
                                             <div class="grid grid-cols-2 gap-2">
                                                 <p class="text-gray-600">Jenis Pelumas:</p>
                                                 <p>{{ $dayData['data']->jenis_pelumas }}</p>
@@ -150,6 +162,12 @@
                                                 <p class="text-gray-600">Saldo Akhir:</p>
                                                 <p>{{ number_format($dayData['data']->saldo_akhir, 2) }}</p>
                                             </div>
+                                            @if($dayData['data']->catatan_transaksi)
+                                                <div class="mt-2 pt-2 border-t">
+                                                    <p class="text-gray-600">Catatan:</p>
+                                                    <p class="mt-1">{{ $dayData['data']->catatan_transaksi }}</p>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @else

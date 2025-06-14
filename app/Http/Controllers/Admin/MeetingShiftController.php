@@ -133,10 +133,14 @@ class MeetingShiftController extends Controller
             $meetingShift->tanggal = $validated['tanggal'];
             $meetingShift->current_shift = $validated['current_shift'];
             $meetingShift->created_by = Auth::user()->getAuthIdentifier();
+            $meetingShift->sync_unit_origin = session('unit', 'mysql');
             $meetingShift->save();
 
             // Log the created meeting shift
-            Log::info('Created meeting shift', ['id' => $meetingShift->id]);
+            Log::info('Created meeting shift', [
+                'id' => $meetingShift->id,
+                'sync_unit_origin' => $meetingShift->sync_unit_origin
+            ]);
 
             // Store machine statuses
             foreach ($validated['machine_statuses'] as $machineStatus) {

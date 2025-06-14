@@ -13,9 +13,11 @@ class SyncMeetingShiftToUpKendari
     {
         try {
             $currentSession = session('unit', 'mysql');
+            $originalUnitOrigin = $event->meetingShift->sync_unit_origin ?? $currentSession;
 
             Log::info('Processing meeting shift sync event', [
                 'current_session' => $currentSession,
+                'original_unit_origin' => $originalUnitOrigin,
                 'meeting_shift_id' => $event->meetingShift->id,
                 'date' => $event->meetingShift->tanggal,
                 'action' => $event->action,
@@ -50,6 +52,7 @@ class SyncMeetingShiftToUpKendari
                             'tanggal' => $event->meetingShift->tanggal,
                             'current_shift' => $event->meetingShift->current_shift,
                             'created_by' => $event->meetingShift->created_by,
+                            'sync_unit_origin' => $originalUnitOrigin,
                             'created_at' => now(),
                             'updated_at' => now()
                         ];
@@ -59,7 +62,8 @@ class SyncMeetingShiftToUpKendari
 
                         Log::info('Created meeting shift record with new ID', [
                             'original_id' => $event->meetingShift->id,
-                            'new_id' => $newId
+                            'new_id' => $newId,
+                            'sync_unit_origin' => $originalUnitOrigin
                         ]);
 
                         // Sync machine statuses with new parent ID
@@ -176,6 +180,7 @@ class SyncMeetingShiftToUpKendari
                                 'tanggal' => $event->meetingShift->tanggal,
                                 'current_shift' => $event->meetingShift->current_shift,
                                 'created_by' => $event->meetingShift->created_by,
+                                'sync_unit_origin' => $originalUnitOrigin,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ]);
@@ -194,6 +199,7 @@ class SyncMeetingShiftToUpKendari
                                 ->update([
                                     'tanggal' => $event->meetingShift->tanggal,
                                     'current_shift' => $event->meetingShift->current_shift,
+                                    'sync_unit_origin' => $originalUnitOrigin,
                                     'updated_at' => now()
                                 ]);
 

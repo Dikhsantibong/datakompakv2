@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\DailySummary;
 use App\Models\MachineStatusLog;
@@ -237,11 +238,11 @@ class MonitoringDatakompakController extends Controller
     {
         $shifts = ['A', 'B', 'C', 'D'];
         $dates = [];
-        
+
         // Start from the 1st of the month
         $startDate = Carbon::parse($date)->startOfMonth();
         $endDate = Carbon::parse($date)->endOfMonth();
-        
+
         // Generate dates for the entire month
         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
             $dates[] = $date->format('Y-m-d');
@@ -249,12 +250,17 @@ class MonitoringDatakompakController extends Controller
         
         foreach ($powerPlants as $powerPlant) {
             $shiftStatus = [];
+            
             foreach ($dates as $date) {
                 foreach ($shifts as $shift) {
                     $key = $date . '_' . $shift;
+                    
+                    // Check if data exists for this unit's sync_unit_origin using unit_source
                     $hasData = MeetingShift::whereDate('tanggal', $date)
                         ->where('current_shift', $shift)
+                        ->where('sync_unit_origin', $powerPlant->unit_source)
                         ->exists();
+                        
                     $shiftStatus[$key] = $hasData;
                 }
             }
@@ -462,14 +468,11 @@ class MonitoringDatakompakController extends Controller
 
         // Get all laporan kit data for the month
         $laporanKitData = LaporanKit::with(['jamOperasi', 'gangguan', 'bbm', 'kwh', 'pelumas', 'bahanKimia', 'bebanTertinggi'])
-            ->whereBetween(DB::raw('DATE(tanggal)'), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+            ->whereBetween('tanggal', [$startDate, $endDate])
             ->get()
-            ->groupBy([
-                'unit_source',
-                function($item) {
-                    return Carbon::parse($item->tanggal)->format('Y-m-d');
-                }
-            ]);
+            ->groupBy(['unit_source', function($item) {
+                return $item->tanggal->format('Y-m-d');
+            }]);
 
         // Prepare data for each power plant
         foreach ($powerPlants as $powerPlant) {

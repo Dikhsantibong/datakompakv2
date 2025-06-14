@@ -19,11 +19,13 @@ class MeetingShift extends Model
     protected $fillable = [
         'tanggal',
         'current_shift',
-        'created_by'
+        'created_by',
+        'sync_unit_origin'
     ];
 
     protected $casts = [
-        'tanggal' => 'date'
+        'tanggal' => 'date',
+        'sync_unit_origin' => 'string'
     ];
 
     protected $primaryKey = 'id';

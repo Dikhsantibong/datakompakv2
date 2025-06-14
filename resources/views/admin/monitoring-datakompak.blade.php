@@ -89,13 +89,13 @@
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-green-100 text-green-600">
                                 <i class="fas fa-check-circle text-xl"></i>
-                            </div>
+                </div>
                             <div class="ml-4">
                                 <p class="text-sm text-gray-500">Sudah Input</p>
                                 <p class="text-lg font-semibold">{{ $stats['completed'] }}</p>
                             </div>
                         </div>
-                    </div>
+                                </div>
                     <div class="bg-white rounded-lg shadow p-6">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
@@ -111,11 +111,11 @@
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-red-100 text-red-600">
                                 <i class="fas fa-exclamation-circle text-xl"></i>
-                            </div>
+                        </div>
                             <div class="ml-4">
                                 <p class="text-sm text-gray-500">Terlambat</p>
                                 <p class="text-lg font-semibold">{{ $stats['overdue'] }}</p>
-                            </div>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -195,15 +195,15 @@
                             <div class="flex items-center gap-2">
                                 <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
                                     <i class="fas fa-check text-xs"></i>
-                                </span>
+                                                    </span>
                                 <span class="text-sm text-gray-600">Data sudah diinput</span>
-                            </div>
+                                                </div>
                             <div class="flex items-center gap-2">
                                 <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
                                     <i class="fas fa-times text-xs"></i>
-                                </span>
+                                            </span>
                                 <span class="text-sm text-gray-600">Data belum diinput</span>
-                            </div>
+                                </div>
                         </div>
                     </div>
                 </div>

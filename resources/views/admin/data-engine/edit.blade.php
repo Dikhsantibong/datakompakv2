@@ -212,25 +212,25 @@
                                     <table class="min-w-full divide-y divide-gray-200">
                                         <thead>
                                             <tr class="bg-gray-50">
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam</th>
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Daya Terpasang (kW)</th>
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SILM/SLO</th>
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DMP Performance Test</th>
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Beban (kW)</th>
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">kVAR</th>
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cos φ</th>
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                                <th class="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">No</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Mesin</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Jam</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Daya Terpasang (kW)</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">SILM/SLO</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">DMP Performance Test</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Beban (kW)</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">kVAR</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Cos φ</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Status</th>
+                                                <th class="px-2 md:px-4 py-2 md:py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Keterangan</th>
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
                                             @forelse($powerPlant->machines as $index => $machine)
                                                 <tr class="hover:bg-gray-50">
-                                                    <td class="px-2 md:px-4 py-2 md:py-3 text-sm text-gray-500 border-r border-gray-200">{{ $index + 1 }}</td>
-                                                    <td class="px-2 md:px-4 py-2 md:py-3 min-w-[120px] md:min-w-[150px]">
-                                                        <div class="text-sm font-medium text-gray-900">{{ $machine->name }}</div>
+                                                    <td class="px-2 md:px-4 py-2 md:py-3 text-sm text-gray-500 border-r border-gray-200 text-center">{{ $index + 1 }}</td>
+                                                    <td class="px-2 md:px-4 py-2 md:py-3 min-w-[120px] md:min-w-[150px] border-r border-gray-200">
+                                                        <div class="text-sm font-medium text-gray-900 text-center  ">{{ $machine->name }}</div>
                                                         <input type="hidden" name="machines[{{ $machine->id }}][machine_id]" value="{{ $machine->id }}">
                                                     </td>
                                                     <td class="px-2 md:px-4 py-2 md:py-3 min-w-[100px] md:min-w-[120px] border-r border-gray-200">

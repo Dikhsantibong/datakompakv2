@@ -1,6 +1,7 @@
 @if($data['type'] === 'data-engine')
     <div class="mb-4">
         <h3 class="text-lg font-semibold text-gray-900">Data Engine - {{ \Carbon\Carbon::parse($data['date'])->isoFormat('D MMMM Y') }}</h3>
+        <p class="text-sm text-gray-500 mb-2">Arahkan cursor ke data yang terceklis untuk melihat detail data</p>
     </div>
     <table class="min-w-full divide-y divide-gray-200 border">
         <thead class="bg-gray-50">
@@ -66,6 +67,7 @@
 @elseif($data['type'] === 'bahan-bakar')
     <div class="mb-4">
         <h3 class="text-lg font-semibold text-gray-900">Data Bahan Bakar - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
+        <p class="text-sm text-gray-500 mb-2">Arahkan cursor ke data yang terceklis untuk melihat detail data</p>
     </div>
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 border">
@@ -142,6 +144,7 @@
 @elseif($data['type'] === 'pelumas')
     <div class="mb-4">
         <h3 class="text-lg font-semibold text-gray-900">Data Pelumas - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
+        <p class="text-sm text-gray-500 mb-2">Arahkan cursor ke data yang terceklis untuk melihat detail data</p>
     </div>
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 border">
@@ -306,6 +309,7 @@
 @elseif($data['type'] === 'laporan-kit')
     <div class="mb-4">
         <h3 class="text-lg font-semibold text-gray-900">Laporan KIT - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
+        <p class="text-sm text-gray-500 mb-2">Arahkan cursor ke data yang terceklis untuk melihat detail data</p>
     </div>
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 border">

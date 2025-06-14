@@ -188,14 +188,18 @@ class MonitoringDatakompakController extends Controller
 
         foreach ($powerPlants as $powerPlant) {
             $hourlyStatus = [];
+            $hourlyLog = [];
             foreach ($hours as $hour) {
-                $hasData = MachineLog::whereIn('machine_id', $powerPlant->machines->pluck('id'))
+                $log = MachineLog::whereIn('machine_id', $powerPlant->machines->pluck('id'))
                     ->whereDate('date', Carbon::parse($hour)->format('Y-m-d'))
                     ->whereTime('time', Carbon::parse($hour)->format('H:i:s'))
-                    ->exists();
+                    ->first();
+                $hasData = !is_null($log);
                 $hourlyStatus[$hour] = $hasData;
+                $hourlyLog[$hour] = $log;
             }
             $powerPlant->hourlyStatus = $hourlyStatus;
+            $powerPlant->hourlyLog = $hourlyLog;
         }
 
         return [

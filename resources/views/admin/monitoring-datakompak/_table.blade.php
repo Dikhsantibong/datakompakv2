@@ -21,11 +21,36 @@
                             {{ $powerPlant->name }}
                         </td>
                         @foreach($data['hours'] as $hour)
-                            <td class="px-6 py-4 whitespace-nowrap text-center border-r">
+                            @php
+                                $log = $powerPlant->hourlyLog[$hour] ?? null;
+                            @endphp
+                            <td class="px-6 py-4 whitespace-nowrap text-center border-r relative group">
                                 @if($powerPlant->hourlyStatus[$hour])
-                                    <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
+                                    <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full cursor-pointer">
                                         <i class="fas fa-check text-xs"></i>
                                     </span>
+                                    @if($log)
+                                    <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
+                                        <div class="text-sm">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <p class="font-semibold">{{ $powerPlant->name }}</p>
+                                                <p class="text-gray-500">{{ \Carbon\Carbon::parse($hour)->format('d/m/Y H:i') }}</p>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <p class="text-gray-600">Status:</p>
+                                                <p>{{ $log->status ?? '-' }}</p>
+                                                <p class="text-gray-600">KW:</p>
+                                                <p>{{ $log->kw ?? '-' }}</p>
+                                                <p class="text-gray-600">KVAR:</p>
+                                                <p>{{ $log->kvar ?? '-' }}</p>
+                                                <p class="text-gray-600">Cos Phi:</p>
+                                                <p>{{ $log->cos_phi ?? '-' }}</p>
+                                                <p class="text-gray-600">Keterangan:</p>
+                                                <p>{{ $log->keterangan ?? '-' }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
                                 @else
                                     <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
                                         <i class="fas fa-times text-xs"></i>

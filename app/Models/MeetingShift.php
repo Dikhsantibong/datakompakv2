@@ -108,6 +108,7 @@ class MeetingShift extends Model
                         'id' => $newId,
                         'tanggal' => $meetingShift->tanggal,
                         'current_shift' => $meetingShift->current_shift,
+                        'sync_unit_origin' => $meetingShift->sync_unit_origin,
                         'created_by' => $meetingShift->created_by,
                         'created_at' => now(),
                         'updated_at' => now()
@@ -160,6 +161,7 @@ class MeetingShift extends Model
                             'id' => $newId,
                             'tanggal' => $meetingShift->tanggal,
                             'current_shift' => $meetingShift->current_shift,
+                            'sync_unit_origin' => $meetingShift->sync_unit_origin,
                             'created_by' => $meetingShift->created_by,
                             'created_at' => now(),
                             'updated_at' => now()
@@ -182,6 +184,7 @@ class MeetingShift extends Model
                             ->update([
                                 'tanggal' => $meetingShift->tanggal,
                                 'current_shift' => $meetingShift->current_shift,
+                                'sync_unit_origin' => $meetingShift->sync_unit_origin,
                                 'updated_at' => now()
                             ]);
 

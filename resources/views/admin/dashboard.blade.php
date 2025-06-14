@@ -334,8 +334,8 @@
                         <h3 class="text-lg font-medium">Unit Pembangkit</h3>
                         <span class="text-sm text-gray-500">Total: {{ $powerPlants->count() }}</span>
                     </div>
-                    <div class="space-y-4">
-                        @foreach($powerPlants->take(4) as $plant)
+                    <div class="space-y-4 max-h-64 overflow-y-auto pr-2">
+                        @foreach($powerPlants as $plant)
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
@@ -345,8 +345,11 @@
                                 </div>
                             </div>
                             <div class="text-right">
-                                <p class="text-sm font-medium">{{ $plant->machines->sum('capacity') }} MW</p>
-                                <p class="text-xs text-gray-500">Kapasitas Total</p>
+                                <p class="text-sm font-medium">
+                                    {{ \App\Models\MachineOperation::whereIn('machine_id', $plant->machines->pluck('id'))
+                                        ->sum('dmp') }} MW
+                                </p>
+                                <p class="text-xs text-gray-500">Kapasitas Total (DMP)</p>
                             </div>
                         </div>
                         @endforeach
@@ -363,7 +366,7 @@
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-medium">Status Mesin</h3>
-                        <span class="text-sm text-gray-500">Total: {{ $machineStats['total'] }}</span>
+                        <span class="text-sm text-gray-500">Bulan: {{ \Carbon\Carbon::now()->isoFormat('MMMM Y') }}</span>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <!-- OPS Machines -->

@@ -18,6 +18,8 @@ class DashboardController extends Controller
     {
         // Get today's date
         $today = Carbon::today();
+        $startOfMonth = $today->copy()->startOfMonth();
+        $endOfMonth = $today->copy()->endOfMonth();
         
         // Fetch daily summaries for today
         $dailySummaries = DailySummary::whereDate('created_at', $today)->get();
@@ -31,22 +33,22 @@ class DashboardController extends Controller
         );
         $totalPeriodHours = $dailySummaries->sum('period_hours');
 
-        // Get latest machine status logs for today
-        $machineStatusLogs = MachineStatusLog::whereDate('tanggal', $today)
+        // Get machine logs for the current month
+        $monthlyMachineLogs = \App\Models\MachineLog::whereBetween('date', [$startOfMonth, $endOfMonth])
             ->select('machine_id', 'status')
-            ->latest('created_at')
+            ->latest('date')
             ->get()
             ->unique('machine_id');
 
-        // Count machines by status
+        // Count machines by status for the month
         $machineStats = [
-            'total' => $machineStatusLogs->count(),
-            'ops' => $machineStatusLogs->where('status', 'OPS')->count(),
-            'rsh' => $machineStatusLogs->where('status', 'RSH')->count(),
-            'fo' => $machineStatusLogs->where('status', 'FO')->count(),
-            'mo' => $machineStatusLogs->where('status', 'MO')->count(),
-            'po' => $machineStatusLogs->where('status', 'PO')->count(),
-            'mb' => $machineStatusLogs->where('status', 'MB')->count(),
+            'total' => $monthlyMachineLogs->count(),
+            'ops' => $monthlyMachineLogs->where('status', 'OPS')->count(),
+            'rsh' => $monthlyMachineLogs->where('status', 'RSH')->count(),
+            'fo' => $monthlyMachineLogs->where('status', 'FO')->count(),
+            'mo' => $monthlyMachineLogs->where('status', 'MO')->count(),
+            'po' => $monthlyMachineLogs->where('status', 'PO')->count(),
+            'mb' => $monthlyMachineLogs->where('status', 'MB')->count(),
         ];
 
         // Get other required data

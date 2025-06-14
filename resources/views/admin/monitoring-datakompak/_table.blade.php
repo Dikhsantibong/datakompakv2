@@ -15,24 +15,26 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
             @foreach($data['powerPlants'] as $powerPlant)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r">
-                        {{ $powerPlant->name }}
-                    </td>
-                    @foreach($data['hours'] as $hour)
-                        <td class="px-6 py-4 whitespace-nowrap text-center border-r">
-                            @if($powerPlant->hourlyStatus[$hour])
-                                <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
-                                    <i class="fas fa-check text-xs"></i>
-                                </span>
-                            @else
-                                <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
-                                    <i class="fas fa-times text-xs"></i>
-                                </span>
-                            @endif
+                @if($powerPlant->name !== 'UP KENDARI')
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r">
+                            {{ $powerPlant->name }}
                         </td>
-                    @endforeach
-                </tr>
+                        @foreach($data['hours'] as $hour)
+                            <td class="px-6 py-4 whitespace-nowrap text-center border-r">
+                                @if($powerPlant->hourlyStatus[$hour])
+                                    <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
+                                        <i class="fas fa-times text-xs"></i>
+                                    </span>
+                                @endif
+                            </td>
+                        @endforeach
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
@@ -56,56 +58,58 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
-                            {{ $powerPlant->name }}
-                        </td>
-                        @foreach($data['dates'] as $index => $date)
-                            @php
-                                $fullDate = \Carbon\Carbon::createFromFormat('d/m', $date)->format('Y-m-d');
-                                $dayData = $powerPlant->dailyData[$fullDate];
-                            @endphp
-                            <td class="px-3 py-4 whitespace-nowrap text-center border-r relative group">
-                                @if($dayData['status'])
-                                    <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full cursor-pointer">
-                                        <i class="fas fa-check text-xs"></i>
-                                    </span>
-                                    <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
-                                        <div class="text-sm">
-                                            <div class="flex justify-between items-center mb-2">
-                                                <p class="font-semibold">{{ $powerPlant->name }}</p>
-                                                <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
-                                            </div>
-                                            <div class="grid grid-cols-2 gap-2">
-                                                <p class="text-gray-600">Jenis BBM:</p>
-                                                <p>{{ $dayData['data']->jenis_bbm }}</p>
-                                                <p class="text-gray-600">Saldo Awal:</p>
-                                                <p>{{ number_format($dayData['data']->saldo_awal, 2) }}</p>
-                                                <p class="text-gray-600">Penerimaan:</p>
-                                                <p>{{ number_format($dayData['data']->penerimaan, 2) }}</p>
-                                                <p class="text-gray-600">Pemakaian:</p>
-                                                <p>{{ number_format($dayData['data']->pemakaian, 2) }}</p>
-                                                <p class="text-gray-600">Saldo Akhir:</p>
-                                                <p>{{ number_format($dayData['data']->saldo_akhir, 2) }}</p>
-                                                <p class="text-gray-600">HOP:</p>
-                                                <p>{{ number_format($dayData['data']->hop, 2) }}</p>
-                                            </div>
-                                            @if($dayData['data']->catatan_transaksi)
-                                                <div class="mt-2 pt-2 border-t">
-                                                    <p class="text-gray-600">Catatan:</p>
-                                                    <p class="mt-1">{{ $dayData['data']->catatan_transaksi }}</p>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @else
-                                    <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
-                                        <i class="fas fa-times text-xs"></i>
-                                    </span>
-                                @endif
+                    @if($powerPlant->name !== 'UP KENDARI')
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
+                                {{ $powerPlant->name }}
                             </td>
-                        @endforeach
-                    </tr>
+                            @foreach($data['dates'] as $index => $date)
+                                @php
+                                    $fullDate = \Carbon\Carbon::createFromFormat('d/m', $date)->format('Y-m-d');
+                                    $dayData = $powerPlant->dailyData[$fullDate];
+                                @endphp
+                                <td class="px-3 py-4 whitespace-nowrap text-center border-r relative group">
+                                    @if($dayData['status'])
+                                        <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full cursor-pointer">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </span>
+                                        <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
+                                            <div class="text-sm">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <p class="font-semibold">{{ $powerPlant->name }}</p>
+                                                    <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
+                                                </div>
+                                                <div class="grid grid-cols-2 gap-2">
+                                                    <p class="text-gray-600">Jenis BBM:</p>
+                                                    <p>{{ $dayData['data']->jenis_bbm }}</p>
+                                                    <p class="text-gray-600">Saldo Awal:</p>
+                                                    <p>{{ number_format($dayData['data']->saldo_awal, 2) }}</p>
+                                                    <p class="text-gray-600">Penerimaan:</p>
+                                                    <p>{{ number_format($dayData['data']->penerimaan, 2) }}</p>
+                                                    <p class="text-gray-600">Pemakaian:</p>
+                                                    <p>{{ number_format($dayData['data']->pemakaian, 2) }}</p>
+                                                    <p class="text-gray-600">Saldo Akhir:</p>
+                                                    <p>{{ number_format($dayData['data']->saldo_akhir, 2) }}</p>
+                                                    <p class="text-gray-600">HOP:</p>
+                                                    <p>{{ number_format($dayData['data']->hop, 2) }}</p>
+                                                </div>
+                                                @if($dayData['data']->catatan_transaksi)
+                                                    <div class="mt-2 pt-2 border-t">
+                                                        <p class="text-gray-600">Catatan:</p>
+                                                        <p class="mt-1">{{ $dayData['data']->catatan_transaksi }}</p>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </span>
+                                    @endif
+                                </td>
+                            @endforeach
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>
@@ -130,54 +134,56 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
-                            {{ $powerPlant->name }}
-                        </td>
-                        @foreach($data['dates'] as $index => $date)
-                            @php
-                                $fullDate = \Carbon\Carbon::createFromFormat('d/m', $date)->format('Y-m-d');
-                                $dayData = $powerPlant->dailyData[$fullDate];
-                            @endphp
-                            <td class="px-3 py-4 whitespace-nowrap text-center border-r relative group">
-                                @if($dayData['status'])
-                                    <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full cursor-pointer">
-                                        <i class="fas fa-check text-xs"></i>
-                                    </span>
-                                    <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
-                                        <div class="text-sm">
-                                            <div class="flex justify-between items-center mb-2">
-                                                <p class="font-semibold">{{ $powerPlant->name }}</p>
-                                                <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
-                                            </div>
-                                            <div class="grid grid-cols-2 gap-2">
-                                                <p class="text-gray-600">Jenis Pelumas:</p>
-                                                <p>{{ $dayData['data']->jenis_pelumas }}</p>
-                                                <p class="text-gray-600">Saldo Awal:</p>
-                                                <p>{{ number_format($dayData['data']->saldo_awal, 2) }}</p>
-                                                <p class="text-gray-600">Penerimaan:</p>
-                                                <p>{{ number_format($dayData['data']->penerimaan, 2) }}</p>
-                                                <p class="text-gray-600">Pemakaian:</p>
-                                                <p>{{ number_format($dayData['data']->pemakaian, 2) }}</p>
-                                                <p class="text-gray-600">Saldo Akhir:</p>
-                                                <p>{{ number_format($dayData['data']->saldo_akhir, 2) }}</p>
-                                            </div>
-                                            @if($dayData['data']->catatan_transaksi)
-                                                <div class="mt-2 pt-2 border-t">
-                                                    <p class="text-gray-600">Catatan:</p>
-                                                    <p class="mt-1">{{ $dayData['data']->catatan_transaksi }}</p>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @else
-                                    <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
-                                        <i class="fas fa-times text-xs"></i>
-                                    </span>
-                                @endif
+                    @if($powerPlant->name !== 'UP KENDARI')
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
+                                {{ $powerPlant->name }}
                             </td>
-                        @endforeach
-                    </tr>
+                            @foreach($data['dates'] as $index => $date)
+                                @php
+                                    $fullDate = \Carbon\Carbon::createFromFormat('d/m', $date)->format('Y-m-d');
+                                    $dayData = $powerPlant->dailyData[$fullDate];
+                                @endphp
+                                <td class="px-3 py-4 whitespace-nowrap text-center border-r relative group">
+                                    @if($dayData['status'])
+                                        <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full cursor-pointer">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </span>
+                                        <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
+                                            <div class="text-sm">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <p class="font-semibold">{{ $powerPlant->name }}</p>
+                                                    <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
+                                                </div>
+                                                <div class="grid grid-cols-2 gap-2">
+                                                    <p class="text-gray-600">Jenis Pelumas:</p>
+                                                    <p>{{ $dayData['data']->jenis_pelumas }}</p>
+                                                    <p class="text-gray-600">Saldo Awal:</p>
+                                                    <p>{{ number_format($dayData['data']->saldo_awal, 2) }}</p>
+                                                    <p class="text-gray-600">Penerimaan:</p>
+                                                    <p>{{ number_format($dayData['data']->penerimaan, 2) }}</p>
+                                                    <p class="text-gray-600">Pemakaian:</p>
+                                                    <p>{{ number_format($dayData['data']->pemakaian, 2) }}</p>
+                                                    <p class="text-gray-600">Saldo Akhir:</p>
+                                                    <p>{{ number_format($dayData['data']->saldo_akhir, 2) }}</p>
+                                                </div>
+                                                @if($dayData['data']->catatan_transaksi)
+                                                    <div class="mt-2 pt-2 border-t">
+                                                        <p class="text-gray-600">Catatan:</p>
+                                                        <p class="mt-1">{{ $dayData['data']->catatan_transaksi }}</p>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </span>
+                                    @endif
+                                </td>
+                            @endforeach
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>
@@ -198,24 +204,26 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
             @foreach($data['powerPlants'] as $powerPlant)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
-                        {{ $powerPlant->name }}
-                    </td>
-                    @foreach($data['dates'] as $date)
-                        <td class="px-3 py-4 whitespace-nowrap text-center border-r">
-                            @if($powerPlant->dailyStatus[$date])
-                                <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
-                                    <i class="fas fa-check text-xs"></i>
-                                </span>
-                            @else
-                                <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
-                                    <i class="fas fa-times text-xs"></i>
-                                </span>
-                            @endif
+                @if($powerPlant->name !== 'UP KENDARI')
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
+                            {{ $powerPlant->name }}
                         </td>
-                    @endforeach
-                </tr>
+                        @foreach($data['dates'] as $date)
+                            <td class="px-3 py-4 whitespace-nowrap text-center border-r">
+                                @if($powerPlant->dailyStatus[$date])
+                                    <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
+                                        <i class="fas fa-times text-xs"></i>
+                                    </span>
+                                @endif
+                            </td>
+                        @endforeach
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
@@ -236,7 +244,7 @@
                 <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-white z-10 border-r"></th>
                 @foreach($data['dates'] as $date)
                     @foreach($data['shifts'] as $shift)
-                        <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap border-r border-t">
+                        <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap border-r">
                             {{ $shift }}
                         </th>
                     @endforeach
@@ -245,26 +253,28 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
             @foreach($data['powerPlants'] as $powerPlant)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
-                        {{ $powerPlant->name }}
-                    </td>
-                    @foreach($data['dates'] as $date)
-                        @foreach($data['shifts'] as $shift)
-                            <td class="px-3 py-4 whitespace-nowrap text-center border-r">
-                                @if($powerPlant->shiftStatus[$date . '_' . $shift])
-                                    <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
-                                        <i class="fas fa-check text-xs"></i>
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
-                                        <i class="fas fa-times text-xs"></i>
-                                    </span>
-                                @endif
-                            </td>
+                @if($powerPlant->name !== 'UP KENDARI')
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
+                            {{ $powerPlant->name }}
+                        </td>
+                        @foreach($data['dates'] as $date)
+                            @foreach($data['shifts'] as $shift)
+                                <td class="px-3 py-4 whitespace-nowrap text-center border-r">
+                                    @if($powerPlant->shiftStatus[$date . '_' . $shift])
+                                        <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </span>
+                                    @endif
+                                </td>
+                            @endforeach
                         @endforeach
-                    @endforeach
-                </tr>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
@@ -288,47 +298,49 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
-                            {{ $powerPlant->name }}
-                        </td>
-                        @foreach($data['dates'] as $index => $date)
-                            @php
-                                $fullDate = \Carbon\Carbon::createFromFormat('d/m', $date)->format('Y-m-d');
-                                $dayData = $powerPlant->dailyData[$fullDate];
-                            @endphp
-                            <td class="px-3 py-4 whitespace-nowrap text-center border-r relative group">
-                                @if($dayData['status'])
-                                    <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full cursor-pointer">
-                                        <i class="fas fa-check text-xs"></i>
-                                    </span>
-                                    <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
-                                        <div class="text-sm">
-                                            <div class="flex justify-between items-center mb-2">
-                                                <p class="font-semibold">{{ $powerPlant->name }}</p>
-                                                <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
-                                            </div>
-                                            @if($dayData['data'])
-                                                <div class="space-y-2">
-                                                    <p><span class="font-medium">Jam Operasi:</span> {{ $dayData['data']->jamOperasi->count() }} entries</p>
-                                                    <p><span class="font-medium">Gangguan:</span> {{ $dayData['data']->gangguan->count() }} entries</p>
-                                                    <p><span class="font-medium">BBM:</span> {{ $dayData['data']->bbm->count() }} entries</p>
-                                                    <p><span class="font-medium">KWH:</span> {{ $dayData['data']->kwh->count() }} entries</p>
-                                                    <p><span class="font-medium">Pelumas:</span> {{ $dayData['data']->pelumas->count() }} entries</p>
-                                                    <p><span class="font-medium">Bahan Kimia:</span> {{ $dayData['data']->bahanKimia->count() }} entries</p>
-                                                    <p><span class="font-medium">Beban Tertinggi:</span> {{ $dayData['data']->bebanTertinggi->count() }} entries</p>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @else
-                                    <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
-                                        <i class="fas fa-times text-xs"></i>
-                                    </span>
-                                @endif
+                    @if($powerPlant->name !== 'UP KENDARI')
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
+                                {{ $powerPlant->name }}
                             </td>
-                        @endforeach
-                    </tr>
+                            @foreach($data['dates'] as $index => $date)
+                                @php
+                                    $fullDate = \Carbon\Carbon::createFromFormat('d/m', $date)->format('Y-m-d');
+                                    $dayData = $powerPlant->dailyData[$fullDate];
+                                @endphp
+                                <td class="px-3 py-4 whitespace-nowrap text-center border-r relative group">
+                                    @if($dayData['status'])
+                                        <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full cursor-pointer">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </span>
+                                        <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
+                                            <div class="text-sm">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <p class="font-semibold">{{ $powerPlant->name }}</p>
+                                                    <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
+                                                </div>
+                                                @if($dayData['data'])
+                                                    <div class="space-y-2">
+                                                        <p><span class="font-medium">Jam Operasi:</span> {{ $dayData['data']->jamOperasi->count() }} entries</p>
+                                                        <p><span class="font-medium">Gangguan:</span> {{ $dayData['data']->gangguan->count() }} entries</p>
+                                                        <p><span class="font-medium">BBM:</span> {{ $dayData['data']->bbm->count() }} entries</p>
+                                                        <p><span class="font-medium">KWH:</span> {{ $dayData['data']->kwh->count() }} entries</p>
+                                                        <p><span class="font-medium">Pelumas:</span> {{ $dayData['data']->pelumas->count() }} entries</p>
+                                                        <p><span class="font-medium">Bahan Kimia:</span> {{ $dayData['data']->bahanKimia->count() }} entries</p>
+                                                        <p><span class="font-medium">Beban Tertinggi:</span> {{ $dayData['data']->bebanTertinggi->count() }} entries</p>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </span>
+                                    @endif
+                                </td>
+                            @endforeach
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>
@@ -359,26 +371,28 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
             @foreach($data['powerPlants'] as $powerPlant)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
-                        {{ $powerPlant->name }}
-                    </td>
-                    @foreach($data['dates'] as $date)
-                        @foreach($data['shifts'] as $shift)
-                            <td class="px-3 py-4 whitespace-nowrap text-center border-r">
-                                @if($powerPlant->shiftStatus[$date . '_' . $shift])
-                                    <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
-                                        <i class="fas fa-check text-xs"></i>
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
-                                        <i class="fas fa-times text-xs"></i>
-                                    </span>
-                                @endif
-                            </td>
+                @if($powerPlant->name !== 'UP KENDARI')
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
+                            {{ $powerPlant->name }}
+                        </td>
+                        @foreach($data['dates'] as $date)
+                            @foreach($data['shifts'] as $shift)
+                                <td class="px-3 py-4 whitespace-nowrap text-center border-r">
+                                    @if($powerPlant->shiftStatus[$date . '_' . $shift])
+                                        <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </span>
+                                    @endif
+                                </td>
+                            @endforeach
                         @endforeach
-                    @endforeach
-                </tr>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>

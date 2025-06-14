@@ -471,7 +471,7 @@ class MonitoringDatakompakController extends Controller
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->get()
             ->groupBy(['unit_source', function($item) {
-                return $item->tanggal->format('Y-m-d');
+                return \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d');
             }]);
 
         // Prepare data for each power plant

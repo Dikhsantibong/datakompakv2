@@ -259,7 +259,7 @@
     <table class="min-w-full divide-y divide-gray-200 border">
         <thead>
             <tr>
-                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-white z-10 border-r">
+                <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-white z-10 border-r justify-center items-center flex">
                     Unit
                 </th>
                 @foreach($data['dates'] as $date)
@@ -272,7 +272,7 @@
                 <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-white z-10 border-r"></th>
                 @foreach($data['dates'] as $date)
                     @foreach($data['shifts'] as $shift)
-                        <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap border-r">
+                        <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap border-r border-t">
                             {{ $shift }}
                         </th>
                     @endforeach

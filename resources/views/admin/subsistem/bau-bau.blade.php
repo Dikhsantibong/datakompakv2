@@ -57,7 +57,97 @@
 
         <!-- Main Content Area -->
         <div class="p-6">
-            <!-- Add your content here -->
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="p-6">
+                    <!-- Table Header with Filters -->
+                    <div class="mb-4">
+                        <div class="flex flex-wrap items-center justify-between gap-4">
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-lg font-semibold text-gray-900">Data PLTU BARUTA</h2>
+                                <a href="{{ route('admin.subsistem.bau-bau.create') }}" 
+                                   class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                                    <i class="fas fa-plus mr-2"></i> Input Data
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Filters -->
+                        <div class="mt-4 border-b border-gray-200 pb-4">
+                            <form action="{{ route('admin.subsistem.bau-bau') }}" method="GET" class="flex flex-wrap items-end gap-4">
+                                <div class="w-40">
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal</label>
+                                    <input type="date" 
+                                           name="date" 
+                                           value="{{ request('date', now()->format('Y-m-d')) }}"
+                                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                </div>
+
+                                <div class="flex items-center gap-2">
+                                    <button type="submit"
+                                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                                        <i class="fas fa-search mr-2"></i> Tampilkan Data
+                                    </button>
+                                    <a href="{{ route('admin.subsistem.bau-bau') }}" 
+                                       class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                                        <i class="fas fa-undo mr-2"></i> Reset
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th rowspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Unit</th>
+                                    @foreach($specificTimes as $time)
+                                        <th colspan="3" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">
+                                            {{ \Carbon\Carbon::createFromFormat('H:i:s', $time)->format('H:i') }}
+                                        </th>
+                                    @endforeach
+                                </tr>
+                                <tr>
+                                    @foreach($specificTimes as $time)
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">DMP</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Status</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Beban</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @if($powerPlant)
+                                    @foreach($powerPlant->machines as $machine)
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border">
+                                                {{ $machine->name }}
+                                            </td>
+                                            @foreach($specificTimes as $time)
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border text-center">
+                                                    <!-- DMP value will be populated here -->
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border text-center">
+                                                    <!-- Status will be populated here -->
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border text-center">
+                                                    <!-- Beban will be populated here -->
+                                                </td>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="{{ count($specificTimes) * 3 + 1 }}" class="px-6 py-4 text-center text-sm text-gray-500">
+                                            Tidak ada data tersedia
+                                        </td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -60,6 +60,9 @@ use App\Http\Controllers\Admin\BlackstartController;
 use App\Http\Controllers\KitUpKendariController;
 use App\Http\Controllers\SubsistemController;
 use App\Http\Controllers\Admin\KesiapanKitController;
+use App\Http\Controllers\Admin\SubsistemKendariController;
+use App\Http\Controllers\Admin\SubsistemBauBauController;
+
 
 Route::get('/', function () {
     return view('auth.login', [
@@ -95,15 +98,23 @@ Route::prefix('attendance')->group(function () {
         ->name('attendance.scan-form')
         ->withoutMiddleware(['auth'])
         ->where('token', '.*');
-    
+
     Route::post('/submit', [AttendanceController::class, 'submitAttendance'])
         ->name('attendance.submit')
         ->withoutMiddleware(['auth']);
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Kendari Subsystem Routes
+    Route::get('/subsistem/kendari', [App\Http\Controllers\Admin\SubsistemKendariController::class, 'index'])->name('subsistem.kendari');
+    Route::get('/subsistem/kendari/create', [App\Http\Controllers\Admin\SubsistemKendariController::class, 'create'])->name('subsistem.kendari.create');
+
+    // Bau-Bau Subsystem Routes
+    Route::get('/subsistem/bau-bau', [SubsistemBauBauController::class, 'index'])->name('subsistem.bau-bau');
+    Route::get('/subsistem/bau-bau/create', [SubsistemBauBauController::class, 'create'])->name('subsistem.bau-bau.create');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     Route::get('/dashboard/refresh', [DashboardController::class, 'refresh'])->name('dashboard.refresh');
 
     // Add monitor-kinerja route
@@ -151,10 +162,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/sr_wo/closed/print', [LaporanController::class, 'printSrWoClosed'])->name('laporan.sr_wo.closed.print');
         Route::post('/store-sr', [LaporanController::class, 'storeSR'])->name('laporan.store-sr');
         Route::post('/store-wo', [LaporanController::class, 'storeWO'])->name('laporan.store-wo');
-        
+
 
     });
-   
+
 
     Route::prefix('daftar-hadir')->name('daftar_hadir.')->group(function () {
         Route::get('/', [DaftarHadirController::class, 'index'])->name('index');
@@ -165,7 +176,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     });
 
     Route::prefix('meetings')->group(function () {
-        Route::get('/', [AdminMeetingController::class, 'index'])->name('meetings');    
+        Route::get('/', [AdminMeetingController::class, 'index'])->name('meetings');
         Route::get('/create', [AdminMeetingController::class, 'create'])->name('meetings.create');
         Route::post('/upload', [AdminMeetingController::class, 'upload'])->name('meetings.upload');
         Route::get('/print', [AdminMeetingController::class, 'print'])->name('meetings.print');
@@ -176,7 +187,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/admin/score-card/data', [AdminMeetingController::class, 'getScoreCardData'])->name('admin.score-card.data');
         Route::get('/admin/score-card/download', [AdminMeetingController::class, 'downloadScoreCard']);
         Route::get('/admin/meetings/print', [AdminMeetingController::class, 'print'])
-        ->name('admin.meetings.print'); 
+        ->name('admin.meetings.print');
     });
 
     // Meeting Shift Routes
@@ -202,7 +213,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::delete('/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
         Route::get('/search', [AdminUserController::class, 'search'])->name('users.search');
     });
-    
+
 
     Route::prefix('activities')->group(function () {
         Route::get('/export', [ActivityController::class, 'export'])->name('activities.export');
@@ -216,7 +227,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::prefix('score-card')->group(function () {
         Route::resource('score-card', ScoreCardDailyController::class);
-      
+
     });
 
     Route::get('/machine-monitor', [MachineMonitorController::class, 'index'])->name('machine-monitor');
@@ -239,7 +250,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::post('/store-absensi', [MeetingShiftController::class, 'storeAbsensi'])->name('meeting-shift.store-absensi');
         Route::post('/store-resume', [MeetingShiftController::class, 'storeResume'])->name('meeting-shift.store-resume');
         Route::get('/list', [MeetingShiftController::class, 'list'])->name('meeting-shift.list');
-        
+
         Route::get('/create', [MeetingShiftController::class, 'create'])->name('meeting-shift.create');
     });
 
@@ -264,7 +275,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/export-pdf', [LaporanKitController::class, 'exportPdf'])->name('laporan-kit.export-pdf');
         Route::get('/export-excel', [LaporanKitController::class, 'exportExcel'])->name('laporan-kit.export-excel');
         Route::delete('/{id}', [LaporanKitController::class, 'destroy'])->name('destroy');
-        
+
     });
 
     // Abnormal Report routes
@@ -289,7 +300,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
             Route::post('/store', [ProgramKerjaController::class, 'store'])->name('store');
             Route::post('/create', [ProgramKerjaController::class, 'create'])->name('create');
         });
-        
+
         // RJPP-DPR Routes
         Route::prefix('rjpp-dpr')->name('rjpp-dpr.')->group(function () {
             Route::get('/', [RjppDprController::class, 'index'])->name('index');
@@ -309,7 +320,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/record-attendance', [AttendanceController::class, 'recordAttendance'])->name('record.attendance');
     Route::get('/daftar-hadir', [AttendanceController::class, 'index'])->name('admin.daftar_hadir.index');
     Route::get('/rekapitulasi', [AttendanceController::class, 'rekapitulasi'])->name('admin.daftar_hadir.rekapitulasi');
-    
+
     // Tambahkan route untuk Zoom meeting
     Route::post('/create-zoom-meeting', [ScoreCardDailyController::class, 'createZoomMeeting'])
         ->name('admin.create-zoom-meeting');
@@ -318,7 +329,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/attendance/error', function() {
         return view('admin.daftar_hadir.error');
     })->name('attendance.error');
-    
+
     Route::get('/attendance/success', function() {
         return view('admin.daftar_hadir.success');
     })->name('attendance.success');
@@ -370,13 +381,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/laporan/create-wo', [LaporanController::class, 'createWO'])->name('laporan.create-wo');
         Route::post('/laporan/store-sr', [LaporanController::class, 'storeSR'])->name('laporan.store-sr');
         Route::post('/laporan/store-wo', [LaporanController::class, 'storeWO'])->name('laporan.store-wo');
-        
+
         // Route untuk update status
         Route::post('/laporan/update-sr-status/{id}', [LaporanController::class, 'updateSRStatus'])
             ->name('laporan.update-sr-status');
         Route::post('/laporan/update-wo-status/{id}', [LaporanController::class, 'updateWOStatus'])
             ->name('laporan.update-wo-status');
-            
+
         // Route untuk WO Backlog
         Route::get('/laporan/create-wo-backlog', [LaporanController::class, 'createWOBacklog'])
             ->name('laporan.create-wo-backlog');
@@ -403,7 +414,7 @@ Route::prefix('attendance')->name('attendance.')->group(function () {
         ->name('scan-form')
         ->where('token', '.*')
         ->withoutMiddleware(['auth']);
-        
+
     Route::post('/submit', [AttendanceController::class, 'submitAttendance'])
         ->name('submit')
         ->withoutMiddleware(['auth']);
@@ -415,7 +426,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::post('/laporan/update-sr-status/{id}', [LaporanController::class, 'updateSRStatus'])
         ->name('admin.laporan.update-sr-status');
     Route::post('/laporan/wo/{id}/update-status', [LaporanController::class, 'updateWOStatus'])->name('laporan.update-wo-status');
-    
+
     // Route untuk daftar hadir
     Route::prefix('daftar-hadir')->name('daftar_hadir.')->group(function () {
         Route::get('/', [DaftarHadirController::class, 'index'])->name('index');
@@ -513,10 +524,10 @@ Route::post('/admin/peserta/update', [PesertaController::class, 'update'])->name
 Route::prefix('admin/laporan')->group(function () {
     // Route yang sudah ada
     Route::get('/sr-wo', [LaporanController::class, 'srWo'])->name('admin.laporan.sr_wo');
-    
+
     // Route baru untuk halaman manage
     Route::get('/manage', [LaporanController::class, 'manage'])->name('admin.laporan.manage');
-    
+
     // Route untuk delete
     Route::delete('/sr/{id}', [LaporanController::class, 'destroySR'])->name('admin.laporan.sr.destroy');
     Route::delete('/wo/{id}', [LaporanController::class, 'destroyWO'])->name('admin.laporan.wo.destroy');
@@ -535,7 +546,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
     // ... route lainnya ...
-    
+
     // Route khusus untuk delete
     Route::delete('/laporan/delete/{type}/{id}', [LaporanDeleteController::class, 'destroy'])
         ->name('laporan.delete')
@@ -556,7 +567,7 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
         Route::get('/report', [PembangkitController::class, 'report'])->name('report');
         Route::get('/report/download', [PembangkitController::class, 'downloadReport'])->name('report.download');
         Route::get('/report/print', [PembangkitController::class, 'printReport'])->name('report.print');
-        
+
         // Image routes
         Route::post('/upload-image', [PembangkitController::class, 'uploadImage'])->name('upload-image');
         Route::delete('/delete-image/{machineId}', [PembangkitController::class, 'deleteImage'])->name('delete-image');
@@ -574,14 +585,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('/pembangkit/ready', [PembangkitController::class, 'ready'])->name('pembangkit.ready');
     Route::post('/pembangkit/save-status', [PembangkitController::class, 'saveStatus'])->name('pembangkit.save-status');
     Route::get('/pembangkit/get-status', [PembangkitController::class, 'getStatus'])->name('pembangkit.get-status');
-    
+
     // Tambahkan route baru untuk search
     Route::get('/pembangkit/search', [PembangkitController::class, 'searchMachines'])->name('pembangkit.search');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
     // ... other admin routes ...
-    
+
     // Backlog routes
     Route::get('/admin/laporan/create-backlog', [App\Http\Controllers\Admin\LaporanController::class, 'createBacklog'])
         ->name('admin.laporan.create-backlog');
@@ -591,7 +602,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     // ... route lainnya ...
-    
+
     Route::get('/admin/machine-status/view', [MachineStatusViewController::class, 'index'])
          ->name('admin.machine-status.view');
 });
@@ -613,15 +624,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
             'update' => 'other-discussions.update',
             'destroy' => 'other-discussions.destroy'
         ]);
-        
+
     // Tambahkan route untuk print dan export
     Route::get('other-discussions/print', [OtherDiscussionController::class, 'print'])
         ->name('other-discussions.print');
-    
+
     Route::get('other-discussions/export/{format}', [OtherDiscussionController::class, 'export'])
         ->name('other-discussions.export')
         ->where('format', 'xlsx|pdf');
-        
+
     Route::post('other-discussions/update-status', [OtherDiscussionController::class, 'updateStatus'])
         ->name('other-discussions.update-status');
 });
@@ -639,7 +650,7 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
         ->name('overdue-discussions.destroy');
     Route::post('/overdue-discussions/{id}/update-status', [OverdueDiscussionController::class, 'updateStatus'])
         ->name('overdue-discussions.update-status');
-    
+
     // Tambahkan route baru untuk pengecekan overdue
     Route::post('/overdue-discussions/check', [OverdueDiscussionController::class, 'checkAndMoveOverdue'])
         ->name('overdue-discussions.check')
@@ -684,7 +695,7 @@ Route::post('/admin/other-discussions/generate-no-pembahasan', [App\Http\Control
 Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     // Other routes...
     Route::post('/other-discussions/generate-no-pembahasan', [
-        App\Http\Controllers\Admin\OtherDiscussionController::class, 
+        App\Http\Controllers\Admin\OtherDiscussionController::class,
         'generateNoPembahasan'
     ])->name('admin.other-discussions.generate-no-pembahasan');
 });
@@ -698,10 +709,10 @@ Route::middleware(['auth'])->group(function () {
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     // ... route lainnya ...
-    
+
     Route::get('other-discussions/show', [OtherDiscussionController::class, 'show'])
         ->name('other-discussions.show');
-    
+
     Route::get('other-discussions/{id}', [OtherDiscussionController::class, 'show_single'])
         ->name('other-discussions.show_single');
 });
@@ -716,7 +727,7 @@ Route::get('/admin/other-discussions/{id}/export/{format}', [OtherDiscussionCont
 
 Route::get('/get-plant-chart-data/{plantId}', [HomeController::class, 'getPlantChartData'])->name('plant.chart.data');
 
-Route::get('other-discussions/{id}/download-document', 
+Route::get('other-discussions/{id}/download-document',
     [OtherDiscussionController::class, 'downloadDocument'])
     ->name('admin.other-discussions.download-document');
 
@@ -727,11 +738,11 @@ Route::middleware(['auth', 'web'])->prefix('admin')->group(function () {
     // Verifikasi password
     Route::post('/verify-password', [PasswordVerificationController::class, 'verify'])
         ->name('verify-password');
-        
+
     // Route lainnya...
-    Route::delete('/other-discussions/{discussion}/remove-file/{index}', 
+    Route::delete('/other-discussions/{discussion}/remove-file/{index}',
         [OtherDiscussionController::class, 'removeFile']);
-    Route::delete('/other-discussions/{discussion}/commitments/{commitment}', 
+    Route::delete('/other-discussions/{discussion}/commitments/{commitment}',
         [OtherDiscussionController::class, 'removeCommitment']);
 });
 
@@ -744,7 +755,7 @@ Route::delete('/admin/other-discussions/{discussion}/remove-file/{index}', [App\
     ->name('admin.other-discussions.remove-file');
 
 // Route untuk hapus commitment
-Route::delete('/admin/other-discussions/{discussion}/commitments/{commitment}', 
+Route::delete('/admin/other-discussions/{discussion}/commitments/{commitment}',
     [App\Http\Controllers\Admin\OtherDiscussionController::class, 'removeCommitment'])
     ->name('admin.other-discussions.remove-commitment');
 
@@ -793,7 +804,7 @@ Route::post('/admin/laporan/update-wo/{id}', [LaporanController::class, 'updateW
 
     Route::get('/admin/laporan/download-document/{id}', [LaporanController::class, 'downloadDocument'])
         ->name('admin.laporan.download-document');
-    
+
 Route::prefix('admin/daftar-hadir')->group(function () {
     Route::get('/export-excel', [AttendanceController::class, 'exportExcel'])
         ->name('admin.daftar_hadir.export-excel');
@@ -805,14 +816,14 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     // Route yang sudah ada
     Route::get('/daftar-hadir/rekapitulasi', [AttendanceController::class, 'rekapitulasi'])
         ->name('admin.daftar_hadir.rekapitulasi');
-    
+
     // Tambahkan route untuk export dan print
     Route::get('/daftar-hadir/export-excel', [AttendanceController::class, 'exportExcel'])
         ->name('admin.daftar_hadir.export-excel');
-    
+
     Route::get('/daftar-hadir/export-pdf', [AttendanceController::class, 'exportPDF'])
         ->name('admin.daftar_hadir.export-pdf');
-    
+
     // Route baru untuk print
     Route::get('/daftar-hadir/print', [AttendanceController::class, 'printView'])
         ->name('admin.daftar_hadir.print');
@@ -831,7 +842,7 @@ Route::get('/admin/laporan/download-backlog-document/{no_wo}', [LaporanControlle
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         // ... other routes ...
-        
+
         // Daftar Hadir routes
         Route::prefix('daftar-hadir')->name('daftar_hadir.')->group(function () {
             Route::get('/rekapitulasi', [AttendanceController::class, 'rekapitulasi'])->name('rekapitulasi');
@@ -861,11 +872,11 @@ Route::get('/daily-summary/results', [DailySummaryController::class, 'results'])
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         // ... other admin routes ...
-        
+
         // Rencana Daya Mampu routes
         Route::get('rencana-daya-mampu', [RencanaDayaMampuController::class, 'index'])
             ->name('rencana-daya-mampu');
-        
+
         Route::get('rencana-daya-mampu/get-status', [RencanaDayaMampuController::class, 'getStatus'])
             ->name('rencana-daya-mampu.get-status');
         Route::post('rencana-daya-mampu/save-status', [RencanaDayaMampuController::class, 'saveStatus'])
@@ -881,14 +892,14 @@ Route::get('/daily-summary/results', [DailySummaryController::class, 'results'])
 
 Route::middleware(['auth'])->group(function () {
     // ... other routes ...
-    
+
     // Daily Summary Routes
     Route::prefix('admin')->group(function () {
         Route::get('/daily-summary', [DailySummaryController::class, 'index'])->name('admin.daily-summary');
         Route::post('/daily-summary', [DailySummaryController::class, 'store'])->name('admin.daily-summary.store');
         Route::get('/daily-summary/results', [DailySummaryController::class, 'results'])->name('admin.daily-summary.results');
     });
-    
+
 });
 
 Route::get('/admin/administrasi-operasi', [AdministrasiOperasiController::class, 'index'])
@@ -920,7 +931,7 @@ Route::get('/admin/library/view/{document}', [LibraryController::class, 'view'])
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         // ... other routes ...
-        
+
         // Perbaiki route untuk machine monitor
         Route::get('/machine-monitor', [MachineMonitorController::class, 'index'])->name('machine-monitor');
         Route::get('/machine-monitor/filter', [MachineMonitorController::class, 'filter'])->name('machine-monitor.filter');
@@ -985,7 +996,7 @@ Route::prefix('admin/energiprimer')->name('admin.energiprimer.')->group(function
     Route::get('/pelumas', [PelumasController::class, 'index'])->name('pelumas');
     Route::get('/pelumas/create', [PelumasController::class, 'create'])->name('pelumas.create');
     Route::post('/pelumas', [PelumasController::class, 'store'])->name('pelumas.store');
-    
+
     // API route untuk cek saldo sebelumnya
     Route::get('/api/check-previous-balance-pelumas', function (Request $request) {
         $previousBalance = Pelumas::where('unit_id', $request->unit_id)
@@ -1005,7 +1016,7 @@ Route::prefix('admin/energiprimer')->name('admin.energiprimer.')->group(function
     Route::get('/bahan-kimia', [BahanKimiaController::class, 'index'])->name('bahan-kimia');
     Route::get('/bahan-kimia/create', [BahanKimiaController::class, 'create'])->name('bahan-kimia.create');
     Route::post('/bahan-kimia', [BahanKimiaController::class, 'store'])->name('bahan-kimia.store');
-    
+
     // API route untuk cek saldo sebelumnya
     Route::get('/api/check-previous-balance-kimia', function (Request $request) {
         $previousBalance = BahanKimia::where('unit_id', $request->unit_id)
@@ -1089,18 +1100,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/data-engine', [DataEngineController::class, 'index'])
         ->name('admin.data-engine.index');
-        
+
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         // ... other routes ...
-        
+
         // K3 KAMP routes (temporary views)
         Route::get('/k3-kamp', function () {
             return view('admin.k3-kamp.index');
         })->name('k3-kamp.index');
-        
+
         Route::get('/k3-kamp/view', function () {
             return view('admin.k3-kamp.view');
         })->name('k3-kamp.view');
@@ -1109,7 +1120,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     // ... existing routes ...
-    
+
     // FLM Routes
     Route::get('/flm', [FlmController::class, 'index'])->name('flm.index');
     Route::post('/flm', [FlmController::class, 'store'])->name('flm.store');
@@ -1129,7 +1140,7 @@ Route::post('/admin/data-engine/update', [DataEngineController::class, 'update']
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         // ... other routes ...
-        
+
         // Calendar routes
         Route::get('/kalender', [App\Http\Controllers\Admin\OperationScheduleController::class, 'index'])->name('kalender.calendar');
         Route::get('/kalender/create', [App\Http\Controllers\Admin\OperationScheduleController::class, 'create'])->name('kalender.create');
@@ -1162,7 +1173,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     // ... existing routes ...
-    
+
     // 5S5R Routes
     Route::get('/5s5r', [App\Http\Controllers\Admin\FiveS5RController::class, 'index'])->name('5s5r.index');
     Route::post('/5s5r', [App\Http\Controllers\Admin\FiveS5RController::class, 'store'])->name('5s5r.store');
@@ -1170,11 +1181,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // ... existing routes ...
-    
+
     // Abnormal Report Routes
     Route::get('/abnormal-report', [AbnormalReportController::class, 'index'])->name('admin.abnormal-report.index');
     Route::post('/abnormal-report', [AbnormalReportController::class, 'store'])->name('admin.abnormal-report.store');
-    
+
     Route::get('/abnormal-report/list', [AbnormalReportController::class, 'list'])->name('admin.abnormal-report.list');
     Route::get('/abnormal-report/show/{id}', [AbnormalReportController::class, 'show'])->name('admin.abnormal-report.show');
     Route::delete('/abnormal-report/destroy/{id}', [AbnormalReportController::class, 'destroy'])->name('admin.abnormal-report.destroy');
@@ -1256,12 +1267,12 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/{id}', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'update'])->name('update');
                 Route::delete('/{id}', [App\Http\Controllers\Admin\OperasiUpkd\RapatController::class, 'destroy'])->name('destroy');
             });
-            
+
             // RJPP-DPR Routes
             Route::prefix('rjpp-dpr')->name('rjpp-dpr.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Admin\OperasiUpkd\RjppDprController::class, 'index'])->name('index');
                 Route::post('/store', [App\Http\Controllers\Admin\OperasiUpkd\RjppDprController::class, 'store'])->name('store');
-                
+
             });
             Route::get('admin/operasi-upkd/rjpp-dpr/create', [ProgramKerjaController::class, 'create'])->name('admin.operasi-upkd.rjpp-dpr.create');
         });
@@ -1281,24 +1292,24 @@ Route::get('/admin/operasi-upkd/program-kerja/export-pdf', [ProgramKerjaControll
     });
 
     Route::get('admin/operasi-upkd/program-kerja/create', [ProgramKerjaController::class, 'create'])->name('admin.operasi-upkd.program-kerja.create');
-    
+
 // ... existing code ...
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // ... existing code ...
-    
+
     Route::prefix('operasi-upkd')->name('admin.operasi-upkd.')->group(function () {
         // ... existing code ...
-        
+
         // RJPP-DPR routes
         Route::get('/rjpp-dpr', [App\Http\Controllers\Admin\OperasiUpkd\RjppDprController::class, 'index'])->name('rjpp-dpr.index');
         Route::post('/rjpp-dpr/store', [App\Http\Controllers\Admin\OperasiUpkd\RjppDprController::class, 'store'])->name('rjpp-dpr.store');
         Route::post('/rjpp-dpr/create', [App\Http\Controllers\Admin\OperasiUpkd\RjppDprController::class, 'create'])->name('rjpp-dpr.create');
 
-      
+
         // ... existing code ...
     });
-    
+
     // ... existing code ...
 });
 
@@ -1324,10 +1335,10 @@ Route::get('admin/operasi-upkd/rjpp-dpr/create', [RjppDprController::class, 'cre
 // ... existing code ...
 Route::middleware(['auth', 'admin'])->group(function () {
     // ... existing routes ...
-    
+
     // Laporan KIT 00.00
     Route::get('/admin/laporan-kit', [App\Http\Controllers\Admin\LaporanKitController::class, 'index'])->name('admin.laporan-kit.index');
-    
+
     // ... existing routes ...
 });
 
@@ -1350,7 +1361,7 @@ Route::prefix('admin/patrol-check')->name('admin.patrol-check.')->group(function
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     // ... existing routes ...
-    
+
     // Blackstart routes
     Route::get('/blackstart', [BlackstartController::class, 'index'])->name('blackstart.index');
     Route::get('/blackstart/show', [BlackstartController::class, 'show'])->name('blackstart.show');
@@ -1396,8 +1407,8 @@ Route::prefix('admin/operasi-upkd/pengadaan')->group(function () {
 
 Route::get('/kit-up-kendari', [App\Http\Controllers\KitUpKendariController::class, 'index'])->name('admin.kit-up-kendari');
 
-Route::get('/subsistem/kendari', [SubsistemController::class, 'kendari'])->name('admin.subsistem.kendari');
-Route::get('/subsistem/bau-bau', [SubsistemController::class, 'bauBau'])->name('admin.subsistem.bau-bau');
+// Route::get('/subsistem/kendari', [SubsistemController::class, 'kendari'])->name('admin.subsistem.kendari');
+// Route::get('/subsistem/bau-bau', [SubsistemController::class, 'bauBau'])->name('admin.subsistem.bau-bau');
 
 // ... existing code ...
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
@@ -1420,10 +1431,10 @@ Route::post('/admin/5s5r/delete-media', [FiveS5RController::class, 'deleteMedia'
 // ... existing code ...
 Route::middleware(['auth'])->group(function () {
     // ... other routes ...
-    
+
     Route::prefix('admin')->name('admin.')->group(function () {
         // ... other admin routes ...
-        
+
         // Data Engine routes
         Route::get('/data-engine', [DataEngineController::class, 'index'])->name('data-engine.index');
         Route::get('/data-engine/daily-list', [DataEngineController::class, 'listDailyInputs'])->name('data-engine.daily-list');
@@ -1434,3 +1445,32 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/data-engine/latest-data', [DataEngineController::class, 'getLatestData'])->name('data-engine.latest-data');
     });
 });
+
+Route::middleware(['auth'])->group(function () {
+    // ... existing routes ...
+
+    // Bau-Bau Subsystem Routes
+
+});
+
+// ... existing code ...
+
+
+
+// ... existing code ...
+
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    // Kendari Subsystem Routes
+    Route::get('/subsistem/kendari', [SubsistemKendariController::class, 'index'])
+        ->name('admin.subsistem.kendari');
+    Route::get('/subsistem/kendari/create', [SubsistemKendariController::class, 'create'])
+        ->name('admin.subsistem.kendari.create');
+
+    // Bau-Bau Subsystem Routes
+    Route::get('/subsistem/bau-bau', [SubsistemBauBauController::class, 'index'])
+        ->name('admin.subsistem.bau-bau');
+    Route::get('/subsistem/bau-bau/create', [SubsistemBauBauController::class, 'create'])
+        ->name('admin.subsistem.bau-bau.create');
+});
+
+// ... existing code ...

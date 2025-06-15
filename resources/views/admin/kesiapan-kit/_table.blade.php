@@ -30,30 +30,30 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead>
                     <tr class="bg-gray-50">
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Daya Terpasang (kW)</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SILM/SLO</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DMP Performance Test</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Beban (kW)</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Jam</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Daya Terpasang (kW)</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">SILM/SLO</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">DMP Performance Test</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Beban (kW)</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($powerPlant->machines as $index => $machine)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200">{{ $index + 1 }}</td>
-                            <td class="px-4 py-3 text-sm font-medium text-gray-900 border-r border-gray-200">{{ $machine->name }}</td>
-                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200">
+                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200 text-center">{{ $index + 1 }}</td>
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900 border-r border-gray-200 text-center">{{ $machine->name }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200 text-center">
                                 {{ $machine->log_time ? \Carbon\Carbon::parse($machine->log_time)->format('H:i') : '-' }}
                             </td>
-                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200">{{ $machine->daya_terpasang ?? '-' }}</td>
-                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200">{{ $machine->silm_slo ?? '-' }}</td>
-                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200">{{ $machine->dmp_performance ?? '-' }}</td>
-                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200">{{ $machine->kw ?? '-' }}</td>
-                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200">
+                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200 text-center">{{ $machine->daya_terpasang ?? '-' }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200 text-center">{{ $machine->silm_slo ?? '-' }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200 text-center">{{ $machine->dmp_performance ?? '-' }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200 text-center">{{ $machine->kw ?? '-' }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-200 text-center">
                                 @if($machine->status)
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                         {{ $machine->status === 'OPS' ? 'bg-green-100 text-green-800' :

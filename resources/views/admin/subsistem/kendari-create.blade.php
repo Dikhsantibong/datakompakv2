@@ -81,14 +81,17 @@
                     <div class="mt-6">
                         <h3 class="text-lg font-medium text-gray-900">{{ $powerPlant->name }}</h3>
                         <div class="mt-4 space-y-4">
-                            @foreach($powerPlant->machines as $machine)
+                            @foreach($machines as $machine)
                             <div class="border rounded-lg p-4">
                                 <h4 class="font-medium text-gray-800">{{ $machine->name }}</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">DMP</label>
-                                        <input type="number" step="0.01" name="dmp[{{ $machine->id }}]"
-                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @foreach($machine->machineOperations as $opr)
+                                            {{-- tes --}}
+                                            <input type="text" step="0.01" readonly value="dmp[{{ $opr->dmp }}]"
+                                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @endforeach
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Status</label>

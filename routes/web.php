@@ -106,8 +106,8 @@ Route::prefix('attendance')->group(function () {
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     // Kendari Subsystem Routes
-    Route::get('/subsistem/kendari', [App\Http\Controllers\Admin\SubsistemKendariController::class, 'index'])->name('subsistem.kendari');
-    Route::get('/subsistem/kendari/create', [App\Http\Controllers\Admin\SubsistemKendariController::class, 'create'])->name('subsistem.kendari.create');
+    // Route::get('/subsistem/kendari', [App\Http\Controllers\Admin\SubsistemKendariController::class, 'index'])->name('subsistem.kendari');
+    // Route::get('/subsistem/kendari/create', [App\Http\Controllers\Admin\SubsistemKendariController::class, 'create'])->name('subsistem.kendari.create');
 
     // Bau-Bau Subsystem Routes
     Route::get('/subsistem/bau-bau', [SubsistemBauBauController::class, 'index'])->name('subsistem.bau-bau');

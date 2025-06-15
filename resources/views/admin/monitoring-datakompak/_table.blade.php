@@ -1,4 +1,13 @@
 @if($data['type'] === 'data-engine')
+    <div class="flex justify-end mb-2">
+        <form method="GET" action="{{ route('admin.monitoring-datakompak.export-excel') }}">
+            <input type="hidden" name="tab" value="{{ $data['type'] }}">
+            <input type="hidden" name="date" value="{{ $data['date'] }}">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded  text-sm">
+                <i class="fas fa-file-excel mr-1"></i> Export Excel
+            </button>
+        </form>
+    </div>
     <div class="mb-4">
         <h3 class="text-lg font-semibold text-gray-900">Data Engine - {{ \Carbon\Carbon::parse($data['date'])->isoFormat('D MMMM Y') }}</h3>
         <p class="text-sm text-gray-500 mb-2">Arahkan cursor ke data yang terceklis untuk melihat detail data</p>
@@ -65,6 +74,15 @@
         </tbody>
     </table>
 @elseif($data['type'] === 'bahan-bakar')
+    <div class="flex justify-end mb-2">
+        <form method="GET" action="{{ route('admin.monitoring-datakompak.export-excel') }}">
+            <input type="hidden" name="tab" value="{{ $data['type'] }}">
+            <input type="hidden" name="month" value="{{ $data['month'] }}">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded  text-sm">
+                <i class="fas fa-file-excel mr-1"></i> Export Excel
+            </button>
+        </form>
+    </div>
     <div class="mb-4">
         <h3 class="text-lg font-semibold text-gray-900">Data Bahan Bakar - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
         <p class="text-sm text-gray-500 mb-2">Arahkan cursor ke data yang terceklis untuk melihat detail data</p>
@@ -142,6 +160,15 @@
         </table>
     </div>
 @elseif($data['type'] === 'pelumas')
+    <div class="flex justify-end mb-2">
+        <form method="GET" action="{{ route('admin.monitoring-datakompak.export-excel') }}">
+            <input type="hidden" name="tab" value="{{ $data['type'] }}">
+            <input type="hidden" name="month" value="{{ $data['month'] }}">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded  text-sm">
+                <i class="fas fa-file-excel mr-1"></i> Export Excel
+            </button>
+        </form>
+    </div>
     <div class="mb-4">
         <h3 class="text-lg font-semibold text-gray-900">Data Pelumas - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
         <p class="text-sm text-gray-500 mb-2">Arahkan cursor ke data yang terceklis untuk melihat detail data</p>
@@ -217,6 +244,15 @@
         </table>
     </div>
 @elseif($data['type'] === 'daily-summary')
+    <div class="flex justify-end mb-2">
+        <form method="GET" action="{{ route('admin.monitoring-datakompak.export-excel') }}">
+            <input type="hidden" name="tab" value="{{ $data['type'] }}">
+            <input type="hidden" name="month" value="{{ $data['dates'][0] ? \Carbon\Carbon::parse($data['dates'][0])->format('Y-m') : '' }}">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded  text-sm">
+                <i class="fas fa-file-excel mr-1"></i> Export Excel
+            </button>
+        </form>
+    </div>
     <table class="min-w-full divide-y divide-gray-200 border">
         <thead>
             <tr>
@@ -256,6 +292,15 @@
         </tbody>
     </table>
 @elseif($data['type'] === 'meeting-shift')
+    <div class="flex justify-end mb-2">
+        <form method="GET" action="{{ route('admin.monitoring-datakompak.export-excel') }}">
+            <input type="hidden" name="tab" value="{{ $data['type'] }}">
+            <input type="hidden" name="month" value="{{ $data['dates'][0] ? \Carbon\Carbon::parse($data['dates'][0])->format('Y-m') : '' }}">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded  text-sm">
+                <i class="fas fa-file-excel mr-1"></i> Export Excel
+            </button>
+        </form>
+    </div>
     <table class="min-w-full divide-y divide-gray-200 border">
         <thead>
             <tr>
@@ -307,6 +352,15 @@
         </tbody>
     </table>
 @elseif($data['type'] === 'laporan-kit')
+    <div class="flex justify-end mb-2">
+        <form method="GET" action="{{ route('admin.monitoring-datakompak.export-excel') }}">
+            <input type="hidden" name="tab" value="{{ $data['type'] }}">
+            <input type="hidden" name="month" value="{{ $data['month'] }}">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded  text-sm">
+                <i class="fas fa-file-excel mr-1"></i> Export Excel
+            </button>
+        </form>
+    </div>
     <div class="mb-4">
         <h3 class="text-lg font-semibold text-gray-900">Laporan KIT - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
         <p class="text-sm text-gray-500 mb-2">Arahkan cursor ke data yang terceklis untuk melihat detail data</p>

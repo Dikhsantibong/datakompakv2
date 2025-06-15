@@ -12,6 +12,10 @@
             border-bottom: 2px solid #2563eb;
             color: #2563eb;
         }
+        @keyframes spin {
+            0% { transform: rotate(0deg);}
+            100% { transform: rotate(360deg);}
+        }
     </style>
 @endpush
 
@@ -212,6 +216,13 @@
     </div>
 </div>
 
+<div id="excel-loading-overlay" style="display:none; position:fixed; z-index:9999; top:0; left:0; width:100vw; height:100vh; background:rgba(255,255,255,0.7); align-items:center; justify-content:center;">
+    <div style="text-align:center;">
+        <div class="loader" style="border:8px solid #f3f3f3; border-top:8px solid #2563eb; border-radius:50%; width:60px; height:60px; animation:spin 1s linear infinite; margin:auto;"></div>
+        <div style="margin-top:16px; color:#2563eb; font-weight:bold;">Mempersiapkan file Excel...</div>
+    </div>
+</div>
+
 @push('scripts')
 <script src="{{ asset('js/toggle.js') }}"></script>
 <script>
@@ -286,6 +297,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 monthFilter.classList.remove('hidden');
                 updateContent(currentTab, { month: monthInput.value, tab: currentTab });
             }
+        });
+    });
+
+    document.querySelectorAll('form[action*="export-excel"]').forEach(form => {
+        form.addEventListener('submit', function() {
+            document.getElementById('excel-loading-overlay').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('excel-loading-overlay').style.display = 'none';
+            }, 1000); // fallback hide after 10s
         });
     });
 });

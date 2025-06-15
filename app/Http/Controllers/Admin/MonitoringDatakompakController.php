@@ -17,6 +17,8 @@ use Illuminate\Support\Collection;
 use App\Models\BahanBakar;
 use App\Models\Pelumas;
 use App\Models\LaporanKit;
+use App\Exports\MonitoringDatakompakExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MonitoringDatakompakController extends Controller
 {
@@ -501,5 +503,39 @@ class MonitoringDatakompakController extends Controller
             }),
             'powerPlants' => $powerPlants
         ];
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $tab = $request->get('tab', 'data-engine');
+        $date = $request->get('date', now()->format('Y-m-d'));
+        $month = $request->get('month', now()->format('Y-m'));
+
+        $powerPlants = PowerPlant::with(['machines'])->get();
+
+        switch ($tab) {
+            case 'data-engine':
+                $data = $this->getDataEngineData($date, $powerPlants);
+                break;
+            case 'daily-summary':
+                $data = $this->getDailySummaryData(\Carbon\Carbon::createFromFormat('Y-m', $month)->format('Y-m-d'), $powerPlants);
+                break;
+            case 'meeting-shift':
+                $data = $this->getMeetingShiftData(\Carbon\Carbon::createFromFormat('Y-m', $month)->format('Y-m-d'), $powerPlants);
+                break;
+            case 'bahan-bakar':
+                $data = $this->getBahanBakarData($month);
+                break;
+            case 'pelumas':
+                $data = $this->getPelumasData($month);
+                break;
+            case 'laporan-kit':
+                $data = $this->getLaporanKitData($month);
+                break;
+            default:
+                $data = $this->getDataEngineData($date, $powerPlants);
+        }
+
+        return Excel::download(new MonitoringDatakompakExport($data, $tab), 'monitoring-datakompak-'.$tab.'-'.now()->format('Ymd_His').'.xlsx');
     }
 } 

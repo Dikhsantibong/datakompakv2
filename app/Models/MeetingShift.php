@@ -19,13 +19,11 @@ class MeetingShift extends Model
     protected $fillable = [
         'tanggal',
         'current_shift',
-        'created_by',
-        'sync_unit_origin'
+        'created_by'
     ];
 
     protected $casts = [
-        'tanggal' => 'date',
-        'sync_unit_origin' => 'string'
+        'tanggal' => 'date'
     ];
 
     protected $primaryKey = 'id';
@@ -109,6 +107,7 @@ class MeetingShift extends Model
                         'tanggal' => $meetingShift->tanggal,
                         'current_shift' => $meetingShift->current_shift,
                         'created_by' => $meetingShift->created_by,
+                        'sync_unit_origin' => $meetingShift->sync_unit_origin,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
@@ -161,6 +160,7 @@ class MeetingShift extends Model
                             'tanggal' => $meetingShift->tanggal,
                             'current_shift' => $meetingShift->current_shift,
                             'created_by' => $meetingShift->created_by,
+                            'sync_unit_origin' => $meetingShift->sync_unit_origin,
                             'created_at' => now(),
                             'updated_at' => now()
                         ];

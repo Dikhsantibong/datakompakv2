@@ -12,9 +12,46 @@
             border-bottom: 2px solid #2563eb;
             color: #2563eb;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg);}
-            100% { transform: rotate(360deg);}
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.9); opacity: 0.5; }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .loading-dots div {
+            width: 10px;
+            height: 10px;
+            background-color: #2563eb;
+            border-radius: 50%;
+            animation: pulse 1.4s ease-in-out infinite;
+        }
+        .loading-dots div:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .loading-dots div:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        .loading-text {
+            background: linear-gradient(90deg, #2563eb 25%, #60a5fa 50%, #2563eb 75%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 2s infinite;
+            font-weight: 500;
+        }
+        .loading-overlay {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
         }
     </style>
 @endpush
@@ -216,10 +253,25 @@
     </div>
 </div>
 
-<div id="excel-loading-overlay" style="display:none; position:fixed; z-index:9999; top:0; left:0; width:100vw; height:100vh; background:rgba(255,255,255,0.7); align-items:center; justify-content:center;">
+<div id="excel-loading-overlay" class="loading-overlay" style="display:none; position:fixed; z-index:9999; top:0; left:0; width:100vw; height:100vh; align-items:center; justify-content:center;">
     <div style="text-align:center;">
-        <div class="loader" style="border:8px solid #f3f3f3; border-top:8px solid #2563eb; border-radius:50%; width:60px; height:60px; animation:spin 1s linear infinite; margin:auto;"></div>
-        <div style="margin-top:16px; color:#2563eb; font-weight:bold;">Mempersiapkan file Excel...</div>
+        <div class="loading-dots">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="loading-text mt-4 text-lg">Mempersiapkan file Excel</div>
+    </div>
+</div>
+
+<div id="tab-loading-overlay" class="loading-overlay" style="display:none; position:fixed; z-index:9999; top:0; left:0; width:100vw; height:100vh; align-items:center; justify-content:center;">
+    <div style="text-align:center;">
+        <div class="loading-dots">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="loading-text mt-4 text-lg">Memuat data</div>
     </div>
 </div>
 
@@ -249,9 +301,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const monthFilter = document.getElementById('month-filter');
     const tableContainer = document.getElementById('tableContainer');
     const tabLinks = document.querySelectorAll('.tab-link');
+    const loadingOverlay = document.getElementById('tab-loading-overlay');
     let currentTab = '{{ $activeTab }}';
 
+    function showLoading() {
+        loadingOverlay.style.display = 'flex';
+    }
+
+    function hideLoading() {
+        loadingOverlay.style.display = 'none';
+    }
+
     function updateContent(tab, params) {
+        showLoading();
         const queryString = new URLSearchParams(params).toString();
         fetch(`{{ route('admin.monitoring-datakompak') }}?${queryString}`, {
             headers: {
@@ -262,9 +324,11 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(html => {
             tableContainer.innerHTML = html;
             window.history.pushState({}, '', `{{ route('admin.monitoring-datakompak') }}?${queryString}`);
+            hideLoading();
         })
         .catch(error => {
             console.error('Error:', error);
+            hideLoading();
         });
     }
 
@@ -305,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('excel-loading-overlay').style.display = 'flex';
             setTimeout(() => {
                 document.getElementById('excel-loading-overlay').style.display = 'none';
-            }, 1000); // fallback hide after 10s
+            }, 10000); // fallback hide after 10s
         });
     });
 });

@@ -313,7 +313,10 @@
                                 <div>
                                     <p class="text-sm text-gray-600">Operasi (OPS)</p>
                                     <p class="text-2xl font-semibold text-green-600">
-                                        {{ $machineStats['ops'] }}
+                                        {{ $machineStats['ops']['count'] }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        {{ number_format($machineStats['ops']['hours']) }} jam
                                     </p>
                                 </div>
                                 <div class="text-green-500">
@@ -328,7 +331,10 @@
                                 <div>
                                     <p class="text-sm text-gray-600">Reserve Shutdown (RSH)</p>
                                     <p class="text-2xl font-semibold text-red-600">
-                                        {{ $machineStats['rsh'] }}
+                                        {{ $machineStats['rsh']['count'] }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        {{ number_format($machineStats['rsh']['hours']) }} jam
                                     </p>
                                 </div>
                                 <div class="text-red-500">
@@ -343,7 +349,10 @@
                                 <div>
                                     <p class="text-sm text-gray-600">Maintenance Outage (MO)</p>
                                     <p class="text-2xl font-semibold text-yellow-600">
-                                        {{ $machineStats['mo'] }}
+                                        {{ $machineStats['mo']['count'] }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        {{ number_format($machineStats['mo']['hours']) }} jam
                                     </p>
                                 </div>
                                 <div class="text-yellow-500">
@@ -358,7 +367,10 @@
                                 <div>
                                     <p class="text-sm text-gray-600">Forced Outage (FO)</p>
                                     <p class="text-2xl font-semibold text-blue-600">
-                                        {{ $machineStats['fo'] }}
+                                        {{ $machineStats['fo']['count'] }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        {{ number_format($machineStats['fo']['hours']) }} jam
                                     </p>
                                 </div>
                                 <div class="text-blue-500">
@@ -373,7 +385,10 @@
                                 <div>
                                     <p class="text-sm text-gray-600">Planned Outage (PO)</p>
                                     <p class="text-2xl font-semibold text-purple-600">
-                                        {{ $machineStats['po'] }}
+                                        {{ $machineStats['po']['count'] }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        {{ number_format($machineStats['po']['hours']) }} jam
                                     </p>
                                 </div>
                                 <div class="text-purple-500">
@@ -388,7 +403,10 @@
                                 <div>
                                     <p class="text-sm text-gray-600">Mothballed (MB)</p>
                                     <p class="text-2xl font-semibold text-orange-600">
-                                        {{ $machineStats['mb'] }}
+                                        {{ $machineStats['mb']['count'] }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        {{ number_format($machineStats['mb']['hours']) }} jam
                                     </p>
                                 </div>
                                 <div class="text-orange-500">

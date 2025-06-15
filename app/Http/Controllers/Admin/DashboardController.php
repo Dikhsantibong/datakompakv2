@@ -33,23 +33,51 @@ class DashboardController extends Controller
         );
         $totalPeriodHours = $dailySummaries->sum('period_hours');
 
-        // Get machine logs for the current month
-        $monthlyMachineLogs = \App\Models\MachineLog::whereBetween('date', [$startOfMonth, $endOfMonth])
-            ->select('machine_id', 'status')
-            ->latest('date')
+        // Get machine status statistics for the current month
+        $machineStats = DB::table('machine_logs as ml')
+            ->whereBetween('ml.date', [$startOfMonth, $endOfMonth])
+            ->select(
+                'ml.status',
+                DB::raw('COUNT(DISTINCT ml.machine_id) as count'),
+                DB::raw('SUM(
+                    TIMESTAMPDIFF(
+                        HOUR,
+                        ml.time,
+                        COALESCE(
+                            (
+                                SELECT MIN(next_log.time)
+                                FROM machine_logs as next_log
+                                WHERE next_log.machine_id = ml.machine_id
+                                AND next_log.time > ml.time
+                                AND next_log.date <= "' . $endOfMonth->format('Y-m-d') . '"
+                            ),
+                            NOW()
+                        )
+                    )
+                ) as hours')
+            )
+            ->groupBy('ml.status')
             ->get()
-            ->unique('machine_id');
+            ->mapWithKeys(function ($item) {
+                return [strtolower($item->status) => [
+                    'count' => $item->count,
+                    'hours' => max(0, $item->hours) // Ensure we don't get negative hours
+                ]];
+            })
+            ->toArray();
 
-        // Count machines by status for the month
-        $machineStats = [
-            'total' => $monthlyMachineLogs->count(),
-            'ops' => $monthlyMachineLogs->where('status', 'OPS')->count(),
-            'rsh' => $monthlyMachineLogs->where('status', 'RSH')->count(),
-            'fo' => $monthlyMachineLogs->where('status', 'FO')->count(),
-            'mo' => $monthlyMachineLogs->where('status', 'MO')->count(),
-            'po' => $monthlyMachineLogs->where('status', 'PO')->count(),
-            'mb' => $monthlyMachineLogs->where('status', 'MB')->count(),
+        // Set default values for all possible statuses
+        $defaultStats = [
+            'ops' => ['count' => 0, 'hours' => 0],
+            'rsh' => ['count' => 0, 'hours' => 0],
+            'fo' => ['count' => 0, 'hours' => 0],
+            'mo' => ['count' => 0, 'hours' => 0],
+            'po' => ['count' => 0, 'hours' => 0],
+            'mb' => ['count' => 0, 'hours' => 0]
         ];
+
+        // Merge with actual stats
+        $machineStats = array_merge($defaultStats, $machineStats);
 
         // Get other required data
         $powerPlants = PowerPlant::with(['machines' => function($query) {

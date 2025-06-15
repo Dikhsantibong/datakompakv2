@@ -423,4 +423,28 @@
         scrollbar-width: thin;
         scrollbar-color: rgba(255, 255, 255, 0.15) rgba(255, 255, 255, 0.05);
     }
+
+    /* Sidebar menu hover animation with feather effect */
+    nav a, nav button {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    nav a::before, nav button::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 0;
+        background: rgba(255,255,255,0.10);
+        z-index: -1;
+        transition: width 0.3s cubic-bezier(0.4,0,0.2,1), background 0.3s;
+    }
+    nav a:hover::before, nav a.bg-white\/10::before,
+    nav button:hover::before, nav button.bg-white\/10::before {
+        width: 100%;
+        /* Feather effect: gradient only on hover */
+        background: linear-gradient(to right, rgba(255,255,255,0.10) 80%, rgba(255,255,255,0.01) 100%);
+    }
 </style>

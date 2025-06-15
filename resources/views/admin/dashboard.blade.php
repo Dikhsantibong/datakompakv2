@@ -218,73 +218,11 @@
             </div>
 
 
-            <!-- Stats Overview -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-                <!-- Card 1: Total Produksi Netto -->
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                    <div class="p-4">
-                        <div class="text-3xl text-blue-600 mb-2">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-1">Total Produksi Netto</h3>
-                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalNetProduction, 2) }} kWh</p>
-                        <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                            Lihat Detail →
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Card 2: Total Produksi Bruto -->
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                    <div class="p-4">
-                        <div class="text-3xl text-green-600 mb-2">
-                            <i class="fas fa-chart-bar"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-1">Total Produksi Bruto</h3>
-                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalGrossProduction, 2) }} kWh</p>
-                        <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                            Lihat Detail →
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Card 3: Beban Puncak -->
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                    <div class="p-4">
-                        <div class="text-3xl text-yellow-600 mb-2">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-1">Beban Puncak</h3>
-                        <p class="text-gray-600 mb-2 text-sm">{{ number_format(max($dailySummaries->pluck('peak_load_day')->max(), $dailySummaries->pluck('peak_load_night')->max()), 2) }} MW</p>
-                        <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                            Lihat Detail →
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Card 4: Total Jam Periode -->
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                    <div class="p-4">
-                        <div class="text-3xl text-purple-600 mb-2">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-1">Total Jam Periode</h3>
-                        <p class="text-gray-600 mb-2 text-sm">{{ number_format($totalPeriodHours, 1) }} Jam</p>
-                        <a href="{{ route('admin.daily-summary.results', ['date' => date('Y-m-d')]) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                            Lihat Detail →
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-             <!-- Operation Schedule Section -->
-            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-medium">Jadwal Operasi Hari Ini</h3>
-                    <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Lihat Semua Jadwal →</a>
-                </div>
+            
+                
+            
                 @if($operationSchedules->count() > 0)
-                    <div class="space-y-4">
+                    <div class="space-y-4 ">
                         @foreach($operationSchedules as $schedule)
                             <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
                                 <div class="flex justify-between items-start">
@@ -319,7 +257,7 @@
                         @endforeach
                     </div>
                 @else
-                    <div class="text-center py-8 text-gray-500">
+                    <div class="text-center py-8 text-gray-500 bg-white rounded-lg shadow-md p-6 mb-6">
                         <i class="fas fa-calendar-times text-4xl mb-3"></i>
                         <p>Tidak ada jadwal operasi untuk hari ini</p>
                     </div>
@@ -327,14 +265,14 @@
             </div>
 
             <!-- Unit & Machine Stats -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 ">
                 <!-- Power Plants Overview -->
-                <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="bg-white rounded-lg shadow-md p-6 ml-6">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-medium">Unit Pembangkit</h3>
                         <span class="text-sm text-gray-500">Total: {{ $powerPlants->count() }}</span>
                     </div>
-                    <div class="space-y-4 max-h-64 overflow-y-auto pr-2">
+                    <div class="space-y-4 max-h-80 overflow-y-auto pr-2">
                         @foreach($powerPlants as $plant)
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
@@ -363,7 +301,7 @@
                 </div>
 
                 <!-- Machines Status -->
-                <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="bg-white rounded-lg shadow-md p-6 mr-6">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-medium">Status Mesin</h3>
                         <span class="text-sm text-gray-500">Bulan: {{ \Carbon\Carbon::now()->isoFormat('MMMM Y') }}</span>
@@ -468,132 +406,8 @@
                 </div>
             </div>
 
-            <!-- Progress Trackers -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <!-- Progress Tracker Card -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-lg font-medium mb-4">Status Pembangkit</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <span class="text-sm font-medium">Kapasitas Terpasang</span>
-                                <span class="text-sm font-medium">85%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <span class="text-sm font-medium">Efisiensi Pembangkit</span>
-                                <span class="text-sm font-medium">78%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-blue-500 h-2 rounded-full" style="width: 78%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <span class="text-sm font-medium">Ketersediaan Unit</span>
-                                <span class="text-sm font-medium">92%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 92%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Activity Card -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-lg font-medium mb-4">Aktivitas Terkini</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-                            <p class="text-sm">Unit PLTD Bau-Bau beroperasi normal</p>
-                            <span class="text-xs text-gray-500 ml-auto">2 jam yang lalu</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
-                            <p class="text-sm">Pemeliharaan rutin PLTU Kendari</p>
-                            <span class="text-xs text-gray-500 ml-auto">4 jam yang lalu</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                            <p class="text-sm">Update data operasional PLTD Wangi-Wangi</p>
-                            <span class="text-xs text-gray-500 ml-auto">5 jam yang lalu</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
-                            <p class="text-sm">Peringatan bahan bakar PLTD Raha</p>
-                            <span class="text-xs text-gray-500 ml-auto">6 jam yang lalu</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Charts Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <!-- Production Chart -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-lg font-medium mb-4">Grafik Produksi Harian</h3>
-                    <div style="height: 300px;">
-                        <canvas id="productionChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Fuel Consumption Chart -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-lg font-medium mb-4">Konsumsi Bahan Bakar</h3>
-                    <div style="height: 300px;">
-                        <canvas id="fuelChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fuel Monitoring Section -->
-            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-medium">Monitoring Bahan Bakar</h3>
-                    <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Lihat Detail →</a>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- HSD Fuel -->
-                    <div class="border rounded-lg p-4">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm font-medium">HSD</span>
-                            <span class="text-xs text-gray-500">Stok: 75%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
-                            <div class="bg-green-500 h-2 rounded-full" style="width: 75%"></div>
-                        </div>
-                        <div class="text-sm text-gray-600">150,000 Liter</div>
-                    </div>
-                    <!-- MFO Fuel -->
-                    <div class="border rounded-lg p-4">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm font-medium">MFO</span>
-                            <span class="text-xs text-gray-500">Stok: 45%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
-                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 45%"></div>
-                        </div>
-                        <div class="text-sm text-gray-600">90,000 Liter</div>
-                    </div>
-                    <!-- Batubara -->
-                    <div class="border rounded-lg p-4">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm font-medium">B35</span>
-                            <span class="text-xs text-gray-500">Stok: 60%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
-                            <div class="bg-blue-500 h-2 rounded-full" style="width: 60%"></div>
-                        </div>
-                        <div class="text-sm text-gray-600">1,200 liter</div>
-                    </div>
-                </div>
-            </div>
-
+            
+                
            
 
             <!-- Chart Initialization Scripts -->

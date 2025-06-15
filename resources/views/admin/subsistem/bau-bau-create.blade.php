@@ -3,7 +3,7 @@
 @section('content')
 <div class="flex h-screen bg-gray-50 overflow-auto">
     @include('components.sidebar')
-    
+
     <div id="main-content" class="flex-1 main-content">
         <!-- Header -->
         <header class="bg-white shadow-sm sticky top-0 z-20">
@@ -37,7 +37,7 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
@@ -87,12 +87,15 @@
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">DMP</label>
-                                        <input type="number" step="0.01" name="dmp[{{ $machine->id }}]" 
-                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @foreach($machine->machineOperations as $opr)
+                                            {{-- tes --}}
+                                            <input type="text" step="0.01" readonly value="dmp[{{ $opr->dmp }}]"
+                                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @endforeach
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Status</label>
-                                        <select name="status[{{ $machine->id }}]" 
+                                        <select name="status[{{ $machine->id }}]"
                                                 class="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                             <option value="Normal">Normal</option>
                                             <option value="Derating">Derating</option>
@@ -103,7 +106,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Beban</label>
-                                        <input type="number" step="0.01" name="beban[{{ $machine->id }}]" 
+                                        <input type="number" step="0.01" name="beban[{{ $machine->id }}]"
                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     </div>
                                 </div>
@@ -113,11 +116,11 @@
                     </div>
 
                     <div class="flex justify-end gap-3">
-                        <a href="{{ route('admin.subsistem.bau-bau') }}" 
+                        <a href="{{ route('admin.subsistem.bau-bau') }}"
                            class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
                             Batal
                         </a>
-                        <button type="submit" 
+                        <button type="submit"
                                 class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
                             Simpan Data
                         </button>
@@ -129,4 +132,4 @@
 </div>
 
 <script src="{{ asset('js/toggle.js') }}"></script>
-@endsection 
+@endsection

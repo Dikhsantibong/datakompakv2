@@ -13,8 +13,8 @@ class SubsistemKendariController extends Controller
 {
     public function index()
     {
-        
-        $machines = Machine::where(' power_plant_id',2)->with('operations');//, 'machineOperations'
+
+        $machines = Machine::where(' power_plant_id',2)->with('operations');
         $powerPlant = PowerPlant::where('unit_source', 'mysql_moramo')->first();
         $specificTimes = ['11:00:00', '14:00:00', '16:00:00', '18:00:00', '19:00:00'];
 

@@ -110,8 +110,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Route::get('/subsistem/kendari/create', [App\Http\Controllers\Admin\SubsistemKendariController::class, 'create'])->name('subsistem.kendari.create');
 
     // Bau-Bau Subsystem Routes
-    Route::get('/subsistem/bau-bau', [SubsistemBauBauController::class, 'index'])->name('subsistem.bau-bau');
-    Route::get('/subsistem/bau-bau/create', [SubsistemBauBauController::class, 'create'])->name('subsistem.bau-bau.create');
+    // Route::get('/subsistem/bau-bau', [SubsistemBauBauController::class, 'index'])->name('subsistem.bau-bau');
+    // Route::get('/subsistem/bau-bau/create', [SubsistemBauBauController::class, 'create'])->name('subsistem.bau-bau.create');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

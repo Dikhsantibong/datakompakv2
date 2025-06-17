@@ -33,6 +33,13 @@
                     <i class="fas fa-chart-pie w-5 h-5"></i>
                     <span class="ml-3 text-sm">Monitoring Datakompak</span>
                 </a>
+
+                <!-- Monitoring Akumulasi Datakompak -->
+                <a href="{{ route('admin.monitoring-datakompak.accumulation') }}"
+                    class="flex items-center px-4 py-3 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.monitoring-datakompak.accumulation') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                    <i class="fas fa-chart-bar w-5 h-5"></i>
+                    <span class="ml-3 text-sm">Akumulasi Input Datakompak</span>
+                </a>
                 @endif
 
                 <!-- Kalender Operasi -->

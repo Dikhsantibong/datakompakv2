@@ -1224,6 +1224,7 @@ Route::middleware(['auth'])->group(function () {
     // Monitoring Datakompak
     Route::get('/admin/monitoring-datakompak', [MonitoringDatakompakController::class, 'index'])->name('admin.monitoring-datakompak');
     Route::get('/admin/monitoring-datakompak/export-excel', [MonitoringDatakompakController::class, 'exportExcel'])->name('admin.monitoring-datakompak.export-excel');
+    Route::get('/admin/monitoring-datakompak/accumulation', [MonitoringDatakompakController::class, 'accumulation'])->name('admin.monitoring-datakompak.accumulation');
 });
 
 // K3 KAMP Routes

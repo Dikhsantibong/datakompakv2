@@ -729,4 +729,208 @@ class MonitoringDatakompakController extends Controller
             'powerPlants' => $powerPlants
         ];
     }
+
+    public function accumulation(Request $request)
+    {
+        $startDate = $request->input('start_date', now()->subDays(14)->format('Y-m-d'));
+        $endDate = $request->input('end_date', now()->format('Y-m-d'));
+        $selectedUnit = $request->input('unit');
+
+        // Get all power plants except UP KENDARI
+        $powerPlantsQuery = PowerPlant::where('name', '!=', 'UP KENDARI');
+
+        // Apply unit filter if selected
+        if ($selectedUnit) {
+            $powerPlantsQuery->where('id', $selectedUnit);
+        }
+
+        $powerPlants = $powerPlantsQuery->get();
+        $allPowerPlants = PowerPlant::where('name', '!=', 'UP KENDARI')->get(); // For dropdown
+
+        $accumulatedData = [];
+
+        foreach ($powerPlants as $powerPlant) {
+            $data = [
+                'name' => $powerPlant->name,
+                'operator_kit' => [
+                    'data_engine' => $this->calculateCompletionRate($powerPlant, 'data_engine', $startDate, $endDate),
+                    'daily_summary' => $this->calculateCompletionRate($powerPlant, 'daily_summary', $startDate, $endDate),
+                    'meeting_shift' => $this->calculateCompletionRate($powerPlant, 'meeting_shift', $startDate, $endDate),
+                    'bahan_kimia' => $this->calculateCompletionRate($powerPlant, 'bahan_kimia', $startDate, $endDate),
+                    'patrol_check' => $this->calculateCompletionRate($powerPlant, 'patrol_check', $startDate, $endDate),
+                    'five_s5r' => $this->calculateCompletionRate($powerPlant, 'five_s5r', $startDate, $endDate),
+                    'flm' => $this->calculateCompletionRate($powerPlant, 'flm', $startDate, $endDate),
+                    'abnormal_report' => $this->calculateCompletionRate($powerPlant, 'abnormal_report', $startDate, $endDate),
+                    'k3_kam' => $this->calculateCompletionRate($powerPlant, 'k3_kam', $startDate, $endDate),
+                ],
+                'operasi_ul' => [
+                    'bahan_bakar' => $this->calculateCompletionRate($powerPlant, 'bahan_bakar', $startDate, $endDate),
+                    'pelumas' => $this->calculateCompletionRate($powerPlant, 'pelumas', $startDate, $endDate),
+                    'daily_summary' => $this->calculateCompletionRate($powerPlant, 'daily_summary', $startDate, $endDate),
+                    'bahan_kimia' => $this->calculateCompletionRate($powerPlant, 'bahan_kimia', $startDate, $endDate),
+                    'rencana_daya_mampu' => $this->calculateCompletionRate($powerPlant, 'rencana_daya_mampu', $startDate, $endDate),
+                ]
+            ];
+
+            $accumulatedData[] = $data;
+        }
+
+        return view('admin.monitoring-datakompak.accumulation', [
+            'data' => $accumulatedData,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'selectedUnit' => $selectedUnit,
+            'powerPlants' => $allPowerPlants
+        ]);
+    }
+
+    private function calculateCompletionRate($powerPlant, $type, $startDate, $endDate)
+    {
+        $totalDays = Carbon::parse($startDate)->diffInDays(Carbon::parse($endDate)) + 1;
+        $filledDays = 0;
+        $currentDate = Carbon::parse($startDate);
+
+        while ($currentDate <= Carbon::parse($endDate)) {
+            $date = $currentDate->format('Y-m-d');
+
+            switch ($type) {
+                case 'data_engine':
+                    $filledDays += $this->checkDataEngineCompletion($powerPlant, $date) ? 1 : 0;
+                    break;
+                case 'daily_summary':
+                    $filledDays += $this->checkDailySummaryCompletion($powerPlant, $date) ? 1 : 0;
+                    break;
+                case 'meeting_shift':
+                    $filledDays += $this->checkMeetingShiftCompletion($powerPlant, $date) ? 1 : 0;
+                    break;
+                case 'bahan_kimia':
+                    $filledDays += $this->checkBahanKimiaCompletion($powerPlant, $date) ? 1 : 0;
+                    break;
+                case 'patrol_check':
+                    $filledDays += $this->checkPatrolCheckCompletion($powerPlant, $date) ? 1 : 0;
+                    break;
+                case 'five_s5r':
+                    $filledDays += $this->checkFiveS5rCompletion($powerPlant, $date) ? 1 : 0;
+                    break;
+                case 'flm':
+                    $filledDays += $this->checkFlmCompletion($powerPlant, $date) ? 1 : 0;
+                    break;
+                case 'abnormal_report':
+                    $filledDays += $this->checkAbnormalReportCompletion($powerPlant, $date) ? 1 : 0;
+                    break;
+                case 'k3_kam':
+                    $filledDays += $this->checkK3KamCompletion($powerPlant, $date) ? 1 : 0;
+                    break;
+                case 'bahan_bakar':
+                    $filledDays += $this->checkBahanBakarCompletion($powerPlant, $date) ? 1 : 0;
+                    break;
+                case 'pelumas':
+                    $filledDays += $this->checkPelumasCompletion($powerPlant, $date) ? 1 : 0;
+                    break;
+                case 'rencana_daya_mampu':
+                    $filledDays += $this->checkRencanaDayaMampuCompletion($powerPlant, $date) ? 1 : 0;
+                    break;
+            }
+
+            $currentDate->addDay();
+        }
+
+        $percentage = ($filledDays / $totalDays) * 100;
+        $missingDays = $totalDays - $filledDays;
+
+        return [
+            'percentage' => round($percentage, 2),
+            'missing_days' => $missingDays
+        ];
+    }
+
+    private function checkDataEngineCompletion($powerPlant, $date)
+    {
+        return MachineLog::whereIn('machine_id', $powerPlant->machines->pluck('id'))
+            ->whereDate('date', $date)
+            ->exists();
+    }
+
+    private function checkDailySummaryCompletion($powerPlant, $date)
+    {
+        return DailySummary::where('power_plant_id', $powerPlant->id)
+            ->whereDate('date', $date)
+            ->exists();
+    }
+
+    private function checkMeetingShiftCompletion($powerPlant, $date)
+    {
+        return MeetingShift::whereDate('tanggal', $date)
+            ->where('sync_unit_origin', $powerPlant->unit_source)
+            ->exists();
+    }
+
+    private function checkBahanKimiaCompletion($powerPlant, $date)
+    {
+        return BahanKimia::where('unit_id', $powerPlant->id)
+            ->whereDate('tanggal', $date)
+            ->exists();
+    }
+
+    private function checkPatrolCheckCompletion($powerPlant, $date)
+    {
+        return DB::table('patrol_checks')
+            ->where('sync_unit_origin', $powerPlant->name)
+            ->whereDate('created_at', $date)
+            ->exists();
+    }
+
+    private function checkFiveS5rCompletion($powerPlant, $date)
+    {
+        return DB::table('five_s5r_batches')
+            ->where('sync_unit_origin', $powerPlant->name)
+            ->whereDate('created_at', $date)
+            ->exists();
+    }
+
+    private function checkFlmCompletion($powerPlant, $date)
+    {
+        return DB::table('flm_inspections')
+            ->where('sync_unit_origin', $powerPlant->name)
+            ->whereDate('tanggal', $date)
+            ->exists();
+    }
+
+    private function checkAbnormalReportCompletion($powerPlant, $date)
+    {
+        return DB::table('abnormal_reports')
+            ->where('sync_unit_origin', $powerPlant->name)
+            ->whereDate('created_at', $date)
+            ->exists();
+    }
+
+    private function checkK3KamCompletion($powerPlant, $date)
+    {
+        return DB::table('k3_kamp_reports')
+            ->where('sync_unit_origin', $powerPlant->name)
+            ->whereDate('date', $date)
+            ->exists();
+    }
+
+    private function checkBahanBakarCompletion($powerPlant, $date)
+    {
+        return BahanBakar::where('unit_id', $powerPlant->id)
+            ->whereDate('tanggal', $date)
+            ->exists();
+    }
+
+    private function checkPelumasCompletion($powerPlant, $date)
+    {
+        return Pelumas::where('unit_id', $powerPlant->id)
+            ->whereDate('tanggal', $date)
+            ->exists();
+    }
+
+    private function checkRencanaDayaMampuCompletion($powerPlant, $date)
+    {
+        return DB::table('rencana_daya_mampu')
+            ->where('unit_source', $powerPlant->unit_source)
+            ->whereDate('tanggal', $date)
+            ->exists();
+    }
 }

@@ -434,18 +434,18 @@
             </tbody>
         </table>
     </div>
-@elseif($data['type'] === 'flm')
+@elseif($data['type'] === 'flm-inspection')
     <div class="flex justify-end mb-2">
         <form method="GET" action="{{ route('admin.monitoring-datakompak.export-excel') }}">
             <input type="hidden" name="tab" value="{{ $data['type'] }}">
             <input type="hidden" name="month" value="{{ $data['month'] }}">
-            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded  text-sm">
                 <i class="fas fa-file-excel mr-1"></i> Export Excel
             </button>
         </form>
     </div>
     <div class="mb-4">
-        <h3 class="text-lg font-semibold text-gray-900">Data FLM - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
+        <h3 class="text-lg font-semibold text-gray-900">FLM Inspection - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
         <p class="text-sm text-gray-500 mb-2">Arahkan cursor ke data yang terceklis untuk melihat detail data</p>
     </div>
     <div class="overflow-x-auto">
@@ -469,15 +469,34 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
                             </td>
-                            @foreach($data['dates'] as $date)
+                            @foreach($data['dates'] as $index => $date)
                                 @php
                                     $fullDate = \Carbon\Carbon::createFromFormat('d/m', $date)->format('Y-m-d');
+                                    $dayData = $powerPlant->dailyData[$fullDate];
                                 @endphp
-                                <td class="px-3 py-4 whitespace-nowrap text-center border-r">
-                                    @if($powerPlant->dailyStatus[$fullDate])
-                                        <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
+                                <td class="px-3 py-4 whitespace-nowrap text-center border-r relative group">
+                                    @if($dayData['status'])
+                                        <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full cursor-pointer">
                                             <i class="fas fa-check text-xs"></i>
                                         </span>
+                                        <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
+                                            <div class="text-sm">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <p class="font-semibold">{{ $powerPlant->name }}</p>
+                                                    <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
+                                                </div>
+                                                <div class="space-y-2">
+                                                    <p><span class="font-medium">Total Inspections:</span> {{ $dayData['data']->count() }}</p>
+                                                    @foreach($dayData['data'] as $inspection)
+                                                        <div class="border-t pt-2">
+                                                            <p><span class="font-medium">Time:</span> {{ $inspection->time }}</p>
+                                                            <p><span class="font-medium">Shift:</span> {{ $inspection->shift }}</p>
+                                                            <p><span class="font-medium">Status:</span> {{ $inspection->status }}</p>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
                                     @else
                                         <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
                                             <i class="fas fa-times text-xs"></i>
@@ -491,18 +510,18 @@
             </tbody>
         </table>
     </div>
-@elseif($data['type'] === '5s5r')
+@elseif($data['type'] === 'five-s5r')
     <div class="flex justify-end mb-2">
         <form method="GET" action="{{ route('admin.monitoring-datakompak.export-excel') }}">
             <input type="hidden" name="tab" value="{{ $data['type'] }}">
             <input type="hidden" name="month" value="{{ $data['month'] }}">
-            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded  text-sm">
                 <i class="fas fa-file-excel mr-1"></i> Export Excel
             </button>
         </form>
     </div>
     <div class="mb-4">
-        <h3 class="text-lg font-semibold text-gray-900">Data 5S5R - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
+        <h3 class="text-lg font-semibold text-gray-900">5S 5R - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
         <p class="text-sm text-gray-500 mb-2">Arahkan cursor ke data yang terceklis untuk melihat detail data</p>
     </div>
     <div class="overflow-x-auto">
@@ -526,15 +545,33 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
                             </td>
-                            @foreach($data['dates'] as $date)
+                            @foreach($data['dates'] as $index => $date)
                                 @php
                                     $fullDate = \Carbon\Carbon::createFromFormat('d/m', $date)->format('Y-m-d');
+                                    $dayData = $powerPlant->dailyData[$fullDate];
                                 @endphp
-                                <td class="px-3 py-4 whitespace-nowrap text-center border-r">
-                                    @if($powerPlant->dailyStatus[$fullDate])
-                                        <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
+                                <td class="px-3 py-4 whitespace-nowrap text-center border-r relative group">
+                                    @if($dayData['status'])
+                                        <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full cursor-pointer">
                                             <i class="fas fa-check text-xs"></i>
                                         </span>
+                                        <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
+                                            <div class="text-sm">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <p class="font-semibold">{{ $powerPlant->name }}</p>
+                                                    <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
+                                                </div>
+                                                <div class="space-y-2">
+                                                    <p><span class="font-medium">Total Batches:</span> {{ $dayData['data']->count() }}</p>
+                                                    @foreach($dayData['data'] as $batch)
+                                                        <div class="border-t pt-2">
+                                                            <p><span class="font-medium">Pemeriksaan:</span> {{ $batch->pemeriksaan->count() }}</p>
+                                                            <p><span class="font-medium">Program Kerja:</span> {{ $batch->programKerja->count() }}</p>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
                                     @else
                                         <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
                                             <i class="fas fa-times text-xs"></i>
@@ -553,13 +590,13 @@
         <form method="GET" action="{{ route('admin.monitoring-datakompak.export-excel') }}">
             <input type="hidden" name="tab" value="{{ $data['type'] }}">
             <input type="hidden" name="month" value="{{ $data['month'] }}">
-            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded  text-sm">
                 <i class="fas fa-file-excel mr-1"></i> Export Excel
             </button>
         </form>
     </div>
     <div class="mb-4">
-        <h3 class="text-lg font-semibold text-gray-900">Data Patrol Check - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
+        <h3 class="text-lg font-semibold text-gray-900">Patrol Check - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
         <p class="text-sm text-gray-500 mb-2">Arahkan cursor ke data yang terceklis untuk melihat detail data</p>
     </div>
     <div class="overflow-x-auto">
@@ -583,15 +620,34 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
                             </td>
-                            @foreach($data['dates'] as $date)
+                            @foreach($data['dates'] as $index => $date)
                                 @php
                                     $fullDate = \Carbon\Carbon::createFromFormat('d/m', $date)->format('Y-m-d');
+                                    $dayData = $powerPlant->dailyData[$fullDate];
                                 @endphp
-                                <td class="px-3 py-4 whitespace-nowrap text-center border-r">
-                                    @if($powerPlant->dailyStatus[$fullDate])
-                                        <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
+                                <td class="px-3 py-4 whitespace-nowrap text-center border-r relative group">
+                                    @if($dayData['status'])
+                                        <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full cursor-pointer">
                                             <i class="fas fa-check text-xs"></i>
                                         </span>
+                                        <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
+                                            <div class="text-sm">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <p class="font-semibold">{{ $powerPlant->name }}</p>
+                                                    <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
+                                                </div>
+                                                <div class="space-y-2">
+                                                    <p><span class="font-medium">Total Patrols:</span> {{ $dayData['data']->count() }}</p>
+                                                    @foreach($dayData['data'] as $patrol)
+                                                        <div class="border-t pt-2">
+                                                            <p><span class="font-medium">Time:</span> {{ $patrol->time }}</p>
+                                                            <p><span class="font-medium">Shift:</span> {{ $patrol->shift }}</p>
+                                                            <p><span class="font-medium">Status:</span> {{ $patrol->status }}</p>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
                                     @else
                                         <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
                                             <i class="fas fa-times text-xs"></i>
@@ -610,7 +666,7 @@
         <form method="GET" action="{{ route('admin.monitoring-datakompak.export-excel') }}">
             <input type="hidden" name="tab" value="{{ $data['type'] }}">
             <input type="hidden" name="month" value="{{ $data['month'] }}">
-            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded  text-sm">
                 <i class="fas fa-file-excel mr-1"></i> Export Excel
             </button>
         </form>
@@ -640,7 +696,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
                             </td>
-                            @foreach($data['dates'] as $date)
+                            @foreach($data['dates'] as $index => $date)
                                 @php
                                     $fullDate = \Carbon\Carbon::createFromFormat('d/m', $date)->format('Y-m-d');
                                     $dayData = $powerPlant->dailyData[$fullDate];

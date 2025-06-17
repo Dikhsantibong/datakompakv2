@@ -138,10 +138,15 @@ class DailySummary extends Model
         return $this->belongsTo(PowerPlant::class);
     }
 
+    public function machine()
+    {
+        return $this->belongsTo(Machine::class);
+    }
+
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($model) {
             if (!$model->uuid) {
                 $model->uuid = (string) Str::uuid();
@@ -209,7 +214,7 @@ class DailySummary extends Model
     {
         $sessionId = uniqid('daily_summary_sync_');
         $currentSession = session('unit', 'mysql');
-        
+
         $logData = array_merge([
             'sync_id' => $sessionId,
             'timestamp' => now()->toDateTimeString(),
@@ -218,7 +223,7 @@ class DailySummary extends Model
         ], $data);
 
         Log::channel('sync')->info("Daily Summary Sync Process: {$stage}", $logData);
-        
+
         return $sessionId;
     }
 }

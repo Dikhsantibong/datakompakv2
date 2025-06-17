@@ -19,11 +19,7 @@ use App\Models\Pelumas;
 use App\Models\LaporanKit;
 use App\Exports\MonitoringDatakompakExport;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Models\FlmInspection;
-use App\Models\FiveS5rBatch;
 use App\Models\BahanKimia;
-use App\Models\PatrolCheck;
-use App\Models\Machine;
 
 class MonitoringDatakompakController extends Controller
 {
@@ -32,14 +28,6 @@ class MonitoringDatakompakController extends Controller
         $month = $request->get('month', now()->format('Y-m'));
         $date = $request->get('date', now()->format('Y-m-d'));
         $activeTab = $request->get('tab', 'data-engine');
-        $startDate = $request->get('start_date', now()->subDays(13)->format('Y-m-d'));
-        $endDate = $request->get('end_date', now()->format('Y-m-d'));
-
-        // Get monitoring summary
-        $monitoringSummary = $this->getMonitoringSummary(
-            \Carbon\Carbon::parse($startDate),
-            \Carbon\Carbon::parse($endDate)
-        );
 
         // Get all power plants
         $powerPlants = PowerPlant::with(['machines'])->get();
@@ -73,32 +61,23 @@ class MonitoringDatakompakController extends Controller
             case 'laporan-kit':
                 $data = $this->getLaporanKitData($month);
                 break;
-            case 'flm':
-                $data = $this->getFlmData($month);
+            case 'flm-inspection':
+                $data = $this->getFlmInspectionData($month, $powerPlants);
                 break;
-            case '5s5r':
-                $data = $this->get5s5rData($month);
+            case 'five-s5r':
+                $data = $this->getFiveS5rData($month, $powerPlants);
+                break;
+            case 'patrol-check':
+                $data = $this->getPatrolCheckData($month, $powerPlants);
                 break;
             case 'bahan-kimia':
                 $data = $this->getBahanKimiaData($month);
-                break;
-            case 'patrol-check':
-                $data = $this->getPatrolCheckData($month);
                 break;
             default:
                 $data = $this->getDataEngineData($date, $powerPlants);
         }
 
         if ($request->ajax()) {
-            if ($request->get('get_summary')) {
-                return response()->json([
-                    'summary' => $monitoringSummary,
-                    'date_range' => [
-                        'start' => $startDate,
-                        'end' => $endDate
-                    ]
-                ]);
-            }
             return view('admin.monitoring-datakompak._table', compact('data', 'activeTab', 'date', 'month'));
         }
 
@@ -112,10 +91,7 @@ class MonitoringDatakompakController extends Controller
             'date',
             'stats',
             'recentActivities',
-            'categorizedUnits',
-            'monitoringSummary',
-            'startDate',
-            'endDate'
+            'categorizedUnits'
         ));
     }
 
@@ -542,86 +518,165 @@ class MonitoringDatakompakController extends Controller
         ];
     }
 
-    private function getFlmData($month)
+    public function exportExcel(Request $request)
+    {
+        $tab = $request->get('tab', 'data-engine');
+        $date = $request->get('date', now()->format('Y-m-d'));
+        $month = $request->get('month', now()->format('Y-m'));
+
+        $powerPlants = PowerPlant::with(['machines'])->get();
+
+        switch ($tab) {
+            case 'data-engine':
+                $data = $this->getDataEngineData($date, $powerPlants);
+                break;
+            case 'daily-summary':
+                $data = $this->getDailySummaryData(\Carbon\Carbon::createFromFormat('Y-m', $month)->format('Y-m-d'), $powerPlants);
+                break;
+            case 'meeting-shift':
+                $data = $this->getMeetingShiftData(\Carbon\Carbon::createFromFormat('Y-m', $month)->format('Y-m-d'), $powerPlants);
+                break;
+            case 'bahan-bakar':
+                $data = $this->getBahanBakarData($month);
+                break;
+            case 'pelumas':
+                $data = $this->getPelumasData($month);
+                break;
+            case 'laporan-kit':
+                $data = $this->getLaporanKitData($month);
+                break;
+            default:
+                $data = $this->getDataEngineData($date, $powerPlants);
+        }
+
+        return Excel::download(new MonitoringDatakompakExport($data, $tab), 'monitoring-datakompak-'.$tab.'-'.now()->format('Ymd_His').'.xlsx');
+    }
+
+    public function formatUnitName($name)
+    {
+        // Split the name by spaces and take first 3 words
+        $words = explode(' ', $name);
+        $firstThreeWords = array_slice($words, 0, 2);
+        return implode(' ', $firstThreeWords);
+    }
+
+    private function getFlmInspectionData($month, $powerPlants)
     {
         $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
         $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
-        $dates = [];
+        $dates = collect();
 
-        // Start from the 1st of the month
-        $currentDate = $startDate->copy();
-        while ($currentDate <= $endDate) {
-            $dates[] = $currentDate->format('Y-m-d');
-            $currentDate->addDay();
+        for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
+            $dates->push($date->format('Y-m-d'));
         }
 
-        // Get all power plants
-        $powerPlants = PowerPlant::all();
-
         foreach ($powerPlants as $powerPlant) {
-            $dailyStatus = [];
-            // Get the short name version for matching
-            $shortName = trim(explode('(', $powerPlant->name)[0]);
-
+            $dailyData = collect();
             foreach ($dates as $date) {
-                // Check if data exists matching the power plant name
-                $hasData = FlmInspection::whereDate('tanggal', $date)
-                    ->where('sync_unit_origin', $shortName)
-                    ->exists();
+                // Extract the first two words from power plant name for matching
+                $powerPlantWords = explode(' ', $powerPlant->name);
+                $searchName = $powerPlantWords[0] . ' ' . ($powerPlantWords[1] ?? '');
+                $searchName = trim($searchName);
 
-                $dailyStatus[$date] = $hasData;
+                $inspections = \App\Models\FlmInspection::whereDate('tanggal', $date)
+                    ->where('sync_unit_origin', 'like', $searchName . '%')
+                    ->get();
+
+                $dailyData->put($date, [
+                    'status' => $inspections->isNotEmpty(),
+                    'data' => $inspections
+                ]);
             }
-            $powerPlant->dailyStatus = $dailyStatus;
+            $powerPlant->dailyData = $dailyData;
         }
 
         return [
-            'type' => 'flm',
+            'type' => 'flm-inspection',
             'month' => $month,
-            'dates' => array_map(function($date) {
+            'dates' => $dates->map(function($date) {
                 return Carbon::parse($date)->format('d/m');
-            }, $dates),
+            }),
             'powerPlants' => $powerPlants
         ];
     }
 
-    private function get5s5rData($month)
+    private function getFiveS5rData($month, $powerPlants)
     {
         $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
         $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
-        $dates = [];
+        $dates = collect();
 
-        // Start from the 1st of the month
-        $currentDate = $startDate->copy();
-        while ($currentDate <= $endDate) {
-            $dates[] = $currentDate->format('Y-m-d');
-            $currentDate->addDay();
+        for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
+            $dates->push($date->format('Y-m-d'));
         }
 
-        // Get all power plants
-        $powerPlants = PowerPlant::all();
-
         foreach ($powerPlants as $powerPlant) {
-            $dailyStatus = [];
-            // Get the short name version for matching
-            $shortName = trim(explode('(', $powerPlant->name)[0]);
-
+            $dailyData = collect();
             foreach ($dates as $date) {
-                // Check if data exists matching the power plant name
-                $hasData = FiveS5rBatch::whereDate('created_at', $date)
-                    ->where('sync_unit_origin', $shortName)
-                    ->exists();
+                // Extract the first two words from power plant name for matching
+                $powerPlantWords = explode(' ', $powerPlant->name);
+                $searchName = $powerPlantWords[0] . ' ' . ($powerPlantWords[1] ?? '');
+                $searchName = trim($searchName);
 
-                $dailyStatus[$date] = $hasData;
+                $batches = \App\Models\FiveS5rBatch::whereDate('created_at', $date)
+                    ->where('sync_unit_origin', 'like', $searchName . '%')
+                    ->with(['pemeriksaan', 'programKerja'])
+                    ->get();
+
+                $dailyData->put($date, [
+                    'status' => $batches->isNotEmpty(),
+                    'data' => $batches
+                ]);
             }
-            $powerPlant->dailyStatus = $dailyStatus;
+            $powerPlant->dailyData = $dailyData;
         }
 
         return [
-            'type' => '5s5r',
+            'type' => 'five-s5r',
             'month' => $month,
-            'dates' => array_map(function($date) {
+            'dates' => $dates->map(function($date) {
                 return Carbon::parse($date)->format('d/m');
-            }, $dates),
+            }),
+            'powerPlants' => $powerPlants
+        ];
+    }
+
+    private function getPatrolCheckData($month, $powerPlants)
+    {
+        $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+        $dates = collect();
+
+        for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
+            $dates->push($date->format('Y-m-d'));
+        }
+
+        foreach ($powerPlants as $powerPlant) {
+            $dailyData = collect();
+            foreach ($dates as $date) {
+                // Extract the first two words from power plant name for matching
+                $powerPlantWords = explode(' ', $powerPlant->name);
+                $searchName = $powerPlantWords[0] . ' ' . ($powerPlantWords[1] ?? '');
+                $searchName = trim($searchName);
+
+                $patrols = \App\Models\PatrolCheck::whereDate('created_at', $date)
+                    ->where('sync_unit_origin', 'like', $searchName . '%')
+                    ->get();
+
+                $dailyData->put($date, [
+                    'status' => $patrols->isNotEmpty(),
+                    'data' => $patrols
+                ]);
+            }
+            $powerPlant->dailyData = $dailyData;
+        }
+
+        return [
+            'type' => 'patrol-check',
+            'month' => $month,
+            'dates' => $dates->map(function($date) {
+                return Carbon::parse($date)->format('d/m');
+            }),
             'powerPlants' => $powerPlants
         ];
     }
@@ -673,257 +728,5 @@ class MonitoringDatakompakController extends Controller
             }),
             'powerPlants' => $powerPlants
         ];
-    }
-
-    private function getPatrolCheckData($month)
-    {
-        $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
-        $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
-        $dates = [];
-
-        // Start from the 1st of the month
-        $currentDate = $startDate->copy();
-        while ($currentDate <= $endDate) {
-            $dates[] = $currentDate->format('Y-m-d');
-            $currentDate->addDay();
-        }
-
-        // Get all power plants
-        $powerPlants = PowerPlant::all();
-
-        foreach ($powerPlants as $powerPlant) {
-            $dailyStatus = [];
-            // Get the short name version for matching
-            $shortName = trim(explode('(', $powerPlant->name)[0]);
-
-            foreach ($dates as $date) {
-                // Check if data exists matching the power plant name
-                $hasData = PatrolCheck::whereDate('created_at', $date)
-                    ->where('sync_unit_origin', $shortName)
-                    ->exists();
-
-                $dailyStatus[$date] = $hasData;
-            }
-            $powerPlant->dailyStatus = $dailyStatus;
-        }
-
-        return [
-            'type' => 'patrol-check',
-            'month' => $month,
-            'dates' => array_map(function($date) {
-                return Carbon::parse($date)->format('d/m');
-            }, $dates),
-            'powerPlants' => $powerPlants
-        ];
-    }
-
-    public function exportExcel(Request $request)
-    {
-        $tab = $request->get('tab', 'data-engine');
-        $date = $request->get('date', now()->format('Y-m-d'));
-        $month = $request->get('month', now()->format('Y-m'));
-
-        $powerPlants = PowerPlant::with(['machines'])->get();
-
-        switch ($tab) {
-            case 'data-engine':
-                $data = $this->getDataEngineData($date, $powerPlants);
-                break;
-            case 'daily-summary':
-                $data = $this->getDailySummaryData(\Carbon\Carbon::createFromFormat('Y-m', $month)->format('Y-m-d'), $powerPlants);
-                break;
-            case 'meeting-shift':
-                $data = $this->getMeetingShiftData(\Carbon\Carbon::createFromFormat('Y-m', $month)->format('Y-m-d'), $powerPlants);
-                break;
-            case 'bahan-bakar':
-                $data = $this->getBahanBakarData($month);
-                break;
-            case 'pelumas':
-                $data = $this->getPelumasData($month);
-                break;
-            case 'laporan-kit':
-                $data = $this->getLaporanKitData($month);
-                break;
-            case 'flm':
-                $data = $this->getFlmData($month);
-                break;
-            case '5s5r':
-                $data = $this->get5s5rData($month);
-                break;
-            case 'bahan-kimia':
-                $data = $this->getBahanKimiaData($month);
-                break;
-            case 'patrol-check':
-                $data = $this->getPatrolCheckData($month);
-                break;
-            default:
-                $data = $this->getDataEngineData($date, $powerPlants);
-        }
-
-        return Excel::download(new MonitoringDatakompakExport($data, $tab), 'monitoring-datakompak-'.$tab.'-'.now()->format('Ymd_His').'.xlsx');
-    }
-
-    public function formatUnitName($name)
-    {
-        // Split the name by spaces and take first 3 words
-        $words = explode(' ', $name);
-        $firstThreeWords = array_slice($words, 0, 2);
-        return implode(' ', $firstThreeWords);
-    }
-
-    private function getMonitoringSummary($startDate, $endDate)
-    {
-        $startDate = Carbon::parse($startDate)->startOfDay();
-        $endDate = Carbon::parse($endDate)->endOfDay();
-        $powerPlants = PowerPlant::where('name', '!=', 'UP KENDARI')->get();
-        $summary = [];
-
-        foreach ($powerPlants as $powerPlant) {
-            $shortName = trim(explode('(', $powerPlant->name)[0]);
-            $summary[$powerPlant->name] = [
-                'operator' => [
-                    'data_engine' => $this->calculateCompletionRate(
-                        $powerPlant->id,
-                        $startDate,
-                        $endDate,
-                        'EngineData',
-                        'machine_id'
-                    ),
-                    'daily_summary' => $this->calculateCompletionRate(
-                        $powerPlant->id,
-                        $startDate,
-                        $endDate,
-                        'DailySummary',
-                        'power_plant_id'
-                    ),
-                    'meeting_shift' => $this->calculateCompletionRate(
-                        $shortName,
-                        $startDate,
-                        $endDate,
-                        'MeetingShift',
-                        'sync_unit_origin'
-                    ),
-                    'laporan_kit' => $this->calculateCompletionRate(
-                        $powerPlant->unit_source,
-                        $startDate,
-                        $endDate,
-                        'LaporanKit',
-                        'unit_source'
-                    )
-                ],
-                'operasi' => [
-                    'bahan_bakar' => $this->calculateCompletionRate(
-                        $powerPlant->id,
-                        $startDate,
-                        $endDate,
-                        'BahanBakar',
-                        'unit_id'
-                    ),
-                    'pelumas' => $this->calculateCompletionRate(
-                        $powerPlant->id,
-                        $startDate,
-                        $endDate,
-                        'Pelumas',
-                        'unit_id'
-                    ),
-                    'bahan_kimia' => $this->calculateCompletionRate(
-                        $powerPlant->id,
-                        $startDate,
-                        $endDate,
-                        'BahanKimia',
-                        'unit_id'
-                    ),
-                    'flm' => $this->calculateCompletionRate(
-                        $shortName,
-                        $startDate,
-                        $endDate,
-                        'FlmInspection',
-                        'sync_unit_origin'
-                    ),
-                    '5s5r' => $this->calculateCompletionRate(
-                        $shortName,
-                        $startDate,
-                        $endDate,
-                        'FiveS5rBatch',
-                        'sync_unit_origin'
-                    ),
-                    'patrol_check' => $this->calculateCompletionRate(
-                        $shortName,
-                        $startDate,
-                        $endDate,
-                        'PatrolCheck',
-                        'sync_unit_origin'
-                    )
-                ]
-            ];
-
-            // Calculate average scores
-            $operatorScores = collect($summary[$powerPlant->name]['operator'])->pluck('percentage');
-            $operasiScores = collect($summary[$powerPlant->name]['operasi'])->pluck('percentage');
-
-            $summary[$powerPlant->name]['average_score'] = (int) round(
-                ($operatorScores->sum() + $operasiScores->sum()) /
-                ($operatorScores->count() + $operasiScores->count())
-            );
-        }
-
-        return $summary;
-    }
-
-    private function calculateCompletionRate($identifier, $startDate, $endDate, $modelName, $columnName)
-    {
-        $modelClass = "App\\Models\\{$modelName}";
-        $query = $modelClass::query();
-
-        // Set the date column name based on model - only EngineData and DailySummary use 'date'
-        $dateColumn = match($modelName) {
-            'EngineData', 'DailySummary' => 'date',
-            default => 'created_at'
-        };
-
-        // Special handling for EngineData which uses machine_id
-        if ($modelName === 'EngineData') {
-            // Get all machine IDs for this power plant
-            $machineIds = Machine::where('power_plant_id', $identifier)->pluck('id');
-            $query->whereIn('machine_id', $machineIds);
-        } else if ($columnName === 'sync_unit_origin') {
-            // Add quotes for string comparison
-            $query->where($columnName, '=', $identifier);
-        } else {
-            $query->where($columnName, $identifier);
-        }
-
-        $query->whereBetween($dateColumn, [$startDate, $endDate]);
-
-        // Get the total number of days in the date range
-        $totalDays = (int) $startDate->diffInDays($endDate) + 1;
-
-        // Special handling for EngineData which should have 24 entries per day
-        if ($modelName === 'EngineData') {
-            $totalExpected = $totalDays * 24 * count($machineIds);
-            $actualCount = (int) $query->count();
-            $percentage = $totalExpected > 0 ? (int) round(($actualCount / $totalExpected) * 100) : 0;
-            $missingInputs = $totalExpected - $actualCount;
-        } else {
-            // For other models, count distinct dates from created_at
-            $daysWithData = (int) $query->distinct(DB::raw("DATE($dateColumn)"))->count();
-            $percentage = $totalDays > 0 ? (int) round(($daysWithData / $totalDays) * 100) : 0;
-            $missingInputs = $totalDays - $daysWithData;
-        }
-
-        return [
-            'percentage' => $percentage,
-            'missing_inputs' => $missingInputs
-        ];
-    }
-
-    public function getSummaryData(Request $request)
-    {
-        $startDate = $request->get('start_date', now()->startOfMonth()->format('Y-m-d'));
-        $endDate = $request->get('end_date', now()->format('Y-m-d'));
-
-        return response()->json([
-            'summary' => $this->getMonitoringSummary($startDate, $endDate)
-        ]);
     }
 }

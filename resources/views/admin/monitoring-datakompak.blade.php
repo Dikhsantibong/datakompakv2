@@ -196,6 +196,26 @@
                                data-tab="laporan-kit">
                                 Laporan KIT 00.00
                             </a>
+                            <a href="#"
+                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'flm' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                               data-tab="flm">
+                                FLM
+                            </a>
+                            <a href="#"
+                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === '5s5r' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                               data-tab="5s5r">
+                                5S5R
+                            </a>
+                            <a href="#"
+                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'bahan-kimia' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                               data-tab="bahan-kimia">
+                                Bahan Kimia
+                            </a>
+                            <a href="#"
+                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'patrol-check' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                               data-tab="patrol-check">
+                                Patrol Check
+                            </a>
                         </nav>
                     </div>
                 </div>
@@ -236,15 +256,92 @@
                             <div class="flex items-center gap-2">
                                 <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full">
                                     <i class="fas fa-check text-xs"></i>
-                                                    </span>
+                                </span>
                                 <span class="text-sm text-gray-600">Data sudah diinput</span>
-                                                </div>
+                            </div>
                             <div class="flex items-center gap-2">
                                 <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
                                     <i class="fas fa-times text-xs"></i>
-                                            </span>
+                                </span>
                                 <span class="text-sm text-gray-600">Data belum diinput</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monitoring Summary Section -->
+                <div class="mt-8 bg-white rounded-lg shadow">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-semibold text-gray-900">Monitoring Summary</h2>
+                            <div class="flex gap-4">
+                                <div>
+                                    <label for="summary_start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
+                                    <input type="date" id="summary_start_date" value="{{ $startDate }}" class="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                                 </div>
+                                <div>
+                                    <label for="summary_end_date" class="block text-sm font-medium text-gray-700">End Date</label>
+                                    <input type="date" id="summary_end_date" value="{{ $endDate }}" class="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                </div>
+                                <button id="copyReport" class="mt-6 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                    <i class="fas fa-copy mr-2"></i>Copy Report
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Charts Container -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <canvas id="overallChart"></canvas>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Unit Details -->
+                        <div id="unitDetails" class="space-y-8">
+                            @foreach($monitoringSummary as $unitName => $data)
+                                <div class="border-t pt-6">
+                                    <h3 class="text-lg font-semibold mb-4">{{ $unitName }}</h3>
+
+                                    <!-- Operator KIT Section -->
+                                    <div class="mb-6">
+                                        <h4 class="text-md font-medium mb-3">OPERATOR KIT:</h4>
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            @foreach($data['operator'] as $key => $stat)
+                                                <div class="bg-gray-50 p-4 rounded-lg">
+                                                    <div class="flex justify-between items-center">
+                                                        <span class="text-sm text-gray-600">{{ ucwords(str_replace('_', ' ', $key)) }}</span>
+                                                        <span class="text-sm font-semibold">{{ $stat['percentage'] }}%</span>
+                                                    </div>
+                                                    <div class="mt-2 text-xs text-gray-500">
+                                                        {{ $stat['missing_inputs'] }} kali tidak menginput
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+
+                                    <!-- Operasi UL/Central Section -->
+                                    <div>
+                                        <h4 class="text-md font-medium mb-3">OPERASI UL/CENTRAL:</h4>
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            @foreach($data['operasi'] as $key => $stat)
+                                                <div class="bg-gray-50 p-4 rounded-lg">
+                                                    <div class="flex justify-between items-center">
+                                                        <span class="text-sm text-gray-600">{{ ucwords(str_replace('_', ' ', $key)) }}</span>
+                                                        <span class="text-sm font-semibold">{{ $stat['percentage'] }}%</span>
+                                                    </div>
+                                                    <div class="mt-2 text-xs text-gray-500">
+                                                        {{ $stat['missing_inputs'] }} kali tidak menginput
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -277,6 +374,7 @@
 
 @push('scripts')
 <script src="{{ asset('js/toggle.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 // Toggle dropdown
 function toggleDropdown() {
@@ -372,6 +470,138 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 10000); // fallback hide after 10s
         });
     });
+
+    // Initialize charts
+    const summaryData = @json($monitoringSummary);
+    initializeCharts(summaryData);
+
+    // Handle date range changes
+    document.getElementById('summary_start_date').addEventListener('change', updateSummary);
+    document.getElementById('summary_end_date').addEventListener('change', updateSummary);
+
+    // Handle copy report button
+    document.getElementById('copyReport').addEventListener('click', function() {
+        const startDate = document.getElementById('summary_start_date').value;
+        const endDate = document.getElementById('summary_end_date').value;
+        const formattedStartDate = new Date(startDate).toLocaleDateString('id-ID', { day: 'numeric' });
+        const formattedEndDate = new Date(endDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        let report = `MONITORING PENGISIAN DATAKOMPAK.COM TANGGAL ${formattedStartDate} S/D ${formattedEndDate}\n\n`;
+
+        Object.entries(summaryData).forEach(([unitName, data]) => {
+            report += `${unitName}\n\n`;
+
+            report += `OPERATOR KIT:\n`;
+            Object.entries(data.operator).forEach(([key, stat], index) => {
+                report += `${index + 1}. ${key.toUpperCase().replace('_', ' ')}: ${stat.percentage}%, ${stat.missing_inputs} kali tidak menginput\n`;
+            });
+
+            report += `\nOPERASI UL/CENTRAL:\n`;
+            Object.entries(data.operasi).forEach(([key, stat], index) => {
+                report += `${index + 1}. ${key.toUpperCase().replace('_', ' ')}: ${stat.percentage}%, ${stat.missing_inputs} kali tidak menginput\n`;
+            });
+
+            report += '\n';
+        });
+
+        report += `\nRANKING (MENGINPUT TERTINGGI KE RENDAH)\n`;
+        Object.entries(summaryData)
+            .sort((a, b) => b[1].average_score - a[1].average_score)
+            .forEach(([unitName, data], index) => {
+                report += `${index + 1}. ${unitName}: ${data.average_score}%\n`;
+            });
+
+        navigator.clipboard.writeText(report).then(() => {
+            alert('Report copied to clipboard!');
+        });
+    });
+
+    function updateSummary() {
+        const startDate = document.getElementById('summary_start_date').value;
+        const endDate = document.getElementById('summary_end_date').value;
+
+        fetch(`{{ route('admin.monitoring-datakompak') }}?get_summary=1&start_date=${startDate}&end_date=${endDate}`)
+            .then(response => response.json())
+            .then(data => {
+                initializeCharts(data.summary);
+                // Update the unit details section
+                // This would require additional implementation
+            });
+    }
+
+    function initializeCharts(data) {
+        // Overall Performance Chart
+        const overallCtx = document.getElementById('overallChart').getContext('2d');
+        new Chart(overallCtx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(data),
+                datasets: [{
+                    label: 'Overall Performance',
+                    data: Object.values(data).map(unit => unit.average_score),
+                    backgroundColor: 'rgba(37, 99, 235, 0.5)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Overall Unit Performance'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Category Performance Chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        const categories = ['Operator KIT', 'Operasi UL/Central'];
+        const categoryData = Object.values(data).map(unit => [
+            Object.values(unit.operator).reduce((acc, curr) => acc + curr.percentage, 0) / Object.keys(unit.operator).length,
+            Object.values(unit.operasi).reduce((acc, curr) => acc + curr.percentage, 0) / Object.keys(unit.operasi).length
+        ]);
+
+        new Chart(categoryCtx, {
+            type: 'radar',
+            data: {
+                labels: categories,
+                datasets: Object.keys(data).map((unitName, index) => ({
+                    label: unitName,
+                    data: categoryData[index],
+                    fill: true,
+                    backgroundColor: `rgba(37, 99, 235, ${0.2 + (index * 0.1)})`,
+                    borderColor: `rgba(37, 99, 235, ${0.7 + (index * 0.1)})`,
+                    pointBackgroundColor: `rgba(37, 99, 235, ${0.7 + (index * 0.1)})`,
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: `rgba(37, 99, 235, ${0.7 + (index * 0.1)})`
+                }))
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Category Performance by Unit'
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
 });
 </script>
 @endpush

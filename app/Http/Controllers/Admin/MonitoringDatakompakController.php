@@ -19,6 +19,10 @@ use App\Models\Pelumas;
 use App\Models\LaporanKit;
 use App\Exports\MonitoringDatakompakExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\FlmInspection;
+use App\Models\FiveS5rBatch;
+use App\Models\BahanKimia;
+use App\Models\PatrolCheck;
 
 class MonitoringDatakompakController extends Controller
 {
@@ -27,6 +31,14 @@ class MonitoringDatakompakController extends Controller
         $month = $request->get('month', now()->format('Y-m'));
         $date = $request->get('date', now()->format('Y-m-d'));
         $activeTab = $request->get('tab', 'data-engine');
+        $startDate = $request->get('start_date', now()->subDays(13)->format('Y-m-d'));
+        $endDate = $request->get('end_date', now()->format('Y-m-d'));
+
+        // Get monitoring summary
+        $monitoringSummary = $this->getMonitoringSummary(
+            \Carbon\Carbon::parse($startDate),
+            \Carbon\Carbon::parse($endDate)
+        );
 
         // Get all power plants
         $powerPlants = PowerPlant::with(['machines'])->get();
@@ -60,11 +72,32 @@ class MonitoringDatakompakController extends Controller
             case 'laporan-kit':
                 $data = $this->getLaporanKitData($month);
                 break;
+            case 'flm':
+                $data = $this->getFlmData($month);
+                break;
+            case '5s5r':
+                $data = $this->get5s5rData($month);
+                break;
+            case 'bahan-kimia':
+                $data = $this->getBahanKimiaData($month);
+                break;
+            case 'patrol-check':
+                $data = $this->getPatrolCheckData($month);
+                break;
             default:
                 $data = $this->getDataEngineData($date, $powerPlants);
         }
 
         if ($request->ajax()) {
+            if ($request->get('get_summary')) {
+                return response()->json([
+                    'summary' => $monitoringSummary,
+                    'date_range' => [
+                        'start' => $startDate,
+                        'end' => $endDate
+                    ]
+                ]);
+            }
             return view('admin.monitoring-datakompak._table', compact('data', 'activeTab', 'date', 'month'));
         }
 
@@ -78,7 +111,10 @@ class MonitoringDatakompakController extends Controller
             'date',
             'stats',
             'recentActivities',
-            'categorizedUnits'
+            'categorizedUnits',
+            'monitoringSummary',
+            'startDate',
+            'endDate'
         ));
     }
 
@@ -505,6 +541,199 @@ class MonitoringDatakompakController extends Controller
         ];
     }
 
+    private function getFlmData($month)
+    {
+        $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+
+        // Get all power plants
+        $powerPlants = PowerPlant::all();
+
+        // Get all dates in the month
+        $dates = collect();
+        $currentDate = $startDate->copy();
+        while ($currentDate <= $endDate) {
+            $dates->push($currentDate->format('Y-m-d'));
+            $currentDate->addDay();
+        }
+
+        // Get all FLM data for the month
+        $flmData = FlmInspection::whereBetween('tanggal', [$startDate, $endDate])
+            ->get()
+            ->groupBy(['sync_unit_origin', function($item) {
+                return $item->tanggal->format('Y-m-d');
+            }]);
+
+        // Prepare data for each power plant
+        foreach ($powerPlants as $powerPlant) {
+            $powerPlant->dailyData = collect();
+            foreach ($dates as $date) {
+                $dayData = $flmData->get($powerPlant->unit_source, collect())
+                    ->get($date, collect())
+                    ->first();
+
+                $powerPlant->dailyData->put($date, [
+                    'status' => !is_null($dayData),
+                    'data' => $dayData
+                ]);
+            }
+        }
+
+        return [
+            'type' => 'flm',
+            'month' => $month,
+            'dates' => $dates->map(function($date) {
+                return Carbon::parse($date)->format('d/m');
+            }),
+            'powerPlants' => $powerPlants
+        ];
+    }
+
+    private function get5s5rData($month)
+    {
+        $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+
+        // Get all power plants
+        $powerPlants = PowerPlant::all();
+
+        // Get all dates in the month
+        $dates = collect();
+        $currentDate = $startDate->copy();
+        while ($currentDate <= $endDate) {
+            $dates->push($currentDate->format('Y-m-d'));
+            $currentDate->addDay();
+        }
+
+        // Get all 5S5R data for the month
+        $fiveSData = FiveS5rBatch::whereBetween('created_at', [$startDate, $endDate])
+            ->get()
+            ->groupBy(['sync_unit_origin', function($item) {
+                return $item->created_at->format('Y-m-d');
+            }]);
+
+        // Prepare data for each power plant
+        foreach ($powerPlants as $powerPlant) {
+            $powerPlant->dailyData = collect();
+            foreach ($dates as $date) {
+                $dayData = $fiveSData->get($powerPlant->unit_source, collect())
+                    ->get($date, collect())
+                    ->first();
+
+                $powerPlant->dailyData->put($date, [
+                    'status' => !is_null($dayData),
+                    'data' => $dayData
+                ]);
+            }
+        }
+
+        return [
+            'type' => '5s5r',
+            'month' => $month,
+            'dates' => $dates->map(function($date) {
+                return Carbon::parse($date)->format('d/m');
+            }),
+            'powerPlants' => $powerPlants
+        ];
+    }
+
+    private function getBahanKimiaData($month)
+    {
+        $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+
+        // Get all power plants
+        $powerPlants = PowerPlant::all();
+
+        // Get all dates in the month
+        $dates = collect();
+        $currentDate = $startDate->copy();
+        while ($currentDate <= $endDate) {
+            $dates->push($currentDate->format('Y-m-d'));
+            $currentDate->addDay();
+        }
+
+        // Get all bahan kimia data for the month
+        $bahanKimiaData = BahanKimia::with('unit')
+            ->whereBetween('tanggal', [$startDate, $endDate])
+            ->get()
+            ->groupBy(['unit_id', function($item) {
+                return $item->tanggal->format('Y-m-d');
+            }]);
+
+        // Prepare data for each power plant
+        foreach ($powerPlants as $powerPlant) {
+            $powerPlant->dailyData = collect();
+            foreach ($dates as $date) {
+                $dayData = $bahanKimiaData->get($powerPlant->id, collect())
+                    ->get($date, collect())
+                    ->first();
+
+                $powerPlant->dailyData->put($date, [
+                    'status' => !is_null($dayData),
+                    'data' => $dayData
+                ]);
+            }
+        }
+
+        return [
+            'type' => 'bahan-kimia',
+            'month' => $month,
+            'dates' => $dates->map(function($date) {
+                return Carbon::parse($date)->format('d/m');
+            }),
+            'powerPlants' => $powerPlants
+        ];
+    }
+
+    private function getPatrolCheckData($month)
+    {
+        $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+
+        // Get all power plants
+        $powerPlants = PowerPlant::all();
+
+        // Get all dates in the month
+        $dates = collect();
+        $currentDate = $startDate->copy();
+        while ($currentDate <= $endDate) {
+            $dates->push($currentDate->format('Y-m-d'));
+            $currentDate->addDay();
+        }
+
+        // Get all patrol check data for the month
+        $patrolData = PatrolCheck::whereBetween('created_at', [$startDate, $endDate])
+            ->get()
+            ->groupBy(['sync_unit_origin', function($item) {
+                return $item->created_at->format('Y-m-d');
+            }]);
+
+        // Prepare data for each power plant
+        foreach ($powerPlants as $powerPlant) {
+            $powerPlant->dailyData = collect();
+            foreach ($dates as $date) {
+                $dayData = $patrolData->get($powerPlant->unit_source, collect())
+                    ->get($date, collect())
+                    ->first();
+
+                $powerPlant->dailyData->put($date, [
+                    'status' => !is_null($dayData),
+                    'data' => $dayData
+                ]);
+            }
+        }
+
+        return [
+            'type' => 'patrol-check',
+            'month' => $month,
+            'dates' => $dates->map(function($date) {
+                return Carbon::parse($date)->format('d/m');
+            }),
+            'powerPlants' => $powerPlants
+        ];
+    }
+
     public function exportExcel(Request $request)
     {
         $tab = $request->get('tab', 'data-engine');
@@ -532,6 +761,18 @@ class MonitoringDatakompakController extends Controller
             case 'laporan-kit':
                 $data = $this->getLaporanKitData($month);
                 break;
+            case 'flm':
+                $data = $this->getFlmData($month);
+                break;
+            case '5s5r':
+                $data = $this->get5s5rData($month);
+                break;
+            case 'bahan-kimia':
+                $data = $this->getBahanKimiaData($month);
+                break;
+            case 'patrol-check':
+                $data = $this->getPatrolCheckData($month);
+                break;
             default:
                 $data = $this->getDataEngineData($date, $powerPlants);
         }
@@ -545,5 +786,107 @@ class MonitoringDatakompakController extends Controller
         $words = explode(' ', $name);
         $firstThreeWords = array_slice($words, 0, 2);
         return implode(' ', $firstThreeWords);
+    }
+
+    private function getMonitoringSummary($startDate, $endDate)
+    {
+        $powerPlants = PowerPlant::where('name', '!=', 'UP KENDARI')->get();
+        $summary = [];
+
+        foreach ($powerPlants as $powerPlant) {
+            $operatorStats = [
+                'data_engine' => $this->calculateInputPercentage('engine_data', $powerPlant, $startDate, $endDate),
+                'daily_summary' => $this->calculateInputPercentage('daily_summary', $powerPlant, $startDate, $endDate),
+                'meeting_shift' => $this->calculateInputPercentage('meeting_shift', $powerPlant, $startDate, $endDate),
+                'bahan_kimia' => $this->calculateInputPercentage('bahan_kimia', $powerPlant, $startDate, $endDate),
+                'patrol_check' => $this->calculateInputPercentage('patrol_check', $powerPlant, $startDate, $endDate),
+                '5s5r' => $this->calculateInputPercentage('5s5r', $powerPlant, $startDate, $endDate),
+                'flm' => $this->calculateInputPercentage('flm', $powerPlant, $startDate, $endDate),
+                'abnormal_report' => $this->calculateInputPercentage('abnormal_report', $powerPlant, $startDate, $endDate),
+                'k3_kam' => $this->calculateInputPercentage('k3_kam', $powerPlant, $startDate, $endDate),
+            ];
+
+            $operasiStats = [
+                'bahan_bakar' => $this->calculateInputPercentage('bahan_bakar', $powerPlant, $startDate, $endDate),
+                'pelumas' => $this->calculateInputPercentage('pelumas', $powerPlant, $startDate, $endDate),
+                'daily_summary_operasi' => $this->calculateInputPercentage('daily_summary_operasi', $powerPlant, $startDate, $endDate),
+                'bahan_kimia_operasi' => $this->calculateInputPercentage('bahan_kimia_operasi', $powerPlant, $startDate, $endDate),
+                'rencana_daya_mampu' => $this->calculateInputPercentage('rencana_daya_mampu', $powerPlant, $startDate, $endDate),
+            ];
+
+            $summary[$powerPlant->name] = [
+                'operator' => $operatorStats,
+                'operasi' => $operasiStats,
+                'average_score' => $this->calculateAverageScore($operatorStats, $operasiStats)
+            ];
+        }
+
+        // Sort by average score
+        uasort($summary, function($a, $b) {
+            return $b['average_score'] <=> $a['average_score'];
+        });
+
+        return $summary;
+    }
+
+    private function calculateInputPercentage($type, $powerPlant, $startDate, $endDate)
+    {
+        $totalDays = $startDate->diffInDays($endDate) + 1;
+        $missingInputs = 0;
+        $percentage = 0;
+
+        switch ($type) {
+            case 'engine_data':
+                $count = EngineData::whereIn('machine_id', $powerPlant->machines->pluck('id'))
+                    ->whereBetween('date', [$startDate, $endDate])
+                    ->count();
+                $expected = $totalDays * 24; // 24 entries per day
+                $percentage = ($count / $expected) * 100;
+                $missingInputs = $expected - $count;
+                break;
+            case 'daily_summary':
+                $count = DailySummary::where('power_plant_id', $powerPlant->id)
+                    ->whereBetween('date', [$startDate, $endDate])
+                    ->count();
+                $percentage = ($count / $totalDays) * 100;
+                $missingInputs = $totalDays - $count;
+                break;
+            case 'meeting_shift':
+                $count = MeetingShift::where('sync_unit_origin', $powerPlant->unit_source)
+                    ->whereBetween('tanggal', [$startDate, $endDate])
+                    ->count();
+                $expected = $totalDays * 4; // 4 shifts per day
+                $percentage = ($count / $expected) * 100;
+                $missingInputs = $expected - $count;
+                break;
+            // Add similar cases for other types...
+            default:
+                // For types that aren't implemented yet, return placeholder values
+                $percentage = 0;
+                $missingInputs = $totalDays;
+        }
+
+        return [
+            'percentage' => round($percentage, 2),
+            'missing_inputs' => $missingInputs
+        ];
+    }
+
+    private function calculateAverageScore($operatorStats, $operasiStats)
+    {
+        $total = 0;
+        $count = 0;
+
+        foreach ($operatorStats as $stat) {
+            $total += $stat['percentage'];
+            $count++;
+        }
+
+        foreach ($operasiStats as $stat) {
+            $total += $stat['percentage'];
+            $count++;
+        }
+
+        return $count > 0 ? round($total / $count, 2) : 0;
     }
 }

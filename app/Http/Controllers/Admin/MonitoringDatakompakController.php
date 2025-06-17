@@ -23,6 +23,7 @@ use App\Models\FlmInspection;
 use App\Models\FiveS5rBatch;
 use App\Models\BahanKimia;
 use App\Models\PatrolCheck;
+use App\Models\Machine;
 
 class MonitoringDatakompakController extends Controller
 {
@@ -772,103 +773,157 @@ class MonitoringDatakompakController extends Controller
 
     private function getMonitoringSummary($startDate, $endDate)
     {
+        $startDate = Carbon::parse($startDate)->startOfDay();
+        $endDate = Carbon::parse($endDate)->endOfDay();
         $powerPlants = PowerPlant::where('name', '!=', 'UP KENDARI')->get();
         $summary = [];
 
         foreach ($powerPlants as $powerPlant) {
-            $operatorStats = [
-                'data_engine' => $this->calculateInputPercentage('engine_data', $powerPlant, $startDate, $endDate),
-                'daily_summary' => $this->calculateInputPercentage('daily_summary', $powerPlant, $startDate, $endDate),
-                'meeting_shift' => $this->calculateInputPercentage('meeting_shift', $powerPlant, $startDate, $endDate),
-                'bahan_kimia' => $this->calculateInputPercentage('bahan_kimia', $powerPlant, $startDate, $endDate),
-                'patrol_check' => $this->calculateInputPercentage('patrol_check', $powerPlant, $startDate, $endDate),
-                '5s5r' => $this->calculateInputPercentage('5s5r', $powerPlant, $startDate, $endDate),
-                'flm' => $this->calculateInputPercentage('flm', $powerPlant, $startDate, $endDate),
-                'abnormal_report' => $this->calculateInputPercentage('abnormal_report', $powerPlant, $startDate, $endDate),
-                'k3_kam' => $this->calculateInputPercentage('k3_kam', $powerPlant, $startDate, $endDate),
-            ];
-
-            $operasiStats = [
-                'bahan_bakar' => $this->calculateInputPercentage('bahan_bakar', $powerPlant, $startDate, $endDate),
-                'pelumas' => $this->calculateInputPercentage('pelumas', $powerPlant, $startDate, $endDate),
-                'daily_summary_operasi' => $this->calculateInputPercentage('daily_summary_operasi', $powerPlant, $startDate, $endDate),
-                'bahan_kimia_operasi' => $this->calculateInputPercentage('bahan_kimia_operasi', $powerPlant, $startDate, $endDate),
-                'rencana_daya_mampu' => $this->calculateInputPercentage('rencana_daya_mampu', $powerPlant, $startDate, $endDate),
-            ];
-
+            $shortName = trim(explode('(', $powerPlant->name)[0]);
             $summary[$powerPlant->name] = [
-                'operator' => $operatorStats,
-                'operasi' => $operasiStats,
-                'average_score' => $this->calculateAverageScore($operatorStats, $operasiStats)
+                'operator' => [
+                    'data_engine' => $this->calculateCompletionRate(
+                        $powerPlant->id,
+                        $startDate,
+                        $endDate,
+                        'EngineData',
+                        'machine_id'
+                    ),
+                    'daily_summary' => $this->calculateCompletionRate(
+                        $powerPlant->id,
+                        $startDate,
+                        $endDate,
+                        'DailySummary',
+                        'power_plant_id'
+                    ),
+                    'meeting_shift' => $this->calculateCompletionRate(
+                        $shortName,
+                        $startDate,
+                        $endDate,
+                        'MeetingShift',
+                        'sync_unit_origin'
+                    ),
+                    'laporan_kit' => $this->calculateCompletionRate(
+                        $powerPlant->unit_source,
+                        $startDate,
+                        $endDate,
+                        'LaporanKit',
+                        'unit_source'
+                    )
+                ],
+                'operasi' => [
+                    'bahan_bakar' => $this->calculateCompletionRate(
+                        $powerPlant->id,
+                        $startDate,
+                        $endDate,
+                        'BahanBakar',
+                        'unit_id'
+                    ),
+                    'pelumas' => $this->calculateCompletionRate(
+                        $powerPlant->id,
+                        $startDate,
+                        $endDate,
+                        'Pelumas',
+                        'unit_id'
+                    ),
+                    'bahan_kimia' => $this->calculateCompletionRate(
+                        $powerPlant->id,
+                        $startDate,
+                        $endDate,
+                        'BahanKimia',
+                        'unit_id'
+                    ),
+                    'flm' => $this->calculateCompletionRate(
+                        $shortName,
+                        $startDate,
+                        $endDate,
+                        'FlmInspection',
+                        'sync_unit_origin'
+                    ),
+                    '5s5r' => $this->calculateCompletionRate(
+                        $shortName,
+                        $startDate,
+                        $endDate,
+                        'FiveS5rBatch',
+                        'sync_unit_origin'
+                    ),
+                    'patrol_check' => $this->calculateCompletionRate(
+                        $shortName,
+                        $startDate,
+                        $endDate,
+                        'PatrolCheck',
+                        'sync_unit_origin'
+                    )
+                ]
             ];
-        }
 
-        // Sort by average score
-        uasort($summary, function($a, $b) {
-            return $b['average_score'] <=> $a['average_score'];
-        });
+            // Calculate average scores
+            $operatorScores = collect($summary[$powerPlant->name]['operator'])->pluck('percentage');
+            $operasiScores = collect($summary[$powerPlant->name]['operasi'])->pluck('percentage');
+
+            $summary[$powerPlant->name]['average_score'] = (int) round(
+                ($operatorScores->sum() + $operasiScores->sum()) /
+                ($operatorScores->count() + $operasiScores->count())
+            );
+        }
 
         return $summary;
     }
 
-    private function calculateInputPercentage($type, $powerPlant, $startDate, $endDate)
+    private function calculateCompletionRate($identifier, $startDate, $endDate, $modelName, $columnName)
     {
-        $totalDays = $startDate->diffInDays($endDate) + 1;
-        $missingInputs = 0;
-        $percentage = 0;
+        $modelClass = "App\\Models\\{$modelName}";
+        $query = $modelClass::query();
 
-        switch ($type) {
-            case 'engine_data':
-                $count = EngineData::whereIn('machine_id', $powerPlant->machines->pluck('id'))
-                    ->whereBetween('date', [$startDate, $endDate])
-                    ->count();
-                $expected = $totalDays * 24; // 24 entries per day
-                $percentage = ($count / $expected) * 100;
-                $missingInputs = $expected - $count;
-                break;
-            case 'daily_summary':
-                $count = DailySummary::where('power_plant_id', $powerPlant->id)
-                    ->whereBetween('date', [$startDate, $endDate])
-                    ->count();
-                $percentage = ($count / $totalDays) * 100;
-                $missingInputs = $totalDays - $count;
-                break;
-            case 'meeting_shift':
-                $count = MeetingShift::where('sync_unit_origin', $powerPlant->unit_source)
-                    ->whereBetween('tanggal', [$startDate, $endDate])
-                    ->count();
-                $expected = $totalDays * 4; // 4 shifts per day
-                $percentage = ($count / $expected) * 100;
-                $missingInputs = $expected - $count;
-                break;
-            // Add similar cases for other types...
-            default:
-                // For types that aren't implemented yet, return placeholder values
-                $percentage = 0;
-                $missingInputs = $totalDays;
+        // Set the date column name based on model - only EngineData and DailySummary use 'date'
+        $dateColumn = match($modelName) {
+            'EngineData', 'DailySummary' => 'date',
+            default => 'created_at'
+        };
+
+        // Special handling for EngineData which uses machine_id
+        if ($modelName === 'EngineData') {
+            // Get all machine IDs for this power plant
+            $machineIds = Machine::where('power_plant_id', $identifier)->pluck('id');
+            $query->whereIn('machine_id', $machineIds);
+        } else if ($columnName === 'sync_unit_origin') {
+            // Add quotes for string comparison
+            $query->where($columnName, '=', $identifier);
+        } else {
+            $query->where($columnName, $identifier);
+        }
+
+        $query->whereBetween($dateColumn, [$startDate, $endDate]);
+
+        // Get the total number of days in the date range
+        $totalDays = (int) $startDate->diffInDays($endDate) + 1;
+
+        // Special handling for EngineData which should have 24 entries per day
+        if ($modelName === 'EngineData') {
+            $totalExpected = $totalDays * 24 * count($machineIds);
+            $actualCount = (int) $query->count();
+            $percentage = $totalExpected > 0 ? (int) round(($actualCount / $totalExpected) * 100) : 0;
+            $missingInputs = $totalExpected - $actualCount;
+        } else {
+            // For other models, count distinct dates from created_at
+            $daysWithData = (int) $query->distinct(DB::raw("DATE($dateColumn)"))->count();
+            $percentage = $totalDays > 0 ? (int) round(($daysWithData / $totalDays) * 100) : 0;
+            $missingInputs = $totalDays - $daysWithData;
         }
 
         return [
-            'percentage' => round($percentage, 2),
+            'percentage' => $percentage,
             'missing_inputs' => $missingInputs
         ];
     }
 
-    private function calculateAverageScore($operatorStats, $operasiStats)
+    public function getSummaryData(Request $request)
     {
-        $total = 0;
-        $count = 0;
+        $startDate = $request->get('start_date', now()->startOfMonth()->format('Y-m-d'));
+        $endDate = $request->get('end_date', now()->format('Y-m-d'));
 
-        foreach ($operatorStats as $stat) {
-            $total += $stat['percentage'];
-            $count++;
-        }
-
-        foreach ($operasiStats as $stat) {
-            $total += $stat['percentage'];
-            $count++;
-        }
-
-        return $count > 0 ? round($total / $count, 2) : 0;
+        return response()->json([
+            'summary' => $this->getMonitoringSummary($startDate, $endDate)
+        ]);
     }
 }

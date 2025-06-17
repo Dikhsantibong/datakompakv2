@@ -519,13 +519,86 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateSummary() {
         const startDate = document.getElementById('summary_start_date').value;
         const endDate = document.getElementById('summary_end_date').value;
+        const loadingOverlay = document.getElementById('tab-loading-overlay');
 
-        fetch(`{{ route('admin.monitoring-datakompak') }}?get_summary=1&start_date=${startDate}&end_date=${endDate}`)
+        loadingOverlay.style.display = 'flex';
+
+        fetch(`{{ route('admin.monitoring-datakompak.summary') }}?start_date=${startDate}&end_date=${endDate}`)
             .then(response => response.json())
             .then(data => {
+                // Update charts
                 initializeCharts(data.summary);
-                // Update the unit details section
-                // This would require additional implementation
+
+                // Update unit details section
+                const unitDetails = document.getElementById('unitDetails');
+                unitDetails.innerHTML = '';
+
+                Object.entries(data.summary).forEach(([unitName, unitData]) => {
+                    const unitSection = document.createElement('div');
+                    unitSection.className = 'border-t pt-6';
+
+                    let html = `
+                        <h3 class="text-lg font-semibold mb-4">${unitName}</h3>
+
+                        <!-- Operator KIT Section -->
+                        <div class="mb-6">
+                            <h4 class="text-md font-medium mb-3">OPERATOR KIT:</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    `;
+
+                    Object.entries(unitData.operator).forEach(([key, stat]) => {
+                        html += `
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600">${key.replace(/_/g, ' ').toUpperCase()}</span>
+                                    <span class="text-sm font-semibold">${stat.percentage}%</span>
+                                </div>
+                                <div class="mt-2 text-xs text-gray-500">
+                                    ${stat.missing_inputs} kali tidak menginput
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += `
+                            </div>
+                        </div>
+
+                        <!-- Operasi UL/Central Section -->
+                        <div>
+                            <h4 class="text-md font-medium mb-3">OPERASI UL/CENTRAL:</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    `;
+
+                    Object.entries(unitData.operasi).forEach(([key, stat]) => {
+                        html += `
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600">${key.replace(/_/g, ' ').toUpperCase()}</span>
+                                    <span class="text-sm font-semibold">${stat.percentage}%</span>
+                                </div>
+                                <div class="mt-2 text-xs text-gray-500">
+                                    ${stat.missing_inputs} kali tidak menginput
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += `
+                            </div>
+                        </div>
+                    `;
+
+                    unitSection.innerHTML = html;
+                    unitDetails.appendChild(unitSection);
+                });
+
+                loadingOverlay.style.display = 'none';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                loadingOverlay.style.display = 'none';
+                alert('Failed to update summary data');
             });
     }
 

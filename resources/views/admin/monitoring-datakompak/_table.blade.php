@@ -605,6 +605,90 @@
             </tbody>
         </table>
     </div>
+@elseif($data['type'] === 'bahan-kimia')
+    <div class="flex justify-end mb-2">
+        <form method="GET" action="{{ route('admin.monitoring-datakompak.export-excel') }}">
+            <input type="hidden" name="tab" value="{{ $data['type'] }}">
+            <input type="hidden" name="month" value="{{ $data['month'] }}">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm">
+                <i class="fas fa-file-excel mr-1"></i> Export Excel
+            </button>
+        </form>
+    </div>
+    <div class="mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">Data Bahan Kimia - {{ \Carbon\Carbon::parse($data['month'])->isoFormat('MMMM Y') }}</h3>
+        <p class="text-sm text-gray-500 mb-2">Arahkan cursor ke data yang terceklis untuk melihat detail data</p>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 border">
+            <thead>
+                <tr>
+                    <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-white z-10 border-r">
+                        Unit
+                    </th>
+                    @foreach($data['dates'] as $date)
+                        <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap border-r">
+                            {{ $date }}
+                        </th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach($data['powerPlants'] as $powerPlant)
+                    @if($powerPlant->name !== 'UP KENDARI')
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
+                                {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
+                            </td>
+                            @foreach($data['dates'] as $date)
+                                @php
+                                    $fullDate = \Carbon\Carbon::createFromFormat('d/m', $date)->format('Y-m-d');
+                                    $dayData = $powerPlant->dailyData[$fullDate];
+                                @endphp
+                                <td class="px-3 py-4 whitespace-nowrap text-center border-r relative group">
+                                    @if($dayData['status'])
+                                        <span class="inline-flex items-center justify-center size-6 bg-green-100 text-green-800 rounded-full cursor-pointer">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </span>
+                                        <div class="hidden group-hover:block absolute z-20 bg-white border rounded-lg shadow-lg p-4 min-w-[300px] text-left -translate-x-1/2 left-1/2 mt-2">
+                                            <div class="text-sm">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <p class="font-semibold">{{ $powerPlant->name }}</p>
+                                                    <p class="text-gray-500">{{ \Carbon\Carbon::parse($fullDate)->format('d/m/Y') }}</p>
+                                                </div>
+                                                <div class="grid grid-cols-2 gap-2">
+                                                    <p class="text-gray-600">Jenis Bahan:</p>
+                                                    <p>{{ $dayData['data']->jenis_bahan }}</p>
+                                                    <p class="text-gray-600">Saldo Awal:</p>
+                                                    <p>{{ number_format($dayData['data']->saldo_awal, 2) }}</p>
+                                                    <p class="text-gray-600">Penerimaan:</p>
+                                                    <p>{{ number_format($dayData['data']->penerimaan, 2) }}</p>
+                                                    <p class="text-gray-600">Pemakaian:</p>
+                                                    <p>{{ number_format($dayData['data']->pemakaian, 2) }}</p>
+                                                    <p class="text-gray-600">Saldo Akhir:</p>
+                                                    <p>{{ number_format($dayData['data']->saldo_akhir, 2) }}</p>
+                                                </div>
+                                                @if($dayData['data']->catatan_transaksi)
+                                                    <div class="mt-2 pt-2 border-t">
+                                                        <p class="text-gray-600">Catatan:</p>
+                                                        <p class="mt-1">{{ $dayData['data']->catatan_transaksi }}</p>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="inline-flex items-center justify-center size-6 bg-red-100 text-red-800 rounded-full">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </span>
+                                    @endif
+                                </td>
+                            @endforeach
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 @else
     <table class="min-w-full divide-y divide-gray-200 border">
         <thead>

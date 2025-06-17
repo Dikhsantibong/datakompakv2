@@ -1464,3 +1464,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/subsistem/bau-bau/create', [SubsistemBauBauController::class, 'create'])
         ->name('admin.subsistem.bau-bau.create');
 });
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    // ... existing routes ...
+    Route::get('/admin/monitoring-datakompak/summary', [MonitoringDatakompakController::class, 'getSummaryData'])
+        ->name('admin.monitoring-datakompak.summary');
+    // ... existing code ...
+});

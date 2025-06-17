@@ -3,7 +3,7 @@
 @section('content')
 <div class="flex h-screen bg-gray-100">
     @include('components.sidebar')
-    
+
     <div class="flex-1 flex flex-col overflow-hidden">
         <!-- Header -->
         <header class="bg-white shadow-sm sticky top-0 z-20
@@ -38,7 +38,7 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
@@ -57,7 +57,7 @@
 
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto  px-4">
+            <div class=" px-2">
                 @if(session('success'))
                 <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
                     <span class="block sm:inline">{{ session('success') }}</span>
@@ -71,11 +71,11 @@
                             <h2 class="text-2xl font-bold mb-2">Data Pemeriksaan FLM</h2>
                             <p class="text-blue-100 mb-4">Kelola dan monitor pemeriksaan First Line Maintenance untuk memastikan kinerja optimal peralatan.</p>
                             <div class="flex flex-wrap gap-3">
-                                <a href="{{ route('admin.flm.index') }}" 
+                                <a href="{{ route('admin.flm.index') }}"
                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
                                     <i class="fas fa-plus mr-2"></i> Tambah Data
                                 </a>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -89,7 +89,7 @@
                             <div class="flex flex-wrap items-center justify-between gap-4">
                                 <div class="flex items-center gap-2">
                                     <h2 class="text-lg font-semibold text-gray-900">Daftar Pemeriksaan FLM</h2>
-                                    <button id="toggleFullTable" 
+                                    <button id="toggleFullTable"
                                             class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
                                             onclick="toggleFullTableView()">
                                         <i class="fas fa-expand mr-1"></i> Full Table
@@ -138,25 +138,25 @@
 
                             <!-- Horizontal Filters -->
                             <div class="mt-2 border-b border-gray-200 pb-4" id="filters-section">
-                                <form action="{{ route('admin.flm.list') }}" method="GET" 
+                                <form action="{{ route('admin.flm.list') }}" method="GET"
                                       class="flex flex-wrap items-end gap-4">
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                        <input type="date" name="start_date" 
+                                        <input type="date" name="start_date"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('start_date') }}">
                                     </div>
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Akhir</label>
-                                        <input type="date" name="end_date" 
+                                        <input type="date" name="end_date"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('end_date') }}">
                                     </div>
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Mesin/Peralatan</label>
-                                        <input type="text" name="mesin" 
+                                        <input type="text" name="mesin"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                placeholder="Cari mesin..."
                                                value="{{ request('mesin') }}">
@@ -164,7 +164,7 @@
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Sistem Pembangkit</label>
-                                        <input type="text" name="sistem" 
+                                        <input type="text" name="sistem"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                placeholder="Cari sistem..."
                                                value="{{ request('sistem') }}">
@@ -172,7 +172,7 @@
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Asal Unit</label>
-                                        <select name="unit_origin" 
+                                        <select name="unit_origin"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Unit</option>
                                             <option value="PLTD Poasia" {{ request('unit_origin') == 'PLTD Poasia' ? 'selected' : '' }}>PLTD Poasia</option>
@@ -188,7 +188,7 @@
                                                 class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
                                             <i class="fas fa-search mr-2"></i> Cari
                                         </button>
-                                        <a href="{{ route('admin.flm.list') }}" 
+                                        <a href="{{ route('admin.flm.list') }}"
                                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                                             <i class="fas fa-undo mr-2"></i> Reset
                                         </a>
@@ -204,7 +204,7 @@
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">No</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Tanggal</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Shift</th>
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Waktu</th>  
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Waktu</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Asal Unit</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-200">Aksi</th>
                                     </tr>
@@ -230,7 +230,7 @@
                                                 {{ $firstItem->tanggal->format('d/m/Y') }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                                 @if($firstItem->shift == 'A') bg-blue-100 text-blue-800
                                                 @elseif($firstItem->shift == 'B') bg-green-100 text-green-800
                                                 @elseif($firstItem->shift == 'C') bg-yellow-100 text-yellow-800
@@ -250,33 +250,33 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center border border-gray-200">
                                                 <div class="flex items-center justify-center space-x-4">
-                                                    <a href="{{ route('admin.flm.show', $firstItem->id) }}" 
-                                                       class="text-indigo-600 hover:text-indigo-900 flex items-center" 
+                                                    <a href="{{ route('admin.flm.show', $firstItem->id) }}"
+                                                       class="text-indigo-600 hover:text-indigo-900 flex items-center"
                                                        title="Lihat Detail">
                                                         <i class="fas fa-eye mr-1"></i> Detail
                                                     </a>
-                                                    <a href="{{ route('admin.flm.edit', $firstItem->id) }}" 
-                                                       class="text-yellow-600 hover:text-yellow-900 flex items-center" 
+                                                    <a href="{{ route('admin.flm.edit', $firstItem->id) }}"
+                                                       class="text-yellow-600 hover:text-yellow-900 flex items-center"
                                                        title="Edit">
                                                         <i class="fas fa-edit mr-1"></i> Edit
                                                     </a>
-                                                    <a href="{{ route('admin.flm.exportExcel', $firstItem->id) }}" 
-                                                       class="text-green-600 hover:text-green-900 flex items-center" 
+                                                    <a href="{{ route('admin.flm.exportExcel', $firstItem->id) }}"
+                                                       class="text-green-600 hover:text-green-900 flex items-center"
                                                        title="Export Excel">
                                                         <i class="fas fa-file-excel mr-1"></i> Excel
                                                     </a>
-                                                    <a href="{{ route('admin.flm.exportPdf', $firstItem->id) }}" 
-                                                       class="text-red-600 hover:text-red-900 flex items-center" 
+                                                    <a href="{{ route('admin.flm.exportPdf', $firstItem->id) }}"
+                                                       class="text-red-600 hover:text-red-900 flex items-center"
                                                        title="Export PDF">
                                                         <i class="fas fa-file-pdf mr-1"></i> PDF
                                                     </a>
-                                                    <form action="{{ route('admin.flm.destroy', $firstItem->id) }}" method="POST" 
+                                                    <form action="{{ route('admin.flm.destroy', $firstItem->id) }}" method="POST"
                                                           onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');"
                                                           class="inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" 
-                                                                class="text-red-600 hover:text-red-900 flex items-center" 
+                                                        <button type="submit"
+                                                                class="text-red-600 hover:text-red-900 flex items-center"
                                                                 title="Hapus">
                                                             <i class="fas fa-trash-alt mr-1"></i> Hapus
                                                         </button>
@@ -288,7 +288,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <div class="mt-4">
                             {{ $flmData->links() }}
                         </div>
@@ -329,16 +329,16 @@ function toggleFullTableView() {
     const filtersSection = document.getElementById('filters-section');
     const activeFilters = document.getElementById('active-filters');
     const tableControls = document.getElementById('table-controls');
-    
+
     // Toggle full table mode
     const isFullTable = button.classList.contains('bg-blue-600');
-    
+
     if (isFullTable) {
         // Restore normal view
         button.classList.remove('bg-blue-600', 'text-white');
         button.classList.add('bg-blue-50', 'text-blue-600');
         button.innerHTML = '<i class="fas fa-expand mr-1"></i> Full Table';
-        
+
         welcomeSection.style.display = '';
         if (filtersSection) filtersSection.style.display = '';
         if (activeFilters) activeFilters.style.display = '';
@@ -346,13 +346,13 @@ function toggleFullTableView() {
             tableControls.classList.remove('border-t', 'pt-4');
             tableControls.querySelector('h2').classList.remove('mt-2');
         }
-        
+
     } else {
         // Enable full table view
         button.classList.remove('bg-blue-50', 'text-blue-600');
         button.classList.add('bg-blue-600', 'text-white');
         button.innerHTML = '<i class="fas fa-compress mr-1"></i> Normal View';
-        
+
         welcomeSection.style.display = 'none';
         if (filtersSection) filtersSection.style.display = 'none';
         if (activeFilters) activeFilters.style.display = 'none';
@@ -366,4 +366,4 @@ function toggleFullTableView() {
 @endpush
 
 <script src="{{ asset('js/toggle.js') }}"></script>
-@endsection 
+@endsection

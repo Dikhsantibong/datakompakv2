@@ -59,7 +59,7 @@
 @section('content')
 <div class="flex h-screen bg-gray-100">
     @include('components.sidebar')
-    
+
     <div class="flex-1 flex flex-col overflow-hidden">
         <!-- Header -->
         <header class="bg-white shadow-sm sticky top-0 z-20">
@@ -92,7 +92,7 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
@@ -112,7 +112,7 @@
 
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto px-4">
+            <div class="px-2">
                 <!-- Stats Overview -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     <div class="bg-white rounded-lg shadow p-6">
@@ -161,37 +161,37 @@
                     </div>
                 </div>
 
-                
+
                 <!-- Tabs -->
                 <div class="mb-6">
                     <div class="border-b border-gray-200">
                         <nav class="-mb-px flex space-x-8">
-                            <a href="#" 
+                            <a href="#"
                                class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'data-engine' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
                                data-tab="data-engine">
                                 Data Engine 24 Jam
                             </a>
-                            <a href="#" 
+                            <a href="#"
                                class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'daily-summary' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
                                data-tab="daily-summary">
                                 Ikhtisar Harian
                             </a>
-                            <a href="#" 
+                            <a href="#"
                                class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'meeting-shift' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
                                data-tab="meeting-shift">
                                 Meeting Shift
                             </a>
-                            <a href="#" 
+                            <a href="#"
                                class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'bahan-bakar' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
                                data-tab="bahan-bakar">
                                 Bahan Bakar
                             </a>
-                            <a href="#" 
+                            <a href="#"
                                class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'pelumas' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
                                data-tab="pelumas">
                                 Pelumas
                             </a>
-                            <a href="#" 
+                            <a href="#"
                                class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'laporan-kit' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
                                data-tab="laporan-kit">
                                 Laporan KIT 00.00
@@ -206,8 +206,8 @@
                         <!-- Date Filter for Data Engine -->
                         <div class="{{ $activeTab === 'data-engine' ? '' : 'hidden' }}" id="date-filter">
                             <label for="date" class="block text-sm font-medium text-gray-700">Tanggal</label>
-                            <input type="date" 
-                                   name="date" 
+                            <input type="date"
+                                   name="date"
                                    id="date"
                                    value="{{ $date }}"
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
@@ -215,8 +215,8 @@
                         <!-- Month Filter for other tabs -->
                         <div class="{{ $activeTab === 'data-engine' ? 'hidden' : '' }}" id="month-filter">
                             <label for="month" class="block text-sm font-medium text-gray-700">Bulan</label>
-                            <input type="month" 
-                                   name="month" 
+                            <input type="month"
+                                   name="month"
                                    id="month"
                                    value="{{ $month }}"
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
@@ -288,7 +288,7 @@ function toggleDropdown() {
 window.addEventListener('click', function(e) {
     const dropdown = document.getElementById('dropdown');
     const dropdownToggle = document.getElementById('dropdownToggle');
-    
+
     if (!dropdown.contains(e.target) && !dropdownToggle.contains(e.target)) {
         dropdown.classList.add('hidden');
     }
@@ -343,7 +343,7 @@ document.addEventListener('DOMContentLoaded', function() {
     tabLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            
+
             tabLinks.forEach(l => {
                 l.classList.remove('tab-active');
                 l.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
@@ -376,4 +376,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 @endpush
 
-@endsection 
+@endsection

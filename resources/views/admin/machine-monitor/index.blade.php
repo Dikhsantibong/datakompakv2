@@ -61,7 +61,7 @@
 
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto px-6">
+            <div class=" px-2">
                 <!-- Welcome Card -->
                 {{-- <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
                     <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
@@ -309,7 +309,7 @@
             line-height: 1.2;
             animation: fadeIn 1s ease-in forwards;
         }
-        
+
         .welcome-card {
             background-position: center;
             padding: 1.5rem;

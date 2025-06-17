@@ -10,7 +10,7 @@
             <h3 class="text-lg font-medium text-gray-900 mb-4">Pilih Jam Laporan</h3>
             <div class="grid grid-cols-4 gap-2 mb-4">
                 @for ($hour = 0; $hour <= 24; $hour++)
-                    <button 
+                    <button
                         class="time-button px-3 py-2 text-sm font-medium rounded-md hover:bg-blue-50 border"
                         data-time="{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00">
                         {{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00
@@ -18,12 +18,12 @@
                 @endfor
             </div>
             <div class="flex justify-end gap-2">
-                <button 
+                <button
                     onclick="closeTimeModal()"
                     class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                     Batal
                 </button>
-                <button 
+                <button
                     onclick="confirmTimeSelection()"
                     class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
                     Pilih
@@ -66,7 +66,7 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
@@ -80,45 +80,45 @@
             </div>
         </header>
 
-        
+
 
         <!-- Main Content -->
         <div class="py-6">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class=" px-2">
                 <!-- Welcome Card -->
                 <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm p-6 mb-6 text-white relative">
                     <div class="max-w-3xl">
                         <h2 class="text-2xl font-bold mb-2">Data Engine Management</h2>
                         <p class="text-blue-100 mb-4">Monitor dan kelola data operasional mesin pembangkit listrik secara efisien.</p>
                         <div class="flex flex-wrap gap-3">
-                            <button id="copyFormattedData" 
+                            <button id="copyFormattedData"
                                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
                                 </svg>
                                 Salin Laporan
                             </button>
-                            <button id="shareWhatsApp" 
+                            <button id="shareWhatsApp"
                                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-green-600 bg-white rounded-md hover:bg-green-50">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                                 </svg>
                                 Kirim ke WhatsApp
                             </button>
-                            <a href="{{ route('admin.data-engine.export-excel', request()->query()) }}" 
+                            <a href="{{ route('admin.data-engine.export-excel', request()->query()) }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <i class="fas fa-file-excel mr-2"></i> Export Excel
                             </a>
-                            <a href="{{ route('admin.data-engine.export-pdf', request()->query()) }}" 
+                            <a href="{{ route('admin.data-engine.export-pdf', request()->query()) }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <i class="fas fa-file-pdf mr-2"></i> Export PDF
                             </a>
-                            <a href="{{ route('admin.data-engine.edit', ['date' => request('date', now()->format('Y-m-d'))]) }}" 
+                            <a href="{{ route('admin.data-engine.edit', ['date' => request('date', now()->format('Y-m-d'))]) }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
                                 <i class="fas fa-plus mr-2"></i> Update Data
                             </a>
                             @if(session('unit') == 'mysql')
-                            <a href="{{ route('admin.data-engine.daily-list', ['date' => request('date', now()->format('Y-m-d'))]) }}" 
+                            <a href="{{ route('admin.data-engine.daily-list', ['date' => request('date', now()->format('Y-m-d'))]) }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                                 <i class="fas fa-tasks mr-2"></i> Manage Input
                             </a>
@@ -135,12 +135,12 @@
                             <div class="flex flex-wrap items-center justify-between gap-4">
                                 <div class="flex items-center gap-2">
                                     <h2 class="text-lg font-semibold text-gray-900">Data Engine</h2>
-                                    <button id="toggleFullTable" 
+                                    <button id="toggleFullTable"
                                             class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
                                             onclick="toggleFullTableView()">
                                         <i class="fas fa-expand mr-1"></i> Full Table
                                     </button>
-                                    
+
                                     @if(request()->has('power_plant_id') || request()->has('date') || request()->has('time'))
                                         <div class="flex flex-wrap gap-2" id="active-filters">
                                             @if(request('power_plant_id'))
@@ -174,11 +174,11 @@
 
                             <!-- Horizontal Filters -->
                             <div class="mt-2 border-b border-gray-200 pb-4" id="filters-section">
-                                <form id="dateFilterForm" action="{{ route('admin.data-engine.index') }}" method="GET" 
+                                <form id="dateFilterForm" action="{{ route('admin.data-engine.index') }}" method="GET"
                                       class="flex flex-wrap items-end gap-4">
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
-                                        <select name="power_plant_id" 
+                                        <select name="power_plant_id"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Unit</option>
                                             @foreach($allPowerPlants as $powerPlant)
@@ -191,19 +191,19 @@
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal</label>
-                                        <input type="date" 
-                                               name="date" 
+                                        <input type="date"
+                                               name="date"
                                                value="{{ request('date', now()->format('Y-m-d')) }}"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                     </div>
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Jam</label>
-                                        <select name="time" 
+                                        <select name="time"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Jam</option>
                                             @for ($hour = 0; $hour <= 24; $hour++)
-                                                <option value="{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00:00" 
+                                                <option value="{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00:00"
                                                         {{ request('time') == str_pad($hour, 2, '0', STR_PAD_LEFT) . ':00:00' ? 'selected' : '' }}>
                                                     {{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00
                                                 </option>
@@ -223,7 +223,7 @@
                                                 <i class="fas fa-search mr-2"></i> Tampilkan Data
                                             </span>
                                         </button>
-                                        <a href="{{ route('admin.data-engine.index') }}" 
+                                        <a href="{{ route('admin.data-engine.index') }}"
                                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                                             <i class="fas fa-undo mr-2"></i> Reset
                                         </a>
@@ -296,27 +296,27 @@ function toggleFullTableView() {
     const activeFilters = document.getElementById('active-filters');
     const welcomeCard = document.querySelector('.welcome-card')?.parentElement;
     const mainContent = document.querySelector('main');
-    
+
     // Toggle full table mode
     const isFullTable = button.classList.contains('bg-blue-600');
-    
+
     if (isFullTable) {
         // Restore normal view
         button.classList.remove('bg-blue-600', 'text-white');
         button.classList.add('bg-blue-50', 'text-blue-600');
         button.innerHTML = '<i class="fas fa-expand mr-1"></i> Full Table';
-        
+
         if (filtersSection) filtersSection.style.display = '';
         if (activeFilters) activeFilters.style.display = '';
         if (welcomeCard) welcomeCard.style.display = '';
         if (mainContent) mainContent.classList.remove('pt-0');
-        
+
     } else {
         // Enable full table view
         button.classList.remove('bg-blue-50', 'text-blue-600');
         button.classList.add('bg-blue-600', 'text-white');
         button.innerHTML = '<i class="fas fa-compress mr-1"></i> Normal View';
-        
+
         if (filtersSection) filtersSection.style.display = 'none';
         if (activeFilters) activeFilters.style.display = 'none';
         if (welcomeCard) welcomeCard.style.display = 'none';
@@ -340,13 +340,13 @@ function showTimeModal() {
     const modal = document.getElementById('timeSelectionModal');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
-    
+
     // Reset previously selected button
     document.querySelectorAll('.time-button').forEach(btn => {
         btn.classList.remove('bg-blue-600', 'text-white');
         btn.classList.add('text-gray-700');
     });
-    
+
     // If there's a previously selected time, highlight it
     if (selectedTime) {
         const btn = document.querySelector(`[data-time="${selectedTime}"]`);
@@ -371,7 +371,7 @@ document.querySelectorAll('.time-button').forEach(button => {
             btn.classList.remove('bg-blue-600', 'text-white');
             btn.classList.add('text-gray-700');
         });
-        
+
         // Add highlight to selected button
         this.classList.add('bg-blue-600', 'text-white');
         this.classList.remove('text-gray-700');
@@ -397,28 +397,28 @@ function confirmTimeSelection() {
 function getFormattedReport(selectedTime) {
     const date = document.querySelector('input[name="date"]').value;
     const currentSession = '{{ session('unit') }}';
-    
+
     let report = `Assalamu Alaikum Wr.Wb\n`;
     report += `Laporan Data Engine PLN\ Nusantara Power\n`;
-    
+
     if (currentSession !== 'mysql') {
         const powerPlantName = document.querySelector('.bg-white.rounded-xl.shadow-sm.overflow-hidden.border.border-gray-100 h2')?.textContent.trim() || '';
         report += `${powerPlantName}, ${formatDate(date)}\n`;
     } else {
         report += `Unit Pembangkitan Kendari, ${formatDate(date)}\n`;
     }
-    
+
     report += `Pukul : ${selectedTime} Wita\n\n`;
 
     // Get all power plant sections
     const powerPlantSections = document.querySelectorAll('.bg-white.rounded-xl.shadow-sm.overflow-hidden.border.border-gray-100');
-    
+
     powerPlantSections.forEach(section => {
         const title = section.querySelector('h2').textContent.trim();
         const powerPlantInfo = section.querySelector('.flex.items-center.gap-4');
-        
+
         report += `\n${title}\n`;
-        
+
         // Add power plant specific info (HOP/TMA/Inflow)
         if (powerPlantInfo) {
             const infoElements = powerPlantInfo.querySelectorAll('.flex.items-center.gap-2');
@@ -444,7 +444,7 @@ function getFormattedReport(selectedTime) {
                 const cosPhi = cells[8].textContent.trim();
                 const status = cells[9].querySelector('span')?.textContent.trim() || '-';
                 const description = cells[10].textContent.trim();
-                
+
                 report += `- ${name}:\n`;
                 report += `  Daya Terpasang: ${dayaTerpasang} kW\n`;
                 report += `  DMN: ${dmn}\n`;
@@ -475,7 +475,7 @@ document.getElementById('shareWhatsApp').addEventListener('click', function() {
 
 document.getElementById('copyFormattedData').addEventListener('click', function() {
     const formattedReport = getFormattedReport();
-    
+
     navigator.clipboard.writeText(formattedReport).then(() => {
         // Show success message using SweetAlert2
         Swal.fire({

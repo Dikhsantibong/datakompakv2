@@ -45,9 +45,9 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                           onclick="event.preventDefault(); 
+                           onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">Logout</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                             @csrf
@@ -64,7 +64,7 @@
 
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto px-6">
+            <div class=" px-2">
                 <!-- Welcome Card -->
                 {{-- <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
                     <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
@@ -85,7 +85,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <!-- Logo - Hidden on mobile -->
                         <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
                     </div>
@@ -619,7 +619,7 @@
                 line-height: 1.2;
                 animation: fadeIn 1s ease-in forwards;
             }
-            
+
             .welcome-card {
                 background-position: center;
                 padding: 1.5rem;
@@ -798,4 +798,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-@endpush 
+@endpush

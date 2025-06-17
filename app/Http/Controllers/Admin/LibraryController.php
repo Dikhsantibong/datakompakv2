@@ -36,7 +36,7 @@ class LibraryController extends Controller
         $beritaAcaraFiles = Document::where('category', 'berita-acara')
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         return view('admin.library.berita-acara', compact('beritaAcaraFiles'));
     }
 
@@ -45,7 +45,7 @@ class LibraryController extends Controller
         $standarisasiFiles = Document::where('category', 'standarisasi')
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         return view('admin.library.standarisasi', compact('standarisasiFiles'));
     }
 
@@ -54,7 +54,7 @@ class LibraryController extends Controller
         $bacaanDigitalFiles = Document::where('category', 'bacaan-digital')
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         return view('admin.library.bacaan-digital', compact('bacaanDigitalFiles'));
     }
 
@@ -63,7 +63,7 @@ class LibraryController extends Controller
         $diklatFiles = Document::where('category', 'diklat')
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         return view('admin.library.diklat', compact('diklatFiles'));
     }
 
@@ -72,7 +72,7 @@ class LibraryController extends Controller
         $sopKitFiles = Document::where('category', 'sop-kit')
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         return view('admin.library.sop-kit', compact('sopKitFiles'));
     }
 
@@ -81,7 +81,7 @@ class LibraryController extends Controller
         $baTransaksiFiles = Document::where('category', 'ba-transaksi')
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         return view('admin.library.ba-transaksi', compact('baTransaksiFiles'));
     }
 
@@ -90,7 +90,7 @@ class LibraryController extends Controller
         $operasiLainnyaFiles = Document::where('category', 'operasi-lainnya')
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         return view('admin.library.operasi-lainnya', compact('operasiLainnyaFiles'));
     }
 
@@ -100,7 +100,7 @@ class LibraryController extends Controller
             'document' => [
                 'required',
                 'file',
-                'mimes:pdf,doc,docx,xls,xlsx',
+                'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
                 'max:10240',
                 function ($attribute, $value, $fail) {
                     // Check if file is readable
@@ -208,4 +208,4 @@ class LibraryController extends Controller
             ], 500);
         }
     }
-} 
+}

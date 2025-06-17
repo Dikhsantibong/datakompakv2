@@ -29,7 +29,7 @@
                     @if($powerPlant->name !== 'UP KENDARI')
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r sticky left-0 bg-white z-10">
-                                {{ $powerPlant->name }}
+                                {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
                             </td>
                             @foreach($data['hours'] as $hour)
                                 @php
@@ -108,7 +108,7 @@
                     @if($powerPlant->name !== 'UP KENDARI')
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
-                                {{ $powerPlant->name }}
+                                {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
                             </td>
                             @foreach($data['dates'] as $index => $date)
                                 @php
@@ -194,7 +194,7 @@
                     @if($powerPlant->name !== 'UP KENDARI')
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
-                                {{ $powerPlant->name }}
+                                {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
                             </td>
                             @foreach($data['dates'] as $index => $date)
                                 @php
@@ -274,7 +274,7 @@
                     @if($powerPlant->name !== 'UP KENDARI')
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
-                                {{ $powerPlant->name }}
+                                {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
                             </td>
                             @foreach($data['dates'] as $date)
                                 <td class="px-3 py-4 whitespace-nowrap text-center border-r">
@@ -334,7 +334,7 @@
                     @if($powerPlant->name !== 'UP KENDARI')
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
-                                {{ $powerPlant->name }}
+                                {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
                             </td>
                             @foreach($data['dates'] as $date)
                                 @foreach($data['shifts'] as $shift)
@@ -390,7 +390,7 @@
                     @if($powerPlant->name !== 'UP KENDARI')
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
-                                {{ $powerPlant->name }}
+                                {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
                             </td>
                             @foreach($data['dates'] as $index => $date)
                                 @php
@@ -463,7 +463,7 @@
                 @if($powerPlant->name !== 'UP KENDARI')
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
-                            {{ $powerPlant->name }}
+                            {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
                         </td>
                         @foreach($data['dates'] as $date)
                             @foreach($data['shifts'] as $shift)
@@ -485,4 +485,4 @@
             @endforeach
         </tbody>
     </table>
-@endif 
+@endif

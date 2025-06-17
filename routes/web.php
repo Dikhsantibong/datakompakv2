@@ -57,8 +57,6 @@ use App\Http\Controllers\Admin\OperasiUpkd\RjppDprController;
 use App\Http\Controllers\Admin\LaporanKitController;
 use App\Http\Controllers\Admin\PatrolCheckController;
 use App\Http\Controllers\Admin\BlackstartController;
-use App\Http\Controllers\KitUpKendariController;
-use App\Http\Controllers\SubsistemController;
 use App\Http\Controllers\Admin\KesiapanKitController;
 use App\Http\Controllers\Admin\SubsistemKendariController;
 use App\Http\Controllers\Admin\SubsistemBauBauController;
@@ -1453,12 +1451,6 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
-// ... existing code ...
-
-
-
-// ... existing code ...
-
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Kendari Subsystem Routes
     Route::get('/subsistem/kendari', [SubsistemKendariController::class, 'index'])
@@ -1472,5 +1464,3 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/subsistem/bau-bau/create', [SubsistemBauBauController::class, 'create'])
         ->name('admin.subsistem.bau-bau.create');
 });
-
-// ... existing code ...

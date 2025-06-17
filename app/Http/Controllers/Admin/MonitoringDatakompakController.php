@@ -27,10 +27,10 @@ class MonitoringDatakompakController extends Controller
         $month = $request->get('month', now()->format('Y-m'));
         $date = $request->get('date', now()->format('Y-m-d'));
         $activeTab = $request->get('tab', 'data-engine');
-        
+
         // Get all power plants
         $powerPlants = PowerPlant::with(['machines'])->get();
-        
+
         // Calculate stats and get categorized units based on active tab
         if ($activeTab === 'data-engine') {
             $statsData = $this->calculateStats($powerPlants, $date);
@@ -183,7 +183,7 @@ class MonitoringDatakompakController extends Controller
     {
         $hours = [];
         $selectedDate = Carbon::parse($date);
-        
+
         for ($i = 0; $i < 24; $i++) {
             $hours[] = $selectedDate->copy()->startOfDay()->addHours($i)->format('Y-m-d H:i:s');
         }
@@ -253,20 +253,20 @@ class MonitoringDatakompakController extends Controller
         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
             $dates[] = $date->format('Y-m-d');
         }
-        
+
         foreach ($powerPlants as $powerPlant) {
             $shiftStatus = [];
-            
+
             foreach ($dates as $date) {
                 foreach ($shifts as $shift) {
                     $key = $date . '_' . $shift;
-                    
+
                     // Check if data exists for this unit's sync_unit_origin using unit_source
                     $hasData = MeetingShift::whereDate('tanggal', $date)
                         ->where('current_shift', $shift)
                         ->where('sync_unit_origin', $powerPlant->unit_source)
                         ->exists();
-                        
+
                     $shiftStatus[$key] = $hasData;
                 }
             }
@@ -389,7 +389,7 @@ class MonitoringDatakompakController extends Controller
                 $dayData = $bahanBakarData->get($powerPlant->id, collect())
                     ->get($date, collect())
                     ->first();
-                
+
                 $powerPlant->dailyData->put($date, [
                     'status' => !is_null($dayData),
                     'data' => $dayData
@@ -438,7 +438,7 @@ class MonitoringDatakompakController extends Controller
                 $dayData = $pelumasData->get($powerPlant->id, collect())
                     ->get($date, collect())
                     ->first();
-                
+
                 $powerPlant->dailyData->put($date, [
                     'status' => !is_null($dayData),
                     'data' => $dayData
@@ -487,7 +487,7 @@ class MonitoringDatakompakController extends Controller
                 $dayData = $laporanKitData->get($powerPlant->unit_source, collect())
                     ->get($date, collect())
                     ->first();
-                
+
                 $powerPlant->dailyData->put($date, [
                     'status' => !is_null($dayData),
                     'data' => $dayData
@@ -538,4 +538,12 @@ class MonitoringDatakompakController extends Controller
 
         return Excel::download(new MonitoringDatakompakExport($data, $tab), 'monitoring-datakompak-'.$tab.'-'.now()->format('Ymd_His').'.xlsx');
     }
-} 
+
+    public function formatUnitName($name)
+    {
+        // Split the name by spaces and take first 3 words
+        $words = explode(' ', $name);
+        $firstThreeWords = array_slice($words, 0, 3);
+        return implode(' ', $firstThreeWords);
+    }
+}

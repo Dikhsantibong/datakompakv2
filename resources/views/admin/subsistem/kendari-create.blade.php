@@ -97,11 +97,13 @@
                                         <label class="block text-sm font-medium text-gray-700">Status</label>
                                         <select name="status[{{ $machine->id }}]"
                                                 class="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                            <option value="Normal">Normal</option>
-                                            <option value="Derating">Derating</option>
-                                            <option value="Gangguan">Gangguan</option>
-                                            <option value="Pemeliharaan">Pemeliharaan</option>
-                                            <option value="Reserve Shutdown">Reserve Shutdown</option>
+                                                <option value="">Pilih Status</option>
+                                                <option value="RSH">RSH</option>
+                                                <option value="FO">FO</option>
+                                                <option value="MO">MO</option>
+                                                <option value="P0">P0</option>
+                                                <option value="MB">MB</option>
+                                                <option value="OPS">OPS</option>
                                         </select>
                                     </div>
                                     <div>

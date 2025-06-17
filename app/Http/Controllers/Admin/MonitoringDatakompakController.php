@@ -543,7 +543,7 @@ class MonitoringDatakompakController extends Controller
     {
         // Split the name by spaces and take first 3 words
         $words = explode(' ', $name);
-        $firstThreeWords = array_slice($words, 0, 3);
+        $firstThreeWords = array_slice($words, 0, 2);
         return implode(' ', $firstThreeWords);
     }
 }

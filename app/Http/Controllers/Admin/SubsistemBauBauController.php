@@ -16,7 +16,7 @@ class SubsistemBaubauController extends Controller
 
         $machines = Machine::where(' power_plant_id',29)->with('operations');
         $powerPlant = PowerPlant::where('unit_source', 'mysql_baruta')->first();
-        $specificTimes = ['11:00:00', '14:00:00', '16:00:00', '18:00:00', '19:00:00'];
+        $specificTimes = ['06:00:00','11:00:00', '14:00:00', '18:00:00', '19:00:00'];
 
         return view('admin.subsistem.bau-bau', compact('powerPlant', 'specificTimes', 'machines'));
     }
@@ -28,7 +28,7 @@ class SubsistemBaubauController extends Controller
 
 
         $powerPlant = PowerPlant::where('unit_source', 'mysql_baruta')->first();
-        $specificTimes = ['11:00:00', '14:00:00', '16:00:00', '18:00:00', '19:00:00'];
+        $specificTimes = ['06:00:00','11:00:00', '14:00:00', '18:00:00', '19:00:00'];
 
         return view('admin.subsistem.bau-bau-create', compact('powerPlant', 'specificTimes','machines'));
     }

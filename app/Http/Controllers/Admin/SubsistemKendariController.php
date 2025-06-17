@@ -16,7 +16,7 @@ class SubsistemKendariController extends Controller
 
         $machines = Machine::where(' power_plant_id',2)->with('operations');
         $powerPlant = PowerPlant::where('unit_source', 'mysql_moramo')->first();
-        $specificTimes = ['11:00:00', '14:00:00', '16:00:00', '18:00:00', '19:00:00'];
+        $specificTimes = ['06:00:00','11:00:00', '14:00:00', '16:00:00', '18:00:00', '19:00:00'];
 
         return view('admin.subsistem.kendari', compact('powerPlant', 'specificTimes', 'machines'));
     }
@@ -28,7 +28,7 @@ class SubsistemKendariController extends Controller
 
 
         $powerPlant = PowerPlant::where('unit_source', 'mysql_moramo')->first();
-        $specificTimes = ['11:00:00', '14:00:00', '16:00:00', '18:00:00', '19:00:00'];
+        $specificTimes = ['06:00:00','11:00:00', '14:00:00', '16:00:00', '18:00:00', '19:00:00'];
 
         return view('admin.subsistem.kendari-create', compact('powerPlant', 'specificTimes','machines'));
     }

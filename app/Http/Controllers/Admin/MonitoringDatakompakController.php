@@ -559,11 +559,13 @@ class MonitoringDatakompakController extends Controller
 
         foreach ($powerPlants as $powerPlant) {
             $dailyStatus = [];
+            // Get the short name version for matching
+            $shortName = trim(explode('(', $powerPlant->name)[0]);
 
             foreach ($dates as $date) {
-                // Check if data exists for this unit's sync_unit_origin using unit_source
+                // Check if data exists matching the power plant name
                 $hasData = FlmInspection::whereDate('tanggal', $date)
-                    ->where('sync_unit_origin', $powerPlant->unit_source)
+                    ->where('sync_unit_origin', $shortName)
                     ->exists();
 
                 $dailyStatus[$date] = $hasData;
@@ -599,11 +601,13 @@ class MonitoringDatakompakController extends Controller
 
         foreach ($powerPlants as $powerPlant) {
             $dailyStatus = [];
+            // Get the short name version for matching
+            $shortName = trim(explode('(', $powerPlant->name)[0]);
 
             foreach ($dates as $date) {
-                // Check if data exists for this unit's sync_unit_origin using unit_source
+                // Check if data exists matching the power plant name
                 $hasData = FiveS5rBatch::whereDate('created_at', $date)
-                    ->where('sync_unit_origin', $powerPlant->unit_source)
+                    ->where('sync_unit_origin', $shortName)
                     ->exists();
 
                 $dailyStatus[$date] = $hasData;
@@ -688,11 +692,13 @@ class MonitoringDatakompakController extends Controller
 
         foreach ($powerPlants as $powerPlant) {
             $dailyStatus = [];
+            // Get the short name version for matching
+            $shortName = trim(explode('(', $powerPlant->name)[0]);
 
             foreach ($dates as $date) {
-                // Check if data exists for this unit's sync_unit_origin using unit_source
+                // Check if data exists matching the power plant name
                 $hasData = PatrolCheck::whereDate('created_at', $date)
-                    ->where('sync_unit_origin', $powerPlant->unit_source)
+                    ->where('sync_unit_origin', $shortName)
                     ->exists();
 
                 $dailyStatus[$date] = $hasData;

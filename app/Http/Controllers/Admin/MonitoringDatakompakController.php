@@ -545,46 +545,38 @@ class MonitoringDatakompakController extends Controller
     {
         $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
         $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+        $dates = [];
+
+        // Start from the 1st of the month
+        $currentDate = $startDate->copy();
+        while ($currentDate <= $endDate) {
+            $dates[] = $currentDate->format('Y-m-d');
+            $currentDate->addDay();
+        }
 
         // Get all power plants
         $powerPlants = PowerPlant::all();
 
-        // Get all dates in the month
-        $dates = collect();
-        $currentDate = $startDate->copy();
-        while ($currentDate <= $endDate) {
-            $dates->push($currentDate->format('Y-m-d'));
-            $currentDate->addDay();
-        }
-
-        // Get all FLM data for the month
-        $flmData = FlmInspection::whereBetween('tanggal', [$startDate, $endDate])
-            ->get()
-            ->groupBy(['sync_unit_origin', function($item) {
-                return $item->tanggal->format('Y-m-d');
-            }]);
-
-        // Prepare data for each power plant
         foreach ($powerPlants as $powerPlant) {
-            $powerPlant->dailyData = collect();
-            foreach ($dates as $date) {
-                $dayData = $flmData->get($powerPlant->unit_source, collect())
-                    ->get($date, collect())
-                    ->first();
+            $dailyStatus = [];
 
-                $powerPlant->dailyData->put($date, [
-                    'status' => !is_null($dayData),
-                    'data' => $dayData
-                ]);
+            foreach ($dates as $date) {
+                // Check if data exists for this unit's sync_unit_origin using unit_source
+                $hasData = FlmInspection::whereDate('tanggal', $date)
+                    ->where('sync_unit_origin', $powerPlant->unit_source)
+                    ->exists();
+
+                $dailyStatus[$date] = $hasData;
             }
+            $powerPlant->dailyStatus = $dailyStatus;
         }
 
         return [
             'type' => 'flm',
             'month' => $month,
-            'dates' => $dates->map(function($date) {
+            'dates' => array_map(function($date) {
                 return Carbon::parse($date)->format('d/m');
-            }),
+            }, $dates),
             'powerPlants' => $powerPlants
         ];
     }
@@ -593,46 +585,38 @@ class MonitoringDatakompakController extends Controller
     {
         $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
         $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+        $dates = [];
+
+        // Start from the 1st of the month
+        $currentDate = $startDate->copy();
+        while ($currentDate <= $endDate) {
+            $dates[] = $currentDate->format('Y-m-d');
+            $currentDate->addDay();
+        }
 
         // Get all power plants
         $powerPlants = PowerPlant::all();
 
-        // Get all dates in the month
-        $dates = collect();
-        $currentDate = $startDate->copy();
-        while ($currentDate <= $endDate) {
-            $dates->push($currentDate->format('Y-m-d'));
-            $currentDate->addDay();
-        }
-
-        // Get all 5S5R data for the month
-        $fiveSData = FiveS5rBatch::whereBetween('created_at', [$startDate, $endDate])
-            ->get()
-            ->groupBy(['sync_unit_origin', function($item) {
-                return $item->created_at->format('Y-m-d');
-            }]);
-
-        // Prepare data for each power plant
         foreach ($powerPlants as $powerPlant) {
-            $powerPlant->dailyData = collect();
-            foreach ($dates as $date) {
-                $dayData = $fiveSData->get($powerPlant->unit_source, collect())
-                    ->get($date, collect())
-                    ->first();
+            $dailyStatus = [];
 
-                $powerPlant->dailyData->put($date, [
-                    'status' => !is_null($dayData),
-                    'data' => $dayData
-                ]);
+            foreach ($dates as $date) {
+                // Check if data exists for this unit's sync_unit_origin using unit_source
+                $hasData = FiveS5rBatch::whereDate('created_at', $date)
+                    ->where('sync_unit_origin', $powerPlant->unit_source)
+                    ->exists();
+
+                $dailyStatus[$date] = $hasData;
             }
+            $powerPlant->dailyStatus = $dailyStatus;
         }
 
         return [
             'type' => '5s5r',
             'month' => $month,
-            'dates' => $dates->map(function($date) {
+            'dates' => array_map(function($date) {
                 return Carbon::parse($date)->format('d/m');
-            }),
+            }, $dates),
             'powerPlants' => $powerPlants
         ];
     }
@@ -690,46 +674,38 @@ class MonitoringDatakompakController extends Controller
     {
         $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
         $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+        $dates = [];
+
+        // Start from the 1st of the month
+        $currentDate = $startDate->copy();
+        while ($currentDate <= $endDate) {
+            $dates[] = $currentDate->format('Y-m-d');
+            $currentDate->addDay();
+        }
 
         // Get all power plants
         $powerPlants = PowerPlant::all();
 
-        // Get all dates in the month
-        $dates = collect();
-        $currentDate = $startDate->copy();
-        while ($currentDate <= $endDate) {
-            $dates->push($currentDate->format('Y-m-d'));
-            $currentDate->addDay();
-        }
-
-        // Get all patrol check data for the month
-        $patrolData = PatrolCheck::whereBetween('created_at', [$startDate, $endDate])
-            ->get()
-            ->groupBy(['sync_unit_origin', function($item) {
-                return $item->created_at->format('Y-m-d');
-            }]);
-
-        // Prepare data for each power plant
         foreach ($powerPlants as $powerPlant) {
-            $powerPlant->dailyData = collect();
-            foreach ($dates as $date) {
-                $dayData = $patrolData->get($powerPlant->unit_source, collect())
-                    ->get($date, collect())
-                    ->first();
+            $dailyStatus = [];
 
-                $powerPlant->dailyData->put($date, [
-                    'status' => !is_null($dayData),
-                    'data' => $dayData
-                ]);
+            foreach ($dates as $date) {
+                // Check if data exists for this unit's sync_unit_origin using unit_source
+                $hasData = PatrolCheck::whereDate('created_at', $date)
+                    ->where('sync_unit_origin', $powerPlant->unit_source)
+                    ->exists();
+
+                $dailyStatus[$date] = $hasData;
             }
+            $powerPlant->dailyStatus = $dailyStatus;
         }
 
         return [
             'type' => 'patrol-check',
             'month' => $month,
-            'dates' => $dates->map(function($date) {
+            'dates' => array_map(function($date) {
                 return Carbon::parse($date)->format('d/m');
-            }),
+            }, $dates),
             'powerPlants' => $powerPlants
         ];
     }

@@ -754,9 +754,7 @@ class MonitoringDatakompakController extends Controller
                 'name' => $powerPlant->name,
                 'operator_kit' => [
                     'data_engine' => $this->calculateCompletionRate($powerPlant, 'data_engine', $startDate, $endDate),
-                    'daily_summary' => $this->calculateCompletionRate($powerPlant, 'daily_summary', $startDate, $endDate),
                     'meeting_shift' => $this->calculateCompletionRate($powerPlant, 'meeting_shift', $startDate, $endDate),
-                    'bahan_kimia' => $this->calculateCompletionRate($powerPlant, 'bahan_kimia', $startDate, $endDate),
                     'patrol_check' => $this->calculateCompletionRate($powerPlant, 'patrol_check', $startDate, $endDate),
                     'five_s5r' => $this->calculateCompletionRate($powerPlant, 'five_s5r', $startDate, $endDate),
                     'flm' => $this->calculateCompletionRate($powerPlant, 'flm', $startDate, $endDate),

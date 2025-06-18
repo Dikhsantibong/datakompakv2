@@ -127,20 +127,22 @@
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
-                                        @foreach($powerPlant['operator_kit'] as $key => $value)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ ucwords(str_replace('_', ' ', $key)) }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $value['percentage'] >= 80 ? 'bg-green-100 text-green-800' : ($value['percentage'] >= 50 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                                                    {{ $value['percentage'] }}%
-                                                </span>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
-                                                {{ $value['missing_days'] }} hari
-                                            </td>
-                                        </tr>
+                                        @foreach(['meeting_shift', 'abnormal_report', 'flm_inspection', 'five_s5r', 'patrol_check', 'laporan_kit'] as $key)
+                                            @if(isset($powerPlant['operator_kit'][$key]))
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    {{ ucwords(str_replace('_', ' ', $key)) }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $powerPlant['operator_kit'][$key]['percentage'] >= 80 ? 'bg-green-100 text-green-800' : ($powerPlant['operator_kit'][$key]['percentage'] >= 50 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                                        {{ $powerPlant['operator_kit'][$key]['percentage'] }}%
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                                    {{ $powerPlant['operator_kit'][$key]['missing_days'] }} hari
+                                                </td>
+                                            </tr>
+                                            @endif
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -160,20 +162,22 @@
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
-                                        @foreach($powerPlant['operasi_ul'] as $key => $value)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ ucwords(str_replace('_', ' ', $key)) }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $value['percentage'] >= 80 ? 'bg-green-100 text-green-800' : ($value['percentage'] >= 50 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                                                    {{ $value['percentage'] }}%
-                                                </span>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
-                                                {{ $value['missing_days'] }} hari
-                                            </td>
-                                        </tr>
+                                        @foreach(['bahan_bakar', 'pelumas', 'bahan_kimia', 'daily_summary', 'rencana_daya_mampu'] as $key)
+                                            @if(isset($powerPlant['operasi_ul'][$key]))
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    {{ ucwords(str_replace('_', ' ', $key)) }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $powerPlant['operasi_ul'][$key]['percentage'] >= 80 ? 'bg-green-100 text-green-800' : ($powerPlant['operasi_ul'][$key]['percentage'] >= 50 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                                        {{ $powerPlant['operasi_ul'][$key]['percentage'] }}%
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                                    {{ $powerPlant['operasi_ul'][$key]['missing_days'] }} hari
+                                                </td>
+                                            </tr>
+                                            @endif
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -198,10 +202,24 @@ document.addEventListener('DOMContentLoaded', function() {
         new Chart(document.getElementById('operatorKitChart{{ str_replace(' ', '', $powerPlant['name']) }}'), {
             type: 'bar',
             data: {
-                labels: {!! json_encode(array_map(function($key) { return ucwords(str_replace('_', ' ', $key)); }, array_keys($powerPlant['operator_kit']))) !!},
+                labels: [
+                    'Meeting Shift',
+                    'Abnormal Report',
+                    'FLM Inspection',
+                    '5S 5R',
+                    'Patrol Check',
+                    'Laporan KIT'
+                ],
                 datasets: [{
                     label: 'Completion Rate (%)',
-                    data: {!! json_encode(array_map(function($value) { return $value['percentage']; }, $powerPlant['operator_kit'])) !!},
+                    data: [
+                        {{ $powerPlant['operator_kit']['meeting_shift']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operator_kit']['abnormal_report']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operator_kit']['flm_inspection']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operator_kit']['five_s5r']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operator_kit']['patrol_check']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operator_kit']['laporan_kit']['percentage'] ?? 0 }}
+                    ],
                     backgroundColor: 'rgba(59, 130, 246, 0.5)',
                     borderColor: 'rgb(59, 130, 246)',
                     borderWidth: 1
@@ -222,10 +240,22 @@ document.addEventListener('DOMContentLoaded', function() {
         new Chart(document.getElementById('operasiUlChart{{ str_replace(' ', '', $powerPlant['name']) }}'), {
             type: 'bar',
             data: {
-                labels: {!! json_encode(array_map(function($key) { return ucwords(str_replace('_', ' ', $key)); }, array_keys($powerPlant['operasi_ul']))) !!},
+                labels: [
+                    'Bahan Bakar',
+                    'Pelumas',
+                    'Bahan Kimia',
+                    'Daily Summary',
+                    'Rencana Daya Mampu'
+                ],
                 datasets: [{
                     label: 'Completion Rate (%)',
-                    data: {!! json_encode(array_map(function($value) { return $value['percentage']; }, $powerPlant['operasi_ul'])) !!},
+                    data: [
+                        {{ $powerPlant['operasi_ul']['bahan_bakar']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operasi_ul']['pelumas']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operasi_ul']['bahan_kimia']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operasi_ul']['daily_summary']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operasi_ul']['rencana_daya_mampu']['percentage'] ?? 0 }}
+                    ],
                     backgroundColor: 'rgba(16, 185, 129, 0.5)',
                     borderColor: 'rgb(16, 185, 129)',
                     borderWidth: 1

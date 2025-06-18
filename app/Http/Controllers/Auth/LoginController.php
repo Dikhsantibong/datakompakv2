@@ -40,7 +40,7 @@ class LoginController extends Controller
                 return redirect()->route('admin.dashboard');
             } elseif (Auth::user()->role == 'tl_ron')   {
                 return redirect()->route('admin.dashboard');
-            } elseif (Auth::user()->role == 'stasiun')   { 
+            } elseif (Auth::user()->role == 'stasiun')   {
                 return redirect()->route('user.dashboard');
             }
         }
@@ -48,11 +48,11 @@ class LoginController extends Controller
         return back()->withErrors(['email' => 'Login failed!']);
     }
 
-    public function showLoginForm(Request $request) 
+    public function showLoginForm(Request $request)
     {
         // Ambil parameter unit dari URL jika ada
         $selectedUnit = $request->query('unit');
-        
+
         return view('auth.login', [
             'selectedUnit' => $selectedUnit
         ]);
@@ -67,10 +67,10 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         Alert::success('Berhasil Logout', 'Anda telah berhasil keluar dari sistem');
         return redirect('/');
     }

@@ -3,7 +3,35 @@
 @section('content')
 <div class="flex h-screen bg-gray-50 overflow-auto">
     @include('components.sidebar')
-    
+
+    <!-- Add Modal for Time Selection -->
+    <div id="timeSelectionModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-96">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Pilih Jam Laporan</h3>
+            <div class="grid grid-cols-4 gap-2 mb-4">
+                @for ($hour = 0; $hour <= 24; $hour++)
+                    <button
+                        class="time-button px-3 py-2 text-sm font-medium rounded-md hover:bg-blue-50 border"
+                        data-time="{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00">
+                        {{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00
+                    </button>
+                @endfor
+            </div>
+            <div class="flex justify-end gap-2">
+                <button
+                    onclick="closeTimeModal()"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                    Batal
+                </button>
+                <button
+                    onclick="confirmTimeSelection()"
+                    class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                    Pilih
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="main-content" class="flex-1 overflow-auto">
         <header class="bg-white shadow-sm sticky top-0 z-10">
             <div class="flex justify-between items-center px-6 py-3">
@@ -43,9 +71,9 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                           onclick="event.preventDefault(); 
+                           onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">Logout</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                             @csrf
@@ -64,18 +92,32 @@
                         <h2 class="text-2xl font-bold mb-2">Data Ikhtisar Harian</h2>
                         <p class="text-blue-100 mb-4">Monitor dan kelola data operasional pembangkit listrik secara harian.</p>
                         <div class="flex flex-wrap gap-3">
-                            <a href="{{ route('admin.daily-summary.export-pdf', ['date' => $date]) }}" 
+                            <button id="copyFormattedData"
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                                </svg>
+                                Salin Laporan
+                            </button>
+                            <button id="shareWhatsApp"
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-green-600 bg-white rounded-md hover:bg-green-50">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                </svg>
+                                Kirim ke WhatsApp
+                            </button>
+                            <a href="{{ route('admin.daily-summary.export-pdf', ['date' => $date]) }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
-                                <i class="fas fa-file-pdf mr-2 text-sm"></i>Export PDF
+                                <i class="fas fa-file-pdf mr-2"></i>Export PDF
                             </a>
-                            <a href="{{ route('admin.daily-summary.export-excel', ['date' => $date]) }}" 
+                            <a href="{{ route('admin.daily-summary.export-excel', ['date' => $date]) }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
-                                <i class="fas fa-file-excel mr-2 text-sm"></i>Export Excel
+                                <i class="fas fa-file-excel mr-2"></i>Export Excel
                             </a>
-                            <button 
-                                onclick="window.location.href='{{ route('admin.daily-summary') }}'" 
+                            <button
+                                onclick="window.location.href='{{ route('admin.daily-summary') }}'"
                                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
-                                <i class="fas fa-arrow-left mr-2 text-sm"></i>Kembali
+                                <i class="fas fa-arrow-left mr-2"></i>Kembali
                             </button>
                         </div>
                     </div>
@@ -91,7 +133,7 @@
                                 <!-- Date Filter -->
                                 <div class="w-full sm:w-72">
                                     <label for="dateFilter" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                                    <input type="date" 
+                                    <input type="date"
                                            id="dateFilter"
                                            value="{{ $date }}"
                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#009BB9] focus:ring focus:ring-[#009BB9] focus:ring-opacity-50">
@@ -149,7 +191,7 @@
                                 <div class="w-full sm:w-72">
                                     <label for="searchInput" class="block text-sm font-medium text-gray-700 mb-1">Pencarian</label>
                                     <div class="relative">
-                                        <input type="text" 
+                                        <input type="text"
                                                id="searchInput"
                                                placeholder="Cari unit atau mesin..."
                                                value="{{ request('search') }}"
@@ -186,7 +228,150 @@
 </div>
 
 <script src="{{ asset('js/toggle.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+let selectedTime = null;
+
+function showTimeModal() {
+    const modal = document.getElementById('timeSelectionModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    document.querySelectorAll('.time-button').forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white');
+        btn.classList.add('text-gray-700');
+    });
+
+    if (selectedTime) {
+        const btn = document.querySelector(`[data-time="${selectedTime}"]`);
+        if (btn) {
+            btn.classList.add('bg-blue-600', 'text-white');
+            btn.classList.remove('text-gray-700');
+        }
+    }
+}
+
+function closeTimeModal() {
+    const modal = document.getElementById('timeSelectionModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+document.querySelectorAll('.time-button').forEach(button => {
+    button.addEventListener('click', function() {
+        document.querySelectorAll('.time-button').forEach(btn => {
+            btn.classList.remove('bg-blue-600', 'text-white');
+            btn.classList.add('text-gray-700');
+        });
+
+        this.classList.add('bg-blue-600', 'text-white');
+        this.classList.remove('text-gray-700');
+        selectedTime = this.dataset.time;
+    });
+});
+
+function confirmTimeSelection() {
+    if (selectedTime) {
+        shareToWhatsApp(selectedTime);
+        closeTimeModal();
+    } else {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Pilih Jam',
+            text: 'Silakan pilih jam terlebih dahulu',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }
+}
+
+function formatDate(date) {
+    const months = [
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    const d = new Date(date);
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function getFormattedReport(selectedTime = null) {
+    const date = '{{ $date }}';
+    let report = `Assalamu Alaikum Wr.Wb\n`;
+    report += `Laporan Ikhtisar Harian PLN Nusantara Power\n`;
+    report += `Unit Pembangkitan Kendari, ${formatDate(date)}\n`;
+
+    if (selectedTime) {
+        report += `Pukul : ${selectedTime} Wita\n\n`;
+    }
+
+    // Get all unit sections
+    const unitSections = document.querySelectorAll('.bg-white.rounded-lg.shadow-md');
+
+    unitSections.forEach(section => {
+        const unitName = section.querySelector('h3')?.textContent.trim();
+        if (!unitName) return;
+
+        report += `\n${unitName}\n`;
+
+        // Get table data
+        const rows = section.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells.length >= 2) {
+                const mesin = cells[0].textContent.trim();
+                const dayaTerpasang = cells[1].textContent.trim();
+                const bebanRata = cells[2].textContent.trim();
+                const produksi = cells[3].textContent.trim();
+                const pemakaianSendiri = cells[4].textContent.trim();
+                const jamOperasi = cells[5].textContent.trim();
+                const sfc = cells[6].textContent.trim();
+
+                report += `- ${mesin}:\n`;
+                report += `  Daya Terpasang: ${dayaTerpasang}\n`;
+                report += `  Beban Rata-rata: ${bebanRata}\n`;
+                report += `  Produksi: ${produksi}\n`;
+                report += `  Pemakaian Sendiri: ${pemakaianSendiri}\n`;
+                report += `  Jam Operasi: ${jamOperasi}\n`;
+                report += `  SFC: ${sfc}\n\n`;
+            }
+        });
+    });
+
+    report += '\nBarakallahu Fikhum dan Terima Kasih';
+    return report;
+}
+
+function shareToWhatsApp(selectedTime) {
+    const formattedReport = getFormattedReport(selectedTime);
+    const encodedMessage = encodeURIComponent(formattedReport);
+    const whatsappMessage = encodedMessage.replace(/\n/g, '%0A');
+    window.open(`https://wa.me/?text=${whatsappMessage}`, '_blank');
+}
+
+document.getElementById('shareWhatsApp').addEventListener('click', function() {
+    showTimeModal();
+});
+
+document.getElementById('copyFormattedData').addEventListener('click', function() {
+    const formattedReport = getFormattedReport();
+    navigator.clipboard.writeText(formattedReport).then(() => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Laporan telah disalin ke clipboard',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Gagal menyalin laporan ke clipboard'
+        });
+    });
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     const dateFilter = document.getElementById('dateFilter');
     const searchInput = document.getElementById('searchInput');
@@ -200,13 +385,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Get current URL and update the parameters
         const url = new URL(window.location.href);
-        
+
         // Ensure date parameter is properly set
         const selectedDate = dateFilter.value;
         if (selectedDate) {
             url.searchParams.set('date', selectedDate);
         }
-        
+
         // Handle search parameter
         if (searchInput && searchInput.value.trim()) {
             url.searchParams.set('search', searchInput.value.trim());
@@ -352,4 +537,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 }
 </style>
-@endsection 
+@endsection

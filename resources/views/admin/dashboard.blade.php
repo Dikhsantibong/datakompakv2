@@ -34,7 +34,7 @@
                 line-height: 1.2;
                 animation: fadeIn 1s ease-in forwards;
             }
-            
+
             .welcome-card {
                 background-position: center;
                 padding: 1.5rem;
@@ -101,7 +101,7 @@
 @section('content')
 <div class="flex h-screen bg-gray-50 overflow-auto">
     @include('components.sidebar')
-    
+
     <div id="main-content" class="flex-1 main-content">
         <!-- Header -->
         <header class="bg-white shadow-sm sticky top-0 z-20
@@ -136,7 +136,7 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
@@ -184,13 +184,13 @@
             </div>
         </div>
 
-        
-        
+
+
         <!-- Main Content -->
-        
+
         <div class="px-6">
             <!-- Welcome Card -->
-            
+
             <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
                 <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
                 <div class="relative z-10">
@@ -206,21 +206,21 @@
                         </p>
                         <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 fade-in w-50">
                             <p class="text-xs md:text-base leading-relaxed">
-                                Platform terintegrasi untuk monitoring dan analisis kinerja pembangkit listrik secara real-time. 
+                                Platform terintegrasi untuk monitoring dan analisis kinerja pembangkit listrik secara real-time.
                                 Dapatkan insight mendalam untuk pengambilan keputusan yang lebih efektif dan efisien.
                             </p>
                         </div>
                     </div>
-                    
+
                     <!-- Logo - Hidden on mobile -->
                     <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
                 </div>
             </div>
 
 
-            
-                
-            
+
+
+
                 @if($operationSchedules->count() > 0)
                     <div class="space-y-4 ">
                         @foreach($operationSchedules as $schedule)
@@ -236,10 +236,10 @@
                                     </div>
                                     <div class="text-right">
                                         <div class="text-sm font-medium text-gray-800">
-                                            {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }} - 
+                                            {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }} -
                                             {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }}
                                         </div>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                             @if($schedule->status == 'completed') bg-green-100 text-green-800
                                             @elseif($schedule->status == 'in_progress') bg-blue-100 text-blue-800
                                             @else bg-yellow-100 text-yellow-800 @endif">
@@ -293,7 +293,7 @@
                         @endforeach
                     </div>
                     <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="{{ route('admin.power-plants.index') }}" 
+                        <a href="{{ route('admin.power-plants.index') }}"
                            class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                             Lihat Semua Unit →
                         </a>
@@ -416,7 +416,7 @@
                         </div>
                     </div>
                     <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="{{ route('admin.machine-monitor.show') }}" 
+                        <a href="{{ route('admin.machine-monitor.show') }}"
                            class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                             Lihat Detail Mesin →
                         </a>
@@ -424,9 +424,9 @@
                 </div>
             </div>
 
-            
-                
-           
+
+
+
 
             <!-- Chart Initialization Scripts -->
             <script>
@@ -543,7 +543,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const koordinasiDataBtn = document.getElementById('koordinasiDataBtn');
         const koordinasiDataDropdown = document.getElementById('koordinasiDataDropdown');
-        
+
         koordinasiDataBtn.addEventListener('click', function() {
             koordinasiDataDropdown.classList.toggle('hidden');
         });

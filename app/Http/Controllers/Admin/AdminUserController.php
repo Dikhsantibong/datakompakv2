@@ -29,7 +29,7 @@ class AdminUserController extends Controller
     public function index(Request $request)
     {
         $query = User::query();
-        
+
         // Search berdasarkan nama atau email
         if ($search = $request->input('search')) {
             $query->where(function($q) use ($search) {
@@ -37,21 +37,21 @@ class AdminUserController extends Controller
                   ->orWhere('email', 'LIKE', "%{$search}%");
             });
         }
-        
+
         // Filter berdasarkan role
         if ($role = $request->input('role')) {
             if (array_key_exists($role, self::AVAILABLE_ROLES)) {
                 $query->where('role', $role);
             }
         }
-        
+
         // Pagination
         $users = $query->orderBy('created_at', 'desc')->paginate(10);
-        
+
         if ($request->ajax()) {
             return view('admin.users.index', compact('users'))->render();
         }
-        
+
         return view('admin.users.index', [
             'users' => $users,
             'availableRoles' => self::AVAILABLE_ROLES
@@ -121,7 +121,7 @@ class AdminUserController extends Controller
             $user->name = $validated['name'];
             $user->email = $validated['email'];
             $user->role = $validated['role'];
-            
+
             if (!empty($validated['password'])) {
                 $user->password = Hash::make($validated['password']);
             }
@@ -148,7 +148,7 @@ class AdminUserController extends Controller
                 ->route('admin.users')
                 ->with('error', 'Anda tidak dapat menghapus akun Anda sendiri');
         }
-        
+
         return view('admin.users.delete', compact('user'));
     }
 
@@ -163,7 +163,7 @@ class AdminUserController extends Controller
             }
 
             $user->delete();
-            
+
             return redirect()
                 ->route('admin.users')
                 ->with('success', 'Pengguna berhasil dihapus');
@@ -177,7 +177,7 @@ class AdminUserController extends Controller
     public function search(Request $request)
     {
         $query = User::query();
-        
+
         // Search berdasarkan nama atau email
         if ($search = $request->input('search')) {
             $query->where(function($q) use ($search) {
@@ -185,15 +185,15 @@ class AdminUserController extends Controller
                   ->orWhere('email', 'LIKE', "%{$search}%");
             });
         }
-        
+
         // Filter berdasarkan role
         if ($role = $request->input('role')) {
             $query->where('role', $role);
         }
-        
+
         // Ambil semua data yang sesuai dengan kriteria pencarian
         $users = $query->orderBy('created_at', 'desc')->get();
-        
+
         return response()->json([
             'users' => $users,
             'total' => User::count()

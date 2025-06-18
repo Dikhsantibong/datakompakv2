@@ -63,7 +63,11 @@
                 <div class="mb-6">
                     <h2 class="text-2xl font-bold text-gray-900">Monitoring Pengisian Datakompak.com</h2>
                     <p class="text-gray-600">Periode: {{ \Carbon\Carbon::parse($startDate)->isoFormat('D MMMM Y') }} s/d {{ \Carbon\Carbon::parse($endDate)->isoFormat('D MMMM Y') }}</p>
+
                 </div>
+
+                <!-- Hidden textarea for copying -->
+                <textarea id="reportText" class="hidden"></textarea>
 
                 <!-- Date Range Filter -->
                 <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
@@ -90,6 +94,9 @@
                         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
                             Filter
                         </button>
+                        <button id="copyReportBtn" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                            <i class="fas fa-copy mr-2"></i> Salin Laporan
+                        </button>
                     </form>
                 </div>
 
@@ -108,7 +115,7 @@
                         <!-- Operasi UL Chart -->
                         <div class="bg-gray-50 rounded-lg p-4">
                             <h3 class="text-lg font-medium text-gray-900 mb-4">Operasi UL/Central Performance</h3>
-                            <canvas id="operasiUlChart{{ str_replace(' ', '', $powerPlant['name']) }}" class="w-full"></canvas>
+                            <canvas id="operasiUlChart{{ str_replace(' ', '', $powerPlant['name']) }}" class="w-full "></canvas>
                         </div>
                     </div>
 
@@ -272,6 +279,80 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     @endforeach
+
+    // Copy Report Functionality
+    document.getElementById('copyReportBtn').addEventListener('click', function() {
+        const powerPlants = @json($data);
+        let reportText = '';
+
+        // Format date range
+        const startDate = '{{ \Carbon\Carbon::parse($startDate)->isoFormat("D") }}';
+        const endDate = '{{ \Carbon\Carbon::parse($endDate)->isoFormat("D MMMM Y") }}';
+
+        reportText += `MONITORING PENGISIAN DATAKOMPAK.COM TANGGAL ${startDate} S/D ${endDate}\n\n`;
+
+        powerPlants.forEach(powerPlant => {
+            if (powerPlant.name === 'UP KENDARI') return;
+
+            reportText += `${powerPlant.name}\n\n`;
+
+            // OPERATOR KIT
+            reportText += 'OPERATOR KIT :\n';
+            const operatorKitData = {
+                'data_engine': 'INPUT DATA ENGINE PERJAM',
+                'meeting_shift': 'INPUT MEETING DAN MUTASI SHIFT',
+                'patrol_check': 'INPUT PATROL CHECK',
+                'five_s5r': 'INPUT 5S5R',
+                'flm': 'INPUT FLM',
+                'abnormal_report': 'INPUT LAPORAN ABNORMAL',
+                'k3_kam': 'INPUT K3 KAM & LINGKUNGAN'
+            };
+
+            let counter = 1;
+            for (const [key, label] of Object.entries(operatorKitData)) {
+                if (powerPlant.operator_kit[key]) {
+                    const data = powerPlant.operator_kit[key];
+                    const tentative = ['abnormal_report', 'k3_kam'].includes(key) ? ' (TENTATIVE)' : '';
+                    reportText += `${counter}. ${label} : ${data.percentage}%, ${data.missing_days} kali tidak menginput${tentative}\n`;
+                    counter++;
+                }
+            }
+
+            reportText += '\n';
+
+            // OPERASI UL/CENTRAL
+            reportText += 'OPERASI UL/CENTRAL\n';
+            const operasiUlData = {
+                'bahan_bakar': 'INPUT BAHAN BAKAR',
+                'pelumas': 'INPUT PELUMAS',
+                'daily_summary': 'INPUT IKHTISAR HARIAN',
+                'bahan_kimia': 'INPUT BAHAN KIMIA',
+                'rencana_daya_mampu': 'INPUT RENCANA DAYA MAMPU BULANAN'
+            };
+
+            counter = 1;
+            for (const [key, label] of Object.entries(operasiUlData)) {
+                if (powerPlant.operasi_ul[key]) {
+                    const data = powerPlant.operasi_ul[key];
+                    reportText += `${counter}. ${label} : ${data.percentage}%, ${data.missing_days} kali tidak menginput\n`;
+                    counter++;
+                }
+            }
+
+            reportText += '\n\n';
+        });
+
+        // Copy to clipboard
+        const textarea = document.getElementById('reportText');
+        textarea.value = reportText;
+        textarea.classList.remove('hidden');
+        textarea.select();
+        document.execCommand('copy');
+        textarea.classList.add('hidden');
+
+        // Show success message
+        alert('Laporan berhasil disalin ke clipboard!');
+    });
 });
 </script>
 @endpush

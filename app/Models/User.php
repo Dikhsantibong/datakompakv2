@@ -71,12 +71,12 @@ class User extends Authenticatable
     {
         return $this->role === 'super_admin';
     }
-    
+
     public function isOperator()
     {
         return $this->role === 'operator';
     }
-    
+
     public function isTlRonUpkd()
     {
         return $this->role === 'tl_ron_upkd';
@@ -85,7 +85,7 @@ class User extends Authenticatable
     {
         return $this->role === 'staf';
     }
-   
+
     public function isTlRon()
     {
         return $this->role === 'tl_ron';
@@ -98,7 +98,7 @@ class User extends Authenticatable
     protected static function boot()
     {
         parent::boot();
-        
+
         // Handle Created Event
         static::created(function ($user) {
             self::syncToUpKendari('create', $user);
@@ -121,7 +121,7 @@ class User extends Authenticatable
 
         try {
             self::$isSyncing = true;
-            
+
             $data = [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -143,12 +143,12 @@ class User extends Authenticatable
                 case 'create':
                     $upKendari->insert($data);
                     break;
-                    
+
                 case 'update':
                     $upKendari->where('id', $user->id)
                              ->update($data);
                     break;
-                    
+
                 case 'delete':
                     $upKendari->where('id', $user->id)
                              ->delete();

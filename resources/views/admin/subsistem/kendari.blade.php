@@ -6,7 +6,7 @@ $specificTimes = $specificTimes ?? ['11:00:00', '14:00:00', '16:00:00', '18:00:0
 @endphp
 <div class="flex h-screen bg-gray-50 overflow-auto">
     @include('components.sidebar')
-    
+
     <div id="main-content" class="flex-1 main-content">
         <!-- Header -->
         <header class="bg-white shadow-sm sticky top-0 z-20">
@@ -40,7 +40,7 @@ $specificTimes = $specificTimes ?? ['11:00:00', '14:00:00', '16:00:00', '18:00:0
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
@@ -67,7 +67,7 @@ $specificTimes = $specificTimes ?? ['11:00:00', '14:00:00', '16:00:00', '18:00:0
                         <div class="flex flex-wrap items-center justify-between gap-4">
                             <div class="flex items-center gap-2">
                                 <h2 class="text-lg font-semibold text-gray-900">Data PLTU MORAMO</h2>
-                                <a href="{{ route('admin.subsistem.kendari.create') }}" 
+                                <a href="{{ route('admin.subsistem.kendari.create') }}"
                                    class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
                                     <i class="fas fa-plus mr-2"></i> Input Data
                                 </a>
@@ -79,8 +79,8 @@ $specificTimes = $specificTimes ?? ['11:00:00', '14:00:00', '16:00:00', '18:00:0
                             <form action="{{ route('admin.subsistem.kendari') }}" method="GET" class="flex flex-wrap items-end gap-4">
                                 <div class="w-40">
                                     <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal</label>
-                                    <input type="date" 
-                                           name="date" 
+                                    <input type="date"
+                                           name="date"
                                            value="{{ request('date', now()->format('Y-m-d')) }}"
                                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                 </div>
@@ -90,7 +90,7 @@ $specificTimes = $specificTimes ?? ['11:00:00', '14:00:00', '16:00:00', '18:00:0
                                             class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
                                         <i class="fas fa-search mr-2"></i> Tampilkan Data
                                     </button>
-                                    <a href="{{ route('admin.subsistem.kendari') }}" 
+                                    <a href="{{ route('admin.subsistem.kendari') }}"
                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                                         <i class="fas fa-undo mr-2"></i> Reset
                                     </a>

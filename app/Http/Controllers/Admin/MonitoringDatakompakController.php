@@ -20,6 +20,11 @@ use App\Models\LaporanKit;
 use App\Exports\MonitoringDatakompakExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\BahanKimia;
+use App\Models\RencanaDayaMampu;
+use App\Models\AbnormalReport;
+use App\Models\FiveS5r;
+use App\Models\PatrolCheck;
+use App\Models\FlmInspection;
 
 class MonitoringDatakompakController extends Controller
 {

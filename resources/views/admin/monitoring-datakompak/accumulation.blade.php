@@ -118,27 +118,27 @@
                         <div>
                             <h3 class="text-lg font-medium text-gray-900 mb-4">Operator KIT</h3>
                             <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200">
+                                <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
-                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Input Type</th>
-                                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Completion</th>
-                                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Missing Days</th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Input Type</th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Completion</th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Missing Days</th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
                                         @foreach(['meeting_shift', 'abnormal_report', 'flm_inspection', 'five_s5r', 'patrol_check', 'laporan_kit'] as $key)
                                             @if(isset($powerPlant['operator_kit'][$key]))
                                             <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
                                                     {{ ucwords(str_replace('_', ' ', $key)) }}
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm border-r border-gray-200 text">
                                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $powerPlant['operator_kit'][$key]['percentage'] >= 80 ? 'bg-green-100 text-green-800' : ($powerPlant['operator_kit'][$key]['percentage'] >= 50 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
                                                         {{ $powerPlant['operator_kit'][$key]['percentage'] }}%
                                                     </span>
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 border-r border-gray-200">
                                                     {{ $powerPlant['operator_kit'][$key]['missing_days'] }} hari
                                                 </td>
                                             </tr>
@@ -153,27 +153,27 @@
                         <div>
                             <h3 class="text-lg font-medium text-gray-900 mb-4">Operasi UL/Central</h3>
                             <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200">
+                                <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
-                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Input Type</th>
-                                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Completion</th>
-                                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Missing Days</th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Input Type</th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Completion</th>
+                                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Missing Days</th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
                                         @foreach(['bahan_bakar', 'pelumas', 'bahan_kimia', 'daily_summary', 'rencana_daya_mampu'] as $key)
                                             @if(isset($powerPlant['operasi_ul'][$key]))
                                             <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
                                                     {{ ucwords(str_replace('_', ' ', $key)) }}
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm border-r border-gray-200">
                                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $powerPlant['operasi_ul'][$key]['percentage'] >= 80 ? 'bg-green-100 text-green-800' : ($powerPlant['operasi_ul'][$key]['percentage'] >= 50 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
                                                         {{ $powerPlant['operasi_ul'][$key]['percentage'] }}%
                                                     </span>
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 border-r border-gray-200">
                                                     {{ $powerPlant['operasi_ul'][$key]['missing_days'] }} hari
                                                 </td>
                                             </tr>

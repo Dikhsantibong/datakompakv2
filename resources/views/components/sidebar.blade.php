@@ -283,7 +283,7 @@
                             <span class="ml-3 text-sm">Rapat </span>
                         </a>
                         <a href="#"
-                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300 {{ request()->routeIs('admin.operasi-upkd.rapat.*') ? 'bg-white/10 text-white font-medium' : 'text-gray-100 hover:bg-white/10' }}">
+                           class="flex items-center px-4 py-2 rounded-lg transition-colors duration-300">
                             <i class="fas fa-comments w-5 h-5"></i>
                             <span class="ml-3 text-sm">Link Koordinasi RON</span>
                         </a>

@@ -211,6 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
             data: {
                 labels: [
                     'Meeting Shift',
+                    'Data Engine',
                     'Abnormal Report',
                     'FLM Inspection',
                     '5S 5R',
@@ -221,6 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     label: 'Completion Rate (%)',
                     data: [
                         {{ $powerPlant['operator_kit']['meeting_shift']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operator_kit']['data_engine']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['abnormal_report']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['flm_inspection']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['five_s5r']['percentage'] ?? 0 }},

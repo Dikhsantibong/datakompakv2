@@ -304,7 +304,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 'data_engine': 'INPUT DATA ENGINE PERJAM',
                 'meeting_shift': 'INPUT MEETING DAN MUTASI SHIFT',
                 'patrol_check': 'INPUT PATROL CHECK',
-                'flm_inspections' :'INPUT FLM '
                 'five_s5r': 'INPUT 5S5R',
                 'flm': 'INPUT FLM',
                 'abnormal_report': 'INPUT LAPORAN ABNORMAL',

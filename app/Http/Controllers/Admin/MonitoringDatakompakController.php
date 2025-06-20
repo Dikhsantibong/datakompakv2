@@ -893,12 +893,8 @@ class MonitoringDatakompakController extends Controller
 
     private function checkFlmCompletion($powerPlant, $date)
     {
-        $powerPlantWords = explode(' ', $powerPlant->name);
-                $searchName = $powerPlantWords[0] . ' ' . ($powerPlantWords[1] ?? '');
-                $searchName = trim($searchName);
-
         return DB::table('flm_inspections')
-            ->where('sync_unit_origin', 'like', $searchName . '%', $powerPlant->name)
+            ->where('sync_unit_origin', $powerPlant->name)
             ->whereDate('tanggal', $date)
             ->exists();
     }

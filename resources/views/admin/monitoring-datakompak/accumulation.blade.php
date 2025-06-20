@@ -169,7 +169,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
-                                        @foreach(['bahan_bakar', 'pelumas', 'bahan_kimia', 'daily_summary', 'rencana_daya_mampu'] as $key)
+                                        @foreach(['bahan_bakar', 'pelumas', 'bahan_kimia', 'daily_summary', 'rencana_daya_mampu', 'k3_kam'] as $key)
                                             @if(isset($powerPlant['operasi_ul'][$key]))
                                             <tr>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
@@ -214,6 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Data Engine',
                     'Abnormal Report',
                     'FLM Inspection',
+                    'K3 Kam',
                     '5S 5R',
                     'Patrol Check',
                     'Laporan KIT'
@@ -225,6 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         {{ $powerPlant['operator_kit']['data_engine']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['abnormal_report']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['flm']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operator_kit']['k3_kam']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['five_s5r']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['patrol_check']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['laporan_kit']['percentage'] ?? 0 }}

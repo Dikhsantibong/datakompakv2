@@ -134,7 +134,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
-                                        @foreach(['meeting_shift', 'abnormal_report', 'flm_inspection', 'five_s5r', 'patrol_check', 'laporan_kit'] as $key)
+                                        @foreach(['meeting_shift', 'abnormal_report', 'flm', 'five_s5r', 'patrol_check', 'laporan_kit'] as $key)
                                             @if(isset($powerPlant['operator_kit'][$key]))
                                             <tr>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">

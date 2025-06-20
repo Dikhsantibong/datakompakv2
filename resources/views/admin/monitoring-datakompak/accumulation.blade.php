@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         {{ $powerPlant['operator_kit']['meeting_shift']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['data_engine']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['abnormal_report']['percentage'] ?? 0 }},
-                        {{ $powerPlant['operator_kit']['flm_inspection']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operator_kit']['flm']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['five_s5r']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['patrol_check']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['laporan_kit']['percentage'] ?? 0 }}

@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         {{ $powerPlant['operator_kit']['meeting_shift']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['data_engine']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['abnormal_report']['percentage'] ?? 0 }},
-                        {{ $powerPlant['operator_kit']['flm_inspections']['percentage'] ?? 0 }},
+                        {{ $powerPlant['operator_kit']['flm']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['five_s5r']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['patrol_check']['percentage'] ?? 0 }},
                         {{ $powerPlant['operator_kit']['laporan_kit']['percentage'] ?? 0 }}
@@ -304,6 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'data_engine': 'INPUT DATA ENGINE PERJAM',
                 'meeting_shift': 'INPUT MEETING DAN MUTASI SHIFT',
                 'patrol_check': 'INPUT PATROL CHECK',
+                'flm_inspections' :'INPUT FLM '
                 'five_s5r': 'INPUT 5S5R',
                 'flm': 'INPUT FLM',
                 'abnormal_report': 'INPUT LAPORAN ABNORMAL',

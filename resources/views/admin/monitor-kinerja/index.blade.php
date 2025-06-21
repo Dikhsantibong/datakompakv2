@@ -37,30 +37,22 @@
                 </button>
                     <h1 class="text-xl font-semibold text-gray-900">Kinerja Pembangkit</h1>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <!-- Current Month Display -->
-                    <div class="hidden md:flex items-center bg-blue-50 px-4 py-2 rounded-lg">
-                        <i class="fas fa-calendar-alt text-blue-600 mr-2"></i>
-                        <span class="text-blue-800 font-medium">{{ $currentMonth }}</span>
-                    </div>
-                    <!-- User Profile -->
-                    <div class="relative">
-                        <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
-                            <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}"
-                                class="w-7 h-7 rounded-full mr-2">
-                            <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
-                            <i class="fas fa-caret-down ml-2 text-gray-600"></i>
-                        </button>
-                        <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                            <a href="{{ route('logout') }}"
-                               class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                               onclick="event.preventDefault();
-                                        document.getElementById('logout-form').submit();">Logout</a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                                @csrf
-                                <input type="hidden" name="redirect" value="{{ route('login') }}">
-                            </form>
-                        </div>
+                <div class="relative">
+                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}"
+                            class="w-7 h-7 rounded-full mr-2">
+                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                    </button>
+                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                        <a href="{{ route('logout') }}"
+                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                           onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                            <input type="hidden" name="redirect" value="{{ route('login') }}">
+                        </form>
                     </div>
                 </div>
             </div>
@@ -73,22 +65,31 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class=" px-2">
-                <!-- Performance Statistics Header -->
-                <div class="bg-white rounded-lg shadow-md p-4 mb-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-800">
-                                <i class="fas fa-chart-line mr-2 text-blue-600"></i>
-                                Statistik Kinerja
-                            </h3>
-                            <p class="text-sm text-gray-600">Rekapitulasi data bulan {{ $currentMonth }}</p>
+                <!-- Welcome Card -->
+                {{-- <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
+                    <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
+                    <div class="relative z-10">
+                        <!-- Text Content -->
+                        <div class="space-y-2 md:space-y-4">
+                            <div style="overflow: hidden;">
+                                <h2 class="text-2xl md:text-3xl font-bold tracking-tight typing-animation">
+                                    Monitor Data Kinerja Pembangkit
+                                </h2>
+                            </div>
+                            <p class="text-sm md:text-lg font-medium fade-in">
+                                PLN NUSANTARA POWER UNIT PEMBANGKITAN KENDARI
+                            </p>
+                            <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 fade-in">
+                                <p class="text-xs md:text-base leading-relaxed">
+                                    Platform monitoring kinerja pembangkit secara real-time untuk analisis dan pengambilan keputusan yang lebih efektif.
+                                </p>
+                            </div>
                         </div>
-                        <div class="md:hidden flex items-center bg-blue-50 px-3 py-1 rounded-lg">
-                            <i class="fas fa-calendar-alt text-blue-600 mr-2"></i>
-                            <span class="text-blue-800 font-medium">{{ $currentMonth }}</span>
-                        </div>
+
+                        <!-- Logo - Hidden on mobile -->
+                        <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- Unit Filter -->
                 <div class="bg-white rounded-lg shadow-md p-4 mb-6">
@@ -491,12 +492,7 @@
 
                 <!-- Tabel Rekap Kinerja Mesin per Unit -->
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800">Tabel Rekap Kinerja Mesin per Unit</h3>
-                            <p class="text-sm text-gray-600">Data untuk tanggal {{ \Carbon\Carbon::parse($today)->isoFormat('dddd, D MMMM Y') }}</p>
-                        </div>
-                    </div>
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Tabel Rekap Kinerja Mesin per Unit</h3>
                     @foreach($powerPlants as $powerPlant)
                     <div class="bg-white rounded-lg shadow p-6 mb-4 unit-table">
                         <div class="overflow-auto">
@@ -531,16 +527,12 @@
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
-                                        @php
-                                            $summariesInUnit = $dailySummaries
-                                                ->where('power_plant_id', $powerPlant->id)
-                                                ->where('date', $today);
-                                        @endphp
+                                        @php $summariesInUnit = $dailySummaries->where('power_plant_id', $powerPlant->id); @endphp
                                         @forelse($summariesInUnit as $i => $summary)
                                         <tr class="hover:bg-gray-50">
                                             <td class="px-4 py-2 border-r border-gray-200">{{ $i+1 }}</td>
                                             <td class="px-4 py-2 border-r border-gray-200">{{ $summary->machine_name }}</td>
-                                            <td class="px-4 py-2 border-r border-gray-200">{{ \Carbon\Carbon::parse($summary->date)->format('d/m/Y') }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ $summary->date ? \Carbon\Carbon::parse($summary->date)->format('d/m/Y') : '-' }}</td>
                                             <td class="px-4 py-2 border-r border-gray-200">{{ $summary->operating_hours ?? '-' }}</td>
                                             <td class="px-4 py-2 border-r border-gray-200">{{ $summary->standby_hours ?? '-' }}</td>
                                             <td class="px-4 py-2 border-r border-gray-200">{{ $summary->net_production ?? '-' }}</td>
@@ -549,7 +541,7 @@
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="8" class="px-4 py-2 text-center text-gray-500">Tidak ada data summary untuk unit ini pada hari ini</td>
+                                            <td colspan="8" class="px-4 py-2 text-center text-gray-500">Tidak ada data summary untuk unit ini</td>
                                         </tr>
                                         @endforelse
                                     </tbody>
@@ -722,148 +714,42 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fuel Consumption Chart
     const fuelCtx = document.getElementById('fuelChart').getContext('2d');
     new Chart(fuelCtx, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: {!! json_encode($chartData['labels']) !!},
             datasets: [
-                {
-                    label: 'HSD',
-                    data: {!! json_encode($chartData['fuel']['hsd']) !!},
-                    borderColor: 'rgb(34, 197, 94)',
-                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    tension: 0.4
-                },
-                {
-                    label: 'MFO',
-                    data: {!! json_encode($chartData['fuel']['mfo']) !!},
-                    borderColor: 'rgb(234, 179, 8)',
-                    backgroundColor: 'rgba(234, 179, 8, 0.1)',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    tension: 0.4
-                },
-                {
-                    label: 'B35',
-                    data: {!! json_encode($chartData['fuel']['b35']) !!},
-                    borderColor: 'rgb(59, 130, 246)',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    tension: 0.4
-                },
-                {
-                    label: 'B40',
-                    data: {!! json_encode($chartData['fuel']['b40']) !!},
-                    borderColor: 'rgb(147, 51, 234)',
-                    backgroundColor: 'rgba(147, 51, 234, 0.1)',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    tension: 0.4
-                }
+                { label: 'HSD', data: {!! json_encode($chartData['fuel']['hsd']) !!}, backgroundColor: 'rgba(34, 197, 94, 0.5)', borderColor: 'rgb(34, 197, 94)', borderWidth: 1 },
+                { label: 'MFO', data: {!! json_encode($chartData['fuel']['mfo']) !!}, backgroundColor: 'rgba(234, 179, 8, 0.5)', borderColor: 'rgb(234, 179, 8)', borderWidth: 1 },
+                { label: 'B35', data: {!! json_encode($chartData['fuel']['b35']) !!}, backgroundColor: 'rgba(59, 130, 246, 0.5)', borderColor: 'rgb(59, 130, 246)', borderWidth: 1 },
+                { label: 'B40', data: {!! json_encode($chartData['fuel']['b40']) !!}, backgroundColor: 'rgba(147, 51, 234, 0.5)', borderColor: 'rgb(147, 51, 234)', borderWidth: 1 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'top',
-                    labels: {
-                        usePointStyle: true,
-                        padding: 20,
-                        font: { size: 12 }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        drawBorder: false,
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    },
-                    ticks: {
-                        callback: function(value) { return value + ' L'; },
-                        font: { size: 11 }
-                    }
-                },
-                x: {
-                    grid: {
-                        drawBorder: false,
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    },
-                    ticks: {
-                        font: { size: 11 }
-                    }
-                }
-            }
+            plugins: { legend: { position: 'top' } },
+            scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return value + ' L'; } } } }
         }
     });
     // Kit Ratio Chart
     const kitRatioCtx = document.getElementById('kitRatioChart').getContext('2d');
     new Chart(kitRatioCtx, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: {!! json_encode($chartData['labels']) !!},
-            datasets: [{
-                label: 'Kit Ratio (%)',
-                data: {!! json_encode($chartData['kit_ratio']) !!},
-                borderColor: 'rgb(236, 72, 153)',
-                backgroundColor: 'rgba(236, 72, 153, 0.1)',
-                fill: true,
-                tension: 0.4,
-                pointRadius: 4,
-                pointHoverRadius: 6
-            }]
+            datasets: [{ label: 'Kit Ratio (%)', data: {!! json_encode($chartData['kit_ratio']) !!}, backgroundColor: 'rgba(236, 72, 153, 0.5)', borderColor: 'rgb(236, 72, 153)', borderWidth: 1 }]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: { callback: v => v + '%' }
-                }
-            }
-        }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } }
     });
     // Usage Percentage Chart
     const usageCtx = document.getElementById('usageChart').getContext('2d');
     new Chart(usageCtx, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: {!! json_encode($chartData['labels']) !!},
-            datasets: [{
-                label: 'Usage (%)',
-                data: {!! json_encode($chartData['usage_percentage']) !!},
-                borderColor: 'rgb(251, 191, 36)',
-                backgroundColor: 'rgba(251, 191, 36, 0.1)',
-                fill: true,
-                tension: 0.4,
-                pointRadius: 4,
-                pointHoverRadius: 6
-            }]
+            datasets: [{ label: 'Usage (%)', data: {!! json_encode($chartData['usage_percentage']) !!}, backgroundColor: 'rgba(251, 191, 36, 0.5)', borderColor: 'rgb(251, 191, 36)', borderWidth: 1 }]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: { callback: v => v + '%' }
-                }
-            }
-        }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } }
     });
     // Trip Chart
     const tripCtx = document.getElementById('tripChart').getContext('2d');
@@ -881,119 +767,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // Derating Hours Chart
     const deratingCtx = document.getElementById('deratingChart').getContext('2d');
     new Chart(deratingCtx, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: {!! json_encode($chartData['labels']) !!},
             datasets: [
-                {
-                    label: 'EFDH',
-                    data: {!! json_encode($chartData['efdh']) !!},
-                    borderColor: 'rgb(132, 204, 22)',
-                    backgroundColor: 'rgba(132, 204, 22, 0.1)',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    tension: 0.4
-                },
-                {
-                    label: 'EPDH',
-                    data: {!! json_encode($chartData['epdh']) !!},
-                    borderColor: 'rgb(163, 230, 53)',
-                    backgroundColor: 'rgba(163, 230, 53, 0.1)',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    tension: 0.4
-                },
-                {
-                    label: 'EUDH',
-                    data: {!! json_encode($chartData['eudh']) !!},
-                    borderColor: 'rgb(190, 242, 100)',
-                    backgroundColor: 'rgba(190, 242, 100, 0.1)',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    tension: 0.4
-                },
-                {
-                    label: 'ESDH',
-                    data: {!! json_encode($chartData['esdh']) !!},
-                    borderColor: 'rgb(217, 249, 157)',
-                    backgroundColor: 'rgba(217, 249, 157, 0.1)',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    tension: 0.4
-                }
+                { label: 'EFDH', data: {!! json_encode($chartData['efdh']) !!}, backgroundColor: 'rgba(132, 204, 22, 0.5)', borderColor: 'rgb(132, 204, 22)', borderWidth: 1 },
+                { label: 'EPDH', data: {!! json_encode($chartData['epdh']) !!}, backgroundColor: 'rgba(163, 230, 53, 0.5)', borderColor: 'rgb(163, 230, 53)', borderWidth: 1 },
+                { label: 'EUDH', data: {!! json_encode($chartData['eudh']) !!}, backgroundColor: 'rgba(190, 242, 100, 0.5)', borderColor: 'rgb(190, 242, 100)', borderWidth: 1 },
+                { label: 'ESDH', data: {!! json_encode($chartData['esdh']) !!}, backgroundColor: 'rgba(217, 249, 157, 0.5)', borderColor: 'rgb(217, 249, 157)', borderWidth: 1 }
             ]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'top',
-                    labels: {
-                        usePointStyle: true,
-                        padding: 20,
-                        font: { size: 12 }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        drawBorder: false,
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    }
-                },
-                x: {
-                    grid: {
-                        drawBorder: false,
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    }
-                }
-            }
-        }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } }
     });
     // JSI Chart
     const jsiCtx = document.getElementById('jsiChart').getContext('2d');
     new Chart(jsiCtx, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: {!! json_encode($chartData['labels']) !!},
-            datasets: [{
-                label: 'JSI',
-                data: {!! json_encode($chartData['jsi']) !!},
-                borderColor: 'rgb(232, 121, 249)',
-                backgroundColor: 'rgba(232, 121, 249, 0.1)',
-                fill: true,
-                tension: 0.4,
-                pointRadius: 4,
-                pointHoverRadius: 6
-            }]
+            datasets: [{ label: 'JSI', data: {!! json_encode($chartData['jsi']) !!}, backgroundColor: 'rgba(232, 121, 249, 0.5)', borderColor: 'rgb(232, 121, 249)', borderWidth: 1 }]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        drawBorder: false,
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    }
-                },
-                x: {
-                    grid: {
-                        drawBorder: false,
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    }
-                }
-            }
-        }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
     });
     // Event handler filter unit
     const unitFilter = document.getElementById('unitFilter');

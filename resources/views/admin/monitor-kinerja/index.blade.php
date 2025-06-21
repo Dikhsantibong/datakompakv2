@@ -493,6 +493,10 @@
                 <!-- Tabel Rekap Kinerja Mesin per Unit -->
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <h3 class="text-lg font-semibold mb-4 text-gray-800">Tabel Rekap Kinerja Mesin per Unit</h3>
+                    <div class="text-sm text-gray-600 mb-4">
+                        <span class="font-medium">Tanggal:</span>
+                        <span class="ml-2">{{ \Carbon\Carbon::parse($today)->isoFormat('dddd, D MMMM Y') }}</span>
+                    </div>
                     @foreach($powerPlants as $powerPlant)
                     <div class="bg-white rounded-lg shadow p-6 mb-4 unit-table">
                         <div class="overflow-auto">
@@ -527,12 +531,16 @@
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
-                                        @php $summariesInUnit = $dailySummaries->where('power_plant_id', $powerPlant->id); @endphp
+                                        @php
+                                            $summariesInUnit = $dailySummaries
+                                                ->where('power_plant_id', $powerPlant->id)
+                                                ->where('date', $today);
+                                        @endphp
                                         @forelse($summariesInUnit as $i => $summary)
                                         <tr class="hover:bg-gray-50">
                                             <td class="px-4 py-2 border-r border-gray-200">{{ $i+1 }}</td>
                                             <td class="px-4 py-2 border-r border-gray-200">{{ $summary->machine_name }}</td>
-                                            <td class="px-4 py-2 border-r border-gray-200">{{ $summary->date ? \Carbon\Carbon::parse($summary->date)->format('d/m/Y') : '-' }}</td>
+                                            <td class="px-4 py-2 border-r border-gray-200">{{ \Carbon\Carbon::parse($summary->date)->format('d/m/Y') }}</td>
                                             <td class="px-4 py-2 border-r border-gray-200">{{ $summary->operating_hours ?? '-' }}</td>
                                             <td class="px-4 py-2 border-r border-gray-200">{{ $summary->standby_hours ?? '-' }}</td>
                                             <td class="px-4 py-2 border-r border-gray-200">{{ $summary->net_production ?? '-' }}</td>
@@ -541,7 +549,7 @@
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="8" class="px-4 py-2 text-center text-gray-500">Tidak ada data summary untuk unit ini</td>
+                                            <td colspan="8" class="px-4 py-2 text-center text-gray-500">Tidak ada data summary untuk unit ini pada hari ini</td>
                                         </tr>
                                         @endforelse
                                     </tbody>
@@ -714,42 +722,148 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fuel Consumption Chart
     const fuelCtx = document.getElementById('fuelChart').getContext('2d');
     new Chart(fuelCtx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: {!! json_encode($chartData['labels']) !!},
             datasets: [
-                { label: 'HSD', data: {!! json_encode($chartData['fuel']['hsd']) !!}, backgroundColor: 'rgba(34, 197, 94, 0.5)', borderColor: 'rgb(34, 197, 94)', borderWidth: 1 },
-                { label: 'MFO', data: {!! json_encode($chartData['fuel']['mfo']) !!}, backgroundColor: 'rgba(234, 179, 8, 0.5)', borderColor: 'rgb(234, 179, 8)', borderWidth: 1 },
-                { label: 'B35', data: {!! json_encode($chartData['fuel']['b35']) !!}, backgroundColor: 'rgba(59, 130, 246, 0.5)', borderColor: 'rgb(59, 130, 246)', borderWidth: 1 },
-                { label: 'B40', data: {!! json_encode($chartData['fuel']['b40']) !!}, backgroundColor: 'rgba(147, 51, 234, 0.5)', borderColor: 'rgb(147, 51, 234)', borderWidth: 1 }
+                {
+                    label: 'HSD',
+                    data: {!! json_encode($chartData['fuel']['hsd']) !!},
+                    borderColor: 'rgb(34, 197, 94)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.4
+                },
+                {
+                    label: 'MFO',
+                    data: {!! json_encode($chartData['fuel']['mfo']) !!},
+                    borderColor: 'rgb(234, 179, 8)',
+                    backgroundColor: 'rgba(234, 179, 8, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.4
+                },
+                {
+                    label: 'B35',
+                    data: {!! json_encode($chartData['fuel']['b35']) !!},
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.4
+                },
+                {
+                    label: 'B40',
+                    data: {!! json_encode($chartData['fuel']['b40']) !!},
+                    borderColor: 'rgb(147, 51, 234)',
+                    backgroundColor: 'rgba(147, 51, 234, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.4
+                }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'top' } },
-            scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return value + ' L'; } } } }
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: { size: 12 }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        drawBorder: false,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        callback: function(value) { return value + ' L'; },
+                        font: { size: 11 }
+                    }
+                },
+                x: {
+                    grid: {
+                        drawBorder: false,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        font: { size: 11 }
+                    }
+                }
+            }
         }
     });
     // Kit Ratio Chart
     const kitRatioCtx = document.getElementById('kitRatioChart').getContext('2d');
     new Chart(kitRatioCtx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: {!! json_encode($chartData['labels']) !!},
-            datasets: [{ label: 'Kit Ratio (%)', data: {!! json_encode($chartData['kit_ratio']) !!}, backgroundColor: 'rgba(236, 72, 153, 0.5)', borderColor: 'rgb(236, 72, 153)', borderWidth: 1 }]
+            datasets: [{
+                label: 'Kit Ratio (%)',
+                data: {!! json_encode($chartData['kit_ratio']) !!},
+                borderColor: 'rgb(236, 72, 153)',
+                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: { callback: v => v + '%' }
+                }
+            }
+        }
     });
     // Usage Percentage Chart
     const usageCtx = document.getElementById('usageChart').getContext('2d');
     new Chart(usageCtx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: {!! json_encode($chartData['labels']) !!},
-            datasets: [{ label: 'Usage (%)', data: {!! json_encode($chartData['usage_percentage']) !!}, backgroundColor: 'rgba(251, 191, 36, 0.5)', borderColor: 'rgb(251, 191, 36)', borderWidth: 1 }]
+            datasets: [{
+                label: 'Usage (%)',
+                data: {!! json_encode($chartData['usage_percentage']) !!},
+                borderColor: 'rgb(251, 191, 36)',
+                backgroundColor: 'rgba(251, 191, 36, 0.1)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: { callback: v => v + '%' }
+                }
+            }
+        }
     });
     // Trip Chart
     const tripCtx = document.getElementById('tripChart').getContext('2d');
@@ -767,27 +881,119 @@ document.addEventListener('DOMContentLoaded', function() {
     // Derating Hours Chart
     const deratingCtx = document.getElementById('deratingChart').getContext('2d');
     new Chart(deratingCtx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: {!! json_encode($chartData['labels']) !!},
             datasets: [
-                { label: 'EFDH', data: {!! json_encode($chartData['efdh']) !!}, backgroundColor: 'rgba(132, 204, 22, 0.5)', borderColor: 'rgb(132, 204, 22)', borderWidth: 1 },
-                { label: 'EPDH', data: {!! json_encode($chartData['epdh']) !!}, backgroundColor: 'rgba(163, 230, 53, 0.5)', borderColor: 'rgb(163, 230, 53)', borderWidth: 1 },
-                { label: 'EUDH', data: {!! json_encode($chartData['eudh']) !!}, backgroundColor: 'rgba(190, 242, 100, 0.5)', borderColor: 'rgb(190, 242, 100)', borderWidth: 1 },
-                { label: 'ESDH', data: {!! json_encode($chartData['esdh']) !!}, backgroundColor: 'rgba(217, 249, 157, 0.5)', borderColor: 'rgb(217, 249, 157)', borderWidth: 1 }
+                {
+                    label: 'EFDH',
+                    data: {!! json_encode($chartData['efdh']) !!},
+                    borderColor: 'rgb(132, 204, 22)',
+                    backgroundColor: 'rgba(132, 204, 22, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.4
+                },
+                {
+                    label: 'EPDH',
+                    data: {!! json_encode($chartData['epdh']) !!},
+                    borderColor: 'rgb(163, 230, 53)',
+                    backgroundColor: 'rgba(163, 230, 53, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.4
+                },
+                {
+                    label: 'EUDH',
+                    data: {!! json_encode($chartData['eudh']) !!},
+                    borderColor: 'rgb(190, 242, 100)',
+                    backgroundColor: 'rgba(190, 242, 100, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.4
+                },
+                {
+                    label: 'ESDH',
+                    data: {!! json_encode($chartData['esdh']) !!},
+                    borderColor: 'rgb(217, 249, 157)',
+                    backgroundColor: 'rgba(217, 249, 157, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.4
+                }
             ]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: { size: 12 }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        drawBorder: false,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        drawBorder: false,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            }
+        }
     });
     // JSI Chart
     const jsiCtx = document.getElementById('jsiChart').getContext('2d');
     new Chart(jsiCtx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: {!! json_encode($chartData['labels']) !!},
-            datasets: [{ label: 'JSI', data: {!! json_encode($chartData['jsi']) !!}, backgroundColor: 'rgba(232, 121, 249, 0.5)', borderColor: 'rgb(232, 121, 249)', borderWidth: 1 }]
+            datasets: [{
+                label: 'JSI',
+                data: {!! json_encode($chartData['jsi']) !!},
+                borderColor: 'rgb(232, 121, 249)',
+                backgroundColor: 'rgba(232, 121, 249, 0.1)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        drawBorder: false,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        drawBorder: false,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            }
+        }
     });
     // Event handler filter unit
     const unitFilter = document.getElementById('unitFilter');

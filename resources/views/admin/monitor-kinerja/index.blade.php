@@ -37,22 +37,30 @@
                 </button>
                     <h1 class="text-xl font-semibold text-gray-900">Kinerja Pembangkit</h1>
                 </div>
-                <div class="relative">
-                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
-                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}"
-                            class="w-7 h-7 rounded-full mr-2">
-                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
-                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
-                    </button>
-                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}"
-                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                           onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">Logout</a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                            <input type="hidden" name="redirect" value="{{ route('login') }}">
-                        </form>
+                <div class="flex items-center space-x-4">
+                    <!-- Current Month Display -->
+                    <div class="hidden md:flex items-center bg-blue-50 px-4 py-2 rounded-lg">
+                        <i class="fas fa-calendar-alt text-blue-600 mr-2"></i>
+                        <span class="text-blue-800 font-medium">{{ $currentMonth }}</span>
+                    </div>
+                    <!-- User Profile -->
+                    <div class="relative">
+                        <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                            <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}"
+                                class="w-7 h-7 rounded-full mr-2">
+                            <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                            <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                        </button>
+                        <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                            <a href="{{ route('logout') }}"
+                               class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                               onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">Logout</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                @csrf
+                                <input type="hidden" name="redirect" value="{{ route('login') }}">
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -65,31 +73,22 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class=" px-2">
-                <!-- Welcome Card -->
-                {{-- <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
-                    <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
-                    <div class="relative z-10">
-                        <!-- Text Content -->
-                        <div class="space-y-2 md:space-y-4">
-                            <div style="overflow: hidden;">
-                                <h2 class="text-2xl md:text-3xl font-bold tracking-tight typing-animation">
-                                    Monitor Data Kinerja Pembangkit
-                                </h2>
-                            </div>
-                            <p class="text-sm md:text-lg font-medium fade-in">
-                                PLN NUSANTARA POWER UNIT PEMBANGKITAN KENDARI
-                            </p>
-                            <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 fade-in">
-                                <p class="text-xs md:text-base leading-relaxed">
-                                    Platform monitoring kinerja pembangkit secara real-time untuk analisis dan pengambilan keputusan yang lebih efektif.
-                                </p>
-                            </div>
+                <!-- Performance Statistics Header -->
+                <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-800">
+                                <i class="fas fa-chart-line mr-2 text-blue-600"></i>
+                                Statistik Kinerja
+                            </h3>
+                            <p class="text-sm text-gray-600">Rekapitulasi data bulan {{ $currentMonth }}</p>
                         </div>
-
-                        <!-- Logo - Hidden on mobile -->
-                        <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
+                        <div class="md:hidden flex items-center bg-blue-50 px-3 py-1 rounded-lg">
+                            <i class="fas fa-calendar-alt text-blue-600 mr-2"></i>
+                            <span class="text-blue-800 font-medium">{{ $currentMonth }}</span>
+                        </div>
                     </div>
-                </div> --}}
+                </div>
 
                 <!-- Unit Filter -->
                 <div class="bg-white rounded-lg shadow-md p-4 mb-6">
@@ -492,10 +491,11 @@
 
                 <!-- Tabel Rekap Kinerja Mesin per Unit -->
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Tabel Rekap Kinerja Mesin per Unit</h3>
-                    <div class="text-sm text-gray-600 mb-4">
-                        <span class="font-medium">Tanggal:</span>
-                        <span class="ml-2">{{ \Carbon\Carbon::parse($today)->isoFormat('dddd, D MMMM Y') }}</span>
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">Tabel Rekap Kinerja Mesin per Unit</h3>
+                            <p class="text-sm text-gray-600">Data untuk tanggal {{ \Carbon\Carbon::parse($today)->isoFormat('dddd, D MMMM Y') }}</p>
+                        </div>
                     </div>
                     @foreach($powerPlants as $powerPlant)
                     <div class="bg-white rounded-lg shadow p-6 mb-4 unit-table">

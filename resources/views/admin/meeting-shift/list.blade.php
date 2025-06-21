@@ -246,14 +246,14 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200">
                                             <div class="flex items-center justify-center space-x-2">
                                                 <a href="{{ route('admin.meeting-shift.show', $meetingShift->id) }}"
-                                                    class="text-blue-600 hover:text-blue-900"
+                                                    class="text-blue-600 hover:text-blue-900 "
                                                     title="Lihat Detail">
-                                                    <i class="fas fa-eye"></i>Detail
+                                                    <i class="fas fa-eye mr-1"></i>Detail
                                                 </a>
                                                 <a href="{{ route('admin.meeting-shift.edit', $meetingShift) }}"
                                                     class="text-yellow-600 hover:text-yellow-900"
                                                     title="Edit">
-                                                    <i class="fas fa-edit"></i>Edit
+                                                    <i class="fas fa-edit mr-1"></i>Edit
                                                 </a>
                                                 <form action="{{ route('admin.meeting-shift.destroy', $meetingShift) }}"
                                                       method="POST"
@@ -264,13 +264,13 @@
                                                     <button type="submit"
                                                             class="text-red-600 hover:text-red-900"
                                                             title="Hapus">
-                                                        <i class="fas fa-trash"></i>Hapus
+                                                        <i class="fas fa-trash mr-1"></i>Hapus
                                                     </button>
                                                 </form>
                                                 <a href="{{ route('admin.meeting-shift.export', $meetingShift) }}"
                                                     class="text-green-600 hover:text-green-900"
                                                     title="Export">
-                                                    <i class="fas fa-file-export"></i>Excel
+                                                    <i class="fas fa-file-export mr-1"></i>Excel
                                                 </a>
                                             </div>
                                         </td>

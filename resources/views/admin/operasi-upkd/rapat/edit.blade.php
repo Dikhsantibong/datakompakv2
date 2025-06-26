@@ -27,7 +27,7 @@
                         </svg>
                     </button>
 
-                    <h1 class="text-xl font-semibold text-gray-800">Tambah Data Rapat</h1>
+                    <h1 class="text-xl font-semibold text-gray-800">Edit Data Rapat</h1>
                 </div>
 
                 <div class="relative">
@@ -54,7 +54,7 @@
         <div class="flex items-center pt-2">
             <x-admin-breadcrumb :breadcrumbs="[
                 ['name' => 'Rapat & Link Koordinasi RON', 'url' => route('admin.operasi-upkd.rapat.index')],
-                ['name' => 'Tambah Data', 'url' => null]
+                ['name' => 'Edit Data', 'url' => null]
             ]" />
         </div>
 
@@ -64,13 +64,14 @@
                 <!-- Form Card -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden mt-6">
                     <div class="p-6">
-                        <form action="{{ route('admin.operasi-upkd.rapat.store') }}" method="POST">
+                        <form action="{{ route('admin.operasi-upkd.rapat.update', $rapat->id) }}" method="POST">
                             @csrf
+                            @method('PUT')
 
                             <!-- Pekerjaan -->
                             <div class="mb-6">
                                 <label for="pekerjaan" class="block text-sm font-medium text-gray-700 mb-2">Pekerjaan</label>
-                                <textarea id="pekerjaan" name="pekerjaan" rows="3" class="w-full p-2 rounded-md shadow-sm border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>{{ old('pekerjaan') }}</textarea>
+                                <textarea id="pekerjaan" name="pekerjaan" rows="3" class="w-full p-2 rounded-md shadow-sm border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>{{ old('pekerjaan', $rapat->pekerjaan) }}</textarea>
                             </div>
 
                             <!-- PIC -->
@@ -78,12 +79,12 @@
                                 <label for="pic" class="block text-sm font-medium text-gray-700 mb-2">PIC</label>
                                 <select id="pic" name="pic" class="w-full p-2 rounded-md shadow-sm border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
                                     <option value="">Pilih PIC</option>
-                                    <option value="Asman Operasi">Asman Operasi</option>
-                                    <option value="TL RON">TL RON</option>
-                                    <option value="ROHMAT">ROHMAT</option>
-                                    <option value="IMAM">IMAM</option>
-                                    <option value="KASMAN">KASMAN</option>
-                                    <option value="AMINAH">AMINAH</option>
+                                    <option value="Asman Operasi" {{ old('pic', $rapat->pic) === 'Asman Operasi' ? 'selected' : '' }}>Asman Operasi</option>
+                                    <option value="TL RON" {{ old('pic', $rapat->pic) === 'TL RON' ? 'selected' : '' }}>TL RON</option>
+                                    <option value="ROHMAT" {{ old('pic', $rapat->pic) === 'ROHMAT' ? 'selected' : '' }}>ROHMAT</option>
+                                    <option value="IMAM" {{ old('pic', $rapat->pic) === 'IMAM' ? 'selected' : '' }}>IMAM</option>
+                                    <option value="KASMAN" {{ old('pic', $rapat->pic) === 'KASMAN' ? 'selected' : '' }}>KASMAN</option>
+                                    <option value="AMINAH" {{ old('pic', $rapat->pic) === 'AMINAH' ? 'selected' : '' }}>AMINAH</option>
                                 </select>
                             </div>
 
@@ -91,18 +92,18 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label for="deadline_start" class="block text-sm font-medium text-gray-700 mb-2">Deadline Start</label>
-                                    <input type="date" id="deadline_start" name="deadline_start" class="w-full rounded-md shadow-sm border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required value="{{ old('deadline_start') }}">
+                                    <input type="date" id="deadline_start" name="deadline_start" class="w-full p-2 rounded-md shadow-sm border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required value="{{ old('deadline_start', $rapat->deadline_start->format('Y-m-d')) }}">
                                 </div>
                                 <div>
                                     <label for="deadline_finish" class="block text-sm font-medium text-gray-700 mb-2">Deadline Finish</label>
-                                    <input type="date" id="deadline_finish" name="deadline_finish" class="w-full rounded-md shadow-sm border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required value="{{ old('deadline_finish') }}">
+                                    <input type="date" id="deadline_finish" name="deadline_finish" class="w-full p-2 rounded-md shadow-sm border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required value="{{ old('deadline_finish', $rapat->deadline_finish->format('Y-m-d')) }}">
                                 </div>
                             </div>
 
                             <!-- Kondisi -->
                             <div class="mb-6">
                                 <label for="kondisi" class="block text-sm font-medium text-gray-700 mb-2">Kondisi</label>
-                                <textarea id="kondisi" name="kondisi" rows="3" class="w-full p-2 rounded-md shadow-sm border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>{{ old('kondisi') }}</textarea>
+                                <textarea id="kondisi" name="kondisi" rows="3" class="w-full p-2 rounded-md shadow-sm border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>{{ old('kondisi', $rapat->kondisi) }}</textarea>
                             </div>
 
                             <!-- Status -->
@@ -110,9 +111,9 @@
                                 <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                                 <select id="status" name="status" class="w-full p-2 rounded-md shadow-sm border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" required>
                                     <option value="">Pilih Status</option>
-                                    <option value="open">Open</option>
-                                    <option value="on progress">On Progress</option>
-                                    <option value="closed">Closed</option>
+                                    <option value="open" {{ old('status', $rapat->status) === 'open' ? 'selected' : '' }}>Open</option>
+                                    <option value="on progress" {{ old('status', $rapat->status) === 'on progress' ? 'selected' : '' }}>On Progress</option>
+                                    <option value="closed" {{ old('status', $rapat->status) === 'closed' ? 'selected' : '' }}>Closed</option>
                                 </select>
                             </div>
 
@@ -121,10 +122,8 @@
                                 <a href="{{ route('admin.operasi-upkd.rapat.index') }}" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                                     Batal
                                 </a>
-                                <button type="submit"
-                                class="inline-flex justify-center items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    <i class="fas fa-save mr-2"></i>
-                                    Simpan
+                                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    Simpan Perubahan
                                 </button>
                             </div>
                         </form>

@@ -4,22 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Meeting extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'title',
-        'description',
-        'department_id',
-        'scheduled_at',
+        'pekerjaan',
+        'pic',
+        'deadline_start',
+        'deadline_finish',
+        'kondisi',
         'status',
-        'created_by'
     ];
 
     protected $casts = [
-        'scheduled_at' => 'datetime'
+        'deadline_start' => 'date',
+        'deadline_finish' => 'date',
     ];
 
     public function department()

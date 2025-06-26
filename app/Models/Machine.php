@@ -79,7 +79,7 @@ class Machine extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($machine) {
             // Generate ID manually if not set
             if (!$machine->id) {
@@ -94,7 +94,7 @@ class Machine extends Model
             try {
                 // Refresh model untuk memastikan relasi ter-load
                 $machine = $machine->fresh(['powerPlant']);
-                
+
                 if (!$machine || !$machine->powerPlant) {
                     \Log::warning('Skipping sync - Power Plant not found for machine:', [
                         'machine_id' => $machine->id ?? null
@@ -135,19 +135,19 @@ class Machine extends Model
         static::deleting(function ($machine) {
             try {
                 DB::beginTransaction();
-                
+
                 // 1. Hapus MachineStatusLog terlebih dahulu
                 $statusLogs = $machine->statusLogs;
                 foreach ($statusLogs as $log) {
                     // Ini akan mentrigger event deleted di MachineStatusLog
                     $log->delete();
                 }
-                
+
                 // 2. Hapus relasi lainnya
                 $machine->operations()->delete();
                 $machine->issues()->delete();
                 $machine->metrics()->delete();
-                
+
                 // 3. Lakukan sinkronisasi penghapusan ke database target
                 $currentSession = session('unit', 'mysql');
                 $powerPlant = $machine->powerPlant;
@@ -161,7 +161,7 @@ class Machine extends Model
                 }
 
                 DB::commit();
-                
+
                 Log::info('Machine and related records deleted successfully', [
                     'machine_id' => $machine->id,
                     'unit_source' => $machine->unit_source
@@ -184,32 +184,32 @@ class Machine extends Model
 
         try {
             self::$isSyncing = true;
-            
-            $targetConnection = session('unit') === 'mysql' 
-                ? $machine->powerPlant->unit_source 
+
+            $targetConnection = session('unit') === 'mysql'
+                ? $machine->powerPlant->unit_source
                 : 'mysql';
-            
+
             $targetDB = DB::connection($targetConnection);
-            
+
             if ($action === 'delete') {
                 // Hapus relasi di database target terlebih dahulu
                 $targetDB->transaction(function () use ($targetDB, $machine) {
                     $targetDB->table('machine_operations')
                             ->where('machine_id', $machine->id)
                             ->delete();
-                            
+
                     $targetDB->table('machine_status_logs')
                             ->where('machine_id', $machine->id)
                             ->delete();
-                            
+
                     $targetDB->table('machine_issues')
                             ->where('machine_id', $machine->id)
                             ->delete();
-                            
+
                     $targetDB->table('machine_metrics')
                             ->where('machine_id', $machine->id)
                             ->delete();
-                            
+
                     $targetDB->table('machines')
                             ->where('id', $machine->id)
                             ->delete();
@@ -238,7 +238,7 @@ class Machine extends Model
                             $targetDB->table('machines')->insert($data);
                         }
                         break;
-                        
+
                     case 'update':
                         $targetDB->table('machines')
                                  ->where('id', $machine->id)
@@ -277,11 +277,11 @@ class Machine extends Model
     {
         $query = $this->logs()
             ->where('date', $date);
-            
+
         if ($time) {
             $query->where('time', $time);
         }
-        
+
         return $query->orderBy('time', 'desc')->first();
     }
 }

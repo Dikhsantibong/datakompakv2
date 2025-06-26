@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Models;
 
@@ -46,7 +46,7 @@ class PowerPlant extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         // Handle Created Event
         static::created(function ($powerPlant) {
             self::syncToUpKendari('create', $powerPlant);
@@ -69,7 +69,7 @@ class PowerPlant extends Model
 
         try {
             self::$isSyncing = true;
-            
+
             $data = [
                 'id' => $powerPlant->id,
                 'name' => $powerPlant->name,
@@ -88,12 +88,12 @@ class PowerPlant extends Model
                 case 'create':
                     $upKendari->insert($data);
                     break;
-                    
+
                 case 'update':
                     $upKendari->where('id', $powerPlant->id)
                              ->update($data);
                     break;
-                    
+
                 case 'delete':
                     $upKendari->where('id', $powerPlant->id)
                              ->delete();

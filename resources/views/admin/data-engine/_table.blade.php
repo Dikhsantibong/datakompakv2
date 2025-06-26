@@ -21,7 +21,7 @@
                                 Data untuk tanggal: {{ \Carbon\Carbon::parse($date)->format('d F Y') }}
                             </p>
                         </div>
-                        
+
                         <!-- Display power plant logs -->
                         <div class="flex items-center gap-4">
                             @if(str_starts_with(strtoupper($powerPlant->name), 'PLTM'))
@@ -64,7 +64,7 @@
                                 <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">kVAR</th>
                                 <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cos φ</th>
                                 <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                               
+
                                 <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
                             </tr>
                         </thead>
@@ -89,7 +89,7 @@
                                             -
                                         @endif
                                     </td>
-                                  
+
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200 text-center">
                                         {{ $machine->daya_terpasang ?? '-' }}
                                     </td>
@@ -123,7 +123,7 @@
                                             -
                                         @endif
                                     </td>
-                                    
+
                                     <td class="px-4 py-3 text-sm text-gray-500 border border-gray-200">
                                         {{ $machine->keterangan ?? '-' }}
                                     </td>
@@ -142,4 +142,4 @@
             @endif
         @endforeach
     </div>
-@endif 
+@endif

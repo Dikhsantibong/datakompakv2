@@ -60,6 +60,8 @@ use App\Http\Controllers\Admin\BlackstartController;
 use App\Http\Controllers\Admin\KesiapanKitController;
 use App\Http\Controllers\Admin\SubsistemKendariController;
 use App\Http\Controllers\Admin\SubsistemBauBauController;
+use App\Http\Controllers\Admin\OperasiUpkd\RapatController;
+use App\Http\Controllers\Admin\OperasiUpkd\LinkKoordinasiController;
 
 
 Route::get('/', function () {
@@ -1133,6 +1135,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
 Route::get('/admin/data-engine/{date}/edit', [DataEngineController::class, 'edit'])->name('admin.data-engine.edit');
 Route::post('/admin/data-engine/update', [DataEngineController::class, 'update'])->name('admin.data-engine.update');
+Route::post('/admin/data-engine/force-update', [DataEngineController::class, 'forceUpdate'])->name('admin.data-engine.force-update');
 
 
 Route::middleware(['auth'])->group(function () {
@@ -1464,4 +1467,36 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         ->name('admin.subsistem.bau-bau');
     Route::get('/subsistem/bau-bau/create', [SubsistemBauBauController::class, 'create'])
         ->name('admin.subsistem.bau-bau.create');
+});
+
+Route::prefix('admin/operasi-upkd')->name('admin.operasi-upkd.')->middleware(['auth', 'admin'])->group(function () {
+    Route::resource('rapat', RapatController::class);
+    // ... other routes ...
+});
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    // ... existing routes ...
+
+    // Link Koordinasi RON Routes
+    Route::prefix('operasi-upkd/link-koordinasi')->name('operasi-upkd.link-koordinasi.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\OperasiUpkd\LinkKoordinasiController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\OperasiUpkd\LinkKoordinasiController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\Admin\OperasiUpkd\LinkKoordinasiController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [App\Http\Controllers\Admin\OperasiUpkd\LinkKoordinasiController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [App\Http\Controllers\Admin\OperasiUpkd\LinkKoordinasiController::class, 'update'])->name('update');
+        Route::delete('/{id}', [App\Http\Controllers\Admin\OperasiUpkd\LinkKoordinasiController::class, 'destroy'])->name('destroy');
+    });
+
+    // ... existing routes ...
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::prefix('admin/operasi-upkd/link-koordinasi')->name('admin.operasi-upkd.link-koordinasi.')->group(function () {
+        Route::get('/', [LinkKoordinasiController::class, 'index'])->name('index');
+        Route::get('/create', [LinkKoordinasiController::class, 'create'])->name('create');
+        Route::post('/', [LinkKoordinasiController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [LinkKoordinasiController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [LinkKoordinasiController::class, 'update'])->name('update');
+        Route::delete('/{id}', [LinkKoordinasiController::class, 'destroy'])->name('destroy');
+    });
 });

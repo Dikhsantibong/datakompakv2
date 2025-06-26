@@ -50,4 +50,30 @@ CREATE TABLE peralatan_blackstarts (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (blackstart_id) REFERENCES blackstarts(id) ON DELETE CASCADE,
     FOREIGN KEY (unit_id) REFERENCES power_plants(id) ON DELETE CASCADE
-); 
+);
+
+-- Create meetings table
+CREATE TABLE IF NOT EXISTS meetings (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    pekerjaan TEXT NOT NULL,
+    pic VARCHAR(255) NOT NULL,
+    deadline_start DATE NOT NULL,
+    deadline_finish DATE NOT NULL,
+    kondisi TEXT NOT NULL,
+    status ENUM('open', 'on progress', 'closed') NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT NULL,
+    updated_at TIMESTAMP NULL DEFAULT NULL,
+    deleted_at TIMESTAMP NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Create link_koordinasis table
+CREATE TABLE IF NOT EXISTS link_koordinasis (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    uraian TEXT NOT NULL,
+    link VARCHAR(255) NOT NULL,
+    monitoring ENUM('harian', 'mingguan', 'bulanan') NOT NULL,
+    koordinasi ENUM('eng', 'bs', 'ops') NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT NULL,
+    updated_at TIMESTAMP NULL DEFAULT NULL,
+    deleted_at TIMESTAMP NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

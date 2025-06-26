@@ -34,7 +34,7 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
@@ -72,11 +72,11 @@
                                 <i class="fas fa-plus mr-2"></i> Tambah Patrol Check Baru
                             </a>
                             @if(isset($patrol))
-                            <a href="{{ route('admin.patrol-check.export-excel', $patrol->id) }}" 
+                            <a href="{{ route('admin.patrol-check.export-excel', $patrol->id) }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <i class="fas fa-file-excel mr-2"></i> Export Excel
                             </a>
-                            <a href="{{ route('admin.patrol-check.export-pdf', $patrol->id) }}" 
+                            <a href="{{ route('admin.patrol-check.export-pdf', $patrol->id) }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <i class="fas fa-file-pdf mr-2"></i> Export PDF
                             </a>
@@ -93,7 +93,7 @@
                             <div class="flex flex-wrap items-center justify-between gap-4">
                                 <div class="flex items-center gap-2">
                                     <h2 class="text-lg font-semibold text-gray-900">Data Patrol Check</h2>
-                                    <button id="toggleFullTable" 
+                                    <button id="toggleFullTable"
                                             class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
                                             onclick="toggleFullTableView()">
                                         <i class="fas fa-expand mr-1"></i> Full Table
@@ -142,11 +142,11 @@
 
                             <!-- Horizontal Filters -->
                             <div class="mt-2 border-b border-gray-200 pb-4" id="filters-section">
-                                <form action="{{ route('admin.patrol-check.list') }}" method="GET" 
+                                <form action="{{ route('admin.patrol-check.list') }}" method="GET"
                                       class="flex flex-wrap items-end gap-4">
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Shift</label>
-                                        <select name="shift" 
+                                        <select name="shift"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Shift</option>
                                             <option value="A" {{ request('shift') == 'A' ? 'selected' : '' }}>Shift A</option>
@@ -159,7 +159,7 @@
                                     @if(session('unit') === 'mysql')
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Dibuat Oleh</label>
-                                        <select name="created_by" 
+                                        <select name="created_by"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua User</option>
                                             @foreach(\App\Models\User::all() as $user)
@@ -173,21 +173,21 @@
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                        <input type="date" name="start_date" 
+                                        <input type="date" name="start_date"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('start_date') }}">
                                     </div>
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Akhir</label>
-                                        <input type="date" name="end_date" 
+                                        <input type="date" name="end_date"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('end_date') }}">
                                     </div>
 
                                     <div class="w-48">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
-                                        <select name="unit_origin" 
+                                        <select name="unit_origin"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Unit</option>
                                             @foreach($unitOrigins as $unit)
@@ -203,7 +203,7 @@
                                                 class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
                                             <i class="fas fa-search mr-2"></i> Cari
                                         </button>
-                                        <a href="{{ route('admin.patrol-check.list') }}" 
+                                        <a href="{{ route('admin.patrol-check.list') }}"
                                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                                             <i class="fas fa-undo mr-2"></i> Reset
                                         </a>
@@ -237,7 +237,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
                                             <span class="text-xs font-medium text-gray-500 rounded-full bg-blue-100 px-2 py-1">
-                                                
+
                                                 Shift {{ $patrol->shift }}
                                             </span>
                                         </td>
@@ -264,36 +264,36 @@
                                             @endif
                                         </td> --}}
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center border border-gray-200">
-                                            <a href="{{ route('admin.patrol-check.show', $patrol->id ?? 0) }}" 
-                                               class="text-blue-600 hover:text-blue-900 mr-3" 
+                                            <a href="{{ route('admin.patrol-check.show', $patrol->id ?? 0) }}"
+                                               class="text-blue-600 hover:text-blue-900 mr-3"
                                                title="Lihat Detail">
-                                                <i class="fas fa-eye"></i>Detail
+                                                <i class="fas fa-eye mr-1"></i>Detail
                                             </a>
-                                            <a href="{{ route('admin.patrol-check.edit', $patrol->id ?? 0) }}" 
-                                               class="text-yellow-600 hover:text-yellow-900 mr-3" 
+                                            <a href="{{ route('admin.patrol-check.edit', $patrol->id ?? 0) }}"
+                                               class="text-yellow-600 hover:text-yellow-900 mr-3"
                                                title="Edit">
-                                                <i class="fas fa-edit"></i>Edit
+                                                <i class="fas fa-edit mr-1"></i>Edit
                                             </a>
-                                            <a href="{{ route('admin.patrol-check.export-excel', $patrol->id ?? 0) }}" 
-                                               class="text-green-600 hover:text-green-900 mr-3" 
+                                            <a href="{{ route('admin.patrol-check.export-excel', $patrol->id ?? 0) }}"
+                                               class="text-green-600 hover:text-green-900 mr-3"
                                                title="Export Excel">
-                                                <i class="fas fa-file-excel"></i>Excel
+                                                <i class="fas fa-file-excel mr-1"></i>Excel
                                             </a>
-                                            <a href="{{ route('admin.patrol-check.export-pdf', $patrol->id ?? 0) }}" 
-                                               class="text-red-600 hover:text-red-900 mr-3" 
+                                            <a href="{{ route('admin.patrol-check.export-pdf', $patrol->id ?? 0) }}"
+                                               class="text-red-600 hover:text-red-900 mr-3"
                                                title="Export PDF">
-                                                <i class="fas fa-file-pdf"></i>PDF
-                                            </a>    
-                                            <form action="{{ route('admin.patrol-check.destroy', $patrol->id ?? 0) }}" 
-                                                  method="POST" 
+                                                <i class="fas fa-file-pdf mr-1"></i>PDF
+                                            </a>
+                                            <form action="{{ route('admin.patrol-check.destroy', $patrol->id ?? 0) }}"
+                                                  method="POST"
                                                   class="inline"
                                                   onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" 
-                                                        class="text-red-600 hover:text-red-900" 
+                                                <button type="submit"
+                                                        class="text-red-600 hover:text-red-900"
                                                         title="Hapus">
-                                                    <i class="fas fa-trash"></i>Hapus
+                                                    <i class="fas fa-trash mr-1"></i>Hapus
                                                 </button>
                                             </form>
                                         </td>
@@ -358,27 +358,27 @@ function toggleFullTableView() {
     const activeFilters = document.getElementById('active-filters');
     const welcomeCard = document.querySelector('.welcome-card')?.parentElement;
     const mainContent = document.querySelector('main');
-    
+
     // Toggle full table mode
     const isFullTable = button.classList.contains('bg-blue-600');
-    
+
     if (isFullTable) {
         // Restore normal view
         button.classList.remove('bg-blue-600', 'text-white');
         button.classList.add('bg-blue-50', 'text-blue-600');
         button.innerHTML = '<i class="fas fa-expand mr-1"></i> Full Table';
-        
+
         if (filtersSection) filtersSection.style.display = '';
         if (activeFilters) activeFilters.style.display = '';
         if (welcomeCard) welcomeCard.style.display = '';
         if (mainContent) mainContent.classList.remove('pt-0');
-        
+
     } else {
         // Enable full table view
         button.classList.remove('bg-blue-50', 'text-blue-600');
         button.classList.add('bg-blue-600', 'text-white');
         button.innerHTML = '<i class="fas fa-compress mr-1"></i> Normal View';
-        
+
         if (filtersSection) filtersSection.style.display = 'none';
         if (activeFilters) activeFilters.style.display = 'none';
         if (welcomeCard) welcomeCard.style.display = 'none';
@@ -386,4 +386,4 @@ function toggleFullTableView() {
     }
 }
 </script>
-@endpush 
+@endpush

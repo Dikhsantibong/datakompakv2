@@ -15,11 +15,11 @@
 <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
 <link rel="manifest" href="{{ asset('/manifest.json') }}">
 
-    
+
 
       <!-- Existing styles -->
       @vite(['resources/css/app.css', 'resources/js/app.js'])
-      
+
         {{-- @vite(['resources/assets/flowbite/flowbite.min.js']) --}}
         <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
@@ -31,17 +31,17 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    
+
     <!-- jQuery (jika diperlukan) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -49,26 +49,26 @@
 
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="{{asset('css/admindashboard.css')}}">  
+    <link rel="stylesheet" href="{{asset('css/admindashboard.css')}}">
      <!-- ... kode lainnya ... -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
      <!-- ... kode lainnya ... -->
-     
+
      <meta name="csrf-token" content="{{ csrf_token() }}">
-    
-     
+
+
  </head>
     <!-- Custom Styles -->
     @yield('styles')
 </head>
 <body class="m-0 p-0 w-full">
     @include('sweetalert::alert')
-    
+
     <!-- Tambahkan form logout tersembunyi -->
     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
         @csrf
     </form>
-    
+
     @if(session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
             <span class="block sm:inline">{{ session('success') }}</span>
@@ -80,9 +80,32 @@
             <span class="block sm:inline">{{ session('error') }}</span>
         </div>
     @endif
-    
+
     @yield('content')
-    
+
+    <!-- Flash Messages -->
+    @if (session('success'))
+    <div id="success-message" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+        {{ session('success') }}
+    </div>
+    <script>
+        setTimeout(function() {
+            document.getElementById('success-message').style.display = 'none';
+        }, 3000);
+    </script>
+    @endif
+
+    @if (session('error'))
+    <div id="error-message" class="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+        {{ session('error') }}
+    </div>
+    <script>
+        setTimeout(function() {
+            document.getElementById('error-message').style.display = 'none';
+        }, 3000);
+    </script>
+    @endif
+
     <!-- Scripts -->
     @stack('scripts')
     <script>
@@ -150,7 +173,7 @@
      console.error("Service workers are not supported.");
   }
 </script>
-    
+
     @yield('scripts')
 </body>
 </html>

@@ -37,7 +37,7 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
@@ -79,7 +79,7 @@
                             <div class="flex flex-wrap items-center justify-between gap-4">
                                 <div class="flex items-center gap-2">
                                     <h2 class="text-lg font-semibold text-gray-900">Data K3 Keamanan dan Lingkungan</h2>
-                                    <button id="toggleFullTable" 
+                                    <button id="toggleFullTable"
                                             class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
                                             onclick="toggleFullTableView()">
                                         <i class="fas fa-expand mr-1"></i> Full Table
@@ -89,11 +89,11 @@
 
                             <!-- Horizontal Filters -->
                             <div class="mt-2 border-b border-gray-200 pb-4" id="filters-section">
-                                <form action="{{ route('admin.k3-kamp.view') }}" method="GET" 
+                                <form action="{{ route('admin.k3-kamp.view') }}" method="GET"
                                       class="flex flex-wrap items-end gap-4">
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Kategori</label>
-                                        <select name="kategori" 
+                                        <select name="kategori"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Kategori</option>
                                             <option value="k3_keamanan">K3 & Keamanan</option>
@@ -103,7 +103,7 @@
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Status</label>
-                                        <select name="status" 
+                                        <select name="status"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Status</option>
                                             <option value="ada">Ada</option>
@@ -113,14 +113,14 @@
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                        <input type="date" name="start_date" 
+                                        <input type="date" name="start_date"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('start_date') }}">
                                     </div>
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Akhir</label>
-                                        <input type="date" name="end_date" 
+                                        <input type="date" name="end_date"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('end_date') }}">
                                     </div>
@@ -130,7 +130,7 @@
                                                 class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
                                             <i class="fas fa-search mr-2"></i> Cari
                                         </button>
-                                        <a href="{{ route('admin.k3-kamp.view') }}" 
+                                        <a href="{{ route('admin.k3-kamp.view') }}"
                                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                                             <i class="fas fa-undo mr-2"></i> Reset
                                         </a>
@@ -191,36 +191,36 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                             <div class="flex items-center justify-center space-x-2">
-                                                <a href="{{ route('admin.k3-kamp.show', $report->id) }}" 
-                                                   class="text-blue-600 hover:text-blue-900" 
+                                                <a href="{{ route('admin.k3-kamp.show', $report->id) }}"
+                                                   class="text-blue-600 hover:text-blue-900"
                                                    title="Lihat Detail">
-                                                    <i class="fas fa-eye"></i>Detail
+                                                    <i class="fas fa-eye mr-1"></i>Detail
                                                 </a>
-                                                <a href="{{ route('admin.k3-kamp.edit', $report->id) }}" 
+                                                <a href="{{ route('admin.k3-kamp.edit', $report->id) }}"
                                                    class="text-green-600 hover:text-green-900"
                                                    title="Edit">
-                                                    <i class="fas fa-edit"></i>Edit
+                                                    <i class="fas fa-edit mr-1"></i>Edit
                                                 </a>
-                                                <a href="{{ route('admin.k3-kamp.export-pdf', $report->id) }}" 
+                                                <a href="{{ route('admin.k3-kamp.export-pdf', $report->id) }}"
                                                    class="text-red-600 hover:text-red-900"
                                                    title="Export PDF">
-                                                    <i class="fas fa-file-pdf"></i>PDF
+                                                    <i class="fas fa-file-pdf mr-1"></i>PDF
                                                 </a>
-                                                <a href="{{ route('admin.k3-kamp.export-excel', $report->id) }}" 
+                                                <a href="{{ route('admin.k3-kamp.export-excel', $report->id) }}"
                                                    class="text-green-600 hover:text-green-900"
                                                    title="Export Excel">
-                                                    <i class="fas fa-file-excel"></i>Excel
+                                                    <i class="fas fa-file-excel mr-1"></i>Excel
                                                 </a>
-                                                <form action="{{ route('admin.k3-kamp.destroy', $report->id) }}" 
-                                                      method="POST" 
+                                                <form action="{{ route('admin.k3-kamp.destroy', $report->id) }}"
+                                                      method="POST"
                                                       class="inline-block"
                                                       onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" 
+                                                    <button type="submit"
                                                             class="text-red-600 hover:text-red-900"
                                                             title="Hapus">
-                                                        <i class="fas fa-trash"></i>Hapus
+                                                        <i class="fas fa-trash mr-1"></i>Hapus
                                                     </button>
                                                 </form>
                                             </div>
@@ -230,7 +230,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <!-- Pagination -->
                         <div class="mt-4">
                             {{ $reports->links() }}
@@ -293,16 +293,16 @@ function toggleFullTableView() {
     const filtersSection = document.getElementById('filters-section');
     const welcomeCard = document.querySelector('.bg-gradient-to-r');
     const mainContent = document.querySelector('main');
-    
+
     // Toggle full table mode
     const isFullTable = button.classList.contains('bg-blue-600');
-    
+
     if (isFullTable) {
         // Restore normal view
         button.classList.remove('bg-blue-600', 'text-white');
         button.classList.add('bg-blue-50', 'text-blue-600');
         button.innerHTML = '<i class="fas fa-expand mr-1"></i> Full Table';
-        
+
         if (filtersSection) {
             filtersSection.classList.remove('hidden-section');
             setTimeout(() => filtersSection.style.display = '', 10);
@@ -312,13 +312,13 @@ function toggleFullTableView() {
             setTimeout(() => welcomeCard.style.display = '', 10);
         }
         if (mainContent) mainContent.classList.remove('pt-0');
-        
+
     } else {
         // Enable full table view
         button.classList.remove('bg-blue-50', 'text-blue-600');
         button.classList.add('bg-blue-600', 'text-white');
         button.innerHTML = '<i class="fas fa-compress mr-1"></i> Normal View';
-        
+
         if (filtersSection) {
             filtersSection.classList.add('hidden-section');
             setTimeout(() => filtersSection.style.display = 'none', 300);
@@ -331,4 +331,4 @@ function toggleFullTableView() {
     }
 }
 </script>
-@endsection 
+@endsection

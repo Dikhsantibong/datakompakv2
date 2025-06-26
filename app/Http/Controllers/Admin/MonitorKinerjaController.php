@@ -13,13 +13,13 @@ class MonitorKinerjaController extends Controller
     {
         // Get selected unit source from request
         $selectedUnitSource = request('unit_source');
-        
+
         // Get all power plants for the filter dropdown
         $powerPlants = PowerPlant::all();
 
         // Base query for daily summaries
         $query = DailySummary::query();
-        
+
         // Jika filter unit_source dipilih dan tidak kosong, filter berdasarkan unit_source
         if (!empty($selectedUnitSource)) {
             $query->where('unit_source', $selectedUnitSource);
@@ -56,8 +56,8 @@ class MonitorKinerjaController extends Controller
 
         // Fetch last 7 days data with unit filter
         $dailyData = $query->select(
-            'eaf', 'sof', 'efor', 'ncf', 
-            'net_production', 'hsd_fuel', 
+            'eaf', 'sof', 'efor', 'ncf',
+            'net_production', 'hsd_fuel',
             'mfo_fuel', 'b35_fuel', 'b40_fuel',
             'kit_ratio', 'usage_percentage', 'water_usage',
             'trip_machine', 'trip_electrical',
@@ -162,4 +162,4 @@ class MonitorKinerjaController extends Controller
 
         return view('admin.monitor-kinerja.index', $data);
     }
-} 
+}

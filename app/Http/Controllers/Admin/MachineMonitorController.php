@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use App\Models\Machine;
 use App\Models\MachineIssue;
 use App\Models\MachineHealthCategory;
@@ -17,7 +18,6 @@ use App\Models\Issue;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Models\MachineLog;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
@@ -28,7 +28,7 @@ class MachineMonitorController extends Controller
     {
         $powerPlants = PowerPlant::all();
         $machines = Machine::all();
-        
+
         // Get latest logs with single query
         $latestLogs = MachineLog::with('machine')
             ->whereIn('id', function($query) {
@@ -38,16 +38,54 @@ class MachineMonitorController extends Controller
             })
             ->get();
 
-        // Manual counting for status
+        // Get all logs for current month to calculate durations
+        $currentMonth = now()->startOfMonth();
+        $monthlyLogs = MachineLog::with('machine')
+            ->whereMonth('date', $currentMonth->month)
+            ->whereYear('date', $currentMonth->year)
+            ->orderBy('date')
+            ->orderBy('time')
+            ->get();
+
+        // Initialize status counts and durations
         $statusCounts = [
             'OPS' => 0,
             'RSH' => 0,
             'FO' => 0,
             'MO' => 0,
-            'Others' => 0
+            'PO' => 0,
+            'MB' => 0
         ];
 
-        // Process logs manually to avoid collection operations
+        $statusDurations = [
+            'OPS' => 0,
+            'RSH' => 0,
+            'FO' => 0,
+            'MO' => 0,
+            'PO' => 0,
+            'MB' => 0
+        ];
+
+        // Calculate status counts from latest logs
+        foreach ($latestLogs as $log) {
+            if (isset($statusCounts[$log->status])) {
+                $statusCounts[$log->status]++;
+            }
+        }
+
+        // Calculate durations from monthly logs
+        $previousLog = null;
+        foreach ($monthlyLogs as $log) {
+            if ($previousLog && $previousLog->machine_id === $log->machine_id) {
+                $duration = $log->time->diffInHours($previousLog->time);
+                if (isset($statusDurations[$previousLog->status])) {
+                    $statusDurations[$previousLog->status] += $duration;
+                }
+            }
+            $previousLog = $log;
+        }
+
+        // Process data for charts
         $processedData = [
             'labels' => [],
             'kw' => [],
@@ -61,13 +99,6 @@ class MachineMonitorController extends Controller
         $lastUpdate = null;
 
         foreach ($latestLogs as $log) {
-            // Process status counts
-            if (isset($statusCounts[$log->status])) {
-                $statusCounts[$log->status]++;
-            } else {
-                $statusCounts['Others']++;
-            }
-
             // Process machine name
             $machineName = $log->machine->name ?? 'Unknown';
             $processedData['labels'][] = $machineName;
@@ -96,6 +127,7 @@ class MachineMonitorController extends Controller
             'machines',
             'latestLogs',
             'statusCounts',
+            'statusDurations',
             'processedData',
             'maxBeban',
             'lastUpdate'
@@ -328,7 +360,7 @@ class MachineMonitorController extends Controller
     {
         return view('admin.machine-monitor.crud');
     }
-    
+
     public function show(Request $request)
     {
         $query = Machine::with(['powerPlant', 'operations' => function($query) {
@@ -361,11 +393,11 @@ class MachineMonitorController extends Controller
         }
 
         $machines = $query->orderBy('id')->paginate(10);
-        
+
         if ($request->ajax()) {
             return view('admin.machine-monitor.table-body', compact('machines'))->render();
         }
-        
+
         return view('admin.machine-monitor.show', compact('machines'));
     }
 
@@ -374,7 +406,7 @@ class MachineMonitorController extends Controller
         $item = Machine::with(['operations' => function($query) {
             $query->latest('recorded_at');
         }])->findOrFail($id);
-        
+
         return view('admin.machine-monitor.edit', compact('item'));
     }
 
@@ -393,7 +425,7 @@ class MachineMonitorController extends Controller
             ]);
 
             $machine = Machine::findOrFail($id);
-            
+
             // Update data mesin
             $machine->update([
                 'name' => $validated['name'],
@@ -433,7 +465,7 @@ class MachineMonitorController extends Controller
         $machines = Machine::with(['powerPlant'])
                           ->orderBy('id')
                           ->paginate(10);
-                          
+
         return view('admin.machine-monitor.show', compact('machines'));
     }
 
@@ -464,7 +496,7 @@ class MachineMonitorController extends Controller
                 ->whereDate('tanggal', Carbon::today());
 
             $selectedTime = $request->input('time_filter');
-            
+
             if ($selectedTime !== 'all') {
                 $query->whereTime('input_time', '=', $selectedTime.':00');
             }

@@ -37,7 +37,7 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
@@ -72,7 +72,7 @@
                         <h2 class="text-2xl font-bold mb-2">Laporan Abnormal/Gangguan</h2>
                         <p class="text-blue-100 mb-4">Kelola dan monitor laporan abnormal atau gangguan untuk memastikan penanganan yang tepat dan cepat.</p>
                         <div class="flex flex-wrap gap-3">
-                            <a href="{{ route('admin.abnormal-report.index') }}" 
+                            <a href="{{ route('admin.abnormal-report.index') }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <i class="fas fa-plus mr-2"></i> Tambah Laporan
                             </a>
@@ -87,7 +87,7 @@
                             <div class="flex flex-wrap items-center justify-between gap-4">
                                 <div class="flex items-center gap-2">
                                     <h2 class="text-lg font-semibold text-gray-900">Daftar Laporan</h2>
-                                    <button id="toggleFullTable" 
+                                    <button id="toggleFullTable"
                                             class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
                                             onclick="toggleFullTableView()">
                                         <i class="fas fa-expand mr-1"></i> Full Table
@@ -128,11 +128,11 @@
 
                             <!-- Horizontal Filters -->
                             <div class="mt-2 border-b border-gray-200 pb-4" id="filters-section">
-                                <form action="{{ route('admin.abnormal-report.list') }}" method="GET" 
+                                <form action="{{ route('admin.abnormal-report.list') }}" method="GET"
                                       class="flex flex-wrap items-end gap-4">
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Status</label>
-                                        <select name="status" 
+                                        <select name="status"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Status</option>
                                             <option value="Rusak" {{ request('status') == 'Rusak' ? 'selected' : '' }}>Rusak</option>
@@ -143,7 +143,7 @@
 
                                     {{-- <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Asal Unit</label>
-                                        <select name="unit_origin" 
+                                        <select name="unit_origin"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Unit</option>
                                             <option value="UP Kendari" {{ request('unit_origin') == 'UP Kendari' ? 'selected' : '' }}>UP Kendari</option>
@@ -154,21 +154,21 @@
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                        <input type="date" name="start_date" 
+                                        <input type="date" name="start_date"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('start_date') }}">
                                     </div>
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Akhir</label>
-                                        <input type="date" name="end_date" 
+                                        <input type="date" name="end_date"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('end_date') }}">
                                     </div>
 
                                     <div class="w-64">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Pencarian</label>
-                                        <input type="text" name="search" 
+                                        <input type="text" name="search"
                                                placeholder="Cari mesin/peralatan..."
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('search') }}">
@@ -179,7 +179,7 @@
                                                 class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
                                             <i class="fas fa-search mr-2"></i> Cari
                                         </button>
-                                        <a href="{{ route('admin.abnormal-report.list') }}" 
+                                        <a href="{{ route('admin.abnormal-report.list') }}"
                                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                                             <i class="fas fa-undo mr-2"></i> Reset
                                         </a>
@@ -218,38 +218,38 @@
                                                 {{ $report->sync_unit_origin ?? 'N/A' }}
                                             </span>
                                         </td>
-                                       
+
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center border border-gray-200">
-                                            <a href="{{ route('admin.abnormal-report.show', $report->id) }}" 
-                                               class="text-blue-600 hover:text-blue-900 mr-3" 
+                                            <a href="{{ route('admin.abnormal-report.show', $report->id) }}"
+                                               class="text-blue-600 hover:text-blue-900 mr-3"
                                                title="Lihat Detail">
-                                                <i class="fas fa-eye"></i>Detail
+                                                <i class="fas fa-eye mr-1"></i>Detail
                                             </a>
-                                            <a href="{{ route('admin.abnormal-report.edit', $report->id) }}" 
-                                               class="text-yellow-600 hover:text-yellow-900 mr-3" 
+                                            <a href="{{ route('admin.abnormal-report.edit', $report->id) }}"
+                                               class="text-yellow-600 hover:text-yellow-900 mr-3"
                                                title="Edit">
-                                                <i class="fas fa-edit"></i>Edit
+                                                <i class="fas fa-edit mr-1"></i>Edit
                                             </a>
-                                            <a href="{{ route('admin.abnormal-report.export-excel', $report->id) }}" 
-                                               class="text-green-600 hover:text-green-900 mr-3" 
+                                            <a href="{{ route('admin.abnormal-report.export-excel', $report->id) }}"
+                                               class="text-green-600 hover:text-green-900 mr-3"
                                                title="Export Excel">
-                                                <i class="fas fa-file-excel"></i>Excel
+                                                <i class="fas fa-file-excel mr-1"></i>Excel
                                             </a>
-                                            <a href="{{ route('admin.abnormal-report.export-pdf', $report->id) }}" 
-                                               class="text-red-600 hover:text-red-900 mr-3" 
+                                            <a href="{{ route('admin.abnormal-report.export-pdf', $report->id) }}"
+                                               class="text-red-600 hover:text-red-900 mr-3"
                                                title="Export PDF">
-                                                <i class="fas fa-file-pdf"></i>PDF
+                                                <i class="fas fa-file-pdf mr-1"></i>PDF
                                             </a>
-                                            <form action="{{ route('admin.abnormal-report.destroy', $report->id) }}" 
-                                                  method="POST" 
+                                            <form action="{{ route('admin.abnormal-report.destroy', $report->id) }}"
+                                                  method="POST"
                                                   class="inline"
                                                   onsubmit="return confirm('Apakah Anda yakin ingin menghapus laporan ini?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" 
-                                                        class="text-red-600 hover:text-red-900" 
+                                                <button type="submit"
+                                                        class="text-red-600 hover:text-red-900"
                                                         title="Hapus">
-                                                    <i class="fas fa-trash"></i>Hapus
+                                                    <i class="fas fa-trash mr-1"></i>Hapus
                                                 </button>
                                             </form>
                                         </td>
@@ -311,27 +311,27 @@ function toggleFullTableView() {
     const activeFilters = document.getElementById('active-filters');
     const welcomeCard = document.querySelector('.welcome-card');
     const mainContent = document.querySelector('main');
-    
+
     // Toggle full table mode
     const isFullTable = button.classList.contains('bg-blue-600');
-    
+
     if (isFullTable) {
         // Restore normal view
         button.classList.remove('bg-blue-600', 'text-white');
         button.classList.add('bg-blue-50', 'text-blue-600');
         button.innerHTML = '<i class="fas fa-expand mr-1"></i> Full Table';
-        
+
         if (filtersSection) filtersSection.style.display = '';
         if (activeFilters) activeFilters.style.display = '';
         if (welcomeCard) welcomeCard.style.display = '';
         if (mainContent) mainContent.classList.remove('pt-0');
-        
+
     } else {
         // Enable full table view
         button.classList.remove('bg-blue-50', 'text-blue-600');
         button.classList.add('bg-blue-600', 'text-white');
         button.innerHTML = '<i class="fas fa-compress mr-1"></i> Normal View';
-        
+
         if (filtersSection) filtersSection.style.display = 'none';
         if (activeFilters) activeFilters.style.display = 'none';
         if (welcomeCard) welcomeCard.style.display = 'none';
@@ -341,4 +341,4 @@ function toggleFullTableView() {
 </script>
 @endpush
 
-@endsection 
+@endsection

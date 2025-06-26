@@ -113,7 +113,7 @@
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <i class="fas fa-file-pdf mr-2"></i> Export PDF
                             </a>
-                            <a href="{{ route('admin.data-engine.edit', ['date' => request('date', now()->format('Y-m-d'))]) }}"
+                            <a href="{{ route('admin.data-engine.edit', ['date' => now()->format('Y-m-d')]) }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
                                 <i class="fas fa-plus mr-2"></i> Update Data
                             </a>

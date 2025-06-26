@@ -44,6 +44,24 @@ class MachineLog extends Model
         return session('unit', 'mysql');
     }
 
+    // Add new method to check existing data
+    public static function checkExistingData($machineId, $date, $time)
+    {
+        return static::where('machine_id', $machineId)
+                    ->where('date', $date)
+                    ->where('time', $time)
+                    ->first();
+    }
+
+    // Add new method to update existing data
+    public static function updateExistingData($machineId, $date, $time, $data)
+    {
+        return static::where('machine_id', $machineId)
+                    ->where('date', $date)
+                    ->where('time', $time)
+                    ->update($data);
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -53,7 +71,7 @@ class MachineLog extends Model
                 if (self::$isSyncing) return;
 
                 $powerPlant = $machineLog->machine->powerPlant;
-                
+
                 if (!$powerPlant) {
                     Log::warning('Skipping sync - Power Plant not found for machine log:', [
                         'machine_id' => $machineLog->machine_id
@@ -121,4 +139,4 @@ class MachineLog extends Model
             }
         });
     }
-} 
+}

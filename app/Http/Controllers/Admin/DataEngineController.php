@@ -23,16 +23,16 @@ class DataEngineController extends Controller
         try {
             $date = $request->date ?? now()->format('Y-m-d');
             $time = $request->time ?? null;
-            
+
             // Handle 24:00 time by converting it to 00:00 of the next day
             if ($time === '24:00:00') {
                 $time = '00:00:00';
                 $date = Carbon::parse($date)->addDay()->format('Y-m-d');
             }
-            
+
             // Get all power plants for the filter dropdown
             $allPowerPlants = PowerPlant::orderBy('name')->get();
-            
+
             // Build query for filtered power plants
             $powerPlantsQuery = PowerPlant::with(['machines' => function ($query) {
                 $query->orderBy('name');
@@ -51,7 +51,7 @@ class DataEngineController extends Controller
                 $latestLogQuery = DB::table('power_plant_logs')
                     ->where('power_plant_id', $powerPlant->id)
                     ->where('date', $date);
-                
+
                 if ($time) {
                     // First try to get exact time match
                     $exactTimeLog = clone $latestLogQuery;
@@ -111,26 +111,26 @@ class DataEngineController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             if ($request->ajax()) {
                 return response()->json(['error' => 'Terjadi kesalahan saat memuat data'], 500);
             }
-            
+
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data: ' . $e->getMessage());
         }
     }
-    
+
     public function edit($date)
     {
         try {
             $time = request('time');
-            
+
             // Handle 24:00 time by converting it to 00:00 of the next day
             if ($time === '24:00:00') {
                 $time = '00:00:00';
                 $date = Carbon::parse($date)->addDay()->format('Y-m-d');
             }
-            
+
             $powerPlants = PowerPlant::with(['machines' => function ($query) use ($date) {
                 $query->orderBy('name')
                     ->with(['latestOperation' => function($q) use ($date) {
@@ -162,13 +162,13 @@ class DataEngineController extends Controller
                     $machine->cos_phi = $latestLog?->cos_phi;
                     $machine->status = $latestLog?->status;
                     $machine->keterangan = $latestLog?->keterangan;
-                    
+
                     // Data dari MachineOperation
                     $machine->daya_terpasang = $latestOperation?->installed_power;
                     $machine->dmn = $latestOperation?->dmn;
                     $machine->dmp = $latestOperation?->dmp;
-              
-                    
+
+
                     $machine->log_time = $latestLog?->time;
                 });
             });
@@ -179,7 +179,7 @@ class DataEngineController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat form edit: ' . $e->getMessage());
         }
     }
@@ -189,110 +189,204 @@ class DataEngineController extends Controller
         try {
             DB::beginTransaction();
 
-            $date = $request->date;
+            $date = $request->input('date');
+            if (empty($date)) {
+                throw new \Exception('Tanggal harus diisi.');
+            }
+
             $machines = $request->input('machines', []);
             $powerPlants = $request->input('power_plants', []);
             $currentSession = session('unit', 'mysql');
+            $existingData = [];
 
-            // Handle 24:00 time entries by converting to 00:00 next day
-            foreach ($machines as &$machineData) {
-                if (isset($machineData['time']) && $machineData['time'] === '24:00') {
-                    $machineData['time'] = '00:00';
-                    $machineData['date'] = Carbon::parse($date)->addDay()->format('Y-m-d');
-                } else {
-                    $machineData['date'] = $date;
-                }
-            }
-
-            Log::info('Starting DataEngine update', [
-                'date' => $date,
-                'session' => $currentSession,
-                'machine_count' => count($machines),
-                'power_plant_count' => count($powerPlants)
-            ]);
-
-            // Save power plant logs
-            foreach ($powerPlants as $powerPlantId => $data) {
-                $time = now()->format('H:i:s'); // Use current time for power plant logs
-                $hopData = [
-                    'power_plant_id' => $powerPlantId,
-                    'date' => $date,
-                    'time' => $time,
-                    'hop' => $data['hop'] ?? null,
-                    'tma' => $data['tma'] ?? null,
-                    'inflow' => $data['inflow'] ?? null,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ];
-                DB::table('power_plant_logs')->insert($hopData);
-
-                // Sinkronisasi ke database utama jika bukan di mysql
-                if ($currentSession !== 'mysql') {
-                    try {
-                        DB::connection('mysql')->table('power_plant_logs')->insert($hopData);
-                    } catch (\Exception $e) {
-                        // Jika gagal insert (misal duplikat), lakukan update
-                        DB::connection('mysql')->table('power_plant_logs')
-                            ->where('power_plant_id', $powerPlantId)
-                            ->where('date', $date)
-                            ->where('time', $time)
-                            ->update([
-                                'hop' => $data['hop'] ?? null,
-                                'tma' => $data['tma'] ?? null,
-                                'inflow' => $data['inflow'] ?? null,
-                                'updated_at' => now()
-                            ]);
-                    }
-                }
-            }
-
-            // Save machine logs
+            // Check for existing data first
             foreach ($machines as $machineId => $data) {
-                // Validate required fields
                 if (empty($data['time'])) {
                     throw new \Exception('Waktu harus diisi untuk semua mesin.');
                 }
 
-                // Create machine log - this will trigger sync event if needed
-                MachineLog::create([
-                    'machine_id' => $machineId,
-                    'date' => $date,
-                    'time' => $data['time'],
-                    'kw' => $data['kw'],
-                    'kvar' => $data['kvar'],
-                    'cos_phi' => $data['cos_phi'],
-                    'status' => $data['status'],
-                    'keterangan' => $data['keterangan'],
-                    'daya_terpasang' => $data['daya_terpasang'],
-                    'silm_slo' => $data['silm_slo'],
-                    'dmp_performance' => $data['dmp_performance']
-                ]);
+                $machineDate = $date; // Use the form date by default
 
-                Log::info('Machine log created', [
-                    'machine_id' => $machineId,
-                    'date' => $date,
-                    'time' => $data['time'],
-                    'session' => $currentSession
+                // Handle 24:00 time entries
+                if ($data['time'] === '24:00') {
+                    $data['time'] = '00:00';
+                    $machineDate = Carbon::parse($date)->addDay()->format('Y-m-d');
+                }
+
+                // Check if data exists
+                $existing = MachineLog::checkExistingData($machineId, $machineDate, $data['time']);
+                if ($existing) {
+                    $existingData[] = [
+                        'machine_id' => $machineId,
+                        'time' => $data['time']
+                    ];
+                }
+
+                // Store the processed date back in the data array
+                $data['date'] = $machineDate;
+                $machines[$machineId] = $data;
+            }
+
+            // If there's existing data, return warning response
+            if (!empty($existingData)) {
+                DB::rollBack();
+                return response()->json([
+                    'warning' => true,
+                    'message' => 'Data sudah ada untuk beberapa mesin pada waktu tertentu. Apakah Anda ingin mengupdate data tersebut?',
+                    'existingData' => $existingData
                 ]);
             }
 
+            // Process normal update
+            $this->processUpdate($machines, $powerPlants, $date, $currentSession);
+
             DB::commit();
 
-            return redirect()
-                ->route('admin.data-engine.index', ['date' => $date])
-                ->with('success', 'Data berhasil diperbarui');
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil disimpan'
+            ]);
+
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             Log::error('Error in DataEngine update:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
-            return redirect()
-                ->back()
-                ->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage())
-                ->withInput();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function forceUpdate(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $date = $request->input('date');
+            if (empty($date)) {
+                throw new \Exception('Tanggal harus diisi.');
+            }
+
+            $machines = $request->input('machines', []);
+            $powerPlants = $request->input('power_plants', []);
+            $currentSession = session('unit', 'mysql');
+
+            // Process date for each machine
+            foreach ($machines as $machineId => &$data) {
+                if (empty($data['time'])) {
+                    throw new \Exception('Waktu harus diisi untuk semua mesin.');
+                }
+
+                // Handle 24:00 time entries
+                if ($data['time'] === '24:00') {
+                    $data['time'] = '00:00';
+                    $data['date'] = Carbon::parse($date)->addDay()->format('Y-m-d');
+                } else {
+                    $data['date'] = $date;
+                }
+            }
+
+            // Process the update
+            $this->processUpdate($machines, $powerPlants, $date, $currentSession);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil diupdate'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Log::error('Error in DataEngine forceUpdate:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat mengupdate data: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    private function processUpdate($machines, $powerPlants, $date, $currentSession)
+    {
+        // Save power plant logs
+        foreach ($powerPlants as $powerPlantId => $data) {
+            $time = now()->format('H:i:s');
+            $hopData = [
+                'power_plant_id' => $powerPlantId,
+                'date' => $date,
+                'time' => $time,
+                'hop' => $data['hop'] ?? null,
+                'tma' => $data['tma'] ?? null,
+                'inflow' => $data['inflow'] ?? null,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+
+            DB::table('power_plant_logs')->insert($hopData);
+
+            if ($currentSession !== 'mysql') {
+                try {
+                    DB::connection('mysql')->table('power_plant_logs')->insert($hopData);
+                } catch (\Exception $e) {
+                    DB::connection('mysql')->table('power_plant_logs')
+                        ->where('power_plant_id', $powerPlantId)
+                        ->where('date', $date)
+                        ->where('time', $time)
+                        ->update([
+                            'hop' => $data['hop'] ?? null,
+                            'tma' => $data['tma'] ?? null,
+                            'inflow' => $data['inflow'] ?? null,
+                            'updated_at' => now()
+                        ]);
+                }
+            }
+        }
+
+        // Save machine logs
+        foreach ($machines as $machineId => $data) {
+            // Make sure we have a date
+            if (empty($data['date'])) {
+                $data['date'] = $date;
+            }
+
+            $logData = [
+                'machine_id' => $machineId,
+                'date' => $data['date'],
+                'time' => $data['time'],
+                'kw' => $data['kw'],
+                'kvar' => $data['kvar'],
+                'cos_phi' => $data['cos_phi'],
+                'status' => $data['status'],
+                'keterangan' => $data['keterangan'],
+                'daya_terpasang' => $data['daya_terpasang'],
+                'silm_slo' => $data['silm_slo'],
+                'dmp_performance' => $data['dmp_performance']
+            ];
+
+            // For force update, we need to delete existing data first
+            MachineLog::where('machine_id', $machineId)
+                     ->where('date', $data['date'])
+                     ->where('time', $data['time'])
+                     ->delete();
+
+            MachineLog::create($logData);
+
+            Log::info('Machine log processed', [
+                'machine_id' => $machineId,
+                'date' => $data['date'],
+                'time' => $data['time'],
+                'session' => $currentSession
+            ]);
         }
     }
 
@@ -301,7 +395,7 @@ class DataEngineController extends Controller
         try {
             $date = $request->get('date', now()->format('Y-m-d'));
             $powerPlantId = $request->get('power_plant_id');
-            
+
             return Excel::download(
                 new DataEngineExport($date, $powerPlantId),
                 'data-engine-report-' . $date . '.xlsx'
@@ -311,7 +405,7 @@ class DataEngineController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengekspor Excel: ' . $e->getMessage());
         }
     }
@@ -320,7 +414,7 @@ class DataEngineController extends Controller
     {
         try {
             $date = $request->date ?? now()->format('Y-m-d');
-            
+
             $powerPlants = PowerPlant::with(['machines' => function ($query) {
                 $query->orderBy('name');
             }])->get();
@@ -338,14 +432,14 @@ class DataEngineController extends Controller
             });
 
             $pdf = PDF::loadView('admin.data-engine.exports.pdf', compact('powerPlants', 'date'));
-            
+
             return $pdf->download('data_engine_' . Carbon::parse($date)->format('Y_m_d') . '.pdf');
         } catch (\Exception $e) {
             Log::error('Error in DataEngine PDF export:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengekspor PDF: ' . $e->getMessage());
         }
     }
@@ -354,15 +448,15 @@ class DataEngineController extends Controller
     {
         try {
             $date = $request->date ?? now()->format('Y-m-d');
-            
+
             // Get all power plants
             $powerPlants = PowerPlant::orderBy('name')->get();
-            
+
             // Generate hours array (00:00 to 23:00)
             $hours = collect(range(0, 23))->map(function($hour) {
                 return str_pad($hour, 2, '0', STR_PAD_LEFT) . ':00:00';
             });
-            
+
             // Get input status for each power plant and hour
             $powerPlants->each(function($powerPlant) use ($date, $hours) {
                 $logs = DB::table('power_plant_logs')
@@ -373,27 +467,27 @@ class DataEngineController extends Controller
                         return Carbon::parse($time)->format('H:i:00');
                     })
                     ->toArray();
-                
+
                 $powerPlant->hourlyStatus = $hours->mapWithKeys(function($hour) use ($logs) {
                     return [$hour => in_array($hour, $logs)];
                 });
             });
-            
+
             if ($request->ajax()) {
                 return view('admin.data-engine._daily-list-table', compact('powerPlants', 'date', 'hours'))->render();
             }
-            
+
             return view('admin.data-engine.daily-list', compact('powerPlants', 'date', 'hours'));
         } catch (\Exception $e) {
             Log::error('Error in DataEngine listDailyInputs:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             if ($request->ajax()) {
                 return response()->json(['error' => 'Terjadi kesalahan saat memuat data: ' . $e->getMessage()], 500);
             }
-            
+
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data: ' . $e->getMessage());
         }
     }
@@ -440,4 +534,4 @@ class DataEngineController extends Controller
             ], 500);
         }
     }
-} 
+}

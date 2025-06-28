@@ -12,12 +12,12 @@
         <div class="electric-current current-2"></div>
         <div class="electric-current current-3"></div>
         <div class="electric-current current-4"></div>
-        
+
         <div class="power-line horizontal"></div>
         <div class="power-line vertical"></div>
         <div class="power-line diagonal-1"></div>
         <div class="power-line diagonal-2"></div>
-        
+
         <!-- Electric nodes -->
         <div class="electric-node node-1">
             <div class="node-spark"></div>
@@ -98,6 +98,9 @@
                                     <option value="mysql_poasia" {{ $selectedUnit == 'mysql_poasia' ? 'selected' : '' }}>
                                         UNIT PLTD POASIA
                                     </option>
+                                    <option value="mysql_poasia_containerized" {{ $selectedUnit == 'mysql_poasia_containerized' ? 'selected' : '' }}>
+                                        UNIT PLTD POASIA CONTAINERIZED
+                                    </option>
                                     <option value="mysql_wua_wua" {{ $selectedUnit == 'mysql_wua_wua' ? 'selected' : '' }}>
                                         UNIT PLTD WUA-WUA
                                     </option>
@@ -123,7 +126,7 @@
                                         UNIT PLTM MIKUASI
                                     </option>
                                     <option value="mysql_ladumpi" {{ $selectedUnit == 'mysql_ladumpi' ? 'selected' : '' }}>
-                                        UNIT PLTD LADUMPI  
+                                        UNIT PLTD LADUMPI
                                     </option>
                                     <option value="mysql_langara" {{ $selectedUnit == 'mysql_langara' ? 'selected' : '' }}>
                                         UNIT PLTD LANGARA
@@ -300,7 +303,7 @@
         height: 20px;
         background: #1e90ff;
         border-radius: 50%;
-        box-shadow: 
+        box-shadow:
             0 0 20px #1e90ff,
             0 0 40px #1e90ff,
             0 0 60px #1e90ff;
@@ -319,7 +322,7 @@
         }
         50% {
             opacity: 0.5;
-            box-shadow: 
+            box-shadow:
                 0 0 15px rgba(30, 144, 255, 0.5),
                 0 0 30px rgba(30, 144, 255, 0.3);
         }
@@ -433,7 +436,7 @@
         50% {
             opacity: 1;
             height: 40px;
-            box-shadow: 
+            box-shadow:
                 0 0 10px #1e90ff,
                 0 0 20px #1e90ff,
                 0 0 30px #1e90ff;
@@ -540,9 +543,9 @@
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(45deg, 
-            transparent, 
-            rgba(30, 144, 255, 0.05), 
+        background: linear-gradient(45deg,
+            transparent,
+            rgba(30, 144, 255, 0.05),
             transparent);
         pointer-events: none;
         z-index: 1;
@@ -630,7 +633,7 @@
         .card-inner {
             flex-direction: column;
         }
-        
+
         .left-section,
         .right-section {
             padding: 30px;
@@ -818,7 +821,7 @@
             loginButton.disabled = true;
             loginButton.classList.add('loading');
             loadingSpinner.classList.remove('d-none');
-            
+
             // Optional: Add electric effect class
             loginButton.classList.add('electric-effect');
         });

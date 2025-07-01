@@ -12,6 +12,9 @@
             border-bottom: 2px solid #2563eb;
             color: #2563eb;
         }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 1; }
             50% { transform: scale(0.9); opacity: 0.5; }
@@ -165,58 +168,60 @@
                 <!-- Tabs -->
                 <div class="mb-6">
                     <div class="border-b border-gray-200">
-                        <nav class="-mb-px flex space-x-8">
-                            <a href="#"
-                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'data-engine' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
-                               data-tab="data-engine">
-                                Data Engine 24 Jam
-                            </a>
-                            <a href="#"
-                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'daily-summary' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
-                               data-tab="daily-summary">
-                                Ikhtisar Harian
-                            </a>
-                            <a href="#"
-                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'meeting-shift' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
-                               data-tab="meeting-shift">
-                                Meeting Shift
-                            </a>
-                            <a href="#"
-                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'bahan-bakar' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
-                               data-tab="bahan-bakar">
-                                Bahan Bakar
-                            </a>
-                            <a href="#"
-                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'pelumas' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
-                               data-tab="pelumas">
-                                Pelumas
-                            </a>
-                            <a href="#"
-                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'laporan-kit' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
-                               data-tab="laporan-kit">
-                                Laporan KIT 00.00
-                            </a>
-                            <a href="#"
-                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'flm-inspection' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
-                               data-tab="flm-inspection">
-                                FLM Inspection
-                            </a>
-                            <a href="#"
-                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'bahan-kimia' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
-                               data-tab="bahan-kimia">
-                                Bahan Kimia
-                            </a>
-                            <a href="#"
-                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'five-s5r' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
-                               data-tab="five-s5r">
-                                FiveS5R
-                            </a>
-                            <a href="#"
-                               class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'patrol-check' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
-                               data-tab="patrol-check">
-                                Patrol Check
-                            </a>
-                        </nav>
+                        <div class="overflow-x-auto scrollbar-hide" style="-ms-overflow-style: none; scrollbar-width: none;">
+                            <nav class="-mb-px flex space-x-8 min-w-max px-4">
+                                <a href="#"
+                                   class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'data-engine' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                   data-tab="data-engine">
+                                    Data Engine 24 Jam
+                                </a>
+                                <a href="#"
+                                   class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'daily-summary' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                   data-tab="daily-summary">
+                                    Ikhtisar Harian
+                                </a>
+                                <a href="#"
+                                   class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'meeting-shift' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                   data-tab="meeting-shift">
+                                    Meeting Shift
+                                </a>
+                                <a href="#"
+                                   class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'bahan-bakar' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                   data-tab="bahan-bakar">
+                                    Bahan Bakar
+                                </a>
+                                <a href="#"
+                                   class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'pelumas' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                   data-tab="pelumas">
+                                    Pelumas
+                                </a>
+                                <a href="#"
+                                   class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'laporan-kit' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                   data-tab="laporan-kit">
+                                    Laporan KIT 00.00
+                                </a>
+                                <a href="#"
+                                   class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'flm-inspection' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                   data-tab="flm-inspection">
+                                    FLM Inspection
+                                </a>
+                                <a href="#"
+                                   class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'bahan-kimia' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                   data-tab="bahan-kimia">
+                                    Bahan Kimia
+                                </a>
+                                <a href="#"
+                                   class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'five-s5r' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                   data-tab="five-s5r">
+                                    FiveS5R
+                                </a>
+                                <a href="#"
+                                   class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'patrol-check' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                   data-tab="patrol-check">
+                                    Patrol Check
+                                </a>
+                            </nav>
+                        </div>
                     </div>
                 </div>
 

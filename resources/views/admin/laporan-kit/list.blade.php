@@ -212,20 +212,20 @@
                             <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                        {{-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th> --}}
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Oleh</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                        {{-- <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th> --}}
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Oleh</th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($laporanKits as $laporan)
                                     <tr class="hover:bg-gray-50 transition-colors">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200 text-center">
                                             {{ $loop->iteration + ($laporanKits->currentPage() - 1) * $laporanKits->perPage() }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200 text-center">
                                             {{ $laporan->tanggal ? \Carbon\Carbon::parse($laporan->tanggal)->format('d F Y') : '-' }}
                                         </td>
                                         {{-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">

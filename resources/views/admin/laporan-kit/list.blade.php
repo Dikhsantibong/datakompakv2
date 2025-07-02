@@ -37,7 +37,7 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
@@ -80,7 +80,7 @@
                             <div class="flex flex-wrap items-center justify-between gap-4">
                                 <div class="flex items-center gap-2">
                                     <h2 class="text-lg font-semibold text-gray-900">Data Laporan KIT</h2>
-                                    <button id="toggleFullTable" 
+                                    <button id="toggleFullTable"
                                             class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
                                             onclick="toggleFullTableView()">
                                         <i class="fas fa-expand mr-1"></i> Full Table
@@ -106,6 +106,7 @@
                                                         'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
                                                         'mysql_rongi' => 'PLTD RONGI',
                                                         'mysql_sabilambo' => 'PLTD SABILAMBO',
+                                                        'mysql_mikuasi' => 'PLTM MIKUASI',
                                                         'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
                                                         'mysql_pltmg_kendari' => 'PLTD KENDARI',
                                                         'mysql_baruta' => 'PLTD BARUTA',
@@ -138,11 +139,11 @@
 
                             <!-- Horizontal Filters -->
                             <div class="mt-2 border-b border-gray-200 pb-4" id="filters-section">
-                                <form action="{{ route('admin.laporan-kit.list') }}" method="GET" 
+                                <form action="{{ route('admin.laporan-kit.list') }}" method="GET"
                                       class="flex flex-wrap items-end gap-4">
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
-                                        <select name="unit_source" 
+                                        <select name="unit_source"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Unit</option>
                                             @php
@@ -162,7 +163,8 @@
                                                     'mysql_wajo' => 'PLTD WAJO',
                                                     'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
                                                     'mysql_rongi' => 'PLTD RONGI',
-                                                    'mysql_sabilambo' => 'PLTD SABILAMBO',
+                                                    'mysql_sabilambo' => 'PLTM SABILAMBO',
+                                                    'mysql_mikuasi' => 'PLTM MIKUASI',
                                                     'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
                                                     'mysql_pltmg_kendari' => 'PLTD KENDARI',
                                                     'mysql_baruta' => 'PLTD BARUTA',
@@ -180,14 +182,14 @@
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                        <input type="date" name="start_date" 
+                                        <input type="date" name="start_date"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('start_date') }}">
                                     </div>
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Akhir</label>
-                                        <input type="date" name="end_date" 
+                                        <input type="date" name="end_date"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('end_date') }}">
                                     </div>
@@ -197,7 +199,7 @@
                                                 class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
                                             <i class="fas fa-search mr-2"></i> Cari
                                         </button>
-                                        <a href="{{ route('admin.laporan-kit.list') }}" 
+                                        <a href="{{ route('admin.laporan-kit.list') }}"
                                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                                             <i class="fas fa-undo mr-2"></i> Reset
                                         </a>
@@ -248,7 +250,7 @@
                                                         'mysql_wajo' => 'PLTD WAJO',
                                                         'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
                                                         'mysql_rongi' => 'PLTD RONGI',
-                                                        'mysql_sabilambo' => 'PLTD SABILAMBO',
+                                                        'mysql_sabilambo' => 'PLTM SABILAMBO',
                                                         'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
                                                         'mysql_pltmg_kendari' => 'PLTD KENDARI',
                                                         'mysql_baruta' => 'PLTD BARUTA',
@@ -261,36 +263,36 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-200 gap">
-                                          
+
                                                 <a href="{{ route('admin.laporan-kit.show', $laporan) }}"
                                                     class="text-blue-600 hover:text-blue-900 mr-4"
                                                     title="Lihat Detail">
-                                                    <i class="fas fa-eye"></i>Detail
+                                                    <i class="fas fa-eye mr-2"></i>Detail
                                                 </a>
                                                 <a href="{{ route('admin.laporan-kit.edit', $laporan->id) }}"
                                                     class="text-yellow-600 hover:text-yellow-900 mr-4"
                                                     title="Edit">
-                                                    <i class="fas fa-edit"></i>Edit
+                                                    <i class="fas fa-edit mr-2"></i>Edit
                                                 </a>
-                                                <form action="{{ route('admin.laporan-kit.destroy', $laporan->id) }}" 
-                                                      method="POST" 
+                                                <form action="{{ route('admin.laporan-kit.destroy', $laporan->id) }}"
+                                                      method="POST"
                                                       class="inline-block"
                                                       onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" 
+                                                    <button type="submit"
                                                             class="text-red-600 hover:text-red-900 mr-4"
                                                             title="Hapus">
-                                                        <i class="fas fa-trash"></i>Hapus
+                                                        <i class="fas fa-trash mr-2"></i>Hapus
                                                     </button>
                                                 </form>
                                                 <a href="{{ route('admin.laporan-kit.export-pdf', $laporan->id) }}"
                                                      class="text-red-600 hover:text-red-900 mr-4 " title="Download PDF">
-                                                    <i class="fas fa-file-pdf"></i>PDF
+                                                    <i class="fas fa-file-pdf mr-2"></i>PDF
                                                 </a>
                                                 <a href="{{ route('admin.laporan-kit.export-excel') }}"
                                                      class="text-green-600 hover:text-green-900 mr-4" title="Download Excel">
-                                                    <i class="fas fa-file-excel"></i>Excel
+                                                    <i class="fas fa-file-excel mr-2"></i>Excel
                                                 </a>
                                             </div>
                                         </td>
@@ -348,27 +350,27 @@ function toggleFullTableView() {
     const activeFilters = document.getElementById('active-filters');
     const welcomeCard = document.querySelector('.welcome-card')?.parentElement;
     const mainContent = document.querySelector('main');
-    
+
     // Toggle full table mode
     const isFullTable = button.classList.contains('bg-blue-600');
-    
+
     if (isFullTable) {
         // Restore normal view
         button.classList.remove('bg-blue-600', 'text-white');
         button.classList.add('bg-blue-50', 'text-blue-600');
         button.innerHTML = '<i class="fas fa-expand mr-1"></i> Full Table';
-        
+
         if (filtersSection) filtersSection.style.display = '';
         if (activeFilters) activeFilters.style.display = '';
         if (welcomeCard) welcomeCard.style.display = '';
         if (mainContent) mainContent.classList.remove('pt-0');
-        
+
     } else {
         // Enable full table view
         button.classList.remove('bg-blue-50', 'text-blue-600');
         button.classList.add('bg-blue-600', 'text-white');
         button.innerHTML = '<i class="fas fa-compress mr-1"></i> Normal View';
-        
+
         if (filtersSection) filtersSection.style.display = 'none';
         if (activeFilters) activeFilters.style.display = 'none';
         if (welcomeCard) welcomeCard.style.display = 'none';

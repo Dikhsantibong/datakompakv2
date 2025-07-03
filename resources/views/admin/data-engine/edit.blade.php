@@ -45,6 +45,11 @@
             width: 100%;
         }
     }
+
+    /* Add style for invalid status select */
+    select[name*="[status]"].is-invalid {
+        border-color: #dc3545;
+    }
 </style>
 @endpush
 
@@ -63,6 +68,34 @@ function updateAllTimes() {
 // Optional: Update times immediately when dropdown changes
 document.getElementById('timeSelector').addEventListener('change', function() {
     updateAllTimes();
+});
+
+// Function to validate status fields
+function validateStatusFields() {
+    const statusSelects = document.querySelectorAll('select[name*="[status]"]');
+    let isValid = true;
+
+    statusSelects.forEach(select => {
+        if (!select.value) {
+            select.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            select.classList.remove('is-invalid');
+        }
+    });
+
+    return isValid;
+}
+
+// Add event listeners to status selects for real-time validation
+document.querySelectorAll('select[name*="[status]"]').forEach(select => {
+    select.addEventListener('change', function() {
+        if (this.value) {
+            this.classList.remove('is-invalid');
+        } else {
+            this.classList.add('is-invalid');
+        }
+    });
 });
 
 // Updated JavaScript for loading latest data with SweetAlert
@@ -97,6 +130,9 @@ document.getElementById('loadLatestDataBtn').addEventListener('click', function(
                     const input = document.querySelector(`[name="machines[${machineId}][${field}]"]`);
                     if (input && log[field] !== null) {
                         input.value = log[field];
+                        if (field === 'status') {
+                            input.classList.remove('is-invalid');
+                        }
                     }
                 });
             });
@@ -132,6 +168,16 @@ document.getElementById('loadLatestDataBtn').addEventListener('click', function(
 // Handle form submission
 document.getElementById('data-engine-form').addEventListener('submit', async function(e) {
     e.preventDefault();
+
+    // Validate status fields first
+    if (!validateStatusFields()) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Validasi Gagal!',
+            text: 'Mohon isi  kolom status untuk semua mesin',
+        });
+        return;
+    }
 
     try {
         const form = this;

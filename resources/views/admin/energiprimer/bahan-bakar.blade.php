@@ -38,7 +38,7 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
@@ -65,15 +65,15 @@
                         <h2 class="text-2xl font-bold mb-2">Manajemen Data Bahan Bakar</h2>
                         <p class="text-blue-100 mb-4">Kelola dan monitor penggunaan bahan bakar untuk optimasi operasional pembangkit listrik.</p>
                         <div class="flex flex-wrap gap-3">
-                            <a href="{{ route('admin.energiprimer.bahan-bakar.export-excel', request()->query()) }}" 
+                            <a href="{{ route('admin.energiprimer.bahan-bakar.export-excel', request()->query()) }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <i class="fas fa-file-excel mr-2"></i> Export Excel
                             </a>
-                            <a href="{{ route('admin.energiprimer.bahan-bakar.export-pdf', request()->query()) }}" 
+                            <a href="{{ route('admin.energiprimer.bahan-bakar.export-pdf', request()->query()) }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-white rounded-md hover:bg-blue-50">
                                 <i class="fas fa-file-pdf mr-2"></i> Export PDF
                             </a>
-                            <a href="{{ route('admin.energiprimer.bahan-bakar.create') }}" 
+                            <a href="{{ route('admin.energiprimer.bahan-bakar.create') }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800">
                                 <i class="fas fa-plus mr-2"></i> Tambah Data
                             </a>
@@ -89,7 +89,7 @@
                             <div class="flex flex-wrap items-center justify-between gap-4">
                                 <div class="flex items-center gap-2">
                                     <h2 class="text-lg font-semibold text-gray-900">Data Bahan Bakar</h2>
-                                    <button id="toggleFullTable" 
+                                    <button id="toggleFullTable"
                                             class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
                                             onclick="toggleFullTableView()">
                                         <i class="fas fa-expand mr-1"></i> Full Table
@@ -130,11 +130,11 @@
 
                             <!-- Horizontal Filters -->
                             <div class="mt-2 border-b border-gray-200 pb-4" id="filters-section">
-                                <form action="{{ route('admin.energiprimer.bahan-bakar') }}" method="GET" 
+                                <form action="{{ route('admin.energiprimer.bahan-bakar') }}" method="GET"
                                       class="flex flex-wrap items-end gap-4">
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
-                                        <select name="unit_id" 
+                                        <select name="unit_id"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Unit</option>
                                             @foreach($units as $unit)
@@ -147,7 +147,7 @@
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Jenis BBM</label>
-                                        <select name="jenis_bbm" 
+                                        <select name="jenis_bbm"
                                                 class="p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                             <option value="">Semua Jenis</option>
                                             <option value="B40" {{ request('jenis_bbm') == 'B40' ? 'selected' : '' }}>B40</option>
@@ -159,14 +159,14 @@
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                        <input type="date" name="start_date" 
+                                        <input type="date" name="start_date"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('start_date') }}">
                                     </div>
 
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Akhir</label>
-                                        <input type="date" name="end_date" 
+                                        <input type="date" name="end_date"
                                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                value="{{ request('end_date') }}">
                                     </div>
@@ -176,7 +176,7 @@
                                                 class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
                                             <i class="fas fa-search mr-2"></i> Cari
                                         </button>
-                                        <a href="{{ route('admin.energiprimer.bahan-bakar') }}" 
+                                        <a href="{{ route('admin.energiprimer.bahan-bakar') }}"
                                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                                             <i class="fas fa-undo mr-2"></i> Reset
                                         </a>
@@ -216,7 +216,7 @@
                                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             HOP
                                         </th>
-                                        
+
                                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Catatan
                                         </th>
@@ -231,18 +231,18 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($bahanBakar as $index => $item)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200 text-center">
                                             {{ $index + 1 }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200 text-center">
                                             {{ $item->tanggal->format('Y-m-d') }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200 text-center">
                                             <span class="text-gray-800 rounded-lg bg-gray-100 px-2 py-1">
                                             {{ $item->unit->name ?? 'Unit Tidak Ditemukan' }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200 text-center">
                                             <span class="text-gray-800 rounded-lg bg-gray-100 px-2 py-1
                                                 @if($item->jenis_bbm == 'B40') bg-blue-100 text-blue-800
                                                 @elseif($item->jenis_bbm == 'B35') bg-green-100 text-green-800
@@ -251,27 +251,27 @@
                                             {{ $item->jenis_bbm }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200 text-center">
                                             {{ number_format($item->saldo_awal, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200 text-center">
                                             {{ number_format($item->penerimaan, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200 text-center">
                                             {{ number_format($item->pemakaian, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200 text-center">
                                             {{ number_format($item->saldo_akhir, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200 text-center">
                                             {{ number_format($item->hop, 2) }}
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 border border-gray-200">
                                             {{ $item->catatan_transaksi }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200 text-center">
                                             @if($item->document)
-                                                <a href="{{ Storage::url('documents/bahan-bakar/' . $item->document) }}" 
+                                                <a href="{{ Storage::url('documents/bahan-bakar/' . $item->document) }}"
                                                    target="_blank"
                                                    class="text-blue-600 hover:text-blue-900">
                                                     <i class="fas fa-file-download mr-1"></i> Download
@@ -282,17 +282,17 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center  border-gray-200">
                                             <div class="flex gap-3">
-                                                <a href="{{ route('admin.energiprimer.bahan-bakar.edit', $item->id) }}" 
+                                                <a href="{{ route('admin.energiprimer.bahan-bakar.edit', $item->id) }}"
                                                    class="inline-flex items-center px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-900">
                                                     <i class="fas fa-edit mr-1"></i> Edit
                                                 </a>
-                                                <form action="{{ route('admin.energiprimer.bahan-bakar.destroy', $item->id) }}" 
-                                                      method="POST" 
+                                                <form action="{{ route('admin.energiprimer.bahan-bakar.destroy', $item->id) }}"
+                                                      method="POST"
                                                       class="inline-block"
                                                       onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" 
+                                                    <button type="submit"
                                                             class="inline-flex items-center px-3 py-1 text-sm font-medium text-red-600 hover:text-red-900">
                                                         <i class="fas fa-trash mr-1"></i> Hapus
                                                     </button>
@@ -344,27 +344,27 @@ function toggleFullTableView() {
     const activeFilters = document.getElementById('active-filters');
     const welcomeCard = document.querySelector('.welcome-card')?.parentElement;
     const mainContent = document.querySelector('main');
-    
+
     // Toggle full table mode
     const isFullTable = button.classList.contains('bg-blue-600');
-    
+
     if (isFullTable) {
         // Restore normal view
         button.classList.remove('bg-blue-600', 'text-white');
         button.classList.add('bg-blue-50', 'text-blue-600');
         button.innerHTML = '<i class="fas fa-expand mr-1"></i> Full Table';
-        
+
         if (filtersSection) filtersSection.style.display = '';
         if (activeFilters) activeFilters.style.display = '';
         if (welcomeCard) welcomeCard.style.display = '';
         if (mainContent) mainContent.classList.remove('pt-0');
-        
+
     } else {
         // Enable full table view
         button.classList.remove('bg-blue-50', 'text-blue-600');
         button.classList.add('bg-blue-600', 'text-white');
         button.innerHTML = '<i class="fas fa-compress mr-1"></i> Normal View';
-        
+
         if (filtersSection) filtersSection.style.display = 'none';
         if (activeFilters) activeFilters.style.display = 'none';
         if (welcomeCard) welcomeCard.style.display = 'none';

@@ -35,7 +35,7 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}" 
+                        <a href="{{ route('logout') }}"
                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
@@ -92,7 +92,7 @@
                                         <tr>
                                             <td colspan="7" class="px-6 py-3 text-sm font-medium text-gray-900 bg-gray-50 border-r border">K3 & Keamanan</td>
                                         </tr>
-                                        
+
                                         @php
                                         $items = [
                                             'Potensi gangguan keamanan',
@@ -108,41 +108,48 @@
                                         <tr class="hover:bg-gray-50 transition-colors">
                                             <td class="px-6 py-4 text-sm text-gray-900 border-r border">{{ $item }}</td>
                                             <td class="px-6 py-4 text-center border-r border">
-                                                <input type="checkbox" name="status_{{ $index }}[]" value="ada" 
+                                                <input type="checkbox" name="status_{{ $index }}[]" value="ada"
                                                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                             </td>
                                             <td class="px-6 py-4 text-center border-r border">
-                                                <input type="checkbox" name="status_{{ $index }}[]" value="tidak_ada" 
+                                                <input type="checkbox" name="status_{{ $index }}[]" value="tidak_ada"
                                                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                             </td>
                                             <td class="px-6 py-4 text-center border-r border">
-                                                <input type="checkbox" name="kondisi_{{ $index }}[]" value="normal" 
+                                                <input type="checkbox" name="kondisi_{{ $index }}[]" value="normal"
                                                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                             </td>
                                             <td class="px-6 py-4 text-center border-r border">
-                                                <input type="checkbox" name="kondisi_{{ $index }}[]" value="abnormal" 
+                                                <input type="checkbox" name="kondisi_{{ $index }}[]" value="abnormal"
                                                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                             </td>
                                             <td class="px-6 py-4 border-r border">
-                                                <textarea name="keterangan_{{ $index }}" rows="2" 
-                                                          class="w-[300px] h-[100px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                                                <textarea name="keterangan_{{ $index }}" rows="2"
+                                                          class="w-[300px] h-[100px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                           placeholder="Masukkan keterangan..."></textarea>
                                             </td>
                                             <td class="px-6 py-4 border-r border">
-                                                <input type="file" 
+                                                <input type="file"
                                                        id="file_{{ $index }}"
                                                        class="hidden"
                                                        accept="image/*"
-                                                       onchange="handleFileSelect(this, '{{ $index }}')">
+                                                       onchange="previewImage(this, 'preview_{{ $index }}')">
                                                 <input type="hidden" name="eviden_path_{{ $index }}" id="eviden_path_{{ $index }}">
-                                                <button type="button" 
-                                                        onclick="document.getElementById('file_{{ $index }}').click()"
-                                                        class="w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-200">
-                                                    <i class="fas fa-upload mr-2"></i>
-                                                    Upload Eviden
-                                                </button>
-                                                <div id="preview_{{ $index }}" class="mt-2 relative">
-                                                    <!-- Preview will be shown here -->
+                                                <div class="relative">
+                                                    <div id="preview_{{ $index }}" class="preview-container mb-2 hidden">
+                                                        <img src="#" alt="Preview" class="w-full h-32 object-cover rounded-lg border border-gray-200">
+                                                        <button type="button"
+                                                                class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                                                                onclick="removeImage(this, '{{ $index }}')">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                    <button type="button"
+                                                            onclick="document.getElementById('file_{{ $index }}').click()"
+                                                            class="w-full px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg border-2 border-blue-100 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                        <i class="fas fa-upload mr-2"></i>
+                                                        Upload Eviden
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -152,7 +159,7 @@
                                         <tr>
                                             <td colspan="7" class="px-6 py-3 text-sm font-medium text-gray-900 bg-gray-50 border-r border">Lingkungan</td>
                                         </tr>
-                                        
+
                                         @php
                                         $lingkunganItems = [
                                             'Unsafe action',
@@ -165,41 +172,48 @@
                                         <tr class="hover:bg-gray-50 transition-colors">
                                             <td class="px-6 py-4 text-sm text-gray-900 border-r border">{{ $item }}</td>
                                             <td class="px-6 py-4 text-center border-r border">
-                                                <input type="checkbox" name="status_lingkungan_{{ $index }}[]" value="ada" 
+                                                <input type="checkbox" name="status_lingkungan_{{ $index }}[]" value="ada"
                                                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                             </td>
                                             <td class="px-6 py-4 text-center border-r border">
-                                                <input type="checkbox" name="status_lingkungan_{{ $index }}[]" value="tidak_ada" 
+                                                <input type="checkbox" name="status_lingkungan_{{ $index }}[]" value="tidak_ada"
                                                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                             </td>
                                             <td class="px-6 py-4 text-center border-r border">
-                                                <input type="checkbox" name="kondisi_lingkungan_{{ $index }}[]" value="normal" 
+                                                <input type="checkbox" name="kondisi_lingkungan_{{ $index }}[]" value="normal"
                                                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                             </td>
                                             <td class="px-6 py-4 text-center border-r border">
-                                                <input type="checkbox" name="kondisi_lingkungan_{{ $index }}[]" value="abnormal" 
+                                                <input type="checkbox" name="kondisi_lingkungan_{{ $index }}[]" value="abnormal"
                                                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                             </td>
                                             <td class="px-6 py-4 border-r border">
-                                                <textarea name="keterangan_lingkungan_{{ $index }}" rows="2" 
-                                                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                                                <textarea name="keterangan_lingkungan_{{ $index }}" rows="2"
+                                                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                           placeholder="Masukkan keterangan..."></textarea>
                                             </td>
                                             <td class="px-6 py-4 border-r border">
-                                                <input type="file" 
+                                                <input type="file"
                                                        id="file_lingkungan_{{ $index }}"
                                                        class="hidden"
                                                        accept="image/*"
-                                                       onchange="handleFileSelect(this, 'lingkungan_{{ $index }}')">
+                                                       onchange="previewImage(this, 'preview_lingkungan_{{ $index }}')">
                                                 <input type="hidden" name="eviden_path_lingkungan_{{ $index }}" id="eviden_path_lingkungan_{{ $index }}">
-                                                <button type="button" 
-                                                        onclick="document.getElementById('file_lingkungan_{{ $index }}').click()"
-                                                        class="w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-200">
-                                                    <i class="fas fa-upload mr-2"></i>
-                                                    Upload Eviden
-                                                </button>
-                                                <div id="preview_lingkungan_{{ $index }}" class="mt-2 relative">
-                                                    <!-- Preview will be shown here -->
+                                                <div class="relative">
+                                                    <div id="preview_lingkungan_{{ $index }}" class="preview-container mb-2 hidden">
+                                                        <img src="#" alt="Preview" class="w-full h-32 object-cover rounded-lg border border-gray-200">
+                                                        <button type="button"
+                                                                class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                                                                onclick="removeImage(this, 'lingkungan_{{ $index }}')">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                    <button type="button"
+                                                            onclick="document.getElementById('file_lingkungan_{{ $index }}').click()"
+                                                            class="w-full px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg border-2 border-blue-100 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                        <i class="fas fa-upload mr-2"></i>
+                                                        Upload Eviden
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -279,28 +293,28 @@ function toggleFullTableView() {
     const button = document.getElementById('toggleFullTable');
     const welcomeCard = document.querySelector('.bg-gradient-to-r');
     const mainContent = document.querySelector('main');
-    
+
     // Toggle full table mode
     const isFullTable = button.classList.contains('bg-blue-600');
-    
+
     if (isFullTable) {
         // Restore normal view
         button.classList.remove('bg-blue-600', 'text-white');
         button.classList.add('bg-blue-50', 'text-blue-600');
         button.innerHTML = '<i class="fas fa-expand mr-1"></i> Full Table';
-        
+
         if (welcomeCard) {
             welcomeCard.classList.remove('hidden-section');
             setTimeout(() => welcomeCard.style.display = '', 10);
         }
         if (mainContent) mainContent.classList.remove('pt-0');
-        
+
     } else {
         // Enable full table view
         button.classList.remove('bg-blue-50', 'text-blue-600');
         button.classList.add('bg-blue-600', 'text-white');
         button.innerHTML = '<i class="fas fa-compress mr-1"></i> Normal View';
-        
+
         if (welcomeCard) {
             welcomeCard.classList.add('hidden-section');
             setTimeout(() => welcomeCard.style.display = 'none', 300);
@@ -321,19 +335,22 @@ function closeMediaModal() {
     document.getElementById('mediaType').value = '';
 }
 
-function handleFileSelect(input, rowId) {
+function previewImage(input, previewId) {
     const file = input.files[0];
     if (!file) return;
 
+    // Show preview immediately
+    const previewContainer = document.getElementById(previewId);
+    previewContainer.classList.remove('hidden');
+    const previewImg = previewContainer.querySelector('img');
+    previewImg.src = URL.createObjectURL(file);
+
     const formData = new FormData();
     formData.append('media_file', file);
-    formData.append('row_id', rowId);
+    formData.append('row_id', previewId);
     formData.append('_token', '{{ csrf_token() }}');
 
-    // Show loading state
-    const previewDiv = document.getElementById(`preview_${rowId}`);
-    previewDiv.innerHTML = '<div class="text-center py-2">Uploading...</div>';
-
+    // Upload to server
     fetch('{{ route('admin.k3-kamp.upload-media') }}', {
         method: 'POST',
         body: formData
@@ -341,57 +358,60 @@ function handleFileSelect(input, rowId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Set file path to hidden input
-            document.getElementById(`eviden_path_${rowId}`).value = data.data.file_path;
-            
-            // Show preview
-            previewDiv.innerHTML = `
-                <div class="relative">
-                    <img src="${data.data.preview_url}" 
-                         alt="Preview" 
-                         class="w-full h-32 object-cover rounded-md">
-                    <button onclick="deleteMedia('${data.data.id}', '${rowId}')"
-                            class="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 m-1 hover:bg-red-600">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <p class="text-xs text-gray-500 mt-1">${data.data.file_name}</p>
-            `;
+            // Update hidden input with file path
+            const fieldName = previewId.includes('lingkungan') ?
+                `eviden_path_${previewId}` :
+                `eviden_path_${previewId.replace('preview_', '')}`;
+            document.getElementById(fieldName).value = data.data.file_path;
         } else {
-            previewDiv.innerHTML = `<div class="text-red-500 text-sm">${data.message}</div>`;
+            alert('Upload failed: ' + data.message);
+            removeImage(null, previewId.replace('preview_', ''));
         }
     })
     .catch(error => {
-        previewDiv.innerHTML = '<div class="text-red-500 text-sm">Upload failed</div>';
         console.error('Error:', error);
+        alert('Upload failed');
+        removeImage(null, previewId.replace('preview_', ''));
     });
 }
 
-function deleteMedia(mediaId, rowId) {
-    if (!confirm('Are you sure you want to delete this image?')) return;
+function removeImage(button, rowId) {
+    const previewContainer = document.getElementById(`preview_${rowId}`);
+    const input = document.getElementById(`file_${rowId}`);
+    const hiddenInput = document.getElementById(`eviden_path_${rowId}`);
 
-    fetch(`{{ url('admin/k3-kamp/delete-media') }}/${mediaId}`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Clear preview and hidden input
-            document.getElementById(`preview_${rowId}`).innerHTML = '';
-            document.getElementById(`file_${rowId}`).value = '';
-            document.getElementById(`eviden_path_${rowId}`).value = '';
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Failed to delete media');
-    });
+    // Reset file input
+    if (input) input.value = '';
+
+    // Hide preview
+    if (previewContainer) {
+        previewContainer.classList.add('hidden');
+        const previewImg = previewContainer.querySelector('img');
+        if (previewImg) previewImg.src = '#';
+    }
+
+    // Clear hidden input
+    if (hiddenInput) hiddenInput.value = '';
+
+    // If there's a file path, delete from server
+    if (hiddenInput && hiddenInput.value) {
+        fetch(`{{ url('admin/k3-kamp/delete-media') }}/${hiddenInput.value}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                console.error('Failed to delete media:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting media:', error);
+        });
+    }
 }
 </script>
-@endsection 
+@endsection

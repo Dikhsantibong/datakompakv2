@@ -60,7 +60,7 @@ class K3KampController extends Controller
                 'mysql' => 'UP Kendari',
                 'mysql_mikuasi' => 'PLTM MIKUASI'
             ];
-            
+
             $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';
 
             // Create report
@@ -112,10 +112,10 @@ class K3KampController extends Controller
                     // Update media jika ada
                     if ($request->filled("eviden_path_{$index}")) {
                         $mediaPath = $request->input("eviden_path_{$index}");
-                        $updated = K3KampMedia::where('item_id', 0)
+                        $updated = K3KampMedia::where('item_id', null)
                             ->where('file_path', $mediaPath)
                             ->update(['item_id' => $item->id]);
-                        
+
                         // Debug log
                         Log::info('Updated media for k3 item', [
                             'item_id' => $item->id,
@@ -163,10 +163,10 @@ class K3KampController extends Controller
                     // Update media jika ada
                     if ($request->filled("eviden_path_lingkungan_{$index}")) {
                         $mediaPath = $request->input("eviden_path_lingkungan_{$index}");
-                        $updated = K3KampMedia::where('item_id', 0)
+                        $updated = K3KampMedia::where('item_id', null)
                             ->where('file_path', $mediaPath)
                             ->update(['item_id' => $item->id]);
-                        
+
                         // Debug log
                         Log::info('Updated media for lingkungan item', [
                             'item_id' => $item->id,
@@ -178,7 +178,7 @@ class K3KampController extends Controller
             }
 
             // Update any remaining unlinked media
-            $unlinkedMedia = K3KampMedia::where('item_id', 0)->get();
+            $unlinkedMedia = K3KampMedia::whereNull('item_id')->get();
             if ($unlinkedMedia->count() > 0) {
                 Log::warning('Found unlinked media after processing', [
                     'count' => $unlinkedMedia->count(),
@@ -230,7 +230,7 @@ class K3KampController extends Controller
             DB::beginTransaction();
 
             K3KampReport::$isSyncing = false;
-            
+
             $report = K3KampReport::findOrFail($id);
 
             // Update sync_unit_origin if not set
@@ -259,14 +259,14 @@ class K3KampController extends Controller
                     'mysql_moramo' => 'PLTD MORAMO',
                     'mysql' => 'UP Kendari'
                 ];
-                
+
                 $unitName = $unitMapping[$unitSource] ?? 'UP Kendari';
-                
+
                 $report->update([
                     'sync_unit_origin' => $unitName
                 ]);
             }
-            
+
             // Update items
             foreach ($report->items as $item) {
                 $item->update([
@@ -296,10 +296,10 @@ class K3KampController extends Controller
             K3KampReport::$isSyncing = false;
             K3KampItem::$isSyncing = false;
             K3KampMedia::$isSyncing = false;
-            
+
             // Ambil report beserta relasi
             $report = K3KampReport::with(['items.media'])->findOrFail($id);
-            
+
             // Debug log
             Log::info('Starting deletion process for report', [
                 'report_id' => $id,
@@ -314,7 +314,7 @@ class K3KampController extends Controller
                 foreach ($item->media as $media) {
                     // Hapus file fisik
                     Storage::disk('public')->delete($media->file_path);
-                    
+
                     // Hapus record media
                     $media->delete();
 
@@ -328,7 +328,7 @@ class K3KampController extends Controller
             // 2. Hapus semua items
             foreach ($report->items as $item) {
                 $item->delete();
-                
+
                 Log::info('Deleted item', [
                     'item_id' => $item->id,
                     'item_type' => $item->item_type,
@@ -338,7 +338,7 @@ class K3KampController extends Controller
 
             // 3. Hapus report
             $report->delete();
-            
+
             Log::info('Successfully deleted report and all related data', [
                 'report_id' => $id
             ]);
@@ -349,12 +349,12 @@ class K3KampController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             Log::error('Error deleting K3 KAMP report: ' . $e->getMessage(), [
                 'exception' => $e,
                 'report_id' => $id
             ]);
-            
+
             return redirect()->back()
                 ->with('error', 'Terjadi kesalahan saat menghapus laporan: ' . $e->getMessage());
         }
@@ -389,14 +389,14 @@ class K3KampController extends Controller
                     }]);
                 }
             }
-            
+
             return Excel::download(
-                new K3KampExport($report), 
+                new K3KampExport($report),
                 'laporan-k3-kamp-' . $report->date->format('dmY') . '.xlsx'
             );
         } catch (\Exception $e) {
             report($e); // Log error menggunakan Laravel error reporting
-            
+
             return redirect()->back()
                 ->with('error', 'Terjadi kesalahan saat mengekspor Excel: ' . $e->getMessage());
         }
@@ -426,7 +426,7 @@ class K3KampController extends Controller
         try {
             $file = $request->file('media_file');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            
+
             // Store file
             $path = $file->storeAs(
                 'k3-kamp-media',
@@ -434,10 +434,10 @@ class K3KampController extends Controller
                 'public'
             );
 
-            // Create media record with item_id 0 initially
+            // Create media record with item_id NULL initially
             // It will be updated later when the form is submitted
             $media = K3KampMedia::create([
-                'item_id' => 0, // Set to 0 initially
+                'item_id' => null, // Changed from 0 to null
                 'media_type' => 'image',
                 'file_path' => $path,
                 'original_name' => $file->getClientOriginalName(),
@@ -482,4 +482,4 @@ class K3KampController extends Controller
             ], 500);
         }
     }
-} 
+}

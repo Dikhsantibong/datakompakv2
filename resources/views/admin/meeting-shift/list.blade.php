@@ -194,7 +194,7 @@
                                             </span>
                                         </td>
 
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200 text-center">
                                             @php
                                                 $units = $meetingShift->machineStatuses
                                                     ->map(function($status) {

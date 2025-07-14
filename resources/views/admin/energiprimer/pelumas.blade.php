@@ -236,16 +236,15 @@
                                                     $isWord = in_array(strtolower($extension), ['doc', 'docx']);
                                                 @endphp
                                                 @if($isImage)
-                                                    <a href="#" 
-                                                       onclick="openLightbox('{{ asset('storage/documents/pelumas/' . $item->document) }}', 'Preview Gambar')"
+                                                    <a href="{{ asset('storage/documents/pelumas/' . $item->document) }}" 
+                                                       target="_blank"
                                                        class="group relative inline-block">
                                                         <img src="{{ asset('storage/documents/pelumas/' . $item->document) }}" 
                                                              alt="Preview" 
-                                                             class="h-20 w-32 object-cover rounded mx-auto"
-                                                             style="display:block;"
+                                                             class="h-8 w-8 object-cover rounded"
                                                              onerror="this.src='{{ asset('images/no-image.png') }}'; this.onerror=null;">
                                                         <div class="hidden group-hover:block absolute z-10 p-2 bg-gray-800 text-white text-xs rounded mt-1">
-                                                            Klik untuk memperbesar
+                                                            Klik untuk melihat gambar
                                                         </div>
                                                     </a>
                                                 @elseif($isPdf)
@@ -354,30 +353,5 @@ function toggleFullTableView() {
         if (mainContent) mainContent.classList.add('pt-0');
     }
 }
-
-function openLightbox(imageUrl, title) {
-    document.getElementById('lightboxImage').src = imageUrl;
-    document.getElementById('lightboxTitle').textContent = title;
-    document.getElementById('lightboxModal').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeLightbox() {
-    document.getElementById('lightboxModal').classList.add('hidden');
-    document.body.style.overflow = 'auto';
-}
-
-// Close lightbox when clicking outside the image
-    document.getElementById('lightboxModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeLightbox();
-        }
-    });
-// Close lightbox when pressing Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeLightbox();
-        }
-    });
 </script>
 @endpush

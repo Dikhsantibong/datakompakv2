@@ -228,32 +228,39 @@
                                             {{ $item->catatan_transaksi }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-gray-200">
-                                            @if($item->document)
-                                                @php
-                                                    $extension = pathinfo($item->document, PATHINFO_EXTENSION);
-                                                    $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png']);
-                                                @endphp
-                                                @if($isImage)
-                                                    <a href="{{ Storage::url('documents/pelumas/' . $item->document) }}" 
-                                                       target="_blank"
-                                                       class="group relative inline-block">
-                                                        <img src="{{ Storage::url('documents/pelumas/' . $item->document) }}" 
-                                                             alt="Preview" 
-                                                             class="h-8 w-8 object-cover rounded">
-                                                        <div class="hidden group-hover:block absolute z-10 p-2 bg-gray-800 text-white text-xs rounded mt-1">
-                                                            Klik untuk melihat gambar
+                                            <div class="space-y-2 w-[120px]">
+                                                @if($item->document)
+                                                    @php
+                                                        $extension = pathinfo($item->document, PATHINFO_EXTENSION);
+                                                        $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'webp']);
+                                                    @endphp
+                                                    @if($isImage)
+                                                        <div class="evidence-container">
+                                                            <img src="{{ asset('documents/pelumas/' . $item->document) }}"
+                                                                 alt="Eviden"
+                                                                 class="evidence-image"
+                                                                 style="height: 60px; width: 100%; object-fit: cover; border-radius: 0.375rem;"
+                                                                 onerror="this.src='{{ asset('images/no-image.png') }}'; this.onerror=null;">
+                                                            <button type="button"
+                                                                    onclick="openLightbox('{{ asset('documents/pelumas/' . $item->document) }}', 'Eviden')"
+                                                                    class="zoom-button"
+                                                                    style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.2s;">
+                                                                <span class="bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-xs">
+                                                                    <i class="fas fa-search-plus mr-1"></i>Perbesar
+                                                                </span>
+                                                            </button>
                                                         </div>
-                                                    </a>
+                                                    @else
+                                                        <a href="{{ asset('documents/pelumas/' . $item->document) }}"
+                                                           target="_blank"
+                                                           class="text-blue-600 hover:text-blue-900 flex items-center">
+                                                            <i class="fas fa-file-download mr-1"></i> Download
+                                                        </a>
+                                                    @endif
                                                 @else
-                                                    <a href="{{ Storage::url('documents/pelumas/' . $item->document) }}" 
-                                                       target="_blank"
-                                                       class="text-blue-600 hover:text-blue-900">
-                                                        <i class="fas fa-file-download mr-1"></i> Download
-                                                    </a>
+                                                    <span class="text-gray-400">Tidak ada eviden</span>
                                                 @endif
-                                            @else
-                                                <span class="text-gray-400">Tidak ada dokumen</span>
-                                            @endif
+                                            </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex gap-3">

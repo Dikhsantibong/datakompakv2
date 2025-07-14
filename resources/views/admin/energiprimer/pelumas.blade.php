@@ -236,10 +236,10 @@
                                                     $isWord = in_array(strtolower($extension), ['doc', 'docx']);
                                                 @endphp
                                                 @if($isImage)
-                                                    <a href="{{ asset('storage/documents/pelumas/' . $item->document) }}" 
+                                                    <a href="{{ asset('storage/' . $item->document) }}" 
                                                        target="_blank"
                                                        class="group relative inline-block">
-                                                        <img src="{{ asset('storage/documents/pelumas/' . $item->document) }}" 
+                                                        <img src="{{ asset('storage/' . $item->document) }}" 
                                                              alt="Preview" 
                                                              class="h-8 w-8 object-cover rounded"
                                                              onerror="this.src='{{ asset('images/no-image.png') }}'; this.onerror=null;">
@@ -248,15 +248,15 @@
                                                         </div>
                                                     </a>
                                                 @elseif($isPdf)
-                                                    <a href="{{ asset('storage/documents/pelumas/' . $item->document) }}" target="_blank" class="flex items-center text-red-600 hover:text-red-800">
+                                                    <a href="{{ asset('storage/' . $item->document) }}" target="_blank" class="flex items-center text-red-600 hover:text-red-800">
                                                         <i class="fas fa-file-pdf fa-lg mr-1"></i> Lihat PDF
                                                     </a>
                                                 @elseif($isWord)
-                                                    <a href="{{ asset('storage/documents/pelumas/' . $item->document) }}" target="_blank" class="flex items-center text-blue-700 hover:text-blue-900">
+                                                    <a href="{{ asset('storage/' . $item->document) }}" target="_blank" class="flex items-center text-blue-700 hover:text-blue-900">
                                                         <i class="fas fa-file-word fa-lg mr-1"></i> Download Word
                                                     </a>
                                                 @else
-                                                    <a href="{{ asset('storage/documents/pelumas/' . $item->document) }}" target="_blank" class="flex items-center text-gray-600 hover:text-gray-900">
+                                                    <a href="{{ asset('storage/' . $item->document) }}" target="_blank" class="flex items-center text-gray-600 hover:text-gray-900">
                                                         <i class="fas fa-file-download fa-lg mr-1"></i> Download File
                                                     </a>
                                                 @endif

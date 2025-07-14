@@ -241,7 +241,8 @@
                                                        class="group relative inline-block">
                                                         <img src="{{ asset('storage/documents/pelumas/' . $item->document) }}" 
                                                              alt="Preview" 
-                                                             class="h-8 w-8 object-cover rounded"
+                                                             class="h-20 w-32 object-cover rounded mx-auto"
+                                                             style="display:block;"
                                                              onerror="this.src='{{ asset('images/no-image.png') }}'; this.onerror=null;">
                                                         <div class="hidden group-hover:block absolute z-10 p-2 bg-gray-800 text-white text-xs rounded mt-1">
                                                             Klik untuk melihat gambar

@@ -232,23 +232,32 @@
                                                 @php
                                                     $extension = pathinfo($item->document, PATHINFO_EXTENSION);
                                                     $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png']);
+                                                    $isPdf = strtolower($extension) === 'pdf';
+                                                    $isWord = in_array(strtolower($extension), ['doc', 'docx']);
                                                 @endphp
                                                 @if($isImage)
-                                                    <a href="{{ Storage::url('documents/pelumas/' . $item->document) }}" 
+                                                    <a href="{{ asset('storage/documents/pelumas/' . $item->document) }}" 
                                                        target="_blank"
                                                        class="group relative inline-block">
-                                                        <img src="{{ Storage::url('documents/pelumas/' . $item->document) }}" 
+                                                        <img src="{{ asset('storage/documents/pelumas/' . $item->document) }}" 
                                                              alt="Preview" 
-                                                             class="h-8 w-8 object-cover rounded">
+                                                             class="h-8 w-8 object-cover rounded"
+                                                             onerror="this.src='{{ asset('images/no-image.png') }}'; this.onerror=null;">
                                                         <div class="hidden group-hover:block absolute z-10 p-2 bg-gray-800 text-white text-xs rounded mt-1">
                                                             Klik untuk melihat gambar
                                                         </div>
                                                     </a>
+                                                @elseif($isPdf)
+                                                    <a href="{{ asset('storage/documents/pelumas/' . $item->document) }}" target="_blank" class="flex items-center text-red-600 hover:text-red-800">
+                                                        <i class="fas fa-file-pdf fa-lg mr-1"></i> Lihat PDF
+                                                    </a>
+                                                @elseif($isWord)
+                                                    <a href="{{ asset('storage/documents/pelumas/' . $item->document) }}" target="_blank" class="flex items-center text-blue-700 hover:text-blue-900">
+                                                        <i class="fas fa-file-word fa-lg mr-1"></i> Download Word
+                                                    </a>
                                                 @else
-                                                    <a href="{{ Storage::url('documents/pelumas/' . $item->document) }}" 
-                                                       target="_blank"
-                                                       class="text-blue-600 hover:text-blue-900">
-                                                        <i class="fas fa-file-download mr-1"></i> Download
+                                                    <a href="{{ asset('storage/documents/pelumas/' . $item->document) }}" target="_blank" class="flex items-center text-gray-600 hover:text-gray-900">
+                                                        <i class="fas fa-file-download fa-lg mr-1"></i> Download File
                                                     </a>
                                                 @endif
                                             @else

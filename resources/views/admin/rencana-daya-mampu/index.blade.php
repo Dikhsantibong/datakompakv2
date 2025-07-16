@@ -195,11 +195,11 @@
                                                                     <span class="data-display">{{ $row['beban'] ?? '-' }}</span>
                                                                 </td>
                                                                 <td class="border px-2 py-1">
-                                                                    <input type="time" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $index }}][on]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $row['on'] ?? '' }}" step="1" pattern="[0-9]{2}:[0-9]{2}" placeholder="HH:mm">
+                                                                    <input type="time" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $index }}][on]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $row['on'] ?? '' }}" pattern="[0-9]{2}:[0-9]{2}" placeholder="HH:mm">
                                                                     <span class="data-display">{{ $row['on'] ?? '-' }}</span>
                                                                 </td>
                                                                 <td class="border px-2 py-1">
-                                                                    <input type="time" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $index }}][off]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $row['off'] ?? '' }}" step="1" pattern="[0-9]{2}:[0-9]{2}" placeholder="HH:mm">
+                                                                    <input type="time" name="rencana[{{ $machine->id }}][{{ $date }}][{{ $index }}][off]" class="data-input hidden w-24 text-center border rounded focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all duration-150" value="{{ $row['off'] ?? '' }}" pattern="[0-9]{2}:[0-9]{2}" placeholder="HH:mm">
                                                                     <span class="data-display">{{ $row['off'] ?? '-' }}</span>
                                                                 </td>
                                                                 <td class="border px-2 py-1">

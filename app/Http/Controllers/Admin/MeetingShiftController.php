@@ -558,21 +558,13 @@ class MeetingShiftController extends Controller
 
             $filename = 'meeting-shift-' . $meetingShift->tanggal->format('Y-m-d') . '-shift-' . $meetingShift->current_shift;
             
-            // Get selected sheets
-            $selectedSheets = $request->input('sheets', []);
-            
-            // Pass selected sheets to export class
             return Excel::download(
-                new MeetingShiftExport($meetingShift, $selectedSheets),
-                $filename . '.' . ($request->input('format', 'xlsx'))
+                new MeetingShiftExport($meetingShift),
+                $filename . '.xlsx'
             );
         } catch (\Exception $e) {
-            Log::error('Error generating Excel: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengunduh Excel: ' . $e->getMessage());
+            Log::error('Error generating Excel: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengunduh Excel');
         }
     }
 

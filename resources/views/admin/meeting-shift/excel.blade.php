@@ -10,7 +10,6 @@
     </tr>
     <tr><td colspan="6" style="height:15px;"></td></tr>
 
-    @if(empty($selectedSheets) || in_array('machine_statuses', $selectedSheets))
     <!-- Machine Status Section -->
     <tr class="section-header">
         <td colspan="6" style="font-size:13px; font-weight:bold; background:#E2E8F0; border:2px solid #000; height:25px;">Status Mesin</td>
@@ -32,9 +31,7 @@
     </tr>
     @endforeach
     <tr><td colspan="6" style="height:15px;"></td></tr>
-    @endif
 
-    @if(empty($selectedSheets) || in_array('auxiliary_equipment', $selectedSheets))
     <!-- Auxiliary Equipment Section -->
     <tr class="section-header">
         <td colspan="6" style="font-size:13px; font-weight:bold; background:#E2E8F0; border:2px solid #000; height:25px;">Alat Bantu</td>
@@ -54,9 +51,7 @@
     </tr>
     @endforeach
     <tr><td colspan="6" style="height:15px;"></td></tr>
-    @endif
 
-    @if(empty($selectedSheets) || in_array('resources', $selectedSheets))
     <!-- Resources Section -->
     <tr class="section-header">
         <td colspan="6" style="font-size:13px; font-weight:bold; background:#E2E8F0; border:2px solid #000; height:25px;">Resources</td>
@@ -78,9 +73,7 @@
     </tr>
     @endforeach
     <tr><td colspan="6" style="height:15px;"></td></tr>
-    @endif
 
-    @if(empty($selectedSheets) || in_array('k3l', $selectedSheets))
     <!-- K3L Section -->
     <tr class="section-header">
         <td colspan="6" style="font-size:13px; font-weight:bold; background:#E2E8F0; border:2px solid #000; height:25px;">K3L</td>
@@ -100,9 +93,7 @@
     </tr>
     @endforeach
     <tr><td colspan="6" style="height:15px;"></td></tr>
-    @endif
 
-    @if(empty($selectedSheets) || in_array('notes', $selectedSheets))
     <!-- Notes Section -->
     <tr class="section-header">
         <td colspan="6" style="font-size:13px; font-weight:bold; background:#E2E8F0; border:2px solid #000; height:25px;">Catatan</td>
@@ -124,9 +115,7 @@
         <td colspan="4" style="border:1px solid #000;">{{ $meetingShift->resume->content ?? '-' }}</td>
     </tr>
     <tr><td colspan="6" style="height:15px;"></td></tr>
-    @endif
 
-    @if(empty($selectedSheets) || in_array('attendance', $selectedSheets))
     <!-- Attendance Section -->
     <tr class="section-header">
         <td colspan="6" style="font-size:13px; font-weight:bold; background:#E2E8F0; border:2px solid #000; height:25px;">Absensi</td>
@@ -148,7 +137,6 @@
     </tr>
     @endforeach
     <tr><td colspan="6" style="height:15px;"></td></tr>
-    @endif
 
     <!-- Signature Section -->
     <tr><td colspan="6" style="height:30px;"></td></tr>

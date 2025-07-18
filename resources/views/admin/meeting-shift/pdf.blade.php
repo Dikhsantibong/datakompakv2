@@ -6,25 +6,42 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
+        }
+        .header-container {
+            position: relative;
+            width: 100%;
+            height: 80px;
+        }
+        .logo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 60px;
         }
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            padding-top: 70px;
+            margin-bottom: 20px;
         }
         .header h1 {
+            font-size: 16px;
             margin: 0;
-            color: #333;
+            padding: 0;
         }
-        .header p {
-            margin: 5px 0;
-            color: #666;
+        .info {
+            margin-bottom: 20px;
+        }
+        .info-item {
+            margin-bottom: 5px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         th, td {
             border: 1px solid #ddd;
@@ -35,50 +52,48 @@
             background-color: #f5f5f5;
         }
         .section-title {
-            margin-top: 20px;
-            margin-bottom: 10px;
-            color: #333;
-            font-size: 18px;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 15px 0 10px;
         }
         .status-badge {
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
         }
-        .status-operasi { background-color: #e3f2fd; color: #1976d2; }
-        .status-standby { background-color: #f3e5f5; color: #7b1fa2; }
-        .status-gangguan { background-color: #ffebee; color: #c62828; }
-        table thead tr th {
-            background-color: #009BB9 !important;
-            color: #fff !important;
+        .footer {
+            margin-top: 30px;
+            text-align: right;
         }
     </style>
 </head>
 <body>
-    <!-- Header container -->
-    <div style="position: relative; width: 100%; min-height: 80px;">
-        <!-- Logo kiri atas -->
-        <img src="{{ public_path('logo/navlog1.png') }}" alt="Logo" style="position: absolute; top: 0; left: 0; height: 55px;">
-        <!-- Logo kanan atas dan username overlap -->
-        <div style="position: absolute; top: 0; right: 0; width: 170px; height: 70px;">
-            <img src="{{ public_path('logo/PLN-bg.png') }}" alt="PLN Logo" style="height: 55px; display: block; margin: 0 auto;">
-            <span style="position: absolute; left: 52px; right: 0; top: 22px; font-size: 16px; color: #406a7d; font-family: Arial, sans-serif; text-align: center; font-weight: normal; white-space: nowrap;">{{ Auth::user()->name }}</span>
-        </div>
-    </div>
-    <!-- Judul dan detail di tengah, tanpa margin atas besar -->
-    <div style="text-align: center; margin-bottom: 30px; margin-top: 0;">
-        <h1 style="margin: 0; color: #333; font-size: 28px;">Meeting Shift Report</h1>
-        <p style="margin: 5px 0; color: #666;">Tanggal: {{ $meetingShift->tanggal->format('d F Y') }}</p>
-        <p style="margin: 5px 0; color: #666;">Shift: {{ $meetingShift->current_shift }}</p>
-        <p style="margin: 5px 0; color: #666;">Dibuat oleh: {{ $meetingShift->creator->name }}</p>
+    <div class="header-container">
+        <img src="{{ public_path('logo/navlog1.png') }}" alt="PLN Nusantara Power Logo" class="logo">
     </div>
 
-    <!-- Machine Statuses -->
+    <div class="header">
+        <h1>LAPORAN MEETING DAN MUTASI SHIFT</h1>
+    </div>
+
+    <div class="info">
+        <div class="info-item">
+            <strong>Tanggal:</strong> {{ $meetingShift->tanggal->format('d F Y') }}
+        </div>
+        <div class="info-item">
+            <strong>Shift:</strong> {{ $meetingShift->current_shift }}
+        </div>
+        <div class="info-item">
+            <strong>Dibuat oleh:</strong> {{ $meetingShift->creator->name ?? '-' }}
+        </div>
+    </div>
+
+    <!-- Machine Status Section -->
     <div class="section-title">Status Mesin</div>
     <table>
         <thead>
-            <tr style="background-color: #009BB9; color: #fff;">
+            <tr>
                 <th>Mesin</th>
                 <th>Status</th>
                 <th>Keterangan</th>
@@ -87,13 +102,13 @@
         <tbody>
             @foreach($meetingShift->machineStatuses as $status)
             <tr>
-                <td>{{ $status->machine->name }}</td>
+                <td>{{ $status->machine->name ?? '-' }}</td>
                 <td>
                     @php
-                        $statuses = json_decode($status->status);
+                        $statuses = is_array($status->status) ? $status->status : json_decode($status->status, true);
                     @endphp
                     @foreach($statuses as $stat)
-                        <span class="status-badge status-{{ strtolower($stat) }}">{{ $stat }}</span>
+                        <span class="status-badge">{{ $stat }}</span>
                     @endforeach
                 </td>
                 <td>{{ $status->keterangan ?? '-' }}</td>
@@ -102,11 +117,11 @@
         </tbody>
     </table>
 
-    <!-- Auxiliary Equipment -->
+    <!-- Auxiliary Equipment Section -->
     <div class="section-title">Peralatan Bantu</div>
     <table>
         <thead>
-            <tr style="background-color: #009BB9; color: #fff;">
+            <tr>
                 <th>Nama</th>
                 <th>Status</th>
                 <th>Keterangan</th>
@@ -118,7 +133,7 @@
                 <td>{{ $equipment->name }}</td>
                 <td>
                     @php
-                        $statuses = json_decode($equipment->status);
+                        $statuses = is_array($equipment->status) ? $equipment->status : json_decode($equipment->status, true);
                     @endphp
                     @foreach($statuses as $stat)
                         <span class="status-badge">{{ $stat }}</span>
@@ -130,11 +145,11 @@
         </tbody>
     </table>
 
-    <!-- Resources -->
-    <div class="section-title">Resources</div>
+    <!-- Resources Section -->
+    <div class="section-title">Sumber Daya</div>
     <table>
         <thead>
-            <tr style="background-color: #009BB9; color: #fff;">
+            <tr>
                 <th>Nama</th>
                 <th>Kategori</th>
                 <th>Status</th>
@@ -153,11 +168,11 @@
         </tbody>
     </table>
 
-    <!-- K3L -->
+    <!-- K3L Section -->
     <div class="section-title">K3L</div>
     <table>
         <thead>
-            <tr style="background-color: #009BB9; color: #fff;">
+            <tr>
                 <th>Tipe</th>
                 <th>Uraian</th>
                 <th>Saran</th>
@@ -174,36 +189,32 @@
         </tbody>
     </table>
 
-    <!-- Notes -->
+    <!-- Notes Section -->
     <div class="section-title">Catatan</div>
     <table>
-        <thead>
-            <tr style="background-color: #009BB9; color: #fff;">
-                <th>Tipe</th>
-                <th>Konten</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($meetingShift->notes as $note)
-            <tr>
-                <td>{{ ucfirst($note->type) }}</td>
-                <td>{{ $note->content }}</td>
-            </tr>
-            @endforeach
-        </tbody>
+        <tr>
+            <th>Catatan Sistem</th>
+            <td>{{ $meetingShift->systemNote->content ?? '-' }}</td>
+        </tr>
+        <tr>
+            <th>Catatan Umum</th>
+            <td>{{ $meetingShift->generalNote->content ?? '-' }}</td>
+        </tr>
     </table>
 
-    <!-- Resume -->
-    @if($meetingShift->resume)
+    <!-- Resume Section -->
     <div class="section-title">Resume</div>
-    <p>{{ $meetingShift->resume->content }}</p>
-    @endif
+    <table>
+        <tr>
+            <td>{{ $meetingShift->resume->content ?? '-' }}</td>
+        </tr>
+    </table>
 
-    <!-- Attendance -->
-    <div class="section-title">Kehadiran</div>
+    <!-- Attendance Section -->
+    <div class="section-title">Absensi</div>
     <table>
         <thead>
-            <tr style="background-color: #009BB9; color: #fff;">
+            <tr>
                 <th>Nama</th>
                 <th>Shift</th>
                 <th>Status</th>
@@ -221,5 +232,9 @@
             @endforeach
         </tbody>
     </table>
+
+    <div class="footer">
+        <p>Dicetak pada: {{ now()->format('d F Y H:i:s') }}</p>
+    </div>
 </body>
 </html> 

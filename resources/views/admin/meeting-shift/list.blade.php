@@ -272,6 +272,11 @@
                                                     title="Export">
                                                     <i class="fas fa-file-export mr-1"></i>Excel
                                                 </a>
+                                                <a href="{{ route('admin.meeting-shift.download-pdf', $meetingShift) }}"
+                                                    class="text-red-600 hover:text-red-900"
+                                                    title="Export PDF">
+                                                    <i class="fas fa-file-pdf mr-1"></i>PDF
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>

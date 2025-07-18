@@ -27,10 +27,12 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
     protected $meetingShift;
     protected $sectionRows;
     protected $signatureStartRow;
+    protected $selectedSheets;
 
-    public function __construct(MeetingShift $meetingShift)
+    public function __construct(MeetingShift $meetingShift, array $selectedSheets = [])
     {
         $this->meetingShift = $meetingShift;
+        $this->selectedSheets = $selectedSheets;
         // Define section header rows (will be populated after view rendering)
         $this->sectionRows = [];
         $this->signatureStartRow = null;
@@ -39,7 +41,8 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
     public function view(): View
     {
         return view('admin.meeting-shift.excel', [
-            'meetingShift' => $this->meetingShift
+            'meetingShift' => $this->meetingShift,
+            'selectedSheets' => $this->selectedSheets
         ]);
     }
 
@@ -134,6 +137,7 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
         $sheet->getColumnDimension('C')->setWidth(20); // Status
         $sheet->getColumnDimension('D')->setWidth(30); // Description 1
         $sheet->getColumnDimension('E')->setWidth(30); // Description 2
+        $sheet->getColumnDimension('F')->setWidth(30); // Additional column for colspan="6"
 
         // Set row height for logo row
         $sheet->getRowDimension(1)->setRowHeight(50);
@@ -200,14 +204,14 @@ class MeetingShiftExport implements FromView, WithTitle, WithEvents, WithStyles,
 
         // Apply styles to all section headers
         foreach ($this->sectionRows as $row) {
-            $sheet->getStyle("A{$row}:E{$row}")->applyFromArray($sectionHeaderStyle);
+            $sheet->getStyle("A{$row}:F{$row}")->applyFromArray($sectionHeaderStyle);
             $sheet->getRowDimension($row)->setRowHeight(25);
         }
 
         // Apply styles to table headers (rows after section headers)
         foreach ($this->sectionRows as $row) {
             $tableHeaderRow = $row + 1;
-            $sheet->getStyle("A{$tableHeaderRow}:E{$tableHeaderRow}")->applyFromArray($tableHeaderStyle);
+            $sheet->getStyle("A{$tableHeaderRow}:F{$tableHeaderRow}")->applyFromArray($tableHeaderStyle);
             $sheet->getRowDimension($tableHeaderRow)->setRowHeight(20);
         }
 

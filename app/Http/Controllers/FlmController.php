@@ -138,10 +138,11 @@ class FlmController extends Controller
             $query->where('sync_unit_origin', request('unit_origin'));
         }
 
-        // Group by flm_id to show related entries together
-        $query->orderBy('flm_id')
-              ->orderBy('tanggal', 'desc')
-              ->orderBy('created_at', 'desc');
+        // Order by newest first: tanggal DESC, time DESC, created_at DESC, flm_id DESC
+        $query->orderBy('tanggal', 'desc')
+              ->orderBy('time', 'desc')
+              ->orderBy('created_at', 'desc')
+              ->orderBy('flm_id', 'desc');
 
         $flmData = $query->paginate(10)->withQueryString();
 

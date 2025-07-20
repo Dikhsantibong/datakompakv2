@@ -312,6 +312,7 @@
                                                 <option value="BBM">BBM</option>
                                                 <option value="AIR PENDINGIN">AIR PENDINGIN</option>
                                                 <option value="UDARA START">UDARA START</option>
+                                                <option value="AKI">AKI</option>
                                             </select>
                                         </div>
                                         <div>

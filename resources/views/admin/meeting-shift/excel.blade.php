@@ -22,11 +22,17 @@
         <th colspan="2" style="background:#F8FAFC; border:1px solid #000;">Keterangan</th>
     </tr>
     @foreach($meetingShift->machineStatuses as $index => $machineStatus)
+    @php
+        $status = $machineStatus->status;
+        if (is_string($status)) {
+            $status = json_decode($status, true);
+        }
+    @endphp
     <tr>
         <td style="border:1px solid #000;">{{ $index + 1 }}</td>
         <td style="border:1px solid #000;">{{ $machineStatus->machine->powerPlant->name ?? '-' }}</td>
         <td style="border:1px solid #000;">{{ $machineStatus->machine->name }}</td>
-        <td style="border:1px solid #000;">{{ implode(', ', json_decode($machineStatus->status)) }}</td>
+        <td style="border:1px solid #000;">{{ is_array($status) ? implode(', ', $status) : $status }}</td>
         <td colspan="2" style="border:1px solid #000;">{{ $machineStatus->keterangan ?? '-' }}</td>
     </tr>
     @endforeach
@@ -43,10 +49,16 @@
         <th colspan="3" style="background:#F8FAFC; border:1px solid #000;">Keterangan</th>
     </tr>
     @foreach($meetingShift->auxiliaryEquipments as $index => $equipment)
+    @php
+        $status = $equipment->status;
+        if (is_string($status)) {
+            $status = json_decode($status, true);
+        }
+    @endphp
     <tr>
         <td style="border:1px solid #000;">{{ $index + 1 }}</td>
         <td style="border:1px solid #000;">{{ $equipment->name }}</td>
-        <td style="border:1px solid #000;">{{ implode(', ', json_decode($equipment->status)) }}</td>
+        <td style="border:1px solid #000;">{{ is_array($status) ? implode(', ', $status) : $status }}</td>
         <td colspan="3" style="border:1px solid #000;">{{ $equipment->keterangan ?? '-' }}</td>
     </tr>
     @endforeach

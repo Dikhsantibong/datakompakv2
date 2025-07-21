@@ -102,7 +102,7 @@ class DataEngineExport implements FromView, WithTitle, WithEvents, WithStyles, W
         $plnBgDrawing = new Drawing();
         $plnBgDrawing->setName('PLN-bg Logo');
         $plnBgDrawing->setDescription('PLN-bg Logo');
-        $plnBgDrawing->setPath(public_path('logo/PLN-bg.png'));
+        $plnBgDrawing->setPath(public_path('logo/UP_KENDARI.png'));
         $plnBgDrawing->setHeight(60);
         $plnBgDrawing->setCoordinates('H1');
         $plnBgDrawing->setOffsetX(5);

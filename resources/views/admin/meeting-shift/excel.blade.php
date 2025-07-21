@@ -30,8 +30,8 @@
     @endphp
     <tr>
         <td style="border:1px solid #000;">{{ $index + 1 }}</td>
-        <td style="border:1px solid #000;">{{ $machineStatus->machine->powerPlant->name ?? '-' }}</td>
-        <td style="border:1px solid #000;">{{ $machineStatus->machine->name }}</td>
+        <td style="border:1px solid #000;">{{ $machineStatus->machine?->powerPlant?->name ?? '-' }}</td>
+        <td style="border:1px solid #000;">{{ $machineStatus->machine?->name ?? '-' }}</td>
         <td style="border:1px solid #000;">{{ is_array($status) ? implode(', ', $status) : $status }}</td>
         <td colspan="2" style="border:1px solid #000;">{{ $machineStatus->keterangan ?? '-' }}</td>
     </tr>
@@ -142,7 +142,7 @@
     @foreach($meetingShift->attendances as $index => $attendance)
     <tr>
         <td style="border:1px solid #000;">{{ $index + 1 }}</td>
-        <td style="border:1px solid #000;">{{ $attendance->nama }}</td>
+        <td style="border:1px solid #000;">{{ $attendance->nama ?? '-' }}</td>
         <td style="border:1px solid #000;">{{ $attendance->shift }}</td>
         <td style="border:1px solid #000;">{{ ucfirst($attendance->status) }}</td>
         <td colspan="2" style="border:1px solid #000;">{{ $attendance->keterangan ?? '-' }}</td>
@@ -164,7 +164,7 @@
     <!-- Footer -->
     <tr><td colspan="6" style="height:15px;"></td></tr>
     <tr class="footer">
-        <td colspan="6" style="font-size:11px; text-align:right; color:#555;">Dibuat oleh: {{ $meetingShift->creator->name }} | Tanggal: {{ $meetingShift->created_at->format('d/m/Y H:i') }}</td>
+        <td colspan="6" style="font-size:11px; text-align:right; color:#555;">Dibuat oleh: {{ $meetingShift->creator?->name ?? '-' }} | Tanggal: {{ $meetingShift->created_at->format('d/m/Y H:i') }}</td>
     </tr>
     <tr><td colspan="6"></td></tr>
     <tr><td colspan="6"></td></tr>

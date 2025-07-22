@@ -19,13 +19,13 @@
     <table class="header-table">
         <tr>
             <td class="logo-left">
-                <img src="{{ public_path('logo/navlog1.png') }}" alt="PLN Logo" style="height:60px;">
+                <img src="{{ asset('logo/navlog1.png') }}" alt="PLN Logo" style="height:60px;">
             </td>
             <td class="header-title">
                 Laporan K3 KAMP & Lingkungan
             </td>
             <td class="logo-right">
-                <img src="{{ public_path('logo/UP_KENDARI.png') }}" alt="UP Kendari Logo" style="height:60px;">
+                <img src="{{ asset('logo/UP_KENDARI.png') }}" alt="UP Kendari Logo" style="height:60px;">
             </td>
         </tr>
     </table>

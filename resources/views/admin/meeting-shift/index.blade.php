@@ -397,7 +397,7 @@
                         <!-- Catatan Sistem -->
                         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                             <div class="px-4 py-5 sm:p-6">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900">Catatan Sistem</h3>
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">Catatan Sistem Distribusi</h3>
                                 <div class="mt-2">
                                     <textarea name="catatan_sistem" rows="4" required
                                         class="p-2 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md"

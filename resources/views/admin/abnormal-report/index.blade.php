@@ -489,6 +489,7 @@
 @endpush
 
 @push('scripts')
+<script src="{{ asset('js/toggle.js') }}"></script>
 <script>
 function validateForm() {
     // Get all tables

@@ -116,12 +116,11 @@
 
                                 <div class="w-full md:w-1/4">
                                     <label class="block text-sm font-medium text-gray-700">Waktu</label>
-                                    <select name="time" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                                        <option value="">Pilih Waktu</option>
-                                        <option value="08:00" {{ old('time') == '08:00' ? 'selected' : '' }}>08.00</option>
-                                        <option value="16:00" {{ old('time') == '16:00' ? 'selected' : '' }}>16.00</option>
-                                        <option value="20:00" {{ old('time') == '20:00' ? 'selected' : '' }}>20.00</option>
-                                    </select>
+                                    <input type="time" 
+                                           name="time" 
+                                           value="{{ old('time') }}" 
+                                           class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" 
+                                           required>
                                 </div>
                                 
                                 <div class="w-full md:w-1/4">

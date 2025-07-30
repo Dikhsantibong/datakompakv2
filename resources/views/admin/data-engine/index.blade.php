@@ -410,9 +410,30 @@ function getFormattedReport(selectedTime) {
 
     report += `Pukul : ${selectedTime} Wita\n\n`;
 
-    // Get all power plant sections
+    // --- Tambahan: Hitung total beban dan cadangan daya ---
+    let totalBeban = 0;
+    let totalDayaTerpasang = 0;
+    // Ambil semua baris mesin dari seluruh section
     const powerPlantSections = document.querySelectorAll('.bg-white.rounded-xl.shadow-sm.overflow-hidden.border.border-gray-100');
+    powerPlantSections.forEach(section => {
+        const machines = section.querySelectorAll('tbody tr');
+        machines.forEach(machine => {
+            const cells = machine.querySelectorAll('td');
+            if (cells.length >= 11) {
+                // Daya Terpasang di kolom 4, Beban di kolom 7
+                let dayaTerpasang = cells[3].textContent.trim().replace(/[^\d.,-]/g, '').replace(',', '.');
+                let beban = cells[6].textContent.trim().replace(/[^\d.,-]/g, '').replace(',', '.');
+                dayaTerpasang = parseFloat(dayaTerpasang) || 0;
+                beban = parseFloat(beban) || 0;
+                totalDayaTerpasang += dayaTerpasang;
+                totalBeban += beban;
+            }
+        });
+    });
+    const cadanganDaya = totalDayaTerpasang - totalBeban;
+    // --- Akhir tambahan ---
 
+    // Get all power plant sections (lanjutkan seperti sebelumnya)
     powerPlantSections.forEach(section => {
         const title = section.querySelector('h2').textContent.trim();
         const powerPlantInfo = section.querySelector('.flex.items-center.gap-4');
@@ -457,6 +478,10 @@ function getFormattedReport(selectedTime) {
             }
         });
     });
+
+    // Tambahkan total beban & cadangan daya di bawah sebelum penutup
+    report += `Total Beban: ${totalBeban.toLocaleString('id-ID', {minimumFractionDigits: 2, maximumFractionDigits: 2})} kW\n`;
+    report += `Cadangan Daya: ${cadanganDaya.toLocaleString('id-ID', {minimumFractionDigits: 2, maximumFractionDigits: 2})} kW\n\n`;
 
     report += '\nBarakallahu Fikhum dan Terima Kasih';
     return report;

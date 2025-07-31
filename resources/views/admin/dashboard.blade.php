@@ -191,32 +191,7 @@
         <div class="px-6">
             <!-- Welcome Card -->
 
-            <div class="rounded-lg shadow-sm p-4 mb-6 text-white relative welcome-card min-h-[200px] md:h-64">
-                <div class="absolute inset-0 bg-blue-500 opacity-50 rounded-lg"></div>
-                <div class="relative z-10">
-                    <!-- Text Content -->
-                    <div class="space-y-2 md:space-y-4">
-                        <div style="overflow: hidden;">
-                            <h2 class="text-2xl md:text-3xl font-bold tracking-tight typing-animation">
-                                Selamat Datang di Datakompak
-                            </h2>
-                        </div>
-                        <p class="text-sm md:text-lg font-medium fade-in">
-                            Data Komunitas Operasi Mantap Unit Pembangkit Kendari
-                        </p>
-                        <div class="backdrop-blur-sm bg-white/30 rounded-lg p-3 fade-in w-50">
-                            <p class="text-xs md:text-base leading-relaxed">
-                                Platform terintegrasi untuk monitoring dan analisis kinerja pembangkit listrik secara real-time.
-                                Dapatkan insight mendalam untuk pengambilan keputusan yang lebih efektif dan efisien.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Logo - Hidden on mobile -->
-                    <img src="{{ asset('logo/navlogo.png') }}" alt="Power Plant" class="hidden md:block absolute top-4 right-4 w-32 md:w-48 fade-in">
-                </div>
-            </div>
-
+        
 
 
 

@@ -69,9 +69,12 @@
 
                         <!-- Password -->
                         <div class="form-group mb-3">
-                            <div class="modern-input-group">
+                            <div class="modern-input-group" style="position: relative;">
                                 <i class="fas fa-lock"></i>
                                 <input id="password" type="password" class="modern-form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter Password" required autocomplete="current-password">
+                                <span class="toggle-password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #2a5298; font-size: 18px;">
+                                    <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                                </span>
                             </div>
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -725,6 +728,11 @@
             left: 100%;
         }
     }
+
+    /* Show/hide password icon hover effect */
+    .toggle-password:hover {
+        color: #1e90ff;
+    }
 </style>
 @endsection
 
@@ -808,6 +816,25 @@
                 timerProgressBar: true
             });
         @endif
+
+        // Show/hide password functionality
+        const togglePassword = document.querySelector('.toggle-password');
+        const passwordInput = document.getElementById('password');
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+        if (togglePassword && passwordInput && togglePasswordIcon) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                // Toggle icon
+                if (type === 'text') {
+                    togglePasswordIcon.classList.remove('fa-eye');
+                    togglePasswordIcon.classList.add('fa-eye-slash');
+                } else {
+                    togglePasswordIcon.classList.remove('fa-eye-slash');
+                    togglePasswordIcon.classList.add('fa-eye');
+                }
+            });
+        }
     });
 
     document.addEventListener('DOMContentLoaded', function() {

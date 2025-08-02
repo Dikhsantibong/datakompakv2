@@ -119,6 +119,7 @@ class MeetingShiftController extends Controller
                 
                 // Resume
                 'resume' => 'required|string',
+                'uraian_shift' => 'nullable|string',
                 
                 // Attendance
                 'absensi' => 'required|array',
@@ -233,7 +234,8 @@ class MeetingShiftController extends Controller
             if (!empty($validated['resume'])) {
                 MeetingShiftResume::create([
                     'meeting_shift_id' => $meetingShift->id,
-                    'content' => trim($validated['resume'])
+                    'content' => trim($validated['resume']),
+                    'uraian_shift' => $request->input('uraian_shift')
                 ]);
             }
 
@@ -455,7 +457,8 @@ class MeetingShiftController extends Controller
     public function storeResume(Request $request)
     {
         $validated = $request->validate([
-            'resume' => 'required|string'
+            'resume' => 'required|string',
+            'uraian_shift' => 'nullable|string'
         ]);
 
         DB::beginTransaction();
@@ -467,7 +470,8 @@ class MeetingShiftController extends Controller
 
             MeetingShiftResume::create([
                 'meeting_shift_id' => $meetingShift->id,
-                'content' => $validated['resume']
+                'content' => $validated['resume'],
+                'uraian_shift' => $request->input('uraian_shift')
             ]);
 
             DB::commit();
@@ -627,6 +631,7 @@ class MeetingShiftController extends Controller
                 
                 // Resume
                 'resume' => 'required|string',
+                'uraian_shift' => 'nullable|string',
                 
                 // Attendance
                 'absensi' => 'required|array',
@@ -723,7 +728,8 @@ class MeetingShiftController extends Controller
             if (!empty($validated['resume'])) {
                 MeetingShiftResume::create([
                     'meeting_shift_id' => $meetingShift->id,
-                    'content' => trim($validated['resume'])
+                    'content' => trim($validated['resume']),
+                    'uraian_shift' => $request->input('uraian_shift')
                 ]);
             }
 

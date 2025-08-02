@@ -413,6 +413,7 @@ function getFormattedReport(selectedTime) {
     // --- Tambahan: Hitung total beban dan cadangan daya ---
     let totalBeban = 0;
     let totalDayaTerpasang = 0;
+    let dmnSILM = 0; // Tambahan untuk DMN SILM
     // Ambil semua baris mesin dari seluruh section
     const powerPlantSections = document.querySelectorAll('.bg-white.rounded-xl.shadow-sm.overflow-hidden.border.border-gray-100');
     powerPlantSections.forEach(section => {
@@ -427,10 +428,17 @@ function getFormattedReport(selectedTime) {
                 beban = parseFloat(beban) || 0;
                 totalDayaTerpasang += dayaTerpasang;
                 totalBeban += beban;
+
+                // Cari DMN SILM
+                const name = cells[1].querySelector('div').textContent.trim().toUpperCase();
+                if (name.includes('SILM')) {
+                    let dmn = cells[4].textContent.trim().replace(/[^\d.,-]/g, '').replace(',', '.');
+                    dmnSILM = parseFloat(dmn) || 0;
+                }
             }
         });
     });
-    const cadanganDaya = totalDayaTerpasang - totalBeban;
+    const cadanganDaya = dmnSILM !== 0 ? totalBeban / dmnSILM : 0;
     // --- Akhir tambahan ---
 
     // Get all power plant sections (lanjutkan seperti sebelumnya)

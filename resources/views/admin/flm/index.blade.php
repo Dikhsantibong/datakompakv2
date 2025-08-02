@@ -205,7 +205,7 @@
                                             <td class="border px-4 py-2">
                                                 <div class="space-y-3 w-[300px] p-2">
                                                     <div class="eviden-upload">
-                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Foto Sebelum:</label>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Foto Sebelum: <span class="text-red-500">*</span></label>
                                                         <div class="relative">
                                                             <input type="file" 
                                                                    name="eviden_sebelum[]" 
@@ -230,7 +230,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="eviden-upload">
-                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Foto Sesudah:</label>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Foto Sesudah: <span class="text-red-500">*</span></label>
                                                         <div class="relative">
                                                             <input type="file" 
                                                                    name="eviden_sesudah[]" 
@@ -413,7 +413,28 @@ document.getElementById('flmForm').addEventListener('keypress', function(e) {
     }
 });
 
-document.getElementById('flmForm').addEventListener('submit', function() {
+document.getElementById('flmForm').addEventListener('submit', function(e) {
+    let valid = true;
+    const rows = document.querySelectorAll('#flmTableBody .flm-row');
+    rows.forEach((row, idx) => {
+        const fileSebelum = row.querySelector('input[name^="eviden_sebelum"]');
+        const fileSesudah = row.querySelector('input[name^="eviden_sesudah"]');
+        if (!fileSebelum.files.length || !fileSesudah.files.length) {
+            valid = false;
+            row.querySelectorAll('.eviden-upload label').forEach(label => {
+                label.classList.add('text-red-600');
+            });
+        } else {
+            row.querySelectorAll('.eviden-upload label').forEach(label => {
+                label.classList.remove('text-red-600');
+            });
+        }
+    });
+    if (!valid) {
+        alert('Semua kolom foto sebelum dan sesudah wajib diisi di setiap baris!');
+        e.preventDefault();
+        return false;
+    }
     const submitBtn = document.getElementById('submitBtn');
     const loader = submitBtn.querySelector('.loader');
     const btnText = submitBtn.querySelector('span:not(.loader)');

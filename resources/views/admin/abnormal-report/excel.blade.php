@@ -59,7 +59,7 @@
         <td>{{ $chronology->turun_beban ? '✓' : '-' }}</td>
         <td>{{ $chronology->off_cbg ? '✓' : '-' }}</td>
         <td>{{ $chronology->stop ? '✓' : '-' }}</td>
-        <td>{{ $chronology->tl_ophar ? '✓' : '-' }}</td>
+        <td>{{ $chronology->tl_ophar ? '✓' : '-' }}</td> 
         <td>{{ $chronology->tl_op ? '✓' : '-' }}</td>
         <td>{{ $chronology->tl_har ? '✓' : '-' }}</td>
         <td>{{ $chronology->mul ? '✓' : '-' }}</td>

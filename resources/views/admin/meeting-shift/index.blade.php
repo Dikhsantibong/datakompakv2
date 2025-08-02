@@ -422,6 +422,16 @@
                     <!-- Resume Rapat -->
                     <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
                         <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Uraian Shift</h3>
+                            <div class="mt-2">
+                                <textarea name="uraian_shift" rows="4" required
+                                    class="p-2 shadow-sm focus:ring-[#009BB9] focus:border-[#009BB9] block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Masukkan uraian shift..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Resume Rapat -->
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+                        <div class="px-4 py-5 sm:p-6">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">Resume Rapat</h3>
                             <div class="mt-2">
                                 <textarea name="resume" rows="4" required

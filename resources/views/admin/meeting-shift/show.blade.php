@@ -351,6 +351,21 @@
                         </div>
                     </div>
 
+                    <!-- Uraian Shift -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <i class="fas fa-align-left mr-2 text-gray-500"></i>
+                                Uraian Shift
+                            </h3>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-sm text-gray-600 whitespace-pre-line">
+                                {{ $meetingShift->resume->uraian_shift ?? '-' }}
+                            </p>
+                        </div>
+                    </div>
+
                     <!-- Resume Rapat -->
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">

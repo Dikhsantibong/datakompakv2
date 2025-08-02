@@ -132,6 +132,7 @@ class SyncMeetingShiftToUpKendari
                             $upKendariDB->table('meeting_shift_resume')->insert([
                                 'meeting_shift_id' => $newId,
                                 'content' => $event->meetingShift->resume->content,
+                                'uraian_shift' => $event->meetingShift->resume->uraian_shift ?? null,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ]);
@@ -276,6 +277,7 @@ class SyncMeetingShiftToUpKendari
                             $upKendariDB->table('meeting_shift_resume')->insert([
                                 'meeting_shift_id' => $parentId,
                                 'content' => $event->meetingShift->resume->content,
+                                'uraian_shift' => $event->meetingShift->resume->uraian_shift ?? null,
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ]);

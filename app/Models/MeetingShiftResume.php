@@ -27,7 +27,8 @@ class MeetingShiftResume extends Model
      */
     protected $fillable = [
         'meeting_shift_id',
-        'content'
+        'content',
+        'uraian_shift'
     ];
 
     protected $guarded = ['id'];
@@ -81,6 +82,7 @@ class MeetingShiftResume extends Model
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'content' => $resume->content,
+                        'uraian_shift' => $resume->uraian_shift,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];
@@ -127,6 +129,7 @@ class MeetingShiftResume extends Model
                     $data = [
                         'meeting_shift_id' => $parentId,
                         'content' => $resume->content,
+                        'uraian_shift' => $resume->uraian_shift,
                         'created_at' => now(),
                         'updated_at' => now()
                     ];

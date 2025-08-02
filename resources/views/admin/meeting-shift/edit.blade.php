@@ -284,6 +284,12 @@
                         </div>
                     </div>
 
+                    <!-- Uraian Shift -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h2 class="text-lg font-semibold mb-4">Uraian Shift</h2>
+                        <textarea name="uraian_shift" rows="4" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>{{ $meetingShift->resume->uraian_shift ?? '' }}</textarea>
+                    </div>
+
                     <!-- Resume -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
                         <h2 class="text-lg font-semibold mb-4">Resume</h2>

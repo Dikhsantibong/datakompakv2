@@ -288,16 +288,20 @@
                                     @foreach($meetingShift->k3ls as $k3l)
                                     <tr class="hover:bg-gray-50">
                                         <td class="px-6 py-4 text-sm border-b border-gray-200 border">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                                {{ $k3l->type == 'unsafe_action' ? 'bg-red-100 text-red-800' : 'bg-orange-100 text-orange-800' }}">
-                                                {{ str_replace('_', ' ', ucfirst($k3l->type)) }}
-                                            </span>
+                                            @if($k3l->type == 'positif')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Positif (Tidak Ada K3L)</span>
+                                            @else
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                                    {{ $k3l->type == 'unsafe_action' ? 'bg-red-100 text-red-800' : 'bg-orange-100 text-orange-800' }}">
+                                                    {{ str_replace('_', ' ', ucfirst($k3l->type)) }}
+                                                </span>
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 border-b border-gray-200 border">
-                                            {{ $k3l->uraian }}
+                                            {{ ($k3l->type == 'positif' || $k3l->uraian == '-' || empty($k3l->uraian)) ? 'Tidak Ada K3L' : $k3l->uraian }}
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 border-b border-gray-200 border">
-                                            {{ $k3l->saran }}
+                                            {{ ($k3l->type == 'positif' || $k3l->saran == '-' || empty($k3l->saran)) ? '-' : $k3l->saran }}
                                         </td>
                                         <td class="px-6 py-4 text-sm border-b border-gray-200 border">
                                             @if($k3l->eviden_path)

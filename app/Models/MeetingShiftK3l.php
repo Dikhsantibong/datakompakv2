@@ -51,7 +51,7 @@ class MeetingShiftK3l extends Model
      */
     public static function getValidTypes()
     {
-        return ['unsafe_action', 'unsafe_condition'];
+        return ['unsafe_action', 'unsafe_condition', 'positif'];
     }
 
     /**

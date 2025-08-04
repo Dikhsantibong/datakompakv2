@@ -177,35 +177,30 @@
                                                                 <div class="flex items-center">
                                                                     <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="operasi"
                                                                         class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                                        data-machine-index="{{ $index }}"
                                                                         onchange="handleMachineStatusChange(this, {{ $index }})">
                                                                     <label class="ml-2 text-sm text-gray-700">Operasi</label>
                                                                 </div>
                                                                 <div class="flex items-center">
                                                                     <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="standby"
                                                                         class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                                        data-machine-index="{{ $index }}"
                                                                         onchange="handleMachineStatusChange(this, {{ $index }})">
                                                                     <label class="ml-2 text-sm text-gray-700">Standby</label>
                                                                 </div>
                                                                 <div class="flex items-center">
                                                                     <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="har_rutin"
                                                                         class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                                        data-machine-index="{{ $index }}"
                                                                         onchange="handleMachineStatusChange(this, {{ $index }})">
                                                                     <label class="ml-2 text-sm text-gray-700">HAR Rutin</label>
                                                                 </div>
                                                                 <div class="flex items-center">
                                                                     <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="har_nonrutin"
                                                                         class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                                        data-machine-index="{{ $index }}"
                                                                         onchange="handleMachineStatusChange(this, {{ $index }})">
                                                                     <label class="ml-2 text-sm text-gray-700">HAR Non-Rutin</label>
                                                                 </div>
                                                                 <div class="flex items-center">
                                                                     <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="gangguan"
                                                                         class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                                        data-machine-index="{{ $index }}"
                                                                         onchange="handleMachineStatusChange(this, {{ $index }})">
                                                                     <label class="ml-2 text-sm text-gray-700">Gangguan</label>
                                                                 </div>
@@ -356,10 +351,12 @@
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Tipe</label>
                                             <select name="k3l[0][type]" required
-                                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm rounded-md">
+                                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#009BB9] focus:border-[#009BB9] sm:text-sm rounded-md"
+                                                onchange="handleK3lTypeChange(this, 0)">
                                                 <option value="">Pilih Tipe</option>
                                                 <option value="unsafe_action">Unsafe Action</option>
                                                 <option value="unsafe_condition">Unsafe Condition</option>
+                                                <option value="positif">Positif (Tidak Ada K3L)</option>
                                             </select>
                                         </div>
                                         <div>
@@ -721,6 +718,38 @@ function handleAuxiliaryStatusChange(checkbox, index) {
     }
 }
 
+function handleK3lTypeChange(select, index) {
+    var uraian = document.querySelector(`textarea[name='k3l[${index}][uraian]']`);
+    var saran = document.querySelector(`textarea[name='k3l[${index}][saran]']`);
+    var eviden = document.querySelector(`input[name='k3l[${index}][eviden]']`);
+    if (select.value === 'positif') {
+        if (uraian) { uraian.value = ''; uraian.required = false; uraian.disabled = true; }
+        if (saran) { saran.value = ''; saran.required = false; saran.disabled = true; }
+        if (eviden) { eviden.value = ''; eviden.required = false; eviden.disabled = true; }
+    } else {
+        if (uraian) { uraian.required = true; uraian.disabled = false; }
+        if (saran) { saran.required = true; saran.disabled = false; }
+        if (eviden) { eviden.required = false; eviden.disabled = false; }
+    }
+}
+
+function addK3L() {
+    const container = document.getElementById('k3l-container');
+    const template = document.querySelector('.k3l-item').cloneNode(true);
+    template.querySelectorAll('input, select, textarea').forEach(input => {
+        input.name = input.name.replace('[0]', `[${k3lCount}]`);
+        input.value = '';
+        if (input.type === 'checkbox') input.checked = false;
+    });
+    // Set onchange untuk select tipe
+    const typeSelect = template.querySelector('select[name$="[type]"]');
+    if (typeSelect) {
+        typeSelect.onchange = function() { handleK3lTypeChange(this, k3lCount); };
+    }
+    container.appendChild(template);
+    k3lCount++;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Set default date to today
     const today = new Date().toISOString().split('T')[0];
@@ -736,6 +765,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+
+    // Set onchange for first K3L type select
+    var firstK3lType = document.querySelector('select[name="k3l[0][type]"]');
+    if (firstK3lType) {
+        firstK3lType.onchange = function() { handleK3lTypeChange(this, 0); };
+    }
 });
 </script>
 @endpush

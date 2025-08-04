@@ -79,7 +79,6 @@
                                             <div class="flex items-center">
                                                 <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="operasi"
                                                     class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                    data-machine-index="{{ $index }}"
                                                     {{ in_array('operasi', $currentStatus) ? 'checked' : '' }}
                                                     onchange="validateMachineStatus({{ $index }})">
                                                 <label class="ml-2 text-sm text-gray-700">Operasi</label>
@@ -87,7 +86,6 @@
                                             <div class="flex items-center">
                                                 <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="standby"
                                                     class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                    data-machine-index="{{ $index }}"
                                                     {{ in_array('standby', $currentStatus) ? 'checked' : '' }}
                                                     onchange="validateMachineStatus({{ $index }})">
                                                 <label class="ml-2 text-sm text-gray-700">Standby</label>
@@ -95,7 +93,6 @@
                                             <div class="flex items-center">
                                                 <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="har_rutin"
                                                     class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                    data-machine-index="{{ $index }}"
                                                     {{ in_array('har_rutin', $currentStatus) ? 'checked' : '' }}
                                                     onchange="validateMachineStatus({{ $index }})">
                                                 <label class="ml-2 text-sm text-gray-700">HAR Rutin</label>
@@ -103,7 +100,6 @@
                                             <div class="flex items-center">
                                                 <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="har_nonrutin"
                                                     class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                    data-machine-index="{{ $index }}"
                                                     {{ in_array('har_nonrutin', $currentStatus) ? 'checked' : '' }}
                                                     onchange="validateMachineStatus({{ $index }})">
                                                 <label class="ml-2 text-sm text-gray-700">HAR Non-Rutin</label>
@@ -111,7 +107,6 @@
                                             <div class="flex items-center">
                                                 <input type="checkbox" name="machine_statuses[{{ $index }}][status][]" value="gangguan"
                                                     class="h-4 w-4 text-[#009BB9] focus:ring-[#009BB9] border-gray-300 rounded machine-status-checkbox"
-                                                    data-machine-index="{{ $index }}"
                                                     {{ in_array('gangguan', $currentStatus) ? 'checked' : '' }}
                                                     onchange="validateMachineStatus({{ $index }})">
                                                 <label class="ml-2 text-sm text-gray-700">Gangguan</label>
@@ -240,18 +235,19 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Tipe</label>
-                                        <select name="k3l[{{ $index }}][type]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                        <select name="k3l[{{ $index }}][type]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required onchange="handleK3lTypeChange(this, {{ $index }})">
                                             <option value="unsafe_action" {{ $k3l->type == 'unsafe_action' ? 'selected' : '' }}>Unsafe Action</option>
                                             <option value="unsafe_condition" {{ $k3l->type == 'unsafe_condition' ? 'selected' : '' }}>Unsafe Condition</option>
+                                            <option value="positif" {{ $k3l->type == 'positif' ? 'selected' : '' }}>Positif (Tidak Ada K3L)</option>
                                         </select>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Uraian</label>
-                                        <textarea name="k3l[{{ $index }}][uraian]" rows="3" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>{{ $k3l->uraian }}</textarea>
+                                        <textarea name="k3l[{{ $index }}][uraian]" rows="3" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" {{ $k3l->type == 'positif' ? 'disabled' : 'required' }}>{{ $k3l->uraian }}</textarea>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Saran</label>
-                                        <textarea name="k3l[{{ $index }}][saran]" rows="3" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>{{ $k3l->saran }}</textarea>
+                                        <textarea name="k3l[{{ $index }}][saran]" rows="3" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" {{ $k3l->type == 'positif' ? 'disabled' : 'required' }}>{{ $k3l->saran }}</textarea>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Eviden</label>
@@ -261,7 +257,8 @@
                                             </div>
                                         @endif
                                         <input type="file" name="k3l[{{ $index }}][eviden]" accept="image/*"
-                                               class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                               class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                               {{ $k3l->type == 'positif' ? 'disabled' : '' }}>
                                     </div>
                                 </div>
                             </div>
@@ -364,7 +361,29 @@
 
 @push('scripts')
 <script>
+function handleK3lTypeChange(select, index) {
+    var uraian = document.querySelector(`textarea[name='k3l[${index}][uraian]']`);
+    var saran = document.querySelector(`textarea[name='k3l[${index}][saran]']`);
+    var eviden = document.querySelector(`input[name='k3l[${index}][eviden]']`);
+    if (select.value === 'positif') {
+        if (uraian) { uraian.value = ''; uraian.required = false; uraian.disabled = true; }
+        if (saran) { saran.value = ''; saran.required = false; saran.disabled = true; }
+        if (eviden) { eviden.value = ''; eviden.required = false; eviden.disabled = true; }
+    } else {
+        if (uraian) { uraian.required = true; uraian.disabled = false; }
+        if (saran) { saran.required = true; saran.disabled = false; }
+        if (eviden) { eviden.required = false; eviden.disabled = false; }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Set onchange for all K3L type select
+    document.querySelectorAll('select[name^="k3l"][name$="[type]"]').forEach(function(select, idx) {
+        select.onchange = function() { handleK3lTypeChange(this, idx); };
+        // Trigger on load
+        handleK3lTypeChange(select, idx);
+    });
+
     // Validate machine status before form submission
     document.querySelector('form').addEventListener('submit', function(e) {
         let hasError = false;

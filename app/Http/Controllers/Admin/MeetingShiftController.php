@@ -109,9 +109,9 @@ class MeetingShiftController extends Controller
                 
                 // K3L
                 'k3l' => 'required|array',
-                'k3l.*.type' => 'required|in:unsafe_action,unsafe_condition',
-                'k3l.*.uraian' => 'required|string',
-                'k3l.*.saran' => 'required|string',
+                'k3l.*.type' => 'required|in:unsafe_action,unsafe_condition,positif',
+                'k3l.*.uraian' => 'nullable|string',
+                'k3l.*.saran' => 'nullable|string',
                 
                 // Notes
                 'catatan_sistem' => 'required|string',
@@ -205,12 +205,13 @@ class MeetingShiftController extends Controller
                         $file = $request->file("k3l.{$index}.eviden");
                         $evidenPath = $file->store('eviden/k3l', 'public');
                     }
-
+                    $uraian = ($k3l['type'] === 'positif') ? '-' : ($k3l['uraian'] ?? '-');
+                    $saran = ($k3l['type'] === 'positif') ? '-' : ($k3l['saran'] ?? '-');
                     MeetingShiftK3l::create([
                         'meeting_shift_id' => $meetingShift->id,
                         'type' => (string) $k3l['type'],
-                        'uraian' => $k3l['uraian'],
-                        'saran' => $k3l['saran'],
+                        'uraian' => $uraian,
+                        'saran' => $saran,
                         'eviden_path' => $evidenPath
                     ]);
                 }
@@ -621,9 +622,9 @@ class MeetingShiftController extends Controller
                 
                 // K3L
                 'k3l' => 'required|array',
-                'k3l.*.type' => 'required|in:unsafe_action,unsafe_condition',
-                'k3l.*.uraian' => 'required|string',
-                'k3l.*.saran' => 'required|string',
+                'k3l.*.type' => 'required|in:unsafe_action,unsafe_condition,positif',
+                'k3l.*.uraian' => 'nullable|string',
+                'k3l.*.saran' => 'nullable|string',
                 
                 // Notes
                 'catatan_sistem' => 'required|string',
@@ -699,12 +700,13 @@ class MeetingShiftController extends Controller
                         $file = $request->file("k3l.{$index}.eviden");
                         $evidenPath = $file->store('eviden/k3l', 'public');
                     }
-
+                    $uraian = ($k3l['type'] === 'positif') ? '-' : ($k3l['uraian'] ?? '-');
+                    $saran = ($k3l['type'] === 'positif') ? '-' : ($k3l['saran'] ?? '-');
                     MeetingShiftK3l::create([
                         'meeting_shift_id' => $meetingShift->id,
                         'type' => (string) $k3l['type'],
-                        'uraian' => $k3l['uraian'],
-                        'saran' => $k3l['saran'],
+                        'uraian' => $uraian,
+                        'saran' => $saran,
                         'eviden_path' => $evidenPath
                     ]);
                 }

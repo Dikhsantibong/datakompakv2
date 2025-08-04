@@ -105,11 +105,13 @@ class SyncMeetingShiftToUpKendari
 
                         // Sync K3L with new parent ID
                         foreach ($event->meetingShift->k3ls as $k3l) {
+                            $uraian = $k3l->uraian ?? '-';
+                            $saran = $k3l->saran ?? '-';
                             $upKendariDB->table('meeting_shift_k3l')->insert([
                                 'meeting_shift_id' => $newId,
                                 'type' => $k3l->type,
-                                'uraian' => $k3l->uraian,
-                                'saran' => $k3l->saran,
+                                'uraian' => $uraian,
+                                'saran' => $saran,
                                 'eviden_path' => $k3l->eviden_path ?? null,
                                 'created_at' => now(),
                                 'updated_at' => now()
@@ -252,11 +254,13 @@ class SyncMeetingShiftToUpKendari
                         }
 
                         foreach ($event->meetingShift->k3ls as $k3l) {
+                            $uraian = $k3l->uraian ?? '-';
+                            $saran = $k3l->saran ?? '-';
                             $upKendariDB->table('meeting_shift_k3l')->insert([
                                 'meeting_shift_id' => $parentId,
                                 'type' => $k3l->type,
-                                'uraian' => $k3l->uraian,
-                                'saran' => $k3l->saran,
+                                'uraian' => $uraian,
+                                'saran' => $saran,
                                 'eviden_path' => $k3l->eviden_path,
                                 'created_at' => now(),
                                 'updated_at' => now()

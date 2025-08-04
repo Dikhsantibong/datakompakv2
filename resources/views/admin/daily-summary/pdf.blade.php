@@ -77,8 +77,8 @@
         <img src="{{ public_path('logo/k3_logo.png') }}" class="logo-right" alt="K3 Logo">
     </div>
 
-    @foreach($units as $unit)
-        <table>
+    @foreach($units as $i => $unit)
+        <table @if($i > 0) style="page-break-before: always;" @endif>
             <thead>
                 <tr>
                     <td colspan="48" style="text-align: center; font-size: 10px; font-weight: bold; border:1px solid #000;">

@@ -479,4 +479,42 @@ class LaporanKitController extends Controller
                 ->with('error', 'Gagal menghapus Laporan KIT.');
         }
     }
+
+    public function getLatestData(Request $request)
+    {
+        $tanggal = $request->input('tanggal', now()->format('Y-m-d'));
+        $laporan = \App\Models\LaporanKit::with([
+            'jamOperasi', 'gangguan', 'bbm', 'bbm.storageTanks', 'bbm.serviceTanks', 'bbm.flowmeters',
+            'kwh', 'kwh.productionPanels', 'kwh.psPanels',
+            'pelumas', 'pelumas.storageTanks', 'pelumas.drums',
+            'bahanKimia', 'bebanTertinggi'
+        ])
+        ->where('tanggal', '<', $tanggal)
+        ->orderBy('tanggal', 'desc')
+        ->first();
+
+        // Fallback: jika tidak ada data sebelum hari ini, ambil data terakhir apapun
+        if (!$laporan) {
+            $laporan = \App\Models\LaporanKit::with([
+                'jamOperasi', 'gangguan', 'bbm', 'bbm.storageTanks', 'bbm.serviceTanks', 'bbm.flowmeters',
+                'kwh', 'kwh.productionPanels', 'kwh.psPanels',
+                'pelumas', 'pelumas.storageTanks', 'pelumas.drums',
+                'bahanKimia', 'bebanTertinggi'
+            ])
+            ->orderBy('tanggal', 'desc')
+            ->first();
+        }
+
+        if ($laporan) {
+            return response()->json([
+                'success' => true,
+                'laporan' => $laporan
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data terakhir tidak ditemukan'
+            ]);
+        }
+    }
 } 

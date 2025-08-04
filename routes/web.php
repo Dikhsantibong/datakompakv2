@@ -1381,6 +1381,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     // ...
     Route::prefix('laporan-kit')->name('laporan-kit.')->group(function () {
         Route::get('/list', [LaporanKitController::class, 'list'])->name('list');
+        Route::get('/latest-data', [LaporanKitController::class, 'getLatestData'])->name('latest-data');
         // ... route lain ...
         Route::get('/{laporanKit}', [LaporanKitController::class, 'show'])->name('show');
         Route::get('/export-pdf', [LaporanKitController::class, 'exportPdf'])->name('export-pdf');
@@ -1500,3 +1501,4 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/{id}', [LinkKoordinasiController::class, 'destroy'])->name('destroy');
     });
 });
+

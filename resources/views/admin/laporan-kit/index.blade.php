@@ -72,6 +72,13 @@
                 </div>
             </div>
 
+            <!-- Tombol Load Data Terakhir -->
+            <div class="flex items-center gap-3 mb-4">
+                <button type="button" id="loadLatestDataBtn" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700">
+                    <i class="fas fa-sync-alt mr-2"></i>Load Data Terakhir
+                </button>
+            </div>
+
             <!-- Filter Unit & Tanggal -->
             <div class="bg-white rounded-lg shadow-md p-4 mb-6">
                 <div class="flex items-center justify-between">
@@ -408,11 +415,6 @@
                     </div>
                 </div>
 
-                <div class="flex items-center gap-3 mb-4">
-    <button type="button" id="loadLatestDataBtn" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700">
-        <i class="fas fa-sync-alt mr-2"></i>Load Data Terakhir
-    </button>
-</div>
                 <div class="flex justify-end space-x-4 p-6">
                     <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Simpan Data
@@ -1249,7 +1251,7 @@
             didOpen: () => { Swal.showLoading(); }
         });
 
-        fetch('/admin/laporan-kit/latest-data?tanggal={{ date('Y-m-d') }}', {
+        fetch('{{ route('admin.laporan-kit.latest-data') }}?tanggal={{ request('tanggal') ?? date('Y-m-d') }}', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -1260,8 +1262,22 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // TODO: Mapping data.laporan ke form input
-                // Contoh: document.querySelector('[name="mesin[1][ops]"]').value = data.laporan.jam_operasi[0]?.ops || '';
+                // Mapping contoh: Jam Operasi Mesin
+                if (data.laporan.jam_operasi) {
+                    data.laporan.jam_operasi.forEach(jam => {
+                        let opsInput = document.querySelector(`[name="mesin[${jam.machine_id}][ops]"]`);
+                        if (opsInput) opsInput.value = jam.ops;
+                        let harInput = document.querySelector(`[name="mesin[${jam.machine_id}][har]"]`);
+                        if (harInput) harInput.value = jam.har;
+                        let ggnInput = document.querySelector(`[name="mesin[${jam.machine_id}][ggn]"]`);
+                        if (ggnInput) ggnInput.value = jam.ggn;
+                        let stbyInput = document.querySelector(`[name="mesin[${jam.machine_id}][stby]"]`);
+                        if (stbyInput) stbyInput.value = jam.stby;
+                        let jamHariInput = document.querySelector(`[name="mesin[${jam.machine_id}][jam_hari]"]`);
+                        if (jamHariInput) jamHariInput.value = jam.jam_hari;
+                    });
+                }
+                // TODO: Mapping untuk field lain (bbm, pelumas, gangguan, dst) sesuai kebutuhan
                 Swal.fire({
                     icon: 'success',
                     title: 'Berhasil!',

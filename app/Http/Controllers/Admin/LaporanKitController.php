@@ -479,4 +479,34 @@ class LaporanKitController extends Controller
                 ->with('error', 'Gagal menghapus Laporan KIT.');
         }
     }
+
+    public function getLatestData(Request $request)
+    {
+        $today = now()->format('Y-m-d');
+        $tanggal = $request->query('tanggal', $today);
+
+        $laporan = \App\Models\LaporanKit::where('tanggal', $tanggal)->latest()->first();
+        if (!$laporan) {
+            $laporan = \App\Models\LaporanKit::where('tanggal', now()->subDay()->format('Y-m-d'))->latest()->first();
+        }
+
+        if (!$laporan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data laporan KIT untuk hari ini atau kemarin.'
+            ]);
+        }
+
+        $laporan->load([
+            'jamOperasi', 'gangguan', 'bbm', 'bbm.storageTanks', 'bbm.serviceTanks', 'bbm.flowmeters',
+            'kwh', 'kwh.productionPanels', 'kwh.psPanels',
+            'pelumas', 'pelumas.storageTanks', 'pelumas.drums',
+            'bahanKimia', 'bebanTertinggi'
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'laporan' => $laporan
+        ]);
+    }
 } 

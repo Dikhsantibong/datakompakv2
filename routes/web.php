@@ -1500,7 +1500,3 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/{id}', [LinkKoordinasiController::class, 'destroy'])->name('destroy');
     });
 });
-
-// ... existing code ...
-Route::get('/admin/laporan-kit/latest-data', [App\Http\Controllers\Admin\LaporanKitController::class, 'getLatestData'])->name('admin.laporan-kit.latest-data');
-// ... existing code ...

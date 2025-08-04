@@ -38,9 +38,9 @@
                         <i class="fas fa-caret-down ml-2 text-gray-600"></i>
                     </button>
                     <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
-                        <a href="{{ route('logout') }}"
-                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <a href="{{ route('logout') }}" 
+                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
@@ -67,7 +67,7 @@
                         <a href="{{ route('admin.laporan-kit.list') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150">
                             <i class="fas fa-eye mr-2"></i> Lihat Data
                         </a>
-
+                      
                     </div>
                 </div>
             </div>
@@ -87,7 +87,7 @@
                 <input type="hidden" name="unit_source" value="{{ $unitSource }}">
                 <input type="hidden" name="unit_source" value="{{ $unitSource }}">
                 <input type="hidden" name="tanggal" value="{{ request('tanggal') }}">
-
+                
                 <!-- JAM OPERASI MESIN -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 m-2">
                     <div class="p-6 bg-gradient-to-r from-blue-50 to-white border-b">
@@ -207,33 +207,33 @@
                                 <tr class="bg-gray-50" id="bbm-panel-header-row">
                                     <!-- Tank numbers -->
                                     @for ($i = 1; $i <= 5; $i++)
-                                        <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
-                                        @endfor
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
-                                            @endfor
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                <th colspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
-                                                @endfor
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
+                                    @endfor
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
+                                    @endfor
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th colspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
+                                    @endfor
                                 </tr>
                                 <tr class="bg-gray-50" id="bbm-panel-subheader-row">
                                     <!-- Storage Tank subheaders -->
                                     @for ($i = 1; $i <= 5; $i++)
-                                        <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">cm</th>
-                                        <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
-                                        @endfor
-                                        <!-- Service Tank subheaders -->
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
-                                            <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">%</th>
-                                            @endfor
-                                            <!-- Flowmeter subheaders -->
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">awal</th>
-                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">akhir</th>
-                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">pakai {{ $i }}</th>
-                                                @endfor
-                                                <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">cm</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                    @endfor
+                                    <!-- Service Tank subheaders -->
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">%</th>
+                                    @endfor
+                                    <!-- Flowmeter subheaders -->
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">awal</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">akhir</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">pakai {{ $i }}</th>
+                                    @endfor
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
                                 </tr>
                             </thead>
                             <tbody id="bbm-tbody" class="bg-white divide-y divide-gray-200">
@@ -313,23 +313,23 @@
                                 <tr class="bg-gray-50" id="pelumas-panel-header-row">
                                     <!-- Storage Tank numbers -->
                                     @for ($i = 1; $i <= 5; $i++)
-                                        <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
-                                        @endfor
-                                        <!-- Drum Area numbers -->
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <th class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">Area {{ $i }}</th>
-                                            @endfor
+                                    <th colspan="2" class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">{{ $i }}</th>
+                                    @endfor
+                                    <!-- Drum Area numbers -->
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th class="px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center">Area {{ $i }}</th>
+                                    @endfor
                                 </tr>
                                 <tr class="bg-gray-50" id="pelumas-panel-subheader-row">
                                     <!-- Storage Tank subheaders -->
                                     @for ($i = 1; $i <= 5; $i++)
-                                        <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">cm</th>
-                                        <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
-                                        @endfor
-                                        <!-- Drum Area subheaders -->
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
-                                            @endfor
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">cm</th>
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                    @endfor
+                                    <!-- Drum Area subheaders -->
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <th class="px-4 py-2 text-xs font-medium text-gray-500 border-r text-center">liter</th>
+                                    @endfor
                                 </tr>
                             </thead>
                             <tbody id="pelumas-tbody" class="bg-white divide-y divide-gray-200">
@@ -409,10 +409,10 @@
                 </div>
 
                 <div class="flex items-center gap-3 mb-4">
-                    <button type="button" id="loadLatestDataBtn" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700">
-                        <i class="fas fa-sync-alt mr-2"></i>Load Data Terakhir
-                    </button>
-                </div>
+    <button type="button" id="loadLatestDataBtn" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700">
+        <i class="fas fa-sync-alt mr-2"></i>Load Data Terakhir
+    </button>
+</div>
                 <div class="flex justify-end space-x-4 p-6">
                     <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Simpan Data
@@ -429,26 +429,25 @@
         overflow-y: auto;
         height: calc(100vh - 64px);
     }
-
+    
     /* Additional table styles */
     table {
         border-collapse: collapse;
         width: 100%;
     }
-
-    th,
-    td {
+    
+    th, td {
         border: 1px solid #e5e7eb;
     }
-
+    
     thead tr {
         background-color: #f9fafb;
     }
-
+    
     tbody tr:hover {
         background-color: #f9fafb;
     }
-
+    
     .table-container {
         box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     }
@@ -468,7 +467,6 @@
         color: #dc2626;
         cursor: pointer;
     }
-
     .delete-row:hover {
         color: #991b1b;
     }
@@ -483,17 +481,14 @@
         border-radius: 9999px;
         transition: background 0.2s;
     }
-
     .table-action-btn:hover {
         background: #fee2e2;
     }
 
     /* Tambahan untuk kolom aksi */
-    th.border-l,
-    td.border-l {
+    th.border-l, td.border-l {
         border-left-width: 1px !important;
-        border-left-color: #d1d5db !important;
-        /* gray-300 */
+        border-left-color: #d1d5db !important; /* gray-300 */
     }
 </style>
 @endpush
@@ -554,7 +549,7 @@
         const subheaderRow = document.getElementById('panel-subheader-row');
         const kwhProduksiHeader = document.getElementById('kwh-produksi-header');
         const kwhPSHeader = document.getElementById('kwh-ps-header');
-
+        
         // Clear existing headers
         headerRow.innerHTML = '';
         subheaderRow.innerHTML = '';
@@ -576,7 +571,7 @@
             panelHeader.className = 'px-4 py-3 text-sm font-semibold text-gray-900 border-r text-center';
             panelHeader.style.width = '160px';
             panelHeader.colSpan = 2;
-            panelHeader.textContent = `PANEL ${i}`;
+                panelHeader.textContent = `PANEL ${i}`;
             headerRow.appendChild(panelHeader);
         }
 
@@ -632,12 +627,12 @@
     function updateKWHRows() {
         const rows = document.querySelectorAll('#kwh-tbody tr');
         rows.forEach(row => {
-            const rowIndex = row.dataset.rowIndex;
-            const newInputs = [];
+        const rowIndex = row.dataset.rowIndex;
+        const newInputs = [];
 
             // Production panels
             for (let i = 1; i <= kwhProduksiPanelCount; i++) {
-                newInputs.push(`
+            newInputs.push(`
                 <td class="w-40 px-4 py-2 border-r">
                     <input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel${i}_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </td>
@@ -645,10 +640,10 @@
                     <input type="number" step="0.1" name="kwh[${rowIndex}][prod_panel${i}_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </td>
             `);
-            }
+        }
 
             // Total production
-            newInputs.push(`
+        newInputs.push(`
             <td class="w-20 px-4 py-2 border-r">
                     <input type="number" step="0.1" name="kwh[${rowIndex}][prod_total]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
             </td>
@@ -656,7 +651,7 @@
 
             // PS panels
             for (let i = 1; i <= kwhPSPanelCount; i++) {
-                newInputs.push(`
+            newInputs.push(`
                 <td class="w-40 px-4 py-2 border-r">
                     <input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel${i}_awal]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </td>
@@ -664,25 +659,25 @@
                     <input type="number" step="0.1" name="kwh[${rowIndex}][ps_panel${i}_akhir]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </td>
             `);
-            }
+        }
 
-            // Total PS
-            newInputs.push(`
+        // Total PS
+        newInputs.push(`
             <td class="w-20 px-4 py-2 border-r">
                     <input type="number" step="0.1" name="kwh[${rowIndex}][ps_total]" class="w-[80px] border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
             </td>
         `);
 
             // Delete button
-            newInputs.push(`
+        newInputs.push(`
             <td class="w-20 px-4 py-2 border-r">
                 <button type="button" onclick="this.closest('tr').remove()" class="text-red-600 hover:text-red-800">
                     <i class="fas fa-trash"></i>
                 </button>
         `);
 
-            row.innerHTML = newInputs.join('');
-            setupKWHCalculations(row);
+        row.innerHTML = newInputs.join('');
+        setupKWHCalculations(row);
         });
     }
 
@@ -731,11 +726,11 @@
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.dataset.rowIndex = kwhRowCount++;
-
+        
         // Initialize empty row
         row.innerHTML = '<td></td>';
         tbody.appendChild(row);
-
+        
         // Update row with current panel configuration
         updateKWHRows();
     }
@@ -745,7 +740,7 @@
         const har = parseFloat(document.querySelector(`input[name="mesin[${machineId}][har]"]`).value) || 0;
         const ggn = parseFloat(document.querySelector(`input[name="mesin[${machineId}][ggn]"]`).value) || 0;
         const stby = parseFloat(document.querySelector(`input[name="mesin[${machineId}][stby]"]`).value) || 0;
-
+        
         const total = ops + har + ggn + stby;
         document.querySelector(`input[name="mesin[${machineId}][jam_hari]"]`).value = total.toFixed(1);
     }
@@ -789,11 +784,11 @@
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.dataset.rowIndex = bbmRowCount++;
-
+        
         // Initialize empty row
         row.innerHTML = '<td></td>';
         tbody.appendChild(row);
-
+        
         // Update row with current panel configuration
         updateBBMRows();
     }
@@ -801,7 +796,7 @@
     function initializeBBMPanels() {
         const headerRow = document.getElementById('bbm-panel-header-row');
         const subheaderRow = document.getElementById('bbm-panel-subheader-row');
-
+        
         // Clear existing headers
         headerRow.innerHTML = '';
         subheaderRow.innerHTML = '';
@@ -1045,11 +1040,11 @@
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.dataset.rowIndex = pelumasRowCount++;
-
+        
         // Initialize empty row
         row.innerHTML = '<td></td>';
         tbody.appendChild(row);
-
+        
         // Update row with current panel configuration
         updatePelumasRows();
     }
@@ -1057,7 +1052,7 @@
     function initializePelumasPanels() {
         const headerRow = document.getElementById('pelumas-panel-header-row');
         const subheaderRow = document.getElementById('pelumas-panel-subheader-row');
-
+        
         // Clear existing headers
         headerRow.innerHTML = '';
         subheaderRow.innerHTML = '';
@@ -1251,47 +1246,44 @@
             title: 'Memuat Data...',
             html: 'Mohon tunggu sebentar',
             allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
+            didOpen: () => { Swal.showLoading(); }
         });
 
-        fetch('/admin/laporan-kit/latest-data?tanggal={{ date('
-                Y - m - d ') }}', {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // TODO: Mapping data.laporan ke form input
-                    // Contoh: document.querySelector('[name="mesin[1][ops]"]').value = data.laporan.jam_operasi[0]?.ops || '';
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: 'Data terakhir berhasil dimuat',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal!',
-                        text: data.message || 'Terjadi kesalahan saat memuat data',
-                    });
-                }
-            })
-            .catch(error => {
+        fetch('/admin/laporan-kit/latest-data?tanggal={{ date('Y-m-d') }}', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // TODO: Mapping data.laporan ke form input
+                // Contoh: document.querySelector('[name="mesin[1][ops]"]').value = data.laporan.jam_operasi[0]?.ops || '';
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Data terakhir berhasil dimuat',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error!',
-                    text: 'Terjadi kesalahan saat memuat data',
+                    title: 'Gagal!',
+                    text: data.message || 'Terjadi kesalahan saat memuat data',
                 });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Terjadi kesalahan saat memuat data',
             });
+        });
     });
 </script>
 @endpush

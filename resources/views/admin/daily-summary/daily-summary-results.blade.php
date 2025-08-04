@@ -134,7 +134,7 @@
                                                         'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
                                                         'mysql_raha' => 'PLTD RAHA',
                                                         'mysql_wajo' => 'PLTD WAJO',
-                                                        'mysql_wangi' => 'PLTD WANGI-WANGI',
+                                                        'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
                                                         'mysql_rongi' => 'PLTD RONGI',
                                                         'mysql_sabilambo' => 'PLTD SABILAMBO',
                                                         'mysql_pltmg_bau_bau' => 'PLTMG BAU BAU',

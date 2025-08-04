@@ -287,6 +287,35 @@ document.getElementById('copyFormattedData').addEventListener('click', function(
     });
 });
 
+function updateExportLinks() {
+    const selectedDate = document.getElementById('dateFilter').value;
+    const exportExcelBtn = document.querySelector('a[href*="export-excel"]');
+    const exportPdfBtn = document.querySelector('a[href*="export-pdf"]');
+    if (exportExcelBtn) {
+        const url = new URL(exportExcelBtn.href, window.location.origin);
+        url.searchParams.set('date', selectedDate);
+        exportExcelBtn.href = url.toString();
+    }
+    if (exportPdfBtn) {
+        const url = new URL(exportPdfBtn.href, window.location.origin);
+        url.searchParams.set('date', selectedDate);
+        exportPdfBtn.href = url.toString();
+    }
+}
+
+// Panggil saat filter tanggal berubah
+const dateFilter = document.getElementById('dateFilter');
+if (dateFilter) {
+    dateFilter.addEventListener('change', function() {
+        updateExportLinks();
+    });
+}
+
+// Panggil juga saat halaman pertama kali load
+window.addEventListener('DOMContentLoaded', function() {
+    updateExportLinks();
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     const dateFilter = document.getElementById('dateFilter');
     const searchInput = document.getElementById('searchInput');

@@ -687,6 +687,33 @@ document.querySelectorAll('input[name$="[eviden]"]').forEach(input => {
 
 // Add loading animation to submit button
 document.getElementById('meetingShiftForm').addEventListener('submit', function(e) {
+    // Validate auxiliary equipment status
+    const auxiliaryItems = document.querySelectorAll('.alat-bantu-item');
+    let isValid = true;
+    
+    auxiliaryItems.forEach((item, index) => {
+        const nameField = item.querySelector(`input[name="auxiliary_equipment[${index}][name]"]`);
+        const checkboxes = item.querySelectorAll(`input[name="auxiliary_equipment[${index}][status][]"]`);
+        
+        if (nameField && nameField.value.trim() !== '') {
+            const hasChecked = Array.from(checkboxes).some(cb => cb.checked);
+            if (!hasChecked) {
+                validateAuxiliaryStatus(index);
+                isValid = false;
+            }
+        }
+    });
+    
+    if (!isValid) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'error',
+            title: 'Validasi Error',
+            text: 'Mohon lengkapi status untuk semua alat bantu yang diisi namanya.',
+        });
+        return;
+    }
+    
     const submitButton = document.getElementById('submitButton');
     const loadingSpinner = submitButton.querySelector('.loading');
     const buttonText = submitButton.querySelector('span:not(.loading)');
@@ -715,6 +742,37 @@ function handleAuxiliaryStatusChange(checkbox, index) {
                 cb.checked = false;
             }
         });
+    }
+    
+    // Validate that at least one checkbox is checked
+    validateAuxiliaryStatus(index);
+}
+
+function validateAuxiliaryStatus(index) {
+    const checkboxes = document.querySelectorAll(`input[name="auxiliary_equipment[${index}][status][]"]`);
+    const nameField = document.querySelector(`input[name="auxiliary_equipment[${index}][name]"]`);
+    
+    // Check if name is filled but no status is selected
+    if (nameField && nameField.value.trim() !== '') {
+        const hasChecked = Array.from(checkboxes).some(cb => cb.checked);
+        
+        if (!hasChecked) {
+            // Show error message
+            let errorDiv = document.querySelector(`#auxiliary-status-error-${index}`);
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.id = `auxiliary-status-error-${index}`;
+                errorDiv.className = 'text-red-500 text-xs mt-1';
+                errorDiv.textContent = 'Pilih minimal satu status';
+                checkboxes[0].parentElement.appendChild(errorDiv);
+            }
+        } else {
+            // Remove error message if exists
+            const errorDiv = document.querySelector(`#auxiliary-status-error-${index}`);
+            if (errorDiv) {
+                errorDiv.remove();
+            }
+        }
     }
 }
 

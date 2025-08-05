@@ -203,6 +203,7 @@
                                             <option value="BBM" {{ $resource->category == 'BBM' ? 'selected' : '' }}>BBM</option>
                                             <option value="AIR PENDINGIN" {{ $resource->category == 'AIR PENDINGIN' ? 'selected' : '' }}>AIR PENDINGIN</option>
                                             <option value="UDARA START" {{ $resource->category == 'UDARA START' ? 'selected' : '' }}>UDARA START</option>
+                                            <option value="AKI" {{ $resource->category == 'AKI' ? 'selected' : '' }}>AKI</option>
                                         </select>
                                     </div>
                                     <div>

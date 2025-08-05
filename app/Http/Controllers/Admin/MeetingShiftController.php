@@ -103,7 +103,7 @@ class MeetingShiftController extends Controller
                 // Resources
                 'resources' => 'required|array',
                 'resources.*.name' => 'required|string',
-                'resources.*.category' => 'required|in:PELUMAS,BBM,AIR PENDINGIN,UDARA START',
+                'resources.*.category' => 'required|in:PELUMAS,BBM,AIR PENDINGIN,UDARA START,AKI',
                 'resources.*.status' => 'required|in:0-20,21-40,41-61,61-80,up-80',
                 'resources.*.keterangan' => 'nullable|string',
                 
@@ -128,6 +128,30 @@ class MeetingShiftController extends Controller
                 'absensi.*.status' => 'required|in:hadir,izin,sakit,cuti,alpha,terlambat,ganti shift',
                 'absensi.*.keterangan' => 'nullable|string',
             ]);
+
+            // Custom validation for auxiliary equipment
+            if ($request->has('auxiliary_equipment')) {
+                foreach ($request->auxiliary_equipment as $index => $equipment) {
+                    if (!empty($equipment['name']) && empty($equipment['status'])) {
+                        throw new \Illuminate\Validation\ValidationException(
+                            validator([], []),
+                            'Status harus dipilih untuk alat bantu: ' . $equipment['name']
+                        );
+                    }
+                }
+            }
+
+            // Custom validation for resources
+            if ($request->has('resources')) {
+                foreach ($request->resources as $index => $resource) {
+                    if (!empty($resource['name']) && (empty($resource['category']) || $resource['category'] === '')) {
+                        throw new \Illuminate\Validation\ValidationException(
+                            validator([], []),
+                            'Kategori harus dipilih untuk resource: ' . $resource['name']
+                        );
+                    }
+                }
+            }
 
             // Create main meeting shift record first and make sure it's saved
             $meetingShift = new MeetingShift();
@@ -616,7 +640,7 @@ class MeetingShiftController extends Controller
                 // Resources
                 'resources' => 'required|array',
                 'resources.*.name' => 'required|string',
-                'resources.*.category' => 'required|in:PELUMAS,BBM,AIR PENDINGIN,UDARA START',
+                'resources.*.category' => 'required|in:PELUMAS,BBM,AIR PENDINGIN,UDARA START,AKI',
                 'resources.*.status' => 'required|in:0-20,21-40,41-61,61-80,up-80',
                 'resources.*.keterangan' => 'nullable|string',
                 
@@ -641,6 +665,18 @@ class MeetingShiftController extends Controller
                 'absensi.*.status' => 'required|in:hadir,izin,sakit,cuti,alpha,terlambat,ganti shift',
                 'absensi.*.keterangan' => 'nullable|string',
             ]);
+
+            // Custom validation for resources in update
+            if ($request->has('resources')) {
+                foreach ($request->resources as $index => $resource) {
+                    if (!empty($resource['name']) && (empty($resource['category']) || $resource['category'] === '')) {
+                        throw new \Illuminate\Validation\ValidationException(
+                            validator([], []),
+                            'Kategori harus dipilih untuk resource: ' . $resource['name']
+                        );
+                    }
+                }
+            }
 
             $meetingShift = MeetingShift::findOrFail($id);
             // Update main meeting shift record

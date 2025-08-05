@@ -47,7 +47,7 @@ class MeetingShiftResource extends Model
      */
     public static function getValidCategories()
     {
-        return ['PELUMAS', 'BBM', 'AIR PENDINGIN', 'UDARA START'];
+        return ['PELUMAS', 'BBM', 'AIR PENDINGIN', 'UDARA START', 'AKI'];
     }
 
     public function meetingShift()

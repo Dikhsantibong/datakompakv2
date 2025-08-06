@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="flex items-center">
                                     <i class="fas fa-sign-in-alt mr-2 text-yellow-500"></i>
-                                    Jam Masuk: {{ $meetingShift->created_at->format('d F Y, H:i') }}
+                                    Jam Keluar: {{ $meetingShift->created_at->format('d F Y, H:i') }}
                                 </div>
                                 
                                 <div class="flex items-center">

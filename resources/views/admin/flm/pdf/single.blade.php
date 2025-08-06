@@ -59,8 +59,14 @@
             margin-top: 20px;
         }
         .images img {
-            max-width: 300px;
+            max-width: 120px;
             margin: 10px;
+            page-break-inside: avoid !important;
+        }
+        body, html, table, tr, td, th, div, img {
+            page-break-inside: avoid !important;
+            page-break-before: avoid !important;
+            page-break-after: avoid !important;
         }
     </style>
 </head>

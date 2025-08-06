@@ -81,10 +81,80 @@
             page-break-after: avoid !important;
         }
     </style>
-</head>
+</head> 
 <body>
-    <div class="header">
-        <h1>Form Pemeriksaan FLM - {{ $flmData->first()->tanggal->format('d F Y') }}</h1>
+    <div class="header" style="padding:0; background-color:#D1D5DB;">
+        <table width="100%" style="border:none; background:none;">
+            <tr>
+                <td style="width:80px; text-align:left; border:none;">
+                    <img src="{{ public_path('logo/navlog1.png') }}" alt="PLN Logo" style="height:50px;">
+                </td>
+                <td style="text-align:center; border:none;">
+                    <h1 style="margin:0; font-size:18px; color:#000;">
+                        Form Pemeriksaan FLM - {{ $flmData->first()->tanggal->format('d F Y') }}<br>
+                        Unit: 
+                        @php
+                            $unitMapping = [
+                                'mysql_poasia' => 'PLTD POASIA',
+                                'mysql_kolaka' => 'PLTD KOLAKA',
+                                'mysql_bau_bau' => 'PLTD BAU BAU',
+                                'mysql_wua_wua' => 'PLTD WUA WUA',
+                                'mysql_winning' => 'PLTD WINNING',
+                                'mysql_erkee' => 'PLTD ERKEE',
+                                'mysql_ladumpi' => 'PLTD LADUMPI',
+                                'mysql_langara' => 'PLTD LANGARA',
+                                'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+                                'mysql_pasarwajo' => 'PLTD PASARWAJO',
+                                'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+                                'mysql_raha' => 'PLTD RAHA',
+                                'mysql_wajo' => 'PLTD WAJO',
+                                'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+                                'mysql_rongi' => 'PLTD RONGI',
+                                'mysql_sabilambo' => 'PLTM SABILAMBO',
+                                'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+                                'mysql_pltmg_kendari' => 'PLTD KENDARI',
+                                'mysql_baruta' => 'PLTD BARUTA',
+                                'mysql_moramo' => 'PLTD MORAMO',
+                                'mysql_mikuasi' => 'PLTM MIKUASI',
+                            ];
+                            $unitCode = $flmData->first()->sync_unit_origin ?? null;
+                            $unitName = $unitCode ? ($unitMapping[$unitCode] ?? $unitCode) : 'UP Kendari';
+                        @endphp
+                        {{ $unitName }}
+                    </h1>
+                </td>
+                @php
+                    // Ambil nama unit dari mapping, fallback ke UP Kendari
+                    $unitLogoMap = [
+                        'PLTD POASIA' => 'logo/PLTD_POASIA.png',
+                        'PLTD KOLAKA' => 'logo/PLTD_KOLAKA.png',
+                        'PLTD BAU BAU' => 'logo/PLTD_BAU_BAU.png',
+                        'PLTD WUA WUA' => 'logo/PLTD_WUA_WUA.png',
+                        'PLTD WINNING' => 'logo/PLTM_WINNING.png',
+                        'PLTD ERKEE' => 'logo/PLTD_EREKE.png',
+                        'PLTD LADUMPI' => 'logo/PLTD_LADUMPI.png',
+                        'PLTD LANGARA' => 'logo/PLTD_LANGARA.png',
+                        'PLTD LANIPA-NIPA' => 'logo/PLTD_LANIPA_NIPA.png',
+                        'PLTD PASARWAJO' => 'logo/PLTD_PASARWAJO.png',
+                        'PLTD POASIA CONTAINERIZED' => 'logo/PLTD_POASIA_CONTAINERIZED.png',
+                        'PLTD RAHA' => 'logo/PLTD_RAHA.png',
+                        'PLTD WAJO' => 'logo/PLTD_WAJO.png',
+                        'PLTD WANGI-WANGI' => 'logo/PLTD_WANGI_WANGI.png',
+                        'PLTM RONGI' => 'logo/PLTM_RONGI.png',
+                        'PLTM SABILAMBO' => 'logo/PLTM_SABILAMBO.png',
+                        'PLTD KENDARI' => 'logo/PLTMG_KENDARI.png',
+                        'PLTD BARUTA' => 'logo/PLTU_BARUTA.png',
+                        'PLTD MORAMO' => 'logo/PLTU_MORAMO.png',
+                        'PLTM MIKUASI' => 'logo/PLTM_MIKUASI.png',
+                    ];
+                    // $unitName sudah didapat dari mapping di atas
+                    $logoPath = $unitLogoMap[$unitName] ?? 'logo/UP_KENDARI.png';
+                @endphp
+                <td style="width:80px; text-align:right; border:none;">
+                    <img src="{{ public_path($logoPath) }}" alt="Unit Logo" style="height:50px;">
+                </td>
+            </tr>
+        </table>
     </div>
 
     <!-- FLM Data Section -->

@@ -135,14 +135,14 @@
             @if($item->eviden_sebelum)
             <div>
                 <p>Kondisi Sebelum #{{ $index + 1 }}:</p>
-                <img src="{{ public_path(str_replace('/storage', 'storage/app/public', $item->eviden_sebelum)) }}" alt="Kondisi Sebelum">
+                <img src="{{ storage_path('app/public/flm/eviden/' . basename($item->eviden_sebelum)) }}" alt="Kondisi Sebelum">
             </div>
             @endif
             
             @if($item->eviden_sesudah)
             <div>
                 <p>Kondisi Sesudah #{{ $index + 1 }}:</p>
-                <img src="{{ public_path(str_replace('/storage', 'storage/app/public', $item->eviden_sesudah)) }}" alt="Kondisi Sesudah">
+                <img src="{{ storage_path('app/public/flm/eviden/' . basename($item->eviden_sesudah)) }}" alt="Kondisi Sesudah">
             </div>
             @endif
         @endforeach

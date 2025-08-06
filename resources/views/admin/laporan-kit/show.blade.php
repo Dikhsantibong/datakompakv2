@@ -81,25 +81,25 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ops</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Har</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ggn</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stby/Rsh</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam/Hari</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Ops</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Har</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Ggn</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Stby/Rsh</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Jam/Hari</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($laporan->jamOperasi as $row)
                                     <tr>
-                                        <td class="px-6 py-4 border-r">{{ $loop->iteration }}</td>
-                                        <td class="px-6 py-4 border-r">{{ $row->machine->name ?? '-' }}</td>
-                                        <td class="px-6 py-4 border-r">{{ $row->ops }}</td>
-                                        <td class="px-6 py-4 border-r">{{ $row->har }}</td>
-                                        <td class="px-6 py-4 border-r">{{ $row->ggn }}</td>
-                                        <td class="px-6 py-4 border-r">{{ $row->stby }}</td>
-                                        <td class="px-6 py-4">{{ $row->jam_hari }}</td>
+                                        <td class="px-6 py-4 border-r text-center">{{ $loop->iteration }}</td>
+                                        <td class="px-6 py-4 border-r text-center">{{ $row->machine->name ?? '-' }}</td>
+                                        <td class="px-6 py-4 border-r text-center">{{ $row->ops }}</td>
+                                        <td class="px-6 py-4 border-r text-center">{{ $row->har }}</td>
+                                        <td class="px-6 py-4 border-r text-center">{{ $row->ggn }}</td>
+                                        <td class="px-6 py-4 border-r text-center">{{ $row->stby }}</td>
+                                        <td class="px-6 py-4 text-center">{{ $row->jam_hari }}</td>
                                     </tr>
                                     @empty
                                     <tr>
@@ -125,21 +125,21 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mekanik</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elektrik</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Mesin</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Mekanik</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Elektrik</th>
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($filteredGangguan as $row)
                                     <tr>
-                                        <td class="px-6 py-4 border-r">{{ $loop->iteration }}</td>
-                                        <td class="px-6 py-4 border-r">{{ $row->machine->name ?? '-' }}</td>
-                                        <td class="px-6 py-4 border-r">{{ $row->mekanik }}</td>
-                                        <td class="px-6 py-4 border-r">{{ $row->elektrik }}</td>
-                                        <td class="px-6 py-4 border-r">{{ $row->keterangan ?? '-' }}</td>
+                                        <td class="px-6 py-4 border-r text-center">{{ $loop->iteration }}</td>
+                                        <td class="px-6 py-4 border-r text-center">{{ $row->machine->name ?? '-' }}</td>
+                                        <td class="px-6 py-4 border-r text-center">{{ $row->mekanik }}</td>
+                                        <td class="px-6 py-4 border-r text-center">{{ $row->elektrik }}</td>
+                                        <td class="px-6 py-4 border-r text-center">{{ $row->keterangan ?? '-' }}</td>
                                     </tr>
                                     @empty
                                     <tr>

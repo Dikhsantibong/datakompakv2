@@ -236,7 +236,37 @@ class FlmController extends Controller
             $mainData = FlmInspection::findOrFail($id);
             $flmData = FlmInspection::where('flm_id', $mainData->flm_id)->get();
             $pdf = Pdf::loadView('admin.flm.pdf.single', compact('flmData'));
-            return $pdf->download('flm-inspection-' . $mainData->flm_id . '.pdf');
+            // Ambil nama unit dari sync_unit_origin jika ada
+            $unitName = null;
+            if (!empty($mainData->sync_unit_origin)) {
+                // Mapping unit code ke nama unit
+                $unitMapping = [
+                    'mysql_poasia' => 'PLTD POASIA',
+                    'mysql_kolaka' => 'PLTD KOLAKA',
+                    'mysql_bau_bau' => 'PLTD BAU BAU',
+                    'mysql_wua_wua' => 'PLTD WUA WUA',
+                    'mysql_winning' => 'PLTD WINNING',
+                    'mysql_erkee' => 'PLTD ERKEE',
+                    'mysql_ladumpi' => 'PLTD LADUMPI',
+                    'mysql_langara' => 'PLTD LANGARA',
+                    'mysql_lanipa_nipa' => 'PLTD LANIPA-NIPA',
+                    'mysql_pasarwajo' => 'PLTD PASARWAJO',
+                    'mysql_poasia_containerized' => 'PLTD POASIA CONTAINERIZED',
+                    'mysql_raha' => 'PLTD RAHA',
+                    'mysql_wajo' => 'PLTD WAJO',
+                    'mysql_wangi_wangi' => 'PLTD WANGI-WANGI',
+                    'mysql_rongi' => 'PLTD RONGI',
+                    'mysql_sabilambo' => 'PLTM SABILAMBO',
+                    'mysql_pltmg_bau_bau' => 'PLTD BAU BAU',
+                    'mysql_pltmg_kendari' => 'PLTD KENDARI',
+                    'mysql_baruta' => 'PLTD BARUTA',
+                    'mysql_moramo' => 'PLTD MORAMO',
+                    'mysql_mikuasi' => 'PLTM MIKUASI',
+                ];
+                $unitName = $unitMapping[$mainData->sync_unit_origin] ?? $mainData->sync_unit_origin;
+            }
+            // Kirim unitName ke view jika ada
+            return $pdf->download('flm-inspection-' . $mainData->tanggal->format('d-m-Y') . ($unitName ? '-' . str_replace(' ', '_', strtolower($unitName)) : '') . '.pdf');
         }
 
         $flmData = FlmInspection::orderBy('tanggal', 'desc')->get();

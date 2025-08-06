@@ -63,6 +63,18 @@
             margin: 10px;
             page-break-inside: avoid !important;
         }
+        .images-row {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+        .image-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         body, html, table, tr, td, th, div, img {
             page-break-inside: avoid !important;
             page-break-before: avoid !important;
@@ -138,18 +150,23 @@
     <div class="section-header">Dokumentasi</div>
     <div class="images">
         @foreach($flmData as $index => $item)
-            @if($item->eviden_sebelum)
-            <div>
-                <p>Kondisi Sebelum #{{ $index + 1 }}:</p>
-                <img src="{{ storage_path('app/public/flm/eviden/' . basename($item->eviden_sebelum)) }}" alt="Kondisi Sebelum">
-            </div>
-            @endif
-            
-            @if($item->eviden_sesudah)
-            <div>
-                <p>Kondisi Sesudah #{{ $index + 1 }}:</p>
-                <img src="{{ storage_path('app/public/flm/eviden/' . basename($item->eviden_sesudah)) }}" alt="Kondisi Sesudah">
-            </div>
+            @if($item->eviden_sebelum || $item->eviden_sesudah)
+            <table style="margin-bottom: 10px; border: none; width: auto;">
+                <tr>
+                    @if($item->eviden_sebelum)
+                    <td style="text-align: center; border: none;">
+                        <img src="{{ storage_path('app/public/flm/eviden/' . basename($item->eviden_sebelum)) }}" alt="Kondisi Sebelum"><br>
+                        <span style="font-size:10px;">Kondisi Sebelum #{{ $index + 1 }}</span>
+                    </td>
+                    @endif
+                    @if($item->eviden_sesudah)
+                    <td style="text-align: center; border: none;">
+                        <img src="{{ storage_path('app/public/flm/eviden/' . basename($item->eviden_sesudah)) }}" alt="Kondisi Sesudah"><br>
+                        <span style="font-size:10px;">Kondisi Sesudah #{{ $index + 1 }}</span>
+                    </td>
+                    @endif
+                </tr>
+            </table>
             @endif
         @endforeach
     </div>

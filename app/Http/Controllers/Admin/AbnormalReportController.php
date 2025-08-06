@@ -456,9 +456,12 @@ class AbnormalReportController extends Controller
                 'creator'
             ])->findOrFail($id);
 
+            $unitName = $report->sync_unit_origin ?? 'UP Kendari';
+            $unitNameFile = str_replace(' ', '_', strtolower($unitName));
+
             return Excel::download(
                 new AbnormalReportExport($report), 
-                'laporan-abnormal-' . $report->created_at->format('Y-m-d') . '.xlsx'
+                'laporan-abnormal-' . $report->created_at->format('Y-m-d') . '-' . $unitNameFile . '.xlsx'
             );
         } catch (\Exception $e) {
             return redirect()
@@ -479,12 +482,15 @@ class AbnormalReportController extends Controller
                 'creator'
             ])->findOrFail($id);
 
+            $unitName = $report->sync_unit_origin ?? 'UP Kendari';
+            $unitNameFile = str_replace(' ', '_', strtolower($unitName));
+
             $pdf = PDF::loadView('admin.abnormal-report.pdf', compact('report'));
             
             // Set paper size to A4 and landscape orientation for better table display
             $pdf->setPaper('a4', 'landscape');
             
-            return $pdf->download('laporan-abnormal-' . $id . '.pdf');
+            return $pdf->download('laporan-abnormal-' . $id . '-' . $unitNameFile . '.pdf');
         } catch (\Exception $e) {
             return redirect()
                 ->back()

@@ -80,6 +80,35 @@
             page-break-before: avoid !important;
             page-break-after: avoid !important;
         }
+        .doc-image-card {
+            width: 130px;
+            height: 110px;
+            background: #fff;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            padding: 6px 4px 2px 4px;
+        }
+        .doc-image-card img {
+            width: 120px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #eee;
+            background: #fafafa;
+            display: block;
+        }
+        .doc-image-caption {
+            font-size: 10px;
+            color: #333;
+            margin-top: 4px;
+            text-align: center;
+        }
     </style>
 </head> 
 <body>
@@ -224,15 +253,19 @@
             <table style="margin-bottom: 10px; border: none; width: auto;">
                 <tr>
                     @if($item->eviden_sebelum)
-                    <td style="text-align: center; border: none;">
-                        <img src="{{ storage_path('app/public/flm/eviden/' . basename($item->eviden_sebelum)) }}" alt="Kondisi Sebelum"><br>
-                        <span style="font-size:10px;">Kondisi Sebelum #{{ $index + 1 }}</span>
+                    <td style="text-align: center; border: none; vertical-align: top;">
+                        <div class="doc-image-card">
+                            <img src="{{ storage_path('app/public/flm/eviden/' . basename($item->eviden_sebelum)) }}" alt="Kondisi Sebelum">
+                            <div class="doc-image-caption">Kondisi Sebelum #{{ $index + 1 }}</div>
+                        </div>
                     </td>
                     @endif
                     @if($item->eviden_sesudah)
-                    <td style="text-align: center; border: none;">
-                        <img src="{{ storage_path('app/public/flm/eviden/' . basename($item->eviden_sesudah)) }}" alt="Kondisi Sesudah"><br>
-                        <span style="font-size:10px;">Kondisi Sesudah #{{ $index + 1 }}</span>
+                    <td style="text-align: center; border: none; vertical-align: top;">
+                        <div class="doc-image-card">
+                            <img src="{{ storage_path('app/public/flm/eviden/' . basename($item->eviden_sesudah)) }}" alt="Kondisi Sesudah">
+                            <div class="doc-image-caption">Kondisi Sesudah #{{ $index + 1 }}</div>
+                        </div>
                     </td>
                     @endif
                 </tr>

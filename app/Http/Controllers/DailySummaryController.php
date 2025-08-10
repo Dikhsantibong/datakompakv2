@@ -435,6 +435,42 @@ class DailySummaryController extends Controller
         }
     }
 
+    /**
+     * Ambil data inputan terakhir sebelum tanggal tertentu (atau tanggal yang tersedia)
+     * untuk setiap mesin/unit, digunakan untuk fitur Load Data Terakhir di daily-summary
+     */
+    public function loadLastData(Request $request)
+    {
+        $inputDate = $request->input('input_date', now()->format('Y-m-d'));
+        $unitSource = $request->input('unit_source', session('unit', 'mysql'));
+
+        // Ambil semua unit
+        $query = \App\Models\PowerPlant::query();
+        if ($unitSource !== 'mysql' && $unitSource !== 'all') {
+            $query->where('unit_source', $unitSource);
+        }
+        $units = $query->with('machines')->get();
+
+        $result = [];
+        foreach ($units as $unit) {
+            foreach ($unit->machines as $machine) {
+                // Cari data terakhir sebelum inputDate untuk mesin ini
+                $last = \App\Models\DailySummary::where('power_plant_id', $unit->id)
+                    ->where('machine_name', $machine->name)
+                    ->whereDate('date', '<', $inputDate)
+                    ->orderBy('date', 'desc')
+                    ->first();
+                if ($last) {
+                    $result[$unit->id . '_' . $machine->name] = $last;
+                }
+            }
+        }
+        return response()->json([
+            'success' => true,
+            'data' => $result
+        ]);
+    }
+
     public function exportPdf(Request $request)
     {
         try {

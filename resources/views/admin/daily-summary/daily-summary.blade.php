@@ -162,7 +162,7 @@
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                             </svg>
-                            Refresh
+                            Load Data Terakhir
                         </button>
                     <button type="button" onclick="window.location.href='{{ route('daily-summary.results') }}'" class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         <i class="fas fa-cogs mr-2"></i>
@@ -467,10 +467,9 @@
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" 
                                                            name="data[{{ $machine->id }}][standby_hours]"
-                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-center"
-                                                           value="{{ old('data.'.$machine->id.'.standby_hours',
-                                                                isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? 
-                                                                $existingData[$machine->power_plant_id.'_'.$machine->name]->standby_hours : '') }}">
+                                                           class="block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ring-2 ring-blue-500 bg-blue-50 text-sm text-center js-standby-hours" 
+                                                           value="{{ old('data.'.$machine->id.'.standby_hours', isset($existingData[$machine->power_plant_id.'_'.$machine->name]) ? $existingData[$machine->power_plant_id.'_'.$machine->name]->standby_hours : 24) }}"
+                                                           readonly>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" 
@@ -872,6 +871,66 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    // Handle Load Data Terakhir button
+    document.getElementById('refreshButton').addEventListener('click', function(e) {
+        e.preventDefault();
+        const inputDate = document.getElementById('input-date').value;
+        const unitFilter = document.getElementById('unit-filter');
+        const unitSource = unitFilter ? unitFilter.value : '';
+        Swal.fire({
+            title: 'Memuat Data Terakhir...',
+            text: 'Mohon tunggu sebentar...',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+        fetch("{{ route('admin.daily-summary.load-last-data') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ input_date: inputDate, unit_source: unitSource })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.data) {
+                // Loop data dan isi form
+                Object.entries(data.data).forEach(([key, summary]) => {
+                    Object.entries(summary).forEach(([field, value]) => {
+                        // Cari input sesuai name
+                        const input = document.querySelector(`[name="data[${summary.power_plant_id}][${field}]"], [name="data[${summary.power_plant_id}_${summary.machine_name}][${field}]"], [name="data[${key}][${field}]"], [name^="data["][name$="][${field}]\"]`);
+                        if (input && value !== null && value !== undefined) {
+                            input.value = value;
+                            // Trigger event agar rumus jalan
+                            input.dispatchEvent(new Event('input', { bubbles: true }));
+                        }
+                    });
+                });
+                Swal.close();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'Data terakhir berhasil dimuat!'
+                });
+            } else {
+                Swal.close();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Tidak Ada Data',
+                    text: 'Data terakhir tidak ditemukan.'
+                });
+            }
+        })
+        .catch(() => {
+            Swal.close();
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Gagal memuat data terakhir.'
+            });
+        });
+    });
 });
 </script>
 <style>
@@ -1297,5 +1356,58 @@ document.querySelector('form').addEventListener('submit', function(e) {
         const totalFuel = hsd + b35 + mfo + b40;
         document.querySelector(`[name="data[${machineId}][total_fuel]"]`).value = totalFuel.toFixed(2);
     }
+
+    // Standby = 24 - (OPR + PO + MO + FO)
+    function calculateStandbyHours(machineId) {
+        const periodHours = 24;
+        const opr = getNumericValue(machineId, 'operating_hours');
+        const po = getNumericValue(machineId, 'planned_outage');
+        const mo = getNumericValue(machineId, 'maintenance_outage');
+        const fo = getNumericValue(machineId, 'forced_outage');
+        let standby = periodHours - (opr + po + mo + fo);
+        if (isNaN(standby) || standby < 0) standby = 0;
+        const standbyInput = document.querySelector(`[name="data[${machineId}][standby_hours]"]`);
+        if (standbyInput) {
+            standbyInput.value = (standby % 1 === 0) ? standby : standby.toFixed(2).replace(/\.00$/, '');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listeners to all input fields
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            const name = input.getAttribute('name');
+            if (!name) return;
+            // Extract machine ID from input name
+            const match = name.match(/data\[(\d+)\]/);
+            if (!match) return;
+            const machineId = match[1];
+            input.addEventListener('input', function() {
+                const fieldName = name.match(/\[([^\]]+)\]$/)[1];
+                // Perhitungan standby otomatis jika field OPR, PO, MO, FO berubah
+                if ([
+                    'operating_hours',
+                    'planned_outage',
+                    'maintenance_outage',
+                    'forced_outage'
+                ].includes(fieldName)) {
+                    calculateStandbyHours(machineId);
+                }
+                // ... existing code ...
+                switch(fieldName) {
+                    // ... existing code ...
+                }
+                // ... existing code ...
+            });
+        });
+        // Inisialisasi nilai standby saat halaman dimuat
+        document.querySelectorAll('input[name$="[standby_hours]"]').forEach(input => {
+            const name = input.getAttribute('name');
+            const match = name.match(/data\[(\d+)\]\[standby_hours\]/);
+            if (match) {
+                calculateStandbyHours(match[1]);
+            }
+        }); 
+    
+});
 </script>
 @endsection 

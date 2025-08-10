@@ -81,8 +81,8 @@
             page-break-after: avoid !important;
         }
         .doc-image-card {
-            width: 130px;
-            height: 110px;
+            width: 210px;
+            height: 170px;
             background: #fff;
             border: 1px solid #bbb;
             border-radius: 6px;
@@ -92,11 +92,11 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto;
-            padding: 6px 4px 2px 4px;
+            padding: 8px 4px 2px 4px;
         }
         .doc-image-card img {
-            width: 120px;
-            height: 90px;
+            width: 200px;
+            height: 150px;
             object-fit: cover;
             border-radius: 4px;
             border: 1px solid #eee;

@@ -1502,3 +1502,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     });
 });
 
+// ... existing code ...
+Route::post('/admin/daily-summary/load-last-data', [\App\Http\Controllers\DailySummaryController::class, 'loadLastData'])->name('admin.daily-summary.load-last-data');
+// ... existing code ...
+

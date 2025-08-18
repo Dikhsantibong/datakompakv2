@@ -1,1 +1,99 @@
- 
+@extends('layouts.app')
+
+@push('styles')
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .main-content {
+            overflow-y: auto;
+            height: calc(100vh - 64px);
+        }
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #22223b;
+        }
+    </style>
+@endpush
+
+@section('content')
+<div class="flex h-screen bg-gray-50 overflow-auto">
+    @include('components.sidebar')
+
+    <div id="main-content" class="flex-1 main-content">
+        <!-- Header -->
+        <header class="bg-white shadow-sm sticky top-0 z-20">
+            <div class="flex justify-between items-center px-6 py-3">
+                <div class="flex items-center gap-x-3">
+                    <!-- Mobile Menu Toggle -->
+                    <button id="mobile-menu-toggle"
+                        class="md:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-[#009BB9] hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                        aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </button>
+
+                    <button id="desktop-menu-toggle"
+                        class="hidden md:block relative items-center justify-center rounded-md text-gray-400 hover:bg-[#009BB9] p-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </button>
+
+                    <h1 class="text-xl font-semibold text-gray-800">Maturity</h1>
+                </div>
+
+                <div class="relative">
+                    <button id="dropdownToggle" class="flex items-center" onclick="toggleDropdown()">
+                        <img src="{{ Auth::user()->avatar ?? asset('foto_profile/admin1.png') }}" class="w-7 h-7 rounded-full mr-2">
+                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}</span>
+                        <i class="fas fa-caret-down ml-2 text-gray-600"></i>
+                    </button>
+                    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-10">
+                        <a href="{{ route('logout') }}"
+                           class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                            <input type="hidden" name="redirect" value="{{ route('homepage') }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex items-center pt-2">
+            <x-admin-breadcrumb :breadcrumbs="[['name' => 'Maturity', 'url' => null]]" />
+        </div>
+
+        <!-- Main Content -->
+        <div class="px-6 py-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h1 class="page-title mb-4">Maturity</h1>
+                {{-- Konten maturity di sini --}}
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+    function toggleDropdown() {
+        const dropdown = document.getElementById('dropdown');
+        dropdown.classList.toggle('hidden');
+    }
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('dropdown');
+        const toggle = document.getElementById('dropdownToggle');
+        if (!toggle.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+</script>
+@endpush

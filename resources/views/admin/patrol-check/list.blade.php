@@ -245,7 +245,7 @@
                                             {{ $patrol->time }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
-                                            {{ optional($patrol->creator)->name ?? 'N/A' }}
+                                            {{ optional($patrol->creator)->name ?? 'OPERATOR' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center border border-gray-200">
                                             <span class="text-xs font-medium text-gray-500 rounded-full bg-blue-100 px-2 py-1">

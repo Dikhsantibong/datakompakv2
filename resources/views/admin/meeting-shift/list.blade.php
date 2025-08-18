@@ -255,6 +255,7 @@
                                                     title="Edit">
                                                     <i class="fas fa-edit mr-1"></i>Edit
                                                 </a>
+                                                @if(auth()->user()->role !== 'operator')
                                                 <form action="{{ route('admin.meeting-shift.destroy', $meetingShift) }}"
                                                       method="POST"
                                                       class="inline-block"
@@ -267,6 +268,7 @@
                                                         <i class="fas fa-trash mr-1"></i>Hapus
                                                     </button>
                                                 </form>
+                                                @endif
                                                 <a href="{{ route('admin.meeting-shift.export', $meetingShift) }}"
                                                     class="text-green-600 hover:text-green-900"
                                                     title="Export">

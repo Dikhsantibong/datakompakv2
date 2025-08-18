@@ -270,6 +270,7 @@
                                                        title="Export PDF">
                                                         <i class="fas fa-file-pdf mr-1"></i> PDF
                                                     </a>
+                                                    @if(auth()->user()->role !== 'operator')
                                                     <form action="{{ route('admin.flm.destroy', $firstItem->id) }}" method="POST"
                                                           onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');"
                                                           class="inline">
@@ -281,6 +282,7 @@
                                                             <i class="fas fa-trash-alt mr-1"></i> Hapus
                                                         </button>
                                                     </form>
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>

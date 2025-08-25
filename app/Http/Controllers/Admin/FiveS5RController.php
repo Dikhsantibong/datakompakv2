@@ -8,7 +8,7 @@ use App\Models\Pemeriksaan5s5r;
 use App\Models\ProgramKerja5r;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\FiveS5RExport;
 use Illuminate\Support\Str;

@@ -284,6 +284,7 @@
                                                title="Export PDF">
                                                 <i class="fas fa-file-pdf mr-1"></i>PDF
                                             </a>
+                                            @if(auth()->user()->role !== 'operator')
                                             <form action="{{ route('admin.patrol-check.destroy', $patrol->id ?? 0) }}"
                                                   method="POST"
                                                   class="inline"
@@ -296,6 +297,7 @@
                                                     <i class="fas fa-trash mr-1"></i>Hapus
                                                 </button>
                                             </form>
+                                            @endif
                                         </td>
                                     </tr>
                                     @empty

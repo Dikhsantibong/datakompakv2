@@ -214,6 +214,7 @@
                                                    title="Edit">
                                                     <i class="fas fa-edit mr-1"></i> Edit
                                                 </a>
+                                                @if(auth()->user()->role !== 'operator')
                                                 <form action="{{ route('admin.5s5r.destroy', $batch->id) }}"
                                                       method="POST"
                                                       class="inline"
@@ -226,6 +227,7 @@
                                                         <i class="fas fa-trash-alt mr-1"></i> Hapus
                                                     </button>
                                                 </form>
+                                                @endif
                                                 <a href="{{ route('admin.5s5r.export.pdf', $batch->id) }}"
                                                    class="text-red-600 hover:text-red-900 flex items-center"
                                                    title="Export PDF">

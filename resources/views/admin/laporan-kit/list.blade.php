@@ -274,6 +274,7 @@
                                                     title="Edit">
                                                     <i class="fas fa-edit mr-2"></i>Edit
                                                 </a>
+                                                @if(auth()->user()->role !== 'operator')
                                                 <form action="{{ route('admin.laporan-kit.destroy', $laporan->id) }}"
                                                       method="POST"
                                                       class="inline-block"
@@ -286,6 +287,7 @@
                                                         <i class="fas fa-trash mr-2"></i>Hapus
                                                     </button>
                                                 </form>
+                                                @endif
                                                 <a href="{{ route('admin.laporan-kit.export-pdf', $laporan->id) }}"
                                                      class="text-red-600 hover:text-red-900 mr-4 " title="Download PDF">
                                                     <i class="fas fa-file-pdf mr-2"></i>PDF

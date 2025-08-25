@@ -211,6 +211,7 @@
                                                    title="Export Excel">
                                                     <i class="fas fa-file-excel mr-1"></i>Excel
                                                 </a>
+                                                @if(auth()->user()->role !== 'operator')
                                                 <form action="{{ route('admin.k3-kamp.destroy', $report->id) }}"
                                                       method="POST"
                                                       class="inline-block"
@@ -223,6 +224,7 @@
                                                         <i class="fas fa-trash mr-1"></i>Hapus
                                                     </button>
                                                 </form>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

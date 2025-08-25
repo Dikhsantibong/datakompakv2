@@ -98,11 +98,42 @@ class DataEngineExport implements FromView, WithTitle, WithEvents, WithStyles, W
         $plnDrawing->setOffsetX(5);
         $plnDrawing->setOffsetY(5);
 
-        // PLN-bg Logo (ganti Engine Logo)
+        // Unit Logo (kanan) - mapping berdasarkan nama unit
+        $unitLogoMap = [
+            'PLTD POASIA' => 'logo/PLTD_POASIA.png',
+            'PLTD KOLAKA' => 'logo/PLTD_KOLAKA.png',
+            'PLTD BAU BAU' => 'logo/PLTD_BAU_BAU.png',
+            'PLTD WUA WUA' => 'logo/PLTD_WUA_WUA.png',
+            'PLTD WINNING' => 'logo/PLTM_WINNING.png',
+            'PLTD ERKEE' => 'logo/PLTD_EREKE.png',
+            'PLTD LADUMPI' => 'logo/PLTD_LADUMPI.png',
+            'PLTD LANGARA' => 'logo/PLTD_LANGARA.png',
+            'PLTD LANIPA-NIPA' => 'logo/PLTD_LANIPA_NIPA.png',
+            'PLTD PASARWAJO' => 'logo/PLTD_PASARWAJO.png',
+            'PLTD POASIA CONTAINERIZED' => 'logo/PLTD_POASIA_CONTAINERIZED.png',
+            'PLTD RAHA' => 'logo/PLTD_RAHA.png',
+            'PLTD WAJO' => 'logo/PLTD_WAJO.png',
+            'PLTD WANGI-WANGI' => 'logo/PLTD_WANGI_WANGI.png',
+            'PLTM RONGI' => 'logo/PLTM_RONGI.png',
+            'PLTM SABILAMBO' => 'logo/PLTM_SABILAMBO.png',
+            'PLTD KENDARI' => 'logo/PLTMG_KENDARI.png',
+            'PLTD BARUTA' => 'logo/PLTU_BARUTA.png',
+            'PLTD MORAMO' => 'logo/PLTU_MORAMO.png',
+            'PLTM MIKUASI' => 'logo/PLTM_MIKUASI.png',
+        ];
+        $unitName = isset($this->powerPlants[0]) ? $this->powerPlants[0]->name : '';
+        $logoPath = 'logo/UP_KENDARI.png';
+        foreach ($unitLogoMap as $key => $path) {
+            if (stripos($unitName, $key) !== false) {
+                $logoPath = $path;
+                break;
+            }
+        }
+
         $plnBgDrawing = new Drawing();
-        $plnBgDrawing->setName('PLN-bg Logo');
-        $plnBgDrawing->setDescription('PLN-bg Logo');
-        $plnBgDrawing->setPath(public_path('logo/UP_KENDARI.png'));
+        $plnBgDrawing->setName('Unit Logo');
+        $plnBgDrawing->setDescription('Unit Logo');
+        $plnBgDrawing->setPath(public_path($logoPath));
         $plnBgDrawing->setHeight(60);
         $plnBgDrawing->setCoordinates('H1');
         $plnBgDrawing->setOffsetX(5);

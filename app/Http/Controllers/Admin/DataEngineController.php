@@ -9,7 +9,7 @@ use App\Models\EngineData;
 use App\Exports\DataEngineExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Machine;
 use App\Models\MachineLog;
 use App\Models\MachineOperation;

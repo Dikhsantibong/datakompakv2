@@ -12,21 +12,33 @@ class LoginController extends Controller
 {
     public function login(Request $request)
     {
+        $start = microtime(true);
+
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
             'unit' => 'required',
         ]);
+        \Log::info('Step 1: Validasi input', ['time' => microtime(true) - $start]);
 
         // Simpan unit ke sesi
         $unit = $request->input('unit');
         session(['unit' => $unit]);
+        \Log::info('Step 2: Simpan unit ke session', ['time' => microtime(true) - $start]);
 
         // Set koneksi database sementara untuk autentikasi
         Config::set('database.default', $unit);
+        \Log::info('Step 3: Set koneksi database', ['time' => microtime(true) - $start]);
 
         // Attempt login
-        if (Auth::attempt($request->only('email', 'password'))) {
+        $loginStart = microtime(true);
+        $login = Auth::attempt($request->only('email', 'password'));
+        \Log::info('Step 4: Auth::attempt', [
+            'time' => microtime(true) - $loginStart,
+            'total_time' => microtime(true) - $start
+        ]);
+
+        if ($login) {
             // Check user role and redirect accordingly
             if (Auth::user()->role == 'admin') {
                 return redirect()->route('admin.dashboard');

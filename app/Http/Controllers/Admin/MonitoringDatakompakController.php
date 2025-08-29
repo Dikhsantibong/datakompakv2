@@ -658,10 +658,10 @@ class MonitoringDatakompakController extends Controller
 
         foreach ($powerPlants as $powerPlant) {
             $dailyData = collect();
-            $searchName = strtoupper($powerPlant->name);
+            $searchName = strtoupper(str_replace(['-', ' '], '', $powerPlant->name));
             foreach ($dates as $date) {
                 $patrols = \App\Models\PatrolCheck::whereDate('created_at', $date)
-                    ->whereRaw('UPPER(sync_unit_origin) = ?', [$searchName])
+                    ->whereRaw('REPLACE(REPLACE(UPPER(sync_unit_origin), "-", ""), " ", "") = ?', [$searchName])
                     ->get();
                 $dailyData->put($date, [
                     'status' => $patrols->isNotEmpty(),

@@ -658,16 +658,11 @@ class MonitoringDatakompakController extends Controller
 
         foreach ($powerPlants as $powerPlant) {
             $dailyData = collect();
+            $searchName = $powerPlant->unit_source ?? $powerPlant->name;
             foreach ($dates as $date) {
-                // Extract the first two words from power plant name for matching
-                $powerPlantWords = explode(' ', $powerPlant->name);
-                $searchName = $powerPlantWords[0] . ' ' . ($powerPlantWords[1] ?? '');
-                $searchName = trim($searchName);
-
                 $patrols = \App\Models\PatrolCheck::whereDate('created_at', $date)
-                    ->where('sync_unit_origin', 'like', $searchName . '%')
+                    ->where('sync_unit_origin', $searchName)
                     ->get();
-
                 $dailyData->put($date, [
                     'status' => $patrols->isNotEmpty(),
                     'data' => $patrols

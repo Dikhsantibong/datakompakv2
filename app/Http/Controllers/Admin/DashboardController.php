@@ -16,6 +16,14 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        // Logging semua query dan waktu eksekusinya
+        \DB::listen(function ($query) {
+            \Log::info('QUERY', [
+                'sql' => $query->sql,
+                'bindings' => $query->bindings,
+                'time' => $query->time // waktu dalam milidetik
+            ]);
+        });
         $start = microtime(true);
         \Log::info('DASHBOARD: Mulai proses render', ['time' => $start]);
         // Get today's date

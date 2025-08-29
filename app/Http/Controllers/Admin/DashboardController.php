@@ -16,6 +16,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $start = microtime(true);
+        \Log::info('DASHBOARD: Mulai proses render', ['time' => $start]);
         // Get today's date
         $today = Carbon::today();
         $startOfMonth = $today->copy()->startOfMonth();
@@ -90,7 +92,9 @@ class DashboardController extends Controller
         $operationSchedules = OperationSchedule::whereDate('schedule_date', $today)
             ->orderBy('start_time')
             ->get();
-
+        \Log::info('DASHBOARD: Selesai proses render', [
+            'total_time' => microtime(true) - $start
+        ]);
         // Pass all variables to the view
         return view('admin.dashboard', compact(
             'powerPlants',

@@ -658,10 +658,10 @@ class MonitoringDatakompakController extends Controller
 
         foreach ($powerPlants as $powerPlant) {
             $dailyData = collect();
-            $searchName = $powerPlant->unit_source ?? $powerPlant->name;
+            $searchName = strtoupper($powerPlant->name);
             foreach ($dates as $date) {
                 $patrols = \App\Models\PatrolCheck::whereDate('created_at', $date)
-                    ->where('sync_unit_origin', $searchName)
+                    ->whereRaw('UPPER(sync_unit_origin) = ?', [$searchName])
                     ->get();
                 $dailyData->put($date, [
                     'status' => $patrols->isNotEmpty(),

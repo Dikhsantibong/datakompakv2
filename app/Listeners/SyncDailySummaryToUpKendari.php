@@ -168,6 +168,7 @@ class SyncDailySummaryToUpKendari
             'planned_outage' => $dailySummary->planned_outage,
             'maintenance_outage' => $dailySummary->maintenance_outage,
             'forced_outage' => $dailySummary->forced_outage,
+            'ah' => $dailySummary->ah,
             
             // Trips & Outages
             'trip_machine' => $dailySummary->trip_machine,
@@ -202,6 +203,7 @@ class SyncDailySummaryToUpKendari
             'turbolube_68' => $dailySummary->turbolube_68,
             'shell_argina_s3' => $dailySummary->shell_argina_s3,
             'total_oil' => $dailySummary->total_oil,
+            
             
             // Efficiency Metrics
             'sfc_scc' => $dailySummary->sfc_scc,

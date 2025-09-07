@@ -59,7 +59,7 @@ class DailySummary extends Model
         'mfo_fuel',          // MFO (Liter)
         'total_fuel',        // Total BBM (Liter)
         'water_usage',       // Air (M³)
-        'meditran_oil',      // Meditran SX 15W/40 CH-4 (LITER)
+        'meditran_oil',      // Meditran SX 15W/40 CH-4 (LITER) / Kolaka: MEDITRAN SMX 15W/40
         'salyx_420',         // Salyx 420 (LITER)
         'salyx_430',         // Salyx 430 (LITER)
         'travolube_a',       // TravoLube A (LITER)
@@ -67,11 +67,27 @@ class DailySummary extends Model
         'turbolube_68',      // Turbolube 68 (LITER)
         'shell_argina_s3',   // Shell Argina S3 (LITER)
         'total_oil',         // TOTAL (LITER)
+        // Pelumas khusus Kolaka (tidak ada di field utama)
+        'diala_b',           // Kolaka: DIALA B
+        'turboil_68',        // Kolaka: TurbOil 68
+        'meditran_s40',      // Kolaka: MEDITRAN S40
+        'turbo_lube_xt68',   // Kolaka: Turbo Lube XT68
+        'turbo_oil_46',      // Kolaka: Turbo Oil 46 (jika berbeda dengan turbolube_46)
+        'trafo_lube_a',      // Kolaka: Trafo Lube A
         'sfc_scc',           // SFC/SCC (LITER/KWH)
         'nphr',              // TARA KALOR/NPHR (KCAL/KWH)
         'slc',               // SLC (CC/KWH)
         'notes',             // Keterangan
         'jsi',               // JSI
+        'meditran_smx_15w40',    // Kolaka: MEDITRAN SMX 15W/40
+        'salyx_420',             // Kolaka: SALYX 420
+        'diala_b',               // Kolaka: DIALA B
+        'turbo_oil_46',          // Kolaka: Turbo Oil 46
+        'turboil_68',            // Kolaka: TurbOil 68
+        'meditran_s40',          // Kolaka: MEDITRAN S40
+        'turbo_lube_xt68',       // Kolaka: Turbo Lube XT68
+        'trafo_lube_a',          // Kolaka: Trafo Lube A
+        'meditran_sx_15w40',     // Kolaka: MEDITRAN SX  15W/40 (dua spasi, berbeda dengan SMX)
     ];
 
     // Sesuaikan casting dengan tipe data di database
@@ -121,11 +137,26 @@ class DailySummary extends Model
         'turbolube_68' => 'decimal:3',
         'shell_argina_s3' => 'decimal:2',
         'total_oil' => 'decimal:3',
+        // Pelumas khusus Kolaka
+        'diala_b' => 'decimal:3',
+        'turboil_68' => 'decimal:3',
+        'meditran_s40' => 'decimal:3',
+        'turbo_lube_xt68' => 'decimal:3',
+        'turbo_oil_46' => 'decimal:3',
+        'trafo_lube_a' => 'decimal:3',
         'sfc_scc' => 'decimal:3',
         'nphr' => 'decimal:3',
         'slc' => 'decimal:3',
         'uuid' => 'string',
         'unit_source' => 'string',
+        'meditran_smx_15w40' => 'decimal:3',
+        'diala_b' => 'decimal:3',
+        'turbo_oil_46' => 'decimal:3',
+        'turboil_68' => 'decimal:3',
+        'meditran_s40' => 'decimal:3',
+        'turbo_lube_xt68' => 'decimal:3',
+        'trafo_lube_a' => 'decimal:3',
+        'meditran_sx_15w40' => 'decimal:3',
     ];
 
     public function getConnectionName()

@@ -522,6 +522,29 @@ class DailySummaryController extends Controller
         }
     }
 
+    public function importExcelPage()
+    {
+        // Tampilkan halaman upload Excel
+        return view('admin.daily-summary.import-excel');
+    }
+
+    public function importExcelProcess(Request $request)
+    {
+        $request->validate([
+            'excel' => 'required|file|mimes:xlsx,xls',
+        ]);
+        $file = $request->file('excel');
+        $rows = \Excel::toArray([], $file)[0];
+        // Ambil baris 13-25 (index 12-24)
+        $preview = [];
+        for ($i = 12; $i <= 24; $i++) {
+            if (!isset($rows[$i])) continue;
+            $row = $rows[$i];
+            $preview[] = $row;
+        }
+        return view('admin.daily-summary.import-excel', compact('preview'));
+    }
+
     // Add method to handle unit source changes
     public function setUnitSource(Request $request)
     {

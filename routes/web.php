@@ -62,6 +62,8 @@ use App\Http\Controllers\Admin\SubsistemKendariController;
 use App\Http\Controllers\Admin\SubsistemBauBauController;
 use App\Http\Controllers\Admin\OperasiUpkd\RapatController;
 use App\Http\Controllers\Admin\OperasiUpkd\LinkKoordinasiController;
+use App\Http\Controllers\DailySummaryExcelImportController;
+use App\Http\Controllers\DailySummaryResultController;
 
 
 Route::get('/', function () {
@@ -1504,5 +1506,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 // ... existing code ...
 Route::post('/admin/daily-summary/load-last-data', [\App\Http\Controllers\DailySummaryController::class, 'loadLastData'])->name('admin.daily-summary.load-last-data');
+// ... existing code ...
+
+// ... existing code ...
+Route::get('/daily-summary/import-excel', [\App\Http\Controllers\DailySummaryExcelImportController::class, 'index'])->name('daily-summary.import-excel');
+Route::post('/daily-summary/import-excel', [\App\Http\Controllers\DailySummaryExcelImportController::class, 'process'])->name('daily-summary.import-excel.process');
+// ... existing code ...
+
+// ... existing code ...
+Route::post('/daily-summary/import-excel/save', [\App\Http\Controllers\DailySummaryExcelImportController::class, 'save'])->name('daily-summary.import-excel.save');
+// ... existing code ...
+
+// ... existing code ...
+Route::get('daily-summary/import-excel/result', [App\Http\Controllers\DailySummaryResultController::class, 'index'])->name('daily-summary.import-excel.result');
 // ... existing code ...
 

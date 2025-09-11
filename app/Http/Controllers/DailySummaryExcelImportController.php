@@ -22,7 +22,39 @@ class DailySummaryExcelImportController extends Controller
             'bulan' => 'required|date_format:Y-m',
         ]);
         $file = $request->file('excel');
+        \Log::info('DEBUG: Mulai proses upload', ['file' => $file ? $file->getClientOriginalName() : 'NULL']);
+        $unitSource = $request->input('unit_source', session('unit', 'mysql'));
         $bulan = $request->input('bulan');
+        $storagePath = storage_path('app/excel-uploads');
+        if (!file_exists($storagePath)) {
+            mkdir($storagePath, 0777, true);
+        }
+        $filename = $unitSource . '-' . $bulan . '.xlsx';
+        $fullPath = $storagePath . '/' . $filename;
+        if (file_exists($fullPath)) {
+            unlink($fullPath);
+            \Log::info('DEBUG: File lama dihapus', ['file' => $fullPath]);
+        }
+        if ($file) {
+            try {
+                // Simpan file ke storage dulu
+                $file->move($storagePath, $filename);
+                \Log::info('DEBUG: File excel berhasil diupload', [
+                    'file' => $filename,
+                    'path' => $fullPath,
+                    'unit_source' => $unitSource,
+                    'bulan' => $bulan
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('DEBUG: GAGAL UPLOAD FILE EXCEL', [
+                    'file' => $filename,
+                    'path' => $fullPath,
+                    'error' => $e->getMessage()
+                ]);
+            }
+        } else {
+            \Log::error('DEBUG: File upload gagal: file tidak ditemukan di request');
+        }
         $carbonBulan = \Carbon\Carbon::createFromFormat('Y-m', $bulan);
         $jumlahHari = $carbonBulan->daysInMonth;
 
@@ -156,7 +188,8 @@ class DailySummaryExcelImportController extends Controller
             unset($headerLabels['water_usage']);
         }
 
-        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file->getRealPath());
+        // Load file dari storage, bukan dari temp upload
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($fullPath);
         $allSheets = $spreadsheet->getAllSheets();
         $previewSheets = [];
         $unitSheets = [];
@@ -365,5 +398,17 @@ class DailySummaryExcelImportController extends Controller
             }
         }
         return redirect()->back()->with('status', "Import selesai. Berhasil: $success, Gagal: $failed");
+    }
+
+    public function downloadExcel(Request $request)
+    {
+        $bulan = $request->input('bulan');
+        $unitSource = $request->input('unit_source', session('unit', 'mysql'));
+        $filename = $unitSource . '-' . $bulan . '.xlsx';
+        $path = storage_path('app/excel-uploads/' . $filename);
+        if (!file_exists($path)) {
+            abort(404, 'File tidak ditemukan');
+        }
+        return response()->download($path, $filename);
     }
 }

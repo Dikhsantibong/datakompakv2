@@ -49,28 +49,39 @@
             </div>
         </header>
         <div class="px-6 py-8">
-            <form method="GET" action="" class="mb-6 flex flex-col md:flex-row gap-4 items-end">
-                <div>
-                    <label for="bulan" class="block text-sm font-semibold text-gray-700 mb-1">Pilih Bulan</label>
-                    <input type="month" name="bulan" id="bulan" value="{{ $bulan }}" class="border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+            <form method="GET" action="" class="mb-6 flex flex-col md:flex-row gap-4 items-end w-full">
+                <div class="flex flex-col md:flex-row gap-4 flex-1">
+                    <div>
+                        <label for="bulan" class="block text-sm font-semibold text-gray-700 mb-1">Pilih Bulan</label>
+                        <input type="month" name="bulan" id="bulan" value="{{ $bulan }}" class="border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                    </div>
+                    @if($isMain)
+                    <div>
+                        <label for="unit" class="block text-sm font-semibold text-gray-700 mb-1">Pilih Unit</label>
+                        <select name="unit" id="unit" class="border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                            <option value="">Semua Unit</option>
+                            @foreach($units as $unit)
+                                <option value="{{ $unit->id }}" {{ $unitFilter == $unit->id ? 'selected' : '' }}>{{ $unit->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endif
                 </div>
-                @if($isMain)
-                <div>
-                    <label for="unit" class="block text-sm font-semibold text-gray-700 mb-1">Pilih Unit</label>
-                    <select name="unit" id="unit" class="border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-                        <option value="">Semua Unit</option>
-                        @foreach($units as $unit)
-                            <option value="{{ $unit->id }}" {{ $unitFilter == $unit->id ? 'selected' : '' }}>{{ $unit->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                @endif
-                <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white text-base font-semibold rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                    <i class="fas fa-search"></i> Filter
-                </button>
-            <a href="{{ route('daily-summary.import-excel') }}" class="inline-flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white text-base font-semibold rounded-lg shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all">
-                <i class="fas fa-file-excel"></i> Import Data Excel
-            </a>
+                <div class="flex flex-row gap-2 justify-end w-full md:w-auto mt-4 md:mt-0">
+                    <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        <i class="fas fa-search"></i> Filter
+                    </button>
+                    <a href="{{ route('daily-summary.import-excel') }}" class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-600 text-white text-xs font-medium rounded shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all">
+                        <i class="fas fa-file-excel"></i> Import Data Excel
+                    </a>
+                    
+                        <a href="{{ route('daily-summary.download-excel', ['bulan' => $bulan, 'unit_source' => request('unit_source', session('unit'))]) }}"
+                           class="inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-600 text-white text-xs font-medium rounded shadow hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-all"
+                           target="_blank">
+                            <i class="fas fa-download"></i> Download Excel Asli
+                        </a>
+                
+                </div>                
             </form>
             <h3 class="text-lg font-semibold mb-2">Data per Hari:</h3>
             @if(!$isMain)

@@ -1,6 +1,7 @@
 @php
 $isKolaka = session('unit') === 'mysql_kolaka';
 $isBauBau = session('unit') === 'mysql_bau_bau';
+$isPoasia = session('unit') === 'mysql_poasia';
 @endphp
 <div class="w-full overflow-x-auto mb-8 bg-white rounded-lg shadow-md p-4">
 <table class="min-w-full divide-y divide-gray-200 border table-fixed min-w-[1800px]" style="min-width: 1800px;">
@@ -9,7 +10,7 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
             <th class="px-4 py-3 border-r" rowspan="2">No</th>
             <th class="px-4 py-3 border-r" rowspan="2">Unit</th>
             <th class="px-4 py-3 border-r" rowspan="2">Mesin</th>
-            @if($isBauBau)
+            @if($isBauBau || $isPoasia)
                 <th class="px-4 py-3 border-r" colspan="2">Daya (MW)</th>
                 <th class="px-4 py-3 border-r" colspan="2">Beban Puncak (kW)</th>
             @else
@@ -19,7 +20,7 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
             <th class="px-4 py-3 border-r" rowspan="2">Ratio Daya Kit (%)</th>
             <th class="px-4 py-3 border-r" colspan="2">Produksi (kWh)</th>
             <th class="px-4 py-3 border-r" colspan="3">Pemakaian Sendiri</th>
-            @if($isBauBau)
+            @if($isBauBau || $isPoasia)
                 <!-- Tidak ada kolom Jam Periode untuk Bau-Bau -->
             @else
                 <th class="px-4 py-3 border-r" rowspan="2">Jam Periode</th>
@@ -28,7 +29,7 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
             <th class="px-4 py-3 border-r" colspan="2">Trip Non OMC</th>
             <th class="px-4 py-3 border-r" colspan="4">Derating</th>
             <th class="px-4 py-3 border-r" colspan="4">Kinerja Pembangkit</th>
-            @if($isBauBau)
+            @if($isBauBau || $isPoasia)
                 <!-- Tidak ada kolom NCF dan NOF untuk Bau-Bau -->
             @else
                 <th class="px-4 py-3 border-r" rowspan="2">NCF</th>
@@ -39,6 +40,8 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
                 <th class="px-4 py-3 border-r" colspan="3">Pemakaian Bahan Bakar/Baku</th>
             @elseif($isKolaka)
                 <th class="px-4 py-3 border-r" colspan="5">Pemakaian Bahan Bakar/Baku</th>
+            @elseif($isPoasia)
+                <th class="px-4 py-3 border-r" colspan="10">Pemakaian Bahan Bakar/Baku</th>
             @else
                 <th class="px-4 py-3 border-r" colspan="6">Pemakaian Bahan Bakar/Baku</th>
             @endif
@@ -46,6 +49,8 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
                 <th class="px-4 py-3 border-r" colspan="10">Pemakaian Pelumas</th>
             @elseif($isBauBau)
                 <th class="px-4 py-3 border-r" colspan="6">Pemakaian Pelumas</th>
+            @elseif($isPoasia)
+                <th class="px-4 py-3 border-r" colspan="5">Pemakaian Pelumas</th>
             @else
                 <th class="px-4 py-3 border-r" colspan="8">Pemakaian Pelumas</th>
             @endif
@@ -53,7 +58,7 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
             <th class="px-4 py-3 border-r" rowspan="2">Keterangan</th>
         </tr>
         <tr class="text-center border-b bg-gray-100 text-xs">
-            @if($isBauBau)
+            @if($isBauBau || $isPoasia)
                 <th class="border-r">Daya Terpasang</th>
                 <th class="border-r">Daya Mampu</th>
                 <th class="border-r">Siang</th>
@@ -76,6 +81,12 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
                 <th class="border-r">GGN</th>
                 <th class="border-r">STAND BY</th>
                 <th class="border-r">AH</th>
+            @elseif($isPoasia)
+                <th class="border-r">SH</th>
+                <th class="border-r">PO</th>
+                <th class="border-r">MO</th>
+                <th class="border-r">FO</th>
+                <th class="border-r">STANDBY</th>
             @else
                 <th class="border-r">OPR</th>
                 <th class="border-r">STANDBY</th>
@@ -103,6 +114,17 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
                 <th class="border-r">MFO (Liter)</th>
                 <th class="border-r">Total BBM (Liter)</th>
                 <th class="border-r">Air (M³)</th>
+            @elseif($isPoasia)
+                <th class="border-r">HSD (Liter)</th>
+                <th class="border-r">B10 (Liter)</th>
+                <th class="border-r">B15 (Liter)</th>
+                <th class="border-r">B20 (Liter)</th>
+                <th class="border-r">B25 (Liter)</th>
+                <th class="border-r">B35 (Liter)</th>
+                <th class="border-r">MFO (Liter)</th>
+                <th class="border-r">Total BBM (Liter)</th>
+                <th class="border-r">Batubara (KG)</th>
+                <th class="border-r">Air (M³)</th>
             @else
                 <th class="border-r">HSD (Liter)</th>
                 <th class="border-r">B35 (Liter)</th>
@@ -129,6 +151,12 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
                 <th class="border-r">Turbo oil 68</th>
                 <th class="border-r">Trafolube A</th>
                 <th class="border-r">TOTAL</th>
+            @elseif($isPoasia)
+                <th class="border-r">Shell Argina S3 (LITER)</th>
+                <th class="border-r">Thermo XT 32 (LITER)</th>
+                <th class="border-r">Shell Diala B (LITER)</th>
+                <th class="border-r">Meditran SX CH-4 (LITER)</th>
+                <th class="border-r">TOTAL (LITER)</th>
             @else
                 <th class="border-r">Meditran SX 15W/40 CH-4 (LITER)</th>
                 <th class="border-r">Salyx 420 (LITER)</th>
@@ -150,7 +178,7 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
                 <td class="px-4 py-3 border-r text-center">{{ $i + 1 }}</td>
                 <td class="px-4 py-3 border-r">{{ $row->powerPlant->name ?? '-' }}</td>
                 <td class="px-4 py-3 border-r">{{ $row->machine_name }}</td>
-                @if($isBauBau)
+                @if($isBauBau || $isPoasia)
                     <td class="px-4 py-3 border-r text-right">{{ $row->installed_power }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->capable_power }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->peak_load_day }}</td>
@@ -174,6 +202,12 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
                     <td class="px-4 py-3 border-r text-right">{{ $row->forced_outage }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->standby_hours }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->ah }}</td>
+                @elseif($isPoasia)
+                    <td class="px-4 py-3 border-r text-right">{{ $row->operating_hours }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->planned_outage }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->maintenance_outage }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->forced_outage }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->standby_hours }}</td>
                 @else
                     <td class="px-4 py-3 border-r text-right">{{ $row->period_hours }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->operating_hours }}</td>
@@ -192,7 +226,7 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
                 <td class="px-4 py-3 border-r text-right">{{ $row->sof }}</td>
                 <td class="px-4 py-3 border-r text-right">{{ $row->efor }}</td>
                 <td class="px-4 py-3 border-r text-right">{{ $row->sdof }}</td>
-                @if(!$isBauBau)
+                @if(!$isBauBau && !$isPoasia)
                     <td class="px-4 py-3 border-r text-right">{{ $row->ncf }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->nof }}</td>
                 @endif
@@ -222,6 +256,22 @@ $isBauBau = session('unit') === 'mysql_bau_bau';
                     <td class="px-4 py-3 border-r text-right">{{ $row->turbo_lube_xt68 }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->trafo_lube_a }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->meditran_sx_15w40 }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->total_oil }}</td>
+                @elseif($isPoasia)
+                    <td class="px-4 py-3 border-r text-right">{{ $row->hsd_fuel }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->b10_fuel }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->b15_fuel }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->b20_fuel }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->b25_fuel }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->b35_fuel }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->mfo_fuel }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->total_fuel }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->batubara }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->water_usage }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->shell_argina_s3 }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->thermo_xt_32 }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->shell_diala_b }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->meditran_sx_ch4 }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->total_oil }}</td>
                 @else
                     <td class="px-4 py-3 border-r text-right">{{ $row->hsd_fuel }}</td>

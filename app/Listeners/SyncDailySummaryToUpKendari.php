@@ -189,7 +189,13 @@ class SyncDailySummaryToUpKendari
             
             // Fuel Usage
             'hsd_fuel' => $dailySummary->hsd_fuel,
+            'b10_fuel' => $dailySummary->b10_fuel,
+            'b15_fuel' => $dailySummary->b15_fuel,
+            'b20_fuel' => $dailySummary->b20_fuel,
+            'b25_fuel' => $dailySummary->b25_fuel,
+            'batubara' => $dailySummary->batubara,
             'b35_fuel' => $dailySummary->b35_fuel,
+            'b40_fuel' => $dailySummary->b40_fuel,
             'mfo_fuel' => $dailySummary->mfo_fuel,
             'total_fuel' => $dailySummary->total_fuel,
             'water_usage' => $dailySummary->water_usage,
@@ -202,6 +208,9 @@ class SyncDailySummaryToUpKendari
             'turbolube_46' => $dailySummary->turbolube_46,
             'turbolube_68' => $dailySummary->turbolube_68,
             'shell_argina_s3' => $dailySummary->shell_argina_s3,
+            'thermo_xt_32' => $dailySummary->thermo_xt_32,
+            'shell_diala_b' => $dailySummary->shell_diala_b,
+            'meditran_sx_ch4' => $dailySummary->meditran_sx_ch4,
             'total_oil' => $dailySummary->total_oil,
             
             

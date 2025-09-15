@@ -68,7 +68,6 @@ class DailySummary extends Model
         'shell_argina_s3',   // Shell Argina S3 (LITER)
         'total_oil',         // TOTAL (LITER)
         // Pelumas khusus Kolaka (tidak ada di field utama)
-        'diala_b',           // Kolaka: DIALA B
         'turboil_68',        // Kolaka: TurbOil 68
         'meditran_s40',      // Kolaka: MEDITRAN S40
         'turbo_lube_xt68',   // Kolaka: Turbo Lube XT68
@@ -81,13 +80,22 @@ class DailySummary extends Model
         'jsi',               // JSI
         'meditran_smx_15w40',    // Kolaka: MEDITRAN SMX 15W/40
         'salyx_420',             // Kolaka: SALYX 420
-        'diala_b',               // Kolaka: DIALA B
         'turbo_oil_46',          // Kolaka: Turbo Oil 46
         'turboil_68',            // Kolaka: TurbOil 68
         'meditran_s40',          // Kolaka: MEDITRAN S40
         'turbo_lube_xt68',       // Kolaka: Turbo Lube XT68
         'trafo_lube_a',          // Kolaka: Trafo Lube A
         'meditran_sx_15w40',     // Kolaka: MEDITRAN SX  15W/40 (dua spasi, berbeda dengan SMX)
+        // Tambahan agar sesuai tabel:
+        'machine_id',
+        'b10_fuel',
+        'b15_fuel',
+        'b20_fuel',
+        'b25_fuel',
+        'batubara',
+        'thermo_xt_32',
+        'shell_diala_b',
+        'meditran_sx_ch4',
     ];
 
     // Sesuaikan casting dengan tipe data di database
@@ -124,6 +132,11 @@ class DailySummary extends Model
         'nof' => 'decimal:2',
         'jsi' => 'decimal:2',
         'hsd_fuel' => 'decimal:3',
+        'b10_fuel' => 'decimal:3',
+        'b15_fuel' => 'decimal:3',
+        'b20_fuel' => 'decimal:3',
+        'b25_fuel' => 'decimal:3',
+        'batubara' => 'decimal:3',
         'b35_fuel' => 'decimal:3',
         'b40_fuel' => 'decimal:3',
         'mfo_fuel' => 'decimal:3',
@@ -136,9 +149,11 @@ class DailySummary extends Model
         'turbolube_46' => 'decimal:3',
         'turbolube_68' => 'decimal:3',
         'shell_argina_s3' => 'decimal:2',
+        'thermo_xt_32' => 'decimal:3',
+        'shell_diala_b' => 'decimal:3',
+        'meditran_sx_ch4' => 'decimal:3',
         'total_oil' => 'decimal:3',
         // Pelumas khusus Kolaka
-        'diala_b' => 'decimal:3',
         'turboil_68' => 'decimal:3',
         'meditran_s40' => 'decimal:3',
         'turbo_lube_xt68' => 'decimal:3',
@@ -150,7 +165,7 @@ class DailySummary extends Model
         'uuid' => 'string',
         'unit_source' => 'string',
         'meditran_smx_15w40' => 'decimal:3',
-        'diala_b' => 'decimal:3',
+        'meditran_s30' => 'decimal:3',
         'turbo_oil_46' => 'decimal:3',
         'turboil_68' => 'decimal:3',
         'meditran_s40' => 'decimal:3',

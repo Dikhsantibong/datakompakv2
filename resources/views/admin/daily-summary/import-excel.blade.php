@@ -114,6 +114,7 @@
                     $tabIdx = 0;
                     $isKolaka = session('unit') === 'mysql_kolaka';
                     $isBauBau = session('unit') === 'mysql_bau_bau';
+                    $isPoasia = session('unit') === 'mysql_poasia';
                 @endphp
                 <h3 class="text-lg font-semibold mb-2">Preview Data per Hari:</h3>
                 <div>
@@ -155,7 +156,7 @@
                                                 <th class="px-4 py-3 border-r" rowspan="2">No</th>
                                                 <th class="px-4 py-3 border-r" rowspan="2">Unit</th>
                                                 <th class="px-4 py-3 border-r" rowspan="2">Mesin</th>
-                                                @if($isBauBau)
+                                                @if($isBauBau || $isPoasia)
                                                     <th class="px-4 py-3 border-r" colspan="2">Daya (MW)</th>
                                                     <th class="px-4 py-3 border-r" colspan="2">Beban Puncak (kW)</th>
                                                 @else
@@ -165,7 +166,7 @@
                                                 <th class="px-4 py-3 border-r" rowspan="2">Ratio Daya Kit (%)</th>
                                                 <th class="px-4 py-3 border-r" colspan="2">Produksi (kWh)</th>
                                                 <th class="px-4 py-3 border-r" colspan="3">Pemakaian Sendiri</th>
-                                                @if($isBauBau)
+                                                @if($isBauBau || $isPoasia)
                                                     <!-- Tidak ada kolom Jam Periode untuk Bau-Bau -->
                                                 @else
                                                     <th class="px-4 py-3 border-r" rowspan="2">Jam Periode</th>
@@ -174,7 +175,7 @@
                                                 <th class="px-4 py-3 border-r" colspan="2">Trip Non OMC</th>
                                                 <th class="px-4 py-3 border-r" colspan="4">Derating</th>
                                                 <th class="px-4 py-3 border-r" colspan="4">Kinerja Pembangkit</th>
-                                                @if($isBauBau)
+                                                @if($isBauBau || $isPoasia)
                                                     <!-- Tidak ada kolom NCF dan NOF untuk Bau-Bau -->
                                                 @else
                                                     <th class="px-4 py-3 border-r" rowspan="2">NCF</th>
@@ -185,6 +186,8 @@
                                                     <th class="px-4 py-3 border-r" colspan="3">Pemakaian Bahan Bakar/Baku</th>
                                                 @elseif($isKolaka)
                                                     <th class="px-4 py-3 border-r" colspan="5">Pemakaian Bahan Bakar/Baku</th>
+                                                @elseif($isPoasia)
+                                                    <th class="px-4 py-3 border-r" colspan="10">Pemakaian Bahan Bakar/Baku</th>
                                                 @else
                                                     <th class="px-4 py-3 border-r" colspan="5">Pemakaian Bahan Bakar/Baku</th>
                                                 @endif
@@ -194,6 +197,9 @@
                                                 @elseif($isBauBau)
                                                     <th class="px-4 py-3 border-r" colspan="6">Pemakaian Pelumas</th>
                                                     <th class="px-4 py-3 border-r" colspan="3">Effisiensi</th>
+                                                @elseif($isPoasia)
+                                                    <th class="px-4 py-3 border-r" colspan="5">Pemakaian Pelumas</th>
+                                                    <th class="px-4 py-3 border-r" colspan="3">Effisiensi</th>
                                                 @else
                                                     <th class="px-4 py-3 border-r" colspan="8">Pemakaian Pelumas</th>
                                                     <th class="px-4 py-3 border-r" colspan="3">Effisiensi</th>
@@ -201,7 +207,7 @@
                                                 <th class="px-4 py-3 border-r" rowspan="2">Keterangan</th>
                                             </tr>
                                             <tr class="text-center border-b bg-gray-100 text-xs">
-                                                @if($isBauBau)
+                                                @if($isBauBau || $isPoasia)
                                                     <th class="border-r">Daya Terpasang</th>
                                                     <th class="border-r">Daya Mampu</th>
                                                     <th class="border-r">Siang</th>
@@ -224,6 +230,12 @@
                                                     <th class="border-r">GGN</th>
                                                     <th class="border-r">STAND BY</th>
                                                     <th class="border-r">AH</th>
+                                                @elseif($isPoasia)
+                                                    <th class="border-r">SH</th>
+                                                    <th class="border-r">PO</th>
+                                                    <th class="border-r">MO</th>
+                                                    <th class="border-r">FO</th>
+                                                    <th class="border-r">STANDBY</th>
                                                 @else
                                                     <th class="border-r">OPR</th>
                                                     <th class="border-r">PO</th>
@@ -249,6 +261,14 @@
                                                 @elseif($isBauBau)
                                                     <th class="border-r">HSD (Liter)</th>
                                                     <th class="border-r">B40 (Liter)</th>
+                                                @elseif($isPoasia)
+                                                    <th class="border-r">HSD (Liter)</th>
+                                                    <th class="border-r">B10 (Liter)</th>
+                                                    <th class="border-r">B15 (Liter)</th>
+                                                    <th class="border-r">B20 (Liter)</th>
+                                                    <th class="border-r">B25 (Liter)</th>
+                                                    <th class="border-r">B35 (Liter)</th>
+                                                    <th class="border-r">MFO (Liter)</th>
                                                 @else
                                                     <th class="border-r">HSD (Liter)</th>
                                                     <th class="border-r">B35 (Liter)</th>
@@ -256,6 +276,10 @@
                                                 @endif
                                                 @if($isBauBau)
                                                     <th class="border-r">Total BBM (Liter)</th>
+                                                @elseif($isPoasia)
+                                                    <th class="border-r">Total BBM (Liter)</th>
+                                                    <th class="border-r">Batubara (KG)</th>
+                                                    <th class="border-r">Air (M³)</th>
                                                 @else
                                                     <th class="border-r">Total BBM (Liter)</th>
                                                     <th class="border-r">Air (M³)</th>
@@ -278,6 +302,12 @@
                                                     <th class="border-r">Turbo oil 68</th>
                                                     <th class="border-r">Trafolube A</th>
                                                     <th class="border-r">TOTAL</th>
+                                                @elseif($isPoasia)
+                                                    <th class="border-r">Shell Argina S3</th>
+                                                    <th class="border-r">Thermo XT 32</th>
+                                                    <th class="border-r">Shell Diala B</th>
+                                                    <th class="border-r">Meditran SX CH-4</th>
+                                                    <th class="border-r">TOTAL (LITER)</th>
                                                 @else
                                                     <th class="border-r">Meditran SX 15W/40 CH-4 (LITER)</th>
                                                     <th class="border-r">Salyx 420 (LITER)</th>
@@ -374,4 +404,4 @@
         </div>
     </div>
 </div>
-@endsection
+@endsection 

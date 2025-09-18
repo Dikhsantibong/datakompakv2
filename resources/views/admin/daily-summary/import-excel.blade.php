@@ -367,11 +367,26 @@
                     <input type="hidden" name="bulan" value="{{ $bulan }}">
                     <input type="hidden" name="preview_data" value="{{ base64_encode(serialize($previewSheets)) }}">
                     <div class="flex justify-end mt-6">
-                        <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white text-base font-semibold rounded-lg shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all">
+                        <button type="submit" class=" mb-2 inline-flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white text-base font-semibold rounded-lg shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all">
                             <i class="fas fa-save"></i> Simpan ke Database
                         </button>
                     </div>
                 </form>
+                <!-- Loader overlay for saving -->
+                <div id="save-loader" class="fixed inset-0 flex items-center justify-center z-50" style="display:none;">
+                    <div class="bg-white rounded-lg p-6 flex flex-col items-center shadow-lg">
+                        <svg class="animate-spin h-10 w-10 text-green-600 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                        </svg>
+                        <div class="text-green-700 font-semibold text-lg">Menyimpan ke Database...</div>
+                    </div>
+                </div>
+                <script>
+                    document.getElementById('save-excel-form').addEventListener('submit', function() {
+                        document.getElementById('save-loader').style.display = 'flex';
+                    });
+                </script>
             @endif
             @if(isset($debugRows) && isset($firstSheetName) && count($debugRows) > 0)
                 <div class="mb-6 p-4 bg-yellow-50 border border-yellow-300 rounded">

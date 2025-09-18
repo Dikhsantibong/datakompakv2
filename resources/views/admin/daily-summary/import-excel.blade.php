@@ -116,6 +116,7 @@
                     $isBauBau = session('unit') === 'mysql_bau_bau';
                     $isPoasia = session('unit') === 'mysql_poasia';
                     $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
+                    $isWuaWua = session('unit') === 'mysql_wua_wua';
                 @endphp
                 <h3 class="text-lg font-semibold mb-2">Preview Data per Hari:</h3>
                 <div>
@@ -185,7 +186,7 @@
                                                 <th class="px-4 py-3 border-r" rowspan="2">JSI</th>
                                                 @if($isBauBau)
                                                     <th class="px-4 py-3 border-r" colspan="3">Pemakaian Bahan Bakar/Baku</th>
-                                                @elseif($isKolaka)
+                                                @elseif($isKolaka || $isWuaWua)
                                                     <th class="px-4 py-3 border-r" colspan="5">Pemakaian Bahan Bakar/Baku</th>
                                                 @elseif($isPoasia || $isPoasiaContainerized)
                                                     <th class="px-4 py-3 border-r" colspan="10">Pemakaian Bahan Bakar/Baku</th>
@@ -200,6 +201,9 @@
                                                     <th class="px-4 py-3 border-r" colspan="3">Effisiensi</th>
                                                 @elseif($isPoasia || $isPoasiaContainerized)
                                                     <th class="px-4 py-3 border-r" colspan="5">Pemakaian Pelumas</th>
+                                                    <th class="px-4 py-3 border-r" colspan="3">Effisiensi</th>
+                                                @elseif($isWuaWua)
+                                                    <th class="px-4 py-3 border-r" colspan="7">Pemakaian Pelumas</th>
                                                     <th class="px-4 py-3 border-r" colspan="3">Effisiensi</th>
                                                 @else
                                                     <th class="px-4 py-3 border-r" colspan="8">Pemakaian Pelumas</th>
@@ -255,7 +259,7 @@
                                                 <th class="border-r">SOF (%)</th>
                                                 <th class="border-r">EFOR (%)</th>
                                                 <th class="border-r">SdOF (Kali)</th>
-                                                @if($isKolaka)
+                                                @if($isKolaka || $isWuaWua)
                                                 <th class="border-r">HSD (Liter)</th>
                                                 <th class="border-r">B40 (Liter)</th>
                                                 <th class="border-r">MFO (Liter)</th>
@@ -309,6 +313,14 @@
                                                     <th class="border-r">Shell Diala B</th>
                                                     <th class="border-r">Meditran SX CH-4</th>
                                                     <th class="border-r">TOTAL (LITER)</th>
+                                                @elseif($isWuaWua)
+                                                    <th class="border-r">Meditran SMX 15W/40 (LITER)</th>
+                                                    <th class="border-r">Salyx 420 (LITER)</th>
+                                                    <th class="border-r">Salyx 430 (LITER)</th>
+                                                    <th class="border-r">TravoLube A (LITER)</th>
+                                                    <th class="border-r">Turbolube 46 (LITER)</th>
+                                                    <th class="border-r">Turbolube 68 (LITER)</th>
+                                                    <th class="border-r">TOTAL (LITER)</th>
                                                 @else
                                                     <th class="border-r">Meditran SX 15W/40 CH-4 (LITER)</th>
                                                     <th class="border-r">Salyx 420 (LITER)</th>
@@ -318,6 +330,7 @@
                                                     <th class="border-r">Turbolube 68 (LITER)</th>
                                                     <th class="border-r">Shell Argina S3 (LITER)</th>
                                                     <th class="border-r">TOTAL (LITER)</th>
+                                                
                                                 @endif
                                                     <th class="border-r">SFC/SCC (LITER/KWH)</th>
                                                     <th class="border-r">TARA KALOR/NPHR (KCAL/KWH)</th>

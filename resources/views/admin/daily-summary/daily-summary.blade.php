@@ -169,7 +169,7 @@
                         Kelola
                     </button>
 
-                     @if(session('unit') === 'mysql_kolaka' || session('unit') === 'mysql_bau_bau' || session('unit') === 'mysql_poasia' || session('unit') === 'mysql_poasia_containerized')
+                     @if(session('unit') === 'mysql_kolaka' || session('unit') === 'mysql_bau_bau' || session('unit') === 'mysql_poasia' || session('unit') === 'mysql_poasia_containerized' || session('unit') === 'mysql_wua_wua')
                         <div>
                             <a href="{{ route('daily-summary.import-excel') }}" class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                 <i class="fas fa-file-excel mr-2"></i> Input dari Excel

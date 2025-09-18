@@ -128,6 +128,7 @@ class DailySummaryExcelImportController extends Controller
         $isBauBau = session('unit') === 'mysql_bau_bau';
         $isPoasia = session('unit') === 'mysql_poasia';
         $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
+        $isWuaWua = session('unit') === 'mysql_wua_wua';
         if ($isKolaka) {
             $fieldOrder = [
                 'installed_power', 'dmn_power', 'capable_power',
@@ -153,7 +154,7 @@ class DailySummaryExcelImportController extends Controller
                 'turbo_lube_xt68' => 'Turbo Lube XT68',
                 'trafo_lube_a' => 'Trafo Lube A',
                 'meditran_sx_15w40' => 'MEDITRAN SX 15W/40',
-                'total_oil' => 'TOTAL',
+                'total_oil' => 'TOTAL'
             ]);
         } else if ($isBauBau) {
             $fieldOrder = [
@@ -248,6 +249,33 @@ class DailySummaryExcelImportController extends Controller
             unset($headerLabels['period_hours']);
             unset($headerLabels['ncf']);
             unset($headerLabels['nof']);
+        } else if ($isWuaWua) {
+            // Struktur khusus Wua Wua, meniru Kolaka
+            $fieldOrder = [
+                'installed_power', 'dmn_power', 'capable_power',
+                'peak_load_day', 'peak_load_night', 'kit_ratio',
+                'gross_production', 'net_production', 'aux_power', 'transformer_losses', 'usage_percentage',
+                'period_hours', 'operating_hours', 'standby_hours', 'planned_outage', 'maintenance_outage', 'forced_outage',
+                'trip_machine', 'trip_electrical',
+                'efdh', 'epdh', 'eudh', 'esdh',
+                'eaf', 'sof', 'efor', 'sdof',
+                'ncf', 'nof', 'jsi',
+                // Mulai mapping manual dari sini:
+                'hsd_fuel', 'b35_fuel', 'mfo_fuel', 'total_fuel', 'water_usage',
+                'meditran_sx_15w40', 'salyx_420', 'salyx_430', 'travolube_a', 'turbolube_46', 'turbolube_68', 'total_oil',
+                'sfc_scc', 'nphr', 'slc', 'notes'
+            ];
+            $headerLabels = array_merge($headerLabels, [
+                'meditran_sx_15w40' => 'MEDITRAN SMX 15W/40',
+                'salyx_420' => 'SALYX 420',
+                'salyx_430' => 'SALYX 430',
+                'travolube_a' => 'TravoLube A',
+                'turbolube_46' => 'Turbo Oil 46',
+                'turboil_68' => 'TurbOil 68',
+                'turbolube_68' => 'Turbolube 68',
+                'total_oil' => 'TOTAL',
+                'total_oil' => 'TOTAL'
+            ]);
         }
 
         // Load file dari storage, bukan dari temp upload
@@ -265,6 +293,7 @@ class DailySummaryExcelImportController extends Controller
         $isBauBau = session('unit') === 'mysql_bau_bau';
         $isPoasia = session('unit') === 'mysql_poasia';
         $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
+        $isWuaWua = session('unit') === 'mysql_wua_wua';
         if ($isBauBau) {
             $rowStart = 121;
             $rowEnd = 125;
@@ -274,6 +303,9 @@ class DailySummaryExcelImportController extends Controller
         } else if ($isPoasiaContainerized) {
             $rowStart = 127;
             $rowEnd = 129;
+        } else if ($isWuaWua) {
+            $rowStart = 13; // Samakan dengan Kolaka, bisa diubah jika perlu
+            $rowEnd = 17;
         }
         if ($isBauBau) {
             $sheetStart = 0; // mulai dari sheet pertama
@@ -330,6 +362,9 @@ class DailySummaryExcelImportController extends Controller
                 } else if ($isPoasiaContainerized) {
                     $unit = 'PLTD POASIA CONTAINERIZED';
                     $mesin = $row[2] ?? ''; // Ambil nama mesin dari kolom ke-2 (index 2)
+                } else if ($isWuaWua) {
+                    $unit = 'PLTD WUA WUA';
+                    $mesin = $row[1] ?? ''; // Ambil nama mesin dari kolom ke-2 (index 1)
                 } else {
                     // Ambil unit dan mesin dari kolom ke-2 Excel (index 1)
                     $unitMesin = $row[1] ?? '';
@@ -342,7 +377,7 @@ class DailySummaryExcelImportController extends Controller
                     }
                 }
                 $mapped = [
-                    'unit' => $isBauBau ? 'PLTD BAU BAU' : ($isKolaka ? 'PLTD KOLAKA' : ($isPoasia ? 'PLTD POASIA' : ($isPoasiaContainerized ? 'PLTD POASIA CONTAINERIZED' : $unit))),
+                    'unit' => $isBauBau ? 'PLTD BAU BAU' : ($isKolaka ? 'PLTD KOLAKA' : ($isPoasia ? 'PLTD POASIA' : ($isPoasiaContainerized ? 'PLTD POASIA CONTAINERIZED' : ($isWuaWua ? 'PLTD WUA WUA' : $unit)) )),
                     'machine_name' => $isPoasia ? ($row[2] ?? '') : (($isBauBau) ? ($row[1] ?? '') : $mesin)
                 ];
                 if ($isKolaka) {
@@ -374,6 +409,35 @@ class DailySummaryExcelImportController extends Controller
                         'notes' => 54,
                     ];
                     foreach ($kolakaManualMap as $field => $excelIdx) {
+                        $mapped[$field] = $row[$excelIdx] ?? '';
+                    }
+                } else if ($isWuaWua) {
+                    // Mapping khusus Wua Wua, meniru Kolaka
+                    $idxHsd = array_search('hsd_fuel', $fieldOrder);
+                    foreach ($fieldOrder as $idx => $field) {
+                        if ($idx >= $idxHsd) break;
+                        $excelIdx = $idx + 2;
+                        $mapped[$field] = $row[$excelIdx] ?? '';
+                    }
+                    $wuaWuaManualMap = [
+                        'hsd_fuel' => 32,
+                        'b35_fuel' => 37,
+                        'mfo_fuel' => 38,
+                        'total_fuel' => 39,
+                        'water_usage' => 40,
+                        'meditran_sx_15w40' => 41,
+                        'salyx_420' => 42,
+                        'salyx_430' => 43,
+                        'travolube_a' => 44,
+                        'turbolube_46' => 45,
+                        'turbolube_68' => 46,
+                        'total_oil' => 47,
+                        'sfc_scc' => 48,
+                        'nphr' => 49,
+                        'slc' => 50,
+                        'notes' => 51,
+                    ];
+                    foreach ($wuaWuaManualMap as $field => $excelIdx) {
                         $mapped[$field] = $row[$excelIdx] ?? '';
                     }
                 } else if ($isBauBau) {
@@ -556,6 +620,7 @@ class DailySummaryExcelImportController extends Controller
                     $isBauBau = session('unit') === 'mysql_bau_bau';
                     $isPoasia = session('unit') === 'mysql_poasia';
                     $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
+                    $isWuaWua = session('unit') === 'mysql_wua_wua';
                     if ($isKolaka) {
                         $insert['power_plant_id'] = 7;
                         $insert['unit'] = 'PLTD KOLAKA';
@@ -568,6 +633,9 @@ class DailySummaryExcelImportController extends Controller
                     } else if ($isPoasiaContainerized) {
                         $insert['power_plant_id'] = 5; // Ganti sesuai kebutuhan
                         $insert['unit'] = 'PLTD POASIA CONTAINERIZED';
+                    } else if ($isWuaWua) {
+                        $insert['power_plant_id'] = 3; // Ganti sesuai kebutuhan
+                        $insert['unit'] = 'PLTD WUA WUA';
                     }
                     $decimalFields = [
                         'installed_power','dmn_power','capable_power','peak_load_day','peak_load_night','kit_ratio','gross_production','net_production','aux_power','transformer_losses','usage_percentage','period_hours','operating_hours','standby_hours','planned_outage','maintenance_outage','forced_outage','trip_machine','trip_electrical','efdh','epdh','eudh','esdh','eaf','sof','efor','sdof','ncf','nof','jsi','hsd_fuel','b35_fuel','b40_fuel','mfo_fuel','total_fuel','water_usage','meditran_oil','salyx_420','salyx_430','travolube_a','turbolube_46','turbolube_68','shell_argina_s3','total_fuel','diala_b','turboil_68','meditran_s40','turbo_lube_xt68','turbo_oil_46','trafo_lube_a','sfc_scc','nphr','slc','meditran_smx_15w40','meditran_sx_15w40'

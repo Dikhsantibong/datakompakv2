@@ -3,6 +3,7 @@ $isKolaka = session('unit') === 'mysql_kolaka';
 $isBauBau = session('unit') === 'mysql_bau_bau';
 $isPoasia = session('unit') === 'mysql_poasia';
 $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
+$isWuaWua = session('unit') === 'mysql_wua_wua';
 @endphp
 <div class="w-full overflow-x-auto mb-8 bg-white rounded-lg shadow-md p-4">
 <table class="min-w-full divide-y divide-gray-200 border table-fixed min-w-[1800px]" style="min-width: 1800px;">
@@ -39,7 +40,7 @@ $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
             <th class="px-4 py-3 border-r" rowspan="2">JSI</th>
             @if($isBauBau)
                 <th class="px-4 py-3 border-r" colspan="3">Pemakaian Bahan Bakar/Baku</th>
-            @elseif($isKolaka)
+            @elseif($isKolaka || $isWuaWua)
                 <th class="px-4 py-3 border-r" colspan="5">Pemakaian Bahan Bakar/Baku</th>
             @elseif($isPoasia || $isPoasiaContainerized)
                 <th class="px-4 py-3 border-r" colspan="10">Pemakaian Bahan Bakar/Baku</th>
@@ -52,6 +53,8 @@ $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
                 <th class="px-4 py-3 border-r" colspan="6">Pemakaian Pelumas</th>
             @elseif($isPoasia || $isPoasiaContainerized)
                 <th class="px-4 py-3 border-r" colspan="5">Pemakaian Pelumas</th>
+            @elseif($isWuaWua)
+                <th class="px-4 py-3 border-r" colspan="7">Pemakaian Pelumas</th>
             @else
                 <th class="px-4 py-3 border-r" colspan="8">Pemakaian Pelumas</th>
             @endif
@@ -109,7 +112,7 @@ $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
                 <th class="border-r">HSD (Liter)</th>
                 <th class="border-r">B40 (Liter)</th>
                 <th class="border-r">Total BBM (Liter)</th>
-            @elseif($isKolaka)
+            @elseif($isKolaka || $isWuaWua)
                 <th class="border-r">HSD (Liter)</th>
                 <th class="border-r">B35 (Liter)</th>
                 <th class="border-r">MFO (Liter)</th>
@@ -145,6 +148,14 @@ $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
                 <th class="border-r">Trafo Lube A</th>
                 <th class="border-r">MEDITRAN SX 15W/40</th>
                 <th class="border-r">TOTAL</th>
+            @elseif($isWuaWua)
+                <th class="border-r">Meditran SMX 15W/40 (LITER)</th>
+                <th class="border-r">Salyx 420 (LITER)</th>
+                <th class="border-r">Salyx 430 (LITER)</th>
+                <th class="border-r">TravoLube A (LITER)</th>
+                <th class="border-r">Turbolube 46 (LITER)</th>
+                <th class="border-r">Turbolube 68 (LITER)</th>
+                <th class="border-r">TOTAL (LITER)</th>
             @elseif($isBauBau)
                 <th class="border-r">Meditran S40</th>
                 <th class="border-r">Meditran SMX 15W/40</th>
@@ -273,6 +284,19 @@ $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
                     <td class="px-4 py-3 border-r text-right">{{ $row->thermo_xt_32 }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->shell_diala_b }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->meditran_sx_ch4 }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->total_oil }}</td>
+                @elseif ($isWuaWua)
+                    <td class="px-4 py-3 border-r text-right">{{ $row->hsd_fuel }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->b35_fuel }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->mfo_fuel }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->total_fuel }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->water_usage }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->meditran_sx_15w40 }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->salyx_420 }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->salyx_430 }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->travolube_a }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->turbolube_46 }}</td>
+                    <td class="px-4 py-3 border-r text-right">{{ $row->turbolube_68 }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->total_oil }}</td>
                 @else
                     <td class="px-4 py-3 border-r text-right">{{ $row->hsd_fuel }}</td>

@@ -115,6 +115,7 @@
                     $isKolaka = session('unit') === 'mysql_kolaka';
                     $isBauBau = session('unit') === 'mysql_bau_bau';
                     $isPoasia = session('unit') === 'mysql_poasia';
+                    $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
                 @endphp
                 <h3 class="text-lg font-semibold mb-2">Preview Data per Hari:</h3>
                 <div>
@@ -156,7 +157,7 @@
                                                 <th class="px-4 py-3 border-r" rowspan="2">No</th>
                                                 <th class="px-4 py-3 border-r" rowspan="2">Unit</th>
                                                 <th class="px-4 py-3 border-r" rowspan="2">Mesin</th>
-                                                @if($isBauBau || $isPoasia)
+                                                @if($isBauBau || $isPoasia || $isPoasiaContainerized)
                                                     <th class="px-4 py-3 border-r" colspan="2">Daya (MW)</th>
                                                     <th class="px-4 py-3 border-r" colspan="2">Beban Puncak (kW)</th>
                                                 @else
@@ -166,7 +167,7 @@
                                                 <th class="px-4 py-3 border-r" rowspan="2">Ratio Daya Kit (%)</th>
                                                 <th class="px-4 py-3 border-r" colspan="2">Produksi (kWh)</th>
                                                 <th class="px-4 py-3 border-r" colspan="3">Pemakaian Sendiri</th>
-                                                @if($isBauBau || $isPoasia)
+                                                @if($isBauBau || $isPoasia || $isPoasiaContainerized)
                                                     <!-- Tidak ada kolom Jam Periode untuk Bau-Bau -->
                                                 @else
                                                     <th class="px-4 py-3 border-r" rowspan="2">Jam Periode</th>
@@ -175,7 +176,7 @@
                                                 <th class="px-4 py-3 border-r" colspan="2">Trip Non OMC</th>
                                                 <th class="px-4 py-3 border-r" colspan="4">Derating</th>
                                                 <th class="px-4 py-3 border-r" colspan="4">Kinerja Pembangkit</th>
-                                                @if($isBauBau || $isPoasia)
+                                                @if($isBauBau || $isPoasia || $isPoasiaContainerized)
                                                     <!-- Tidak ada kolom NCF dan NOF untuk Bau-Bau -->
                                                 @else
                                                     <th class="px-4 py-3 border-r" rowspan="2">NCF</th>
@@ -186,7 +187,7 @@
                                                     <th class="px-4 py-3 border-r" colspan="3">Pemakaian Bahan Bakar/Baku</th>
                                                 @elseif($isKolaka)
                                                     <th class="px-4 py-3 border-r" colspan="5">Pemakaian Bahan Bakar/Baku</th>
-                                                @elseif($isPoasia)
+                                                @elseif($isPoasia || $isPoasiaContainerized)
                                                     <th class="px-4 py-3 border-r" colspan="10">Pemakaian Bahan Bakar/Baku</th>
                                                 @else
                                                     <th class="px-4 py-3 border-r" colspan="5">Pemakaian Bahan Bakar/Baku</th>
@@ -197,7 +198,7 @@
                                                 @elseif($isBauBau)
                                                     <th class="px-4 py-3 border-r" colspan="6">Pemakaian Pelumas</th>
                                                     <th class="px-4 py-3 border-r" colspan="3">Effisiensi</th>
-                                                @elseif($isPoasia)
+                                                @elseif($isPoasia || $isPoasiaContainerized)
                                                     <th class="px-4 py-3 border-r" colspan="5">Pemakaian Pelumas</th>
                                                     <th class="px-4 py-3 border-r" colspan="3">Effisiensi</th>
                                                 @else
@@ -207,7 +208,7 @@
                                                 <th class="px-4 py-3 border-r" rowspan="2">Keterangan</th>
                                             </tr>
                                             <tr class="text-center border-b bg-gray-100 text-xs">
-                                                @if($isBauBau || $isPoasia)
+                                                @if($isBauBau || $isPoasia || $isPoasiaContainerized)
                                                     <th class="border-r">Daya Terpasang</th>
                                                     <th class="border-r">Daya Mampu</th>
                                                     <th class="border-r">Siang</th>
@@ -230,7 +231,7 @@
                                                     <th class="border-r">GGN</th>
                                                     <th class="border-r">STAND BY</th>
                                                     <th class="border-r">AH</th>
-                                                @elseif($isPoasia)
+                                                @elseif($isPoasia || $isPoasiaContainerized)
                                                     <th class="border-r">SH</th>
                                                     <th class="border-r">PO</th>
                                                     <th class="border-r">MO</th>
@@ -276,7 +277,7 @@
                                                 @endif
                                                 @if($isBauBau)
                                                     <th class="border-r">Total BBM (Liter)</th>
-                                                @elseif($isPoasia)
+                                                @elseif($isPoasia || $isPoasiaContainerized)
                                                     <th class="border-r">Total BBM (Liter)</th>
                                                     <th class="border-r">Batubara (KG)</th>
                                                     <th class="border-r">Air (M³)</th>
@@ -302,7 +303,7 @@
                                                     <th class="border-r">Turbo oil 68</th>
                                                     <th class="border-r">Trafolube A</th>
                                                     <th class="border-r">TOTAL</th>
-                                                @elseif($isPoasia)
+                                                @elseif($isPoasia || $isPoasiaContainerized)
                                                     <th class="border-r">Shell Argina S3</th>
                                                     <th class="border-r">Thermo XT 32</th>
                                                     <th class="border-r">Shell Diala B</th>

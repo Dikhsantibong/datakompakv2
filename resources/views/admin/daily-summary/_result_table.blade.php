@@ -2,6 +2,7 @@
 $isKolaka = session('unit') === 'mysql_kolaka';
 $isBauBau = session('unit') === 'mysql_bau_bau';
 $isPoasia = session('unit') === 'mysql_poasia';
+$isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
 @endphp
 <div class="w-full overflow-x-auto mb-8 bg-white rounded-lg shadow-md p-4">
 <table class="min-w-full divide-y divide-gray-200 border table-fixed min-w-[1800px]" style="min-width: 1800px;">
@@ -10,7 +11,7 @@ $isPoasia = session('unit') === 'mysql_poasia';
             <th class="px-4 py-3 border-r" rowspan="2">No</th>
             <th class="px-4 py-3 border-r" rowspan="2">Unit</th>
             <th class="px-4 py-3 border-r" rowspan="2">Mesin</th>
-            @if($isBauBau || $isPoasia)
+            @if($isBauBau || $isPoasia || $isPoasiaContainerized)
                 <th class="px-4 py-3 border-r" colspan="2">Daya (MW)</th>
                 <th class="px-4 py-3 border-r" colspan="2">Beban Puncak (kW)</th>
             @else
@@ -20,7 +21,7 @@ $isPoasia = session('unit') === 'mysql_poasia';
             <th class="px-4 py-3 border-r" rowspan="2">Ratio Daya Kit (%)</th>
             <th class="px-4 py-3 border-r" colspan="2">Produksi (kWh)</th>
             <th class="px-4 py-3 border-r" colspan="3">Pemakaian Sendiri</th>
-            @if($isBauBau || $isPoasia)
+            @if($isBauBau || $isPoasia || $isPoasiaContainerized)
                 <!-- Tidak ada kolom Jam Periode untuk Bau-Bau -->
             @else
                 <th class="px-4 py-3 border-r" rowspan="2">Jam Periode</th>
@@ -29,7 +30,7 @@ $isPoasia = session('unit') === 'mysql_poasia';
             <th class="px-4 py-3 border-r" colspan="2">Trip Non OMC</th>
             <th class="px-4 py-3 border-r" colspan="4">Derating</th>
             <th class="px-4 py-3 border-r" colspan="4">Kinerja Pembangkit</th>
-            @if($isBauBau || $isPoasia)
+            @if($isBauBau || $isPoasia || $isPoasiaContainerized)
                 <!-- Tidak ada kolom NCF dan NOF untuk Bau-Bau -->
             @else
                 <th class="px-4 py-3 border-r" rowspan="2">NCF</th>
@@ -40,7 +41,7 @@ $isPoasia = session('unit') === 'mysql_poasia';
                 <th class="px-4 py-3 border-r" colspan="3">Pemakaian Bahan Bakar/Baku</th>
             @elseif($isKolaka)
                 <th class="px-4 py-3 border-r" colspan="5">Pemakaian Bahan Bakar/Baku</th>
-            @elseif($isPoasia)
+            @elseif($isPoasia || $isPoasiaContainerized)
                 <th class="px-4 py-3 border-r" colspan="10">Pemakaian Bahan Bakar/Baku</th>
             @else
                 <th class="px-4 py-3 border-r" colspan="6">Pemakaian Bahan Bakar/Baku</th>
@@ -49,7 +50,7 @@ $isPoasia = session('unit') === 'mysql_poasia';
                 <th class="px-4 py-3 border-r" colspan="10">Pemakaian Pelumas</th>
             @elseif($isBauBau)
                 <th class="px-4 py-3 border-r" colspan="6">Pemakaian Pelumas</th>
-            @elseif($isPoasia)
+            @elseif($isPoasia || $isPoasiaContainerized)
                 <th class="px-4 py-3 border-r" colspan="5">Pemakaian Pelumas</th>
             @else
                 <th class="px-4 py-3 border-r" colspan="8">Pemakaian Pelumas</th>
@@ -58,7 +59,7 @@ $isPoasia = session('unit') === 'mysql_poasia';
             <th class="px-4 py-3 border-r" rowspan="2">Keterangan</th>
         </tr>
         <tr class="text-center border-b bg-gray-100 text-xs">
-            @if($isBauBau || $isPoasia)
+            @if($isBauBau || $isPoasia || $isPoasiaContainerized)
                 <th class="border-r">Daya Terpasang</th>
                 <th class="border-r">Daya Mampu</th>
                 <th class="border-r">Siang</th>
@@ -81,7 +82,7 @@ $isPoasia = session('unit') === 'mysql_poasia';
                 <th class="border-r">GGN</th>
                 <th class="border-r">STAND BY</th>
                 <th class="border-r">AH</th>
-            @elseif($isPoasia)
+            @elseif($isPoasia || $isPoasiaContainerized)
                 <th class="border-r">SH</th>
                 <th class="border-r">PO</th>
                 <th class="border-r">MO</th>
@@ -226,7 +227,7 @@ $isPoasia = session('unit') === 'mysql_poasia';
                 <td class="px-4 py-3 border-r text-right">{{ $row->sof }}</td>
                 <td class="px-4 py-3 border-r text-right">{{ $row->efor }}</td>
                 <td class="px-4 py-3 border-r text-right">{{ $row->sdof }}</td>
-                @if(!$isBauBau && !$isPoasia)
+                @if(!$isBauBau && !$isPoasia && !$isPoasiaContainerized)
                     <td class="px-4 py-3 border-r text-right">{{ $row->ncf }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->nof }}</td>
                 @endif
@@ -257,7 +258,7 @@ $isPoasia = session('unit') === 'mysql_poasia';
                     <td class="px-4 py-3 border-r text-right">{{ $row->trafo_lube_a }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->meditran_sx_15w40 }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->total_oil }}</td>
-                @elseif($isPoasia)
+                @elseif($isPoasia || $isPoasiaContainerized)
                     <td class="px-4 py-3 border-r text-right">{{ $row->hsd_fuel }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->b10_fuel }}</td>
                     <td class="px-4 py-3 border-r text-right">{{ $row->b15_fuel }}</td>

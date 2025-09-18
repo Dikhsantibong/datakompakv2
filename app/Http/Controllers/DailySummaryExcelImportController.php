@@ -127,6 +127,7 @@ class DailySummaryExcelImportController extends Controller
         $isKolaka = session('unit') === 'mysql_kolaka';
         $isBauBau = session('unit') === 'mysql_bau_bau';
         $isPoasia = session('unit') === 'mysql_poasia';
+        $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
         if ($isKolaka) {
             $fieldOrder = [
                 'installed_power', 'dmn_power', 'capable_power',
@@ -217,6 +218,36 @@ class DailySummaryExcelImportController extends Controller
             unset($headerLabels['period_hours']);
             unset($headerLabels['ncf']);
             unset($headerLabels['nof']);
+        } else if ($isPoasiaContainerized) {
+            // Sama persis dengan Poasia, hanya rowStart dan rowEnd beda
+            $fieldOrder = [
+                'installed_power', 'capable_power',
+                'peak_load_day', 'peak_load_night', 'kit_ratio',
+                'gross_production', 'net_production', 'aux_power', 'transformer_losses', 'usage_percentage',
+                // Jam Indikator khusus Poasia (sama dulu dengan Bau-Bau)
+                'operating_hours', 'planned_outage', 'maintenance_outage', 'forced_outage', 'standby_hours',
+                'trip_machine', 'trip_electrical',
+                'efdh', 'epdh', 'eudh', 'esdh',
+                'eaf', 'sof', 'efor', 'sdof',
+                'jsi',
+                'hsd_fuel', 'b10_fuel', 'b15_fuel', 'b20_fuel', 'b25_fuel', 'b35_fuel', 'mfo_fuel', 'total_fuel', 'batubara', 'water_usage',
+                // hanya pelumas Poasia (sama dulu dengan Bau-Bau):
+                'shell_argina_s3', 'thermo_xt_32', 'shell_diala_b', 'meditran_sx_ch4', 'total_oil',
+                // efisiensi:
+                'sfc_scc', 'nphr', 'slc',
+                'notes'
+            ];
+            $headerLabels = array_merge($headerLabels, [
+                'shell_argina_s3' => 'Shell Argina S3',
+                'thermo_xt_32' => 'Thermo XT 32',
+                'shell_diala_b' => 'Shell Diala B',
+                'meditran_sx_ch4' => 'Meditran SX CH-4',
+                'total_oil' => 'TOTAL (LITER)',
+            ]);
+            unset($headerLabels['dmn_power']);
+            unset($headerLabels['period_hours']);
+            unset($headerLabels['ncf']);
+            unset($headerLabels['nof']);
         }
 
         // Load file dari storage, bukan dari temp upload
@@ -233,12 +264,16 @@ class DailySummaryExcelImportController extends Controller
         $isKolaka = session('unit') === 'mysql_kolaka';
         $isBauBau = session('unit') === 'mysql_bau_bau';
         $isPoasia = session('unit') === 'mysql_poasia';
+        $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
         if ($isBauBau) {
             $rowStart = 121;
             $rowEnd = 125;
         } else if ($isPoasia) {
             $rowStart = 122; // Sama dulu dengan Bau-Bau
             $rowEnd = 126;
+        } else if ($isPoasiaContainerized) {
+            $rowStart = 127;
+            $rowEnd = 129;
         }
         if ($isBauBau) {
             $sheetStart = 0; // mulai dari sheet pertama
@@ -292,6 +327,9 @@ class DailySummaryExcelImportController extends Controller
                 } else if ($isPoasia) {
                     $unit = 'PLTD POASIA';
                     $mesin = $row[2] ?? ''; // Ambil nama mesin dari kolom ke-2 (index 2)
+                } else if ($isPoasiaContainerized) {
+                    $unit = 'PLTD POASIA CONTAINERIZED';
+                    $mesin = $row[2] ?? ''; // Ambil nama mesin dari kolom ke-2 (index 2)
                 } else {
                     // Ambil unit dan mesin dari kolom ke-2 Excel (index 1)
                     $unitMesin = $row[1] ?? '';
@@ -304,7 +342,7 @@ class DailySummaryExcelImportController extends Controller
                     }
                 }
                 $mapped = [
-                    'unit' => $isBauBau ? 'PLTD BAU BAU' : ($isKolaka ? 'PLTD KOLAKA' : ($isPoasia ? 'PLTD POASIA' : $unit)),
+                    'unit' => $isBauBau ? 'PLTD BAU BAU' : ($isKolaka ? 'PLTD KOLAKA' : ($isPoasia ? 'PLTD POASIA' : ($isPoasiaContainerized ? 'PLTD POASIA CONTAINERIZED' : $unit))),
                     'machine_name' => $isPoasia ? ($row[2] ?? '') : (($isBauBau) ? ($row[1] ?? '') : $mesin)
                 ];
                 if ($isKolaka) {
@@ -418,6 +456,61 @@ class DailySummaryExcelImportController extends Controller
                             $mapped[$field] = $row[$excelIdx] ?? 0;
                         }
                     }
+                } else if ($isPoasiaContainerized) {
+                    // --- POASIA CONTAINERIZED: mapping sama persis dengan Poasia ---
+                    $poasiaManualMap = [
+                        'installed_power' => 3,
+                        'capable_power' => 4,
+                        'peak_load_day' => 5,
+                        'peak_load_night' => 6,
+                        'kit_ratio' => 7,
+                        'gross_production' => 8,
+                        'net_production' => 9,
+                        'aux_power' => 10,
+                        'transformer_losses' => 11,
+                        'usage_percentage' => 12,
+                        'operating_hours' => 13,
+                        'planned_outage' => 14,
+                        'maintenance_outage' => 15,
+                        'forced_outage' => 16,
+                        'standby_hours' => 17,
+                        'trip_machine' => 18,
+                        'trip_electrical' => 19,
+                        'efdh' => 20,
+                        'epdh' => 21,
+                        'eudh' => 22,
+                        'esdh' => 23,
+                        'eaf' => 24,
+                        'sof' => 25,
+                        'efor' => 26,
+                        'sdof' => 27,
+                        'jsi' => 28,
+                        'hsd_fuel' => 29,
+                        'b10_fuel' => 30,
+                        'b15_fuel' => 31,
+                        'b20_fuel' => 32,
+                        'b25_fuel' => 33,
+                        'b35_fuel' => 34,
+                        'mfo_fuel' => 35,
+                        'total_fuel' => 36,
+                        'batubara' => 37,
+                        'water_usage' => 38,
+                        'shell_argina_s3' => 39,
+                        'thermo_xt_32' => 40,
+                        'shell_diala_b' => 41,
+                        'meditran_sx_ch4' => 42,
+                        'total_oil' => 43,
+                        'sfc_scc' => 44,
+                        'nphr' => 45,
+                        'slc' => 46,
+                        'notes' => 47,
+                    ];
+                    foreach ($fieldOrder as $field) {
+                        if (isset($poasiaManualMap[$field])) {
+                            $excelIdx = $poasiaManualMap[$field];
+                            $mapped[$field] = $row[$excelIdx] ?? 0;
+                        }
+                    }
                 } else {
                     foreach ($fieldOrder as $idx => $field) {
                         $excelIdx = $idx + 2;
@@ -462,6 +555,7 @@ class DailySummaryExcelImportController extends Controller
                     $isKolaka = session('unit') === 'mysql_kolaka';
                     $isBauBau = session('unit') === 'mysql_bau_bau';
                     $isPoasia = session('unit') === 'mysql_poasia';
+                    $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
                     if ($isKolaka) {
                         $insert['power_plant_id'] = 7;
                         $insert['unit'] = 'PLTD KOLAKA';
@@ -471,6 +565,9 @@ class DailySummaryExcelImportController extends Controller
                     } else if ($isPoasia) {
                         $insert['power_plant_id'] = 4; // Assuming a new power plant ID for Poasia
                         $insert['unit'] = 'PLTD POASIA';
+                    } else if ($isPoasiaContainerized) {
+                        $insert['power_plant_id'] = 5; // Ganti sesuai kebutuhan
+                        $insert['unit'] = 'PLTD POASIA CONTAINERIZED';
                     }
                     $decimalFields = [
                         'installed_power','dmn_power','capable_power','peak_load_day','peak_load_night','kit_ratio','gross_production','net_production','aux_power','transformer_losses','usage_percentage','period_hours','operating_hours','standby_hours','planned_outage','maintenance_outage','forced_outage','trip_machine','trip_electrical','efdh','epdh','eudh','esdh','eaf','sof','efor','sdof','ncf','nof','jsi','hsd_fuel','b35_fuel','b40_fuel','mfo_fuel','total_fuel','water_usage','meditran_oil','salyx_420','salyx_430','travolube_a','turbolube_46','turbolube_68','shell_argina_s3','total_fuel','diala_b','turboil_68','meditran_s40','turbo_lube_xt68','turbo_oil_46','trafo_lube_a','sfc_scc','nphr','slc','meditran_smx_15w40','meditran_sx_15w40'

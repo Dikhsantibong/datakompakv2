@@ -205,6 +205,8 @@ class SyncDailySummaryToUpKendari
             'salyx_420' => $dailySummary->salyx_420,
             'salyx_430' => $dailySummary->salyx_430,
             'travolube_a' => $dailySummary->travolube_a,
+            'oil_dummy1' => $dailySummary->oil_dummy1,
+            'oil_dummy2' => $dailySummary->oil_dummy2,
             'turbolube_46' => $dailySummary->turbolube_46,
             'turbolube_68' => $dailySummary->turbolube_68,
             'shell_argina_s3' => $dailySummary->shell_argina_s3,

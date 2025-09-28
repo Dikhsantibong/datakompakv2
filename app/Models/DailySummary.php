@@ -96,6 +96,8 @@ class DailySummary extends Model
         'thermo_xt_32',
         'shell_diala_b',
         'meditran_sx_ch4',
+        'oil_dummy1',
+        'oil_dummy2',
     ];
 
     // Sesuaikan casting dengan tipe data di database
@@ -172,6 +174,8 @@ class DailySummary extends Model
         'turbo_lube_xt68' => 'decimal:3',
         'trafo_lube_a' => 'decimal:3',
         'meditran_sx_15w40' => 'decimal:3',
+        'oil_dummy1' => 'decimal:3',
+        'oil_dummy2' => 'decimal:3',
     ];
 
     public function getConnectionName()

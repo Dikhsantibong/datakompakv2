@@ -117,6 +117,7 @@
                     $isPoasia = session('unit') === 'mysql_poasia';
                     $isPoasiaContainerized = session('unit') === 'mysql_poasia_containerized';
                     $isWuaWua = session('unit') === 'mysql_wua_wua';
+                    $isLangara = session('unit') === 'mysql_langara';
                 @endphp
                 <h3 class="text-lg font-semibold mb-2">Preview Data per Hari:</h3>
                 <div>
@@ -186,7 +187,7 @@
                                                 <th class="px-4 py-3 border-r" rowspan="2">JSI</th>
                                                 @if($isBauBau)
                                                     <th class="px-4 py-3 border-r" colspan="3">Pemakaian Bahan Bakar/Baku</th>
-                                                @elseif($isKolaka || $isWuaWua)
+                                                @elseif($isKolaka || $isWuaWua || $isLangara)
                                                     <th class="px-4 py-3 border-r" colspan="5">Pemakaian Bahan Bakar/Baku</th>
                                                 @elseif($isPoasia || $isPoasiaContainerized)
                                                     <th class="px-4 py-3 border-r" colspan="10">Pemakaian Bahan Bakar/Baku</th>
@@ -204,6 +205,9 @@
                                                     <th class="px-4 py-3 border-r" colspan="3">Effisiensi</th>
                                                 @elseif($isWuaWua)
                                                     <th class="px-4 py-3 border-r" colspan="7">Pemakaian Pelumas</th>
+                                                    <th class="px-4 py-3 border-r" colspan="3">Effisiensi</th>
+                                                @elseif($isLangara)
+                                                    <th class="px-4 py-3 border-r" colspan="6">Pemakaian Pelumas</th>
                                                     <th class="px-4 py-3 border-r" colspan="3">Effisiensi</th>
                                                 @else
                                                     <th class="px-4 py-3 border-r" colspan="8">Pemakaian Pelumas</th>
@@ -259,7 +263,7 @@
                                                 <th class="border-r">SOF (%)</th>
                                                 <th class="border-r">EFOR (%)</th>
                                                 <th class="border-r">SdOF (Kali)</th>
-                                                @if($isKolaka || $isWuaWua)
+                                                @if($isKolaka || $isWuaWua || $isLangara)
                                                 <th class="border-r">HSD (Liter)</th>
                                                 <th class="border-r">B40 (Liter)</th>
                                                 <th class="border-r">MFO (Liter)</th>
@@ -320,6 +324,13 @@
                                                     <th class="border-r">TravoLube A (LITER)</th>
                                                     <th class="border-r">Turbolube 46 (LITER)</th>
                                                     <th class="border-r">Turbolube 68 (LITER)</th>
+                                                    <th class="border-r">TOTAL (LITER)</th>
+                                                @elseif($isLangara)
+                                                    <th class="border-r">Meditran SX 15W/40 CH-4 (LITER)</th>
+                                                    <th class="border-r">Meditran S40 (LITER)</th>
+                                                    <th class="border-r">TravoLube A (LITER)</th>
+                                                    <th class="border-r">0</th>
+                                                    <th class="border-r">0</th>
                                                     <th class="border-r">TOTAL (LITER)</th>
                                                 @else
                                                     <th class="border-r">Meditran SX 15W/40 CH-4 (LITER)</th>

@@ -1127,6 +1127,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('/flm', [FlmController::class, 'index'])->name('flm.index');
     Route::post('/flm', [FlmController::class, 'store'])->name('flm.store');
     Route::get('/flm/list', [FlmController::class, 'list'])->name('flm.list');
+    Route::get('/flm/print-periode', [FlmController::class, 'printPeriode'])->name('flm.printPeriode');
     Route::get('/flm/{id}', [FlmController::class, 'show'])->name('flm.show');
     Route::get('/flm/{id}/edit', [FlmController::class, 'edit'])->name('flm.edit');
     Route::put('/flm/{id}', [FlmController::class, 'update'])->name('flm.update');

@@ -81,6 +81,20 @@
                     </div>
                 </div>
 
+                <form action="{{ route('admin.flm.printPeriode') }}" method="GET" target="_blank" class="flex items-end gap-2 mb-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Mulai</label>
+                        <input type="date" name="start_date" class="rounded-md border-gray-300 text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Selesai</label>
+                        <input type="date" name="end_date" class="rounded-md border-gray-300 text-sm" required>
+                    </div>
+                    <button type="submit" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                        <i class="fas fa-print mr-2"></i> Print Periode
+                    </button>
+                </form>
+
                 <!-- Data Table -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <div class="p-6">

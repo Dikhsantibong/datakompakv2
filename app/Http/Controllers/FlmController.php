@@ -281,4 +281,20 @@ class FlmController extends Controller
         }
         return Excel::download(new FlmExport, 'flm-inspections.xlsx');
     }
+
+    public function printPeriode(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $flmData = FlmInspection::whereDate('tanggal', '>=', $request->start_date)
+            ->whereDate('tanggal', '<=', $request->end_date)
+            ->orderBy('tanggal', 'desc')
+            ->orderBy('time', 'desc')
+            ->get();
+
+        return view('admin.flm.print_periode', compact('flmData', 'request'));
+    }
 } 

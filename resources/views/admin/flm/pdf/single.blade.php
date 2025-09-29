@@ -16,7 +16,7 @@
             background-color: #D1D5DB;
         }
         .header h1 {
-            font-size: 18px;
+            font-size: 14px;
             margin: 0;
             color: #000;
         }
@@ -119,7 +119,7 @@
                     <img src="{{ public_path('logo/navlog1.png') }}" alt="PLN Logo" style="height:50px;">
                 </td>
                 <td style="text-align:center; border:none;">
-                    <h1 style="margin:0; font-size:18px; color:#000;">
+                    <h1 style="margin:0; font-size:14px; color:#000;">
                         Form Pemeriksaan FLM - {{ $flmData->first()->tanggal->format('d F Y') }}<br>
                         Unit: 
                         @php

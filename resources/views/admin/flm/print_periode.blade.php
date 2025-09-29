@@ -9,12 +9,35 @@
         table { width: 100%; border-collapse: collapse; }
         th, td { border: 1px solid #333; padding: 6px; font-size: 12px; }
         th { background: #eee; }
+
+        .flm-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-title {
+            width: 50%;
+            text-align: left;
+        }
+        .header-logo {
+            width: 50%;
+            text-align: right;
+        }
     </style>
+
+
 </head>
 <body>
+    <div class="flm-header flex">
+    <div class="header-title">
     <h2>Data Pemeriksaan FLM<br>
         Periode: {{ $request->start_date }} s/d {{ $request->end_date }}
     </h2>
+    </div>
+    <div class="header-logo">
+    <img src="{{ asset('logo/UP_KENDARI.png') }}" alt="PLN Logo" style="height: 50px;">
+    </div>
+    </div>
     <table>
         <thead>
             <tr>

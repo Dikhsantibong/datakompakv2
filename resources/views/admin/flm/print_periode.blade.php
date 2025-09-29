@@ -23,6 +23,10 @@
             width: 50%;
             text-align: right;
         }
+        table td {
+            text-transform: uppercase;
+
+        }
     </style>
 
 
@@ -61,10 +65,10 @@
         <tbody>
             @foreach($flmData as $i => $item)
             <tr>
-                <td>{{ $i+1 }}</td>
-                <td>{{ $item->tanggal->format('d/m/Y') }}</td>
-                <td>{{ $item->shift }}</td>
-                <td>{{ $item->time->format('H:i') }}</td>
+                <td style="text-align: center;">{{ $i+1 }}</td>
+                <td style="text-align: center;">{{ $item->tanggal->format('d/m/Y') }}</td>
+                <td style="text-align: center;">{{ $item->shift }}</td>
+                <td style="text-align: center;">{{ $item->time->format('H:i') }}</td>
                 <td>{{ $item->sync_unit_origin }}</td>
                 <td>{{ $item->mesin }}</td>
                 <td>{{ $item->sistem }}</td>

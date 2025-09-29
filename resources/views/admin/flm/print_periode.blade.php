@@ -30,7 +30,9 @@
                 <th>Tindakan</th>
                 <th>Kondisi Akhir</th>
                 <th>Catatan</th>
-                <th>Status</th>
+                <th>Eviden Sebelum</th>
+                <th>Eviden Sesudah</th>
+                {{-- <th>Status</th> --}}
             </tr>
         </thead>
         <tbody>
@@ -58,7 +60,25 @@
                 </td>
                 <td>{{ $item->kondisi_akhir }}</td>
                 <td>{{ $item->catatan }}</td>
-                <td>{{ $item->status }}</td>
+                <td>@if($item->eviden_sebelum)
+                    <img src="{{ asset('storage/' . $item->eviden_sebelum) }}" 
+                         width="100" 
+                         height="75"
+                         style="margin:auto; display:block;" 
+                         alt="Kondisi Sebelum">
+                @else
+                    -
+                @endif</td>
+                <td>@if($item->eviden_sesudah)
+                    <img src="{{ asset('storage/' . $item->eviden_sesudah) }}" 
+                         width="100" 
+                         height="75"
+                         style="margin:auto; display:block;" 
+                         alt="Kondisi Sesudah">
+                @else
+                    -
+                @endif</td>
+                {{-- <td>{{ $item->status }}</td> --}}
             </tr>
             @endforeach
         </tbody>

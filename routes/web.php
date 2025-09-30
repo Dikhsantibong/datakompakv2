@@ -106,6 +106,26 @@ Route::prefix('attendance')->group(function () {
         ->withoutMiddleware(['auth']);
 });
 
+
+// ... existing code ...
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    // ... existing routes ...
+    Route::prefix('5s5r')->name('5s5r.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\FiveS5RController::class, 'index'])->name('index');
+        Route::get('/list', [App\Http\Controllers\Admin\FiveS5RController::class, 'list'])->name('list');
+        Route::get('/print-periode', [App\Http\Controllers\Admin\FiveS5RController::class, 'printPeriode'])->name('printPeriode');
+        Route::get('/{id}', [App\Http\Controllers\Admin\FiveS5RController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [App\Http\Controllers\Admin\FiveS5RController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [App\Http\Controllers\Admin\FiveS5RController::class, 'update'])->name('update');
+        Route::delete('/{id}', [App\Http\Controllers\Admin\FiveS5RController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}/export-pdf', [App\Http\Controllers\Admin\FiveS5RController::class, 'exportPdf'])->name('export.pdf');
+        Route::get('/{id}/export-excel', [App\Http\Controllers\Admin\FiveS5RController::class, 'exportExcel'])->name('export.excel');
+    });
+});
+// ... existing code ...
+
+
+
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     // Kendari Subsystem Routes
     // Route::get('/subsistem/kendari', [App\Http\Controllers\Admin\SubsistemKendariController::class, 'index'])->name('subsistem.kendari');
@@ -1136,6 +1156,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('/flm/export-pdf/{id?}', [FlmController::class, 'exportPdf'])->name('flm.exportPdf');
 });
 
+
+
 Route::get('/admin/data-engine/{date}/edit', [DataEngineController::class, 'edit'])->name('admin.data-engine.edit');
 Route::post('/admin/data-engine/update', [DataEngineController::class, 'update'])->name('admin.data-engine.update');
 Route::post('/admin/data-engine/force-update', [DataEngineController::class, 'forceUpdate'])->name('admin.data-engine.force-update');
@@ -1525,4 +1547,5 @@ Route::get('daily-summary/import-excel/result', [App\Http\Controllers\DailySumma
 // ... existing code ...
 Route::get('/daily-summary/download-excel', [\App\Http\Controllers\DailySummaryExcelImportController::class, 'downloadExcel'])->name('daily-summary.download-excel');
 // ... existing code ...
+
 

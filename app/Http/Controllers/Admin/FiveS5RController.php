@@ -383,4 +383,20 @@ class FiveS5RController extends Controller
             ], 500);
         }
     }
+
+    public function printPeriode(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $batches = \App\Models\FiveS5rBatch::whereDate('created_at', '>=', $request->start_date)
+            ->whereDate('created_at', '<=', $request->end_date)
+            ->orderBy('created_at', 'desc')
+            ->with(['pemeriksaan', 'programKerja'])
+            ->get();
+
+        return view('admin.5s5r.print_periode', compact('batches', 'request'));
+    }
 } 

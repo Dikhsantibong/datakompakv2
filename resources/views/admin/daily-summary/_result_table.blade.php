@@ -58,7 +58,6 @@ $isLangara = session('unit') === 'mysql_langara';
                 <th class="px-4 py-3 border-r" colspan="7">Pemakaian Pelumas</th>
             @elseif($isLangara)
                 <th class="px-4 py-3 border-r" colspan="6">Pemakaian Pelumas</th>
-                <th class="px-4 py-3 border-r" colspan="3">Effisiensi</th>
             @else
                 <th class="px-4 py-3 border-r" colspan="8">Pemakaian Pelumas</th>
             @endif
@@ -179,7 +178,6 @@ $isLangara = session('unit') === 'mysql_langara';
                 <th class="border-r">Trafolube A (LITER)</th>
                 <th class="border-r">0</th>
                 <th class="border-r">0</th>
-                <th class="border-r">Turbolube 68 (LITER)</th>
                 <th class="border-r">TOTAL (LITER)</th>
             @else
                 <th class="border-r">Meditran SX 15W/40 CH-4 (LITER)</th>

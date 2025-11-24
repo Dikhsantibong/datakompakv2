@@ -138,5 +138,53 @@ class MachineLog extends Model
                 ]);
             }
         });
+
+        static::saved(function ($machineLog) {
+            try {
+                if (self::$isSyncing) return;
+                $powerPlant = $machineLog->machine->powerPlant;
+                if (!$powerPlant) {
+                    \Log::warning('Skipping sync (saved) - Power Plant not found for machine log:', [
+                        'machine_id' => $machineLog->machine_id
+                    ]);
+                    return;
+                }
+                $currentSession = session('unit', 'mysql');
+                if ($currentSession !== 'mysql') {
+                    self::$isSyncing = true;
+                    $data = $machineLog->only([
+                        'machine_id',
+                        'date',
+                        'time',
+                        'kw',
+                        'kvar',
+                        'cos_phi',
+                        'status',
+                        'keterangan',
+                        'daya_terpasang',
+                        'silm_slo',
+                        'dmp_performance'
+                    ]);
+                    $data['updated_at'] = now();
+                    $data['created_at'] = $machineLog->created_at ?: now();
+                    \DB::connection('mysql')->table('machine_logs')->updateOrInsert([
+                        'machine_id' => $machineLog->machine_id,
+                        'date' => $machineLog->date,
+                        'time' => $machineLog->time
+                    ], $data);
+                    \Log::info('DEBUG: Sync MachineLog to UP Kendari', [
+                        'machine_id' => $machineLog->machine_id,
+                        'date' => $machineLog->date,
+                        'time' => $machineLog->time
+                    ]);
+                    self::$isSyncing = false;
+                }
+            } catch (\Exception $e) {
+                self::$isSyncing = false;
+                \Log::error('Error in MachineLog sync (saved):', [
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        });
     }
 }

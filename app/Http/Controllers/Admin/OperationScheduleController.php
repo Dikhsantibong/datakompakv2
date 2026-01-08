@@ -35,8 +35,8 @@ class OperationScheduleController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'schedule_date' => 'required|date',
-            'start_time' => 'required',
-            'end_time' => 'required|after:start_time',
+            'start_time' => 'nullable',
+            'end_time' => 'nullable|after:start_time',
             'location' => 'nullable|string|max:255',
             'participants' => 'nullable|string',
         ]);
@@ -72,8 +72,8 @@ class OperationScheduleController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'schedule_date' => 'required|date',
-            'start_time' => 'required',
-            'end_time' => 'required|after:start_time',
+            'start_time' => 'nullable',
+            'end_time' => 'nullable|after:start_time',
             'location' => 'nullable|string|max:255',
             'participants' => 'nullable|string',
             'status' => 'required|in:scheduled,completed,cancelled'

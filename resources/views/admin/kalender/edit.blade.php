@@ -119,8 +119,8 @@
                                 <div class="space-y-2">
                                     <label for="start_time" class="block text-sm font-medium text-gray-700">Waktu Mulai</label>
                                     <div class="relative">
-                                        <input type="time" name="start_time" id="start_time" required
-                                            value="{{ old('start_time', $schedule->start_time) }}"
+                                        <input type="time" name="start_time" id="start_time"
+                                            value="{{ old('start_time', $schedule->start_time ? \Carbon\Carbon::parse($schedule->start_time)->format('H:i') : '') }}"
                                             class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('start_time') border-red-500 @else border-gray-300 @enderror transition-all duration-300">
                                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                             <!-- Removed duplicate icon -->
@@ -134,8 +134,8 @@
                                 <div class="space-y-2">
                                     <label for="end_time" class="block text-sm font-medium text-gray-700">Waktu Selesai</label>
                                     <div class="relative">
-                                        <input type="time" name="end_time" id="end_time" required
-                                            value="{{ old('end_time', $schedule->end_time) }}"
+                                        <input type="time" name="end_time" id="end_time"
+                                            value="{{ old('end_time', $schedule->end_time ? \Carbon\Carbon::parse($schedule->end_time)->format('H:i') : '') }}"
                                             class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('end_time') border-red-500 @else border-gray-300 @enderror transition-all duration-300">
                                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                             <!-- Removed duplicate icon -->

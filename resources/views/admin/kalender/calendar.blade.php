@@ -275,19 +275,19 @@
                         <div class="p-4">
                             <h2 class="text-lg font-semibold text-gray-800 mb-4">Aksi Cepat</h2>
                             <div class="space-y-2">
-                                <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
+                                <button onclick="window.location.href='{{ route('admin.kalender.create') }}'" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
                                     <i class="fas fa-plus-circle mr-2 text-blue-600"></i>
                                     <span>Tambah Jadwal Baru</span>
                                 </button>
-                                <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
+                                <button onclick="window.location.href='{{ route('admin.kalender.calendar') }}'" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
                                     <i class="fas fa-sync-alt mr-2 text-green-600"></i>
                                     <span>Segarkan Kalender</span>
                                 </button>
-                                <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
+                                <button onclick="window.location.href='{{ route('admin.kalender.calendar') }}'" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
                                     <i class="fas fa-calendar-week mr-2 text-purple-600"></i>
                                     <span>Tampilkan Minggu Ini</span>
                                 </button>
-                                <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
+                                <button onclick="window.location.href='{{ route('admin.kalender.calendar') }}'" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
                                     <i class="fas fa-filter mr-2 text-yellow-600"></i>
                                     <span>Filter Jadwal</span>
                                 </button>
@@ -322,6 +322,45 @@
         </div>
     </div>
 </div>
+
+<div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+        <h3 class="text-lg font-semibold mb-4">Edit Jadwal</h3>
+
+        <form id="editForm">
+            <input type="hidden" id="edit_id">
+
+            <div class="mb-3">
+                <label class="text-sm">Judul</label>
+                <input id="edit_title" class="w-full border rounded p-2">
+            </div>
+
+            <div class="mb-3">
+                <label class="text-sm">Tanggal</label>
+                <input type="date" id="edit_date" class="w-full border rounded p-2">
+            </div>
+
+            <div class="flex gap-2 mb-3">
+                <input type="time" id="edit_start" class="w-full border rounded p-2">
+                <input type="time" id="edit_end" class="w-full border rounded p-2">
+            </div>
+
+            <div class="mb-3">
+                <textarea id="edit_description" class="w-full border rounded p-2"></textarea>
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeEditModal()" class="px-3 py-2 bg-gray-200 rounded">
+                    Batal
+                </button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">
+                    Simpan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 @push('scripts')
 <script src="{{ asset('js/toggle.js') }}"></script>
@@ -377,16 +416,13 @@ function renderCalendar() {
                 ${hasSchedule ? `
                     <div class="space-y-1">
                         ${schedules[dateStr].slice(0, 2).map(schedule => `
-                            <div class="text-xs p-2 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 truncate cursor-pointer hover:bg-blue-100 transition-all duration-300 transform hover:-translate-y-0.5">
+                            <div
+                                onclick='showScheduleDetail(${JSON.stringify(schedule)})'
+                                class="text-xs p-2 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 truncate cursor-pointer hover:bg-blue-100">
                                 <div class="font-medium">${schedule.title}</div>
-                                <div class="text-blue-600 text-[10px]">${schedule.start_time}</div>
+                                <div class="text-blue-600 text-[10px]">${schedule.start_time ?? '-'}</div>
                             </div>
                         `).join('')}
-                        ${schedules[dateStr].length > 2 ? `
-                            <div class="text-xs text-center p-1 text-blue-600 font-medium">
-                                +${schedules[dateStr].length - 2} lainnya
-                            </div>
-                        ` : ''}
                     </div>
                 ` : ''}
             </div>
@@ -479,50 +515,36 @@ function showScheduleDetail(schedule) {
     const modal = document.getElementById('scheduleModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalContent = document.getElementById('modalContent');
-    
+
     modalTitle.textContent = schedule.title;
+
     modalContent.innerHTML = `
-        <div class="space-y-4">
-            <div>
-                <p class="text-sm text-gray-500">Waktu</p>
-                <p class="text-gray-700">
-                    <i class="far fa-clock mr-1 text-blue-600"></i>
-                    ${schedule.start_time} - ${schedule.end_time}
-                </p>
-            </div>
-            <div>
-                <p class="text-sm text-gray-500">Deskripsi</p>
-                <p class="text-gray-700">${schedule.description}</p>
-            </div>
-            ${schedule.location ? `
-                <div>
-                    <p class="text-sm text-gray-500">Lokasi</p>
-                    <p class="text-gray-700">
-                        <i class="fas fa-map-marker-alt mr-1 text-blue-600"></i>
-                        ${schedule.location}
-                    </p>
-                </div>
-            ` : ''}
-            ${schedule.participants ? `
-                <div>
-                    <p class="text-sm text-gray-500">Peserta</p>
-                    <p class="text-gray-700">
-                        <i class="fas fa-users mr-1 text-blue-600"></i>
-                        ${schedule.participants.join(', ')}
-                    </p>
-                </div>
-            ` : ''}
-            <div>
-                <p class="text-sm text-gray-500">Status</p>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    schedule.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-600'
+        <div class="space-y-3">
+            <p><strong>Waktu:</strong> ${schedule.start_time ?? '-'} - ${schedule.end_time ?? '-'}</p>
+            <p><strong>Deskripsi:</strong> ${schedule.description}</p>
+            ${schedule.location ? `<p><strong>Lokasi:</strong> ${schedule.location}</p>` : ''}
+            <p>
+                <strong>Status:</strong>
+                <span class="px-2 py-1 rounded text-xs ${
+                    schedule.status === 'completed'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-blue-100 text-blue-700'
                 }">
-                    ${schedule.status.charAt(0).toUpperCase() + schedule.status.slice(1)}
+                    ${schedule.status}
                 </span>
+            </p>
+
+            <div class="flex justify-end gap-2 pt-3 border-t">
+<a
+   href="/admin/kalender/${schedule.id}/edit"
+   class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 inline-block">
+   Edit
+</a>
+
             </div>
         </div>
     `;
-    
+
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 }
@@ -571,6 +593,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+function openEditModal(id) {
+    fetch(`/admin/kalender/${id}`)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('edit_id').value = data.id;
+            document.getElementById('edit_title').value = data.title;
+            document.getElementById('edit_date').value = data.schedule_date;
+            document.getElementById('edit_start').value = data.start_time;
+            document.getElementById('edit_end').value = data.end_time;
+            document.getElementById('edit_description').value = data.description;
+
+            document.getElementById('editModal').classList.remove('hidden');
+            document.getElementById('editModal').classList.add('flex');
+        });
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.add('hidden');
+}
+
 </script>
 
 <style>

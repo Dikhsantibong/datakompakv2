@@ -535,13 +535,9 @@ function showScheduleDetail(schedule) {
             </p>
 
             <div class="flex justify-end gap-2 pt-3 border-t">
-<a
-   href="/admin/kalender/${schedule.id}/edit"
-   class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 inline-block">
-   Edit
-</a>
-
-            </div>
+    <a href="/admin/kalender/${schedule.id}/edit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 inline-block">Edit</a>
+    <button onclick="deleteSchedule(${schedule.id})" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 inline-block">Hapus</button>
+</div>
         </div>
     `;
 

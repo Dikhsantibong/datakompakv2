@@ -37,6 +37,9 @@ class EventServiceProvider extends ServiceProvider
     }
 
     protected $listen = [
+        \App\Events\OperationScheduleUpdated::class => [
+            \App\Listeners\SyncOperationScheduleToUpKendari::class,
+        ],
         MachineStatusUpdated::class => [
             SyncMachineStatusToUpKendari::class,
         ],

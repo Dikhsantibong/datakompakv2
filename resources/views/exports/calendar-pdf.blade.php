@@ -41,7 +41,7 @@
             <tr>
                 <th>Tanggal</th>
                 <th>Judul</th>
-                <th>Waktu</th>
+                <th>Deskripsi</th>
                 <th>Lokasi</th>
                 <th>Status</th>
             </tr>
@@ -49,9 +49,9 @@
         <tbody>
             @foreach($schedules as $schedule)
             <tr>
-                <td>{{ $schedule['date'] ?? '-' }}</td>
+                <td>{{ isset($schedule['date']) ? \Carbon\Carbon::parse($schedule['date'])->format('d/m/Y') : '-' }}</td>
                 <td>{{ $schedule['title'] ?? '-' }}</td>
-                <td>{{ ($schedule['start_time'] ?? '-') . ' - ' . ($schedule['end_time'] ?? '-') }}</td>
+                <td>{{ ($schedule['description'] ?? '-') }}</td>
                 <td>{{ $schedule['location'] ?? '-' }}</td>
                 <td>{{ ucfirst($schedule['status'] ?? 'scheduled') }}</td>
             </tr>

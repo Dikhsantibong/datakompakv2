@@ -42,7 +42,28 @@ class SyncOperationScheduleToUpKendari
                 ];
 
                 // Daftar semua unit selain mysql (UP Kendari)
-                $units = ['bau_bau', 'kolaka']; // Tambahkan sesuai daftar unit database Anda
+                $units = [
+                            'mysql_bau_bau',
+                            'mysql_kolaka',
+                            'mysql_poasia',
+                            'mysql_wua_wua',
+                            'mysql_ereke',
+                            'mysql_ladumpi',
+                            'mysql_langara',
+                            'mysql_lanipa_nipa',
+                            'mysql_pasarwajo',
+                            'mysql_poasia_containerized',
+                            'mysql_raha',
+                            'mysql_wangi_wangi',
+                            'mysql_mikuasi',
+                            'mysql_rongi',
+                            'mysql_sabilambo',
+                            'mysql_winning',
+                            'mysql_pltmg_bau_bau',
+                            'mysql_kendari',
+                            'mysql_baruta',
+                            'mysql_moramo',
+                        ];
 
                 foreach ($units as $unit) {
                     $db = DB::connection($unit);

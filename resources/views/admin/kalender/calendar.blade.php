@@ -270,7 +270,45 @@
                         </div>
                     </div>
 
-                    <!-- Quick Actions -->
+                    <!-- Filter Tanggal -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="p-4">
+                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Filter Tanggal</h2>
+                            <form id="filterForm" method="GET" action="{{ route('admin.kalender.calendar') }}">
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Dari Tanggal</label>
+                                        <input type="date" 
+                                               name="start_date" 
+                                               id="start_date"
+                                               value="{{ $startDate ?? '' }}"
+                                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Sampai Tanggal</label>
+                                        <input type="date" 
+                                               name="end_date" 
+                                               id="end_date"
+                                               value="{{ $endDate ?? '' }}"
+                                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button type="submit" 
+                                                class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+                                            <i class="fas fa-filter mr-2"></i>Filter
+                                        </button>
+                                        <button type="button" 
+                                                onclick="resetFilter()"
+                                                class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium">
+                                            <i class="fas fa-redo mr-2"></i>Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    {{-- <!-- Quick Actions -->
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                         <div class="p-4">
                             <h2 class="text-lg font-semibold text-gray-800 mb-4">Aksi Cepat</h2>
@@ -283,17 +321,13 @@
                                     <i class="fas fa-sync-alt mr-2 text-green-600"></i>
                                     <span>Segarkan Kalender</span>
                                 </button>
-                                <button onclick="window.location.href='{{ route('admin.kalender.calendar') }}'" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
-                                    <i class="fas fa-calendar-week mr-2 text-purple-600"></i>
-                                    <span>Tampilkan Minggu Ini</span>
-                                </button>
-                                <button onclick="window.location.href='{{ route('admin.kalender.calendar') }}'" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
-                                    <i class="fas fa-filter mr-2 text-yellow-600"></i>
-                                    <span>Filter Jadwal</span>
+                                <button onclick="goToToday()" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
+                                    <i class="fas fa-calendar-day mr-2 text-purple-600"></i>
+                                    <span>Tampilkan Hari Ini</span>
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     
                 </div>
@@ -367,6 +401,13 @@
 <script>
 let currentDate = new Date();
 let schedules = @json($allSchedules ?? []);
+
+// Set current date berdasarkan filter jika ada
+@if(isset($startDate) && $startDate)
+    currentDate = new Date('{{ $startDate }}');
+@elseif(isset($endDate) && $endDate)
+    currentDate = new Date('{{ $endDate }}');
+@endif
 
 function renderCalendar() {
     const year = currentDate.getFullYear();
@@ -537,7 +578,7 @@ function showScheduleDetail(schedule) {
             <div class="flex justify-end gap-2 pt-3 border-t">
     <a href="/admin/kalender/${schedule.id}/edit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 inline-block">Edit</a>
     <button onclick="deleteSchedule(${schedule.id})" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 inline-block">Hapus</button>
-</div>
+            </div>
         </div>
     `;
 
@@ -609,6 +650,37 @@ function openEditModal(id) {
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
 }
+
+function resetFilter() {
+    document.getElementById('start_date').value = '';
+    document.getElementById('end_date').value = '';
+    window.location.href = '{{ route('admin.kalender.calendar') }}';
+}
+
+function goToToday() {
+    const today = new Date();
+    currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    renderCalendar();
+}
+
+// Handle filter form submission
+document.getElementById('filterForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const startDate = document.getElementById('start_date').value;
+    const endDate = document.getElementById('end_date').value;
+    
+    let url = '{{ route('admin.kalender.calendar') }}';
+    const params = new URLSearchParams();
+    
+    if (startDate) params.append('start_date', startDate);
+    if (endDate) params.append('end_date', endDate);
+    
+    if (params.toString()) {
+        url += '?' + params.toString();
+    }
+    
+    window.location.href = url;
+});
 
 </script>
 

@@ -9,19 +9,36 @@ use Carbon\Carbon;
 
 class OperationScheduleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $today = Carbon::today();
-        $schedules = OperationSchedule::whereDate('schedule_date', $today)
-            ->orderBy('start_time')
-            ->get();
-            
-        $allSchedules = OperationSchedule::all()
+        
+        // Filter berdasarkan tanggal jika ada
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        
+        $query = OperationSchedule::query();
+        
+        if ($startDate) {
+            $query->whereDate('schedule_date', '>=', $startDate);
+        }
+        
+        if ($endDate) {
+            $query->whereDate('schedule_date', '<=', $endDate);
+        }
+        
+        // Jika tidak ada filter, ambil semua
+        $allSchedules = $query->get()
             ->groupBy(function($schedule) {
                 return $schedule->schedule_date->format('Y-m-d');
             });
+        
+        // Schedules hari ini untuk sidebar
+        $schedules = OperationSchedule::whereDate('schedule_date', $today)
+            ->orderBy('start_time')
+            ->get();
 
-        return view('admin.kalender.calendar', compact('schedules', 'allSchedules'));
+        return view('admin.kalender.calendar', compact('schedules', 'allSchedules', 'startDate', 'endDate'));
     }
 
     public function create()

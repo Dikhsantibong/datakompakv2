@@ -308,7 +308,7 @@
                         </div>
                     </div>
 
-                    {{-- <!-- Quick Actions -->
+                    <!-- Quick Actions -->
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                         <div class="p-4">
                             <h2 class="text-lg font-semibold text-gray-800 mb-4">Aksi Cepat</h2>
@@ -317,18 +317,13 @@
                                     <i class="fas fa-plus-circle mr-2 text-blue-600"></i>
                                     <span>Tambah Jadwal Baru</span>
                                 </button>
-                                <button onclick="window.location.href='{{ route('admin.kalender.calendar') }}'" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
-                                    <i class="fas fa-sync-alt mr-2 text-green-600"></i>
-                                    <span>Segarkan Kalender</span>
-                                </button>
-                                <button onclick="goToToday()" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
-                                    <i class="fas fa-calendar-day mr-2 text-purple-600"></i>
-                                    <span>Tampilkan Hari Ini</span>
+                                <button onclick="showAllSchedules()" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-gray-700">
+                                    <i class="fas fa-list mr-2 text-green-600"></i>
+                                    <span>Lihat Semua Jadwal</span>
                                 </button>
                             </div>
                         </div>
-                    </div> --}}
-
+                    </div>
                     
                 </div>
             </div>
@@ -392,6 +387,36 @@
                 </button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- All Schedules Modal -->
+<div id="allSchedulesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] flex flex-col">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-semibold text-gray-800">Semua Jadwal</h3>
+                <button onclick="closeAllSchedulesModal()" class="text-gray-400 hover:text-gray-600 p-1">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-6 overflow-y-auto flex-1">
+            <div id="allSchedulesList" class="space-y-3">
+                <div class="text-center py-8">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-3">
+                        <i class="fas fa-spinner fa-spin text-xl text-gray-400"></i>
+                    </div>
+                    <p class="text-gray-500">Memuat data...</p>
+                </div>
+            </div>
+        </div>
+        <div class="p-4 border-t border-gray-200 flex justify-end">
+            <button onclick="closeAllSchedulesModal()" 
+                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                Tutup
+            </button>
+        </div>
     </div>
 </div>
 
@@ -663,6 +688,140 @@ function goToToday() {
     renderCalendar();
 }
 
+function showAllSchedules() {
+    const modal = document.getElementById('allSchedulesModal');
+    const schedulesList = document.getElementById('allSchedulesList');
+    
+    // Show modal dengan loading state
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    
+    schedulesList.innerHTML = `
+        <div class="text-center py-8">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-3">
+                <i class="fas fa-spinner fa-spin text-xl text-gray-400"></i>
+            </div>
+            <p class="text-gray-500">Memuat data...</p>
+        </div>
+    `;
+    
+    // Fetch semua jadwal
+    fetch('{{ route('admin.kalender.all-schedules') }}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.length === 0) {
+                schedulesList.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+                            <i class="fas fa-calendar-times text-2xl text-gray-400"></i>
+                        </div>
+                        <p class="text-gray-500 text-lg">Tidak ada jadwal</p>
+                        <p class="text-gray-400 text-sm mt-2">Belum ada jadwal yang dibuat</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Store schedules globally untuk akses di fungsi lain
+            window.allSchedulesData = data;
+            
+            schedulesList.innerHTML = data.map((schedule, index) => `
+                <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-500 transition-colors">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-gray-800 text-lg mb-1">${schedule.title}</h4>
+                            <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600">
+                                <span class="flex items-center">
+                                    <i class="far fa-calendar mr-2 text-blue-600"></i>
+                                    ${schedule.schedule_date_formatted}
+                                </span>
+                                <span class="flex items-center">
+                                    <i class="far fa-clock mr-2 text-blue-600"></i>
+                                    ${schedule.start_time} - ${schedule.end_time}
+                                </span>
+                                ${schedule.location ? `
+                                    <span class="flex items-center">
+                                        <i class="fas fa-map-marker-alt mr-2 text-blue-600"></i>
+                                        ${schedule.location}
+                                    </span>
+                                ` : ''}
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 text-xs rounded-full font-medium ${
+                            schedule.status === 'completed' 
+                                ? 'bg-green-100 text-green-700' 
+                                : schedule.status === 'cancelled'
+                                ? 'bg-red-100 text-red-700'
+                                : 'bg-blue-100 text-blue-700'
+                        }">
+                            ${schedule.status === 'completed' ? 'Selesai' : schedule.status === 'cancelled' ? 'Dibatalkan' : 'Terjadwal'}
+                        </span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">${schedule.description || '-'}</p>
+                    ${schedule.participants && schedule.participants.length > 0 ? `
+                        <p class="text-sm text-gray-600 mb-3">
+                            <i class="fas fa-users mr-2 text-blue-600"></i>
+                            <span class="font-medium">Peserta:</span> ${Array.isArray(schedule.participants) ? schedule.participants.join(', ') : schedule.participants}
+                        </p>
+                    ` : ''}
+                    <div class="flex justify-between items-center pt-3 border-t border-gray-100">
+                        <span class="text-xs text-gray-500">
+                            <i class="fas fa-user mr-1"></i>
+                            Dibuat oleh: ${schedule.created_by}
+                        </span>
+                        <div class="flex gap-2">
+                            <button onclick="showScheduleDetailFromList(${index})" 
+                                    class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                <i class="fas fa-eye mr-1"></i>Detail
+                            </button>
+                            <a href="/admin/kalender/${schedule.id}/edit" 
+                               class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            schedulesList.innerHTML = `
+                <div class="text-center py-12">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">
+                        <i class="fas fa-exclamation-triangle text-2xl text-red-600"></i>
+                    </div>
+                    <p class="text-red-600 text-lg">Terjadi kesalahan</p>
+                    <p class="text-gray-500 text-sm mt-2">Gagal memuat data jadwal</p>
+                </div>
+            `;
+        });
+}
+
+function closeAllSchedulesModal() {
+    const modal = document.getElementById('allSchedulesModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function showScheduleDetailFromList(index) {
+    if (window.allSchedulesData && window.allSchedulesData[index]) {
+        const schedule = window.allSchedulesData[index];
+        closeAllSchedulesModal();
+        // Format schedule untuk showScheduleDetail
+        const formattedSchedule = {
+            id: schedule.id,
+            title: schedule.title,
+            description: schedule.description || '',
+            start_time: schedule.start_time || '-',
+            end_time: schedule.end_time || '-',
+            location: schedule.location || '',
+            status: schedule.status || 'scheduled',
+            participants: schedule.participants || []
+        };
+        showScheduleDetail(formattedSchedule);
+    }
+}
+
 // Handle filter form submission
 document.getElementById('filterForm')?.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -680,6 +839,13 @@ document.getElementById('filterForm')?.addEventListener('submit', function(e) {
     }
     
     window.location.href = url;
+});
+
+// Close modal when clicking outside
+document.getElementById('allSchedulesModal')?.addEventListener('click', function(event) {
+    if (event.target === this) {
+        closeAllSchedulesModal();
+    }
 });
 
 </script>

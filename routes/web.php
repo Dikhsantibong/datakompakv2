@@ -1175,6 +1175,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/kalender/{schedule}', [App\Http\Controllers\Admin\OperationScheduleController::class, 'update'])->name('kalender.update');
         Route::delete('/kalender/{schedule}', [App\Http\Controllers\Admin\OperationScheduleController::class, 'destroy'])->name('kalender.destroy');
         Route::get('/kalender/schedules/{date}', [App\Http\Controllers\Admin\OperationScheduleController::class, 'getSchedulesByDate'])->name('kalender.schedules');
+        Route::get('/kalender/all-schedules', [App\Http\Controllers\Admin\OperationScheduleController::class, 'getAllSchedules'])->name('kalender.all-schedules');
         Route::get('/kalender/export-pdf', [App\Http\Controllers\Admin\OperationScheduleController::class, 'exportPdf'])->name('kalender.export-pdf');
     });
 });
@@ -1547,5 +1548,4 @@ Route::get('daily-summary/import-excel/result', [App\Http\Controllers\DailySumma
 // ... existing code ...
 Route::get('/daily-summary/download-excel', [\App\Http\Controllers\DailySummaryExcelImportController::class, 'downloadExcel'])->name('daily-summary.download-excel');
 // ... existing code ...
-
 

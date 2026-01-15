@@ -112,4 +112,29 @@ class OperationScheduleController extends Controller
         return redirect()->route('admin.kalender.calendar')
             ->with('success', 'Jadwal berhasil dihapus');
     }
+
+    public function getAllSchedules()
+    {
+        $schedules = OperationSchedule::with('creator')
+            ->orderBy('schedule_date', 'desc')
+            ->orderBy('start_time', 'asc')
+            ->get()
+            ->map(function($schedule) {
+                return [
+                    'id' => $schedule->id,
+                    'title' => $schedule->title,
+                    'description' => $schedule->description,
+                    'schedule_date' => $schedule->schedule_date->format('Y-m-d'),
+                    'schedule_date_formatted' => $schedule->schedule_date->format('d M Y'),
+                    'start_time' => $schedule->start_time ? $schedule->start_time->format('H:i') : '-',
+                    'end_time' => $schedule->end_time ? $schedule->end_time->format('H:i') : '-',
+                    'location' => $schedule->location,
+                    'status' => $schedule->status,
+                    'participants' => is_array($schedule->participants) ? $schedule->participants : [],
+                    'created_by' => $schedule->creator ? $schedule->creator->name : '-',
+                ];
+            });
+
+        return response()->json($schedules);
+    }
 }

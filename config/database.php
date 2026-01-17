@@ -619,29 +619,7 @@ return [
     ]
 ],
 
-'mysql_pltg_kolaka' => [
-    'driver' => 'mysql',
-    'host' => env('DB_HOST', '127.0.0.1'),
-    'port' => env('DB_PORT', '3306'),
-    'database' => env('DB_UNIT_PLTG_KOLAKA_DATABASE', 'forge'),
-    'username' => env('DB_USERNAME_PLTG_KOLAKA', 'forge'),
-    'password' => env('DB_PASSWORD_PLTG_KOLAKA', ''),
-    'charset' => 'utf8mb4',
-    'collation' => 'utf8mb4_unicode_ci',
-    'prefix' => '',
-    'strict' => true,
-    'engine' => null,
-    'modes' => [
-        'NO_ENGINE_SUBSTITUTION'
     ],
-    'options' => [
-        PDO::ATTR_EMULATE_PREPARES => true,
-        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
-        PDO::ATTR_STRINGIFY_FETCHES => true,
-        PDO::MYSQL_ATTR_DIRECT_QUERY => true,
-        PDO::ATTR_PERSISTENT => false
-    ]
-],
 
     /*
     |--------------------------------------------------------------------------

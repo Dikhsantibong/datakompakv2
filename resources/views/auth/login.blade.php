@@ -93,10 +93,13 @@
                                         UP KENDARI
                                     </option>
                                     <option value="mysql_bau_bau" {{ $selectedUnit == 'mysql_bau_bau' ? 'selected' : '' }}>
-                                        PLTD BAU-BAU
+                                        UNIT PLTD BAU-BAU
                                     </option>
                                     <option value="mysql_kolaka" {{ $selectedUnit == 'mysql_kolaka' ? 'selected' : '' }}>
                                         UNIT PLTD KOLAKA
+                                    </option>
+                                    <option value="mysql_pltg_kolaka" {{ $selectedUnit == 'mysql_pltg_kolaka' ? 'selected' : '' }}>
+                                        UNIT PLTG KOLAKA
                                     </option>
                                     <option value="mysql_poasia" {{ $selectedUnit == 'mysql_poasia' ? 'selected' : '' }}>
                                         UNIT PLTD POASIA

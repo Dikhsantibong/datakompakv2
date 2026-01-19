@@ -522,13 +522,13 @@ return [
 ],
 
 // PLTMG Units
-'mysql_pltmg_bau_bau' => [
+'mysql_pltg_kolaka' => [
     'driver' => 'mysql',
     'host' => env('DB_HOST', '127.0.0.1'),
     'port' => env('DB_PORT', '3306'),
-    'database' => env('DB_UNIT_PLTMG_BAU_BAU_DATABASE', 'forge'),
-    'username' => env('DB_USERNAME_PLTMG_BAU_BAU', 'forge'),
-    'password' => env('DB_PASSWORD_PLTMG_BAU_BAU', ''),
+    'database' => env('DB_UNIT_PLTG_KOLAKA_DATABASE', 'forge'),
+    'username' => env('DB_USERNAME_PLTG_KOLAKA', 'forge'),
+    'password' => env('DB_PASSWORD_PLTG_KOLAKA', ''),
     'charset' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
     'prefix' => '',

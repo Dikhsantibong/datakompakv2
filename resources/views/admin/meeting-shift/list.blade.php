@@ -112,7 +112,7 @@
 
                             <!-- Horizontal Filters -->
                             <div class="mt-2 border-b border-gray-200 pb-4" id="filters-section">
-                                <form action="{{ route('admin.meeting-shift.list') }}" method="GET"
+                                <form id="filterForm" action="{{ route('admin.meeting-shift.list') }}" method="GET"
                                       class="flex flex-wrap items-end gap-4">
                                     <div class="w-40">
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Shift</label>
@@ -295,7 +295,7 @@
 
                         <!-- Pagination -->
                         <div class="mt-4">
-                            {{ $meetingShifts->links() }}
+                            {{ $meetingShifts->withQueryString()->links() }}
                         </div>
                     </div>
                 </div>
@@ -310,22 +310,26 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Auto-submit form when changing filters
-    const filterForm = document.querySelector('form');
-    const filterInputs = filterForm.querySelectorAll('select, input[type="date"]');
+    const filterForm = document.getElementById('filterForm');
+    if (filterForm) {
+        const filterInputs = filterForm.querySelectorAll('select, input[type="date"]');
 
-    filterInputs.forEach(input => {
-        input.addEventListener('change', () => {
-            filterForm.submit();
+        filterInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                filterForm.submit();
+            });
         });
-    });
+    }
 });
 
 function removeFilter(filterName) {
-    const form = document.querySelector('form');
-    const input = form.querySelector(`[name="${filterName}"]`);
-    if (input) {
-        input.value = '';
-        form.submit();
+    const form = document.getElementById('filterForm');
+    if (form) {
+        const input = form.querySelector(`[name="${filterName}"]`);
+        if (input) {
+            input.value = '';
+            form.submit();
+        }
     }
 }
 

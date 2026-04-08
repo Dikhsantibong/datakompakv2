@@ -53,15 +53,15 @@ class MeetingShiftController extends Controller
         ]);
 
         // Apply shift filter
-        if (request()->has('shift') && request('shift') !== '') {
+        if (request()->filled('shift')) {
             $query->where('current_shift', request('shift'));
         }
 
         // Apply date range filter
-        if (request()->has('start_date') && request('start_date') !== '') {
+        if (request()->filled('start_date')) {
             $query->whereDate('tanggal', '>=', request('start_date'));
         }
-        if (request()->has('end_date') && request('end_date') !== '') {
+        if (request()->filled('end_date')) {
             $query->whereDate('tanggal', '<=', request('end_date'));
         }
 

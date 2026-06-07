@@ -68,7 +68,7 @@
     </thead>
     <tbody>
         @foreach($data['powerPlants'] as $powerPlant)
-            @if($powerPlant->name !== 'UP KENDARI')
+            @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                 <tr>
                     <td style="padding:10px; border:1px solid #000;">{{ $powerPlant->name }}</td>
                     @foreach($data['dates'] as $date)
@@ -96,7 +96,7 @@
     </thead>
     <tbody>
         @foreach($data['powerPlants'] as $powerPlant)
-            @if($powerPlant->name !== 'UP KENDARI')
+            @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                 <tr>
                     <td>{{ $powerPlant->name }}</td>
                     @foreach($data['hours'] as $hour)
@@ -122,7 +122,7 @@
     </thead>
     <tbody>
         @foreach($data['powerPlants'] as $powerPlant)
-            @if($powerPlant->name !== 'UP KENDARI')
+            @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                 <tr>
                     <td>{{ $powerPlant->name }}</td>
                     @foreach($data['dates'] as $date)
@@ -148,7 +148,7 @@
     </thead>
     <tbody>
         @foreach($data['powerPlants'] as $powerPlant)
-            @if($powerPlant->name !== 'UP KENDARI')
+            @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                 <tr>
                     <td>{{ $powerPlant->name }}</td>
                     @foreach($data['dates'] as $index => $date)
@@ -178,7 +178,7 @@
     </thead>
     <tbody>
         @foreach($data['powerPlants'] as $powerPlant)
-            @if($powerPlant->name !== 'UP KENDARI')
+            @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                 <tr>
                     <td>{{ $powerPlant->name }}</td>
                     @foreach($data['dates'] as $index => $date)
@@ -208,7 +208,7 @@
     </thead>
     <tbody>
         @foreach($data['powerPlants'] as $powerPlant)
-            @if($powerPlant->name !== 'UP KENDARI')
+            @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                 <tr>
                     <td>{{ $powerPlant->name }}</td>
                     @foreach($data['dates'] as $index => $date)

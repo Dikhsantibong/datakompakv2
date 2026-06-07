@@ -101,6 +101,7 @@
                 </div>
 
                 @foreach($data as $powerPlant)
+                @if(!in_array($powerPlant['name'], ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                 <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
                     <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ $powerPlant['name'] }}</h2>
 
@@ -192,6 +193,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 @endforeach
             </div>
         </main>
@@ -205,6 +207,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     @foreach($data as $powerPlant)
+        @if(!in_array($powerPlant['name'], ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
         // Operator KIT Chart
         new Chart(document.getElementById('operatorKitChart{{ str_replace(' ', '', $powerPlant['name']) }}'), {
             type: 'bar',
@@ -281,7 +284,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             }
+            }
         });
+        @endif
     @endforeach
 
     // Copy Report Functionality
@@ -295,8 +300,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
         reportText += `MONITORING PENGISIAN DATAKOMPAK.COM TANGGAL ${startDate} S/D ${endDate}\n\n`;
 
+        // Calculate and add ranking section
+        reportText += '=== RANKING KONSISTENSI INPUT DATA ===\n\n';
+
+        // Calculate average completion percentage for each power plant
+        const rankings = powerPlants
+            .filter(plant => !['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU'].includes(plant.name))
+            .map(plant => {
+                let totalPercentage = 0;
+                let dataPoints = 0;
+
+                // Calculate for operator_kit
+                Object.values(plant.operator_kit || {}).forEach(data => {
+                    if (data.percentage !== undefined) {
+                        totalPercentage += data.percentage;
+                        dataPoints++;
+                    }
+                });
+
+                // Calculate for operasi_ul
+                Object.values(plant.operasi_ul || {}).forEach(data => {
+                    if (data.percentage !== undefined) {
+                        totalPercentage += data.percentage;
+                        dataPoints++;
+                    }
+                });
+
+                const averagePercentage = dataPoints > 0 ? totalPercentage / dataPoints : 0;
+
+                return {
+                    name: plant.name,
+                    average: averagePercentage
+                };
+            })
+            .sort((a, b) => b.average - a.average);
+
+        // Add rankings to report
+        rankings.forEach((rank, index) => {
+            reportText += `${index + 1}. ${rank.name} - Rata-rata Konsistensi: ${rank.average.toFixed(2)}%\n`;
+        });
+        reportText += '\n';
+
         powerPlants.forEach(powerPlant => {
-            if (powerPlant.name === 'UP KENDARI') return;
+            if (['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU'].includes(powerPlant.name)) return;
 
             reportText += `${powerPlant.name}\n\n`;
 
@@ -344,46 +390,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             reportText += '\n\n';
-        });
-
-        // Calculate and add ranking section
-        reportText += '=== RANKING KONSISTENSI INPUT DATA ===\n\n';
-
-        // Calculate average completion percentage for each power plant
-        const rankings = powerPlants
-            .filter(plant => plant.name !== 'UP KENDARI')
-            .map(plant => {
-                let totalPercentage = 0;
-                let dataPoints = 0;
-
-                // Calculate for operator_kit
-                Object.values(plant.operator_kit || {}).forEach(data => {
-                    if (data.percentage !== undefined) {
-                        totalPercentage += data.percentage;
-                        dataPoints++;
-                    }
-                });
-
-                // Calculate for operasi_ul
-                Object.values(plant.operasi_ul || {}).forEach(data => {
-                    if (data.percentage !== undefined) {
-                        totalPercentage += data.percentage;
-                        dataPoints++;
-                    }
-                });
-
-                const averagePercentage = dataPoints > 0 ? totalPercentage / dataPoints : 0;
-
-                return {
-                    name: plant.name,
-                    average: averagePercentage
-                };
-            })
-            .sort((a, b) => b.average - a.average);
-
-        // Add rankings to report
-        rankings.forEach((rank, index) => {
-            reportText += `${index + 1}. ${rank.name} - Rata-rata Konsistensi: ${rank.average.toFixed(2)}%\n`;
         });
 
         // Copy to clipboard

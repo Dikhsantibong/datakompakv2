@@ -26,7 +26,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    @if($powerPlant->name !== 'UP KENDARI')
+                    @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r sticky left-0 bg-white z-10">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
@@ -105,7 +105,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    @if($powerPlant->name !== 'UP KENDARI')
+                    @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
@@ -191,7 +191,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    @if($powerPlant->name !== 'UP KENDARI')
+                    @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
@@ -271,7 +271,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    @if($powerPlant->name !== 'UP KENDARI')
+                    @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
@@ -331,7 +331,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    @if($powerPlant->name !== 'UP KENDARI')
+                    @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
@@ -387,7 +387,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    @if($powerPlant->name !== 'UP KENDARI')
+                    @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
@@ -464,7 +464,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    @if($powerPlant->name !== 'UP KENDARI')
+                    @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
@@ -540,7 +540,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    @if($powerPlant->name !== 'UP KENDARI')
+                    @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
@@ -615,7 +615,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    @if($powerPlant->name !== 'UP KENDARI')
+                    @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
@@ -691,7 +691,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($data['powerPlants'] as $powerPlant)
-                    @if($powerPlant->name !== 'UP KENDARI')
+                    @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                                 {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}
@@ -771,7 +771,7 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
             @foreach($data['powerPlants'] as $powerPlant)
-                @if($powerPlant->name !== 'UP KENDARI')
+                @if(!in_array($powerPlant->name, ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']))
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10 border-r">
                             {{ app('App\Http\Controllers\Admin\MonitoringDatakompakController')->formatUnitName($powerPlant->name) }}

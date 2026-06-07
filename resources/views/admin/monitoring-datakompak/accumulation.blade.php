@@ -284,7 +284,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             }
-            }
         });
         @endif
     @endforeach

@@ -35,7 +35,9 @@ class MonitoringDatakompakController extends Controller
         $activeTab = $request->get('tab', 'data-engine');
 
         // Get all power plants
-        $powerPlants = PowerPlant::with(['machines'])->get();
+        $powerPlants = PowerPlant::with(['machines'])
+            ->whereNotIn('name', ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU'])
+            ->get();
 
         // Calculate stats and get categorized units based on active tab
         if ($activeTab === 'data-engine') {
@@ -382,7 +384,7 @@ class MonitoringDatakompakController extends Controller
         $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
 
         // Get all power plants
-        $powerPlants = PowerPlant::all();
+        $powerPlants = PowerPlant::whereNotIn('name', ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU'])->get();
 
         // Get all dates in the month
         $dates = collect();
@@ -431,7 +433,7 @@ class MonitoringDatakompakController extends Controller
         $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
 
         // Get all power plants
-        $powerPlants = PowerPlant::all();
+        $powerPlants = PowerPlant::whereNotIn('name', ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU'])->get();
 
         // Get all dates in the month
         $dates = collect();
@@ -480,7 +482,7 @@ class MonitoringDatakompakController extends Controller
         $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
 
         // Get all power plants
-        $powerPlants = PowerPlant::all();
+        $powerPlants = PowerPlant::whereNotIn('name', ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU'])->get();
 
         // Get all dates in the month
         $dates = collect();
@@ -529,7 +531,9 @@ class MonitoringDatakompakController extends Controller
         $date = $request->get('date', now()->format('Y-m-d'));
         $month = $request->get('month', now()->format('Y-m'));
 
-        $powerPlants = PowerPlant::with(['machines'])->get();
+        $powerPlants = PowerPlant::with(['machines'])
+            ->whereNotIn('name', ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU'])
+            ->get();
 
         switch ($tab) {
             case 'data-engine':
@@ -687,7 +691,7 @@ class MonitoringDatakompakController extends Controller
         $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
 
         // Get all power plants
-        $powerPlants = PowerPlant::all();
+        $powerPlants = PowerPlant::whereNotIn('name', ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU'])->get();
 
         // Get all dates in the month
         $dates = collect();
@@ -737,7 +741,7 @@ class MonitoringDatakompakController extends Controller
         $selectedUnit = $request->input('unit');
 
         // Get all power plants except UP KENDARI
-        $powerPlantsQuery = PowerPlant::where('name', '!=', 'UP KENDARI');
+        $powerPlantsQuery = PowerPlant::whereNotIn('name', ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU']);
 
         // Apply unit filter if selected
         if ($selectedUnit) {
@@ -745,7 +749,7 @@ class MonitoringDatakompakController extends Controller
         }
 
         $powerPlants = $powerPlantsQuery->get();
-        $allPowerPlants = PowerPlant::where('name', '!=', 'UP KENDARI')->get(); // For dropdown
+        $allPowerPlants = PowerPlant::whereNotIn('name', ['UP KENDARI', 'PLTU MORAMO', 'PLTD Ladumpi', 'PLTU BARUTA', 'PLTMG KENDARI', 'PLTMG BAU-BAU'])->get(); // For dropdown
 
         $accumulatedData = [];
 
